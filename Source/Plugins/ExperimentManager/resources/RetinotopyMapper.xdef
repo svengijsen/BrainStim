@@ -1,0 +1,1498 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<definitions>
+	<groups>
+		<group id="0">
+	    <enabled>true</enabled>
+	    <grouppath>Global</grouppath>
+		</group>
+		<group id="1">
+	    <enabled>true</enabled>	   
+	    <grouppath>PolarAngle specific</grouppath>
+		  <dependencies>
+		  	<dependency id="0">
+		  		<relationid>0</relationid>
+		  		<autohide>true</autohide>
+		  		<regularexpression>
+		  			<pattern>PolarAngle</pattern>
+		  			<casesensitive>false</casesensitive>
+		  		</regularexpression>
+		  	</dependency>
+		  </dependencies>
+		</group>	
+		<group id="2">
+	    <enabled>true</enabled>
+	    <grouppath>Eccentricity specific</grouppath>
+	    <dependencies>
+		  	<dependency id="0">
+		  		<relationid>0</relationid>
+		  		<autohide>true</autohide>
+		  		<regularexpression>
+		  			<pattern>Eccentricity</pattern>
+		  			<casesensitive>false</casesensitive>
+		  		</regularexpression>
+		  	</dependency>
+		  </dependencies>
+		</group>
+		<group id="3">
+	    <enabled>true</enabled>
+	    <grouppath>MovingBar specific</grouppath>
+		  <dependencies>
+		  	<dependency id="0">
+		  		<relationid>0</relationid>
+		  		<autohide>true</autohide>
+		  		<regularexpression>
+		  			<pattern>MovingBar</pattern>
+		  			<casesensitive>false</casesensitive>
+		  		</regularexpression>
+		  	</dependency>
+		  </dependencies>
+		</group>
+		<group id="4">
+	    <enabled>true</enabled>
+	    <grouppath>MovingDots specific</grouppath>
+		  <dependencies>
+		  	<dependency id="0">
+		  		<relationid>0</relationid>
+		  		<autohide>true</autohide>
+		  		<regularexpression>
+		  			<pattern>MovingDots</pattern>
+		  			<casesensitive>false</casesensitive>
+		  		</regularexpression>
+		  	</dependency>
+		  </dependencies>
+		</group>
+	</groups>
+
+	<parameters>
+	
+	    <parameter id="0">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>retinopattern</name>
+	        <displayname>Pattern</displayname>
+	        <grouppath>Global</grouppath>
+	        <information>The Retinotopic Pattern to use</information>
+	        <type>string</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>PolarAngle</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+						<allowed>PolarAngle;Eccentricity;MovingBar;MovingDots;Fixation;Custom</allowed>
+	      	</restriction>
+	    </parameter>
+	    
+	    <parameter id="1">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>stimulirefreshrate</name>
+	        <displayname>Refresh Rate</displayname>
+	        <grouppath>Global</grouppath>
+	        <information>The Refresh Rate of the Stimuli</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>0</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+	      	</restriction>
+	    </parameter>      
+	    
+	    <parameter id="2">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>showfixpoint</name>
+	        <displayname>Show</displayname>
+	        <grouppath>Global;Fixation Point</grouppath>
+	        <information>The Visibility of the Fixation Point</information>
+	        <type>boolean</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>true</defaultvalue>
+	    </parameter>    
+	    
+	    <parameter id="3">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>fixationsize</name>
+	        <displayname>Size</displayname>
+	        <grouppath>Global;Fixation Point</grouppath>
+	        <information>The Size of the Fixation Point</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>8</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+	      	</restriction>
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>2</relationid>
+	        		<regularexpression>
+	        			<pattern>true</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>
+	        </dependencies>      	
+	    </parameter>  
+	    
+	    <parameter id="4">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>fixationcolor</name>
+	        <displayname>Color</displayname>
+	        <grouppath>Global;Fixation Point</grouppath>
+	        <information>The Color of the Fixation Point</information>
+	        <type>color</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>#FF0000</defaultvalue>
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>2</relationid>
+	        		<regularexpression>
+	        			<pattern>true</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>
+	        </dependencies>         
+	    </parameter>
+	    
+	    <parameter id="5">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>backgroundcolor</name>
+	        <displayname>BackGround Color</displayname>
+	        <grouppath>Global</grouppath>
+	        <information>The Color of the Stimuli Background</information>
+	        <type>color</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>#575757</defaultvalue>
+	    </parameter>
+	    
+	    <parameter id="6">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>stimuluswidthspan</name>
+	        <displayname>Width</displayname>
+	        <grouppath>Global;Size</grouppath>
+	        <information>The Width of the Stimuli in Pixels</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>480</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+	      	</restriction>
+	    </parameter>          
+	
+	    <parameter id="7">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>stimulusheightspan</name>
+	        <displayname>Height</displayname>
+	        <grouppath>Global;Size</grouppath>
+	        <information>The Height of the Stimuli in Pixels</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>480</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="8">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>antialiasing</name>
+	        <displayname>Anti-aliasing</displayname>
+	        <grouppath>Global</grouppath>
+	        <information>Determines whether Anti-Aliasing should be enabled</information>
+	        <type>boolean</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>true</defaultvalue>
+	    </parameter>
+	
+	    <parameter id="9">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>gapdiameter</name>
+	        <displayname>GapDiameter</displayname>
+	        <grouppath>PolarAngle specific</grouppath>
+	        <information>The Diameter of the gap in Pixels</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>20</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter>          
+	
+	    <parameter id="10">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>checkercolor1</name>
+	        <displayname>Color(Checker 1)</displayname>
+	        <grouppath>PolarAngle specific;Coloring</grouppath>
+	        <information>The Color of the first Checker</information>
+	        <type>color</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>#FFFFFF</defaultvalue>
+	    </parameter> 
+	    
+	    <parameter id="11">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>checkercolor2</name>
+	        <displayname>Color(Checker 2)</displayname>
+	        <grouppath>PolarAngle specific;Coloring</grouppath>
+	        <information>The Color of the second Checker</information>
+	        <type>color</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>#000000</defaultvalue>
+	    </parameter> 
+	    
+	    <parameter id="12">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>polarcheckamount</name>
+	        <displayname>Number of Checkers</displayname>
+	        <grouppath>PolarAngle specific</grouppath>
+	        <information>The Number of Checkers along the Wedge Rotation Direction</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>4</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="13">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>polarringamount</name>
+	        <displayname>Number of Rings</displayname>
+	        <grouppath>PolarAngle specific</grouppath>
+	        <information>The Number of partial Rings inside/along the Wedge Direction</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>20</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="14">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>polarrotationdirection</name>
+	        <displayname>Direction</displayname>
+	        <grouppath>PolarAngle specific</grouppath>
+	        <information>The Rotation Direction of the Wedge</information>
+	        <type>rotationdirection</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>1</defaultvalue>
+	    </parameter>
+
+	    <parameter id="15">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>polarwedgespan</name>
+	        <displayname>Wedge Span</displayname>
+	        <grouppath>PolarAngle specific</grouppath>
+	        <information>The total Span of the Wedge in degrees</information>
+	        <type>float</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>22.5</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0.0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>true</enabled>
+	      			<value>360.0</value>
+	      		</maximal>	      		  		
+	      	</restriction>	        
+	    </parameter>
+	    
+	    <parameter id="16">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>internaltriggerduration</name>
+	        <displayname>Trigger Duration</displayname>
+	        <grouppath>PolarAngle specific</grouppath>
+	        <information>The Expected Internal Trigger Duration Time in milliseconds</information>
+	        <type>float</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>2000.0</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>50.0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="17">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>cycletriggeramount</name>
+	        <displayname>Cycle Triggers</displayname>
+	        <grouppath>PolarAngle specific</grouppath>
+	        <information>The Amount of Triggers it takes to complete a full Cycle</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>1</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>1</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="18">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>flickrfrequency</name>
+	        <displayname>Flicker Frequency</displayname>
+	        <grouppath>PolarAngle specific</grouppath>
+	        <information>The Frequency of the Checker Color Flickering</information>
+	        <type>float</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>5.0</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0.0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="19">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>disablecortmagfac</name>
+	        <displayname>Disabled</displayname>
+	        <grouppath>PolarAngle specific;Cortical Magnitude</grouppath>
+	        <information>Disable the Cortical Magnitude Feature</information>
+	        <type>boolean</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	    </parameter>     
+	    
+	    <parameter id="20">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>corticalmagnitudefactor</name>
+	        <displayname>Factor</displayname>
+	        <grouppath>PolarAngle specific;Cortical Magnitude</grouppath>
+	        <information>The Cortical Magnitude Factor</information>
+	        <type>float</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>0.2</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0.0</value>
+	      		</minimal>      		
+	      	</restriction>
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>19</relationid>
+	        		<regularexpression>
+	        			<pattern>false</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies>      	
+	    </parameter>                                 
+	    
+	    <parameter id="21">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>outputtriggerframe</name>
+	        <displayname>Enabled</displayname>
+	        <grouppath>PolarAngle specific;Output</grouppath>
+	        <information>Whether the Output of Generated Stimuli Frames Feature should be enabled</information>
+	        <type>boolean</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	    </parameter>                                 
+	    
+	    <parameter id="22">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>outputframeformat</name>
+	        <displayname>Format</displayname>
+	        <grouppath>PolarAngle specific;Output</grouppath>
+	        <information>The Format of the Generated Stimuli Frame</information>
+	        <type>string</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>DAT</defaultvalue>
+	      	<restriction>
+						<allowed>DAT;PNG;CDAT</allowed>     		
+	      	</restriction>
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>21</relationid>
+	        		<regularexpression>
+	        			<pattern>true</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies>      	
+	    </parameter>                                 
+	    
+	    <parameter id="23">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>outputframetype</name>
+	        <displayname>Type</displayname>
+	        <grouppath>PolarAngle specific;Output</grouppath>
+	        <information>The File Type of the Generated Stimuli Frame</information>
+	        <type>string</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>Frame</defaultvalue>
+	      	<restriction>
+						<allowed>Frame;Mask</allowed>
+	      	</restriction>	      	
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>21</relationid>
+	        		<regularexpression>
+	        			<pattern>true</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies>      	
+	    </parameter>                                 
+	    
+	    <parameter id="24">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>discretetriggersteps</name>
+	        <displayname>Discrete</displayname>
+	        <grouppath>PolarAngle specific</grouppath>
+	        <information>Whether the transition between trigger steps should be discrete</information>
+	        <type>boolean</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	    </parameter>                                 
+	    
+	    <parameter id="25">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>randomizetriggersteps</name>
+	        <displayname>Enable</displayname>
+	        <grouppath>PolarAngle specific;Randomisation</grouppath>
+	        <information>Whether the Randomisation of Trigger Steps should be enabled</information>
+	        <type>boolean</type>
+	        <scriptable>false</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	    </parameter>                                 
+	    
+	    <parameter id="26">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>emptytriggersteps</name>
+	        <displayname>Amount</displayname>
+	        <grouppath>PolarAngle specific;Empty Steps</grouppath>
+	        <information>How many Empty Trigger Steps one full cycle contains</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>        
+	    </parameter>                                 
+	    
+	    <parameter id="27">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>randomizetriggerstepsarray</name>
+	        <displayname>Array(predefined)</displayname>
+	        <grouppath>PolarAngle specific;Randomisation</grouppath>
+	        <information>The pre-defined Array containing the Randomisation Stimuli Frames for each Trigger Step</information>
+	        <type>stringarray</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue></defaultvalue>
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>25</relationid>
+	        		<regularexpression>
+	        			<pattern>true</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies>      	
+	    </parameter>                                 
+	    
+	    <parameter id="28">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>emptytriggerstepsarray</name>
+	        <displayname>Array(predefined)</displayname>
+	        <grouppath>PolarAngle specific;Empty Steps</grouppath>
+	        <information>The pre-defined Array containing the Empty Stimuli Frames for each Trigger Step</information>
+	        <type>stringarray</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue></defaultvalue>
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>26</relationid>
+	        		<regularexpression>
+	        			<pattern>^[1-9][0-9]*$</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies>      	
+	    </parameter>
+	    
+	    <parameter id="29">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>gapdiameter</name>
+	        <displayname>GapDiameter</displayname>
+	        <grouppath>Eccentricity specific</grouppath>
+	        <information>The Diameter of the gap in Pixels</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>20</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter>          
+	
+	    <parameter id="30">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>checkercolor1</name>
+	        <displayname>Color(Checker 1)</displayname>
+	        <grouppath>Eccentricity specific;Coloring</grouppath>
+	        <information>The Color of the first Checker</information>
+	        <type>color</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>#FFFFFF</defaultvalue>
+	    </parameter> 
+	    
+	    <parameter id="31">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>checkercolor2</name>
+	        <displayname>Color(Checker 2)</displayname>
+	        <grouppath>Eccentricity specific;Coloring</grouppath>
+	        <information>The Color of the second Checker</information>
+	        <type>color</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>#000000</defaultvalue>
+	    </parameter> 
+	    
+	    <parameter id="32">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>eccentricitycheckamount</name>
+	        <displayname>Number of Checkers</displayname>
+	        <grouppath>Eccentricity specific</grouppath>
+	        <information>The Number of Checkers inside one Eccentricity Ring</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>20</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="33">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>eccentricityringamount</name>
+	        <displayname>Number of Rings</displayname>
+	        <grouppath>Eccentricity specific</grouppath>
+	        <information>The Number of Rings inside the Eccentricity Pattern</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>4</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="34">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>eccentricitydirection</name>
+	        <displayname>Direction</displayname>
+	        <grouppath>Eccentricity specific</grouppath>
+	        <information>The Eccentricity Direction of the Ring</information>
+	        <type>eccentricitydirection</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>1</defaultvalue>
+	    </parameter> 
+	    
+	    <parameter id="35">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>internaltriggerduration</name>
+	        <displayname>Trigger Duration</displayname>
+	        <grouppath>Eccentricity specific</grouppath>
+	        <information>The Expected Internal Trigger Duration Time in milliseconds</information>
+	        <type>float</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>2000.0</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>50.0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="36">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>cycletriggeramount</name>
+	        <displayname>Cycle Triggers</displayname>
+	        <grouppath>Eccentricity specific</grouppath>
+	        <information>The Amount of Triggers it takes to complete a full Cycle</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>1</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>1</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="37">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>flickrfrequency</name>
+	        <displayname>Flicker Frequency</displayname>
+	        <grouppath>Eccentricity specific</grouppath>
+	        <information>The Frequency of the Checker Color Flickering</information>
+	        <type>float</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>5.0</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0.0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="38">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>disablecortmagfac</name>
+	        <displayname>Disabled</displayname>
+	        <grouppath>Eccentricity specific;Cortical Magnitude</grouppath>
+	        <information>Disable the Cortical Magnitude Feature</information>
+	        <type>boolean</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	    </parameter>     
+	    
+	    <parameter id="39">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>corticalmagnitudefactor</name>
+	        <displayname>Factor</displayname>
+	        <grouppath>Eccentricity specific;Cortical Magnitude</grouppath>
+	        <information>The Cortical Magnitude Factor</information>
+	        <type>float</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>0.2</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0.0</value>
+	      		</minimal>      		
+	      	</restriction>
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>38</relationid>
+	        		<regularexpression>
+	        			<pattern>false</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies>      	
+	    </parameter>                                 
+	    
+	    <parameter id="40">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>outputtriggerframe</name>
+	        <displayname>Enabled</displayname>
+	        <grouppath>Eccentricity specific;Output</grouppath>
+	        <information>Whether the Output of Generated Stimuli Frames Feature should be enabled</information>
+	        <type>boolean</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	    </parameter>                                 
+	    
+	    <parameter id="41">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>outputframeformat</name>
+	        <displayname>Format</displayname>
+	        <grouppath>Eccentricity specific;Output</grouppath>
+	        <information>The Format of the Generated Stimuli Frame</information>
+	        <type>string</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>DAT</defaultvalue>
+	      	<restriction>
+						<allowed>DAT;PNG;CDAT</allowed>     		
+	      	</restriction>	        
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>40</relationid>
+	        		<regularexpression>
+	        			<pattern>true</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies>      	
+	    </parameter>                                 
+	    
+	    <parameter id="42">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>outputframetype</name>
+	        <displayname>Type</displayname>
+	        <grouppath>Eccentricity specific;Output</grouppath>
+	        <information>The File Type of the Generated Stimuli Frame</information>
+	        <type>string</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>Frame</defaultvalue>
+	      	<restriction>
+						<allowed>Frame;Mask</allowed>
+	      	</restriction>	        
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>40</relationid>
+	        		<regularexpression>
+	        			<pattern>true</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies>      	
+	    </parameter>                                 
+	    
+	    <parameter id="43">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>discretetriggersteps</name>
+	        <displayname>Discrete</displayname>
+	        <grouppath>Eccentricity specific</grouppath>
+	        <information>Whether the transition between trigger steps should be discrete</information>
+	        <type>boolean</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	    </parameter>                                 
+	    
+	    <parameter id="44">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>randomizetriggersteps</name>
+	        <displayname>Enable</displayname>
+	        <grouppath>Eccentricity specific;Randomisation</grouppath>
+	        <information>Whether the Randomisation of Trigger Steps should be enabled</information>
+	        <type>boolean</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	    </parameter>                                 
+	    
+	    <parameter id="45">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>emptytriggersteps</name>
+	        <displayname>Amount</displayname>
+	        <grouppath>Eccentricity specific;Empty Steps</grouppath>
+	        <information>How many Empty Trigger Steps one full cycle contains</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>        
+	    </parameter>                                 
+	    
+	    <parameter id="46">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>randomizetriggerstepsarray</name>
+	        <displayname>Array(predefined)</displayname>
+	        <grouppath>Eccentricity specific;Randomisation</grouppath>
+	        <information>The pre-defined Array containing the Randomisation Stimuli Frames for each Trigger Step</information>
+	        <type>stringarray</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue></defaultvalue>
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>44</relationid>
+	        		<regularexpression>
+	        			<pattern>true</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies>      	
+	    </parameter>                                 
+	    
+	    <parameter id="47">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>emptytriggerstepsarray</name>
+	        <displayname>Array(predefined)</displayname>
+	        <grouppath>Eccentricity specific;Empty Steps</grouppath>
+	        <information>The pre-defined Array containing the Empty Stimuli Frames for each Trigger Step</information>
+	        <type>stringarray</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue></defaultvalue>
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>45</relationid>
+	        		<regularexpression>
+	        			<pattern>^[1-9][0-9]*$</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>          	
+	        </dependencies>      	
+	    </parameter>
+	    
+	    <parameter id="48">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>checkercolor1</name>
+	        <displayname>Color(Checker 1)</displayname>
+	        <grouppath>MovingBar specific;Coloring</grouppath>
+	        <information>The Color of the first Checker</information>
+	        <type>color</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>#FFFFFF</defaultvalue>
+	    </parameter> 
+	    
+	    <parameter id="49">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>checkercolor2</name>
+	        <displayname>Color(Checker 2)</displayname>
+	        <grouppath>MovingBar specific;Coloring</grouppath>
+	        <information>The Color of the second Checker</information>
+	        <type>color</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>#000000</defaultvalue>
+	    </parameter> 
+	    
+	    <parameter id="50">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingbarheight</name>
+	        <displayname>Height</displayname>
+	        <grouppath>MovingBar specific</grouppath>
+	        <information>E.g. if the total bar movement is 640 pixel then the bar width is 640/10.0(=Height) = 64 pixels</information>
+	        <type>float</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>10</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter>	    
+	    
+	    <parameter id="51">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingbarheightcheckamount</name>
+	        <displayname>Number of Checkers</displayname>
+	        <grouppath>MovingBar specific</grouppath>
+	        <information>The Number of Checkers along the Moving Bar direction (number of rows)</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>4</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="52">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingbardirection</name>
+	        <displayname>Direction</displayname>
+	        <grouppath>MovingBar specific</grouppath>
+	        <information>The Movement Direction of the Bar</information>
+	        <type>movementdirection</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>1</defaultvalue>
+	    </parameter> 
+	    
+	    <parameter id="53">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingbarangle</name>
+	        <displayname>Angle</displayname>
+	        <grouppath>MovingBar specific</grouppath>
+	        <information>The Movement Angle of the bar, 0 degrees is along the X axis. A larger value turns counterclockwise</information>
+	        <type>float</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>45.0</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0.0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 	 
+	    
+	    <parameter id="54">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingbarcoverage</name>
+	        <displayname>Coverage</displayname>
+	        <grouppath>MovingBar specific</grouppath>
+	        <information>The active stimulus area coverage of a full bar cycle movement.</information>
+	        <type>float</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>0.5</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0.0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 	   
+	    
+	    <parameter id="55">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>flickrfrequency</name>
+	        <displayname>Flicker Frequency</displayname>
+	        <grouppath>MovingBar specific</grouppath>
+	        <information>The Frequency of the Checker Color Flickering</information>
+	        <type>float</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>5.0</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0.0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 	        
+	    
+	    <parameter id="56">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>internaltriggerduration</name>
+	        <displayname>Trigger Duration</displayname>
+	        <grouppath>MovingBar specific</grouppath>
+	        <information>The Expected Internal Trigger Duration Time in milliseconds</information>
+	        <type>float</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>2000.0</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>50.0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="57">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>cycletriggeramount</name>
+	        <displayname>Cycle Triggers</displayname>
+	        <grouppath>MovingBar specific</grouppath>
+	        <information>The Amount of Triggers it takes to complete a full Cycle</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>1</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>1</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="58">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>outputtriggerframe</name>
+	        <displayname>Enabled</displayname>
+	        <grouppath>MovingBar specific;Output</grouppath>
+	        <information>Whether the Output of Generated Stimuli Frames Feature should be enabled</information>
+	        <type>boolean</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	    </parameter>                                 
+	    
+	    <parameter id="59">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>outputframeformat</name>
+	        <displayname>Format</displayname>
+	        <grouppath>MovingBar specific;Output</grouppath>
+	        <information>The Format of the Generated Stimuli Frame</information>
+	        <type>string</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>DAT</defaultvalue>
+	      	<restriction>
+						<allowed>DAT;PNG;CDAT</allowed>     		
+	      	</restriction>	        
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>40</relationid>
+	        		<regularexpression>
+	        			<pattern>true</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies>      	
+	    </parameter>                                 
+	    
+	    <parameter id="60">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>outputframetype</name>
+	        <displayname>Type</displayname>
+	        <grouppath>MovingBar specific;Output</grouppath>
+	        <information>The File Type of the Generated Stimuli Frame</information>
+	        <type>string</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>Frame</defaultvalue>
+	      	<restriction>
+						<allowed>Frame;Mask</allowed>
+	      	</restriction>	        
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>40</relationid>
+	        		<regularexpression>
+	        			<pattern>true</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies>      	
+	    </parameter> 	  
+	    
+	    <parameter id="61">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>discretetriggersteps</name>
+	        <displayname>Discrete</displayname>
+	        <grouppath>MovingBar specific</grouppath>
+	        <information>Whether the transition between trigger steps should be discrete</information>
+	        <type>boolean</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	    </parameter>
+	 
+	    <parameter id="62">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>randomizetriggersteps</name>
+	        <displayname>Enable</displayname>
+	        <grouppath>MovingBar specific;Randomisation</grouppath>
+	        <information>Whether the Randomisation of Trigger Steps should be enabled</information>
+	        <type>boolean</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	    </parameter>                                 
+	    
+	    <parameter id="63">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>emptytriggersteps</name>
+	        <displayname>Amount</displayname>
+	        <grouppath>MovingBar specific;Empty Steps</grouppath>
+	        <information>How many Empty Trigger Steps one full cycle contains</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>        
+	    </parameter>                                 
+	    
+	    <parameter id="64">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>randomizetriggerstepsarray</name>
+	        <displayname>Array(predefined)</displayname>
+	        <grouppath>MovingBar specific;Randomisation</grouppath>
+	        <information>The pre-defined Array containing the Randomisation Stimuli Frames for each Trigger Step</information>
+	        <type>stringarray</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue></defaultvalue>
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>44</relationid>
+	        		<regularexpression>
+	        			<pattern>true</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies>      	
+	    </parameter>                                 
+	    
+	    <parameter id="65">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>emptytriggerstepsarray</name>
+	        <displayname>Array(predefined)</displayname>
+	        <grouppath>MovingBar specific;Empty Steps</grouppath>
+	        <information>The pre-defined Array containing the Empty Stimuli Frames for each Trigger Step</information>
+	        <type>stringarray</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue></defaultvalue>
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>45</relationid>
+	        		<regularexpression>
+	        			<pattern>^[1-9][0-9]*$</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>          	
+	        </dependencies>      	
+	    </parameter>   
+		
+			<parameter id="66">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingdotsnrofdots</name>
+	        <displayname>Amount</displayname>
+	        <grouppath>MovingDots specific;Dots</grouppath>
+	        <information>The number of active visible moving Dots per visible Hemispere</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>1000</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+		
+	    <parameter id="67">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingdotsdotsize</name>
+	        <displayname>Size</displayname>
+	        <grouppath>MovingDots specific;Dots</grouppath>
+	        <information>The diameter of a single dot in pixels</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>12</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter>		
+		
+		  <parameter id="68">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingdotscolor</name>
+	        <displayname>Color</displayname>
+	        <grouppath>MovingDots specific;Dots</grouppath>
+	        <information>The Color of the dots</information>
+	        <type>color</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>#FFFFFF</defaultvalue>
+	    </parameter>    
+	    
+	    <parameter id="69">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingdotsstationairy</name>
+	        <displayname>Stationairy</displayname>
+	        <grouppath>MovingDots specific;Dynamics</grouppath>
+	        <information>Defines whether the dots should move or hold their initial position</information>
+	        <type>boolean</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>false</defaultvalue>
+	    </parameter> 	    
+	    
+	    <parameter id="70">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingdotsminmovespeed</name>
+	        <displayname>Min. Speed)</displayname>
+	        <grouppath>MovingDots specific;Dynamics</grouppath>
+	        <information>The minimal movement speed of the Dots in Pixels/StimuliRefreshRate</information>
+	        <type>float</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>4.0</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>	
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>69</relationid>
+	        		<regularexpression>
+	        			<pattern>false</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies>      	        
+	    </parameter> 
+	    
+	    <parameter id="71">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingdotsmaxmovespeed</name>
+	        <displayname>Max. Speed</displayname>
+	        <grouppath>MovingDots specific;Dynamics</grouppath>
+	        <information>The maximal movement speed of the Dots in Pixels/StimuliRefreshRate</information>
+	        <type>float</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>4.0</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>	
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>69</relationid>
+	        		<regularexpression>
+	        			<pattern>false</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies> 	      	        
+	    </parameter>	
+	    
+	    <parameter id="72">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingdotsminmoveangle</name>
+	        <displayname>Min. Angle</displayname>
+	        <grouppath>MovingDots specific;Dynamics</grouppath>
+	        <information>The minimal movement Angle of the Dots in Degrees</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>0</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>true</enabled>
+	      			<value>359</value>
+	      		</maximal> 	      				
+	      	</restriction>	
+	        <dependencies>
+	        	<dependency id="0">
+	        		<relationid>69</relationid>
+	        		<regularexpression>
+	        			<pattern>false</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies> 	      	        
+	    </parameter> 
+	    
+	    <parameter id="73">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingdotsmaxmoveangle</name>
+	        <displayname>Max. Angle</displayname>
+	        <grouppath>MovingDots specific;Dynamics</grouppath>
+	        <information>The maximal movement Angle of the Dots in Degrees</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>359</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>   
+	      		<maximal>
+	      			<enabled>true</enabled>
+	      			<value>359</value>
+	      		</maximal> 	      		   		
+	      	</restriction>	  
+	      	<dependencies>
+	        	<dependency id="0">
+	        		<relationid>69</relationid>
+	        		<regularexpression>
+	        			<pattern>false</pattern>
+	        			<casesensitive>false</casesensitive>
+	        		</regularexpression>
+	        	</dependency>        	
+	        </dependencies>       
+	    </parameter>	 	    
+	    
+	    <parameter id="74">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingdotshemifield</name>
+	        <displayname>Active Fields</displayname>
+	        <grouppath>MovingDots specific;Hemifields</grouppath>
+	        <information>Defines which Hemifield(s) are visible within the active stimuli area</information>
+	        <type>string</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>Both</defaultvalue>
+	      	<restriction>
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+						<allowed>Left;Right;Both</allowed>
+	      	</restriction>
+	    </parameter>	    
+	    
+	    <parameter id="75">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingdotspixelfromcenter</name>
+	        <displayname>Offset</displayname>
+	        <grouppath>MovingDots specific;Hemifields</grouppath>
+	        <information>The distance between the Hemifield (left and/or right) and the center X position on the screen in pixels</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>100</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 	    
+    	    
+	    <parameter id="76">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingdotshemifieldwidth</name>
+	        <displayname>Width</displayname>
+	        <grouppath>MovingDots specific;Hemifields</grouppath>
+	        <information>This defines the Width of one Hemifield in pixels</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>320</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="77">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>movingdotshemifieldheight</name>
+	        <displayname>Height</displayname>
+	        <grouppath>MovingDots specific;Hemifields</grouppath>
+	        <information>This defines the Height of one Hemifield in pixels</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>240</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>      		
+	      	</restriction>
+	    </parameter>    
+	    
+	</parameters>
+</definitions>	

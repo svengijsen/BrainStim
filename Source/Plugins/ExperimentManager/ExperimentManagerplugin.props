@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+
+  <PropertyGroup Label="UserMacros">
+  	<!-- some comments... -->
+  	<!--IsDebug: search for 'Debug' in Configuration-->
+    <IsDebug>$([System.Convert]::ToString( $([System.Text.RegularExpressions.Regex]::IsMatch($(Configuration), '[Dd]ebug'))))</IsDebug>
+    <!--ShortPlatform-->
+    <QTDIR Condition="'$(Platform)' == 'Win32'">C:\Qt\5.1.0\win32</QTDIR>
+    <QTDIR Condition="'$(Platform)' == 'x64'">C:\Qt\5.1.0\x64</QTDIR>
+    <AGNER>C:\Qt\Agner</AGNER>
+    <QTPROPERTYBROWSER>C:\Qt\CTK\QtPropertyBrowser</QTPROPERTYBROWSER>
+  </PropertyGroup>
+  
+  <Choose>
+    <When Condition="$([System.Convert]::ToBoolean($(IsDebug)))">
+      <!-- debug macroses -->
+      <PropertyGroup Label="UserMacros">
+        <MyOutDirBase>debug</MyOutDirBase>
+        <DebugSuffix>d</DebugSuffix>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <!-- other/release macroses -->
+      <PropertyGroup Label="UserMacros">
+        <MyOutDirBase>release</MyOutDirBase>
+        <DebugSuffix></DebugSuffix>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+  
+  <ItemDefinitionGroup />
+  <ItemGroup>
+    <BuildMacro Include="QTDIR">
+      <Value>$(QTDIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="AGNER">
+      <Value>$(AGNER)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QTPROPERTYBROWSER">
+      <Value>$(QTPROPERTYBROWSER)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,74 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Versioning</title>
+<script src="BrainStim.js" type="text/javascript" charset="utf-8"></script>
+<script type="text/javascript">
+	BrainStimInfo = new BrainStim_Information();
+</script>
+</head>
+<body>
+
+<script type="text/javascript">
+function test()
+{
+	//var elTableRow = document.getElementById("Row2");
+	//var elTableCells = elTableRow.getElementsByTagName("td");
+	//alert(elTableCells[1].innerText);
+	//var root = document.location.protocol + '//' + document.location.host;
+	//alert('BrainStim constructor' + root);
+	//alert('test');
+	//return 'test2';
+}
+</script>
+
+<!--<button onclick="test()">Test</button>-->
+<H1>BrainStim Release Information</H1>
+
+<p>Latest BrainStim release is: <script type="text/javascript">document.write(BrainStimInfo.GetCurrentRelease());</script></p>
+<H2>Changelog History:</H2>
+
+<script language="javascript" type="text/javascript">
+	var nRows = 0;
+	var NumberOfReleases = BrainStimInfo.GetNumberOfReleases();
+	for (var n=NumberOfReleases-1; n>=0; n--) 
+	{
+		document.write("<H3>BrainStim Release: " + BrainStimInfo.GetReleaseByIndex(n) + ", build with Qt version: " + BrainStimInfo.GetReleaseQtVersionByIndex(n) + "</H3>");		
+		nRows = BrainStimInfo.GetNumberOfComponentsByReleaseIndex(n);
+		if(nRows > 0)
+		{		
+			document.write("<p>");
+			document.write("<table id = \"VersionTable\" table border=\"1\">");
+			
+			document.write("<tr>");
+			document.write("<td><em><strong>Component Name</strong></em></td>");
+			document.write("<td><em><strong>Component Version</strong></em></td>");
+			document.write("<td><em><strong>Minimal EXML Version</strong></em></td>");
+			document.write("<td><em><strong>Plugin Device Interface Version</strong></em></td>");
+			document.write("<td><em><strong>Plugin Extension Interface Version</strong></em></td>");
+			document.write("</tr>");
+	
+			for (var i=0; i<nRows; i++) 
+			{
+				document.write("<tr>");				
+				document.write("<td>" + BrainStimInfo.GetComponentNameByIndexes(n,i) + "</td>");
+				document.write("<td>" + BrainStimInfo.GetComponentVersionByIndexes(n,i) + "</td>");
+				document.write("<td>" + BrainStimInfo.GetComponentMinimalEXMLVersionByIndexes(n,i) + "</td>");
+				document.write("<td>" + BrainStimInfo.GetComponentDeviceInterfaceVersionByIndexes(n,i) + "</td>");
+				document.write("<td>" + BrainStimInfo.GetComponentExtensionInterfaceVersionByIndexes(n,i) + "</td>");
+				document.write("</tr>");
+			}
+			document.write("</table>");
+			document.write("</p>");
+			document.write("<p>&nbsp;</p>");
+		}
+		else
+		{
+			document.write("<p><em>No changes since the previous release.</em></p>");
+		}
+	}
+</script>
+
+</body>
+</html>

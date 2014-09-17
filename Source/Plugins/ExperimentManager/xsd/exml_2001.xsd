@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:element name="EXML">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="givenName" type="xsd:string"/>
+                <xsd:element name="familyName" type="xsd:string"/>
+                <xsd:element name="birthdate" type="xsd:date" minOccurs="0"/>
+                <xsd:element name="homeAddress" type="address"/>
+                <xsd:element name="workAddress" type="address" minOccurs="0"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+</xsd:schema>
+
+<!-- 
+
+<EXML version="2.0.0.1">
+    <defines>
+	<experiment ID="0">
+		<name>QML Example Experiment</name>
+		<debugmode>{debugMode}</debugmode>
+	</experiment>
+    </defines>
+		
+    <declarations>
+ 
+        <object ID="0">            
+            <class>qmlWidget</class>
+            <name>qmlWidget_Object_1</name>
+            <constructor>
+                <param1/>
+            </constructor>
+        </object>
+
+        <object ID="1">
+            <class>TriggerTimer</class>
+            <name>Timer_Object_1</name>
+            <constructor>
+		<param1/>
+            </constructor>
+        </object>	
+	
+        <object ID="2">
+            <class>ParallelPort</class>
+            <name>ParallelPort_Object_1</name>
+            <constructor>
+                <param1/>
+            </constructor>
+        </object>    
+	
+    </declarations>
+    
+    <connections>
+
+        <object ID="2">
+        	<type>signal</type>
+        	<signature>CaptureThreadTriggered(short)</signature>
+          <target ID="0">
+          	<type>slot</type>     
+          	<signature>incrementExternalTrigger()</signature>      
+          </target>
+        </object>
+
+        <object ID="1">
+        	<type>signal</type>
+        	<signature>timeout()</signature>
+          <target ID="0">
+          	<type>slot</type>     
+          	<signature>incrementExternalTrigger()</signature>      
+          </target>
+        </object>
+	
+    </connections>
+    
+    <initializations>       
+   
+        <object ID="2">
+        	<type>slot</type>
+        	<signature>StartCaptureThread</signature>
+        	<parameters>
+		      	<parameter ID="0">
+		        	<name>baseAddress</name>
+		        	<value>889</value>
+		        	<type>const short</type>
+		        </parameter>
+		        <parameter ID="1">
+		        	<name>mask</name>
+		        	<value>32</value>
+		        	<type>const short</type>		        	
+			</parameter>		        	
+		        <parameter ID="2">	 	
+		        	<name>method</name>
+		        	<value>2</value>	 
+		        	<type>const short</type>		        	       	
+		        </parameter>
+		        <parameter ID="3">	      	
+		        	<name>postLHDelay</name>
+		        	<value>100</value>
+		        	<type>const int</type>		        	
+		        </parameter>       	
+		        <parameter ID="4">    	
+		        	<name>postHLDelay</name>
+		        	<value>100</value>	
+		        	<type>const int</type>		        	        	
+		        </parameter>        	
+        	</parameters>
+        </object>   
+  
+        <object ID="1">
+        	<type>slot</type>
+        	<signature>startTimer</signature>
+        	<parameters>
+		      	<parameter ID="0">
+		        	<name>msec</name>
+		        	<value>{TriggerInterval}</value>
+		        	<type>double</type>
+		        </parameter>  	
+        	</parameters>
+        </object>
+ 
+    </initializations>        
+     
+    <actions>
+    	<blocks>
+	
+	    <block ID="0">
+	        <name>QMLExample_Block_0</name>
+	        <block_number>0</block_number>            
+	        <nr_of_trials>1</nr_of_trials>
+	        <nr_of_internal_triggers>4</nr_of_internal_triggers>
+	        <nr_of_external_triggers>1</nr_of_external_triggers>	 
+	        <object ID="0">
+	        	<parameters>
+				<parameter ID="0">
+					<name>QmlMainFilePath</name>
+					<value>{scriptRootPath}/ClassifierTraining.qml</value> <!-- or use BrainStim.getSelectedScriptFileLocation() -->
+				</parameter>			
+				<parameter ID="1">
+					<name>StimulusWidthSpan</name>
+					<value>768</value>
+				</parameter>
+				<parameter ID="2">
+					<name>StimulusHeightSpan</name>
+					<value>768</value>
+				</parameter>
+			        <parameter ID="3">
+			        	<name>QmlMinEventTime</name>
+			        	<value>1</value>
+			        </parameter>
+			        <parameter ID="4">
+			        	<name>BackGroundColor</name>
+			        	<value>#000000</value>
+			        </parameter>
+		   	</parameters>    
+		    </object>   
+	    </block>	
+
+	    <block ID="1">
+	        <name>QMLExample_Block_1</name>
+	        <block_number>1</block_number>            
+	        <nr_of_trials>6</nr_of_trials>
+	        <nr_of_internal_triggers>6</nr_of_internal_triggers>
+	        <nr_of_external_triggers>1</nr_of_external_triggers>	 
+	        <object ID="0">
+
+		</object>   
+	    </block>
+	    
+    	</blocks>
+    </actions>
+    
+    <finalizations>
+
+        <object ID="1">
+        	<type>slot</type>
+        	<signature>stopTimer</signature>
+        </object>
+
+        <object ID="2">
+        	<type>slot</type>
+        	<signature>StopCaptureThread</signature>
+        </object>
+
+    </finalizations>    
+
+</EXML>
+
+
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:element name="contact">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element name="givenName" type="xsd:string"/>
+                <xsd:element name="familyName" type="xsd:string"/>
+                <xsd:element name="birthdate" type="xsd:date" minOccurs="0"/>
+                <xsd:element name="homeAddress" type="address"/>
+                <xsd:element name="workAddress" type="address" minOccurs="0"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+
+    <xsd:complexType name="address">
+        <xsd:sequence>
+            <xsd:element name="street" type="xsd:string"/>
+            <xsd:element name="zipCode" type="xsd:string"/>
+            <xsd:element name="city" type="xsd:string"/>
+            <xsd:element name="country" type="xsd:string"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+</xsd:schema>
+
+-->

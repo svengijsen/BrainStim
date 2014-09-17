@@ -1,0 +1,4 @@
+module BrainStim_QMLExtensions
+Clock 1.0 Clock.qml
+plugin DefaultQMLPlugin_Win32_Debug ..\ #Name <Path>
+typeinfo BrainStim_QMLExtensions.qmltypes

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<definitions>
+
+	<parameters>
+	
+	    <parameter id="0">
+	        <enabled>true</enabled>
+	        <editable>false</editable>
+	        <name>object</name>
+	        <displayname>Object</displayname>
+	        <grouppath></grouppath>
+	        <information>The initialization object</information>
+	        <type>dynamicenuminteger</type>
+	        <scriptable>false</scriptable>
+	        <defaultvalue>0</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+	      	</restriction>
+	    </parameter>	
+
+	    <parameter id="1">
+	        <enabled>true</enabled>
+	        <editable>false</editable>
+	        <name>type</name>
+	        <displayname>Type</displayname>
+	        <grouppath></grouppath>
+	        <information>The type of the initialization method</information>
+	        <type>methodtype</type>
+	        <defaultvalue>Signal</defaultvalue>	 
+	      	<restriction>
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+						<allowed></allowed>
+	      	</restriction>	             	
+	    </parameter>	       
+	    
+	    <parameter id="2">
+	        <enabled>true</enabled>
+	        <editable>false</editable>
+	        <name>signature</name>
+	        <displayname>Signature</displayname>
+	        <grouppath></grouppath>
+	        <information>The signature of the initialization</information>
+	        <type>string</type>
+	        <defaultvalue></defaultvalue>
+	    </parameter>
+	    
+	    <parameter id="3">
+	        <enabled>false</enabled>
+	        <editable>false</editable>
+	        <name>param1</name>
+	        <displayname>parameter 1</displayname>
+	        <grouppath>Arguments;Argument 1</grouppath>
+	        <information>The used arguments for the initialization</information>
+	        <type>int</type>
+	        <defaultvalue>3</defaultvalue>
+	    </parameter>
+	    
+	</parameters>
+	
+</definitions>

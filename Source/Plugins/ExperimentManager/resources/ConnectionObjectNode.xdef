@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<definitions>
+	<parameters>
+	
+	    <parameter id="0">
+	        <enabled>true</enabled>
+	        <editable>false</editable>
+	        <name>source/object</name>
+	        <displayname>Object</displayname>
+	        <grouppath>Source</grouppath>
+	        <information>The source object of the connection</information>
+	        <type>dynamicenuminteger</type>
+	        <scriptable>false</scriptable>
+	        <defaultvalue>0</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+	      	</restriction>
+	    </parameter> 
+	
+	    <parameter id="1">
+	        <enabled>true</enabled>
+	        <editable>false</editable>
+	        <name>source/type</name>
+	        <displayname>Type</displayname>
+	        <grouppath>Source</grouppath>
+	        <information>The type of the connection source</information>
+	        <type>methodtype</type>
+	        <defaultvalue>signal</defaultvalue>	 
+	      	<restriction>
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+						<allowed></allowed>
+	      	</restriction>	             	
+	    </parameter>	       
+	    
+	    <parameter id="2">
+	        <enabled>true</enabled>
+	        <editable>false</editable>
+	        <name>source/signature</name>
+	        <displayname>Signature</displayname>
+	        <grouppath>Source</grouppath>
+	        <information>The signature of the connection source</information>
+	        <type>string</type>
+	        <defaultvalue></defaultvalue>
+	    </parameter>
+	    
+	    <parameter id="3">
+	        <enabled>true</enabled>
+	        <editable>false</editable>
+	        <name>target/object</name>
+	        <displayname>Object</displayname>
+	        <grouppath>Target</grouppath>
+	        <information>The target object of the connection</information>
+	        <type>dynamicenuminteger</type>
+	        <scriptable>false</scriptable>
+	        <defaultvalue>0</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="4">
+	        <enabled>true</enabled>
+	        <editable>false</editable>
+	        <name>target/type</name>
+	        <displayname>Type</displayname>
+	        <grouppath>Target</grouppath>
+	        <information>The type of the connection target</information>
+	        <type>methodtype</type>
+	        <defaultvalue>Signal</defaultvalue>	 
+	      	<restriction>
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+						<allowed>signal;slot</allowed>
+	      	</restriction>	             	
+	    </parameter>	       
+	    
+	    <parameter id="5">
+	        <enabled>true</enabled>
+	        <editable>false</editable>
+	        <name>target/signature</name>
+	        <displayname>Signature</displayname>
+	        <grouppath>Target</grouppath>
+	        <information>The signature of the connection target</information>
+	        <type>string</type>
+	        <defaultvalue></defaultvalue>
+	    </parameter>	    
+	    
+	</parameters>
+</definitions>

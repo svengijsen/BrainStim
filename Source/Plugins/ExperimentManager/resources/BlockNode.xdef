@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<definitions>
+	<parameters>
+	
+	    <parameter id="0">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>name</name>
+	        <displayname>Name</displayname>
+	        <grouppath></grouppath>
+	        <information>The name of the block</information>
+	        <type>string</type>
+	        <defaultvalue></defaultvalue>	 
+	    </parameter>	       
+	    
+	    <parameter id="1">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>block_number</name>
+	        <displayname>Number</displayname>
+	        <grouppath></grouppath>
+	        <information>The block number, that can define the order of execution</information>
+	        <type>integer</type>
+	        <defaultvalue></defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="2">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>nr_of_trials</name>
+	        <displayname>Trials</displayname>
+	        <grouppath></grouppath>
+	        <information>The number of trials for this block</information>
+	        <type>integer</type>
+	        <defaultvalue></defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>1</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      	</restriction>
+	    </parameter>
+	    
+	    <parameter id="3">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>nr_of_internal_triggers</name>
+	        <displayname>Internal Triggers</displayname>
+	        <grouppath></grouppath>
+	        <information>The number of internal triggers for each trial of this block</information>
+	        <type>integer</type>
+	        <defaultvalue></defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>1</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="4">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>nr_of_external_triggers</name>
+	        <displayname>External Triggers</displayname>
+	        <grouppath></grouppath>
+	        <information>The number of external triggers for each internal trigger</information>
+	        <type>integer</type>
+	        <defaultvalue></defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>1</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      	</restriction>
+	    </parameter>	    	    	    
+	    
+	</parameters>
+</definitions>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<definitions>
+	<parameters>
+	
+	    <parameter id="0">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>name</name>
+	        <displayname>Name</displayname>
+	        <grouppath></grouppath>
+	        <information>The name of the parameter</information>
+	        <type>string</type>
+	        <defaultvalue></defaultvalue>	 
+	    </parameter>
+	    
+	    <parameter id="1">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>value</name>
+	        <displayname>Value</displayname>
+	        <grouppath></grouppath>
+	        <information>The value of the parameter</information>
+	        <type>string</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue></defaultvalue>	 
+	    </parameter>		        
+	   	    
+	</parameters>
+</definitions>

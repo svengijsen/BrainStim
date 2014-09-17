@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<definitions>
+	<parameters>
+	
+	    <parameter id="0">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>name</name>
+	        <displayname>Name</displayname>
+	        <grouppath></grouppath>
+	        <information>The name of the loop</information>
+	        <type>string</type>
+	        <defaultvalue></defaultvalue>	 
+	    </parameter>	       
+	    
+	    <parameter id="1">
+	        <enabled>false</enabled>
+	        <editable>true</editable>
+	        <name>loop_number</name>
+	        <displayname>Number</displayname>
+	        <grouppath></grouppath>
+	        <information>The loop number, that can define the order of execution</information>
+	        <type>integer</type>
+	        <defaultvalue></defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      	</restriction>
+	    </parameter> 
+	    
+	    <parameter id="2">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>nr_of_loops</name>
+	        <displayname>Loops</displayname>
+	        <grouppath></grouppath>
+	        <information>The number of loop-backs for this loop</information>
+	        <type>integer</type>
+	        <defaultvalue></defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      	</restriction>
+	    </parameter>
+	    
+	    <parameter id="3">
+	        <enabled>false</enabled>
+	        <editable>true</editable>
+	        <name>target_block</name>
+	        <displayname>Target Block ID</displayname>
+	        <grouppath></grouppath>
+	        <information>The loop's target block id</information>
+	        <type>integer</type>
+	        <defaultvalue></defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      	</restriction>
+	    </parameter> 
+	   	    
+	</parameters>
+</definitions>

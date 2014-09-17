@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<definitions>
+	<parameters>
+	
+	    <parameter id="0">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>file</name>
+	        <displayname>Definition File Path</displayname>
+	        <grouppath></grouppath>
+	        <information>The file path to the object definition file</information>
+	        <type>filepath</type>
+	        <defaultvalue></defaultvalue>	      	
+	    </parameter>
+	    
+	</parameters>
+</definitions>	

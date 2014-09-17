@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<definitions>
+	<groups>
+	</groups>
+
+	<parameters>
+	
+	    <parameter id="0">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>qmlmainfilepath</name>
+	        <displayname>QML File</displayname>
+	        <grouppath>Global</grouppath>
+	        <information>The default file path of a QML source to load by the viewer</information>
+	        <type>filepath</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue></defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+						<allowed></allowed>
+	      	</restriction>
+	    </parameter>
+
+	    <parameter id="1">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>backgroundcolor</name>
+	        <displayname>BackGround Color</displayname>
+	        <grouppath>Global</grouppath>
+	        <information>The Color of the Stimuli Background</information>
+	        <type>color</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>#575757</defaultvalue>
+	    </parameter>
+	    
+	    <parameter id="2">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>stimuluswidthspan</name>
+	        <displayname>Width</displayname>
+	        <grouppath>Global;Size</grouppath>
+	        <information>The Width of the Stimuli in Pixels</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>480</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+	      	</restriction>
+	    </parameter>          
+	
+	    <parameter id="3">
+	        <enabled>true</enabled>
+	        <editable>true</editable>
+	        <name>stimulusheightspan</name>
+	        <displayname>Height</displayname>
+	        <grouppath>Global;Size</grouppath>
+	        <information>The Height of the Stimuli in Pixels</information>
+	        <type>integer</type>
+	        <scriptable>true</scriptable>
+	        <defaultvalue>480</defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      		<regularexpression>
+	      			<pattern></pattern>
+	      			<casesensitive>false</casesensitive>
+	      		</regularexpression>
+	      	</restriction>
+	    </parameter> 
+	    
+	</parameters>
+</definitions>	

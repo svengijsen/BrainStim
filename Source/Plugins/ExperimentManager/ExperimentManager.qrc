@@ -1,0 +1,29 @@
+<RCC>
+    <qresource prefix="/">
+        <file>resources/StartQmlFile.qml</file>
+        <file>resources/UnlockedQmlFile.qml</file>
+        <file>resources/RetinotopyMapper.xdef</file>
+        <file>resources/Clockwise.png</file>
+        <file>resources/Counterclockwise.png</file>
+        <file>resources/Decrease.png</file>
+        <file>resources/Downwards.png</file>
+        <file>resources/Increase.png</file>
+        <file>resources/Upwards.png</file>
+        <file>resources/ExperimentNode.xdef</file>
+        <file>resources/DeclarationsObjectNode.xdef</file>
+        <file>resources/BlockLoopNode.xdef</file>
+        <file>resources/BlockNode.xdef</file>
+        <file>resources/BlockParameterNode.xdef</file>
+        <file>resources/InitializationsParameterNode.xdef</file>
+        <file>resources/QML2Viewer.xdef</file>
+        <file>resources/ObjectDefinitionNode.xdef</file>
+        <file>resources/browse.png</file>
+        <file>resources/locked.png</file>
+        <file>resources/unlocked.png</file>
+        <file>resources/ConnectionObjectNode.xdef</file>
+        <file>resources/InitializationObjectNode.xdef</file>
+        <file>resources/FinalizationObjectNode.xdef</file>
+        <file>resources/signal.png</file>
+        <file>resources/slot.png</file>
+    </qresource>
+</RCC>

@@ -1,0 +1,255 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EXML>
+<!-- 
+This is a comment example
+Place you own text here..
+Attributes only apply to readonly non user data, like the ID
+-->
+
+<EXML version="2.0.0.2">
+
+	<defines>
+		<experiment ID="0">
+			<name>Retinotopic Mapping Experiment with the use of a TriggerTimer</name>
+			<debugmode>true</debugmode>
+		</experiment>
+	</defines>
+		
+	<declarations>
+		<object ID="0">
+			<class>TriggerTimer</class>
+			<name>Timer_Object_1</name>
+			<constructor>
+				<param1/>
+			</constructor>
+		</object>
+		<object ID="1">            
+			<class>RetinoMap_glwidget</class>
+			<name>RetinoMap_Object_1</name>
+			<constructor>
+				<param1/>
+			</constructor>
+		</object> 
+	</declarations>
+    
+	<connections>
+		<object ID="0">
+			<type>signal</type>
+			<signature>timeout()</signature>
+			<target ID="1">
+				<type>slot</type>     
+				<signature>incrementExternalTrigger()</signature>      
+			</target>
+		</object>
+	</connections>
+    
+	<initializations>   
+		<object ID="0">
+			<type>slot</type>
+			<signature>startTimer</signature>
+			<parameters>
+				<parameter ID="0">
+					<name>msec</name>
+					<value>200</value>
+					<type>double</type>
+				</parameter>  	
+			</parameters>
+		</object> 
+	</initializations>        
+     
+	<actions>
+		<blocks>
+			<block ID="0">
+				<name>Fixation_Block</name>
+				<block_number>0</block_number>            
+				<nr_of_trials>2</nr_of_trials>
+				<nr_of_internal_triggers>2</nr_of_internal_triggers>
+				<nr_of_external_triggers>1</nr_of_external_triggers>	 
+				<object ID="1">
+					<parameters>
+						<parameter ID="0">
+							<name>RetinoPattern</name>
+							<value>fixation</value>
+						</parameter>
+						<parameter ID="1">
+							<name>ShowFixPoint</name>
+							<value>true</value>
+						</parameter>
+						<parameter ID="2">
+							<name>FixationSize</name>
+							<value>12</value>
+						</parameter>	
+						<parameter ID="3">
+							<name>StimulusWidthSpan</name>
+							<value>768</value>
+						</parameter>
+						<parameter ID="4">
+							<name>StimulusHeightSpan</name>
+							<value>768</value>
+						</parameter>
+						<parameter ID="5">
+							<name>StimuliRefreshRate</name>
+							<value>30</value>
+						</parameter>
+						<parameter ID="6">
+							<name>BackGroundColor</name>
+							<value>#575757</value>
+						</parameter>
+						<parameter ID="7">
+							<name>FixationColor</name>
+							<value>#FF0000</value>
+						</parameter>
+						<parameter ID="8">
+							<name>StimuliRefreshRate</name>
+							<value>30</value>
+						</parameter>						
+					</parameters>    
+				</object>   
+			</block>
+			
+			<block ID="1">
+				<name>PolarAngle_Block_1</name>
+				<block_number>1</block_number>            
+				<nr_of_trials>1</nr_of_trials>
+				<nr_of_internal_triggers>4</nr_of_internal_triggers>
+				<nr_of_external_triggers>1</nr_of_external_triggers>
+				<object ID="1">
+					<parameters>
+						<parameter ID="0">
+							<name>RetinoPattern</name>
+							<value>PolarAngle</value>
+						</parameter>	
+						<parameter ID="1">
+							<name>ShowFixPoint</name>
+							<value>true</value>
+						</parameter>
+						<parameter ID="2">
+							<name>CycleTriggerAmount</name>
+							<value>4</value>
+						</parameter>	
+						<parameter ID="3">
+							<name>InternalTriggerDuration</name>
+							<value>200</value>
+						</parameter>						
+							<parameter ID="4">
+							<name>CheckerColor1</name>
+							<value>#FFFFFF</value>
+						</parameter>
+							<parameter ID="5">
+							<name>CheckerColor2</name>
+							<value>#000000</value>
+						</parameter>			
+						<parameter ID="6">
+							<name>PolarWedgeSpan</name>
+							<value>30</value>
+						</parameter>		        	
+						<parameter ID="7">	 	
+							<name>PolarCheckAmount</name>
+							<value>5</value>	        	
+						</parameter>
+						<parameter ID="8">	      	
+							<name>PolarRingAmount</name>
+							<value>10</value>
+						</parameter>       	
+						<parameter ID="9">    	
+							<name>PolarRotationDirection</name>
+							<value>-1</value>	        	
+						</parameter>
+						<parameter ID="10">   
+							<name>FlickrFrequency</name>
+							<value>7.5</value>
+						</parameter>	        	
+						<parameter ID="11">
+							<name>GapDiameter</name>
+							<value>100</value>
+						</parameter>
+					</parameters>			    	 
+				</object>   
+			</block>
+			
+			<block ID="2">
+				<name>PolarAngle_Block_2</name>
+				<block_number>2</block_number>            
+				<nr_of_trials>1</nr_of_trials>
+				<nr_of_internal_triggers>4</nr_of_internal_triggers>
+				<nr_of_external_triggers>1</nr_of_external_triggers>
+				<object ID="1">
+					<parameters>
+						<parameter ID="0">
+							<name>RetinoPattern</name>
+							<value>PolarAngle</value>
+						</parameter>	
+						<parameter ID="1">
+							<name>ShowFixPoint</name>
+							<value>false</value>
+						</parameter>
+						<parameter ID="2">
+							<name>CycleTriggerAmount</name>
+							<value>4</value>
+						</parameter>	
+						<parameter ID="3">
+							<name>InternalTriggerDuration</name>
+							<value>200</value>
+						</parameter>						
+							<parameter ID="4">
+							<name>CheckerColor1</name>
+							<value>#FF00FF</value>
+						</parameter>
+							<parameter ID="5">
+							<name>CheckerColor2</name>
+							<value>#000000</value>
+						</parameter>			
+						<parameter ID="6">
+							<name>PolarWedgeSpan</name>
+							<value>30</value>
+						</parameter>		        	
+						<parameter ID="7">	 	
+							<name>PolarCheckAmount</name>
+							<value>5</value>	        	
+						</parameter>
+						<parameter ID="8">	      	
+							<name>PolarRingAmount</name>
+							<value>10</value>
+						</parameter>       	
+						<parameter ID="9">    	
+							<name>PolarRotationDirection</name>
+							<value>-1</value>	        	
+						</parameter>
+						<parameter ID="10">   
+							<name>FlickrFrequency</name>
+							<value>7.5</value>
+						</parameter>	        	
+						<parameter ID="11">
+							<name>GapDiameter</name>
+							<value>100</value>
+						</parameter>
+					</parameters>			    	 
+				</object> 
+				<loops>
+					<loop ID="1">
+						<name>Loop_test_1</name>
+						<loop_number>1</loop_number>          
+						<nr_of_loops>1</nr_of_loops>
+						<target_block>1</target_block> 
+					</loop>
+					<loop ID="2">
+						<name>Loop_test_2</name>
+						<loop_number>2</loop_number>          
+						<nr_of_loops>2</nr_of_loops>
+						<target_block>2</target_block> 
+					</loop>					
+				</loops>				
+			</block>			
+			
+		</blocks>
+		
+	</actions>
+	
+	<finalizations>
+		<object ID="0">
+			<type>slot</type>
+			<signature>stopTimer</signature>
+		</object>
+	</finalizations>    
+
+</EXML>

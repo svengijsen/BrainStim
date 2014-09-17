@@ -1,0 +1,192 @@
+//ExperimentManagerplugin
+<<<<<<< HEAD
+//Copyright (C) 2013  Sven Gijsen
+=======
+//Copyright (C) 2012  Sven Gijsen
+>>>>>>> fdpsrv0015/PiezoStimPlugin
+//
+//This file is part of BrainStim.
+//BrainStim is free software: you can redistribute it and/or modify
+//it under the terms of the GNU General Public License as published by
+//the Free Software Foundation, either version 3 of the License, or
+//(at your option) any later version.
+//
+//This program is distributed in the hope that it will be useful,
+//but WITHOUT ANY WARRANTY; without even the implied warranty of
+//MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//GNU General Public License for more details.
+//
+//You should have received a copy of the GNU General Public License
+//along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
+#include <QBackingStore>
+#include <QCoreApplication>
+#include "Quick2ContainerWidget.h"
+
+//////////////////////////////////////////////////////////////////////////////
+Quick2ContainerWidget::Quick2ContainerWidget(QWidget* parent) : QWidget(parent)
+{
+	init();
+}
+
+//////////////////////////////////////////////////////////////////////////////
+Quick2ContainerWidget::Quick2ContainerWidget(QQuickWindow* window, QWidget* parent) : QWidget(parent)
+{
+	init();
+	setWindow(window);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void Quick2ContainerWidget::setWindow(QQuickWindow* window)
+{
+	if (window_)
+	{
+		window_->removeEventFilter(this);
+		disconnect(window_, 0, this, 0);
+	}
+	// else do nothing
+
+	if ((window_ = window))
+	{
+		Q_ASSERT(windowHandle());
+		window->setParent(windowHandle());
+		window->setOpacity(.0);
+		if (window->size().isEmpty())
+		{
+			window->installEventFilter(this);
+		}
+		else
+		{
+			resize(window->size());
+		}
+		window->setPosition(width(), height());
+		connect(window, SIGNAL(afterRendering()), SLOT(afterRendering()),Qt::DirectConnection);
+		connect(window, SIGNAL(beforeRendering()), SLOT(beforeRendering()),Qt::DirectConnection);
+	}
+	// else do nothing
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void Quick2ContainerWidget::init()
+{
+	window_ = 0;
+	setAttribute(Qt::WA_NativeWindow);
+	setAttribute(Qt::WA_TranslucentBackground);
+	setWindowFlags(Qt::FramelessWindowHint);
+	setMouseTracking(true);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+bool Quick2ContainerWidget::event(QEvent* event)
+{
+	if (window_)
+	{
+		switch (event->type())
+		{
+		case QEvent::FocusIn:
+		case QEvent::FocusOut:
+		case QEvent::FocusAboutToChange:
+		case QEvent::KeyPress:
+		case QEvent::KeyRelease:
+		case QEvent::Wheel:
+			QCoreApplication::sendEvent(window_, event);
+			return true;
+		case QEvent::MouseButtonPress:
+		case QEvent::MouseButtonRelease:
+		case QEvent::MouseButtonDblClick:
+		case QEvent::MouseMove:
+			{
+				QPointF localPos(static_cast<QMouseEvent*>(event)->localPos());
+				localPos.setY(height() - localPos.y());
+				QPointF windowPos(static_cast<QMouseEvent*>(event)->windowPos());
+				windowPos.setY(height() - windowPos.y());
+				QMouseEvent mouseEvent(event->type(), localPos, windowPos,
+					static_cast<QMouseEvent*>(event)->button(),
+					static_cast<QMouseEvent*>(event)->buttons(),
+					static_cast<QMouseEvent*>(event)->modifiers());
+				QCoreApplication::sendEvent(window_, &mouseEvent);
+				return true;
+			}
+		case QEvent::Resize:
+			if (window_)
+			{
+				QSize size(static_cast<QResizeEvent*>(event)->size());
+				window_->setGeometry(size.width(), size.height(),
+					size.width(), size.height());
+			}
+			// else do nothing
+			break;
+		case QEvent::Show:
+			if (window_)
+			{
+				window_->show();
+			}
+			// else do nothing
+		default:
+			break;
+		}
+	}
+	return QWidget::event(event);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+bool Quick2ContainerWidget::eventFilter(QObject*, QEvent* event)
+{
+	Q_ASSERT(window_);
+
+	switch (event->type())
+	{
+	case QEvent::Resize:
+		{
+			QSize size(static_cast<QResizeEvent*>(event)->size());
+			resize(size);
+			window_->setPosition(size.width(), size.height());
+			window_->removeEventFilter(this);
+			break;
+		}
+	default:
+		break;
+	}
+	return false;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void Quick2ContainerWidget::afterRendering()
+{
+	if (window_ && windowHandle()->isExposed())
+	{
+		//  fbo_->toImage().save("test.png");
+#   ifdef QT_OPENGL_ES
+		static GLint const fmt(GL_BGRA_EXT);
+#   else
+		static GLint const fmt(GL_BGRA);
+#   endif
+		fbo_->bind();
+		glReadPixels(0, 0, width(), height(), fmt, GL_UNSIGNED_BYTE,
+			static_cast<QImage*>(backingStore()->paintDevice())->bits());
+		/*
+		glBindTexture(GL_TEXTURE_2D, fbo_->texture());
+
+		glGetTexImage(GL_TEXTURE_2D, 0, GL_BGRA, GL_UNSIGNED_BYTE,
+		static_cast<QImage*>(backingStore()->paintDevice())->bits());
+		*/
+		backingStore()->flush(rect());
+	}
+	// else do nothing
+}
+
+//////////////////////////////////////////////////////////////////////////////
+void Quick2ContainerWidget::beforeRendering()
+{
+	if (!fbo_)
+	{
+<<<<<<< HEAD
+		fbo_.reset(new QOpenGLFramebufferObject(size(),	QOpenGLFramebufferObject::NoAttachment));
+=======
+		fbo_.reset(new QOpenGLFramebufferObject(size(),
+			QOpenGLFramebufferObject::NoAttachment));
+>>>>>>> fdpsrv0015/PiezoStimPlugin
+		window_->setRenderTarget(fbo_.data());
+	}
+	// else do nothing
+}
