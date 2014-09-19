@@ -149,9 +149,9 @@
     <PostBuildEvent>
       <Command>echo POSTBUILDSTEP for $(ProjectName) $(Platform) $(Configuration)
 
-xcopy "$(TargetPath)" "$(ProjectDir)..\..\..\..\Install\qml\plugins\$(Platform)\" /i /d /y
-xcopy "$(ProjectDir)BrainStimExtensions\*" "$(ProjectDir)..\..\..\..\Install\qml\plugins\$(Platform)\BrainStim_QMLExtensions" /s /i /y
-copy "$(ProjectDir)qmldir_$(Configuration)_$(Platform)" "$(ProjectDir)..\..\..\..\Install\qml\plugins\$(Platform)\BrainStim_QMLExtensions\qmldir" /y
+xcopy "$(TargetPath)" "$(ProjectDir)..\..\..\..\Install\Qml\plugins\$(Platform)\" /i /d /y
+xcopy "$(ProjectDir)BrainStimExtensions\*" "$(ProjectDir)..\..\..\..\Install\Qml\plugins\$(Platform)\BrainStim_QMLExtensions" /s /i /y
+copy "$(ProjectDir)qmldir_$(Configuration)_$(Platform)" "$(ProjectDir)..\..\..\..\Install\Qml\plugins\$(Platform)\BrainStim_QMLExtensions\qmldir" /y
 if errorlevel 1 goto BuildEventFailed
 goto BuildEventOK
 :BuildEventFailed
@@ -210,9 +210,9 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
     <PostBuildEvent>
       <Command>echo POSTBUILDSTEP for $(ProjectName) $(Platform) $(Configuration)
 
-xcopy "$(TargetPath)" "$(ProjectDir)..\..\..\..\Install\qml\plugins\$(Platform)\" /i /d /y
-xcopy "$(ProjectDir)BrainStimExtensions\*" "$(ProjectDir)..\..\..\..\Install\qml\plugins\$(Platform)\BrainStim_QMLExtensions" /s /i /y
-copy "$(ProjectDir)qmldir_$(Configuration)_$(Platform)" "$(ProjectDir)..\..\..\..\Install\qml\plugins\$(Platform)\BrainStim_QMLExtensions\qmldir" /y
+xcopy "$(TargetPath)" "$(ProjectDir)..\..\..\..\Install\Qml\plugins\$(Platform)\" /i /d /y
+xcopy "$(ProjectDir)BrainStimExtensions\*" "$(ProjectDir)..\..\..\..\Install\Qml\plugins\$(Platform)\BrainStim_QMLExtensions" /s /i /y
+copy "$(ProjectDir)qmldir_$(Configuration)_$(Platform)" "$(ProjectDir)..\..\..\..\Install\Qml\plugins\$(Platform)\BrainStim_QMLExtensions\qmldir" /y
 if errorlevel 1 goto BuildEventFailed
 goto BuildEventOK
 :BuildEventFailed
@@ -265,9 +265,9 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
     <PostBuildEvent>
       <Command>echo POSTBUILDSTEP for $(ProjectName) $(Platform) $(Configuration)
 
-xcopy "$(TargetPath)" "$(ProjectDir)..\..\..\..\Install\qml\plugins\$(Platform)\" /i /d /y
-xcopy "$(ProjectDir)BrainStimExtensions\*" "$(ProjectDir)..\..\..\..\Install\qml\plugins\$(Platform)\BrainStim_QMLExtensions" /s /i /y
-copy "$(ProjectDir)qmldir_$(Configuration)_$(Platform)" "$(ProjectDir)..\..\..\..\Install\qml\plugins\$(Platform)\BrainStim_QMLExtensions\qmldir" /y
+xcopy "$(TargetPath)" "$(ProjectDir)..\..\..\..\Install\Qml\plugins\$(Platform)\" /i /d /y
+xcopy "$(ProjectDir)BrainStimExtensions\*" "$(ProjectDir)..\..\..\..\Install\Qml\plugins\$(Platform)\BrainStim_QMLExtensions" /s /i /y
+copy "$(ProjectDir)qmldir_$(Configuration)_$(Platform)" "$(ProjectDir)..\..\..\..\Install\Qml\plugins\$(Platform)\BrainStim_QMLExtensions\qmldir" /y
 if errorlevel 1 goto BuildEventFailed
 goto BuildEventOK
 :BuildEventFailed
@@ -326,9 +326,9 @@ $(QTDIR)\bin\qmlplugindump.exe -notrelocatable BrainStim_QMLExtensions 1.2 /Brai
     <PostBuildEvent>
       <Command>echo POSTBUILDSTEP for $(ProjectName) $(Platform) $(Configuration)
 
-xcopy "$(TargetPath)" "$(ProjectDir)..\..\..\..\Install\qml\plugins\$(Platform)\" /i /d /y
-xcopy "$(ProjectDir)BrainStimExtensions\*" "$(ProjectDir)..\..\..\..\Install\qml\plugins\$(Platform)\BrainStim_QMLExtensions" /s /i /y
-copy "$(ProjectDir)qmldir_$(Configuration)_$(Platform)" "$(ProjectDir)..\..\..\..\Install\qml\plugins\$(Platform)\BrainStim_QMLExtensions\qmldir" /y
+xcopy "$(TargetPath)" "$(ProjectDir)..\..\..\..\Install\Qml\plugins\$(Platform)\" /i /d /y
+xcopy "$(ProjectDir)BrainStimExtensions\*" "$(ProjectDir)..\..\..\..\Install\Qml\plugins\$(Platform)\BrainStim_QMLExtensions" /s /i /y
+copy "$(ProjectDir)qmldir_$(Configuration)_$(Platform)" "$(ProjectDir)..\..\..\..\Install\Qml\plugins\$(Platform)\BrainStim_QMLExtensions\qmldir" /y
 if errorlevel 1 goto BuildEventFailed
 goto BuildEventOK
 :BuildEventFailed

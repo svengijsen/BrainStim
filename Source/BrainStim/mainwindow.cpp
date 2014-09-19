@@ -2211,7 +2211,7 @@ bool MainWindow::checkUserDirectories(QStringList &lPathsToCheck, bool bShowWarn
 
 	for(i=0;i<lPathsToCheck.size();i++) 
 	{
-		lPathsToCheck[i] = tmpString.toLower() + lPathsToCheck.at(i).toLower();
+		lPathsToCheck[i] = tmpString + lPathsToCheck.at(i);
 		tmpDir.setPath(lPathsToCheck.at(i));
 		if(tmpDir.exists() == false)
 		{
@@ -2258,7 +2258,7 @@ bool MainWindow::checkUserDirectories(QStringList &lPathsToCheck, bool bShowWarn
 					bWriteRights = true;
 				}
 				if(bWriteRights)
-					lPathsToCheck.removeAll(tmpString.toLower());
+					lPathsToCheck.removeAll(tmpString);
 			}
 		}
 	}

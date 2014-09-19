@@ -9,14 +9,8 @@
     <!--ShortPlatform-->
     <QTDIR Condition="'$(Platform)' == 'Win32'">C:\Qt\5.1.0\win32</QTDIR>
     <QTDIR Condition="'$(Platform)' == 'x64'">C:\Qt\5.1.0\x64</QTDIR>
-    <QSCINTILLA>C:\Qt\QScintilla-gpl-2.7.2</QSCINTILLA>
-    <QTPROPERTYBROWSER>C:\Qt\CTK\QtPropertyBrowser</QTPROPERTYBROWSER>
-  </PropertyGroup>
-  
-	<PropertyGroup>
-    <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b$(QSCINTILLA)\lib\$(Platform)\$(Configuration)%3b$(PATH)</LocalDebuggerEnvironment>
-    <LocalDebuggerCommand>$(ProjectDir)..\..\Install\$(ProjectName)_$(PlatformName)_$(Configuration)$(TargetExt)</LocalDebuggerCommand>
-    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <INPOUT_1500 Condition="'$(Platform)' == 'Win32'">C:\Qt\InpOut_1500\Win32</INPOUT_1500>
+    <INPOUT_1500 Condition="'$(Platform)' == 'x64'">C:\Qt\InpOut_1500\x64</INPOUT_1500>    
   </PropertyGroup>
   
   <Choose>
@@ -41,11 +35,8 @@
     <BuildMacro Include="QTDIR">
       <Value>$(QTDIR)</Value>
     </BuildMacro>
-    <BuildMacro Include="QSCINTILLA">
-      <Value>$(QSCINTILLA)</Value>
-    </BuildMacro>
-    <BuildMacro Include="QTPROPERTYBROWSER">
-      <Value>$(QTPROPERTYBROWSER)</Value>
-    </BuildMacro>          
+    <BuildMacro Include="INPOUT_1500">
+      <Value>$(INPOUT_1500)</Value>
+    </BuildMacro>    
   </ItemGroup>
 </Project>

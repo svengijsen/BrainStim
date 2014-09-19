@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets" />
 
@@ -9,14 +9,6 @@
     <!--ShortPlatform-->
     <QTDIR Condition="'$(Platform)' == 'Win32'">C:\Qt\5.1.0\win32</QTDIR>
     <QTDIR Condition="'$(Platform)' == 'x64'">C:\Qt\5.1.0\x64</QTDIR>
-    <QSCINTILLA>C:\Qt\QScintilla-gpl-2.7.2</QSCINTILLA>
-    <QTPROPERTYBROWSER>C:\Qt\CTK\QtPropertyBrowser</QTPROPERTYBROWSER>
-  </PropertyGroup>
-  
-	<PropertyGroup>
-    <LocalDebuggerEnvironment>PATH=$(QTDIR)\bin%3b$(QSCINTILLA)\lib\$(Platform)\$(Configuration)%3b$(PATH)</LocalDebuggerEnvironment>
-    <LocalDebuggerCommand>$(ProjectDir)..\..\Install\$(ProjectName)_$(PlatformName)_$(Configuration)$(TargetExt)</LocalDebuggerCommand>
-    <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
   
   <Choose>
@@ -41,11 +33,5 @@
     <BuildMacro Include="QTDIR">
       <Value>$(QTDIR)</Value>
     </BuildMacro>
-    <BuildMacro Include="QSCINTILLA">
-      <Value>$(QSCINTILLA)</Value>
-    </BuildMacro>
-    <BuildMacro Include="QTPROPERTYBROWSER">
-      <Value>$(QTPROPERTYBROWSER)</Value>
-    </BuildMacro>          
   </ItemGroup>
 </Project>
