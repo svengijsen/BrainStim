@@ -23,7 +23,7 @@
 #include <QString>
 #include <QtScript/QtScript>
 #include <QtScript/QScriptable>
-#include "InpOut32.h"
+#include "inpout32.h"
 #include "ppCaptureThread.h"
 #include "ppGenerateThread.h"
 #include "./../../BrainStim/mainappinfo.h"

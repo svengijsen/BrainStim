@@ -24,7 +24,7 @@
 #include <QSettings>
 #include <QMessageBox>
 #include "ui_optionpage.h"
-#include "GlobalApplicationInformation.h"
+#include "globalapplicationinformation.h"
 
 class OptionPage : public QDialog
 {

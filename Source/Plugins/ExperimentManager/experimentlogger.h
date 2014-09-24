@@ -23,7 +23,7 @@
 #include <QObject>
 #include <QFile>
 #include <QTextStream>
-#include "ExperimentTimer.h"
+#include "experimenttimer.h"
 
 class ExperimentLogger : public QObject
 {

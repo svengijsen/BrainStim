@@ -5,7 +5,7 @@
 #include <QSharedMemory>
 #include <QLocalServer>
 #include <QBuffer>
-#include <GlobalApplicationInformation.h>
+#include <globalapplicationinformation.h>
 
 #define SEGMENT_ALLOWMULTIPLEINSTANCE  "AllowMultipleInstance"
 

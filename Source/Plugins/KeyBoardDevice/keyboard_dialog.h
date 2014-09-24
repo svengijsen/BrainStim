@@ -25,7 +25,7 @@
 #include "ui_keyboard_dialog.h"
 #include <QtWidgets>
 #include <QDialog>
-#include "keyboardCaptureThread.h"
+#include "keyboardcapturethread.h"
 
 class KeyBoard_Dialog : public QDialog, private Ui::KeyBoard_DialogClass
 {

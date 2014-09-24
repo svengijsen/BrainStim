@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+File          : exml_v1001.xsd, exml validation
+Copyright(C)  : 2014, Sven Gijsen
+-->
+
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+
+    <xsd:complexType name="experiment">
+      <xsd:sequence>
+        <xsd:element type="xsd:string" name="name"/>
+        <xsd:element type="xsd:string" name="debugmode"/>
+      </xsd:sequence>
+      <xsd:attribute type="xsd:integer" name="ID"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="object_definition">
+      <xsd:sequence>
+        <xsd:element type="xsd:string" name="file"/>
+      </xsd:sequence>
+      <xsd:attribute type="xsd:integer" name="ID"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="object_declaration">
+      <xsd:sequence>
+        <xsd:element type="xsd:string" name="class"/>
+        <xsd:element type="xsd:string" name="name"/>
+        <xsd:element name="definitions" maxOccurs="1" minOccurs="0">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="definition" maxOccurs="unbounded" minOccurs="0" type="object_definition"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute type="xsd:integer" name="ID"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="object_connection">
+      <xsd:sequence>
+        <xsd:element name="source">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element type="xsd:integer" name="object"/>
+              <xsd:element type="xsd:string" name="type"/>
+              <xsd:element type="xsd:string" name="signature"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="target">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element type="xsd:integer" name="object"/>
+              <xsd:element type="xsd:string" name="type"/>
+              <xsd:element type="xsd:string" name="signature"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute type="xsd:integer" name="ID"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="object_typed_parameter">
+      <xsd:sequence>
+        <xsd:element type="xsd:string" name="name"/>
+        <xsd:element type="xsd:string" name="value"/>
+        <xsd:element type="xsd:string" name="type"/>
+      </xsd:sequence>
+      <xsd:attribute type="xsd:integer" name="ID"/>
+    </xsd:complexType>
+
+  <xsd:complexType name="object_parameter">
+    <xsd:sequence>
+      <xsd:element type="xsd:string" name="name"/>
+      <xsd:element type="xsd:string" name="value"/>
+      <xsd:element type="xsd:string" name="type" maxOccurs="1" minOccurs="0"/>
+    </xsd:sequence>
+    <xsd:attribute type="xsd:integer" name="ID"/>
+  </xsd:complexType>
+
+    <xsd:complexType name="object_init_finit">
+      <xsd:sequence>
+        <xsd:element name="object">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element type="xsd:string" name="type"/>
+              <xsd:element type="xsd:string" name="signature"/>
+              <xsd:element name="parameters" maxOccurs="1" minOccurs="0">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="parameter" maxOccurs="unbounded" minOccurs="0" type="object_typed_parameter"/>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+            <xsd:attribute type="xsd:integer" name="ID"/>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute type="xsd:integer" name="ID"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="block_loop">
+      <xsd:sequence>
+        <xsd:element type="xsd:string" name="name"/>
+        <xsd:element type="xsd:integer" name="loop_number"/>
+        <xsd:element type="xsd:integer" name="nr_of_loops"/>
+        <xsd:element type="xsd:integer" name="target_block"/>
+      </xsd:sequence>
+      <xsd:attribute type="xsd:integer" name="ID"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="experiment_block">
+      <xsd:sequence>
+        <xsd:element type="xsd:string" name="name"/>
+        <xsd:element type="xsd:integer" name="block_number"/>
+        <xsd:element type="xsd:integer" name="nr_of_trials"/>
+        <xsd:element type="xsd:integer" name="nr_of_internal_triggers"/>
+        <xsd:element type="xsd:integer" name="nr_of_external_triggers"/>
+        <xsd:element name="object" maxOccurs="unbounded" minOccurs="0">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="parameters" maxOccurs="unbounded" minOccurs="0">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="parameter" maxOccurs="unbounded" minOccurs="0" type="object_parameter"/>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+              <xsd:element name="custom_parameters" maxOccurs="unbounded" minOccurs="0">
+                <xsd:complexType>
+                  <xsd:sequence>
+                    <xsd:element name="parameter" maxOccurs="unbounded" minOccurs="0" type="object_parameter"/>
+                  </xsd:sequence>
+                </xsd:complexType>
+              </xsd:element>
+            </xsd:sequence>
+            <xsd:attribute type="xsd:integer" name="ID"/>
+          </xsd:complexType>
+        </xsd:element>
+        <xsd:element name="loops" maxOccurs="1" minOccurs="0">
+          <xsd:complexType>
+            <xsd:sequence>
+              <xsd:element name="loop" maxOccurs="unbounded" minOccurs="0" type="block_loop"/>
+            </xsd:sequence>
+          </xsd:complexType>
+        </xsd:element>
+      </xsd:sequence>
+      <xsd:attribute type="xsd:integer" name="ID"/>
+    </xsd:complexType>
+  
+  
+  
+    <xsd:element name="EXML">
+      <xsd:annotation>
+        <xsd:documentation/>
+      </xsd:annotation>
+      <xsd:complexType>
+        <xsd:sequence>
+          <xsd:element name="defines">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="experiment" type="experiment"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="declarations">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="object" maxOccurs="unbounded" minOccurs="0" type ="object_declaration"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="connections">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="connection" maxOccurs="unbounded" minOccurs="0" type="object_connection"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="initializations">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="initialization" maxOccurs="unbounded" minOccurs="0" type="object_init_finit"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="actions">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="blocks">
+                  <xsd:complexType>
+                    <xsd:sequence>
+                      <xsd:element name="block" maxOccurs="unbounded" minOccurs="0" type="experiment_block"/>
+                    </xsd:sequence>
+                  </xsd:complexType>
+                </xsd:element>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="finalizations">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="finalization" maxOccurs="unbounded" minOccurs="0"  type="object_init_finit"/>
+              </xsd:sequence>
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:sequence>
+        <xsd:attribute type="xsd:string" name="version"/>
+      </xsd:complexType>
+    </xsd:element>
+  
+</xsd:schema>

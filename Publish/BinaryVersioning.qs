@@ -140,20 +140,8 @@ sSourceList.push(sSourcePath + "Plugins/KeyBoardDevice/defines.h");
 sDestList.push(sDestPath + "Plugins/KeyBoardDevice/defines.h");//2
 sSourceList.push(sSourcePath + "Plugins/ParallelPortDevice/defines.h");
 sDestList.push(sDestPath + "Plugins/ParallelPortDevice/defines.h");//3
-sSourceList.push(sSourcePath + "Plugins/SerialPortDevice/defines.h");
-sDestList.push(sDestPath + "Plugins/SerialPortDevice/defines.h");//4
-sSourceList.push(sSourcePath + "Plugins/USBHIDDevice/defines.h");
-sDestList.push(sDestPath + "Plugins/USBHIDDevice/defines.h");//5
 sSourceList.push(sSourcePath + "QmlExtensions/Plugins/DefaultPlugin/defines.h");
-sDestList.push(sDestPath + "QmlExtensions/Plugins/DefaultPlugin/defines.h");//6
-sSourceList.push(sSourcePath + "Plugins/FirebirdClient/defines.h");
-sDestList.push(sDestPath + "Plugins/FirebirdClient/defines.h");//7
-sSourceList.push(sSourcePath + "Plugins/PiezoStimDevice/defines.h");
-sDestList.push(sDestPath + "Plugins/PiezoStimDevice/defines.h");//8
-sSourceList.push(sSourcePath + "Plugins/TBVExchanger/defines.h");
-sDestList.push(sDestPath + "Plugins/TBVExchanger/defines.h");//9
-sSourceList.push(sSourcePath + "Plugins/TCPNetworkServer/defines.h");
-sDestList.push(sDestPath + "Plugins/TCPNetworkServer/defines.h");//10
+sDestList.push(sDestPath + "QmlExtensions/Plugins/DefaultPlugin/defines.h");//4
 
 //BrainStim.openFiles("",sSourceList);
 
@@ -304,7 +292,7 @@ if(bDoProcess)
 			nChangeCounter++;			
 			
 			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_EXMLDOC_VALIDATION_NAME";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + "PLUGIN_EXMLDOC_EXTENSION \"_" + tmpMinimalXMLString_Array.join('') + ".xsd\"" + sComment;//PLUGIN_EXMLDOC_EXTENSION "_2001.xsd"
+			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + "PLUGIN_EXMLDOC_EXTENSION \"_v" + tmpMinimalXMLString_Array.join('') + ".xsd\"" + sComment;//PLUGIN_EXMLDOC_EXTENSION "_2001.xsd"
 			nChangeCounter++;
 
 			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_MAIN_PROGRAM_MINIMAL_VERSION";
@@ -400,95 +388,7 @@ if(bDoProcess)
 			nChangeCounter++;
 			bDoProcess = true;	
 		}
-		else if(nFileCounter == 4)//"Plugins/SerialPortDevice/defines.h"
-		{
-			sComponentName = "SerialPortPlugin";			
-			BrainStim_LatestCompReleaseString_Index = BrainStimInfo.GetLatestComponentReleaseByName(sComponentName);
-			sComponentIndex = BrainStimInfo.GetLatestComponentIndexByName(BrainStim_LatestCompReleaseString_Index,sComponentName);
-			
-			tmpCurrentReleaseString = BrainStimInfo.GetComponentVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpCurrentReleaseString_Array = tmpCurrentReleaseString.split(".");
-			tmpProductVersionString = BrainStimInfo.GetComponentProductVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpProductVersionString_Array = tmpProductVersionString.split(".");
-			tmpMinimalXMLString = BrainStimInfo.GetComponentMinimalEXMLVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpMinimalXMLString_Array = tmpMinimalXMLString.split(".");			
-					
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MAJOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[0] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MINOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[1] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_REVISION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[2] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_BUILD";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[3] + sComment;
-			nChangeCounter++;			
-			
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MAJOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[0] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MINOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[1] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_REVISION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[2] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_BUILD";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[3] + sComment;
-			nChangeCounter++;
-
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_MAIN_PROGRAM_MINIMAL_VERSION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + quotedString(BrainStimInfo.GetReleaseByIndex(BrainStim_LatestCompReleaseString_Index)) + sComment;
-			nChangeCounter++;
-			bDoProcess = true;	
-		}
-		else if(nFileCounter == 5)//"Plugins/USBHIDDevice/defines.h"
-		{
-			sComponentName = "USBHIDDevicePlugin";			
-			BrainStim_LatestCompReleaseString_Index = BrainStimInfo.GetLatestComponentReleaseByName(sComponentName);
-			sComponentIndex = BrainStimInfo.GetLatestComponentIndexByName(BrainStim_LatestCompReleaseString_Index,sComponentName);
-			
-			tmpCurrentReleaseString = BrainStimInfo.GetComponentVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpCurrentReleaseString_Array = tmpCurrentReleaseString.split(".");
-			tmpProductVersionString = BrainStimInfo.GetComponentProductVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpProductVersionString_Array = tmpProductVersionString.split(".");
-			tmpMinimalXMLString = BrainStimInfo.GetComponentMinimalEXMLVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpMinimalXMLString_Array = tmpMinimalXMLString.split(".");			
-					
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MAJOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[0] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MINOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[1] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_REVISION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[2] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_BUILD";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[3] + sComment;
-			nChangeCounter++;			
-			
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MAJOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[0] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MINOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[1] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_REVISION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[2] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_BUILD";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[3] + sComment;
-			nChangeCounter++;
-
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_MAIN_PROGRAM_MINIMAL_VERSION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + quotedString(BrainStimInfo.GetReleaseByIndex(BrainStim_LatestCompReleaseString_Index)) + sComment;
-			nChangeCounter++;	
-			bDoProcess = true;	
-		}
-		else if(nFileCounter == 6)//"QmlExtensions/Plugins/DefaultPlugin/defines.h"
+		else if(nFileCounter == 4)//"QmlExtensions/Plugins/DefaultPlugin/defines.h"
 		{
 			sComponentName = "BrainStim_QMLExtensions";			
 			BrainStim_LatestCompReleaseString_Index = BrainStimInfo.GetLatestComponentReleaseByName(sComponentName);
@@ -503,199 +403,199 @@ if(bDoProcess)
 			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[1] + sComment;
 			nChangeCounter++;
 			
-			sComponentName = "MediaPlayer";			
-			BrainStim_LatestCompReleaseString_Index = BrainStimInfo.GetLatestComponentReleaseByName(sComponentName);
-			sComponentIndex = BrainStimInfo.GetLatestComponentIndexByName(BrainStim_LatestCompReleaseString_Index,sComponentName);
-			tmpCurrentReleaseString = BrainStimInfo.GetComponentVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PHONONPLAYER_VERSION_STRING_REVISION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString + sComment;
-						
-			nChangeCounter++;
+//			sComponentName = "MediaPlayer";			
+//			BrainStim_LatestCompReleaseString_Index = BrainStimInfo.GetLatestComponentReleaseByName(sComponentName);
+//			sComponentIndex = BrainStimInfo.GetLatestComponentIndexByName(BrainStim_LatestCompReleaseString_Index,sComponentName);
+//			tmpCurrentReleaseString = BrainStimInfo.GetComponentVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
+//
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PHONONPLAYER_VERSION_STRING_REVISION";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString + sComment;
+//						
+//			nChangeCounter++;
 			bDoProcess = true;	
 		}
-		else if(nFileCounter == 7)//"Plugins/FirebirdClient/defines.h"
-		{
-			sComponentName = "FireBirdClientPlugin";			
-			BrainStim_LatestCompReleaseString_Index = BrainStimInfo.GetLatestComponentReleaseByName(sComponentName);
-			
-			Log(BrainStim_LatestCompReleaseString_Index);
-			
-			sComponentIndex = BrainStimInfo.GetLatestComponentIndexByName(BrainStim_LatestCompReleaseString_Index,sComponentName);
-			
-			tmpCurrentReleaseString = BrainStimInfo.GetComponentVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpCurrentReleaseString_Array = tmpCurrentReleaseString.split(".");
-			tmpProductVersionString = BrainStimInfo.GetComponentProductVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpProductVersionString_Array = tmpProductVersionString.split(".");
-			tmpMinimalXMLString = BrainStimInfo.GetComponentMinimalEXMLVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpMinimalXMLString_Array = tmpMinimalXMLString.split(".");			
-					
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MAJOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[0] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MINOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[1] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_REVISION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[2] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_BUILD";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[3] + sComment;
-			nChangeCounter++;			
-			
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MAJOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[0] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MINOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[1] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_REVISION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[2] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_BUILD";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[3] + sComment;
-			nChangeCounter++;
-
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_MAIN_PROGRAM_MINIMAL_VERSION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + quotedString(BrainStimInfo.GetReleaseByIndex(BrainStim_LatestCompReleaseString_Index)) + sComment;
-			nChangeCounter++;	
-			bDoProcess = true;		
-		}
-		else if(nFileCounter == 8)//"Plugins/PiezoStimDevice/defines.h"
-		{
-			sComponentName = "PiezoStimDevicePlugin";			
-			BrainStim_LatestCompReleaseString_Index = BrainStimInfo.GetLatestComponentReleaseByName(sComponentName);
-			sComponentIndex = BrainStimInfo.GetLatestComponentIndexByName(BrainStim_LatestCompReleaseString_Index,sComponentName);
-			
-			tmpCurrentReleaseString = BrainStimInfo.GetComponentVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpCurrentReleaseString_Array = tmpCurrentReleaseString.split(".");
-			tmpProductVersionString = BrainStimInfo.GetComponentProductVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpProductVersionString_Array = tmpProductVersionString.split(".");
-			tmpMinimalXMLString = BrainStimInfo.GetComponentMinimalEXMLVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpMinimalXMLString_Array = tmpMinimalXMLString.split(".");			
-					
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MAJOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[0] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MINOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[1] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_REVISION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[2] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_BUILD";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[3] + sComment;
-			nChangeCounter++;			
-			
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MAJOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[0] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MINOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[1] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_REVISION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[2] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_BUILD";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[3] + sComment;
-			nChangeCounter++;
-
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_MAIN_PROGRAM_MINIMAL_VERSION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + quotedString(BrainStimInfo.GetReleaseByIndex(BrainStim_LatestCompReleaseString_Index)) + sComment;
-			nChangeCounter++;	
-			bDoProcess = true;	
-		}		
-		else if(nFileCounter == 9)//"Plugins/TBVExchanger/defines.h"
-		{
-			sComponentName = "TBVExchangerPlugin";			
-			BrainStim_LatestCompReleaseString_Index = BrainStimInfo.GetLatestComponentReleaseByName(sComponentName);
-			sComponentIndex = BrainStimInfo.GetLatestComponentIndexByName(BrainStim_LatestCompReleaseString_Index,sComponentName);
-			
-			tmpCurrentReleaseString = BrainStimInfo.GetComponentVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpCurrentReleaseString_Array = tmpCurrentReleaseString.split(".");
-			tmpProductVersionString = BrainStimInfo.GetComponentProductVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpProductVersionString_Array = tmpProductVersionString.split(".");
-			tmpMinimalXMLString = BrainStimInfo.GetComponentMinimalEXMLVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpMinimalXMLString_Array = tmpMinimalXMLString.split(".");			
-					
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MAJOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[0] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MINOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[1] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_REVISION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[2] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_BUILD";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[3] + sComment;
-			nChangeCounter++;			
-			
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MAJOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[0] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MINOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[1] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_REVISION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[2] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_BUILD";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[3] + sComment;
-			nChangeCounter++;
-
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_MAIN_PROGRAM_MINIMAL_VERSION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + quotedString(BrainStimInfo.GetReleaseByIndex(BrainStim_LatestCompReleaseString_Index)) + sComment;
-			nChangeCounter++;	
-			bDoProcess = true;	
-		}		
-		else if(nFileCounter == 10)//"Plugins/TCPNetworkServer/defines.h"
-		{
-			sComponentName = "TCPNetworkServerPlugin";			
-			BrainStim_LatestCompReleaseString_Index = BrainStimInfo.GetLatestComponentReleaseByName(sComponentName);
-			sComponentIndex = BrainStimInfo.GetLatestComponentIndexByName(BrainStim_LatestCompReleaseString_Index,sComponentName);
-			
-			tmpCurrentReleaseString = BrainStimInfo.GetComponentVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpCurrentReleaseString_Array = tmpCurrentReleaseString.split(".");
-			tmpProductVersionString = BrainStimInfo.GetComponentProductVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpProductVersionString_Array = tmpProductVersionString.split(".");
-			tmpMinimalXMLString = BrainStimInfo.GetComponentMinimalEXMLVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
-			tmpMinimalXMLString_Array = tmpMinimalXMLString.split(".");			
-					
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MAJOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[0] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MINOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[1] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_REVISION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[2] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_BUILD";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[3] + sComment;
-			nChangeCounter++;			
-			
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MAJOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[0] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MINOR";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[1] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_REVISION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[2] + sComment;
-			nChangeCounter++;
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_BUILD";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[3] + sComment;
-			nChangeCounter++;
-
-			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_MAIN_PROGRAM_MINIMAL_VERSION";
-			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + quotedString(BrainStimInfo.GetReleaseByIndex(BrainStim_LatestCompReleaseString_Index)) + sComment;
-			nChangeCounter++;	
-			bDoProcess = true;	
-		}		
+//		else if(nFileCounter == 7)//"Plugins/FirebirdClient/defines.h"
+//		{
+//			sComponentName = "FireBirdClientPlugin";			
+//			BrainStim_LatestCompReleaseString_Index = BrainStimInfo.GetLatestComponentReleaseByName(sComponentName);
+//			
+//			Log(BrainStim_LatestCompReleaseString_Index);
+//			
+//			sComponentIndex = BrainStimInfo.GetLatestComponentIndexByName(BrainStim_LatestCompReleaseString_Index,sComponentName);
+//			
+//			tmpCurrentReleaseString = BrainStimInfo.GetComponentVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
+//			tmpCurrentReleaseString_Array = tmpCurrentReleaseString.split(".");
+//			tmpProductVersionString = BrainStimInfo.GetComponentProductVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
+//			tmpProductVersionString_Array = tmpProductVersionString.split(".");
+//			tmpMinimalXMLString = BrainStimInfo.GetComponentMinimalEXMLVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
+//			tmpMinimalXMLString_Array = tmpMinimalXMLString.split(".");			
+//					
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MAJOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[0] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MINOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[1] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_REVISION";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[2] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_BUILD";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[3] + sComment;
+//			nChangeCounter++;			
+//			
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MAJOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[0] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MINOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[1] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_REVISION";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[2] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_BUILD";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[3] + sComment;
+//			nChangeCounter++;
+//
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_MAIN_PROGRAM_MINIMAL_VERSION";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + quotedString(BrainStimInfo.GetReleaseByIndex(BrainStim_LatestCompReleaseString_Index)) + sComment;
+//			nChangeCounter++;	
+//			bDoProcess = true;		
+//		}
+//		else if(nFileCounter == 8)//"Plugins/PiezoStimDevice/defines.h"
+//		{
+//			sComponentName = "PiezoStimDevicePlugin";			
+//			BrainStim_LatestCompReleaseString_Index = BrainStimInfo.GetLatestComponentReleaseByName(sComponentName);
+//			sComponentIndex = BrainStimInfo.GetLatestComponentIndexByName(BrainStim_LatestCompReleaseString_Index,sComponentName);
+//			
+//			tmpCurrentReleaseString = BrainStimInfo.GetComponentVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
+//			tmpCurrentReleaseString_Array = tmpCurrentReleaseString.split(".");
+//			tmpProductVersionString = BrainStimInfo.GetComponentProductVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
+//			tmpProductVersionString_Array = tmpProductVersionString.split(".");
+//			tmpMinimalXMLString = BrainStimInfo.GetComponentMinimalEXMLVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
+//			tmpMinimalXMLString_Array = tmpMinimalXMLString.split(".");			
+//					
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MAJOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[0] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MINOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[1] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_REVISION";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[2] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_BUILD";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[3] + sComment;
+//			nChangeCounter++;			
+//			
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MAJOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[0] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MINOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[1] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_REVISION";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[2] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_BUILD";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[3] + sComment;
+//			nChangeCounter++;
+//
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_MAIN_PROGRAM_MINIMAL_VERSION";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + quotedString(BrainStimInfo.GetReleaseByIndex(BrainStim_LatestCompReleaseString_Index)) + sComment;
+//			nChangeCounter++;	
+//			bDoProcess = true;	
+//		}		
+//		else if(nFileCounter == 9)//"Plugins/TBVExchanger/defines.h"
+//		{
+//			sComponentName = "TBVExchangerPlugin";			
+//			BrainStim_LatestCompReleaseString_Index = BrainStimInfo.GetLatestComponentReleaseByName(sComponentName);
+//			sComponentIndex = BrainStimInfo.GetLatestComponentIndexByName(BrainStim_LatestCompReleaseString_Index,sComponentName);
+//			
+//			tmpCurrentReleaseString = BrainStimInfo.GetComponentVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
+//			tmpCurrentReleaseString_Array = tmpCurrentReleaseString.split(".");
+//			tmpProductVersionString = BrainStimInfo.GetComponentProductVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
+//			tmpProductVersionString_Array = tmpProductVersionString.split(".");
+//			tmpMinimalXMLString = BrainStimInfo.GetComponentMinimalEXMLVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
+//			tmpMinimalXMLString_Array = tmpMinimalXMLString.split(".");			
+//					
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MAJOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[0] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MINOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[1] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_REVISION";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[2] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_BUILD";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[3] + sComment;
+//			nChangeCounter++;			
+//			
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MAJOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[0] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MINOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[1] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_REVISION";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[2] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_BUILD";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[3] + sComment;
+//			nChangeCounter++;
+//
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_MAIN_PROGRAM_MINIMAL_VERSION";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + quotedString(BrainStimInfo.GetReleaseByIndex(BrainStim_LatestCompReleaseString_Index)) + sComment;
+//			nChangeCounter++;	
+//			bDoProcess = true;	
+//		}		
+//		else if(nFileCounter == 10)//"Plugins/TCPNetworkServer/defines.h"
+//		{
+//			sComponentName = "TCPNetworkServerPlugin";			
+//			BrainStim_LatestCompReleaseString_Index = BrainStimInfo.GetLatestComponentReleaseByName(sComponentName);
+//			sComponentIndex = BrainStimInfo.GetLatestComponentIndexByName(BrainStim_LatestCompReleaseString_Index,sComponentName);
+//			
+//			tmpCurrentReleaseString = BrainStimInfo.GetComponentVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
+//			tmpCurrentReleaseString_Array = tmpCurrentReleaseString.split(".");
+//			tmpProductVersionString = BrainStimInfo.GetComponentProductVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
+//			tmpProductVersionString_Array = tmpProductVersionString.split(".");
+//			tmpMinimalXMLString = BrainStimInfo.GetComponentMinimalEXMLVersionByIndexes(BrainStim_LatestCompReleaseString_Index,sComponentIndex);
+//			tmpMinimalXMLString_Array = tmpMinimalXMLString.split(".");			
+//					
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MAJOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[0] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_MINOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[1] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_REVISION";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[2] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_FILE_VERSION_STRING_BUILD";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpCurrentReleaseString_Array[3] + sComment;
+//			nChangeCounter++;			
+//			
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MAJOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[0] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_MINOR";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[1] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_REVISION";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[2] + sComment;
+//			nChangeCounter++;
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_PRODUCT_VERSION_STRING_BUILD";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + tmpProductVersionString_Array[3] + sComment;
+//			nChangeCounter++;
+//
+//			changeSet[nFileCounter][0][nChangeCounter] = "#define PLUGIN_MAIN_PROGRAM_MINIMAL_VERSION";
+//			changeSet[nFileCounter][1][nChangeCounter] = changeSet[nFileCounter][0][nChangeCounter] + "\t" + quotedString(BrainStimInfo.GetReleaseByIndex(BrainStim_LatestCompReleaseString_Index)) + sComment;
+//			nChangeCounter++;	
+//			bDoProcess = true;	
+//		}		
 		else
 		{		
-			bDoProcess = false;			
+			bDoProcess = false;
 		}
 		
 		if(bDoProcess)

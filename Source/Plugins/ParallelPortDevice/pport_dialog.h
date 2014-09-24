@@ -25,7 +25,7 @@
 #include <QtWidgets>
 #include <Windows.h>
 #include <QDialog>
-#include "InpOut32.h"
+#include "inpout32.h"
 #include "ppCaptureThread.h"
 #include "ppGenerateThread.h"
 

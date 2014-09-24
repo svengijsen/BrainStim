@@ -22,7 +22,7 @@
 #include <QtCore/QString>
 #include <QFile>
 #include "mainappinfo.h"
-#include "GlobalApplicationInformation.h"
+#include "globalapplicationinformation.h"
 
 QT_BEGIN_NAMESPACE
 class QProcess;

@@ -49,7 +49,7 @@
 #include "mainappinfo.h"
 #include "sciFindDialog.h"
 #include "assistant.h"
-#include "NetworkServer.h"
+#include "networkserver.h"
 
 class SvgView;
 class DeviceControl;

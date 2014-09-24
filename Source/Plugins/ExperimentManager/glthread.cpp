@@ -1,5 +1,5 @@
 #include "GLThread.h"
-#include "ThreadedGLWidgetWrapper.h"
+#include "threadedglwidgetwrapper.h"
 #include <QtOpenGL>
 
 GLThread::GLThread(ThreadedGLWidgetWrapper *glWidgetWrapper) : QThread(), glw(glWidgetWrapper)

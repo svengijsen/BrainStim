@@ -21,7 +21,7 @@
 
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by BrainStim.rc
+// Used by brainstim.rc
 
 //The defines automatically create the remaining defines
 #define FILE_VERSION_STRING MAIN_PROGRAM_FILE_VERSION_STRING

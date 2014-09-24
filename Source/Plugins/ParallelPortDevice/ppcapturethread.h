@@ -22,7 +22,7 @@
 
 #include <QThread>
 #include <QDateTime>
-#include "Global.h"
+#include "global.h"
 
 class ParallelPort;
 class ppCaptureThread : public QThread

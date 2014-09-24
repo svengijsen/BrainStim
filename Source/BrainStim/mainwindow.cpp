@@ -32,11 +32,11 @@
 #include <QGLFramebufferObject>
 #include <QDir>
 #include <QTabWidget>
-#include "OutputListDelegate.h"
+#include "outputlistdelegate.h"
 
 #include "../Plugins/ParallelPortDevice/parallelport.h"
-#include "../Plugins/ExperimentManager/ExperimentManager.h"
-#include "../Plugins/KeyBoardDevice/KeyBoardCapture.h"
+#include "../Plugins/ExperimentManager/experimentmanager.h"
+#include "../Plugins/KeyBoardDevice/keyboardcapture.h"
 
 GlobalApplicationInformation::MainProgramModeFlags MainWindow::BrainStimFlags = GlobalApplicationInformation::Default;
 GlobalApplicationInformation *MainWindow::globAppInfo = NULL;
@@ -1419,21 +1419,21 @@ void MainWindow::createDefaultMenus()
 	menuBar()->addMenu(markersMenu);
 	updateMarkersMenu();//the markers menu..........................................................
 
-	runDocumentAction = documentMenu->addAction(QIcon(":/resources/runScript.png"),tr("&Execute"));
+	runDocumentAction = documentMenu->addAction(QIcon(":/resources/runscript.png"),tr("&Execute"));
 	runDocumentAction->setEnabled(false);
 	runDocumentAction->setShortcut(QKeySequence(tr("F5")));
 	runDocumentAction->setStatusTip(tr("Execute the current document"));
 	runDocumentAction->setData(GlobalApplicationInformation::Execute);
 	connect(runDocumentAction, SIGNAL(triggered()), this, SLOT(executeActiveDocument()));
 
-	//debugScriptAction = scriptMenu->addAction(tr("Debug Script"));//QIcon(":/resources/runScript.png"),tr("&Run Script"));
+	//debugScriptAction = scriptMenu->addAction(tr("Debug Script"));//QIcon(":/resources/runscript.png"),tr("&Run Script"));
 	//debugScriptAction->setEnabled(false);//(false);
 	//debugScriptAction->setShortcut(QKeySequence(tr("F6")));
 	//debugScriptAction->setStatusTip(tr("Open the current script in the Debugger"));
 	//debugScriptAction->setData(GlobalApplicationInformation::Debug);
 	//connect(debugScriptAction, SIGNAL(triggered()), this, SLOT(executeScript()));
 
-	abortDocumentAction = documentMenu->addAction(tr("&Abort"));//QIcon(":/resources/runScript.png"),tr("&Run Script"));
+	abortDocumentAction = documentMenu->addAction(tr("&Abort"));//QIcon(":/resources/runscript.png"),tr("&Run Script"));
 	abortDocumentAction->setEnabled(false);//false);
 	abortDocumentAction->setShortcut(QKeySequence(tr("F7")));
 	abortDocumentAction->setStatusTip(tr("Abort the current document"));

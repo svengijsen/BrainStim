@@ -35,7 +35,7 @@ QT_END_NAMESPACE
 class ParallelPortPlugin : public QObject, public DeviceInterface
 {
     Q_OBJECT
-	Q_PLUGIN_METADATA(IID "BrainStim.Plugins.Devices" "ParallelPortDevice.json")
+	Q_PLUGIN_METADATA(IID "BrainStim.Plugins.Devices" "parallelportdevice.json")
     Q_INTERFACES(DeviceInterface)
 
 public:

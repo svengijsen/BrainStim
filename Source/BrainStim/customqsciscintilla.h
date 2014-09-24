@@ -27,7 +27,7 @@
 #include <Qsci/qsciscintilla.h>
 #include <Qsci/qsciprinter.h>
 #include "scifinddialog.h"
-#include "GlobalApplicationInformation.h"
+#include "globalapplicationinformation.h"
 
 struct QSciCommandSetDef
 {

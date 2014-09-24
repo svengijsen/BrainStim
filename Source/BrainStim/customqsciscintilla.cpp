@@ -90,7 +90,7 @@ CustomQsciScintilla::CustomQsciScintilla(GlobalApplicationInformation::DocType d
 	//QsciCommand *qsciStandardCommand = qsciStandardCommandSet->find(QsciCommand::DeleteBack);
 	//qsciStandardCommand->setKey(Qt::Key_Backspace);
 
-	//QSettings settings(":/resources/QScintilla.ini", QSettings::IniFormat);//if we want we can store it all in a settings file
+	//QSettings settings(":/resources/qscintilla.ini", QSettings::IniFormat);//if we want we can store it all in a settings file
 	//bool bReadResult = qsciStandardCommandSet->readSettings(settings);
 	//QsciCommand *qsciStandardCommand = qsciStandardCommandSet->find(QsciCommand::LineUp);
 	//nKey = qsciStandardCommand->key();

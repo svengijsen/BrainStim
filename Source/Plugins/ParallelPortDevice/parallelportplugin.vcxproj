@@ -394,17 +394,17 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="InpOut32.cpp" />
+    <ClCompile Include="inpout32.cpp" />
     <ClCompile Include="parallelport.cpp" />
     <ClCompile Include="parallelportplugin.cpp" />
     <ClCompile Include="ppcapturethread.cpp" />
     <ClCompile Include="ppgeneratethread.cpp" />
     <ClCompile Include="pport_dialog.cpp" />
-    <ClCompile Include="StdAfx.cpp" />
+    <ClCompile Include="stdafx.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_pport_dialog.h" />
-    <CustomBuild Include="InpOut32.h">
+    <CustomBuild Include="inpout32.h">
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -522,9 +522,9 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(QTDIR)\bin\moc.exe;%(FullPath)</AdditionalInputs>
     </CustomBuild>
-    <ClInclude Include="Global.h" />
+    <ClInclude Include="global.h" />
     <ClInclude Include="resource.h" />
-    <ClInclude Include="StdAfx.h" />
+    <ClInclude Include="stdafx.h" />
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="pport_dialog.ui">
@@ -550,8 +550,8 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
     <ResourceCompile Include="parallelportplugin.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="licenseHeader.licenseheader" />
-    <None Include="ParallelPortDevice.json" />
+    <None Include="licenseheader.licenseheader" />
+    <None Include="parallelportdevice.json" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

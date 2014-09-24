@@ -20,7 +20,7 @@
 #define QTQUICK2APPLICATIONVIEWER_H
 
 #include <QtQuick/QQuickView>
-#include "Qml2Interface.h"
+#include "qml2interface.h"
 
 class QtQuick2ApplicationViewer : public QQuickView
 {

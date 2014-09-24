@@ -45,7 +45,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="InpOut32.cpp">
+    <ClCompile Include="inpout32.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="parallelport.cpp">
@@ -63,7 +63,7 @@
     <ClCompile Include="pport_dialog.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="StdAfx.cpp">
+    <ClCompile Include="stdafx.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_pport_dialog.cpp">
@@ -128,7 +128,7 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="StdAfx.h">
+    <ClInclude Include="stdafx.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_pport_dialog.h">
@@ -143,12 +143,12 @@
     <ClInclude Include="..\..\BrainStim\plugininterface.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Global.h">
+    <ClInclude Include="global.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="InpOut32.h">
+    <CustomBuild Include="inpout32.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="parallelport.h">
@@ -174,7 +174,7 @@
     <ResourceCompile Include="parallelportplugin.rc" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="licenseHeader.licenseheader" />
-    <None Include="ParallelPortDevice.json" />
+    <None Include="licenseheader.licenseheader" />
+    <None Include="parallelportdevice.json" />
   </ItemGroup>
 </Project>

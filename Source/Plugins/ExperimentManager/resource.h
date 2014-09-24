@@ -21,7 +21,7 @@
 
 //{{NO_DEPENDENCIES}}
 // Microsoft Visual C++ generated include file.
-// Used by ExperimentManagerplugin.rc
+// Used by experimentmanagerplugin.rc
 
 // Next default values for new objects
 // 
