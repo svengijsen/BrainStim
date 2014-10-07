@@ -97,7 +97,7 @@ public:
 	static QString outputsDirPath();
 	static QString qmlExtensionsPluginDirPath()
 	{
-		QString strExtPluginDirPath = appDirPath() + QString("/qml/plugins/");
+		QString strExtPluginDirPath = appDirPath() + QString("/Qml/plugins/");
 #ifdef WIN64
 		strExtPluginDirPath = strExtPluginDirPath + QString("x64");
 #else

@@ -46,6 +46,29 @@ ExperimentTreeModel::~ExperimentTreeModel()
 	reset();
 }
 
+ExperimentTreeModel::ExperimentTreeModel(const ExperimentTreeModel& other)
+{
+	//TODO fill in copy constructor, should be declared for the Q_DECLARE_METATYPE macro
+}
+
+QScriptValue ExperimentTreeModel::ctor__pExperimentTreeModel(QScriptContext* context, QScriptEngine* engine)
+{
+	Q_UNUSED(context);
+	return engine->newQObject(new ExperimentTreeModel(), QScriptEngine::ScriptOwnership);//Now call the below real Object constructor
+}
+
+QScriptValue ExperimentTreeModel::experimentTreeModelToScriptValue(QScriptEngine *engine, ExperimentTreeModel* const &s)
+{
+	QScriptValue obj = engine->newQObject(s);
+	return obj;
+}
+
+void ExperimentTreeModel::experimentTreeModelFromScriptValue(const QScriptValue &obj, ExperimentTreeModel* &s)
+{
+	s = qobject_cast<ExperimentTreeModel*>(obj.toQObject());
+}
+
+
 //QVariant ExperimentTreeModel::data(const QModelIndex &index, int role) const
 //{
 //	if (role == Qt::TextAlignmentRole) 
@@ -685,15 +708,31 @@ int ExperimentTreeModel::cleanupBlockDependencies(const int &nBlockId)
 	return nRemovedDependencies;
 }
 
+bool ExperimentTreeModel::initializeExperiment()
+{
+	if(root)
+		return true;
+	return resetExperiment();
+}
+
+bool ExperimentTreeModel::resetExperiment()
+{
+	QFile tmpFile(":/resources/emptyexperiment.exml");
+	if (!tmpFile.open(QIODevice::ReadOnly | QIODevice::Text))
+		return false;
+	QByteArray tmpByteArray = tmpFile.readAll();
+	bool bReadResult = read(tmpByteArray);
+	tmpFile.close();
+	return bReadResult;
+}
+
 bool ExperimentTreeModel::addExperimentBlocks(const int &nAmount)
 {
 	ExperimentTreeItem* tmpExpTreeItem;
 	bool bResult = false;
 	tmpExpTreeItem = addExperimentBlockTreeItems(nAmount);
 	if(tmpExpTreeItem)
-	{
 		bResult = true;
-	}
 	return bResult;
 }
 
@@ -1600,7 +1639,7 @@ ExperimentTreeItem* ExperimentTreeModel::addExperimentBlockTreeItems(const int &
 
 	for (int nNewBlockCounter=0;nNewBlockCounter<nAmount;nNewBlockCounter++)
 	{
-		ExperimentTreeItem* tmpNewBlockItem = new ExperimentTreeItem(BLOCK_TAG);
+		tmpNewBlockItem = new ExperimentTreeItem(BLOCK_TAG);
 		tmpNewBlockItem->addDefinition(ID_TAG,QString::number(nLatestFoundBlockID+1+nNewBlockCounter),TreeItemType_Attribute);
 		tmpNewBlockItem->appendRow(new ExperimentTreeItem(NAME_TAG,"_noname_"));
 		tmpNewBlockItem->appendRow(new ExperimentTreeItem(BLOCKNUMBER_TAG,QString::number(nHighestFoundBlockNumber+1+nNewBlockCounter)));
@@ -1920,11 +1959,13 @@ QList<ExperimentTreeItem*> ExperimentTreeModel::getFilteredItemList(const QStrin
 {
     QList<ExperimentTreeItem*> list;
 	if(expTreeItem == NULL)
-	{
 		expTreeItem = rootItem;
+	if (expTreeItem)
+	{
+		recursiveSearch(textToFind, filters, expTreeItem, list);
+		return list;
 	}
-	recursiveSearch(textToFind, filters, expTreeItem, list);
-    return list;
+	return QList<ExperimentTreeItem*>();
 }
 
 void ExperimentTreeModel::recursiveSearch(const QString &textToFind, const QStringList &filters, ExperimentTreeItem *item, QList<ExperimentTreeItem*> &list)

@@ -22,14 +22,14 @@
 #include "./../../BrainStim/maindefines.h"
 
 //Only edit the below!
-#define PLUGIN_FILE_VERSION_STRING_MAJOR	2   //Please do not edit this line manually, see BinaryVersioning.qs (145314599).
-#define PLUGIN_FILE_VERSION_STRING_MINOR	2   //Please do not edit this line manually, see BinaryVersioning.qs (145314599).
-#define PLUGIN_FILE_VERSION_STRING_REVISION	0   //Please do not edit this line manually, see BinaryVersioning.qs (145314599).
-#define PLUGIN_FILE_VERSION_STRING_BUILD	0   //Please do not edit this line manually, see BinaryVersioning.qs (145314599).
-#define PLUGIN_PRODUCT_VERSION_STRING_MAJOR	1   //Please do not edit this line manually, see BinaryVersioning.qs (145314599).
-#define PLUGIN_PRODUCT_VERSION_STRING_MINOR	0   //Please do not edit this line manually, see BinaryVersioning.qs (145314599).
-#define PLUGIN_PRODUCT_VERSION_STRING_REVISION	0   //Please do not edit this line manually, see BinaryVersioning.qs (145314599).
-#define PLUGIN_PRODUCT_VERSION_STRING_BUILD	1   //Please do not edit this line manually, see BinaryVersioning.qs (145314599).
+#define PLUGIN_FILE_VERSION_STRING_MAJOR	1   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define PLUGIN_FILE_VERSION_STRING_MINOR	0   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define PLUGIN_FILE_VERSION_STRING_REVISION	0   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define PLUGIN_FILE_VERSION_STRING_BUILD	1   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define PLUGIN_PRODUCT_VERSION_STRING_MAJOR	1   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define PLUGIN_PRODUCT_VERSION_STRING_MINOR	0   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define PLUGIN_PRODUCT_VERSION_STRING_REVISION	0   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define PLUGIN_PRODUCT_VERSION_STRING_BUILD	1   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 #define PLUGIN_LEGAL_COPYRIGHT						MAIN_PROGRAM_LEGAL_COPYRIGHT
 #define PLUGIN_AUTHOR_EMAIL							MAIN_PROGRAM_AUTHOR_EMAIL
 #define PLUGIN_AUTHOR_NAME							MAIN_PROGRAM_AUTHOR_NAME
@@ -41,13 +41,13 @@
 #define PLUGIN_FULL_NAME							PLUGIN_INTERNAL_NAME "(v" PLUGIN_FILE_VERSION_STRING ")"
 #define PLUGIN_FILE_DESCRIPTION						"Library that implements the Experiment Manager"
 #define PLUGIN_INFORMATION							PLUGIN_INTERNAL_NAME " Plugin(v" PLUGIN_FILE_VERSION_STRING ") by " PLUGIN_AUTHOR_NAME
-#define PLUGIN_MAIN_PROGRAM_MINIMAL_VERSION	"2.2.0.0"   //Please do not edit this line manually, see BinaryVersioning.qs (145314599).
-#define PLUGIN_EXMLDOC_MINIMAL_VERSION_MAJOR	2   //Please do not edit this line manually, see BinaryVersioning.qs (145314599).
-#define PLUGIN_EXMLDOC_MINIMAL_VERSION_MINOR	2   //Please do not edit this line manually, see BinaryVersioning.qs (145314599).
-#define PLUGIN_EXMLDOC_MINIMAL_VERSION_REVISION	0   //Please do not edit this line manually, see BinaryVersioning.qs (145314599).
-#define PLUGIN_EXMLDOC_MINIMAL_VERSION_BUILD	0   //Please do not edit this line manually, see BinaryVersioning.qs (145314599).
+#define PLUGIN_MAIN_PROGRAM_MINIMAL_VERSION	"1.0.0.1"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define PLUGIN_EXMLDOC_MINIMAL_VERSION_MAJOR	1   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define PLUGIN_EXMLDOC_MINIMAL_VERSION_MINOR	0   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define PLUGIN_EXMLDOC_MINIMAL_VERSION_REVISION	0   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define PLUGIN_EXMLDOC_MINIMAL_VERSION_BUILD	1   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 #define PLUGIN_EXMLDOC_EXTENSION					"exml"
-#define PLUGIN_EXMLDOC_VALIDATION_NAME	PLUGIN_EXMLDOC_EXTENSION "_2200.xsd"   //Please do not edit this line manually, see BinaryVersioning.qs (145314599).
+#define PLUGIN_EXMLDOC_VALIDATION_NAME	PLUGIN_EXMLDOC_EXTENSION "_v1001.xsd"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 #define PLUGIN_QMLDOC_EXTENSION						"qml"
 #define PLUGIN_QML_INTERFACE_PROVIDER_URI			"BrainStim.Interface"
 #define PLUGIN_QML_INTERFACE_PROVIDER_APINAME		"BrainStimAPI"

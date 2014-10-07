@@ -44,7 +44,12 @@ class ExperimentTreeModel : public QStandardItemModel
 
     public:
         explicit ExperimentTreeModel(QObject *parent = 0);
+		ExperimentTreeModel(const ExperimentTreeModel& other);
 		~ExperimentTreeModel();
+
+		static QScriptValue ctor__pExperimentTreeModel(QScriptContext* context, QScriptEngine* engine);
+		static QScriptValue experimentTreeModelToScriptValue(QScriptEngine *engine, ExperimentTreeModel* const &s);
+		static void experimentTreeModelFromScriptValue(const QScriptValue &obj, ExperimentTreeModel* &s);
 
 		struct  strcParameterSpecifier
 		{
@@ -164,7 +169,11 @@ class ExperimentTreeModel : public QStandardItemModel
 
 		bool removeExperimentBlocks(const QList<int> &lBlockIDs);
 		bool moveExperimentBlocks(const QList<int> &lBlockIDsToMove, const int &nBlockIDToSwitch, const int &nBlockNumberChangeDirection);
+	public slots:
+		bool initializeExperiment();
+		bool resetExperiment();
 		bool addExperimentBlocks(const int &nAmount = 1);
+	public:
 		bool removeExperimentParameters(const QList<ExperimentTreeModel::strcParameterSpecifier> lstParameterSpecifiers);
 		bool renameExperimentParameter(const ExperimentTreeModel::strcParameterSpecifier &cParameterSpecifier, const QString &sNewName);
 		bool addUpdateExperimentBlockParameter(const ExperimentTreeModel::strcParameterSpecifier &cParameterSpecifier, const QString &sNewValue, const bool &bIsCustom);
@@ -212,5 +221,7 @@ class ExperimentTreeModel : public QStandardItemModel
 		ExperimentManagerNameSpace::EXML_DocVersion nXMLCurrentClassVersion;
 		ExperimentManagerNameSpace::EXML_DocVersion nXMLDocumentVersion;
 };
+
+Q_DECLARE_METATYPE(ExperimentTreeModel*)
 
 #endif // TREEMODEL_H

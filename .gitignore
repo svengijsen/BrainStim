@@ -25,3 +25,6 @@ Build_MSVC
 *.opensdf
 *.sdf
 *.suo
+Source/BrainStim/Qml/plugins/*
+Install/firebird.conf
+Install/firebird.msg

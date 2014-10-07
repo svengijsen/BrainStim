@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -28,22 +28,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
     <UseOfMfc>false</UseOfMfc>
-    <PlatformToolset>v110</PlatformToolset>
+    <PlatformToolset>v120</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -122,7 +122,7 @@
       <Command>echo POSTBUILDSTEP for $(ProjectName)
 
 xcopy "$(TargetPath)" "$(ProjectDir)..\..\..\StaticLibs\$(Platform)\" /i /d /y
-xcopy "$(ProjectDir)xsd\*.xsd" "$(ProjectDir)..\..\..\Install\xsd\" /i /d /y
+REM xcopy "$(ProjectDir)xsd\*.xsd" "$(ProjectDir)..\..\..\Install\xsd\" /i /d /y
 if errorlevel 1 goto BuildEventFailed
 goto BuildEventOK
 
@@ -177,7 +177,7 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
       <Command>echo POSTBUILDSTEP for $(ProjectName)
 
 xcopy "$(TargetPath)" "$(ProjectDir)..\..\..\StaticLibs\$(Platform)\" /i /d /y
-xcopy "$(ProjectDir)xsd\*.xsd" "$(ProjectDir)..\..\..\Install\xsd\" /i /d /y
+REM xcopy "$(ProjectDir)xsd\*.xsd" "$(ProjectDir)..\..\..\Install\xsd\" /i /d /y
 if errorlevel 1 goto BuildEventFailed
 goto BuildEventOK
 
@@ -231,7 +231,7 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
       <Command>echo POSTBUILDSTEP for $(ProjectName)
 
 xcopy "$(TargetPath)" "$(ProjectDir)..\..\..\StaticLibs\$(Platform)\" /i /d /y
-xcopy "$(ProjectDir)xsd\*.xsd" "$(ProjectDir)..\..\..\Install\xsd\" /i /d /y
+REM xcopy "$(ProjectDir)xsd\*.xsd" "$(ProjectDir)..\..\..\Install\xsd\" /i /d /y
 if errorlevel 1 goto BuildEventFailed
 goto BuildEventOK
 
@@ -286,7 +286,7 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
       <Command>echo POSTBUILDSTEP for $(ProjectName)
 
 xcopy "$(TargetPath)" "$(ProjectDir)..\..\..\StaticLibs\$(Platform)\" /i /d /y
-xcopy "$(ProjectDir)xsd\*.xsd" "$(ProjectDir)..\..\..\Install\xsd\" /i /d /y
+REM xcopy "$(ProjectDir)xsd\*.xsd" "$(ProjectDir)..\..\..\Install\xsd\" /i /d /y
 if errorlevel 1 goto BuildEventFailed
 goto BuildEventOK
 
@@ -2153,7 +2153,7 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
   </ImportGroup>
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties MocDir=".\..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\Moc" QtVersion="5.0.2" Qt5Version_x0020_Win32="Qt510_win32" Qt5Version_x0020_x64="Qt510_x64" RccDir=".\..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles" UicDir=".\..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles" />
+      <UserProperties MocDir=".\..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\Moc" QtVersion="5.3.2" Qt5Version_x0020_Win32="Qt532_32bit" Qt5Version_x0020_x64="Qt532_64bit" RccDir=".\..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles" UicDir=".\..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

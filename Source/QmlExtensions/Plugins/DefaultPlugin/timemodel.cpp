@@ -16,7 +16,7 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "TimeModel.h"
+#include "timemodel.h"
 
 MinuteTimer::MinuteTimer(QObject *parent) : QObject(parent)
 {

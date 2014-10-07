@@ -1,4 +1,4 @@
-var sTimerType = "QTimer";//"TriggerTimer"; //Choose: QTimer | TriggerTimer
+var sTimerType = "TriggerTimer";//"QTimer"; //Choose: QTimer | TriggerTimer
 
 var sTimer; 
 var sTimeObject;
@@ -23,7 +23,9 @@ function CleanupScript()
 	sTimeObject = null;
 	TimerInvoked=null;
 	CleanupScript=null;
-	Log("CleanupScript ended...");	
+	Beep();
+	Log("CleanupScript ended...");
+	BrainStim.cleanupScript();
 }
 
 function TimerInvoked()
@@ -35,10 +37,6 @@ function TimerInvoked()
 	Log("\t...it took " + timespanInMS + " milliseconds");
 	CleanupScript();
 }
-
-
-
-
 
 if((sTimerType == "QTimer") || (sTimerType == "TriggerTimer"))
 {

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE EXML>
+<!--
+This file was automatically created by BrainStim.
+-->
+<EXML version="1.0.0.1">
+    <defines>
+        <experiment ID="0">
+            <name>&#60;Experiment Name&#62;</name>
+            <debugmode>true</debugmode>
+        </experiment>
+    </defines>
+    <declarations>
+    </declarations>
+    <connections>
+    </connections>
+    <initializations>
+    </initializations>
+    <actions>
+        <blocks>
+        </blocks>
+    </actions>
+    <finalizations>
+    </finalizations>
+</EXML>

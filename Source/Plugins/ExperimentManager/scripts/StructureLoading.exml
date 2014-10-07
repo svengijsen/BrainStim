@@ -6,7 +6,7 @@ Place you own text here..
 Attributes only apply to readonly non user data, like the ID
 -->
 
-<EXML version="2.0.0.2">
+<EXML version="1.0.0.1">
 
 	<defines>
 		<experiment ID="0">
@@ -19,42 +19,42 @@ Attributes only apply to readonly non user data, like the ID
 		<object ID="0">
 			<class>TriggerTimer</class>
 			<name>Timer_Object_1</name>
-			<constructor>
-				<param1/>
-			</constructor>
 		</object>
 		<object ID="1">            
-			<class>RetinoMap_glwidget</class>
-			<name>RetinoMap_Object_1</name>
-			<constructor>
-				<param1/>
-			</constructor>
+			<class>RetinotopyMapper</class>
+			<name>RetinoMap_RenderWidgetGL</name>
 		</object> 
 	</declarations>
     
 	<connections>
-		<object ID="0">
-			<type>signal</type>
-			<signature>timeout()</signature>
-			<target ID="1">
-				<type>slot</type>     
-				<signature>incrementExternalTrigger()</signature>      
+		<connection ID="0">
+			<source>
+				<object>0</object>
+				<type>signal</type>
+				<signature>timeout()</signature>
+			</source>
+				<target>
+				<object>1</object>
+				<type>slot</type>
+				<signature>incrementExternalTrigger()</signature>
 			</target>
-		</object>
+		</connection>
 	</connections>
     
 	<initializations>   
-		<object ID="0">
-			<type>slot</type>
-			<signature>startTimer</signature>
-			<parameters>
-				<parameter ID="0">
-					<name>msec</name>
-					<value>200</value>
-					<type>double</type>
-				</parameter>  	
-			</parameters>
-		</object> 
+		<initialization ID="0">
+			<object ID="0">
+				<type>slot</type>
+				<signature>startTimer</signature>
+				<parameters>
+					<parameter ID="0">
+						<name>msec</name>
+						<value>200</value>
+						<type>double</type>
+					</parameter>  	
+				</parameters>
+			</object> 
+		</initialization>
 	</initializations>        
      
 	<actions>
@@ -246,10 +246,12 @@ Attributes only apply to readonly non user data, like the ID
 	</actions>
 	
 	<finalizations>
-		<object ID="0">
-			<type>slot</type>
-			<signature>stopTimer</signature>
-		</object>
+		<finalization ID="0">
+			<object ID="0">
+				<type>slot</type>
+				<signature>stopTimer</signature>
+			</object>
+		</finalization>
 	</finalizations>    
 
 </EXML>

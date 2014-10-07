@@ -38,12 +38,61 @@ class MainWindow;
 
 int main(int argc, char **argv)
 {
+// Check windows
+#if _WIN32 || _WIN64
+#if _WIN64
+#define ENVIRONMENT64
+#else
+#define ENVIRONMENT32
+#endif
+#endif
+
+// Check GCC
+#if __GNUC__
+#if __x86_64__ || __ppc64__
+#define ENVIRONMENT64
+#else
+#define ENVIRONMENT32
+#endif
+#endif
+
+	QProcess *process = new QProcess();
+	QString sDebugMode;		//Release mode
+	QString sArchitecture;	//Win32 architecture
+
+#ifdef _DEBUG
+	sDebugMode = "d";
+#else
+	sDebugMode = "r";
+#endif
+#ifdef ENVIRONMENT32
+	sArchitecture = "1";
+#else
+	sArchitecture = "2";
+#endif
+	QString sConfigureFileName = "AutoStartConfigure.bat";
+	QString sConfigureFilePath = QDir::currentPath() + QDir::separator() + sConfigureFileName;
+	if (QFile(sConfigureFilePath).exists())
+	{
+		process->start(sConfigureFileName, QStringList() << sArchitecture << sDebugMode << QT_VERSION_STR);
+		if(process->waitForStarted())
+		{ 
+			if (process->waitForFinished())
+			{
+				qDebug() << __FUNCTION__ << sConfigureFileName << "output: \n" << process->readAll();
+				while(process->waitForReadyRead())
+				{
+					qDebug() << __FUNCTION__ << process->readAll();
+				}
+			}
+		}
+	}
+	else
+	{
+		qDebug() << __FUNCTION__ << sConfigureFileName << "not found!";
+	}
+
 	bool bProceed = true;
-	//QString sResult = QDir::toNativeSeparators(QDir(QCoreApplication::applicationDirPath()).absolutePath());
-	//if(QProcessEnvironment::systemEnvironment().value(QString("QT_QPA_PLATFORM_PLUGIN_PATH"),sResult) == false)
-	//{
-	//	qputenv("QT_QPA_PLATFORM_PLUGIN_PATH",sResult.toLatin1());
-	//}
 	MainAppExchange appExchange(argc, argv, MAIN_PROGRAM_SHARED_MEM_KEY);
 	GlobalApplicationInformation *globAppInformation = appExchange.getGlobalAppInformationObjectPointer();
 	if (appExchange.isRunning())
@@ -104,20 +153,9 @@ int main(int argc, char **argv)
 
 	if(bProceed)
 	{
-		Q_INIT_RESOURCE(BrainStim);
-
-		//QApplication app(argc, argv);
+		Q_INIT_RESOURCE(brainstim);
 		QString PluginDir = MainAppInfo::pluginsDirPath();
-		//app.addLibraryPath(PluginDir);
 		appExchange.addLibraryPath(PluginDir);
-
-		//only for console window, change Linker->System->SubSystem..
-		//cerr << "=-=-=-=- Start of Program -=-=-=-=" << endl;
-		//qDebug() <<"=-=-=-=- Start of Program -=-=-=-=";
-		//qWarning() << "Usage: mainwindow [-SizeHint<color> <width>x<height>] ...";
-		//QMessageBox msgBox(QMessageBox::Information,"PluginDirInfo",PluginDir,QMessageBox::Ok);
-		//msgBox.exec();
-
 		MainWindow *appWindow = new MainWindow();
 		appWindow->setGlobalApplicationInformationObject(globAppInformation);
 		MainAppInfo::setMainWindow(appWindow);

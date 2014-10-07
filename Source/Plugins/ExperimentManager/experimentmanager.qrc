@@ -1,29 +1,30 @@
 <RCC>
     <qresource prefix="/">
-        <file>resources/StartQmlFile.qml</file>
-        <file>resources/UnlockedQmlFile.qml</file>
-        <file>resources/RetinotopyMapper.xdef</file>
-        <file>resources/Clockwise.png</file>
-        <file>resources/Counterclockwise.png</file>
-        <file>resources/Decrease.png</file>
-        <file>resources/Downwards.png</file>
-        <file>resources/Increase.png</file>
-        <file>resources/Upwards.png</file>
-        <file>resources/ExperimentNode.xdef</file>
-        <file>resources/DeclarationsObjectNode.xdef</file>
-        <file>resources/BlockLoopNode.xdef</file>
-        <file>resources/BlockNode.xdef</file>
-        <file>resources/BlockParameterNode.xdef</file>
-        <file>resources/InitializationsParameterNode.xdef</file>
-        <file>resources/QML2Viewer.xdef</file>
-        <file>resources/ObjectDefinitionNode.xdef</file>
+        <file>resources/retinotopymapper.xdef</file>
+        <file>resources/downwards.png</file>
+        <file>resources/increase.png</file>
+        <file>resources/upwards.png</file>
+        <file>resources/experimentnode.xdef</file>
+        <file>resources/declarationsobjectnode.xdef</file>
+        <file>resources/blockloopnode.xdef</file>
+        <file>resources/blocknode.xdef</file>
+        <file>resources/blockparameternode.xdef</file>
+        <file>resources/initializationsparameternode.xdef</file>
+        <file>resources/qml2viewer.xdef</file>
+        <file>resources/objectdefinitionnode.xdef</file>
         <file>resources/browse.png</file>
         <file>resources/locked.png</file>
         <file>resources/unlocked.png</file>
-        <file>resources/ConnectionObjectNode.xdef</file>
-        <file>resources/InitializationObjectNode.xdef</file>
-        <file>resources/FinalizationObjectNode.xdef</file>
+        <file>resources/connectionobjectnode.xdef</file>
+        <file>resources/initializationobjectnode.xdef</file>
+        <file>resources/finalizationobjectnode.xdef</file>
         <file>resources/signal.png</file>
         <file>resources/slot.png</file>
+        <file>resources/startqmlfile.qml</file>
+        <file>resources/unlockedqmlfile.qml</file>
+        <file>resources/clockwise.png</file>
+        <file>resources/counterclockwise.png</file>
+        <file>resources/decrease.png</file>
+		<file>resources/emptyexperiment.exml</file>
     </qresource>
 </RCC>

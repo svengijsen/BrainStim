@@ -21,8 +21,8 @@
 #include <RenderSystems/GL/OgreGLFBORenderTexture.h>
 
 #include "ogrenode.h"
-#include "OgreCameraNode.h"
-#include "OgreLightNode.h"
+#include "ogrecameranode.h"
+#include "ogrelightnode.h"
 #include <Ogre.h>
 #include "defines.h"
 

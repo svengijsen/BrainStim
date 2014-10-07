@@ -44,10 +44,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="DefaultPlugin.cpp">
+    <ClCompile Include="defaultplugin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="TimeModel.cpp">
+    <ClCompile Include="timemodel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_TimeModel.cpp">
@@ -104,7 +104,7 @@
     <ClCompile Include="..\..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_OgreCameraNode.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
-    <ClCompile Include="OgreCameraNode.cpp">
+    <ClCompile Include="ogrecameranode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_OgreLightNode.cpp">
@@ -119,15 +119,15 @@
     <ClCompile Include="..\..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_OgreLightNode.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
-    <ClCompile Include="OgreLightNode.cpp">
+    <ClCompile Include="ogrelightnode.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <CustomBuild Include="DefaultPlugin.h">
+    <CustomBuild Include="defaultplugin.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="TimeModel.h">
+    <CustomBuild Include="timemodel.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="ogreitem.h">
@@ -136,10 +136,10 @@
     <CustomBuild Include="ogrenode.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="OgreCameraNode.h">
+    <CustomBuild Include="ogrecameranode.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="OgreLightNode.h">
+    <CustomBuild Include="ogrelightnode.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>
@@ -149,6 +149,6 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DefaultQMLPlugin.json" />
+    <None Include="defaultqmlplugin.json" />
   </ItemGroup>
 </Project>

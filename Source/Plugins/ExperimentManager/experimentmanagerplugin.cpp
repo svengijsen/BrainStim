@@ -38,6 +38,7 @@ ExperimentManagerPlugin::ExperimentManagerPlugin(QObject *parent)
 	PrtFormatManagerObject = NULL;
 	RetinotopyMapperObject = NULL;
 	cExperimentStructureObject = NULL;
+	pExperimentTreeModelObject = NULL;
 	cBlockStructureObject = NULL;
 	cObjectStructureObject = NULL;
 	cLoopStructureObject = NULL;
@@ -78,6 +79,11 @@ ExperimentManagerPlugin::~ExperimentManagerPlugin()
 		delete RandomGeneratorObject;
 		RandomGeneratorObject = NULL;
 	}	
+	if (pExperimentTreeModelObject)
+	{
+		delete pExperimentTreeModelObject;
+		pExperimentTreeModelObject = NULL;
+	}
 	if(cExperimentStructureObject)
 	{
 		delete cExperimentStructureObject;
@@ -190,6 +196,14 @@ int ExperimentManagerPlugin::ConfigureScriptEngine(QScriptEngine &engine)
 	engine.setDefaultPrototype(qMetaTypeId<RandomGenerator*>(), RandomGeneratorProto);
 	QScriptValue RandomGeneratorCtor = engine.newFunction(RandomGenerator::ctor__randomGenerator, RandomGeneratorProto);
 	engine.globalObject().setProperty(RANDOMGENERATOR_NAME, RandomGeneratorCtor);
+
+	if (pExperimentTreeModelObject == NULL)
+		pExperimentTreeModelObject = new ExperimentTreeModel();
+	QScriptValue pExperimentTreeModelProto = engine.newQObject(pExperimentTreeModelObject);
+	engine.setDefaultPrototype(qMetaTypeId<ExperimentTreeModel*>(), pExperimentTreeModelProto);
+	QScriptValue pExperimentTreeModelCtor = engine.newFunction(ExperimentTreeModel::ctor__pExperimentTreeModel, pExperimentTreeModelProto);
+	engine.globalObject().setProperty(EXPERIMENTTREEMODEL_NAME, pExperimentTreeModelCtor);
+	qScriptRegisterMetaType(&engine, ExperimentTreeModel::experimentTreeModelToScriptValue, ExperimentTreeModel::experimentTreeModelFromScriptValue);
 
 	if(cExperimentStructureObject == NULL)
 		cExperimentStructureObject = new cExperimentStructure();
@@ -345,6 +359,10 @@ QObject *ExperimentManagerPlugin::GetScriptMetaObject(int nIndex)
 		if(cMethodStructureObject == NULL)
 			cMethodStructureObject = new cMethodStructure();
 		return (QObject *)cMethodStructureObject->metaObject();
+	case 14:
+		if (pExperimentTreeModelObject == NULL)
+			pExperimentTreeModelObject = new ExperimentTreeModel();
+		return (QObject *)pExperimentTreeModelObject->metaObject();
 	default:
 		return NULL;
 	}
@@ -535,7 +553,7 @@ bool ExperimentManagerPlugin::LoadAdditionalFile(QString strFilePath)
 
 	//if(ExperimentManagerObject == NULL)
 	//	ExperimentManagerObject = new ExperimentManager(this);
-	if(tmpManager->loadExperiment(tmpString,true))
+	if ((tmpManager->loadExperiment(tmpString, true)) || (tmpManager->getCurrExperimentState() == ExperimentManager::ExperimentManager_Loaded))
 	{		
 		QWidget* tmpWidget = tmpManager->getVisualExperimentEditor();
 		if(tmpWidget)

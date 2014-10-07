@@ -16,7 +16,7 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "OgreLightNode.h"
+#include "ogrelightnode.h"
 #include <OgreRoot.h>
 #include <OgreSceneNode.h>
 #include <OgreLight.h>

@@ -150,12 +150,12 @@ var changeSet;
 var sComment = "   //Please do not edit this line manually, see BinaryVersioning.qs (" + CreateTimeStamp(sTimeObject) + ").";
 var bDoProcess = true;
 var nChangeCounter;
-var jsConfigurationFile = new QFile("E:/Projects/BrainStim/Source/BrainStim/resources/BrainStim.js");
+var jsConfigurationFile = new QFile("E:/Projects/BrainStim/Source/BrainStim/resources/brainStim.js");
 
 Log("");
 if(jsConfigurationFile.exists() == false)
 {
-	jsConfigurationFile.setFileName("D:/Projects/BrainStim/Source/BrainStim/resources/BrainStim.js");
+	jsConfigurationFile.setFileName("D:/Projects/BrainStim/Source/BrainStim/resources/brainStim.js");
 	if(jsConfigurationFile.exists() == false)
 	{
 		jsConfigurationFile.setFileName(getFileName());

@@ -34,7 +34,7 @@ function BrainStim_CreateArray(length)
 function BrainStim_Information()
 {
 	//alert('BrainStim constructor');
-	this.BrainStimReleases = [['2.0.0.2', '4.8.0', '1.0.0.1'], ['2.0.0.3', '4.8.0', '1.0.0.1'], ['2.1.0.0', '5.1.0', '1.0.0.1'], ['2.2.0.0', '5.1.0', '1.0.0.1']];//, ['2.0.0.4', '4.8.0', '1.0.0.1']];
+	this.BrainStimReleases = [['1.0.0.1', '5.3.2', '1.0.0.1']];//, ['Exml', 'Qt', 'Product']];
 	var PropCounter = 0;
 	var AuthorCounter = 0;
 	var ComponentCounter = 0;
@@ -57,212 +57,88 @@ function BrainStim_Information()
 	
 	var ExperimentManagerPlugin_Comp_Index = ComponentCounter++;
 	var ParallelPortPlugin_Comp_Index = ComponentCounter++;
-	var SerialPortPlugin_Comp_Index = ComponentCounter++;
 	var KeyBoardPlugin_Comp_Index = ComponentCounter++;
-	var USBHIDDevicePlugin_Comp_Index = ComponentCounter++;
 	var _extensionname_plugin_Comp_Index = ComponentCounter++;
 	var BrainStim_QMLExtensions_Comp_Index = ComponentCounter++;
-	var MediaPlayer_Comp_Index = ComponentCounter++;
-	var FirebirdClientPlugin_Comp_Index = ComponentCounter++;
-	var PiezoStimDevicePlugin_Comp_Index = ComponentCounter++;
-	var TBVExchangerPlugin_Comp_Index = ComponentCounter++;
-	var TCPNetworkServerPlugin_Comp_Index = ComponentCounter++;
 	
 	this.componentVersioning = BrainStim_CreateArray(1,ComponentCounter,PropCounter);//Default constructor!
-	//BrainStim version (2.0.0.2)
+	//BrainStim version (1.0.0.1)
 	///////////////////////////////////////////////////////////////
 	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.Name_Index] = 'ExperimentManagerPlugin';
-	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.Version_Index] = '2.0.0.2';
+	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.Version_Index] = '1.0.0.1';
 	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.ProductVersion_Index] = '1.0.0.1';
-	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this._BrainStimVersion_Index] = 0;
-	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.EXML_Index] = '2.0.0.1';
+	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this._BrainStimVersion_Index] = 0; //-->1.0.0.1
+	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.EXML_Index] = '1.0.0.1';
 	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.DevInterface_Index] = '1.0';
 	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.ExtInterface_Index] = '1.0';
 	///////////////////////////////////////////////////////////////
 	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this.Name_Index] = 'ParallelPortPlugin';
-	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this.Version_Index] = '2.0.0.1';
+	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this.Version_Index] = '1.0.0.1';
 	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this.ProductVersion_Index] = '1.0.0.1';
-	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this._BrainStimVersion_Index] = 0; //-->2.0.0.2
+	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this._BrainStimVersion_Index] = 0; 
 	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this.EXML_Index] = 'x';
 	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this.DevInterface_Index] = '1.0';
 	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this.ExtInterface_Index] = '1.0';
 	///////////////////////////////////////////////////////////////
-	this.componentVersioning[0][SerialPortPlugin_Comp_Index][this.Name_Index] = 'SerialPortPlugin';
-	this.componentVersioning[0][SerialPortPlugin_Comp_Index][this.Version_Index] = '1.0.0.1';
-	this.componentVersioning[0][SerialPortPlugin_Comp_Index][this.ProductVersion_Index] = '1.0.0.1';
-	this.componentVersioning[0][SerialPortPlugin_Comp_Index][this._BrainStimVersion_Index] = 0; //-->2.0.0.2
-	this.componentVersioning[0][SerialPortPlugin_Comp_Index][this.EXML_Index] = 'x';
-	this.componentVersioning[0][SerialPortPlugin_Comp_Index][this.DevInterface_Index] = '1.0';
-	this.componentVersioning[0][SerialPortPlugin_Comp_Index][this.ExtInterface_Index] = '1.0';
-	///////////////////////////////////////////////////////////////
 	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this.Name_Index] = 'KeyBoardPlugin';
 	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this.Version_Index] = '1.0.0.1';
 	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this.ProductVersion_Index] = '1.0.0.1';
-	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this._BrainStimVersion_Index] = 0; //-->2.0.0.2
+	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this._BrainStimVersion_Index] = 0;
 	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this.EXML_Index] = 'x';
 	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this.DevInterface_Index] = '1.0';
 	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this.ExtInterface_Index] = '1.0';
 	///////////////////////////////////////////////////////////////
-	this.componentVersioning[0][USBHIDDevicePlugin_Comp_Index][this.Name_Index] = 'USBHIDDevicePlugin';
-	this.componentVersioning[0][USBHIDDevicePlugin_Comp_Index][this.Version_Index] = '2.0.0.1';
-	this.componentVersioning[0][USBHIDDevicePlugin_Comp_Index][this.ProductVersion_Index] = '1.0.0.1';
-	this.componentVersioning[0][USBHIDDevicePlugin_Comp_Index][this._BrainStimVersion_Index] = 0; //-->2.0.0.2
-	this.componentVersioning[0][USBHIDDevicePlugin_Comp_Index][this.EXML_Index] = 'x';
-	this.componentVersioning[0][USBHIDDevicePlugin_Comp_Index][this.DevInterface_Index] = '1.0';
-	this.componentVersioning[0][USBHIDDevicePlugin_Comp_Index][this.ExtInterface_Index] = '1.0';
-	///////////////////////////////////////////////////////////////
-	this.componentVersioning[0][_extensionname_plugin_Comp_Index][this.Name_Index] = '_extensionname_plugin';
-	this.componentVersioning[0][_extensionname_plugin_Comp_Index][this.Version_Index] = '1.0.0.1';
-	this.componentVersioning[0][_extensionname_plugin_Comp_Index][this.ProductVersion_Index] = '1.0.0.1';
-	this.componentVersioning[0][_extensionname_plugin_Comp_Index][this._BrainStimVersion_Index] = 0; //-->2.0.0.2
-	this.componentVersioning[0][_extensionname_plugin_Comp_Index][this.EXML_Index] = 'x';
-	this.componentVersioning[0][_extensionname_plugin_Comp_Index][this.DevInterface_Index] = '1.0';
-	this.componentVersioning[0][_extensionname_plugin_Comp_Index][this.ExtInterface_Index] = '1.0';
-	///////////////////////////////////////////////////////////////
 	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this.Name_Index] = 'BrainStim_QMLExtensions';
 	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this.Version_Index] = '1.0';
 	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this.ProductVersion_Index] = 'x';
-	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this._BrainStimVersion_Index] = 0; //-->2.0.0.2
+	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this._BrainStimVersion_Index] = 0;
 	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this.EXML_Index] = 'x';
 	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this.DevInterface_Index] = 'x';
 	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this.ExtInterface_Index] = 'x';
 	///////////////////////////////////////////////////////////////
-	this.componentVersioning[0][MediaPlayer_Comp_Index][this.Name_Index] = 'MediaPlayer';
-	this.componentVersioning[0][MediaPlayer_Comp_Index][this.Version_Index] = '1';
-	this.componentVersioning[0][MediaPlayer_Comp_Index][this.ProductVersion_Index] = 'x';
-	this.componentVersioning[0][MediaPlayer_Comp_Index][this._BrainStimVersion_Index] = 0; //-->2.0.0.2
-	this.componentVersioning[0][MediaPlayer_Comp_Index][this.EXML_Index] = 'x';
-	this.componentVersioning[0][MediaPlayer_Comp_Index][this.DevInterface_Index] = 'x';
-	this.componentVersioning[0][MediaPlayer_Comp_Index][this.ExtInterface_Index] = 'x';
-	///////////////////////////////////////////////////////////////
-//	this.componentVersioning[0][FirebirdClientPlugin_Comp_Index][this.Name_Index] = 'FireBirdClientPlugin';
-//	this.componentVersioning[0][FirebirdClientPlugin_Comp_Index][this.Version_Index] = '1.0.0.1';
-//	this.componentVersioning[0][FirebirdClientPlugin_Comp_Index][this.ProductVersion_Index] = '1.0.0.1';
-//	this.componentVersioning[0][FirebirdClientPlugin_Comp_Index][this._BrainStimVersion_Index] = 2;
-//	this.componentVersioning[0][FirebirdClientPlugin_Comp_Index][this.EXML_Index] = 'x';
-//	this.componentVersioning[0][FirebirdClientPlugin_Comp_Index][this.DevInterface_Index] = '1.2';
-//	this.componentVersioning[0][FirebirdClientPlugin_Comp_Index][this.ExtInterface_Index] = '1.2';	
-	///////////////////////////////////////////////////////////////
-//	this.componentVersioning[0][PiezoStimDevicePlugin_Comp_Index][this.Name_Index] = 'PiezoStimDevicePlugin';
-//	this.componentVersioning[0][PiezoStimDevicePlugin_Comp_Index][this.Version_Index] = '1.0.0.1';
-//	this.componentVersioning[0][PiezoStimDevicePlugin_Comp_Index][this.ProductVersion_Index] = '1.0.0.1';
-//	this.componentVersioning[0][PiezoStimDevicePlugin_Comp_Index][this._BrainStimVersion_Index] = 2;
-//	this.componentVersioning[0][PiezoStimDevicePlugin_Comp_Index][this.EXML_Index] = 'x';
-//	this.componentVersioning[0][PiezoStimDevicePlugin_Comp_Index][this.DevInterface_Index] = '1.2';
-//	this.componentVersioning[0][PiezoStimDevicePlugin_Comp_Index][this.ExtInterface_Index] = '1.2';		
-	///////////////////////////////////////////////////////////////
-//	this.componentVersioning[0][TBVExchangerPlugin_Comp_Index][this.Name_Index] = 'TBVExchangerPlugin';
-//	this.componentVersioning[0][TBVExchangerPlugin_Comp_Index][this.Version_Index] = '1.0.0.1';
-//	this.componentVersioning[0][TBVExchangerPlugin_Comp_Index][this.ProductVersion_Index] = '1.0.0.1';
-//	this.componentVersioning[0][TBVExchangerPlugin_Comp_Index][this._BrainStimVersion_Index] = 2;
-//	this.componentVersioning[0][TBVExchangerPlugin_Comp_Index][this.EXML_Index] = 'x';
-//	this.componentVersioning[0][TBVExchangerPlugin_Comp_Index][this.DevInterface_Index] = '1.2';
-//	this.componentVersioning[0][TBVExchangerPlugin_Comp_Index][this.ExtInterface_Index] = '1.2';		
-	///////////////////////////////////////////////////////////////
-//	this.componentVersioning[0][TCPNetworkServerPlugin_Comp_Index][this.Name_Index] = 'TCPNetworkServerPlugin';
-//	this.componentVersioning[0][TCPNetworkServerPlugin_Comp_Index][this.Version_Index] = '1.0.0.1';
-//	this.componentVersioning[0][TCPNetworkServerPlugin_Comp_Index][this.ProductVersion_Index] = '1.0.0.1';
-//	this.componentVersioning[0][TCPNetworkServerPlugin_Comp_Index][this._BrainStimVersion_Index] = 2;
-//	this.componentVersioning[0][TCPNetworkServerPlugin_Comp_Index][this.EXML_Index] = 'x';
-//	this.componentVersioning[0][TCPNetworkServerPlugin_Comp_Index][this.DevInterface_Index] = '1.2';
-//	this.componentVersioning[0][TCPNetworkServerPlugin_Comp_Index][this.ExtInterface_Index] = '1.2';		
-	///////////////////////////////////////////////////////////////
-	
-		
-	//BrainStim version (2.0.0.3)
-	///////////////////////////////////////////////////////////////
-	nNumberOfComponentChanges = 8;//See below, increment by adding new changes for this release!
-	tmpArray = BrainStim_CreateArray(1,nNumberOfComponentChanges,PropCounter);
-	this.componentVersioning.push.apply(this.componentVersioning, tmpArray)
-	this.componentVersioning[1][ExperimentManagerPlugin_Comp_Index] = 	['ExperimentManagerPlugin',	'2.0.0.3', '1.0.0.1', 1, '2.0.0.2', '1.1',  '1.1'];
-	this.componentVersioning[1][ParallelPortPlugin_Comp_Index] =        ['ParallelPortPlugin',      '2.0.0.2', '1.0.0.1', 0, 'x',       '1.1',  '1.1'];
-	this.componentVersioning[1][SerialPortPlugin_Comp_Index] =          ['SerialPortPlugin',        '1.0.0.2', '1.0.0.1', 0, 'x',       '1.1',  '1.1'];
-	this.componentVersioning[1][KeyBoardPlugin_Comp_Index] =            ['KeyBoardPlugin',          '1.0.0.2', '1.0.0.1', 0, 'x',       '1.1',  '1.1'];
-	this.componentVersioning[1][USBHIDDevicePlugin_Comp_Index] =        ['USBHIDDevicePlugin',      '2.0.0.2', '1.0.0.1', 0, 'x',       '1.1',  '1.1'];
-	this.componentVersioning[1][_extensionname_plugin_Comp_Index] =     ['_extensionname_plugin',   '1.0.0.2', '1.0.0.1', 0, 'x',       '1.1',  '1.1'];
-	this.componentVersioning[1][BrainStim_QMLExtensions_Comp_Index] =    ['BrainStim_QMLExtensions',  '1.1',     '1.0.0.1', 0, 'x',       'x',    'x'];
-	this.componentVersioning[1][MediaPlayer_Comp_Index] =               ['MediaPlayer',             '1',       '1.0.0.1', 0, 'x',       'x',    'x'];
-
-	//BrainStim version (2.1.0.0)
-	///////////////////////////////////////////////////////////////
-	nNumberOfComponentChanges = 8;//See below, increment by adding new changes for this release!
-	tmpArray = BrainStim_CreateArray(1,nNumberOfComponentChanges,PropCounter);
-	this.componentVersioning.push.apply(this.componentVersioning, tmpArray)//		Name,	Version,  Product, StimGLVersionIndex, EXML, Device, Interface
-	this.componentVersioning[2][ExperimentManagerPlugin_Comp_Index] = 	['ExperimentManagerPlugin',	'2.1.0.0', '1.0.0.1', 2, '2.1.0.0', '1.2',  '1.2'];
-	this.componentVersioning[2][ParallelPortPlugin_Comp_Index] =        ['ParallelPortPlugin',      '2.0.1.0', '1.0.0.1', 2, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[2][SerialPortPlugin_Comp_Index] =          ['SerialPortPlugin',        '1.1.0.0', '1.0.0.1', 2, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[2][KeyBoardPlugin_Comp_Index] =            ['KeyBoardPlugin',          '1.1.0.0', '1.0.0.1', 2, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[2][USBHIDDevicePlugin_Comp_Index] =        ['USBHIDDevicePlugin',      '2.0.1.0', '1.0.0.1', 2, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[2][_extensionname_plugin_Comp_Index] =     ['_extensionname_plugin',   '1.1.0.0', '1.0.0.1', 2, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[2][BrainStim_QMLExtensions_Comp_Index] =    ['BrainStim_QMLExtensions',  '1.1',     '1.0.0.1', 2, 'x',       'x',    'x'];
-	this.componentVersioning[2][MediaPlayer_Comp_Index] =               ['MediaPlayer',             '2',       '1.0.0.1', 2, 'x',       'x',    'x'];
-	this.componentVersioning[2][FirebirdClientPlugin_Comp_Index] =        ['FireBirdClientPlugin',      '1.0.0.1', '1.0.0.1', 2, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[2][PiezoStimDevicePlugin_Comp_Index] =        ['PiezoStimDevicePlugin',      '1.0.0.1', '1.0.0.1', 2, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[2][TBVExchangerPlugin_Comp_Index] =        ['TBVExchangerPlugin',     '1.0.0.1', '1.0.0.1', 2, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[2][TCPNetworkServerPlugin_Comp_Index] =        ['TCPNetworkServerPlugin',      '1.0.0.1', '1.0.0.1', 2, 'x',       '1.2',  '1.2'];
-
-	this.DocumentAuditing = BrainStim_CreateArray(14, AuthorCounter); //Default constructor!
+	this.DocumentAuditing = BrainStim_CreateArray(8, AuthorCounter); //Default constructor!
 	///////////////////////////////////////////////////////////////
 	this.DocumentAuditing[0][this.Doc_FileName_Index] = 'GettingStartedGuide.html';
 	this.DocumentAuditing[0][this.Doc_Title_Index] = 'Getting Started Guide';
 	this.DocumentAuditing[0][this.Doc_Version_Index] = '1.0.1.0';
-	this.DocumentAuditing[0][this.Doc_Date_Index] = 'September 2013';
+	this.DocumentAuditing[0][this.Doc_Date_Index] = 'Oktober 2014';
 	this.DocumentAuditing[0][this.Doc_Authors_Index] = 'Sven Gijsen';
 	
-	this.DocumentAuditing[1] = ['PreBuildDevelopmentSetup.html','Pre Build Development Setup','1.0.1.0','September 2013','Sven Gijsen'];
-	this.DocumentAuditing[2] = ['ExperimentManagerPlugin.html','Experiment Manager Plug-in Documentation','1.0.1.0','September 2013','Sven Gijsen'];
-	this.DocumentAuditing[3] = ['ParallelPortDevicePlugin.html','Parallel Port Plug-in Documentation','2.0.0.2','September 2013','Sven Gijsen'];	
-	this.DocumentAuditing[4] = ['USBHIDDevicePlugin.html','USBHID Device Plug-in Documentation','2.0.0.2','September 2013','Sven Gijsen'];		
-	this.DocumentAuditing[5] = ['ExtensionPluginTemplate.html','Extension Plug-in Template Documentation','2.0.0.2','September 2013','Sven Gijsen'];	
-	this.DocumentAuditing[6] = ['TBVExchangerPlugin.html','Turbo-BrainVoyager Exchanger Plug-in Documentation','1.0.0.1','Oktober 2013','Michael Luehrs'];
-	this.DocumentAuditing[7] = ['FireBirdClientPlugin.html','Firebird Client Plug-in Documentation','1.0.0.1','Oktober 2013','Sven Gijsen'];		
-	this.DocumentAuditing[8] = ['KeyBoardDevicePlugin.html','Keyboard Device Plug-in Documentation','1.0.0.1','Oktober 2013','Sven Gijsen'];	
-	this.DocumentAuditing[9] = ['PiezoStimDevicePlugin.html','PiezoStim Device Plug-in Documentation','1.0.0.1','Oktober 2013','Sven Gijsen'];	
-	this.DocumentAuditing[10] = ['SerialPortDevicePlugin.html','SerialPort Device Plug-in Documentation','1.0.0.1','Oktober 2013','Sven Gijsen'];	
-	this.DocumentAuditing[11] = ['TCPNetworkServerPlugin.html','TCPNetwork Server Device Plug-in Documentation','1.0.0.1','Oktober 2013','Sven Gijsen'];	
-	this.DocumentAuditing[12] = ['BrainStim_QMLExtensions.html','BrainStim QML Extensions Plug-in Documentation','1.0.0.1','Oktober 2013','Sven Gijsen'];					
-	this.DocumentAuditing[13] = ['6_RetinoTopicMappingOutput.html','Retinotopic Mapping output files Tutorial','1.0.0.1','Oktober 2013','Sven Gijsen'];	
+	this.DocumentAuditing[1] = ['PreBuildDevelopmentSetup.html','Pre Build Development Setup','1.0.1.0','Oktober 2014','Sven Gijsen'];
+	this.DocumentAuditing[2] = ['ExperimentManagerPlugin.html','Experiment Manager Plug-in Documentation','1.0.1.0','Oktober 2014','Sven Gijsen'];
+	this.DocumentAuditing[3] = ['ParallelPortDevicePlugin.html','Parallel Port Plug-in Documentation','2.0.0.2','Oktober 2014','Sven Gijsen'];	
+	this.DocumentAuditing[4] = ['ExtensionPluginTemplate.html','Extension Plug-in Template Documentation','2.0.0.2','Oktober 2014','Sven Gijsen'];	
+	this.DocumentAuditing[5] = ['KeyBoardDevicePlugin.html','Keyboard Device Plug-in Documentation','1.0.0.1','Oktober 2014','Sven Gijsen'];		
+	this.DocumentAuditing[6] = ['BrainStim_QMLExtensions.html','BrainStim QML Extensions Plug-in Documentation','1.0.0.1','Oktober 2014','Sven Gijsen'];					
+	this.DocumentAuditing[7] = ['6_RetinoTopicMappingOutput.html','Retinotopic Mapping output files Tutorial','1.0.0.1','Oktober 2014','Sven Gijsen'];	
 	
-	//BrainStim version (2.2.0.0), latest release
-	///////////////////////////////////////////////////////////////
-	nNumberOfComponentChanges = 8;//See below, increment by adding new changes for this release!
-	tmpArray = BrainStim_CreateArray(1,nNumberOfComponentChanges,PropCounter);
-	this.componentVersioning.push.apply(this.componentVersioning, tmpArray)//		Name,	Version,  Product, StimGLVersionIndex, EXML, Device, Interface
-	this.componentVersioning[3][ExperimentManagerPlugin_Comp_Index] = 	['ExperimentManagerPlugin',	'2.2.0.0', '1.0.0.1', 3, '2.2.0.0', '1.2',  '1.2'];
-	this.componentVersioning[3][ParallelPortPlugin_Comp_Index] =        ['ParallelPortPlugin',      '2.1.1.0', '1.0.0.1', 3, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[3][SerialPortPlugin_Comp_Index] =          ['SerialPortPlugin',        '1.2.0.0', '1.0.0.1', 3, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[3][KeyBoardPlugin_Comp_Index] =            ['KeyBoardPlugin',          '1.2.0.0', '1.0.0.1', 3, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[3][USBHIDDevicePlugin_Comp_Index] =        ['USBHIDDevicePlugin',      '2.1.1.0', '1.0.0.1', 3, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[3][_extensionname_plugin_Comp_Index] =     ['_extensionname_plugin',   '1.2.0.0', '1.0.0.1', 3, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[3][BrainStim_QMLExtensions_Comp_Index] =    ['BrainStim_QMLExtensions',  '1.2',     '1.0.0.1', 3, 'x',       'x',    'x'];
-	this.componentVersioning[3][MediaPlayer_Comp_Index] =               ['MediaPlayer',             '2',       '1.0.0.1', 3, 'x',       'x',    'x'];
-	this.componentVersioning[3][FirebirdClientPlugin_Comp_Index] =      ['FireBirdClientPlugin',      '1.1.0.1', '1.0.0.1', 3, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[3][PiezoStimDevicePlugin_Comp_Index] =     ['PiezoStimDevicePlugin',      '1.1.0.1', '1.0.0.1', 3, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[3][TBVExchangerPlugin_Comp_Index] =        ['TBVExchangerPlugin',     '1.1.0.1', '1.0.0.1', 3, 'x',       '1.2',  '1.2'];
-	this.componentVersioning[3][TCPNetworkServerPlugin_Comp_Index] =    ['TCPNetworkServerPlugin',      '1.1.0.1', '1.0.0.1', 3, 'x',       '1.2',  '1.2'];
-
-	this.DocumentAuditing = BrainStim_CreateArray(15, AuthorCounter); //Default constructor!
-	///////////////////////////////////////////////////////////////
-	this.DocumentAuditing[0][this.Doc_FileName_Index] = 'GettingStartedGuide.html';
-	this.DocumentAuditing[0][this.Doc_Title_Index] = 'Getting Started Guide';
-	this.DocumentAuditing[0][this.Doc_Version_Index] = '1.1.1.0';
-	this.DocumentAuditing[0][this.Doc_Date_Index] = 'June 2014';
-	this.DocumentAuditing[0][this.Doc_Authors_Index] = 'Sven Gijsen';
 	
-	this.DocumentAuditing[1] = ['PreBuildDevelopmentSetup.html','Pre Build Development Setup','1.0.1.0','September 2013','Sven Gijsen'];
-	this.DocumentAuditing[2] = ['ExperimentManagerPlugin.html','Experiment Manager Plug-in Documentation','1.1.1.0','June 2014','Sven Gijsen'];
-	this.DocumentAuditing[3] = ['ParallelPortDevicePlugin.html','Parallel Port Plug-in Documentation','2.1.0.2','June 2014','Sven Gijsen'];	
-	this.DocumentAuditing[4] = ['USBHIDDevicePlugin.html','USBHID Device Plug-in Documentation','2.0.0.2','September 2013','Sven Gijsen'];		
-	this.DocumentAuditing[5] = ['ExtensionPluginTemplate.html','Extension Plug-in Template Documentation','2.0.0.2','September 2013','Sven Gijsen'];	
-	this.DocumentAuditing[6] = ['TBVExchangerPlugin.html','Turbo-BrainVoyager Exchanger Plug-in Documentation','1.1.0.1','June 2014','Michael Luehrs'];
-	this.DocumentAuditing[7] = ['FireBirdClientPlugin.html','Firebird Client Plug-in Documentation','1.0.0.1','Oktober 2013','Sven Gijsen'];		
-	this.DocumentAuditing[8] = ['KeyBoardDevicePlugin.html','Keyboard Device Plug-in Documentation','1.0.0.1','Oktober 2013','Sven Gijsen'];	
-	this.DocumentAuditing[9] = ['PiezoStimDevicePlugin.html','PiezoStim Device Plug-in Documentation','1.0.0.1','Oktober 2013','Sven Gijsen'];	
-	this.DocumentAuditing[10] = ['SerialPortDevicePlugin.html','SerialPort Device Plug-in Documentation','1.0.0.1','Oktober 2013','Sven Gijsen'];	
-	this.DocumentAuditing[11] = ['TCPNetworkServerPlugin.html','TCPNetwork Server Device Plug-in Documentation','1.0.0.1','Oktober 2013','Sven Gijsen'];	
-	this.DocumentAuditing[12] = ['BrainStim_QMLExtensions.html','BrainStim QML Extensions Plug-in Documentation','1.1.0.1','June 2014','Sven Gijsen'];					
-	this.DocumentAuditing[13] = ['6_RetinoTopicMappingOutput.html','Retinotopic Mapping output files Tutorial','1.1.0.1','June 2014','Sven Gijsen'];	
-	this.DocumentAuditing[14] = ['15_NeuroFeedBack.html','NeuroFeedback Tutorial (with TBVExchanger plugin)','1.1.0.1','June 2014','Sven Gijsen'];
+	
+	
+	//BrainStim version (?.?.?.?)
+	///////////////////////////////////////////////////////////////
+//	nNumberOfComponentChanges = 4;//See below, increment by adding new changes for this release!
+//	tmpArray = BrainStim_CreateArray(1,nNumberOfComponentChanges,PropCounter);
+//	this.componentVersioning.push.apply(this.componentVersioning, tmpArray)
+//	this.componentVersioning[1][ExperimentManagerPlugin_Comp_Index] = 	['ExperimentManagerPlugin',	'1.0.0.1', '1.0.0.1', 1, '1.0.0.1', '1.0',  '1.0'];
+//	this.componentVersioning[1][ParallelPortPlugin_Comp_Index] =        ['ParallelPortPlugin',      '1.0.0.1', '1.0.0.1', 0, 'x',       '1.0',  '1.0'];
+//	this.componentVersioning[1][KeyBoardPlugin_Comp_Index] =            ['KeyBoardPlugin',          '1.0.0.1', '1.0.0.1', 0, 'x',       '1.0',  '1.0'];
+//	this.componentVersioning[1][BrainStim_QMLExtensions_Comp_Index] =    ['BrainStim_QMLExtensions',  '1.0',     '1.0.0.1', 0, 'x',       'x',    'x'];
+//	this.DocumentAuditing = BrainStim_CreateArray(8, AuthorCounter); //Default constructor!
+	///////////////////////////////////////////////////////////////
+//	this.DocumentAuditing[0][this.Doc_FileName_Index] = 'GettingStartedGuide.html';
+//	this.DocumentAuditing[0][this.Doc_Title_Index] = 'Getting Started Guide';
+//	this.DocumentAuditing[0][this.Doc_Version_Index] = '1.0.1.0';
+//	this.DocumentAuditing[0][this.Doc_Date_Index] = 'Oktober 2014';
+//	this.DocumentAuditing[0][this.Doc_Authors_Index] = 'Sven Gijsen';
+//	
+//	this.DocumentAuditing[1] = ['PreBuildDevelopmentSetup.html','Pre Build Development Setup','1.0.1.0','Oktober 2014','Sven Gijsen'];
+//	this.DocumentAuditing[2] = ['ExperimentManagerPlugin.html','Experiment Manager Plug-in Documentation','1.0.1.0','Oktober 2014','Sven Gijsen'];
+//	this.DocumentAuditing[3] = ['ParallelPortDevicePlugin.html','Parallel Port Plug-in Documentation','2.0.0.2','Oktober 2014','Sven Gijsen'];	
+//	this.DocumentAuditing[4] = ['ExtensionPluginTemplate.html','Extension Plug-in Template Documentation','2.0.0.2','Oktober 2014','Sven Gijsen'];	
+//	this.DocumentAuditing[5] = ['KeyBoardDevicePlugin.html','Keyboard Device Plug-in Documentation','1.0.0.1','Oktober 2014','Sven Gijsen'];		
+//	this.DocumentAuditing[6] = ['BrainStim_QMLExtensions.html','BrainStim QML Extensions Plug-in Documentation','1.0.0.1','Oktober 2014','Sven Gijsen'];					
+//	this.DocumentAuditing[7] = ['6_RetinoTopicMappingOutput.html','Retinotopic Mapping output files Tutorial','1.0.0.1','Oktober 2014','Sven Gijsen'];
 }
 
 BrainStim_Information.prototype.GetStrippedFileName = function (strFileUrl)//var strFileUrl=window.location.pathname;
@@ -464,7 +340,7 @@ BrainStim_Information.prototype.GetMainAppInternalName = function ()
 {	return 'BrainStim'; }
 
 BrainStim_Information.prototype.GetMainAppPluginDeviceInterfaceString = function ()
-{	return 'BrainStim.Plugins.DeviceInterface/1.2'; }
+{	return 'BrainStim.Plugins.DeviceInterface/1.0'; }
 
 BrainStim_Information.prototype.GetMainAppPluginExtensionInterfaceString = function ()
-{	return 'BrainStim.Plugins.ExtensionInterface/1.2'; }
+{	return 'BrainStim.Plugins.ExtensionInterface/1.0'; }

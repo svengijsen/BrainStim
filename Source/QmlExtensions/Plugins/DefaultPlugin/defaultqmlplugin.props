@@ -6,12 +6,12 @@
     <!--IsDebug: search for 'Debug' in Configuration-->
     <IsDebug>$([System.Convert]::ToString( $([System.Text.RegularExpressions.Regex]::IsMatch($(Configuration), '[Dd]ebug'))))</IsDebug>
     <!--ShortPlatform-->
-    <QTDIR Condition="'$(Platform)' == 'Win32'">C:\Qt\5.1.0\win32</QTDIR>
-    <QTDIR Condition="'$(Platform)' == 'x64'">C:\Qt\5.1.0\x64</QTDIR>    
-    <OGRE_HOME Condition="'$(Platform)' == 'Win32'">C:\Qt\Ogre\OGRE-SDK-1.8.2-vc110-x86-28.05.2013</OGRE_HOME>
-    <OGRE_HOME Condition="'$(Platform)' == 'x64'">C:\Qt\Ogre\OGRE-SDK-1.8.2-vc110-x64-28.05.2013</OGRE_HOME>
-    <BOOST_HOME Condition="'$(Platform)' == 'Win32'">C:\Qt\Boost\boost-1.54-rev84536-vc110-x86-28.05.2013</BOOST_HOME>
-    <BOOST_HOME Condition="'$(Platform)' == 'x64'">C:\Qt\Boost\boost-1.54-rev84536-vc110-x64-28.05.2013</BOOST_HOME>
+    <QTDIR Condition="'$(Platform)' == 'Win32'">E:\Libraries\Qt5.3.2_32bit\5.3\msvc2013_opengl</QTDIR>
+    <QTDIR Condition="'$(Platform)' == 'x64'">E:\Libraries\Qt5.3.2_64bit\5.3\msvc2013_64_opengl</QTDIR>    
+    <OGRE_HOME Condition="'$(Platform)' == 'Win32'">E:\Libraries\Ogre\OGRE-SDK-1.8.2-vc110-x86-28.05.2013</OGRE_HOME>
+    <OGRE_HOME Condition="'$(Platform)' == 'x64'">E:\Libraries\Ogre\OGRE-SDK-1.8.2-vc110-x64-28.05.2013</OGRE_HOME>
+    <BOOST_HOME Condition="'$(Platform)' == 'Win32'">E:\Libraries\Boost\boost-1.56-32bit</BOOST_HOME>
+    <BOOST_HOME Condition="'$(Platform)' == 'x64'">E:\Libraries\Boost\boost-1.56-64bit</BOOST_HOME>
   </PropertyGroup>
   <Choose>
     <When Condition="$([System.Convert]::ToBoolean($(IsDebug)))">

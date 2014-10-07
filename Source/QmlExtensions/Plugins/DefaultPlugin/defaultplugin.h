@@ -25,7 +25,7 @@ class QDefaultQmlPlugin : public QQmlExtensionPlugin
 {
 	Q_OBJECT
 	Q_PLUGIN_METADATA(IID "BrainStim.QML.Plugins.Default" "DefaultQMLPlugin")
-	//Q_PLUGIN_METADATA(IID "BrainStim.QML.Plugins.Default" FILE DefaultQMLPlugin.json)
+	//Q_PLUGIN_METADATA(IID "BrainStim.QML.Plugins.Default" FILE defaultqmlplugin.json)
 
 public:
 	void registerTypes(const char *uri);

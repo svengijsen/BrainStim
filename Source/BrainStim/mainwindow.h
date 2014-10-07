@@ -613,6 +613,9 @@ private:
 	bool check4ReParseFile(const QString &sFilename);
 	void updateMenuControls();
 
+public slots:
+	void updateMenuControls(QMdiSubWindow *mdiSubWin) { Q_UNUSED(mdiSubWin); updateMenuControls();};
+
 public:
 	bool extendAPICallTips(const QMetaObject* metaScriptObject = NULL);
 	void setGlobalApplicationInformationObject(GlobalApplicationInformation *globAppInformation);

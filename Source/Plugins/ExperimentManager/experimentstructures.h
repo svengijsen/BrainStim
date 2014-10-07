@@ -1005,9 +1005,10 @@ public slots:
 	void incrementExternalTrigger();
 	//! \brief prepareExperiment slot.
 	/*!  This function prepares the current Experiment so it can be started.
+	 * @param bIgnoreNoDefinedBlocks a boolean value (default = false), if set to true than the function returns true even when there are no blocks yet defined.
 	 * @return a boolean value determining whether the function executed successfully.
 	 */	
-	bool prepareExperiment();
+	bool prepareExperiment(const bool &bIgnoreNoDefinedBlocks = false);
 	//! \brief startExperiment slot.
 	/*!  This function starts the current Experiment and will then wait for an external trigger, see cExperimentStructure::incrementExternalTrigger().
 	 */	

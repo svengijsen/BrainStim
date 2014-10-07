@@ -49,12 +49,12 @@ if(nCondition != -1)
 	if(nInterval != -1)
 		Log("appendInterval() successfully returned: " + nInterval);
 }
-if(PRTFormatManagerObj.loadFile("E:\\Projects\\BrainStim\\Install\\prt_files\\SubjectName_Date_ExperimentName_run1.prt"))
+if(PRTFormatManagerObj.loadFile("SubjectName_Date_ExperimentName_run1.prt"))
 {
 	Log("loadFile() successfull");
 }
 
-if(PRTFormatManagerObj.saveFile("E:\\Projects\\BrainStim\\Install\\prt_files\\SubjectName_Date_ExperimentName_run1_new.prt", true))
+if(PRTFormatManagerObj.saveFile("SubjectName_Date_ExperimentName_run1_new.prt", true))
 {
 	Log("saveFile() successfull");
 }

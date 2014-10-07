@@ -111,6 +111,7 @@ public:
 	//static void fromExperimentStateEnumScriptValue(const QScriptValue &obj, ExperimentState &s);
 	//static ExperimentParameterDefinitionContainer *getExperimentParameterDefinition(const QString &sCollectionName);
 
+	ExperimentState getCurrExperimentState() { return experimentCurrentState; }
 	void cleanupSingletons();
 	bool cleanupExperiment();
 	bool fetchExperimentBlockParamsFromTreeItemList(const int &nBlockNumber, const int &nObjectID);
@@ -423,7 +424,6 @@ private:
 	void cleanupExperimentObjects();
 	void changeCurrentExperimentState(ExperimentState expCurrState);
 	QObject *getObjectElementById(int nID);
-	ExperimentState getCurrExperimentState() {return experimentCurrentState;}
 		
 	ExperimentParameterWidgets *expParamWidgets;
 	QList<ExperimentTreeItem*> ExperimentTreeBlockItemList;

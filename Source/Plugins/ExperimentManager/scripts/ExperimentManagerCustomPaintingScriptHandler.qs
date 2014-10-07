@@ -350,13 +350,6 @@ function ConnectDisconnectScriptFunctions(Connect)
 	}	
 }
 ExperimentManagerObj.ExperimentStateHasChanged.connect(this, this.ExperimentStateChanged);
-ExperimentManagerObj.setExperimentFileName(BrainStim.getApplicationRootDirPath() + "/Experiments/CustomScriptPainting.exml");
+Log(BrainStim.getActiveDocumentFileLocation() + "/CustomPainting.exml");
+ExperimentManagerObj.setExperimentFileName(BrainStim.getActiveDocumentFileLocation() + "/CustomPainting.exml");
 ExperimentManagerObj.runExperiment();
-
-//Polar1.exml
-//Polar2.exml
-//Eccentricity1.exml
-//Eccentricity2.exml
-//MovingBar1.exml
-//MovingBar2.exml
-//MovingDots1.exml

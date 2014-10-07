@@ -16,9 +16,9 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "DefaultPlugin.h"
+#include "defaultplugin.h"
 #include "defines.h"
-#include "TimeModel.h"
+#include "timemodel.h"
 #include "ogreitem.h"
 
 void QDefaultQmlPlugin::registerTypes(const char *uri)
@@ -26,6 +26,5 @@ void QDefaultQmlPlugin::registerTypes(const char *uri)
 	Q_ASSERT(uri == QLatin1String(DEFAULT_BRAINSTIM_PLUGIN_QML_NAME));
 	int nTypeID=-1;
 	nTypeID = qmlRegisterType<TimeModel,TIMEMODEL_VERSION_STRING_REVISION>(uri, QML_VERSION_STRING_MAJOR, QML_VERSION_STRING_MINOR, TIMEMODEL_TYPE_QML_NAME);
-	//depriciated --> nTypeID = qmlRegisterType<PhononPlayer,PHONONPLAYER_VERSION_STRING_REVISION>(uri, QML_VERSION_STRING_MAJOR, QML_VERSION_STRING_MINOR, PHONONPLAYER_TYPE_QML_NAME);
 	nTypeID = qmlRegisterType<OgreItem,OGRE3DITEM_VERSION_STRING_REVISION>(uri, QML_VERSION_STRING_MAJOR, QML_VERSION_STRING_MINOR, OGRE3DITEM_TYPE_QML_NAME);
 }

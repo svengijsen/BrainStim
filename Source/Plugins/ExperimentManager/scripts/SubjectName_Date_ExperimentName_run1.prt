@@ -1,0 +1,110 @@
+
+FileVersion:        2
+
+ResolutionOfTime:   Volumes
+
+Experiment:         SubjectName_Date_ExperimentName_run1
+
+BackgroundColor:    0 0 0
+TextColor:          255 255 217
+
+TimeCourseColor:    255 255 255
+TimeCourseThick:    3
+ReferenceFuncColor: 192 192 192
+ReferenceFuncThick: 2
+
+NrOfConditions:  12
+
+Rest
+23
+1 10
+21 28
+40 48
+59 68
+80 87
+98 106
+117 126
+138 145
+156 164
+175 185
+196 203
+214 222
+234 243
+254 261
+272 281
+292 301
+312 319
+331 339
+350 359
+370 377
+389 397
+408 417
+429 437
+Color: 128 128 128
+
+cF
+2
+146 155
+320 330
+Color: 128 255 255
+
+cO
+2
+69 79
+165 174
+Color: 255 0 0
+
+cS
+2
+49 58
+340 349
+Color: 0 255 0
+
+pFx
+2
+29 39
+186 195
+Color: 40 150 255
+
+pxF
+2
+302 311
+418 428
+Color: 0 0 255 
+
+pFO
+2
+282 291
+398 407
+Color: 128 0 128
+
+pOx
+2
+223 233
+360 369
+Color: 255  0 255
+
+pxO
+2
+127 137
+262 271
+Color: 138 0 0
+
+pOF
+2
+11 20
+204 213
+Color: 255 128 0
+
+pSx
+2
+107 116
+244 253
+Color: 0 128 0
+
+pxS
+2
+88 97
+378 388
+Color: 0 255 0
+

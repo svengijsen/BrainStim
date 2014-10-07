@@ -142,6 +142,7 @@ void ExperimentManager::RegisterMetaTypes()
 	MainAppInfo::registerMetaTypeClass<ImageProcessor>(IMAGEPROCESSOR_NAME);	
 	MainAppInfo::registerMetaTypeClass<PrtFormatManager>(PRTFORMATMANAGER_NAME);
 	MainAppInfo::registerMetaTypeClass<RandomGenerator>(RANDOMGENERATOR_NAME);
+	MainAppInfo::registerMetaTypeClass<ExperimentTreeModel>(EXPERIMENTTREEMODEL_NAME);
 	MainAppInfo::registerMetaTypeClass<ExperimentStructuresNameSpace::strcExperimentStructureState>(CEXPERIMENTSTRUCTURESTATE_NAME);
 	MainAppInfo::registerMetaTypeClass<cExperimentStructure>(CEXPERIMENTSTRUCTURE_NAME);
 	MainAppInfo::registerMetaTypeClass<cBlockStructure>(CBLOCKSTRUCTURE_NAME);
@@ -958,10 +959,12 @@ bool ExperimentManager::createExperimentStructure(QList<ExperimentTreeItem*> &lE
 	{
 		if(createExperimentStructureFromTreeItemList(lExpTreeItems, cExpBlockTrialStruct))		
 		{
-			if(cExpBlockTrialStruct->prepareExperiment() == false)
+			if (cExpBlockTrialStruct->prepareExperiment(true) == false)
+			{
 				qDebug() << __FUNCTION__ << "::Could not prepare Experiment Structure!";
-			else
-				return true;
+				return false;
+			}
+			return true;
 		}
 		else
 		{
@@ -1670,22 +1673,19 @@ bool ExperimentManager::connectExperimentObjects(bool bDisconnect, int nObjectID
 					
 						tmpConnectionTreeItemList.clear();;
 						nSectionCount = ExperimentTreeModel::getStaticTreeElements(lConnectionSectionSearchPath, tmpConnectionTreeItemList, ExperimentObjectConnectionsTreeItemList.at(i));
-						if(nSectionCount > 0)
+						if(nSectionCount == 1)
 						{
-							for (int j=0;j<nSectionCount;j++)//For each element of section (source or target)
+							ExperimentTreeItem *pTmpExpTreeItem = NULL;
+							pTmpExpTreeItem = tmpConnectionTreeItemList[0]->firstChild(OBJECT_TAG);
+							if (pTmpExpTreeItem)
 							{
-								tmpString = "";
-								pExpTreeItem = tmpConnectionTreeItemList.at(j);
-								tTmpTreeItemDefs = pExpTreeItem->getDefinitions();
-								if(!tTmpTreeItemDefs.contains(ID_TAG))
-									continue;
-								tmpString = tTmpTreeItemDefs[ID_TAG].value.toString();//Correct ObjectID?
+								tmpString = pTmpExpTreeItem->getValue();
 								if (tmpString.isEmpty())
 									continue;
 								if(nSourceTargetCounter == 0)//Source section...
 								{
 									nSourceObjectID = tmpString.toInt();
-									if (!(nSourceObjectID >= 0))
+									if (nSourceObjectID < 0)
 										continue;
 									pSourceObject = getObjectElementById(nSourceObjectID);
 									if (pSourceObject == NULL)
@@ -1701,8 +1701,8 @@ bool ExperimentManager::connectExperimentObjects(bool bDisconnect, int nObjectID
 										continue;
 								}
 
-								pExpTreeItem = tmpConnectionTreeItemList.at(j)->firstChild(CONNECTION_TYPE_TAG);
-								tmpString = pExpTreeItem->getValue();
+								pTmpExpTreeItem = tmpConnectionTreeItemList[0]->firstChild(CONNECTION_TYPE_TAG);
+								tmpString = pTmpExpTreeItem->getValue();
 								if (tmpString.isEmpty())
 									continue;
 								if (!((tmpString == CONNECTION_TYPE_SIGNAL_TAG) || (tmpString == CONNECTION_TYPE_SLOT_TAG)))
@@ -1713,8 +1713,8 @@ bool ExperimentManager::connectExperimentObjects(bool bDisconnect, int nObjectID
 								else if(nSourceTargetCounter == 1)//Target section...
 									sTargetType = tmpString;
 
-								pExpTreeItem = tmpConnectionTreeItemList.at(j)->firstChild(CONNECTION_SIGNATURE_TAG);
-								tmpString = pExpTreeItem->getValue();
+								pTmpExpTreeItem = tmpConnectionTreeItemList[0]->firstChild(CONNECTION_SIGNATURE_TAG);
+								tmpString = pTmpExpTreeItem->getValue();
 								if (tmpString.isEmpty())
 									continue;
 
@@ -2084,7 +2084,6 @@ bool ExperimentManager::createExperimentStructureFromTreeItemList(const QList<Ex
 	//strSearchPathList.append(ROOT_TAG);
 	strSearchPathList.append(ACTIONS_TAG);
 	strSearchPathList.append(BLOCKTRIALS_TAG);
-	strSearchPathList.append(BLOCK_TAG);
 	int nNrOfObjects;
 	int nNrOfBlockTrials;
 	int nNrOfMethodConnections;
@@ -2094,128 +2093,134 @@ bool ExperimentManager::createExperimentStructureFromTreeItemList(const QList<Ex
 	bool bFinitInitResult = false;
 
 	expStruct->resetExperiment();
-	if(ExperimentTreeModel::getStaticTreeElements(strSearchPathList, lFoundExpTreeItems, ExpRootTreeItems.at(0)) > 0)
+	if (ExperimentTreeModel::getStaticTreeElements(strSearchPathList, lFoundExpTreeItems, ExpRootTreeItems.at(0)) == 1)
 	{
-		nNrOfBlockTrials = lFoundExpTreeItems.count();
-		cBlockStructure *tmpBlock = NULL;
-		cLoopStructure *tmpLoop = NULL;
-		ExperimentTreeItem *tmpTreeItem = NULL;
-		bool bUpdateSucceeded = false;
-		QMap<QString, TreeItemDefinition> tTmpTreeItemDefs;
-		int nTemp;
-		QString sTemp;
-
-		for (int i=0;i<nNrOfBlockTrials;i++)
+		strSearchPathList.append(BLOCK_TAG);
+		lFoundExpTreeItems.clear();
+		nNrOfBlockTrials = 0;
+		if (ExperimentTreeModel::getStaticTreeElements(strSearchPathList, lFoundExpTreeItems, ExpRootTreeItems.at(0)) > 0)
 		{
-			bUpdateSucceeded = false;
-			if(lFoundExpTreeItems.at(i)->hasChildren())
-			{
-				tmpTreeItem = lFoundExpTreeItems.at(i);
-				tTmpTreeItemDefs = tmpTreeItem->getDefinitions();
-				if(tTmpTreeItemDefs.contains(ID_TAG))
-				{
-					tmpBlock = new cBlockStructure();
-					tmpBlock->setBlockID(tTmpTreeItemDefs[ID_TAG].value.toInt());//Copy the BlockID
-					tmpTreeItem = lFoundExpTreeItems.at(i)->firstChild(BLOCKNUMBER_TAG);
-					if(tmpTreeItem)//Is there a block_number defined?
-					{
-						tmpBlock->setBlockNumber(tmpTreeItem->getValue().toInt());//Copy the BlockNumber
-						if (tmpBlock->getBlockNumber()>=0)
-						{
-							tmpTreeItem = lFoundExpTreeItems.at(i)->firstChild(TRIALAMOUNT_TAG);
-							if(tmpTreeItem)//Is there a TrialAmount defined?
-								tmpBlock->setNumberOfTrials(tmpTreeItem->getValue().toInt());//Copy the TrialAmount
-							else
-								tmpBlock->setNumberOfTrials(1);//Default if not defined
-							tmpTreeItem = lFoundExpTreeItems.at(i)->firstChild(INTERNALTRIGGERAMOUNT_TAG);
-							if(tmpTreeItem)//Is there a TriggerAmount defined?
-							{							
-								sTemp = tmpTreeItem->getValue();
-								if (!sTemp.isEmpty())
-								{
-									nTemp = sTemp.toInt();
-									if (nTemp > 0)
-										tmpBlock->setNumberOfInternalTriggers(nTemp);
-								}
-							}
-							tmpTreeItem = lFoundExpTreeItems.at(i)->firstChild(EXTERNALTRIGGERAMOUNT_TAG);
-							if(tmpTreeItem)//Is there a SubTriggerAmount defined?
-							{
-								sTemp = tmpTreeItem->getValue();
-								if (!sTemp.isEmpty())
-								{
-									nTemp = sTemp.toInt();
-									if (nTemp > 0)
-										tmpBlock->setNumberOfExternalTriggers(nTemp);
-								}
-							}
-							tmpTreeItem = lFoundExpTreeItems.at(i)->firstChild(NAME_TAG);
-							if(tmpTreeItem)//Is there a Name defined?
-								tmpBlock->setBlockName(tmpTreeItem->getValue());//Copy the Name
-							//Are there any loops defined?
-							ExperimentTreeItem *tmpLoopItem = lFoundExpTreeItems.at(i)->firstChild(LOOPS_TAG);
-							if(tmpLoopItem)
-							{
-								if(tmpLoopItem->childCount() > 0)
-								{
-									int nTempLoopID = 0;
-									QString sTempLoopName = "";
-									int nTempLoopNumber = 0;
-									int nTempLoopCount = 0;
-									int nTempLoopTargetBlockID = 0;
-									ExperimentTreeItem *tmpLoopTreeItemParams = NULL;
-									bool bLoopParseResult = true;
+			nNrOfBlockTrials = lFoundExpTreeItems.count();
+			cBlockStructure *tmpBlock = NULL;
+			cLoopStructure *tmpLoop = NULL;
+			ExperimentTreeItem *tmpTreeItem = NULL;
+			bool bUpdateSucceeded = false;
+			QMap<QString, TreeItemDefinition> tTmpTreeItemDefs;
+			int nTemp;
+			QString sTemp;
 
-									tmpTreeItem = tmpLoopItem->firstChild(LOOP_TAG);
-									while(tmpTreeItem)
+			for (int i = 0; i < nNrOfBlockTrials; i++)
+			{
+				bUpdateSucceeded = false;
+				if (lFoundExpTreeItems.at(i)->hasChildren())
+				{
+					tmpTreeItem = lFoundExpTreeItems.at(i);
+					tTmpTreeItemDefs = tmpTreeItem->getDefinitions();
+					if (tTmpTreeItemDefs.contains(ID_TAG))
+					{
+						tmpBlock = new cBlockStructure();
+						tmpBlock->setBlockID(tTmpTreeItemDefs[ID_TAG].value.toInt());//Copy the BlockID
+						tmpTreeItem = lFoundExpTreeItems.at(i)->firstChild(BLOCKNUMBER_TAG);
+						if (tmpTreeItem)//Is there a block_number defined?
+						{
+							tmpBlock->setBlockNumber(tmpTreeItem->getValue().toInt());//Copy the BlockNumber
+							if (tmpBlock->getBlockNumber() >= 0)
+							{
+								tmpTreeItem = lFoundExpTreeItems.at(i)->firstChild(TRIALAMOUNT_TAG);
+								if (tmpTreeItem)//Is there a TrialAmount defined?
+									tmpBlock->setNumberOfTrials(tmpTreeItem->getValue().toInt());//Copy the TrialAmount
+								else
+									tmpBlock->setNumberOfTrials(1);//Default if not defined
+								tmpTreeItem = lFoundExpTreeItems.at(i)->firstChild(INTERNALTRIGGERAMOUNT_TAG);
+								if (tmpTreeItem)//Is there a TriggerAmount defined?
+								{
+									sTemp = tmpTreeItem->getValue();
+									if (!sTemp.isEmpty())
 									{
-										tTmpTreeItemDefs = tmpTreeItem->getDefinitions();
-										if(tTmpTreeItemDefs.contains(ID_TAG))
+										nTemp = sTemp.toInt();
+										if (nTemp > 0)
+											tmpBlock->setNumberOfInternalTriggers(nTemp);
+									}
+								}
+								tmpTreeItem = lFoundExpTreeItems.at(i)->firstChild(EXTERNALTRIGGERAMOUNT_TAG);
+								if (tmpTreeItem)//Is there a SubTriggerAmount defined?
+								{
+									sTemp = tmpTreeItem->getValue();
+									if (!sTemp.isEmpty())
+									{
+										nTemp = sTemp.toInt();
+										if (nTemp > 0)
+											tmpBlock->setNumberOfExternalTriggers(nTemp);
+									}
+								}
+								tmpTreeItem = lFoundExpTreeItems.at(i)->firstChild(NAME_TAG);
+								if (tmpTreeItem)//Is there a Name defined?
+									tmpBlock->setBlockName(tmpTreeItem->getValue());//Copy the Name
+								//Are there any loops defined?
+								ExperimentTreeItem *tmpLoopItem = lFoundExpTreeItems.at(i)->firstChild(LOOPS_TAG);
+								if (tmpLoopItem)
+								{
+									if (tmpLoopItem->childCount() > 0)
+									{
+										int nTempLoopID = 0;
+										QString sTempLoopName = "";
+										int nTempLoopNumber = 0;
+										int nTempLoopCount = 0;
+										int nTempLoopTargetBlockID = 0;
+										ExperimentTreeItem *tmpLoopTreeItemParams = NULL;
+										bool bLoopParseResult = true;
+
+										tmpTreeItem = tmpLoopItem->firstChild(LOOP_TAG);
+										while (tmpTreeItem)
 										{
-											if (tmpTreeItem->getName() == LOOP_TAG) 
+											tTmpTreeItemDefs = tmpTreeItem->getDefinitions();
+											if (tTmpTreeItemDefs.contains(ID_TAG))
 											{
-												bLoopParseResult = false;
-												nTempLoopID = tTmpTreeItemDefs[ID_TAG].value.toInt();//Copy the LoopID
-												tmpLoopTreeItemParams = tmpTreeItem->firstChild(NAME_TAG);
-												if(tmpLoopTreeItemParams)//Is it defined?
+												if (tmpTreeItem->getName() == LOOP_TAG)
 												{
-													sTempLoopName = tmpLoopTreeItemParams->getValue();//Copy the LoopName
-													tmpLoopTreeItemParams = tmpTreeItem->firstChild(LOOP_NUMBER_TAG);
-													if(tmpLoopTreeItemParams)//Is it defined?
+													bLoopParseResult = false;
+													nTempLoopID = tTmpTreeItemDefs[ID_TAG].value.toInt();//Copy the LoopID
+													tmpLoopTreeItemParams = tmpTreeItem->firstChild(NAME_TAG);
+													if (tmpLoopTreeItemParams)//Is it defined?
 													{
-														nTempLoopNumber = tmpLoopTreeItemParams->getValue().toInt();//Copy the LoopNumber
-														tmpLoopTreeItemParams = tmpTreeItem->firstChild(LOOP_AMOUNT_TAG);
-														if(tmpLoopTreeItemParams)//Is it defined?
+														sTempLoopName = tmpLoopTreeItemParams->getValue();//Copy the LoopName
+														tmpLoopTreeItemParams = tmpTreeItem->firstChild(LOOP_NUMBER_TAG);
+														if (tmpLoopTreeItemParams)//Is it defined?
 														{
-															nTempLoopCount = tmpLoopTreeItemParams->getValue().toInt();//Copy the LoopNumber
-															tmpLoopTreeItemParams = tmpTreeItem->firstChild(LOOP_TARGETBLOCKID_TAG);
-															if(tmpLoopTreeItemParams)//Is it defined?
+															nTempLoopNumber = tmpLoopTreeItemParams->getValue().toInt();//Copy the LoopNumber
+															tmpLoopTreeItemParams = tmpTreeItem->firstChild(LOOP_AMOUNT_TAG);
+															if (tmpLoopTreeItemParams)//Is it defined?
 															{
-																nTempLoopTargetBlockID = tmpLoopTreeItemParams->getValue().toInt();//Copy the LoopNumber
-																tmpLoop = new cLoopStructure(nTempLoopID,nTempLoopNumber,nTempLoopTargetBlockID,sTempLoopName,nTempLoopCount);
-																bLoopParseResult = tmpBlock->insertLoop(tmpLoop);////&cLoopStructure(nTempLoopID,nTempLoopNumber,nTempLoopTargetBlockID,sTempLoopName,nTempLoopCount));//tmpLoop);
+																nTempLoopCount = tmpLoopTreeItemParams->getValue().toInt();//Copy the LoopNumber
+																tmpLoopTreeItemParams = tmpTreeItem->firstChild(LOOP_TARGETBLOCKID_TAG);
+																if (tmpLoopTreeItemParams)//Is it defined?
+																{
+																	nTempLoopTargetBlockID = tmpLoopTreeItemParams->getValue().toInt();//Copy the LoopNumber
+																	tmpLoop = new cLoopStructure(nTempLoopID, nTempLoopNumber, nTempLoopTargetBlockID, sTempLoopName, nTempLoopCount);
+																	bLoopParseResult = tmpBlock->insertLoop(tmpLoop);////&cLoopStructure(nTempLoopID,nTempLoopNumber,nTempLoopTargetBlockID,sTempLoopName,nTempLoopCount));//tmpLoop);
+																}
 															}
 														}
 													}
 												}
-											} 
-											if(bLoopParseResult == false)
-												qDebug() << __FUNCTION__ << "::Could not parse loop structure, false declared loop!";
-											tmpTreeItem = tmpTreeItem->nextSiblingTreeItem();
+												if (bLoopParseResult == false)
+													qDebug() << __FUNCTION__ << "::Could not parse loop structure, false declared loop!";
+												tmpTreeItem = tmpTreeItem->nextSiblingTreeItem();
+											}
 										}
 									}
 								}
+								expStruct->insertBlock(tmpBlock);//Here we should make a copy to reserve and keep the memory space
+								bUpdateSucceeded = true;
 							}
-							expStruct->insertBlock(tmpBlock);//Here we should make a copy to reserve and keep the memory space
-							bUpdateSucceeded = true;
 						}
 					}
 				}
-			}
-			if(!bUpdateSucceeded)
-			{
-				expStruct->resetExperiment();
-				return false;
+				if (!bUpdateSucceeded)
+				{
+					expStruct->resetExperiment();
+					return false;
+				}
 			}
 		}
 		bBlockTrialParseResult = true;

@@ -1,5 +1,5 @@
 var cExperimentStructure_Object = new cExperimentStructure();
-var ExperimentManagerObj = new ExperimentManager(); 	
+var cExperimentTreeModel_Object = new ExperimentTreeModel();
 var cBlockStructure_Object0;
 var cBlockStructure_Object1;
 var cBlockStructure_Object2;
@@ -10,14 +10,13 @@ var cLoopStructure_Object1;
 var cLoopStructure_Object2;
 var cLoopStructure_Object3;
 var cLoopStructure_Object4;
-var cLoopStructure_Object = new cLoopStructure();
 var cExperimentStructureState_Object = new cExperimentStructureState();
 var sTimer = new TriggerTimer();
-var KeyBoardCaptureObj = new KeyBoardCapture(); //Construct a BrainStim Plugin KeyBoard Object
-var ExperimentManagerObj = new ExperimentManager(); 				//Here we create the Experiment Manager object that can run experiments.
-var sCurrentScriptLocation = BrainStim.getSelectedScriptFileLocation();		//Here we store the directory-path from this script file for further usage.
+var KeyBoardCaptureObj = new KeyBoardCapture(); 						//Construct a BrainStim Plugin KeyBoard Object
+var ExperimentManagerObj = new ExperimentManager(); 						//Here we create the Experiment Manager object that can run experiments.
+var sCurrentScriptLocation = BrainStim.getActiveDocumentFileLocation();			//Here we store the directory-path from this script file for further usage.
 var sExperimentFilePath = sCurrentScriptLocation + "/StructureLoading.exml";
-var ExampleMode=0; // 0: Visual, 1: Counting, 2:LoadFromXML(Counting), 3:LoadFromXML(Visual)
+var ExampleMode = 0;												// 0: Visual, 1: Counting, 2:LoadFromXML(Counting), 3:LoadFromXML(Visual)
 
 function KeyCaptureDetectFunction(keyCode)
 {
@@ -29,7 +28,7 @@ function KeyCaptureDetectFunction(keyCode)
 	else if(keyCode == 82)//r = refresh
 	{
 		Log("* Refresh the Experiment Structure");
-		if(!ExperimentManagerObj.showVisualExperimentEditor(cExperimentStructure_Object)) //Try to run the experiment
+		if(!ExperimentManagerObj.showVisualExperimentEditor(cExperimentStructure_Object))
 		{
 			Log("Failed to show the Experiment Structure");
 			CleanupScript(); //If the experiment fails to run exit the script nicely
@@ -46,23 +45,27 @@ function KeyCaptureDetectFunction(keyCode)
 
 function CleanupScript()
 {
+	if(ExampleMode != 2)
+		BrainStim.enableActiveDocument(true);
 	KeyBoardCaptureObj.StopCaptureThread();
+	sTimer.stopTimer();
 	ConnectDisconnectScriptFunctions(false);
 	ConnectDisconnectScriptFunctions = null;
-	sTimer.stopTimer();
-	cLoopStructure_Object0 = null;
-	cLoopStructure_Object1 = null;
-	cLoopStructure_Object2 = null;
-	cLoopStructure_Object3 = null;
-	cLoopStructure_Object4 = null;	
+	ExperimentManagerObj.deleteLater();
+	ExperimentManagerObj = null;
+	cExperimentStructure_Object.deleteLater();
+	cExperimentStructure_Object = null;	
 	cBlockStructure_Object0 = null;
 	cBlockStructure_Object1 = null;
 	cBlockStructure_Object2 = null;
 	cBlockStructure_Object3 = null;
 	cBlockStructure_Object4 = null;
-	cExperimentStructure_Object = null;	
+	cLoopStructure_Object0 = null;
+	cLoopStructure_Object1 = null;
+	cLoopStructure_Object2 = null;
+	cLoopStructure_Object3 = null;
+	cLoopStructure_Object4 = null;	
 	cExperimentStructureState_Object = null;
-	ExperimentManagerObj = null;
 	CleanupScript = null;
 	LogState = null;
 	sTimer = null;
@@ -75,7 +78,7 @@ function CleanupScript()
 	KeyBoardCaptureObj = null;
 	EM_ExperimentStateChanged = null;
 	EM_ExternalTriggerIncremented = null;
-	ExperimentManagerObj = null;
+	cExperimentTreeModel_Object = null;
 	Log("\nFinished script cleanup, ready for garbage collection!");
 	Beep();
 	BrainStim.cleanupScript();	
@@ -91,9 +94,6 @@ function ConnectDisconnectScriptFunctions(Connect)
 		{	
 			if(ExampleMode == 1)
 				sTimer.timeout.connect(cExperimentStructure_Object, cExperimentStructure_Object.incrementExternalTrigger);
-			cExperimentStructure_Object.experimentStarted.connect(this, ExperimentStarted);
-			cExperimentStructure_Object.experimentStopped.connect(this, ExperimentStopped);
-			cExperimentStructure_Object.externalTriggerRecieved.connect(this, ExperimentStateChanged);
 			KeyBoardCaptureObj.CaptureThreadKeyPressed.connect(this, this.KeyCaptureDetectFunction);
 			ExperimentManagerObj.ExperimentStateHasChanged.connect(this, this.EM_ExperimentStateChanged);  
 			ExperimentManagerObj.WriteToLogOutput.connect(this,this.Log);
@@ -111,14 +111,9 @@ function ConnectDisconnectScriptFunctions(Connect)
 		{	
 			if(ExampleMode == 1)
 				sTimer.timeout.disconnect(cExperimentStructure_Object, cExperimentStructure_Object.incrementExternalTrigger);
-			cExperimentStructure_Object.experimentStarted.disconnect(this, ExperimentStarted);
-			cExperimentStructure_Object.experimentStopped.disconnect(this, ExperimentStopped);
-			cExperimentStructure_Object.externalTriggerRecieved.disconnect(this, ExperimentStateChanged);
 			KeyBoardCaptureObj.CaptureThreadKeyPressed.disconnect(this, this.KeyCaptureDetectFunction);
 			ExperimentManagerObj.ExperimentStateHasChanged.disconnect(this, this.EM_ExperimentStateChanged);  
 			ExperimentManagerObj.WriteToLogOutput.disconnect(this,this.Log);
-	
-			cExperimentStructure_Object.externalTriggerRecieved.disconnect(this, EM_ExternalTriggerIncremented);
 		} 
 		catch (e) 
 		{
@@ -146,10 +141,14 @@ function EM_ExperimentStateChanged(currentState,timestamp)
 		cExperimentStructure_Object.experimentStarted.connect(this, ExperimentStarted);
 		cExperimentStructure_Object.experimentStopped.connect(this, ExperimentStopped);
 		cExperimentStructure_Object.externalTriggerRecieved.connect(this, EM_ExternalTriggerIncremented);
+		cExperimentStructure_Object.externalTriggerRecieved.connect(this, ExperimentStateChanged);
 	}
 	else if(currentEMState == ExperimentManager.ExperimentState.ExperimentManager_IsStopping)
 	{
-		//ExperimentManagerObj.showVisualExperimentEditor(cExperimentStructure_Object);
+		cExperimentStructure_Object.experimentStarted.disconnect(this, ExperimentStarted);
+		cExperimentStructure_Object.experimentStopped.disconnect(this, ExperimentStopped);
+		cExperimentStructure_Object.externalTriggerRecieved.disconnect(this, EM_ExternalTriggerIncremented);
+		cExperimentStructure_Object.externalTriggerRecieved.disconnect(this, ExperimentStateChanged);
 	}
 	else if(currentEMState == ExperimentManager.ExperimentState.ExperimentManager_Stopped)
 	{
@@ -236,6 +235,8 @@ Log();
 
 if(ExampleMode != 2)
 {
+	BrainStim.enableActiveDocument(false);
+	
 	cExperimentStructure_Object.ExperimentName = "Test Experiment";
 	Log("Experiment Name: " + cExperimentStructure_Object.ExperimentName);
 	cExperimentStructure_Object.ExperimentID = 99;
@@ -268,10 +269,6 @@ if(ExampleMode != 2)
 	//CreateLoop(cLoopStructure_Object2,2,1,cBlockStructure_Object0.getBlockID());//(LoopObject,ID,NumberOfLoops,TargetBlockID)
 	//Log("Add a defined Loop result: " + cBlockStructure_Object0.insertLoop(cLoopStructure_Object2));
 
-	
-	
-	
-	
 	//cBlockStructure_Object.BlockName = "Block 0";
 	//Log("Block Name: " + cBlockStructure_Object.BlockName);
 	//cBlockStructure_Object.BlockID = 0;
@@ -318,31 +315,32 @@ if(ExampleMode != 2)
 //	{
 //		Log("Prepare Experiment failed!");
 //	}	
+	cExperimentTreeModel_Object.initializeExperiment();
+	cExperimentTreeModel_Object.addExperimentBlocks(3);
 }
 
 //BrainStim.clearOutputWindow();
 ConnectDisconnectScriptFunctions(true);
 
-
 if(ExampleMode == 0)
 {
-	Log("Ëxample Mode = " + ExampleMode);
-	if(!ExperimentManagerObj.showVisualExperimentEditor(cExperimentStructure_Object)) //Try to run the experiment
+	Log("Example Mode = " + ExampleMode);
+	if(!ExperimentManagerObj.showVisualExperimentEditor(cExperimentTreeModel_Object))//cExperimentStructure_Object))
 	{
-		Log("Failed to show the Experiment Structure");
+		Log("Failed to show the Experiment Model");
 		CleanupScript(); //If the experiment fails to run exit the script nicely
 	}	
 	KeyBoardCaptureObj.StartCaptureThread(0, true);
 }
 else if(ExampleMode == 1)
 {
-	Log("Ëxample Mode = " + ExampleMode);
+	Log("Example Mode = " + ExampleMode);
 	sTimer.startTimer(200);
 	KeyBoardCaptureObj.StartCaptureThread(0, true);
 }
 else if(ExampleMode == 2)
 {
-	Log("Ëxample Mode = " + ExampleMode);
+	Log("Example Mode = " + ExampleMode);
 	ExperimentManagerObj.setExperimentFileName(sExperimentFilePath); //Set the experiment file
 	if(!ExperimentManagerObj.runExperiment()) //Try to run the experiment
 	{
@@ -352,13 +350,14 @@ else if(ExampleMode == 2)
 }
 else if(ExampleMode == 3)
 {
-	Log("Ëxample Mode = " + ExampleMode);
+	Log("Example Mode = " + ExampleMode);
 	ExperimentManagerObj.setExperimentFileName(sExperimentFilePath); //Set the experiment file
 	if(!ExperimentManagerObj.showVisualExperimentEditor()) //Try to run the experiment
 	{
 		Log("Failed to show the Experiment Structure");
 		CleanupScript(); //If the experiment fails to run exit the script nicely
 	}
+	KeyBoardCaptureObj.StartCaptureThread(0, true);
 	//if(!ExperimentManagerObj.runExperiment()) //Try to run the experiment
 	//{
 	//	Log("Failed to execute the Experiment");

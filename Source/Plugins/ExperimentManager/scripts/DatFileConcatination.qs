@@ -1,16 +1,17 @@
 var DatFileConcat_ImageProcessorObj = new ImageProcessor();
-var DatFileConcat_currentScriptLocation = BrainStim.getSelectedScriptFileLocation();
+var DatFileConcat_currentScriptLocation = BrainStim.getActiveDocumentFileLocation();
 var DatFileConcat_searchDialogOptions = QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly | QFileDialog.DontUseNativeDialog;
 var DatFileConcat_saveDialogOptions = QFileDialog.DontUseNativeDialog;//0
-var DatFileConcat_searchDatDirectory;
-var DatFileConcat_resultCDatDirectory;
+var DatFileConcat_DatDirectory;
+var DatFileConcat_CDatDirectory;
+var DatFileConcat_CDatFile;
 var fileArray = new Array();
 
 function DatFileConcat_concat(searchDatDirectory,resultConcatDatPath)
 {
 	var dirDirectory;
 	var dirFileCount;
-	var filePathArray = Array[];
+	var filePathArray = new Array();
 	var selectedSaveFilter;
 	var i;
 	
@@ -56,8 +57,8 @@ function DatFileConcat_split(sourceCDatPath,resultDatDirectory)
 {
 	var dirDirectory;
 	var dirFileCount;
-	//var fileArray = Array[];
-	var filePathArray = Array[];
+	//var fileArray = new Array();
+	var filePathArray = new Array();
 	var selectedSaveFilter;
 	var i;
 	
@@ -96,33 +97,62 @@ function DatFileConcat_CleanupScript()
 }
 
 Log("\n");
-if(false)
+if(true)
 {
-	//DatFileConcat_searchDatDirectory = QFileDialog.getExistingDirectory(this, "Select a directory containing the source (*.dat) file(s)",DatFileConcat_currentScriptLocation, QFileDialog.Options(DatFileConcat_searchDialogOptions));
-	DatFileConcat_searchDatDirectory = "E:/temp/Polar";
-	DatFileConcat_concat(DatFileConcat_searchDatDirectory,DatFileConcat_searchDatDirectory + "/result.cdat");
-	DatFileConcat_resultCDatDirectory = "E:/temp/PolarResult" + "/";
-	var FilesSplitted = DatFileConcat_split(DatFileConcat_searchDatDirectory + "/result.cdat",DatFileConcat_resultCDatDirectory);
-	if (FilesSplitted > 0)
+	 //QString fileName = QFileDialog::getOpenFileName(this, tr("Open File"),
+         //                                        "/home",
+         //                                       tr("Images (*.png *.xpm *.jpg)"));
+	
+	DatFileConcat_CDatFile = QFileDialog.getOpenFileName(this, "Select the (*.cdat) file to split", DatFileConcat_currentScriptLocation, "CDAT (*.cdat)");
+	if(DatFileConcat_CDatFile != "")
 	{
-		var tmpFilestr;
-		for(var i=0;i<FilesSplitted;i++)
+		var DatFileConcat_CDatFile_Info = new QFileInfo(DatFileConcat_CDatFile);
+		DatFileConcat_CDatDirectory = DatFileConcat_CDatFile_Info.canonicalPath();
+		//Log(DatFileConcat_CDatDirectory);
+		DatFileConcat_DatDirectory = DatFileConcat_CDatDirectory + "/splitted/";
+		var DatFileConcat_DatDir_Object = new QDir(DatFileConcat_DatDirectory);
+		var bDirExists = DatFileConcat_DatDir_Object.exists();
+		if(bDirExists == false)
+			bDirExists = DatFileConcat_DatDir_Object.mkpath(DatFileConcat_DatDirectory);
+		if(bDirExists)
 		{
-			tmpFilestr = DatFileConcat_resultCDatDirectory + "result_" + i;
-			Log(DatFileConcat_ImageProcessorObj.ConvertDatToPngFile(tmpFilestr + ".dat", tmpFilestr + ".png", true));	
+			//DatFileConcat_DatDirectory = QFileDialog.getExistingDirectory(this, "Select a directory containing the source (*.dat) file(s)",DatFileConcat_currentScriptLocation, QFileDialog.Options(DatFileConcat_searchDialogOptions));
+			//DatFileConcat_concat(DatFileConcat_DatDirectory,DatFileConcat_DatDirectory + "/result.cdat");
+			//DatFileConcat_CDatDirectory = DatFileConcat_DatDirectory + "/";
+			var FilesSplitted = DatFileConcat_split(DatFileConcat_CDatFile,DatFileConcat_DatDirectory);
+			//var FilesSplitted = DatFileConcat_split(DatFileConcat_CDatDirectory,DatFileConcat_CDatDirectory + "/splitted");
+			if (FilesSplitted > 0)
+			{
+				var tmpFilestr;
+				var bConversionSucceeded = true;
+				for(var i=0;i<FilesSplitted;i++)
+				{
+					tmpFilestr = DatFileConcat_DatDirectory + "result_" + i;
+					bConversionSucceeded = DatFileConcat_ImageProcessorObj.ConvertDatToPngFile(tmpFilestr + ".dat", tmpFilestr + ".png", true);
+					if(bConversionSucceeded == false)
+					{
+						Log("Conversion failed!")
+						break;
+					}
+				}
+				if(bConversionSucceeded)
+				{
+					DatFileConcat_concat(DatFileConcat_DatDirectory,DatFileConcat_DatDirectory + "/concat.cdat");
+				}
+			}
 		}
 	}
 }
 else
 {
-	DatFileConcat_searchDatDirectory = "E:/Projects/BrainStim/Install/outputs/RetinoWidget/20130508143814431_Retinotopic Mapping Experiment with the use of a TriggerTimer or ParallelPort/";
-	var FilesSplitted = DatFileConcat_split(DatFileConcat_searchDatDirectory + "1_masks.cdat",DatFileConcat_searchDatDirectory);
+	DatFileConcat_DatDirectory = "<enter path here...>";
+	var FilesSplitted = DatFileConcat_split(DatFileConcat_DatDirectory + "1_masks.cdat",DatFileConcat_DatDirectory);
 	if (FilesSplitted > 0)
 	{
 		var tmpFilestr;
 		for(var i=0;i<FilesSplitted;i++)
 		{
-			tmpFilestr = DatFileConcat_searchDatDirectory + "result_" + i;
+			tmpFilestr = DatFileConcat_DatDirectory + "result_" + i;
 			Log(DatFileConcat_ImageProcessorObj.ConvertDatToPngFile(tmpFilestr + ".dat", tmpFilestr + ".png", true));	
 		}
 	}	

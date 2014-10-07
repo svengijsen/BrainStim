@@ -1760,6 +1760,7 @@ void MainWindow::setupDynamicPlugins()
 		bool bRetVal = false;
 		QString strRetVal = "";
 		const QMetaObject* metaObject = NULL;
+		bool bInterfaceResolved = false;
 
 		foreach (QObject *plugin, QPluginLoader::staticInstances())
 		{
@@ -1767,6 +1768,7 @@ void MainWindow::setupDynamicPlugins()
 			if (iDevice) 
 			{
 				iDevice->fetchGlobalAppInfo();
+				bInterfaceResolved = true;
 			}
 			else 
 			{
@@ -1774,6 +1776,7 @@ void MainWindow::setupDynamicPlugins()
 				if (iExtension) 
 				{
 					iExtension->fetchGlobalAppInfo();
+					bInterfaceResolved = true;
 				}				
 			}
 			metaObject = plugin->metaObject();
@@ -1783,106 +1786,16 @@ void MainWindow::setupDynamicPlugins()
 			//	methods << QString::fromLatin1(metaObject->method(i).signature());
 			//	DocManager->addAdditionalApiEntry(QString::fromLatin1(metaObject->method(i).signature()));
 			//}
-			if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_ISCOMPATIBLE_FULL).toLatin1())) == -1))//Is the slot present?
-			{				
-				if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_GETSCRIPTMETAOBJECT_FULL).toLatin1())) == -1))//Is the slot present?
-				{
-					QObject *pointerQObject = NULL;
-					const QMetaObject* metaScriptObject;
-					int i = 0;
-					bool bResult;
-					while(true)
-					{
-						//Invoke the slot
-						pointerQObject = NULL;
-						bResult = metaObject->invokeMethod(plugin, FUNC_PLUGIN_GETSCRIPTMETAOBJECT,Qt::DirectConnection, Q_RETURN_ARG(QObject*,(QObject*)pointerQObject), Q_ARG(int,(int)i));				
-						if(bResult)
-						{
-							if(pointerQObject == NULL)
-								break;
-							if(i > 99)
-							{
-								qDebug() << __FUNCTION__ << "::Wrong Plugin(" << metaObject->className() << ") implementation, no limit or too many meta-objects(" << FUNC_PLUGIN_GETSCRIPTMETAOBJECT << ")!";
-								break;
-							}
-							metaScriptObject = (const QMetaObject*) pointerQObject;
-							if (metaScriptObject && bResult)
-								extendAPICallTips(metaScriptObject);
-						}
-						else
-						{
-							break;
-						}
-						i++;
-					}
-				}
-
-				popPluginIntoMenu(plugin);
-				//Additional File Extensions defined?
-				if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_GETADDFILEEXT_FULL).toLatin1())) == -1))//Is the slot present?
-				{
-					//Invoke the slot
-					QStringList strRetValList;
-					metaObject->invokeMethod(plugin, FUNC_PLUGIN_GETADDFILEEXT,Qt::DirectConnection, Q_RETURN_ARG(QStringList, strRetValList));//if(!metaObject->invokeMethod(plugin, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal)))				
-					for (int i=0;i<strRetValList.count();i++)
-					{
-						DocManager->appendKnownFileExtensionList(strRetValList[i]);
-					}
-
-					if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_GETADDFILE_SLOT_HANDLERS_FULL).toLatin1())) == -1))//Is the slot present?
-					{
-						//Invoke the slot
-						metaObject->invokeMethod(plugin, FUNC_PLUGIN_GETADDFILE_SLOT_HANDLERS,Qt::DirectConnection, Q_RETURN_ARG(QStringList, strRetValList));			
-						for (int i=0;i<strRetValList.count();i++)
-						{
-							DocManager->appendKnownDocumentFileHandlerList(strRetValList[i],plugin);
-							//QString a = strRetValList[i];
-						}
-					}
-				}
-			}
-			else
+			if(bInterfaceResolved)
 			{
-				qDebug() << __FUNCTION__ << ", Could not invoke the Static Plugin slot(" << QString(FUNC_PLUGIN_ISCOMPATIBLE_FULL) << ")!";	
-			}
-			metaObject = NULL;
-			bRetVal = false;
-		}
-		showSplashMessage("Loading Dynamic Plugins...");
-		foreach (QString fileName, QDir(MainAppInfo::pluginsDirPath()).entryList(QDir::Files)) 
-		{
-			QPluginLoader loader(QDir(MainAppInfo::pluginsDirPath()).absoluteFilePath(fileName));
-			QObject *plugin = loader.instance();//The QObject provided by the plugin, if it was compiled against an incompatible version of the Qt library, QPluginLoader::instance() returns a null pointer.
-			if (plugin) 
-			{
-				DeviceInterface *iDevice = qobject_cast<DeviceInterface *>(plugin);
-				if (iDevice) 
-				{
-					iDevice->fetchGlobalAppInfo();
-				}
-				else 
-				{
-					ExtensionInterface *iExtension = qobject_cast<ExtensionInterface *>(plugin);
-					if (iExtension) 
-					{
-						iExtension->fetchGlobalAppInfo();
-					}				
-				}
-				metaObject = plugin->metaObject();
-				//QStringList properties;
-				//for(int i = metaObject->methodOffset(); i < metaObject->methodCount(); ++i)
-				//	properties << QString::fromLatin1(metaObject->method(i).signature());
 				if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_ISCOMPATIBLE_FULL).toLatin1())) == -1))//Is the slot present?
-				{
-					//qWarning() << __FUNCTION__ << ", Checking plugin compatibility(" << fileName << ")...";	
-					//Invoke the slot
-					metaObject->invokeMethod(plugin, FUNC_PLUGIN_ISCOMPATIBLE,Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal));//if(!metaObject->invokeMethod(plugin, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal)))				
-					if (bRetVal)
+				{				
+					if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_GETSCRIPTMETAOBJECT_FULL).toLatin1())) == -1))//Is the slot present?
 					{
-						bool bResult;
 						QObject *pointerQObject = NULL;
-						const QMetaObject* metaScriptObject = NULL;
-						int i=0;
+						const QMetaObject* metaScriptObject;
+						int i = 0;
+						bool bResult;
 						while(true)
 						{
 							//Invoke the slot
@@ -1907,42 +1820,151 @@ void MainWindow::setupDynamicPlugins()
 							}
 							i++;
 						}
-						
-						//qWarning() << __FUNCTION__ << ", Plugin is compatibility(" << fileName << ")";
-						if (popPluginIntoMenu(plugin))
+					}
+
+					popPluginIntoMenu(plugin);
+					//Additional File Extensions defined?
+					if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_GETADDFILEEXT_FULL).toLatin1())) == -1))//Is the slot present?
+					{
+						//Invoke the slot
+						QStringList strRetValList;
+						metaObject->invokeMethod(plugin, FUNC_PLUGIN_GETADDFILEEXT,Qt::DirectConnection, Q_RETURN_ARG(QStringList, strRetValList));//if(!metaObject->invokeMethod(plugin, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal)))				
+						for (int i=0;i<strRetValList.count();i++)
 						{
-							pluginFileNames += fileName;
-							//Additional File Extensions defined?
-							if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_GETADDFILEEXT_FULL).toLatin1())) == -1))//Is the slot present?
+							DocManager->appendKnownFileExtensionList(strRetValList[i]);
+						}
+
+						if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_GETADDFILE_SLOT_HANDLERS_FULL).toLatin1())) == -1))//Is the slot present?
+						{
+							//Invoke the slot
+							metaObject->invokeMethod(plugin, FUNC_PLUGIN_GETADDFILE_SLOT_HANDLERS,Qt::DirectConnection, Q_RETURN_ARG(QStringList, strRetValList));			
+							for (int i=0;i<strRetValList.count();i++)
 							{
-								//Invoke the slot
-								QStringList strRetValList;
-								metaObject->invokeMethod(plugin, FUNC_PLUGIN_GETADDFILEEXT,Qt::DirectConnection, Q_RETURN_ARG(QStringList, strRetValList));//if(!metaObject->invokeMethod(plugin, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal)))				
-								for (int i=0;i<strRetValList.count();i++)
-								{
-									DocManager->appendKnownFileExtensionList(strRetValList[i]);
-								}	
-								if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_GETADDFILE_SLOT_HANDLERS_FULL).toLatin1())) == -1))//Is the slot present?
-								{
-									//Invoke the slot
-									metaObject->invokeMethod(plugin, FUNC_PLUGIN_GETADDFILE_SLOT_HANDLERS,Qt::DirectConnection, Q_RETURN_ARG(QStringList, strRetValList));			
-									for (int i=0;i<strRetValList.count();i++)
-									{
-										DocManager->appendKnownDocumentFileHandlerList(strRetValList[i],plugin);
-										//QString a = strRetValList[i];
-									}
-								}
+								DocManager->appendKnownDocumentFileHandlerList(strRetValList[i],plugin);
+								//QString a = strRetValList[i];
 							}
 						}
-					}
-					else
-					{
-						qDebug() << __FUNCTION__ << "::The Dynamic Plugin is incompatible(" << fileName << ")!"; //metaObject->className() << ")!";
 					}
 				}
 				else
 				{
-					qDebug() << __FUNCTION__ << "::Could not invoke the Dynamic Plugin slot(" << fileName << ", " << QString(FUNC_PLUGIN_ISCOMPATIBLE_FULL) << ")!";	
+					qDebug() << __FUNCTION__ << ", Could not invoke the Static Plugin slot(" << QString(FUNC_PLUGIN_ISCOMPATIBLE_FULL) << ")!";	
+				}
+			}
+			else
+			{
+				qDebug() << __FUNCTION__ << ", Could not resolve the Static Plugin interface!";	
+			}
+			metaObject = NULL;
+			bRetVal = false;
+		}
+		showSplashMessage("Loading Dynamic Plugins...");
+		bInterfaceResolved = false;
+		foreach (QString fileName, QDir(MainAppInfo::pluginsDirPath()).entryList(QDir::Files)) 
+		{
+			if (QFileInfo(fileName).completeSuffix().toLower() != "dll")
+				continue;
+			QPluginLoader loader(QDir(MainAppInfo::pluginsDirPath()).absoluteFilePath(fileName));
+			QObject *plugin = loader.instance();//The QObject provided by the plugin, if it was compiled against an incompatible version of the Qt library, QPluginLoader::instance() returns a null pointer.
+			if (plugin) 
+			{
+				DeviceInterface *iDevice = qobject_cast<DeviceInterface *>(plugin);
+				if (iDevice) 
+				{
+					iDevice->fetchGlobalAppInfo();
+					bInterfaceResolved = true;
+				}
+				else 
+				{
+					ExtensionInterface *iExtension = qobject_cast<ExtensionInterface *>(plugin);
+					if (iExtension) 
+					{
+						iExtension->fetchGlobalAppInfo();
+						bInterfaceResolved = true;
+					}				
+				}
+				metaObject = plugin->metaObject();
+				//QStringList properties;
+				//for(int i = metaObject->methodOffset(); i < metaObject->methodCount(); ++i)
+				//	properties << QString::fromLatin1(metaObject->method(i).signature());
+				if(bInterfaceResolved)
+				{
+					if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_ISCOMPATIBLE_FULL).toLatin1())) == -1))//Is the slot present?
+					{
+						//qWarning() << __FUNCTION__ << ", Checking plugin compatibility(" << fileName << ")...";	
+						//Invoke the slot
+						metaObject->invokeMethod(plugin, FUNC_PLUGIN_ISCOMPATIBLE,Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal));//if(!metaObject->invokeMethod(plugin, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal)))				
+						if (bRetVal)
+						{
+							bool bResult;
+							QObject *pointerQObject = NULL;
+							const QMetaObject* metaScriptObject = NULL;
+							int i=0;
+							while(true)
+							{
+								//Invoke the slot
+								pointerQObject = NULL;
+								bResult = metaObject->invokeMethod(plugin, FUNC_PLUGIN_GETSCRIPTMETAOBJECT,Qt::DirectConnection, Q_RETURN_ARG(QObject*,(QObject*)pointerQObject), Q_ARG(int,(int)i));				
+								if(bResult)
+								{
+									if(pointerQObject == NULL)
+										break;
+									if(i > 99)
+									{
+										qDebug() << __FUNCTION__ << "::Wrong Plugin(" << metaObject->className() << ") implementation, no limit or too many meta-objects(" << FUNC_PLUGIN_GETSCRIPTMETAOBJECT << ")!";
+										break;
+									}
+									metaScriptObject = (const QMetaObject*) pointerQObject;
+									if (metaScriptObject && bResult)
+										extendAPICallTips(metaScriptObject);
+								}
+								else
+								{
+									break;
+								}
+								i++;
+							}
+						
+							//qWarning() << __FUNCTION__ << ", Plugin is compatibility(" << fileName << ")";
+							if (popPluginIntoMenu(plugin))
+							{
+								pluginFileNames += fileName;
+								//Additional File Extensions defined?
+								if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_GETADDFILEEXT_FULL).toLatin1())) == -1))//Is the slot present?
+								{
+									//Invoke the slot
+									QStringList strRetValList;
+									metaObject->invokeMethod(plugin, FUNC_PLUGIN_GETADDFILEEXT,Qt::DirectConnection, Q_RETURN_ARG(QStringList, strRetValList));//if(!metaObject->invokeMethod(plugin, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal)))				
+									for (int i=0;i<strRetValList.count();i++)
+									{
+										DocManager->appendKnownFileExtensionList(strRetValList[i]);
+									}	
+									if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_GETADDFILE_SLOT_HANDLERS_FULL).toLatin1())) == -1))//Is the slot present?
+									{
+										//Invoke the slot
+										metaObject->invokeMethod(plugin, FUNC_PLUGIN_GETADDFILE_SLOT_HANDLERS,Qt::DirectConnection, Q_RETURN_ARG(QStringList, strRetValList));			
+										for (int i=0;i<strRetValList.count();i++)
+										{
+											DocManager->appendKnownDocumentFileHandlerList(strRetValList[i],plugin);
+											//QString a = strRetValList[i];
+										}
+									}
+								}
+							}
+						}
+						else
+						{
+							qDebug() << __FUNCTION__ << "::The Dynamic Plugin is incompatible(" << fileName << ")!"; //metaObject->className() << ")!";
+						}
+					}
+					else
+					{
+						qDebug() << __FUNCTION__ << "::Could not invoke the Dynamic Plugin slot(" << fileName << ", " << QString(FUNC_PLUGIN_ISCOMPATIBLE_FULL) << ")!";	
+					}
+				}
+				else
+				{
+					qDebug() << __FUNCTION__ << ", Could not resolve the Dynamic Plugin interface!";	
 				}
 				metaObject = NULL;
 				bRetVal = false;

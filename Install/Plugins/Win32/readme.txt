@@ -1,0 +1,1 @@
+This folder is automatically scanned for available plugin's.

@@ -1,5 +1,5 @@
 var NumberArray = Array[1,2,3,4,5,6,7,8,9];
-var TmpArray = Array[];
+var TmpArray = new Array();
 var TmpString = "";
 var RandomGeneratorObj = new RandomGenerator();
 var nCounter1;

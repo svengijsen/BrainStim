@@ -165,6 +165,7 @@ namespace ExperimentManagerNameSpace
 	#define RANDOMGENERATOR_NAME					"RandomGenerator"
 	#define IMAGEPROCESSOR_NAME						"ImageProcessor"
 	#define PRTFORMATMANAGER_NAME					"PRTFormatManager"
+	#define EXPERIMENTTREEMODEL_NAME				"ExperimentTreeModel"
 	#define CEXPERIMENTSTRUCTURE_NAME				"cExperimentStructure"
 	#define CEXPERIMENTSTRUCTURESTATE_NAME			"cExperimentStructureState"
 	#define CMETHODCONNECTIONSTRUCTURE_NAME			"cMethodConnectionStructure"
@@ -181,8 +182,8 @@ namespace ExperimentManagerNameSpace
 	//#define MIN_SCREEN_UPDATE_TIME				10
 	//#define MAX_SCREEN_UPDATE_TIME				16.6667f
 
-	#define RETINOTOPYMAPPER_PARAMDEF_PATH			":/resources/" RETINOTOPYMAPPER_NAME ".xdef"
-	#define QML2VIEWER_PARAMDEF_PATH				":/resources/" QML2VIEWER_NAME ".xdef"
+	#define RETINOTOPYMAPPER_PARAMDEF_PATH			":/resources/" + QString(RETINOTOPYMAPPER_NAME).toLower() + ".xdef"
+	#define QML2VIEWER_PARAMDEF_PATH				":/resources/" + QString(QML2VIEWER_NAME).toLower() + ".xdef"
 	#define EXPERIMENT_PARAMDEF_PATH				":/resources/experimentnode.xdef"
 	#define DECLARATIONS_OBJECT_TAG					DECLARATIONS_TAG "_" OBJECT_TAG
 	#define DECLARATIONS_OBJECT_PARAMDEF_PATH		":/resources/declarationsobjectnode.xdef"

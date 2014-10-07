@@ -101,7 +101,7 @@ Dialog.prototype.setOpenFileName = function()
 
 Dialog.prototype.showImage = function(imgPath,nIndex)
 {
-	Log("showImage");
+	Log("showImage(" + imgPath + ", " + nIndex + ")");
 	//QGraphicsPixmapItem_Object =
 	//QImage_Object = new QImage(0,0);
 	var nNrOfSubFrames = ImageProcessor_Object.getCDATFileNrOfSubFrames(imgPath);

@@ -7,10 +7,11 @@
   	<!--IsDebug: search for 'Debug' in Configuration-->
     <IsDebug>$([System.Convert]::ToString( $([System.Text.RegularExpressions.Regex]::IsMatch($(Configuration), '[Dd]ebug'))))</IsDebug>
     <!--ShortPlatform-->
-    <QTDIR Condition="'$(Platform)' == 'Win32'">C:\Qt\5.1.0\win32</QTDIR>
-    <QTDIR Condition="'$(Platform)' == 'x64'">C:\Qt\5.1.0\x64</QTDIR>
-    <INPOUT_1500 Condition="'$(Platform)' == 'Win32'">C:\Qt\InpOut_1500\Win32</INPOUT_1500>
-    <INPOUT_1500 Condition="'$(Platform)' == 'x64'">C:\Qt\InpOut_1500\x64</INPOUT_1500>    
+    <QTDIR Condition="'$(Platform)' == 'Win32'">E:\Libraries\Qt5.3.2_32bit\5.3\msvc2013_opengl</QTDIR>
+    <QTDIR Condition="'$(Platform)' == 'x64'">E:\Libraries\Qt5.3.2_64bit\5.3\msvc2013_64_opengl</QTDIR>
+    <INPOUT_1500 Condition="'$(Platform)' == 'Win32'">E:\Libraries\InpOut_1500\Win32</INPOUT_1500>
+    <INPOUT_1500 Condition="'$(Platform)' == 'x64'">E:\Libraries\InpOut_1500\x64</INPOUT_1500>
+    <Path>$(INPOUT_1500);$(Path)</Path>
   </PropertyGroup>
   
   <Choose>

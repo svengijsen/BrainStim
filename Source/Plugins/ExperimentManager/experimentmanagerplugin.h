@@ -34,6 +34,7 @@
 #include "imageprocessor.h"
 #include "prtformatmanager.h"
 #include "triggertimer.h"
+#include "experimenttreemodel.h"
 #include "experimentstructures.h"
 #include "retinotopymapper.h"
 #include "qml2viewer.h"
@@ -79,6 +80,7 @@ private:
 	ExperimentTimer *ExperimentTimerObject;
 	RandomGenerator *RandomGeneratorObject;
 	cExperimentStructure *cExperimentStructureObject;
+	ExperimentTreeModel *pExperimentTreeModelObject;
 	cBlockStructure *cBlockStructureObject;
 	cObjectStructure *cObjectStructureObject;
 	cLoopStructure *cLoopStructureObject;

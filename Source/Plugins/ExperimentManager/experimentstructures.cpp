@@ -1417,8 +1417,10 @@ int cExperimentStructure::getObjectCount() const
 	return pSharedData->lObjects.count();
 }
 
-bool cExperimentStructure::prepareExperiment()
+bool cExperimentStructure::prepareExperiment(const bool &bIgnoreNoDefinedBlocks)
 {
+	if (pSharedData->lBlocks.isEmpty())
+		return bIgnoreNoDefinedBlocks;
 	if(prepareStartBlock())
 	{
 		pSharedData->currentBlockPointer = pSharedData->firstBlockPointer;
