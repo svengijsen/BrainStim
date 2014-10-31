@@ -79,7 +79,21 @@ void ExperimentBlockParameterView::reparseModel()
 			bResult = bResult && setExperimentObjects(tmpExperimentObjectList);
 			if(bResult)
 			{
-				bResult = bResult && parseExperimentBlockParameters(tmpFoundExpTreeItemList);
+				//tmpFoundExpTreeItemList = pExpTreeModel->getFilteredItemList()
+				QStringList strSearchPathList;
+				strSearchPathList.clear();
+				strSearchPathList.append(ACTIONS_TAG);
+				strSearchPathList.append(BLOCKTRIALS_TAG);
+				strSearchPathList.append(BLOCK_TAG);
+				QList<ExperimentTreeItem*> tmpFoundExpBlocksTreeItemList;
+				if (ExperimentTreeModel::getStaticTreeElements(strSearchPathList, tmpFoundExpBlocksTreeItemList, tmpFoundExpTreeItemList.at(0)) > 0)
+				{
+					bResult = bResult && parseExperimentBlockParameters(tmpFoundExpBlocksTreeItemList);
+				}
+				else
+				{
+					bResult = false;
+				}
 			}
 		}
 		if(bCellOpenedForEdit==false)
@@ -473,7 +487,7 @@ bool ExperimentBlockParameterView::parseExperimentBlockParameters(const QList<Ex
 		QStringList lObjectParameterSearchPath;
 		lObjectSearchPath << OBJECT_TAG;
 
-		for (int nParEditTypeCntr=0;nParEditTypeCntr<2;nParEditTypeCntr++) //for each block
+		for (int nParEditTypeCntr=0;nParEditTypeCntr<2;nParEditTypeCntr++) //for each block parameter type
 		{
 			if(nParEditTypeCntr == 0)
 			{
@@ -868,6 +882,11 @@ void ExperimentBlockParameterView::currentChanged(const QModelIndex &current, co
 	bCellOpenedForEdit = false;
 	this->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	this->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+}
+
+void ExperimentBlockParameterView::focusInEvent(QFocusEvent* event)
+{
+	emit onFocusTable();
 }
 
 void ExperimentBlockParameterView::cellOpenedForEdit(const int &nRow, const int &nColumn)

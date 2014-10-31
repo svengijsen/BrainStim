@@ -46,8 +46,9 @@ ExperimentStructureVisualizer::ExperimentStructureVisualizer(QWidget *parent) : 
 	gScene = NULL;
 	parsedExpStruct = NULL;
 	pExperimentTreeModel = NULL;
-	nWidgetMargin = 45;
-	dGraphViewScale = 0.9;//fill till 90%
+	nWidgetMarginWidth = 0;
+	nWidgetMarginHeight = 0;
+	dGraphViewScale = 0.95;//zoom till 95%
 	bDrawVertical = true;
 	eConnDrawOrder = GRAPHLOOP_DRAW_ORDER_NUMBER_MASTERSIDE; //GRAPHLOOP_DRAW_ORDER_NUMBER_MASTERSIDE;//GRAPHLOOP_DRAW_ORDER_NUMBER_MASTERSIDE; GRAPHLOOP_DRAW_ORDER_UNNESTED;
 	pLoopConnections.setColor(QColor("#303030"));
@@ -195,12 +196,38 @@ void ExperimentStructureVisualizer::toggleViewState()
 	}
 }
 
+void ExperimentStructureVisualizer::clearSelection()
+{
+	if (gScene)
+		gScene->clearSelection();
+}
+
 void ExperimentStructureVisualizer::resizeStructureView(const int &nWidth, const int &nHeight)
 {
 	if(ui->graphicsView)
 	{
-		ui->graphicsView->setFixedSize(nWidth-nWidgetMargin,nHeight-nWidgetMargin);
-		//ui->graphicsView->setFixedSize(500,500);
+		if (nWidth > nWidgetMarginWidth && nHeight > nWidgetMarginHeight)//in the case of no blocks the width is 0
+		{
+			ui->graphicsView->resetTransform();
+			ui->graphicsView->setSceneRect(QRectF());
+			ui->graphicsView->setFixedSize(nWidth - nWidgetMarginWidth, nHeight - nWidgetMarginHeight);//nWidth, nHeight); //
+			QRectF currentSceneRect = gScene->itemsBoundingRect();
+			ui->graphicsView->fitInView(currentSceneRect, Qt::KeepAspectRatio);
+			ui->graphicsView->setSceneRect(currentSceneRect);
+
+			//QRectF currentSceneRect = gScene->itemsBoundingRect();
+			//currentSceneRect.setWidth(currentSceneRect.width()+nWidgetMarginWidth);
+			//currentSceneRect.setHeight(currentSceneRect.height()+nWidgetMarginHeight);
+			//ui->graphicsView->setSceneRect(currentSceneRect);
+			//qreal dScaleFactor;
+			//if(bDrawVertical)
+			//	dScaleFactor = (ui->graphicsView->size().height()*dGraphViewScale) / currentSceneRect.height();
+			//else
+			//	dScaleFactor = (ui->graphicsView->size().width()*dGraphViewScale) / currentSceneRect.width();
+			
+			ui->graphicsView->scale(dGraphViewScale, dGraphViewScale);
+			ui->graphicsView->centerOn(currentSceneRect.center());
+		}
 	}
 }
 
@@ -213,6 +240,8 @@ void ExperimentStructureVisualizer::createScene()
 
 void ExperimentStructureVisualizer::itemSelectionChanged()
 {
+	if(gScene->items().isEmpty())
+		return;
 	for(int i=0;i<gScene->items().count();i++)
 	{
 		gScene->items().at(i)->setZValue(0);
@@ -287,10 +316,14 @@ void ExperimentStructureVisualizer::setupLayout()
 
 bool ExperimentStructureVisualizer::drawGraph()
 {
-	if(gScene == NULL)
+	if (gScene == NULL)
+	{
 		createScene();
+	}
 	else
-		gScene->clear();	
+	{
+		gScene->clear();
+	}
 
 	if(gScene->getGraphViewState() == EXPVIS_VIEWSTATE_BLOCKTRIALS)
 	{
@@ -344,10 +377,10 @@ bool ExperimentStructureVisualizer::drawGraph()
 				nCurrentBlockNumber++;			
 			}
 		}
-		else
-		{
-			return false;//no blocks defined...
-		}
+		//else
+		//{
+		//	return true;//no blocks defined, still true, just no blocks
+		//}
 
 		//END EXPERIMENT//
 		expSceneItems.gEndGraphBlockItem = new ExperimentGraphBlockItem();
@@ -431,6 +464,16 @@ bool ExperimentStructureVisualizer::drawGraph()
 							gScene->addLine(0.0,tmpY + nAutoConnDistance,0.0,tmpY + nAutoConnDistance + nExtraOutputConnDist,pLoopConnections);
 						continue;
 					}
+				}
+				else //probably no blocks defined, make a start->stop auto-connection
+				{
+					expSceneItems.lAutoConns[i].gGraphConnectionItem = new ExperimentGraphLoopItem();
+					expSceneItems.lAutoConns[i].gGraphConnectionItem->setAutoLoopType(true);
+					expSceneItems.lAutoConns[i].gGraphConnectionItem->setEndPoint(QPoint(0, nAutoConnDistance));
+					int tmpY = expSceneItems.gStartGraphBlockItem->pos().y() + expSceneItems.gStartGraphBlockItem->boundingRect().bottom();
+					expSceneItems.lAutoConns[i].gGraphConnectionItem->setPos(0, tmpY);
+					gScene->addItem(expSceneItems.lAutoConns[i].gGraphConnectionItem);
+					continue;
 				}
 			}
 			//Could not handle the connection, so delete it
@@ -536,22 +579,9 @@ bool ExperimentStructureVisualizer::drawGraph()
 					gScene->addItem(expSceneItems.lLoops[i].gGraphConnectionItem);				
 				}
 			}
-		}	
+		}
 
-		QRectF currentSceneRect = gScene->itemsBoundingRect();
-		currentSceneRect.setWidth(currentSceneRect.width()+nSingleBlockBoundingBox.width());
-		currentSceneRect.setHeight(currentSceneRect.height()+nSingleBlockBoundingBox.height());
-		ui->graphicsView->setSceneRect(currentSceneRect);//QRect(0, 0, nWidth+nodeWidth, nHeight+nodeHeight));//currentSceneRect);
-		qreal dScaleFactor;
-		if(bDrawVertical)
-			dScaleFactor = ((ui->graphicsView->size().height()-(nWidgetMargin))*dGraphViewScale)/currentSceneRect.height();
-		else
-			dScaleFactor = ((ui->graphicsView->size().width()-(nWidgetMargin))*dGraphViewScale)/currentSceneRect.width();
-		ui->graphicsView->resetTransform();
-		ui->graphicsView->scale(dScaleFactor, dScaleFactor);
-		ui->graphicsView->centerOn(currentSceneRect.center());//QRect(0, 0, nWidth+nodeWidth, nHeight+nodeHeight).center());//currentSceneRect.center());
-		//ui->graphicsView->centerOn(gScene->itemsBoundingRect().center());
-
+		emit GraphRedrawn();
 		return true;
 	}
 	else if(gScene->getGraphViewState() == EXPVIS_VIEWSTATE_OBJECTS)
@@ -707,7 +737,7 @@ bool ExperimentStructureVisualizer::drawGraph()
 		}
 		else
 		{
-			return false;//no objects defined...
+			return true;//no objects defined..., just no objects
 		}
 
 		//OBJECTS METHOD CONNECTIONS//
@@ -759,19 +789,19 @@ bool ExperimentStructureVisualizer::drawGraph()
 			}
 		}
 
-		QRectF currentSceneRect = gScene->itemsBoundingRect();
-		currentSceneRect.setWidth(currentSceneRect.width()+nWidgetMargin);
-		currentSceneRect.setHeight(currentSceneRect.height()+nWidgetMargin);
-		ui->graphicsView->setSceneRect(currentSceneRect);
-		qreal dScaleFactor;
+		//QRectF currentSceneRect = gScene->itemsBoundingRect();
+		//currentSceneRect.setWidth(currentSceneRect.width()+nWidgetMarginWidth);
+		//currentSceneRect.setHeight(currentSceneRect.height()+nWidgetMarginHeight);
+		//ui->graphicsView->setSceneRect(currentSceneRect);
+		//qreal dScaleFactor;
 		//if(bDrawVertical)
-			dScaleFactor = ((ui->graphicsView->size().height()-(nWidgetMargin))*dGraphViewScale)/currentSceneRect.height();
+		//	dScaleFactor = ((ui->graphicsView->size().height() - (nWidgetMarginHeight))*dGraphViewScale) / currentSceneRect.height();
 		//else
-		//	dScaleFactor = ((ui->graphicsView->size().width()-(nWidgetMargin))*dGraphViewScale)/currentSceneRect.width();
-		ui->graphicsView->resetTransform();
-		ui->graphicsView->scale(dScaleFactor, dScaleFactor);
-		ui->graphicsView->centerOn(currentSceneRect.center());
-
+		//	dScaleFactor = ((ui->graphicsView->size().width()-(nWidgetMarginWidth))*dGraphViewScale)/currentSceneRect.width();
+		//ui->graphicsView->resetTransform();
+		//ui->graphicsView->scale(dScaleFactor, dScaleFactor);
+		//ui->graphicsView->centerOn(currentSceneRect.center());
+		emit GraphRedrawn();
 		return true;
 	}
 	return false;
@@ -1072,6 +1102,26 @@ bool ExperimentStructureVisualizer::parseExperimentStructure()
 {
 	if(parsedExpStruct==NULL)
 		return false;
+
+	//if (bPreserveSelection)
+	//{
+	//	if (gScene->items().isEmpty() == false)
+	//	{
+	//		int nSelectedItemCount = gScene->selectedItems().count();
+	//		if (nSelectedItemCount > 0)
+	//		{
+	//			for (int i = 0; i < nSelectedItemCount; i++)
+	//			{
+	//				expBlockItemStrc *pExpBlockItemStrc = getGraphBlockItemStruct((ExperimentGraphBlockItem*)gScene->selectedItems()[i]);//pExpGraphBlockItem);
+	//				if (pExpBlockItemStrc)
+	//				{
+	//					int nSelectedBlock = pExpBlockItemStrc->nId;
+	//				}
+	//			}
+	//		}
+	//	}
+	//}
+
 	resetExpScene();
 
 	int nExpBlockCount = parsedExpStruct->getBlockCount();
@@ -1084,37 +1134,47 @@ bool ExperimentStructureVisualizer::parseExperimentStructure()
 	expConnItemStrc tmpAutoConnItem;
 
 	expSceneItems.sExperimentName = parsedExpStruct->getExperimentName();
-	for (int i=0;i<nExpBlockCount;i++)
+	if (nExpBlockCount > 0)
 	{
-		//tmpAutoConnItem.gvEdge = NULL;
+		for (int i = 0; i < nExpBlockCount; i++)
+		{
+			//tmpAutoConnItem.gvEdge = NULL;
+			tmpAutoConnItem.nSourceBlockId = -1;
+			tmpAutoConnItem.nTargetBlockId = -1;
+			tmpAutoConnItem.nLoopId = -1;
+
+			lastBlock = tmpBlock;
+			tmpBlock = NULL;
+			tmpBlock = parsedExpStruct->getNextClosestBlockNumberByFromNumber(nNextSearchBlockNumber);
+			if (tmpBlock)
+			{
+				if (lastBlock)
+					tmpAutoConnItem.nSourceBlockId = lastBlock->getBlockID();
+				tmpAutoConnItem.nTargetBlockId = tmpBlock->getBlockID();
+
+				nNextSearchBlockNumber = tmpBlock->getBlockNumber() + 1;
+				tmpBlockItem.nId = tmpBlock->getBlockID();
+				tmpBlockItem.nNumber = tmpBlock->getBlockNumber();
+				tmpBlockItem.sName = tmpBlock->getBlockName();
+				//tmpBlockItem.gvNode = NULL;
+				expSceneItems.lBlocks.append(tmpBlockItem);
+			}
+			expSceneItems.lAutoConns.append(tmpAutoConnItem);
+			if (i == (nExpBlockCount - 1))
+			{
+				tmpAutoConnItem.nSourceBlockId = tmpBlock->getBlockID();
+				tmpAutoConnItem.nTargetBlockId = -1;
+				tmpAutoConnItem.nLoopId = -1;
+				expSceneItems.lAutoConns.append(tmpAutoConnItem);
+			}
+		}
+	}
+	else //no blocks, make a start -> stop auto-connection
+	{
 		tmpAutoConnItem.nSourceBlockId = -1;
 		tmpAutoConnItem.nTargetBlockId = -1;
 		tmpAutoConnItem.nLoopId = -1;
-
-		lastBlock = tmpBlock;
-		tmpBlock = NULL;
-		tmpBlock = parsedExpStruct->getNextClosestBlockNumberByFromNumber(nNextSearchBlockNumber);
-		if(tmpBlock) 
-		{
-			if(lastBlock)
-				tmpAutoConnItem.nSourceBlockId = lastBlock->getBlockID();
-			tmpAutoConnItem.nTargetBlockId = tmpBlock->getBlockID();
-
-			nNextSearchBlockNumber = tmpBlock->getBlockNumber() + 1;
-			tmpBlockItem.nId = tmpBlock->getBlockID();
-			tmpBlockItem.nNumber = tmpBlock->getBlockNumber();
-			tmpBlockItem.sName = tmpBlock->getBlockName();
-			//tmpBlockItem.gvNode = NULL;
-			expSceneItems.lBlocks.append(tmpBlockItem);
-		}
 		expSceneItems.lAutoConns.append(tmpAutoConnItem);
-		if(i==(nExpBlockCount-1))
-		{
-			tmpAutoConnItem.nSourceBlockId = tmpBlock->getBlockID();
-			tmpAutoConnItem.nTargetBlockId = -1;
-			tmpAutoConnItem.nLoopId = -1;
-			expSceneItems.lAutoConns.append(tmpAutoConnItem);
-		}
 	}
 	nNextSearchBlockNumber = 0;
 	int nExpBlockLoopCount;
@@ -1234,18 +1294,6 @@ bool ExperimentStructureVisualizer::parseExperimentStructure()
 	}
 	return drawGraph();
 }
-
-//ogdf::node *ExperimentStructureVisualizer::getGraphNodePointer(const int &nBlockID)
-//{
-//	for(int i=0;i<expSceneItems.lBlocks.count();i++)
-//	{
-//		if(expSceneItems.lBlocks[i].nId == nBlockID)
-//		{
-//			return expSceneItems.lBlocks[i].gvNode;
-//		}
-//	}
-//	return NULL;
-//}
 
 ExperimentGraphBlockItem *ExperimentStructureVisualizer::getGraphBlockItemPointer(const int &nBlockID)
 {

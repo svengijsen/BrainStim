@@ -182,6 +182,7 @@ namespace ExperimentManagerNameSpace
 	//#define MIN_SCREEN_UPDATE_TIME				10
 	//#define MAX_SCREEN_UPDATE_TIME				16.6667f
 
+	#define UI_SETTINGS_FILENAME					"ui_settings.ini"
 	#define RETINOTOPYMAPPER_PARAMDEF_PATH			":/resources/" + QString(RETINOTOPYMAPPER_NAME).toLower() + ".xdef"
 	#define QML2VIEWER_PARAMDEF_PATH				":/resources/" + QString(QML2VIEWER_NAME).toLower() + ".xdef"
 	#define EXPERIMENT_PARAMDEF_PATH				":/resources/experimentnode.xdef"
@@ -196,7 +197,9 @@ namespace ExperimentManagerNameSpace
 	#define BLOCK_OBJECT_PARAMDEF_PATH				":/resources/blocknode.xdef"
 	#define LOOP_OBJECT_PARAMDEF_PATH				":/resources/blockloopnode.xdef"
 	#define INITIALIZATIONS_PARAMETER_TAG			INITIALIZATIONS_TAG "_" PARAMETER_TAG
+	#define FINALIZATIONS_PARAMETER_TAG				FINALIZATIONS_TAG "_" PARAMETER_TAG
 	#define INITIALIZATIONS_PARAMETER_PARAMDEF_PATH	":/resources/initializationsparameternode.xdef"
+	#define FINALIZATIONS_PARAMETER_PARAMDEF_PATH	INITIALIZATIONS_PARAMETER_PARAMDEF_PATH
 	#define BLOCK_PARAMETER_TAG						BLOCK_TAG "_" PARAMETER_TAG
 	#define BLOCK_PARAMETER_PARAMDEF_PATH			":/resources/blockparameternode.xdef"
 	#define OBJECT_DEFINITION_TAG					OBJECT_TAG "_" DEFINITION_TAG

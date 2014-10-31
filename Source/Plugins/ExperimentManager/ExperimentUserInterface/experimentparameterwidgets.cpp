@@ -167,6 +167,10 @@ void ExperimentParameterWidgets::fetchExperimentParameterDefinitions()
 	tmpExpContrDefLoc.sPathToDefFile = INITIALIZATIONS_PARAMETER_PARAMDEF_PATH;
 	sExpContrDefLocLst.append(tmpExpContrDefLoc);
 
+	tmpExpContrDefLoc.sName = FINALIZATIONS_PARAMETER_TAG;
+	tmpExpContrDefLoc.sPathToDefFile = FINALIZATIONS_PARAMETER_PARAMDEF_PATH;
+	sExpContrDefLocLst.append(tmpExpContrDefLoc);
+
 	tmpExpContrDefLoc.sName = BLOCK_PARAMETER_TAG;
 	tmpExpContrDefLoc.sPathToDefFile = BLOCK_PARAMETER_PARAMDEF_PATH;
 	sExpContrDefLocLst.append(tmpExpContrDefLoc);

@@ -30,6 +30,8 @@
 #endif
 
 #define MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME		"Default"
+#define MAINWINDOW_DOCK_OUTPUTWINDOW_NAME			"Output Log"
+#define MAINWINDOW_NAME								"MainWindow"
 
 #include <QString>
 #include <QStringList>
@@ -50,6 +52,8 @@
 #include "sciFindDialog.h"
 #include "assistant.h"
 #include "networkserver.h"
+#include "custommdisubwindow.h"
+#include "outputdockwidget.h"
 
 class SvgView;
 class DeviceControl;
@@ -382,9 +386,10 @@ public slots:
 #endif
 
 private slots:
-	void ExternalNetworkDataRecieved(int nClientIndex, QString sAvailableData);
+	void onSubWindowClosed(CustomMDISubWindow*);
+	void onSubWindowDestroyed(CustomMDISubWindow*);
+	void externalNetworkDataRecieved(int nClientIndex, QString sAvailableData);
 	bool receiveExchangeMessage(const QString &sMessage);
-	void returnToOldMaxMinSizes();
 	void abortScript();
 	void setupContextMenus();
 	void DebugcontextMenuEvent(const QPoint &pos, const QString &sTabName = MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME);
@@ -507,7 +512,7 @@ private:
 	QAction *historyQtAct;
 	QAction *separatorAct;
 	QMap<QString, QVariant> tmpNewActionMapping;//Can contain the extension and/or file type.. used for creating a new specific document type
-
+	QList<int> sCurrentClosingSubWindowIds;
 	QLabel *StatusPositionLabel;
 	QLabel *StatusFilePathLabel;
 	QLabel *StatusLinesLabel;
@@ -551,7 +556,7 @@ private:
 	//QString curFile;
 	//QSettings *settings;
 
-	QDockWidget *debugLogDock;
+	OutputDockWidget *debugLogDock;
 	QDockWidget *debuggerDock;
 
 	QTabWidget *outputTabWidget;
@@ -592,7 +597,7 @@ private:
 	QAction* integratePlugin(QObject *plugin, PluginCollection *collection);
 	void setupToolBars();
 	void setRenderer();
-	void newDocument(const GlobalApplicationInformation::DocType &docType, int &DocIndex, const QString &strExtension = "", const QString &strCanonicalFilePath = "", const bool &bNativeMainAppView = false);
+	void newDocument(const GlobalApplicationInformation::DocType &docType, int &DocIndex, const QString &strExtension = "", const QString &strCanonicalFilePath = "", const bool &bNativeMainAppView = false, const bool &bTryToInitialize = false);
 	//void setupSyntaxHighlighting(MdiChild *childWindow,MDIDocumentType tempFileType);
 	void parseRemainingGlobalSettings();
 	bool configureDebugger();
@@ -602,21 +607,24 @@ private:
 	void parsePluginDefinedFileExtensions(QObject *plugin);
     bool popPluginIntoMenu(QObject *plugin);
 	bool parseFile(const QFile &file, const bool &bParseAsText = false);
-	void setCurrentFile(const QString &fileName);
+	void setCurrentFile(const QString &fileName, bool bIsNotSaved = false);
 	void updateRecentFileActions();
 	QString strippedName(const QString &fullFileName);
 	QMdiSubWindow *activeMdiChild();
 	QString activeMdiChildFilePath();
 	QMdiSubWindow *findMdiChild(const QString &fileName);
 	void updateRecentFileList(const QString &fileName);
-	void setDockSize(QDockWidget *dock, int setWidth, int setHeight);
 	bool check4ReParseFile(const QString &sFilename);
 	void updateMenuControls();
 
 public slots:
-	void updateMenuControls(QMdiSubWindow *mdiSubWin) { Q_UNUSED(mdiSubWin); updateMenuControls();};
+	void updateMenuControls(QMdiSubWindow *mdiSubWin);
 
 public:
+	void loadSavedDockWidgetConfiguration(const QString &sSettingsFileName, const QString &sGroupName, const QDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea);
+	void loadSavedWindowLayout(const QString &sSettingsFileName, const QString &sGroupName);
+	void savedDockWidgetConfiguration(const QString &sSettingsFileName, const QString &sGroupName, QDockWidget *dockWidget);
+	void saveWindowLayout(const QString &sSettingsFileName, const QString &sGroupName);
 	bool extendAPICallTips(const QMetaObject* metaScriptObject = NULL);
 	void setGlobalApplicationInformationObject(GlobalApplicationInformation *globAppInformation);
 	void RecoverLastScreenWindowSettings();

@@ -29,8 +29,9 @@
 #include "blockloopsdialog.h"
 #include "experimentobjectsdialog.h"
 #include "objectconnectionsdialog.h"
+#include "ExperimentStructureVisualizer.h"
 
-ExperimentStructureScene::ExperimentStructureScene(QObject *parent) : QGraphicsScene(parent), pBlockLoopsDialog(NULL), pExperimentObjectsDialog(NULL), pObjectConnectionsDialog(NULL), pExpStruct(NULL), pExperimentTreeModel(NULL)
+ExperimentStructureScene::ExperimentStructureScene(ExperimentStructureVisualizer *parent) : QGraphicsScene((QObject*)parent), pBlockLoopsDialog(NULL), pExperimentObjectsDialog(NULL), pObjectConnectionsDialog(NULL), pExpStruct(NULL), pExperimentTreeModel(NULL), parentExpStructVis(parent)
 {
 	currentGraphViewState = EXPVIS_VIEWSTATE_BLOCKTRIALS;
 }
@@ -38,15 +39,9 @@ ExperimentStructureScene::ExperimentStructureScene(QObject *parent) : QGraphicsS
 ExperimentStructureScene::~ExperimentStructureScene()
 {
 	if(pBlockLoopsDialog)
-	{
-		delete pBlockLoopsDialog;
 		pBlockLoopsDialog = NULL;
-	}
 	if(pExperimentObjectsDialog)
-	{
-		delete pExperimentObjectsDialog;
 		pExperimentObjectsDialog = NULL;
-	}
 }
 
 bool ExperimentStructureScene::event(QEvent *event)
@@ -93,9 +88,9 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 	QAction* configureObjectsAction;
 	QAction *addBlockAction;
 	QAction *addMultipleBlocksAction;
-	QAction *removeBlockAction;
+	//QAction *removeBlockAction;
 	QAction *removeBlocksAction;
-	QAction *addObjectAction;
+	//QAction *addObjectAction;
 	QAction *removeObjectConnectionAction;
 	QAction *configureConnectionsAction;
 
@@ -107,6 +102,7 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 	QList<QGraphicsItem *> gItemList = selectedItems();
 	//QGraphicsItem *gItem = itemAt(contextMenuEvent->scenePos(),QTransform());//item at mouse
 	QList<ExperimentGraphBlockItem*> gSelectedBlockItems;
+	QList<int> lSelectedBlockIds;
 	QList<ExperimentGraphLoopItem*> gSelectedAutoConnectionItems;
 	QList<ExperimentGraphLoopItem*> gSelectedLoopConnectionItems;
 	QList<ExperimentGraphObjectItem*> gSelectedObjectItems;
@@ -128,19 +124,27 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 		else if(graphItem->type() == ExperimentStructureItemType::TypeMethodConnectionItem)
 			gSelectedMethodConnectionItems.append(qgraphicsitem_cast<ExperimentGraphMethodConnectionItem*>(graphItem));
 	}
+	if (parentExpStructVis)
+	{
+		foreach(ExperimentGraphBlockItem *tmpExpGraphBlockItem, gSelectedBlockItems)
+		{
+			if (tmpExpGraphBlockItem)
+				lSelectedBlockIds.append(parentExpStructVis->getGraphBlockItemStruct(tmpExpGraphBlockItem)->nId);
+		}
+	}
 
 	if(getGraphViewState() == EXPVIS_VIEWSTATE_BLOCKTRIALS)
 	{
+		addBlockAction = mBlocksMenu->addAction("Add New");
+		addMultipleBlocksAction = mBlocksMenu->addAction("Add New(multiple)");
 		if(gSelectedBlockItems.isEmpty() == false)//Blocks selected?
 		{
-			addBlockAction = mBlocksMenu->addAction("Add New");
-			addMultipleBlocksAction = mBlocksMenu->addAction("Add New(multiple)");
 			//if(bUsedColumnIndexesInSelectionRanges.count() == 1)
-			removeBlockAction = mBlocksMenu->addAction("Remove Selected");
+			//removeBlockAction = mBlocksMenu->addAction("Remove Selected");
 			//else if(bUsedColumnIndexesInSelectionRanges.count() > 1)
-			removeBlocksAction = mBlocksMenu->addAction("Remove Multiple Selected");
-			mBlocksMenu->setEnabled(true);
+			removeBlocksAction = mBlocksMenu->addAction("Remove Selected");
 		}
+		mBlocksMenu->setEnabled(true);
 
 		mLoopsMenu->setEnabled(true);
 		if(gSelectedAutoConnectionItems.isEmpty() == false)//Auto-Connections selected?
@@ -169,7 +173,7 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 		{
 
 		}
-		addObjectAction = mObjectsMenu->addAction("Add New");
+		//addObjectAction = mObjectsMenu->addAction("Add New");
 		configureObjectsAction = mObjectsMenu->addAction("Configure Object(s)");
 		
 		mConnectionsMenu->setEnabled(true);
@@ -201,18 +205,21 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 				{
 					nBlocksToAdd = 1;
 				}
-				//bool bResult = false;
+				bool bResult = false;
 				if(nBlocksToAdd>0)
 				{
-					//bResult = pExpTreeModel->addExperimentBlocks(nBlocksToAdd);
+					if(pExperimentTreeModel)
+						bResult = pExperimentTreeModel->addExperimentBlocks(nBlocksToAdd);
 				}			
 			//}
 		}
-		else if((selectedItemAction == removeBlockAction) || (selectedItemAction == removeBlocksAction))
+		else if(selectedItemAction == removeBlocksAction)//(selectedItemAction == removeBlockAction) || 
 		{
-			//bool bResult = false;
-			//if(pExpTreeModel)
-			//	bResult = pExpTreeModel->removeExperimentBlocks(lstUsedBlockIDsInSelectionRanges);
+			bool bResult = false;
+			if (pExperimentTreeModel)
+			{
+				bResult = pExperimentTreeModel->removeExperimentBlocks(lSelectedBlockIds);
+			}
 		}
 		else if(selectedItemAction == toggleViewAction)
 		{

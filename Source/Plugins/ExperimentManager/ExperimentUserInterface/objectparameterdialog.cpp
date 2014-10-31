@@ -482,7 +482,16 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 		bIsParsing = bWasParsing;
 		return bResult;
 	}
-	int nBlockCount = pCurrentExpStructure->getBlockCount();
+
+	QList<ExperimentTreeItem*> lCurrentExpBlockTreeItems;
+	QStringList strSearchPathList;
+	strSearchPathList.append(ROOT_TAG);
+	strSearchPathList.append(ACTIONS_TAG);
+	strSearchPathList.append(BLOCKTRIALS_TAG);
+	strSearchPathList.append(BLOCK_TAG);
+	int nBlockCount = pCurrentExpTree->getTreeElements(strSearchPathList, lCurrentExpBlockTreeItems);
+
+	//int nBlockCount = pCurrentExpStructure->getBlockCount();
 	int nObjectCount = lCurrentExpObjects.count();
 
 	if((nObjectCount<1) || (nBlockCount<1) || (lCurrentExpTreeItems.isEmpty()))
@@ -562,7 +571,7 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 		nTempCurrentBlockObjectCount = -1;
 
 		//BlockID
-		pTmpExpTreeItem = lCurrentExpTreeItems.at(i);
+		pTmpExpTreeItem = lCurrentExpBlockTreeItems.at(i);
 		tTmpTreeItemDefs = pTmpExpTreeItem->getDefinitions();
 		if(tTmpTreeItemDefs.contains(ID_TAG))
 		{
@@ -571,7 +580,7 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 			{
 				//Objects
 				QList<ExperimentTreeItem*> lExpTreeObjectItems;
-				nTempCurrentBlockObjectCount = ExperimentTreeModel::getStaticTreeElements(lObjectSearchPath, lExpTreeObjectItems, lCurrentExpTreeItems.at(i));
+				nTempCurrentBlockObjectCount = ExperimentTreeModel::getStaticTreeElements(lObjectSearchPath, lExpTreeObjectItems, pTmpExpTreeItem);
 				if(nTempCurrentBlockObjectCount == 0)
 					continue;
 				for (int j=0;j<nTempCurrentBlockObjectCount;j++)//For each Object

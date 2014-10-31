@@ -646,6 +646,21 @@
     <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_QML2Viewer.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_experimentmethodparamsconfiguration.cpp">
+      <Filter>Generated Files\Debug_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_experimentmethodparamsconfiguration.cpp">
+      <Filter>Generated Files\Debug_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_experimentmethodparamsconfiguration.cpp">
+      <Filter>Generated Files\Release_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_experimentmethodparamsconfiguration.cpp">
+      <Filter>Generated Files\Release_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="ExperimentUserInterface\experimentmethodparamsconfiguration.cpp">
+      <Filter>Source Files\ExperimentUserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h">
@@ -709,6 +724,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_ObjectConnectionsDialog.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_experimentmethodparamsconfiguration.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -870,6 +888,12 @@
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="ExperimentUserInterface\objectconnectionsdialog.h">
+      <Filter>Header Files\ExperimentUserInterface</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ExperimentUserInterface\experimentmethodparamsconfiguration.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ExperimentUserInterface\experimentmethodparamsconfiguration.h">
       <Filter>Header Files\ExperimentUserInterface</Filter>
     </CustomBuild>
   </ItemGroup>

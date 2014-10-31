@@ -1,4 +1,4 @@
-//ExperimentManagerplugin
+//BrainStim
 //Copyright (C) 2014  Sven Gijsen
 //
 //This file is part of BrainStim.
@@ -16,62 +16,34 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "customdockwidget.h"
-#include "experimentgraphiceditor.h"
+#include "outputdockwidget.h"
+#include "mainappinfo.h"
 #include <QResizeEvent>
+#include <QSettings>
 
-customDockWidget::customDockWidget(const QString &sTitle, QWidget *parent, Qt::WindowFlags flags) : QDockWidget(sTitle,parent,flags)
+OutputDockWidget::OutputDockWidget(const QString &title, QWidget *parent, Qt::WindowFlags flags) : QDockWidget(title, parent, flags)
 {
 	bIsInitialized = false;
-	bVisibilitySetByUser = true;
 }
 
-customDockWidget::~customDockWidget()
+OutputDockWidget::~OutputDockWidget()
 {
 
 }
 
-void customDockWidget::initialize()
+void OutputDockWidget::initialize()
 {
 	MainAppInfo::loadDockWidgetLayout(this);
 	bIsInitialized = true;
 }
 
-void customDockWidget::resizeEvent(QResizeEvent *event)
+void OutputDockWidget::resizeEvent(QResizeEvent *event)
 {
-	if(bIsInitialized == false)
+	if (bIsInitialized == false)
 		return;
 	QSize sNewSize = event->size();
 	if (sNewSize != event->oldSize())
 	{
 		MainAppInfo::saveDockWidgetLayout(this);
 	}
-}
-
-void customDockWidget::setVisible(bool visible)
-{
-	bool bVisibilityAboutToChange = false;
-	if(visible != isVisible())
-		bVisibilityAboutToChange = true;
-	if(bVisibilityAboutToChange)
-	{
-		if(visible)
-		{
-			if(bVisibilitySetByUser == false)
-				return;
-		}
-	}
-	QDockWidget::setVisible(visible);
-}
-
-void customDockWidget::toggleConfiguredVisibility()
-{
-	bVisibilitySetByUser = !bVisibilitySetByUser;
-	setVisible(bVisibilitySetByUser);
-}
-
-void customDockWidget::closeEvent(QCloseEvent *event)
-{
-	Q_UNUSED(event);
-	bVisibilitySetByUser = false;
 }

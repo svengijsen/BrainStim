@@ -104,6 +104,7 @@ public:
 
 	QWidget *getDocHandler(const int &DocIndex);
 	QWidget *getDocHandler(QMdiSubWindow *subWindow);
+	bool isModified(QMdiSubWindow *subWindow);
 	QMdiSubWindow *getDocSubWindow(QWidget *pDocumentSubWidget);
 	int count(void);
 	QWidget *add(GlobalApplicationInformation::DocType docType,int &DocIndex, const QString &strExtension, const QString &strCanonicalFilePath = "", const bool &bNativeMainAppView = false);
@@ -112,16 +113,18 @@ public:
 	bool initFile(int DocIndex);
 	bool loadFile(int DocIndex, const QString &fileName);
 	GlobalApplicationInformation::DocType getDocType(QMdiSubWindow *subWindow);
-	GlobalApplicationInformation::DocType getDocType(const QString strExtension);
+	GlobalApplicationInformation::DocType getDocType(const QString &strExtension);
+	QString getDocTypeString(const GlobalApplicationInformation::DocType &docType);
 	QString getFileName(QMdiSubWindow *subWindow, bool bFileNameOnly = false);
 	QString getFileName(int DocIndex, bool bFileNameOnly = false);
+	void setFileName(int DocIndex, QString fileName, bool bIsNewNotSavedFile = false);
 	QString getFilePath(QMdiSubWindow *subWindow);
 	int getDocIndex(QMdiSubWindow *subWindow);
 	int getDocIndex(const QString &DocName);
-	bool saveFile(int DocIndex, QString fileName = "", bool *bReparseDocumentContentNeeded = NULL);
-	bool saveFile(QMdiSubWindow *subWindow,  QString fileName = "", bool *bReparseDocumentContentNeeded = NULL);
+	bool saveFile(int DocIndex, QString fileName = "", bool *bReparseDocumentContentNeeded = NULL, QString &sSavedFilenNamePath = QString());
+	bool saveFile(QMdiSubWindow *subWindow, QString fileName = "", bool *bReparseDocumentContentNeeded = NULL, QString &sSavedFilenNamePath = QString());
 	void setModFlagAndTitle(const int &DocIndex,bool hasChanges);
-	bool maybeSave(QMdiSubWindow *subWindow,bool bAutoSaveChanges = false);
+	bool maybeSave(QMdiSubWindow *subWindow,bool bAutoSaveChanges = false, QString &sSavedAsFilePath = QString());
 	void setAllUnmodified();
 	bool getFindParams(QMdiSubWindow *subWindow,QString& str1, QString& str2, DocFindFlags& flags);
 	QString lastFindText() const;
@@ -145,7 +148,6 @@ private:
 	QList<strDocManagerDocument> lChildDocuments;
 	QStringList additionalApiEntries;
 
-	void setFileName(int DocIndex, QString fileName);
 	bool getLexer(QsciLexer *lexer, const QString &lexerName, QObject *parent = 0);
 	QStringList getAdditionalApiEntries() {return additionalApiEntries;};
 	bool customizeDocumentStyle(CustomQsciScintilla *custQsci,GlobalApplicationInformation::DocTypeStyle dStyle = GlobalApplicationInformation::DOCTYPE_STYLE_UNDEFINED, const QString &strAPIFileName = "");

@@ -26,6 +26,8 @@
 #include <QTime>
 #include <iostream>
 #include <fstream>
+#include <QSettings>
+#include <QDockWidget>
 
 #include "maindefines.h"
 
@@ -36,9 +38,11 @@ private:
 	static QWidget *mainWindow;
 	static QString sAppUserPath;
 	static QList<int> lRegisteredMetaTypeIds;
+	static QSettings *sDockWidgetSettings;
 
 public:
 
+	~MainAppInfo();
 	struct QPairFirstComparer
 	{
 		template<typename T1, typename T2>
@@ -71,6 +75,8 @@ public:
 		return -1;
 	}
 
+	static bool loadDockWidgetLayout(QDockWidget *dockWidget);
+	static bool saveDockWidgetLayout(QDockWidget *dockWidget);
 	static bool addRegisteredMetaTypeID(const int &nMetaTypeID);
 	static bool setMainWindow(QWidget *mainWin);
 	static QString appDirPath()						{return QDir(QCoreApplication::applicationDirPath()).absolutePath();}

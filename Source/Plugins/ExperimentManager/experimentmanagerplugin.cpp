@@ -469,7 +469,7 @@ QWidget *ExperimentManagerPlugin::GetAdditionalFileTypeEditor(QString strExtensi
 		ExperimentManager *tmpManager;
 		if(strCanonicalFilePath.isEmpty())
 		{
-			tmpManager = ExperimentManagerObject;
+			return ExperimentManagerObject->getVisualExperimentEditor();
 		}
 		else
 		{			
@@ -551,8 +551,6 @@ bool ExperimentManagerPlugin::LoadAdditionalFile(QString strFilePath)
 		mapCanPathtoControlObjStrc.insert(tmpString,tmpStrcControlObjects);
 	}
 
-	//if(ExperimentManagerObject == NULL)
-	//	ExperimentManagerObject = new ExperimentManager(this);
 	if ((tmpManager->loadExperiment(tmpString, true)) || (tmpManager->getCurrExperimentState() == ExperimentManager::ExperimentManager_Loaded))
 	{		
 		QWidget* tmpWidget = tmpManager->getVisualExperimentEditor();

@@ -332,7 +332,7 @@ public:
 		return NULL;
 	};
 
-	bool getExperimentParameter(const QString &strKeyName, QScriptValue &scriptVal)
+	bool getExperimentParameter(const QString &strKeyName, QScriptValue &scriptVal, QScriptEngine *currentScriptEngine = NULL)
 	{
 		QString strKeyNameLow = strKeyName.toLower();
 		if (hIntContainer.contains(strKeyNameLow))
@@ -368,14 +368,30 @@ public:
 			//for(int i = 0; i < sListLength; i++)
 			//	tmpStringList->append(scriptVal.property(i).toString());
 			////*tmpStringList = scriptVal.toQObject();
-
-			QVariantList list = toVariantList(*tmpStringList);
-			scriptVal = scriptVal.engine()->newArray(tmpStringList->length());
-			for(int i=0; i<tmpStringList->count(); i++)
+			if (tmpStringList)
 			{
-				scriptVal.setProperty(i, QScriptValue(tmpStringList->at(i)));  
+				if (tmpStringList->isEmpty() == false)
+				{
+					QVariantList list = toVariantList(*tmpStringList);
+					if (currentScriptEngine)
+					{
+						scriptVal = currentScriptEngine->newArray(tmpStringList->count());//scriptVal.engine()->newArray(tmpStringList->length());//QScriptValueList();// scriptVal->construct(list);//
+						for (int i = 0; i<tmpStringList->count(); i++)
+						{
+							scriptVal.setProperty(i, QScriptValue(tmpStringList->at(i)));
+						}
+					}
+					else
+					{
+						return false;
+					}
+				}
+				else
+				{
+					scriptVal = QScriptValue(QScriptValue::NullValue);
+				}
+				return true;
 			}
-			return true;
 		}
 		else if (hQColorContainer.contains(strKeyNameLow))
 		{

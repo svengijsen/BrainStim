@@ -27,6 +27,16 @@ QFile *MainAppInfo::mainLogFile = NULL;//Needed to initialize the static variabl
 QWidget *MainAppInfo::mainWindow = NULL;//Needed to initialize the static variable!
 QString MainAppInfo::sAppUserPath = "";//Needed to initialize the static variable!
 QList<int> MainAppInfo::lRegisteredMetaTypeIds = QList<int>();//Needed to initialize the static variable!
+QSettings *MainAppInfo::sDockWidgetSettings = NULL;
+
+MainAppInfo::~MainAppInfo()
+{
+	if(sDockWidgetSettings)
+	{
+		delete sDockWidgetSettings;
+		sDockWidgetSettings = NULL;
+	}
+}
 
 QString MainAppInfo::outputsDirPath()
 {
@@ -145,6 +155,92 @@ void MainAppInfo::CloseMainLogFile()
 			MainAppInfo::mainLogFile->close();			
 		}
 	}	
+}
+
+bool MainAppInfo::loadDockWidgetLayout(QDockWidget *dockWidget)
+{//see also saveDockWidgetLayout(QDockWidget *dockWidget)
+	return true;
+	if (dockWidget == NULL)
+		return false;
+	QString sDockWidgetName = dockWidget->accessibleName();
+	if (sDockWidgetName.isEmpty())
+	{
+		if (dockWidget->widget())
+		{
+			sDockWidgetName = dockWidget->widget()->accessibleName();
+		}
+		if (sDockWidgetName.isEmpty())
+			return false;
+	}
+
+	if (MainAppInfo::sDockWidgetSettings == NULL)
+		MainAppInfo::sDockWidgetSettings = new QSettings("DockLayouts.ini", QSettings::IniFormat);//if we want we can store it all in a settings file
+
+	MainAppInfo::sDockWidgetSettings->sync();
+	//MainAppInfo::sDockWidgetSettings->beginGroup(sDockWidgetName);
+	//dockWidget->setFloating(true);
+	//if (MainAppInfo::sDockWidgetSettings->contains(sDockWidgetName + "\\" + "geometry"))
+	//	dockWidget->setGeometry(MainAppInfo::sDockWidgetSettings->value(sDockWidgetName + "\\" + "geometry").toRect());
+	//if (MainAppInfo::sDockWidgetSettings->contains(sDockWidgetName + "\\" + "isFloating"))
+	//	dockWidget->setFloating(MainAppInfo::sDockWidgetSettings->value(sDockWidgetName + "\\" + "isFloating").toBool());
+	/*if (MainAppInfo::sDockWidgetSettings->contains("isTopLevel"))
+		dockWidget->(MainAppInfo::sDockWidgetSettings->value("isTopLevel").toBool());
+	if (MainAppInfo::sDockWidgetSettings->contains("isLeftToRight"))
+		dockWidget->(MainAppInfo::sDockWidgetSettings->value("isLeftToRight").toBool());
+	if (MainAppInfo::sDockWidgetSettings->contains("isRightToLeft"))
+		dockWidget->(MainAppInfo::sDockWidgetSettings->value("isRightToLeft").toBool());*/
+	//if (MainAppInfo::sDockWidgetSettings->contains(sDockWidgetName + "\\" + "isVisible"))
+	//	dockWidget->setVisible(MainAppInfo::sDockWidgetSettings->value(sDockWidgetName + "\\" + "isVisible").toBool());
+	//if (MainAppInfo::sDockWidgetSettings->contains(sDockWidgetName + "\\" + "isHidden"))
+	//	dockWidget->setHidden(MainAppInfo::sDockWidgetSettings->value(sDockWidgetName + "\\" + "isHidden").toBool());
+
+	
+	//dockWidget->setGeometry(QRect(0, 501, 1920, 837));
+	//dockWidget->updateGeometry();
+	//dockWidget->widget()->setGeometry(QRect(0, 501, 1920, 837));
+	//dockWidget->setGeometry(QRect(0, 501, 1920, 837));
+	//dockWidget->widget()->updateGeometry();
+	//dockWidget->updateGeometry();
+	//QRect(l,T,w,h)
+	//dockWidget->setFloating(false);
+	//if (dockWidget->widget())
+	//	dockWidget->widget()->resize(1920, 837);
+
+	dockWidget->setFloating(false);
+
+	return true;
+	//Qt::BottomDockWidgetArea
+}
+
+bool MainAppInfo::saveDockWidgetLayout(QDockWidget *dockWidget)
+{//see also loadDockWidgetLayout(QDockWidget *dockWidget)
+	if (dockWidget == NULL)
+		return false;
+	QString sDockWidgetName = dockWidget->accessibleName();
+	if (sDockWidgetName.isEmpty())
+	{
+		if (dockWidget->widget())
+		{
+			sDockWidgetName = dockWidget->widget()->accessibleName();
+		}
+		if (sDockWidgetName.isEmpty())
+			return false;
+	}
+
+	if (MainAppInfo::sDockWidgetSettings == NULL)
+		MainAppInfo::sDockWidgetSettings = new QSettings("DockLayouts.ini", QSettings::IniFormat);//if we want we can store it all in a settings file
+	
+	//MainAppInfo::sDockWidgetSettings->beginGroup(sDockWidgetName);
+	MainAppInfo::sDockWidgetSettings->setValue(sDockWidgetName + "\\" + "geometry", dockWidget->geometry());
+	MainAppInfo::sDockWidgetSettings->setValue(sDockWidgetName + "\\" + "isFloating", dockWidget->isFloating());
+	MainAppInfo::sDockWidgetSettings->setValue(sDockWidgetName + "\\" + "isTopLevel", dockWidget->isTopLevel());
+	MainAppInfo::sDockWidgetSettings->setValue(sDockWidgetName + "\\" + "isLeftToRight", dockWidget->isLeftToRight());
+	MainAppInfo::sDockWidgetSettings->setValue(sDockWidgetName + "\\" + "isRightToLeft", dockWidget->isRightToLeft());
+	MainAppInfo::sDockWidgetSettings->setValue(sDockWidgetName + "\\" + "isVisible", dockWidget->isVisible());
+	MainAppInfo::sDockWidgetSettings->setValue(sDockWidgetName + "\\" + "isHidden", dockWidget->isHidden());
+	//MainAppInfo::sDockWidgetSettings->endGroup();
+	MainAppInfo::sDockWidgetSettings->sync();
+	return true;
 }
 
 bool MainAppInfo::addRegisteredMetaTypeID(const int &nMetaTypeID)

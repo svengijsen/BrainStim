@@ -764,6 +764,11 @@ void ExperimentParameterVisualizer::itemEditedHandler(const QString &sParamName,
 		emit rootItemEditFinished(sParamName,sNewValue);
 }
 
+//void ExperimentParameterVisualizer::focusOutEvent(QFocusEvent* event)
+//{ 
+//	emit outOfFocus(); 
+//}
+
 void ExperimentParameterVisualizer::propertyValueChanged(QtProperty *property, const QVariant &value)
 {
 	Q_UNUSED(value);

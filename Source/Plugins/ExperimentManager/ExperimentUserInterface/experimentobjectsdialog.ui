@@ -189,6 +189,22 @@
         </rect>
        </property>
       </widget>
+      <widget class="QPushButton" name="pbInitConfigureParameters">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>220</y>
+         <width>181</width>
+         <height>34</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Configure Argument(s)</string>
+       </property>
+      </widget>
      </widget>
      <widget class="QGroupBox" name="gbAvailableInits">
       <property name="enabled">
@@ -323,6 +339,22 @@
        </property>
        <property name="text">
         <string>Remove</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbFinitConfigureParameters">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>220</y>
+         <width>181</width>
+         <height>34</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Configure Argument(s)</string>
        </property>
       </widget>
      </widget>

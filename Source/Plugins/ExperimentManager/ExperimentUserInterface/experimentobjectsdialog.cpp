@@ -21,6 +21,7 @@
 #include "experimentmanager.h"
 #include "experimentparameterwidgets.h"
 #include "experimentparametervisualizer.h"
+#include "experimentmethodparamsconfiguration.h"
 
 ExperimentObjectsDialog::ExperimentObjectsDialog(QWidget *parent) : QDialog(parent), bIsObjectDeleting(false), bIsParsing(false), bDisableEditUpdates(false), pCurrentExpStructure(NULL), twCurrentObjects(NULL), layoutObjectDeclarationTreeWidgetParent(NULL), layoutObjectInitTreeWidgetParent(NULL), layoutObjectFinitTreeWidgetParent(NULL), pExpParamWidgets(NULL), pObjectDeclarationWidget(NULL), pObjectInitsWidget(NULL), pObjectFinitsWidget(NULL), pObjectInitFinitWidget(NULL), pExperimentTreeModel(NULL), nCurrentObjectSelectionIdentifier(-1), nCurrentObjectInitSelectionIdentifier(-1), nCurrentObjectFinitSelectionIdentifier(-1)
 {
@@ -40,6 +41,8 @@ ExperimentObjectsDialog::ExperimentObjectsDialog(QWidget *parent) : QDialog(pare
 	bConnectResult = connect(ui->lwObjectFinitUsed,SIGNAL(itemSelectionChanged()), this, SLOT(onObjectFinitSelectionChanged()));
 	bConnectResult = connect(ui->pbInitRemove, SIGNAL(clicked()), this, SLOT(onRemoveSelectedObjectInit()));
 	bConnectResult = connect(ui->pbFinitRemove, SIGNAL(clicked()), this, SLOT(onRemoveSelectedObjectFinit()));
+	bConnectResult = connect(ui->pbInitConfigureParameters, SIGNAL(clicked()), this, SLOT(onConfigureSelectedObjectInitParams()));
+	bConnectResult = connect(ui->pbFinitConfigureParameters, SIGNAL(clicked()), this, SLOT(onConfigureSelectedObjectFinitParams()));
 	bConnectResult = connect(ui->pbInitAdd, SIGNAL(clicked()), this, SLOT(addSelectedInit()));
 	bConnectResult = connect(ui->pbFinitAdd, SIGNAL(clicked()), this, SLOT(addSelectedFinit()));
 
@@ -278,11 +281,13 @@ bool ExperimentObjectsDialog::showObjectWidgets(const strcExperimentObjectInfo &
 				{
 					ui->gbDefinedInits->setVisible(true);
 					ui->pbInitRemove->setEnabled(true);
+					ui->pbInitConfigureParameters->setEnabled(true);
 				}
 				else//Finalizations
 				{
 					ui->gbDefinedFinits->setVisible(true);
 					ui->pbFinitRemove->setEnabled(true);
+					ui->pbFinitConfigureParameters->setEnabled(true);
 				}
 				foreach(cMethodStructure* pTmpMethStruct,*pCurrentObjectInitFinitList)
 				{
@@ -408,6 +413,16 @@ void ExperimentObjectsDialog::experimentObjectDefinitionItemEditFinished(const Q
 	return;
 }
 
+void ExperimentObjectsDialog::onConfigureSelectedObjectInitParams()
+{
+	configureSelectedObjectInitFinitParam(true);
+}
+
+void ExperimentObjectsDialog::onConfigureSelectedObjectFinitParams()
+{
+	configureSelectedObjectInitFinitParam(false);
+}
+
 void ExperimentObjectsDialog::onRemoveSelectedObjectInit()
 {
 	removeSelectedObjectInitFinit(true);
@@ -426,6 +441,7 @@ void ExperimentObjectsDialog::removeSelectedObjectInitFinit(const bool &bIsInit)
 		if(nCurrentObjectInitSelectionIdentifier<0)
 			return;
 		ui->pbInitRemove->setEnabled(false);
+		ui->pbInitConfigureParameters->setEnabled(false);
 		nInitFinitIdentifier = nCurrentObjectInitSelectionIdentifier;
 	}
 	else
@@ -433,6 +449,7 @@ void ExperimentObjectsDialog::removeSelectedObjectInitFinit(const bool &bIsInit)
 		if(nCurrentObjectFinitSelectionIdentifier<0)
 			return;
 		ui->pbFinitRemove->setEnabled(false);
+		ui->pbFinitConfigureParameters->setEnabled(true);
 		nInitFinitIdentifier = nCurrentObjectFinitSelectionIdentifier;
 	}
 
@@ -447,6 +464,40 @@ void ExperimentObjectsDialog::removeSelectedObjectInitFinit(const bool &bIsInit)
 	//	ui->pbInitRemove->setEnabled(true);
 	//else
 	//	ui->pbFinitRemove->setEnabled(true);
+}
+
+void ExperimentObjectsDialog::configureSelectedObjectInitFinitParam(const bool &bIsInit)
+{
+	int nInitFinitIdentifier = -1;
+	if (bIsInit)
+	{
+		if (nCurrentObjectInitSelectionIdentifier < 0)
+			return;
+		//ui->pbInitConfigureParameters->setEnabled(false);
+		nInitFinitIdentifier = nCurrentObjectInitSelectionIdentifier;
+	}
+	else
+	{
+		if (nCurrentObjectFinitSelectionIdentifier < 0)
+			return;
+		//ui->pbFinitConfigureParameters->setEnabled(false);
+		nInitFinitIdentifier = nCurrentObjectFinitSelectionIdentifier;
+	}
+	ExperimentMethodParamsConfigurationDialog *tmpExperimentMethodParamsConfigurationDialog = new ExperimentMethodParamsConfigurationDialog(this);
+	tmpExperimentMethodParamsConfigurationDialog->setInitFinitParameter(nInitFinitIdentifier, bIsInit);
+	if (tmpExperimentMethodParamsConfigurationDialog->parseExperimentTreeModel(pExperimentTreeModel))
+	{
+		int returnVal = tmpExperimentMethodParamsConfigurationDialog->exec();
+		switch (returnVal)
+		{
+		case QDialog::Accepted:
+			break;
+		case QDialog::Rejected:
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void ExperimentObjectsDialog::removeSelectedObject()
@@ -474,8 +525,16 @@ void ExperimentObjectsDialog::newObjectConfigurationChanged(int nChangedIndex)
 
 void ExperimentObjectsDialog::checkReparseModel()
 {
+	bool bIsInit = (ui->tabWidget->currentWidget() == ui->tab_Initializations);
+	bool bIsFinit = (ui->tabWidget->currentWidget() == ui->tab_Finalizations);
+	int nLastSelectedInitMethodRow = ui->lwObjectInitUsed->currentRow();
+	int nLastSelectedFinitMethodRow = ui->lwObjectFinitUsed->currentRow();
 	reCreateAndParseExperimentStructure();
 	onObjectSelectionChanged();
+	if ((bIsInit) && (nLastSelectedInitMethodRow < ui->lwObjectInitUsed->count()))
+		ui->lwObjectInitUsed->setCurrentItem(ui->lwObjectInitUsed->item(nLastSelectedInitMethodRow));
+	if ((bIsFinit) && (nLastSelectedFinitMethodRow < ui->lwObjectFinitUsed->count()))
+		ui->lwObjectFinitUsed->setCurrentItem(ui->lwObjectFinitUsed->item(nLastSelectedFinitMethodRow));
 }
 
 bool ExperimentObjectsDialog::setExperimentTreeModel(ExperimentTreeModel *pExpTreeModel)
@@ -787,6 +846,7 @@ void ExperimentObjectsDialog::handleObjectInitFinitSelectionChanged(bool bIsInit
 		*pObjectInitFinitWidget = pExpParamWidgets->getExperimentParameterWidget(sParamWidgetTag);
 		if(*pObjectInitFinitWidget)
 		{
+			(*pObjectInitFinitWidget)->configurePropertyEditSignaling(false);
 			if(layoutObjectInitFinitTreeWidgetParent)
 				layoutObjectInitFinitTreeWidgetParent->insertWidget(0,*pObjectInitFinitWidget);
 			if(bIsInit)
@@ -854,7 +914,7 @@ void ExperimentObjectsDialog::handleObjectInitFinitSelectionChanged(bool bIsInit
 			ExperimentParameterDefinitionStrc *tmpExpParamDefStrc = new ExperimentParameterDefinitionStrc();
 			tmpExpParamDefStrc->bCanBeScriptReference = false;
 			tmpExpParamDefStrc->bEnabled = true;
-			tmpExpParamDefStrc->bIsEditable = true;
+			tmpExpParamDefStrc->bIsEditable = false;
 			tmpExpParamDefStrc->eType = mParamDefinitionsTypesMap[pTmpExpParamStrc->getMethodParameterType().remove("const ", Qt::CaseInsensitive).toLower()];
 			tmpExpParamDefStrc->nId = nAddParamCntr;
 			tmpExpParamDefStrc->sDefaultValue = "0";

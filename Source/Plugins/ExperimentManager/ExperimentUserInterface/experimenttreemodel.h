@@ -191,6 +191,14 @@ class ExperimentTreeModel : public QStandardItemModel
 		bool removeExperimentObjectInitFinit(const int &nInitFinitId, const bool bIsInit);
 		bool addExperimentObjectInitFinit(const ExperimentTreeModel::strcObjectInitFinitSpecifier &cObjectInitFinitSpecifier, const bool bIsInit);
 
+		ExperimentTreeItem* getExperimentObjectTreeItem(const int &nObjectID);
+		ExperimentTreeItem* getExperimentBlockTreeItem(const int &nBlockID);
+		ExperimentTreeItem* getExperimentParameterTreeItem(const int &nBlockID, const int &nObjectID, const QString &sParamName);
+		ExperimentTreeItem* getExperimentBlockLoopTreeItem(const int &nBlockID, const int &nLoopID, const QString &sLoopItemName = "");
+		ExperimentTreeItem* getExperimentObjectConnectionTreeItem(const int &nConnectionID);
+		ExperimentTreeItem* addExperimentBlockTreeItems(const int &nAmount = 1);
+		ExperimentTreeItem* getExperimentObjectInitFinitTreeItem(const int &nInitFinitID, const bool &bIsInit);
+
     public slots:
         void saveNewData(QWidget *widgetContainer, const QModelIndex &parentIndex);
 		void saveNewData(const QString &sName, const QString &sValue, const QModelIndex &parentIndex, ExperimentTreeItem *pParametersSection = NULL);
@@ -203,14 +211,6 @@ class ExperimentTreeModel : public QStandardItemModel
         static void recursiveMultiSearch(const QString &textToFind, const QStringList &filters, QList<ExperimentTreeItem *> items, QList<ExperimentTreeItem*> &list);
 		void recursiveUidSearch(const QString &uuid, ExperimentTreeItem *item, bool found, QModelIndex &index);
 		bool fillModel();
-
-		ExperimentTreeItem* getExperimentObjectTreeItem(const int &nObjectID);
-		ExperimentTreeItem* getExperimentBlockTreeItem(const int &nBlockID);
-		ExperimentTreeItem* getExperimentParameterTreeItem(const int &nBlockID, const int &nObjectID, const QString &sParamName);
-		ExperimentTreeItem* getExperimentBlockLoopTreeItem(const int &nBlockID, const int &nLoopID, const QString &sLoopItemName = "");
-		ExperimentTreeItem* getExperimentObjectConnectionTreeItem(const int &nConnectionID);
-		ExperimentTreeItem* addExperimentBlockTreeItems(const int &nAmount = 1);
-		ExperimentTreeItem* getExperimentObjectInitFinitTreeItem(const int &nInitFinitID, const bool &bIsInit);
 
 		int cleanupObjectDependencies(const int &nObjectId);
 		int cleanupBlockDependencies(const int &nBlockId);

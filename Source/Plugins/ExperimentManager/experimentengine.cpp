@@ -351,7 +351,7 @@ void ExperimentEngine::incrementExternalTrigger()
 
 void ExperimentEngine::initBlockTrial()
 {
-	emit NewInitBlockTrial();
+	//emit NewInitBlockTrial(); moved 28 october by sven
 	bExperimentShouldStop = false;
 	expTrialTimer.restart();
 	if(pExperimentManager)
@@ -367,6 +367,8 @@ void ExperimentEngine::initBlockTrial()
 	{
 		qDebug() << __FUNCTION__ << "::No ExperimentManager defined!";
 	}
+	emit NewInitBlockTrial();
+
 	bool bRetVal;
 	if (thisMetaObject)
 	{

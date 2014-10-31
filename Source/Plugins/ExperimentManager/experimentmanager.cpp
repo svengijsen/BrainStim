@@ -273,7 +273,7 @@ bool ExperimentManager::getExperimentObjectScriptValue(const int &nObjectID,cons
 						if (lExperimentObjectList[i].ExpBlockParams->contains(sKeyName.toLower()))
 						{
 							if(lExperimentObjectList[i].typedExpParamCntnr)
-								return lExperimentObjectList[i].typedExpParamCntnr->getExperimentParameter(sKeyName,sScriptValue);
+								return lExperimentObjectList[i].typedExpParamCntnr->getExperimentParameter(sKeyName,sScriptValue,currentScriptEngine);
 							else
 								return false;
 						}
@@ -543,29 +543,15 @@ bool ExperimentManager::validateExperiment()
 		if (!validator.validate(currentExperimentFile))
 			errorOccurred = true;
 	}
-
 	if (errorOccurred) 
 	{
 		errorOccurred = errorOccurred;
 		QString strMessage = messageHandler.statusMessage();
 		int nColumn = messageHandler.column();
-		//int nLine = messageHandler.line();
-
-		nColumn = nColumn;
-
-		//!!!!!   emit WriteToLogOutput("Invalid schema, " + strMessage + "(line:" + QString::number(nLine) + ", col:" + QString::number(nColumn) + ")");
-
+		int nLine = messageHandler.line();
+		qDebug() << __FUNCTION__ << QString("Invalid schema, " + strMessage + "(line:" + QString::number(nLine) + ", col:" + QString::number(nColumn) + ")");
 		return true;
 	} 
-	//else 
-	//{		
-	//	//validationStatus->setText(tr("validation successful"));
-	//}
-
-	//const QString styleSheet = QString("QLabel {background: %1; padding: 3px}")
-	//	.arg(errorOccurred ? QColor(Qt::red).lighter(160).name() :
-	//	QColor(Qt::green).lighter(160).name());
-	//validationStatus->setStyleSheet(styleSheet);
 	return true;
 }
 
@@ -944,9 +930,9 @@ bool ExperimentManager::prePassiveParseExperiment()
 	return true;
 }
 
-bool ExperimentManager::createExperimentStructure(QList<ExperimentTreeItem*> &lExpTreeItems, ExperimentTreeModel *expTreeModel, cExperimentStructure* cExpBlockTrialStruct)
+bool ExperimentManager::createExperimentStructure(QList<ExperimentTreeItem*> &lExpTreeItems, ExperimentTreeModel *expTreeModel, cExperimentStructure* cExpStruct)
 {
-	if ((expTreeModel == NULL) || (cExpBlockTrialStruct == NULL))
+	if ((expTreeModel == NULL) || (cExpStruct == NULL))
 	{
 		qDebug() << __FUNCTION__ << "::Could not create the Experiment Structure!";
 		return false;
@@ -957,9 +943,9 @@ bool ExperimentManager::createExperimentStructure(QList<ExperimentTreeItem*> &lE
 
 	if(ExperimentTreeModel::getStaticTreeElements(strList, lExpTreeItems,expTreeModel->getRootItem()) > 0)
 	{
-		if(createExperimentStructureFromTreeItemList(lExpTreeItems, cExpBlockTrialStruct))		
+		if(createExperimentStructureFromTreeItemList(lExpTreeItems, cExpStruct))		
 		{
-			if (cExpBlockTrialStruct->prepareExperiment(true) == false)
+			if (cExpStruct->prepareExperiment(true) == false)
 			{
 				qDebug() << __FUNCTION__ << "::Could not prepare Experiment Structure!";
 				return false;
@@ -1078,9 +1064,13 @@ QWidget *ExperimentManager::getVisualExperimentEditor()
 		ExpGraphicEditor = new ExperimentGraphicEditor();
 		connect(ExpGraphicEditor, SIGNAL(IsDestructing(ExperimentGraphicEditor*)), this, SLOT(visualExperimentEditorDestroyed(ExperimentGraphicEditor*))); 
 		ExpGraphicEditor->setExperimentManager(this);		
-	}	
-	if(currentExperimentTree)
-		ExpGraphicEditor->setExperimentTreeModel(currentExperimentTree, "");
+	}
+	if (currentExperimentTree == NULL)
+	{
+		currentExperimentTree = new ExperimentTreeModel();
+		currentExperimentTree->resetExperiment();
+	}
+	ExpGraphicEditor->setExperimentTreeModel(currentExperimentTree, "");
 	return ExpGraphicEditor;
 }
 
@@ -2080,19 +2070,64 @@ bool ExperimentManager::createExperimentStructureFromTreeItemList(const QList<Ex
 
 	QStringList strSearchPathList;
 	QList<ExperimentTreeItem*> lFoundExpTreeItems;
-	strSearchPathList.clear();
-	//strSearchPathList.append(ROOT_TAG);
-	strSearchPathList.append(ACTIONS_TAG);
-	strSearchPathList.append(BLOCKTRIALS_TAG);
 	int nNrOfObjects;
 	int nNrOfBlockTrials;
 	int nNrOfMethodConnections;
+	bool bExperimentDefinesParseResult = false;
 	bool bBlockTrialParseResult = false;
 	bool bObjectsParseResult = false;
 	bool bMethodConnectionsResult = false;
 	bool bFinitInitResult = false;
+	ExperimentTreeItem *tmpTreeItem = NULL;
+	QMap<QString, TreeItemDefinition> tTmpTreeItemDefs;
 
 	expStruct->resetExperiment();
+
+
+	//Experiment Definitions//
+	lFoundExpTreeItems.clear();
+	strSearchPathList.clear();
+	strSearchPathList.append(DEFINES_TAG);
+	strSearchPathList.append(EXPERIMENT_TAG);
+	if (ExperimentTreeModel::getStaticTreeElements(strSearchPathList, lFoundExpTreeItems, ExpRootTreeItems.at(0)) == 1)
+	{
+		if (lFoundExpTreeItems.at(0)->hasChildren())
+		{
+			tmpTreeItem = NULL;
+			tTmpTreeItemDefs.clear();
+			tmpTreeItem = lFoundExpTreeItems.at(0);
+			tTmpTreeItemDefs = tmpTreeItem->getDefinitions();
+			if (tTmpTreeItemDefs.contains(ID_TAG))
+			{
+				expStruct->setExperimentID(tTmpTreeItemDefs[ID_TAG].value.toInt());
+				tmpTreeItem = lFoundExpTreeItems.at(0)->firstChild(NAME_TAG);
+				if (tmpTreeItem)//Is there a experiment name defined?
+				{
+					expStruct->setExperimentName(tmpTreeItem->getValue());//Copy the Experiment Name
+					tmpTreeItem = lFoundExpTreeItems.at(0)->firstChild(DEBUGMODE_TAG);
+					if (tmpTreeItem)//Is there a Experiment DebugMode defined?
+					{
+						QString sTmpString = tmpTreeItem->getValue().toLower();
+						if (sTmpString == BOOL_FALSE_TAG)
+							expStruct->setExperimentDebugMode(false);
+						else
+							expStruct->setExperimentDebugMode(true);
+						bExperimentDefinesParseResult = true;
+					}
+				}
+			}
+		}
+	}
+	if (bExperimentDefinesParseResult == false)
+	{
+		expStruct->resetExperiment();
+		return false;
+	}
+
+	lFoundExpTreeItems.clear();
+	strSearchPathList.clear();
+	strSearchPathList.append(ACTIONS_TAG);
+	strSearchPathList.append(BLOCKTRIALS_TAG);
 	if (ExperimentTreeModel::getStaticTreeElements(strSearchPathList, lFoundExpTreeItems, ExpRootTreeItems.at(0)) == 1)
 	{
 		strSearchPathList.append(BLOCK_TAG);
@@ -2103,9 +2138,9 @@ bool ExperimentManager::createExperimentStructureFromTreeItemList(const QList<Ex
 			nNrOfBlockTrials = lFoundExpTreeItems.count();
 			cBlockStructure *tmpBlock = NULL;
 			cLoopStructure *tmpLoop = NULL;
-			ExperimentTreeItem *tmpTreeItem = NULL;
+			tmpTreeItem = NULL;
 			bool bUpdateSucceeded = false;
-			QMap<QString, TreeItemDefinition> tTmpTreeItemDefs;
+			tTmpTreeItemDefs.clear();
 			int nTemp;
 			QString sTemp;
 
@@ -2237,9 +2272,9 @@ bool ExperimentManager::createExperimentStructureFromTreeItemList(const QList<Ex
 		{
 			nNrOfObjects = lFoundExpTreeItems.count();
 			cObjectStructure *tmpObject = NULL;
-			ExperimentTreeItem *tmpTreeItem = NULL;
+			tmpTreeItem = NULL;
 			bool bUpdateSucceeded = false;
-			QMap<QString, TreeItemDefinition> tTmpTreeItemDefs;
+			tTmpTreeItemDefs.clear();
 
 			for (int i=0;i<nNrOfObjects;i++)
 			{
@@ -2294,9 +2329,9 @@ bool ExperimentManager::createExperimentStructureFromTreeItemList(const QList<Ex
 		{
 			nNrOfMethodConnections = lFoundExpTreeItems.count();
 			cMethodConnectionStructure *tmpMethod = NULL;
-			ExperimentTreeItem *tmpTreeItem = NULL;
+			tmpTreeItem = NULL;
 			bool bUpdateSucceeded = false;
-			QMap<QString, TreeItemDefinition> tTmpTreeItemDefs;
+			tTmpTreeItemDefs.clear();
 
 			for (int i=0;i<nNrOfMethodConnections;i++)
 			{
@@ -2386,9 +2421,9 @@ bool ExperimentManager::createExperimentStructureFromTreeItemList(const QList<Ex
 			{
 				int nNrOfItems = lFoundExpTreeItems.count();
 				cMethodStructure *tmpMethod = NULL;
-				ExperimentTreeItem *tmpTreeItem = NULL;
+				tmpTreeItem = NULL;
 				bool bUpdateSucceeded = false;
-				QMap<QString, TreeItemDefinition> tTmpTreeItemDefs;
+				tTmpTreeItemDefs.clear();
 
 				for (int i=0;i<nNrOfItems;i++)
 				{
@@ -2451,8 +2486,8 @@ bool ExperimentManager::createExperimentStructureFromTreeItemList(const QList<Ex
 																				if(pTmpExpTreeSubParamItem)
 																				{
 																					sParamValue = pTmpExpTreeSubParamItem->getValue();
-																					if(sParamValue.isEmpty() == false)
-																					{
+																					//if(sParamValue.isEmpty() == false)
+																					//{
 																						pTmpExpTreeSubParamItem = tmpTreeItem->child(nChildCount)->firstChild(MEMBER_TYPE_TAG);
 																						if(pTmpExpTreeSubParamItem)
 																						{
@@ -2468,7 +2503,7 @@ bool ExperimentManager::createExperimentStructureFromTreeItemList(const QList<Ex
 																								tmpMethod->insertMethodParameter(pTmpMethParamStruct);
 																							}
 																						}
-																					}
+																					//}
 																				}
 																			}
 																		}

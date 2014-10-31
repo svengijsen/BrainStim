@@ -56,16 +56,18 @@ class ExperimentStructureVisualizer : public QWidget
 signals:
 	void destroyed(QWidget*);
 	void GraphItemSelectionChanged(QList<ExperimentVisualizerGraphItemTypeEnum>, QList<int>);
-
+	void GraphRedrawn();
 
 public:
 	explicit ExperimentStructureVisualizer(QWidget *parent = NULL);
 	~ExperimentStructureVisualizer();
 
 	bool setExperimentTreeModel(ExperimentTreeModel *pExpTreeModel);
+	void setVisualMargin(const int &nNewMarginWidth, const int &nNewMarginHeight) { nWidgetMarginWidth = nNewMarginWidth; nWidgetMarginHeight = nNewMarginHeight; };
 
 public slots:
 	void resizeStructureView(const int &nWidth, const int &nHeight);
+	void clearSelection();
 
 private slots:
 	//void nodeContextMenu(QGVNode* node);
@@ -74,10 +76,6 @@ private slots:
 	void itemSelectionChanged();
 	bool reCreateAndParseExperimentStructure();
 	void toggleViewState();
-
-//protected:
-	//void showEvent ( QShowEvent * event );
-	//void resizeEvent(QResizeEvent * event);
 
 private:
 	Ui::ExperimentStructureVisualizer *ui;
@@ -208,16 +206,11 @@ private:
 	void createScene();
 	void setupLayout();
 	void resetExpScene();
-	ExperimentGraphBlockItem *getGraphBlockItemPointer(const int &nBlockID);
-	ExperimentGraphObjectItem *getGraphObjectItemPointer(const int &nObjectID);
-	expBlockItemStrc *getGraphBlockItemStruct(const ExperimentGraphBlockItem *pExpGraphBlockItem);
-	expConnItemStrc *getGraphLoopItemStruct(const ExperimentGraphLoopItem *pExpGraphBlockItem);
-	expObjectItemStrc *getGraphObjectItemStruct(const ExperimentGraphObjectItem *pExpGraphObjectItem);
-	expObjectMethodConnectionItemStrc *getGraphMethodConnectionItemStruct(const ExperimentGraphMethodConnectionItem *pExpGraphMethodConnItem);
 	bool insertLoopInGraphDrawingStruct(const cBlockStructure *pStrcSourceBlock, const cBlockStructure *pStrcTargetBlock, const cLoopStructure *pStrcLoop);
 	int getNumberOfBlockLoops(const int &nBlockID, const ExperimentGraphLoopTypeEnum &nConnectionType);
 
-	int nWidgetMargin;
+	int nWidgetMarginWidth;
+	int nWidgetMarginHeight;
 	qreal dGraphViewScale;
 	bool bDrawVertical; //Otherwise horizontal
 	ExperimentGraphLoopItemDrawOrder eConnDrawOrder;
@@ -238,6 +231,16 @@ private:
 	expSceneItemStrc expSceneItems;
 	expParsedLoopDrawing expLoopDrawing;
 	QPen pLoopConnections;
+
+public:
+	//void showEvent ( QShowEvent * event );
+	//void resizeEvent(QResizeEvent *event);
+	ExperimentGraphBlockItem *getGraphBlockItemPointer(const int &nBlockID);
+	ExperimentGraphObjectItem *getGraphObjectItemPointer(const int &nObjectID);
+	expBlockItemStrc *getGraphBlockItemStruct(const ExperimentGraphBlockItem *pExpGraphBlockItem);
+	expConnItemStrc *getGraphLoopItemStruct(const ExperimentGraphLoopItem *pExpGraphBlockItem);
+	expObjectItemStrc *getGraphObjectItemStruct(const ExperimentGraphObjectItem *pExpGraphObjectItem);
+	expObjectMethodConnectionItemStrc *getGraphMethodConnectionItemStruct(const ExperimentGraphMethodConnectionItem *pExpGraphMethodConnItem);
 };
 
 #endif // EXPERIMENTSTRUCTUREVISUALIZER_H

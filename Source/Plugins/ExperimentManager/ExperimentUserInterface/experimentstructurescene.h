@@ -27,6 +27,7 @@ class ExperimentObjectsDialog;
 class cExperimentStructure;
 class ExperimentTreeModel;
 class ObjectConnectionsDialog;
+class ExperimentStructureVisualizer;
 
 enum ExperimentStructureItemType 
 { 
@@ -46,7 +47,7 @@ enum ExperimentVisualizerGraphViewState
 class ExperimentStructureScene : public QGraphicsScene
 {
 	public:
-		ExperimentStructureScene(QObject *parent = NULL);
+		ExperimentStructureScene(ExperimentStructureVisualizer *parent);
 		~ExperimentStructureScene();
 
 		void setExperimentStructure(cExperimentStructure *pExperimentStruct);
@@ -67,6 +68,7 @@ private:
 	cExperimentStructure *pExpStruct;
 	ExperimentTreeModel *pExperimentTreeModel;
 	ExperimentVisualizerGraphViewState currentGraphViewState;
+	ExperimentStructureVisualizer *parentExpStructVis;
 };
 
 #endif // EXPERIMENTSTRUCTURESCENE_H

@@ -47,6 +47,7 @@ private slots:
 	void addSelectedInit();
 	void addSelectedFinit();
 	void removeSelectedObject();
+	void configureSelectedObjectInitFinitParam(const bool &bIsInit);
 	void removeSelectedObjectInitFinit(const bool &bIsInit);
 	void newObjectConfigurationChanged(int nChangedIndex);
 	void experimentObjectDefinitionItemEditFinished(const QString &sParamName, const QString &sNewValue);
@@ -57,6 +58,8 @@ private slots:
 	void onObjectFinitSelectionChanged();
 	void onRemoveSelectedObjectInit();
 	void onRemoveSelectedObjectFinit();
+	void onConfigureSelectedObjectInitParams();
+	void onConfigureSelectedObjectFinitParams();
 
 private:
 	struct strcExperimentObjectInfo 

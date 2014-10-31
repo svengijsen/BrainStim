@@ -1,4 +1,4 @@
-//ExperimentManagerplugin
+//BrainStim
 //Copyright (C) 2014  Sven Gijsen
 //
 //This file is part of BrainStim.
@@ -16,35 +16,26 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef CUSTOMDOCKWIDGET_H
-#define CUSTOMDOCKWIDGET_H
+#ifndef OUTPUTDOCKWIDGET_H
+#define OUTPUTDOCKWIDGET_H
 
 #include <QDockWidget>
 
-class customDockWidget : public QDockWidget
+class OutputDockWidget : public QDockWidget
 {
 	Q_OBJECT
 
-//signals :
-	//void CustomDockWidgetResized(const int &nWidth, const int &nHeight);
-
 public:
-	customDockWidget(const QString &sTitle, QWidget *parent = NULL, Qt::WindowFlags flags = 0);
-	~customDockWidget();
+	OutputDockWidget(const QString &title, QWidget *parent = NULL, Qt::WindowFlags flags = NULL);
+	~OutputDockWidget();
 
-	void setVisible(bool visible);
 	void initialize();
 
-public slots:
-	void toggleConfiguredVisibility();
-
 protected:
-	void closeEvent(QCloseEvent * event);
 	void resizeEvent(QResizeEvent * event);
 
 private:
-	bool bVisibilitySetByUser;
 	bool bIsInitialized;
 };
 
-#endif // CUSTOMDOCKWIDGET_H
+#endif // OUTPUTDOCKWIDGET_H

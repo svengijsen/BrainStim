@@ -43,6 +43,7 @@ signals:
 	//void editFinished(const QString&, const QString&);
 	void rootItemEditFinished(const QString&, const QString&);
 	void derivedItemEditFinished(const QString&, const QString&);
+	//void outOfFocus();
 
 private:
 	struct propertyContainerItem
@@ -125,6 +126,9 @@ public slots:
 private slots:
 	void propertyValueChanged(QtProperty *property, const QVariant &value);
 	void itemEditedHandler(const QString &sParamName, const QString &sNewValue, const bool &bIsDerivedProperty);
+
+//protected:
+//	void focusOutEvent(QFocusEvent* event);
 
 private:
 	Ui::ExperimentParameterVisualizer *ui;

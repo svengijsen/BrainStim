@@ -43,6 +43,7 @@ class ExperimentBlockParameterView : public QTableWidget
 
 signals:
 	void destroyed(QWidget*);
+	void onFocusTable();
 
 public:
 	ExperimentBlockParameterView(QWidget *parent = NULL, ExperimentTreeModel *pExperimentTreeModel = NULL);
@@ -65,6 +66,7 @@ private slots:
 	
 protected:
 	void currentChanged(const QModelIndex &current, const QModelIndex &previous);
+	void focusInEvent(QFocusEvent* event);
 
 private:
 	void configureEditHandling(const bool &bEnable);

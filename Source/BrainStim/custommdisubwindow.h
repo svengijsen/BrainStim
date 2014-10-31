@@ -1,4 +1,4 @@
-//ExperimentManagerplugin
+//BrainStim
 //Copyright (C) 2014  Sven Gijsen
 //
 //This file is part of BrainStim.
@@ -16,35 +16,29 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef CUSTOMDOCKWIDGET_H
-#define CUSTOMDOCKWIDGET_H
+#ifndef CUSTOMMDISUBWINDOW_H
+#define CUSTOMMDISUBWINDOW_H
 
-#include <QDockWidget>
+#include <QMdiSubWindow>
 
-class customDockWidget : public QDockWidget
+class CustomMDISubWindow : public QMdiSubWindow
 {
 	Q_OBJECT
 
-//signals :
-	//void CustomDockWidgetResized(const int &nWidth, const int &nHeight);
+signals :
+	void SubWindowClosed(CustomMDISubWindow*);
+	void SubWindowDestroyed(CustomMDISubWindow*);
 
 public:
-	customDockWidget(const QString &sTitle, QWidget *parent = NULL, Qt::WindowFlags flags = 0);
-	~customDockWidget();
-
-	void setVisible(bool visible);
-	void initialize();
-
-public slots:
-	void toggleConfiguredVisibility();
+	CustomMDISubWindow(QWidget *parent);
+	~CustomMDISubWindow();
 
 protected:
-	void closeEvent(QCloseEvent * event);
-	void resizeEvent(QResizeEvent * event);
+	void closeEvent(QCloseEvent *closeEvent);
 
 private:
-	bool bVisibilitySetByUser;
-	bool bIsInitialized;
+	//bool bIsClosing;
+	
 };
 
-#endif // CUSTOMDOCKWIDGET_H
+#endif // CUSTOMMDISUBWINDOW_H
