@@ -60,7 +60,7 @@
 #define FUNC_PLUGIN_COPYAVAILABLE_FULL						"copyAvailable(bool)"				//fixed signal signature, do not change
 #define FUNC_PLUGIN_CURSORPOSCHANGED_FULL					"cursorPositionChanged(int, int)"	//fixed signal signature, do not change
 
-#define FUNC_BRAINSTIM_CONFDOCMODSETTING						"configureDocumentModifiedSetting"
+#define FUNC_BRAINSTIM_CONFDOCMODSETTING					"configureDocumentModifiedSetting"
 #define FUNC_BRAINSTIM_CONFDOCMODSETTING_FULL				FUNC_BRAINSTIM_CONFDOCMODSETTING "(QString,bool)"
 
 #define FUNC_BRAINSTIM_PROCDOCCLOSING						"processDocumentClosing"

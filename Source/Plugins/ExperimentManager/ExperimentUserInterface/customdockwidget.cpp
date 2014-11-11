@@ -20,31 +20,20 @@
 #include "experimentgraphiceditor.h"
 #include <QResizeEvent>
 
-customDockWidget::customDockWidget(const QString &sTitle, QWidget *parent, Qt::WindowFlags flags) : QDockWidget(sTitle,parent,flags)
+customDockWidget::customDockWidget(const QString &sTitle, QWidget *parent, Qt::WindowFlags flags) : QDockWidget(sTitle, parent, flags), bIsInitialized(false), bVisibilitySetByUser(true)
 {
-	bIsInitialized = false;
-	bVisibilitySetByUser = true;
 }
 
 customDockWidget::~customDockWidget()
 {
-
 }
 
 void customDockWidget::initialize()
-{
-	MainAppInfo::loadDockWidgetLayout(this);
-	bIsInitialized = true;
-}
-
-void customDockWidget::resizeEvent(QResizeEvent *event)
-{
-	if(bIsInitialized == false)
-		return;
-	QSize sNewSize = event->size();
-	if (sNewSize != event->oldSize())
+{//! Call this after setting the child widget with ->setWidget(QWidget*)
+	QWidget *childWidget = widget();
+	if (childWidget)
 	{
-		MainAppInfo::saveDockWidgetLayout(this);
+		bIsInitialized = true;
 	}
 }
 

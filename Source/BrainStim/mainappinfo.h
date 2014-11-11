@@ -28,6 +28,10 @@
 #include <fstream>
 #include <QSettings>
 #include <QDockWidget>
+#include <QTabWidget>
+#include <QTreeView>
+#include <QSettings>
+#include <QTableWidget>
 
 #include "maindefines.h"
 
@@ -38,7 +42,6 @@ private:
 	static QWidget *mainWindow;
 	static QString sAppUserPath;
 	static QList<int> lRegisteredMetaTypeIds;
-	static QSettings *sDockWidgetSettings;
 
 public:
 
@@ -75,8 +78,8 @@ public:
 		return -1;
 	}
 
-	static bool loadDockWidgetLayout(QDockWidget *dockWidget);
-	static bool saveDockWidgetLayout(QDockWidget *dockWidget);
+	//static bool loadDockWidgetLayout(QDockWidget *dockWidget);
+	//static bool saveDockWidgetLayout(QDockWidget *dockWidget);
 	static bool addRegisteredMetaTypeID(const int &nMetaTypeID);
 	static bool setMainWindow(QWidget *mainWin);
 	static QString appDirPath()						{return QDir(QCoreApplication::applicationDirPath()).absolutePath();}
@@ -165,6 +168,99 @@ private:
 #endif
 		return appDebugDir.absolutePath();
 	};
+};
+
+class CustomChildDockTabWidget : public QTabWidget
+{
+	Q_OBJECT
+
+public:
+	CustomChildDockTabWidget(QWidget *parent = NULL) { QTabWidget::setParent(parent); sGroupName = ""; };
+	~CustomChildDockTabWidget() {};
+
+	void setGroupName(const QString &sNewGroupName) { sGroupName = sNewGroupName; };
+	QString getGroupName() const { return sGroupName; };
+	QSize minimumSize() const { return QSize(100, 100); };
+	QSize sizeHint() const
+	{
+		QSize sizeCurrentSizeHint = QTabWidget::sizeHint();
+		if (this->parentWidget())
+		{
+			QString sAccessName = this->parentWidget()->accessibleName();
+			bool bRetVal;
+			QRect rCurrentSizeHint;
+			rCurrentSizeHint.setSize(sizeCurrentSizeHint);
+			QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_GETSAVEDDOCKWIDGETSIZEHINT_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QString, sGroupName), Q_ARG(QString, sAccessName), Q_ARG(QRect&, rCurrentSizeHint));
+			if (bRetVal)
+				return rCurrentSizeHint.size();
+		}
+		return sizeCurrentSizeHint;
+	};
+
+private:
+	QString sGroupName;
+};
+
+class CustomChildDockTreeViewWidget : public QTreeView
+{
+	Q_OBJECT
+
+public:
+	CustomChildDockTreeViewWidget(QWidget *parent = NULL) { QTreeView::setParent(parent); sGroupName = ""; };
+	~CustomChildDockTreeViewWidget() {};
+
+	void setGroupName(const QString &sNewGroupName) { sGroupName = sNewGroupName; };
+	QString getGroupName() const { return sGroupName; };
+	QSize minimumSize() const { return QSize(100, 100); };
+	QSize sizeHint() const
+	{
+		QSize sizeCurrentSizeHint = QTreeView::sizeHint();
+		if (this->parentWidget())
+		{
+			QString sAccessName = this->parentWidget()->accessibleName();
+			bool bRetVal;
+			QRect rCurrentSizeHint;
+			rCurrentSizeHint.setSize(sizeCurrentSizeHint);
+			QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_GETSAVEDDOCKWIDGETSIZEHINT_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QString, sGroupName), Q_ARG(QString, sAccessName), Q_ARG(QRect&, rCurrentSizeHint));
+			if (bRetVal)
+				return rCurrentSizeHint.size();
+		}
+		return sizeCurrentSizeHint;
+	};
+
+private:
+	QString sGroupName;
+};
+
+class CustomChildDockTableWidget : public QTableWidget
+{
+	Q_OBJECT
+
+public:
+	CustomChildDockTableWidget(QWidget *parent = NULL) { QTableWidget::setParent(parent); sGroupName = ""; };
+	~CustomChildDockTableWidget() {};
+
+	void setGroupName(const QString &sNewGroupName) { sGroupName = sNewGroupName; };
+	QString getGroupName() const { return sGroupName; };
+	QSize minimumSize() const { return QSize(100, 100); };
+	QSize sizeHint() const
+	{
+		QSize sizeCurrentSizeHint = QTableWidget::sizeHint();
+		if (this->parentWidget())
+		{
+			QString sAccessName = this->parentWidget()->accessibleName();
+			bool bRetVal;
+			QRect rCurrentSizeHint;
+			rCurrentSizeHint.setSize(sizeCurrentSizeHint);
+			QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_GETSAVEDDOCKWIDGETSIZEHINT_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QString, sGroupName), Q_ARG(QString, sAccessName), Q_ARG(QRect&, rCurrentSizeHint));
+			if (bRetVal)
+				return rCurrentSizeHint.size();
+		}
+		return sizeCurrentSizeHint;
+	};
+
+private:
+	QString sGroupName;
 };
 
 #endif // MAINAPPINFO_H

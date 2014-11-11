@@ -216,7 +216,7 @@ int main(int argc, char **argv)
 		// connect message queue to the main window.
 		QObject::connect(&appExchange, SIGNAL(messageAvailable(QString)), appWindow, SLOT(receiveExchangeMessage(QString)));
 		appWindow->show();//showMaximized() creates weird behaviour!;
-		appWindow->RecoverLastScreenWindowSettings();
+		appWindow->recoverLastScreenWindowSettings();
 		int nRetVal = appExchange.exec();
 		delete appWindow;
 		appWindow = NULL;

@@ -25,9 +25,6 @@ class customDockWidget : public QDockWidget
 {
 	Q_OBJECT
 
-//signals :
-	//void CustomDockWidgetResized(const int &nWidth, const int &nHeight);
-
 public:
 	customDockWidget(const QString &sTitle, QWidget *parent = NULL, Qt::WindowFlags flags = 0);
 	~customDockWidget();
@@ -40,7 +37,6 @@ public slots:
 
 protected:
 	void closeEvent(QCloseEvent * event);
-	void resizeEvent(QResizeEvent * event);
 
 private:
 	bool bVisibilitySetByUser;

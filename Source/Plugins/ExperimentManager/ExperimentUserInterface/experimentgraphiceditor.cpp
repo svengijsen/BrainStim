@@ -335,6 +335,7 @@ void ExperimentGraphicEditor::createDockWindows()
 	{
 		pCustomPropertiesDockWidget = new customDockWidget(tr(NAME_DOCKWIDGET_LIST_VIEW), this);
 		pCustomPropertiesDockWidget->setAccessibleName(NAME_DOCKWIDGET_LIST_VIEW);
+		pCustomPropertiesDockWidget->setObjectName(NAME_DOCKWIDGET_LIST_VIEW);
 		pCustomPropertiesDockWidget->setAllowedAreas(Qt::AllDockWidgetAreas);
 		if(actionToggle_ListViewDockVisibility == NULL)
 		{
@@ -344,12 +345,13 @@ void ExperimentGraphicEditor::createDockWindows()
 		}
 		bool bRetVal = false;
 		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(QDockWidget *, pCustomPropertiesDockWidget), Q_ARG(int, Qt::DockWidgetArea::RightDockWidgetArea));
-		pCustomPropertiesDockWidget->initialize();
+		//bConnectRes = connect(pCustomPropertiesDockWidget, SIGNAL(CustomDockWidgetIsDestroying(QDockWidget *)), MainAppInfo::getMainWindow(), SLOT(unregisterDockWidget(QDockWidget *)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 	}
 	if(pCustomParamTableDockWidget == NULL)
 	{
 		pCustomParamTableDockWidget = new customDockWidget(tr(NAME_DOCKWIDGET_TABLE_VIEW), this);
 		pCustomParamTableDockWidget->setAccessibleName(NAME_DOCKWIDGET_TABLE_VIEW);
+		pCustomParamTableDockWidget->setObjectName(NAME_DOCKWIDGET_TABLE_VIEW);
 		pCustomParamTableDockWidget->setAllowedAreas(Qt::AllDockWidgetAreas);
 		if(actionToggle_TableViewDockVisibility == NULL)
 		{
@@ -359,12 +361,13 @@ void ExperimentGraphicEditor::createDockWindows()
 		}
 		bool bRetVal = false;
 		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(QDockWidget *, pCustomParamTableDockWidget), Q_ARG(int, Qt::DockWidgetArea::BottomDockWidgetArea));// +Qt::DockWidgetArea::LeftDockWidgetArea));
-		pCustomParamTableDockWidget->initialize();
+		//bConnectRes = connect(pCustomParamTableDockWidget, SIGNAL(CustomDockWidgetIsDestroying(QDockWidget *)), MainAppInfo::getMainWindow(), SLOT(unregisterDockWidget(QDockWidget *)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 	}
 	if (pCustomExperimentTreeDockWidget == NULL)
 	{
 		pCustomExperimentTreeDockWidget = new customDockWidget(tr(NAME_DOCKWIDGET_TREE_VIEW), this);
 		pCustomExperimentTreeDockWidget->setAccessibleName(NAME_DOCKWIDGET_TREE_VIEW);
+		pCustomExperimentTreeDockWidget->setObjectName(NAME_DOCKWIDGET_TREE_VIEW);
 		pCustomExperimentTreeDockWidget->setAllowedAreas(Qt::AllDockWidgetAreas);
 		if (actionToggle_TableViewDockVisibility == NULL)
 		{
@@ -373,10 +376,15 @@ void ExperimentGraphicEditor::createDockWindows()
 			menuView->addAction(actionToggle_TableViewDockVisibility);
 		}
 		bool bRetVal = false;
-		if (treeView)
-			pCustomExperimentTreeDockWidget->setWidget(treeView);
 		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(QDockWidget *, pCustomExperimentTreeDockWidget), Q_ARG(int, Qt::DockWidgetArea::LeftDockWidgetArea));//Qt::DockWidgetArea::BottomDockWidgetArea));
-		pCustomExperimentTreeDockWidget->initialize();
+		//bConnectRes = connect(pCustomExperimentTreeDockWidget, SIGNAL(CustomDockWidgetIsDestroying(QDockWidget *)), MainAppInfo::getMainWindow(), SLOT(unregisterDockWidget(QDockWidget *)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
+		if (treeView)
+		{
+		//	treeView->setMinimumSize(treeView->width()/4, 100);
+		//	treeView->setMaximumSize(treeView->width() * 2, treeView->height() * 2);
+			pCustomExperimentTreeDockWidget->setWidget(treeView);
+			pCustomExperimentTreeDockWidget->initialize();
+		}
 	}
 	QList<QStringList> lTmpStringListList;
 	lTmpStringListList.append(QStringList()<<"TAGS");
@@ -475,7 +483,8 @@ void ExperimentGraphicEditor::configureActions(bool bCreate)
 
 void ExperimentGraphicEditor::setupExperimentTreeView()
 {
-	treeView = new QTreeView();
+	treeView = new CustomChildDockTreeViewWidget();
+	treeView->setGroupName(PLUGIN_EXMLDOC_EXTENSION);
 	tblWidgetView = new QTableWidget();
 	treeView->setHeaderHidden(true);
 
@@ -1129,8 +1138,11 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 					{
 						bool bConnectResult = connect(expBlockParamView, SIGNAL(destroyed(QWidget*)), this, SLOT(childWidgetDestroyed(QWidget*)));
 						bConnectResult = connect(expBlockParamView, SIGNAL(onFocusTable()), this, SLOT(clearSelection()));
-						if(pCustomParamTableDockWidget)
+						if (pCustomParamTableDockWidget)
+						{
 							pCustomParamTableDockWidget->setWidget(expBlockParamView);
+							pCustomParamTableDockWidget->initialize();
+						}
 						return;							
 					}
 				}
@@ -1645,7 +1657,8 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 		{
 			if (pCustomParamListTabWidget == NULL)
 			{
-				pCustomParamListTabWidget = new QTabWidget(this);
+				pCustomParamListTabWidget = new CustomChildDockTabWidget(this);
+				pCustomParamListTabWidget->setGroupName(PLUGIN_EXMLDOC_EXTENSION);
 			}
 			QString sTabName;
 			if(item->getName().toLower() == EXPERIMENT_TAG)
@@ -1682,6 +1695,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			//pCustomParamListTabWidget->setTabEnabled(nNewTabIndex, false);
 			pCustomParamListTabWidget->setCurrentIndex(nNewTabIndex);
 			pCustomPropertiesDockWidget->setWidget(pCustomParamListTabWidget);
+			pCustomPropertiesDockWidget->initialize();
 		}
 	}
 	if(dynamicGraphicWidget)

@@ -29,8 +29,9 @@
 #include <QHeaderView>
 #include <QInputDialog>
 
-ExperimentBlockParameterView::ExperimentBlockParameterView(QWidget *parent, ExperimentTreeModel *pExperimentTreeModel) : QTableWidget(parent), pExpTreeModel(pExperimentTreeModel)
+ExperimentBlockParameterView::ExperimentBlockParameterView(QWidget *parent, ExperimentTreeModel *pExperimentTreeModel) : CustomChildDockTableWidget(parent), pExpTreeModel(pExperimentTreeModel)
 {
+	CustomChildDockTableWidget::setGroupName(PLUGIN_EXMLDOC_EXTENSION);
 	parsedExpStruct = NULL;
 	pObjectParameterDialog = NULL;
 	leCustomParamEdit = NULL;
@@ -251,9 +252,8 @@ void ExperimentBlockParameterView::showContextMenu(const QPoint& pos)
 		}
 		else if((selectedItemAction == removeBlockAction) || (selectedItemAction == removeBlocksAction))
 		{
-			bool bResult = false;
 			if(pExpTreeModel)
-				bResult = pExpTreeModel->removeExperimentBlocks(lstUsedBlockIDsInSelectionRanges);
+				pExpTreeModel->removeExperimentBlocks(lstUsedBlockIDsInSelectionRanges);
 		}
 		else if(selectedItemAction == toggleViewAction)
 		{
@@ -262,19 +262,17 @@ void ExperimentBlockParameterView::showContextMenu(const QPoint& pos)
 		}
 		else if(selectedItemAction == moveUpLeftBlocksAction)
 		{			
-			bool bResult = false;
 			if(bVerticalViewEnabled)
-				bResult = pExpTreeModel->moveExperimentBlocks(lstUsedBlockIDsInSelectionRanges, hashRowOrColumnIndexBlockId[outerSelectionIndexes.left()-1], -1);
+				pExpTreeModel->moveExperimentBlocks(lstUsedBlockIDsInSelectionRanges, hashRowOrColumnIndexBlockId[outerSelectionIndexes.left()-1], -1);
 			else
-				bResult = pExpTreeModel->moveExperimentBlocks(lstUsedBlockIDsInSelectionRanges, hashRowOrColumnIndexBlockId[outerSelectionIndexes.top()-1], -1);
+				pExpTreeModel->moveExperimentBlocks(lstUsedBlockIDsInSelectionRanges, hashRowOrColumnIndexBlockId[outerSelectionIndexes.top()-1], -1);
 		}
 		else if(selectedItemAction == moveDownRightBlocksAction)
 		{
-			bool bResult = false;
 			if(bVerticalViewEnabled)
-				bResult = pExpTreeModel->moveExperimentBlocks(lstUsedBlockIDsInSelectionRanges, hashRowOrColumnIndexBlockId[outerSelectionIndexes.right()+1], 1);
+				pExpTreeModel->moveExperimentBlocks(lstUsedBlockIDsInSelectionRanges, hashRowOrColumnIndexBlockId[outerSelectionIndexes.right()+1], 1);
 			else
-				bResult = pExpTreeModel->moveExperimentBlocks(lstUsedBlockIDsInSelectionRanges, hashRowOrColumnIndexBlockId[outerSelectionIndexes.bottom()+1], 1);
+				pExpTreeModel->moveExperimentBlocks(lstUsedBlockIDsInSelectionRanges, hashRowOrColumnIndexBlockId[outerSelectionIndexes.bottom()+1], 1);
 		}
 		else if(selectedItemAction == addParametersAction)
 		{
@@ -384,11 +382,6 @@ void ExperimentBlockParameterView::initTableSetup()
 		this->setColumnCount(lColumnHeaders.count());
 		this->setHorizontalHeaderLabels(lColumnHeaders);
 	}
-}
-
-void ExperimentBlockParameterView::resizeView(const int &nWidth, const int &nHeight)
-{
-	this->setFixedSize(nWidth-5,nHeight-5);//Fill available area
 }
 
 bool ExperimentBlockParameterView::parseExperimentStructure(cExperimentStructure *ExpStruct)

@@ -126,7 +126,7 @@ private:
 
 	bool bShowGraphicalTreeView;
 
-	QTreeView *treeView;
+	CustomChildDockTreeViewWidget *treeView;
 	QToolBar *toolBar;
 	QWidget *dynamicGraphicWidget;
 	QGridLayout *gridLayout;
@@ -160,7 +160,7 @@ private:
 	QToolButton *buttonEdit;
 	QToolButton *buttonView;
 
-	QTabWidget *pCustomParamListTabWidget;
+	CustomChildDockTabWidget *pCustomParamListTabWidget;
 	customDockWidget *pCustomPropertiesDockWidget;
 	customDockWidget *pCustomParamTableDockWidget;
 	customDockWidget *pCustomExperimentTreeDockWidget;

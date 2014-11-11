@@ -418,7 +418,7 @@ bool ExperimentManagerPlugin::ExecuteContent(const GlobalApplicationInformation:
 
 int ExperimentManagerPlugin::GetAdditionalFileTypeStyle(QString strExtension) 
 {
-	if((strExtension.toLower() == "exml") || (strExtension.toLower() == "xdef"))
+	if ((strExtension.toLower() == PLUGIN_EXMLDOC_EXTENSION) || (strExtension.toLower() == "xdef"))
 	{
 		return GlobalApplicationInformation::DOCTYPE_STYLE_XML;
 	} 
@@ -431,7 +431,7 @@ int ExperimentManagerPlugin::GetAdditionalFileTypeStyle(QString strExtension)
 
 QString ExperimentManagerPlugin::GetAdditionalFileTypeApiName(QString strExtension) 
 {
-	if(strExtension.toLower() == "exml")
+	if (strExtension.toLower() == PLUGIN_EXMLDOC_EXTENSION)
 	{
 		return "exml.api";
 	} 
@@ -447,7 +447,7 @@ void ExperimentManagerPlugin::InitializeAdditionalFileTypeEditor(QString strCano
 	if(strCanonicalFilePath.isEmpty() == false)
 	{
 		QFileInfo fi(strCanonicalFilePath);
-		if(fi.suffix().toLower() == "exml")
+		if (fi.suffix().toLower() == PLUGIN_EXMLDOC_EXTENSION)
 		{
 			if(mapCanPathtoControlObjStrc.contains(strCanonicalFilePath))
 			{
@@ -464,7 +464,7 @@ void ExperimentManagerPlugin::InitializeAdditionalFileTypeEditor(QString strCano
 
 QWidget *ExperimentManagerPlugin::GetAdditionalFileTypeEditor(QString strExtension, QString strCanonicalFilePath)
 {
-	if(strExtension.toLower() == "exml")
+	if (strExtension.toLower() == PLUGIN_EXMLDOC_EXTENSION)
 	{
 		ExperimentManager *tmpManager;
 		if(strCanonicalFilePath.isEmpty())
@@ -499,7 +499,7 @@ QWidget *ExperimentManagerPlugin::GetAdditionalFileTypeEditor(QString strExtensi
 //bool ExperimentManagerPlugin::RemAdditionalFileTypeEditor(QString strExtension, QString strCanonicalFilePath)
 //{
 //	//return true;
-//	if(strExtension.toLower() == "exml")
+//	if(strExtension.toLower() == PLUGIN_EXMLDOC_EXTENSION)
 //	{
 //		if(strCanonicalFilePath.isEmpty() == false)
 //		{

@@ -20,6 +20,7 @@
 #define EXPERIMENTBLOCKPARAMETERVIEW_H
 
 #include <QTableWidgetItem>
+#include "mainappinfo.h"
 #include "experimentstructures.h"
 #include "experimentparameterdefinition.h"
 
@@ -37,7 +38,7 @@ class ExperimentTreeItem;
 class cExperimentStructure;
 class ObjectParameterDialog;
 
-class ExperimentBlockParameterView : public QTableWidget
+class ExperimentBlockParameterView : public CustomChildDockTableWidget
 {
 	Q_OBJECT
 
@@ -52,9 +53,6 @@ public:
 	bool parseExperimentStructure(cExperimentStructure *ExpStruct);
 	bool parseExperimentBlockParameters(const QList<ExperimentTreeItem*> &tmpExpTreeItemList);
 	bool setExperimentObjects(const QList<ExperimentStructuresNameSpace::strcExperimentObject> &lExperimentObjects);
-
-public slots:
-	void resizeView(const int &nWidth, const int &nHeight);
 
 private slots:
 	void cellItemEditFinished(const QString&sParamName, const QString&sNewValue);

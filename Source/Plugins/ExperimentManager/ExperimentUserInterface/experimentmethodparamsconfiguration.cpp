@@ -73,7 +73,8 @@ bool ExperimentMethodParamsConfigurationDialog::parseExperimentTreeModel(Experim
 	if (initialize() == false)
 		return false;
 	pCurrentExpTree = pExperimentTreeModel;
-	bool bConnectResult = connect(pCurrentExpTree, SIGNAL(modelModified()), this, SLOT(checkReparseModel()), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
+	//bool bConnectResult = 
+	connect(pCurrentExpTree, SIGNAL(modelModified()), this, SLOT(checkReparseModel()), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 	ExperimentTreeItem *tmpParentExpTreeItem = pCurrentExpTree->getExperimentObjectInitFinitTreeItem(nInitFinitId, bIsInit);
 	if (tmpParentExpTreeItem)
 	{

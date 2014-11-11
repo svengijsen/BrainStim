@@ -28,3 +28,5 @@ Build_MSVC
 Source/BrainStim/Qml/plugins/*
 Install/firebird.conf
 Install/firebird.msg
+Install/Xsd/*.xsd
+Install/*.ini
