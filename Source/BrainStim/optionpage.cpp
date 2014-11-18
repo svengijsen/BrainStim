@@ -104,6 +104,7 @@ void OptionPage::applySettings()
 	glob_AppInfo->setRegistryInformation(REGISTRY_DONOTLOADSCRIPTEXTENSION,(bool)(ui.chkDoNotLoadQTBindings->checkState() && Qt::Checked),"bool");
 	glob_AppInfo->setRegistryInformation(REGISTRY_OPENINEXTERNALDEBUGGER,(bool)(ui.chk_OpenDebOnError->checkState() && Qt::Checked),"bool");
 	glob_AppInfo->setRegistryInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE,(bool)(ui.chkAllowMultipleInstances->checkState() && Qt::Checked),"bool");
+	glob_AppInfo->setRegistryInformation(REGISTRY_ENABLECUSTOMUSERLOGINS, (bool)(ui.chkAllowCustomUserLogins->checkState() && Qt::Checked), "bool");
 	glob_AppInfo->setRegistryInformation(REGISTRY_ENABLENETWORKSERVER,(bool)(ui.chkEnableNetworkServer->checkState() && Qt::Checked),"bool");
 	glob_AppInfo->setRegistryInformation(REGISTRY_SERVERHOSTADDRESS,(QString)(ui.edtNetworkServerAddress->text()),"string");
 	glob_AppInfo->setRegistryInformation(REGISTRY_SERVERHOSTPORT,ui.edtNetworkServerPort->text().toInt(),"int");
@@ -139,39 +140,40 @@ void OptionPage::readSettings()
 	QStringList lTemp;
 	int nTemp;
 
-	if(glob_AppInfo->checkRegistryInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY))
+	QVariant tmpVariant;
+	if (glob_AppInfo->getRegistryInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY, tmpVariant))
 	{
-		sTemp = glob_AppInfo->getRegistryInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY).toString();
+		sTemp = tmpVariant.toString();
 		ui.lneUserDocumentsRootDirectory->setText(sTemp);
 	}
-	if(glob_AppInfo->checkRegistryInformation(REGISTRY_DONOTLOADSCRIPTEXTENSION))
+	if (glob_AppInfo->getRegistryInformation(REGISTRY_DONOTLOADSCRIPTEXTENSION, tmpVariant))
 	{
-		bTemp = glob_AppInfo->getRegistryInformation(REGISTRY_DONOTLOADSCRIPTEXTENSION).toBool();
+		bTemp = tmpVariant.toBool();
 		ui.chkDoNotLoadQTBindings->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
 	}
-	if(glob_AppInfo->checkRegistryInformation(REGISTRY_OPENINEXTERNALDEBUGGER))
+	if (glob_AppInfo->getRegistryInformation(REGISTRY_OPENINEXTERNALDEBUGGER, tmpVariant))
 	{
-		bTemp = glob_AppInfo->getRegistryInformation(REGISTRY_OPENINEXTERNALDEBUGGER).toBool();
+		bTemp = tmpVariant.toBool();
 		ui.chk_OpenDebOnError->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
 	}
-	if(glob_AppInfo->checkRegistryInformation(REGISTRY_ENABLENETWORKSERVER))
+	if (glob_AppInfo->getRegistryInformation(REGISTRY_ENABLENETWORKSERVER, tmpVariant))
 	{
-		bTemp = glob_AppInfo->getRegistryInformation(REGISTRY_ENABLENETWORKSERVER).toBool();
+		bTemp = tmpVariant.toBool();
 		ui.chkEnableNetworkServer->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
 	}
-	if(glob_AppInfo->checkRegistryInformation(REGISTRY_SERVERHOSTADDRESS))
+	if (glob_AppInfo->getRegistryInformation(REGISTRY_SERVERHOSTADDRESS, tmpVariant))
 	{
-		sTemp = glob_AppInfo->getRegistryInformation(REGISTRY_SERVERHOSTADDRESS).toString();
+		sTemp = tmpVariant.toString();
 		ui.edtNetworkServerAddress->setText(sTemp);
 	}
-	if(glob_AppInfo->checkRegistryInformation(REGISTRY_SERVERHOSTPORT))
+	if (glob_AppInfo->getRegistryInformation(REGISTRY_SERVERHOSTPORT, tmpVariant))
 	{
-		nTemp = glob_AppInfo->getRegistryInformation(REGISTRY_SERVERHOSTPORT).toInt();
+		nTemp = tmpVariant.toInt();
 		ui.edtNetworkServerPort->setValue(nTemp);
 	}
-	if(glob_AppInfo->checkRegistryInformation(REGISTRY_RENDERTYPE))
+	if (glob_AppInfo->getRegistryInformation(REGISTRY_RENDERTYPE, tmpVariant))
 	{
-		int nValue = glob_AppInfo->getRegistryInformation(REGISTRY_RENDERTYPE).toInt();//(SvgView::RendererType)
+		int nValue = tmpVariant.toInt();//(SvgView::RendererType)
 		switch (nValue)
 		{
 		case 0://SvgView::Native://Native
@@ -182,9 +184,9 @@ void OptionPage::readSettings()
 			}
 		case 1://SvgView::OpenGL://OpenGL
 			{
-				if(glob_AppInfo->checkRegistryInformation(REGISTRY_HQANTIALIAS))
+			if (glob_AppInfo->getRegistryInformation(REGISTRY_HQANTIALIAS, tmpVariant))
 				{
-					bTemp = glob_AppInfo->getRegistryInformation(REGISTRY_HQANTIALIAS).toBool();
+					bTemp = tmpVariant.toBool();
 					ui.chk_HighAntiAFilter->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
 				}
 				else
@@ -202,14 +204,19 @@ void OptionPage::readSettings()
 			}
 		}
 	}
-	if(glob_AppInfo->checkRegistryInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE))
+	if (glob_AppInfo->getRegistryInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE, tmpVariant))
 	{
-		bTemp = glob_AppInfo->getRegistryInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE).toBool();
+		bTemp = tmpVariant.toBool();
 		ui.chkAllowMultipleInstances->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
 	}
-	if(glob_AppInfo->checkRegistryInformation(REGISTRY_SCRIPTING_INCLUDEPATHS))
+	if (glob_AppInfo->getRegistryInformation(REGISTRY_ENABLECUSTOMUSERLOGINS, tmpVariant))
 	{
-		lTemp = glob_AppInfo->getRegistryInformation(REGISTRY_SCRIPTING_INCLUDEPATHS).toStringList();
+		bTemp = tmpVariant.toBool();
+		ui.chkAllowCustomUserLogins->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
+	}
+	if (glob_AppInfo->getRegistryInformation(REGISTRY_SCRIPTING_INCLUDEPATHS, tmpVariant))
+	{
+		lTemp = tmpVariant.toStringList();
 		foreach(QString sTmpString, lTemp)
 		{
 			ui.lwScriptIncludeDirs->addItem(sTmpString);

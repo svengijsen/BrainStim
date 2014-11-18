@@ -26,15 +26,10 @@
 #include <QSharedMemory>
 #include <QDir>
 
-GlobalApplicationInformation::GlobalApplicationInformation(QObject *parent)
+GlobalApplicationInformation::GlobalApplicationInformation(QObject *parent) : webView(NULL), AppRegistrySettings(NULL)
 {
 	Q_UNUSED(parent);
-	webView = NULL;
-	Initialize();
-	composeJavaScriptConfigurationFile();
-	AppRegistrySettings = new QSettings(QSettings::NativeFormat, QSettings::UserScope, getCompanyName(), getTitle());//getCompanyName(),getTitle());//QSettings::IniFormat
-	initAndParseRegistrySettings();
-	copyMainAppInformationStructureToSharedMemory(mainAppInformation);
+	initialize();
 };
 
 GlobalApplicationInformation::~GlobalApplicationInformation()
@@ -53,17 +48,30 @@ GlobalApplicationInformation::~GlobalApplicationInformation()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GlobalApplicationInformation::Initialize()
+void GlobalApplicationInformation::initialize()
 {
-	mainAppInformation.sCompanyName = "";
-	mainAppInformation.sFileVersion = "";
-	mainAppInformation.sInternalName = "";
+	resetInternalStructure(true);
+	composeJavaScriptConfigurationFile();
+	initAndParseRegistrySettings();
+	copyMainAppInformationStructureToSharedMemory(mainAppInformation);
+}
+
+void GlobalApplicationInformation::resetInternalStructure(bool bFullSystemReset)
+{
+	mainAppInformation.sCurrentUserName = "";
+	if (bFullSystemReset)
+	{
+		mainAppInformation.sCompanyName = "";
+		mainAppInformation.sFileVersion = "";
+		mainAppInformation.sInternalName = "";
+	}
 
 	mainAppInformation.bDoNotLoadScriptBindings = false;
 	mainAppInformation.bOpenExtDebug = false;
 	mainAppInformation.rRendererType = 1;//SvgView::OpenGL;
 	mainAppInformation.bHQAntiAlias = false;
 	mainAppInformation.bAllowMultipleInheritance = false;
+	mainAppInformation.bAllowCustomUserLogins = false;
 	mainAppInformation.bEnableNetworkServer = false;
 	mainAppInformation.sHostAddress = "";
 	mainAppInformation.nHostPort = 0;
@@ -71,6 +79,7 @@ void GlobalApplicationInformation::Initialize()
 
 QDataStream &operator<<(QDataStream &out, const GlobalApplicationInformation::MainAppInformationStructure &mainAppInformationStructure)
 {
+	out << mainAppInformationStructure.sCurrentUserName;
 	out << mainAppInformationStructure.sCompanyName;
 	out	<< mainAppInformationStructure.sInternalName;
 	out	<< mainAppInformationStructure.sFileVersion;
@@ -79,6 +88,7 @@ QDataStream &operator<<(QDataStream &out, const GlobalApplicationInformation::Ma
 	out << (int)mainAppInformationStructure.rRendererType;
 	out << mainAppInformationStructure.bHQAntiAlias; 
 	out << mainAppInformationStructure.bAllowMultipleInheritance;
+	out << mainAppInformationStructure.bAllowCustomUserLogins;
 	out << mainAppInformationStructure.bEnableNetworkServer;
 	out << mainAppInformationStructure.sHostAddress;
 	out << mainAppInformationStructure.nHostPort;
@@ -90,6 +100,7 @@ QDataStream &operator>>(QDataStream &in, GlobalApplicationInformation::MainAppIn
 {
 	//in >> title >> artist >> year;
 	int nTemp;
+	in >> mainAppInformationStructure.sCurrentUserName;
 	in >> mainAppInformationStructure.sCompanyName;
 	in >> mainAppInformationStructure.sInternalName;
 	in >> mainAppInformationStructure.sFileVersion;
@@ -99,6 +110,7 @@ QDataStream &operator>>(QDataStream &in, GlobalApplicationInformation::MainAppIn
 	mainAppInformationStructure.rRendererType = nTemp;//(SvgView::RendererType)nTemp;
 	in >> mainAppInformationStructure.bHQAntiAlias; 
 	in >> mainAppInformationStructure.bAllowMultipleInheritance;
+	in >> mainAppInformationStructure.bAllowCustomUserLogins;
 	in >> mainAppInformationStructure.bEnableNetworkServer;
 	in >> mainAppInformationStructure.sHostAddress;
 	in >> mainAppInformationStructure.nHostPort;
@@ -166,6 +178,11 @@ bool GlobalApplicationInformation::shouldLoadScriptBindings()
 	return !(mainAppInformation.bDoNotLoadScriptBindings);
 }
 
+QString GlobalApplicationInformation::currentUserName() const
+{
+	return mainAppInformation.sCurrentUserName;
+}
+
 bool GlobalApplicationInformation::shouldEnableNetworkServer()
 {
 	return mainAppInformation.bEnableNetworkServer;
@@ -184,10 +201,50 @@ quint16 GlobalApplicationInformation::getHostPort()
 
 ////////////////////////////////////////////////////////////////
 
+bool GlobalApplicationInformation::switchRootSettingsGroup(const QString &sNewGroup)
+{
+	QString sCurrentGroupName = AppRegistrySettings->group();
+	if (sCurrentGroupName.isEmpty())
+	{
+		AppRegistrySettings->beginGroup(sNewGroup);
+		return true;
+	}
+	else if (sCurrentGroupName == sNewGroup)
+	{
+		return true;
+	}
+	else if ((sNewGroup == REGISTRY_SETTINGS_SYSTEM) || (sNewGroup == REGISTRY_SETTINGS_USER))
+	{
+		AppRegistrySettings->endGroup();
+		return switchRootSettingsGroup(sNewGroup);
+	}
+	return false;
+}
+
 void GlobalApplicationInformation::initAndParseRegistrySettings()
 {
+	if (AppRegistrySettings == NULL)
+		AppRegistrySettings = new QSettings(QSettings::NativeFormat, QSettings::UserScope, getCompanyName(), getTitle());
 	QString sMainAppInstallRootPath = QDir(QCoreApplication::applicationDirPath()).absolutePath();
+	bool bUserSpecified = (mainAppInformation.sCurrentUserName.isEmpty() == false);
 
+	switchRootSettingsGroup(REGISTRY_SETTINGS_SYSTEM);
+	if (AppRegistrySettings->contains(REGISTRY_ENABLECUSTOMUSERLOGINS))
+	{
+		mainAppInformation.bAllowCustomUserLogins = AppRegistrySettings->value(REGISTRY_ENABLECUSTOMUSERLOGINS).toBool();
+	}
+	else //key doesn't exist, default value here!
+	{
+		mainAppInformation.bAllowCustomUserLogins = false;
+		AppRegistrySettings->setValue(REGISTRY_ENABLECUSTOMUSERLOGINS, mainAppInformation.bAllowCustomUserLogins);
+	}
+	
+	if (bUserSpecified)
+	{
+		switchRootSettingsGroup(REGISTRY_SETTINGS_USER);
+		AppRegistrySettings->beginGroup(mainAppInformation.sCurrentUserName);
+	}
+	
 	if (AppRegistrySettings->contains(REGISTRY_DONOTLOADSCRIPTEXTENSION)) 
 	{
 		mainAppInformation.bDoNotLoadScriptBindings = AppRegistrySettings->value(REGISTRY_DONOTLOADSCRIPTEXTENSION).toBool();
@@ -288,8 +345,13 @@ void GlobalApplicationInformation::initAndParseRegistrySettings()
 
 bool GlobalApplicationInformation::setRegistryInformation(const QString &sName, const QVariant &vValue, const QString &sType)
 {
+	bool bUserSpecified = (mainAppInformation.sCurrentUserName.isEmpty() == false);
+	bool bRetval = false;
+	if (bUserSpecified && (sName == REGISTRY_ENABLECUSTOMUSERLOGINS))
+		switchRootSettingsGroup(REGISTRY_SETTINGS_SYSTEM);
 	if(sType!="")
 	{
+		bRetval = true;
 		if(sType.toLower()=="bool")
 			AppRegistrySettings->setValue(sName, vValue.toBool());
 		else if(sType.toLower()=="int")
@@ -303,22 +365,54 @@ bool GlobalApplicationInformation::setRegistryInformation(const QString &sName, 
 		else if(sType.toLower()=="size")
 			AppRegistrySettings->setValue(sName, vValue.toSize());
 		else
-			return false;
-		return true;
+			bRetval = false;
 	}
-	return false;
+	if (bUserSpecified && (sName == REGISTRY_ENABLECUSTOMUSERLOGINS))
+	{
+		switchRootSettingsGroup(REGISTRY_SETTINGS_USER);
+		AppRegistrySettings->beginGroup(mainAppInformation.sCurrentUserName);
+	}
+	return bRetval;
 }
 
-bool GlobalApplicationInformation::checkRegistryInformation(const QString &sName)
+bool GlobalApplicationInformation::getRegisteredUserCredentials(QStringList &lUserNames, QList<QByteArray> &baPasswordHashes)
 {
-	return AppRegistrySettings->contains(sName);
+	switchRootSettingsGroup(REGISTRY_SETTINGS_USER);
+	lUserNames = AppRegistrySettings->childGroups();
+	foreach(QString sCurrentUserName, lUserNames)
+	{
+		AppRegistrySettings->beginGroup(sCurrentUserName);
+		if (AppRegistrySettings->contains(REGISTRY_USER_PASSWORDHASH))
+		{
+			baPasswordHashes.append(AppRegistrySettings->value(REGISTRY_USER_PASSWORDHASH).toByteArray());
+		}
+		else
+		{
+			baPasswordHashes.append(QByteArray(""));
+		}
+		AppRegistrySettings->endGroup();
+	}
+	switchRootSettingsGroup(REGISTRY_SETTINGS_SYSTEM);
+	return (lUserNames.isEmpty() == false);
 }
 
-QVariant GlobalApplicationInformation::getRegistryInformation(const QString &sName)
+bool GlobalApplicationInformation::getRegistryInformation(const QString &sName, QVariant &vCurrentValue)
 {
-	if(AppRegistrySettings->contains(sName) == false)
-		return NULL;
-	return AppRegistrySettings->value(sName);	
+	bool bUserSpecified = (mainAppInformation.sCurrentUserName.isEmpty() == false);
+	bool bRetval = false;
+	if (sName == REGISTRY_ENABLECUSTOMUSERLOGINS)
+		switchRootSettingsGroup(REGISTRY_SETTINGS_SYSTEM);
+	bRetval = AppRegistrySettings->contains(sName);
+	if (bRetval)
+		vCurrentValue = AppRegistrySettings->value(sName);
+	else
+		vCurrentValue = NULL;
+	if (bUserSpecified && (sName == REGISTRY_ENABLECUSTOMUSERLOGINS))
+	{
+		switchRootSettingsGroup(REGISTRY_SETTINGS_USER);
+		AppRegistrySettings->beginGroup(mainAppInformation.sCurrentUserName);
+	}
+	return bRetval;
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
@@ -374,6 +468,23 @@ void GlobalApplicationInformation::showJavaScriptConfigurationFile()
 	{
 		qobject_cast<QWebView *>(webView)->show();
 	}
+}
+
+bool GlobalApplicationInformation::setCurrentUserCredentials(const QString &sUserName, const QByteArray &baPasswordHash)
+{
+	if (mainAppInformation.sCurrentUserName != sUserName)
+	{
+		resetInternalStructure(false);
+		mainAppInformation.sCurrentUserName = sUserName;
+		initAndParseRegistrySettings();
+		if (sUserName.isEmpty()==false)
+		{
+			AppRegistrySettings->setValue(REGISTRY_USER_PASSWORDHASH, baPasswordHash);
+		}
+		copyMainAppInformationStructureToSharedMemory(mainAppInformation);
+		return true;
+	}
+	return false;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////

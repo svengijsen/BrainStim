@@ -224,7 +224,7 @@ public slots:
 	/*! \brief Re-opens the document.
 	 *
 	 * This function first closes and re-opens the document.
-	 * @param strCanonicalFilePath a String value containing the canonical file path of the document.
+	 * @param strCanonicalFilePath a String value containing the canonical file path of the document, if empty then the current active document file path is used.
 	 * @param bNativeFileViewer a Boolean value determining whether the file should be opened again by the default set file-handler (defined by a plug-in) or by BrainStim directly.
 	 */
 	void reOpenCurrentFile(const QString &strCanonicalFilePath, const bool &bNativeFileViewer = false);
@@ -273,12 +273,20 @@ public slots:
 	* It is the same operation as clicking the mouse on the title bar of a top-level window.
 	*/
 	void activateMainWindow();
+	/*! \brief Executes the provided script file content in the Internal Script Engine and returns the result of that operation.
+	*
+	* This function executes the provided script file content in the Internal Script Engine and returns the result of that operation.
+	* See MainWindow::executeScriptFile(), MainWindow::saveContextState(), MainWindow::setContextState(), MainWindow.resetContextState() and MainWindow.deleteContextState().
+	* @param sFilePath a string value holding the script absolute path to the script file that should be executed.
+	* @return a QScriptValue value holding the return value of the script execution.
+	*/
+	QScriptValue executeScriptFile(const QString &sFilePath);
 	/*! \brief Executes the provided script content in the Internal Script Engine and returns the result of that operation.
 	*
 	* This function executes the provided script content in the Internal Script Engine and returns the result of that operation.
 	* This function acts the same as like executing a script file (*.qs) from the BrainStim application, but now the content of the script is directly provided by a string of text.
 	* Before the internal script engine executes the custom script it firsts creates a so called script context state from within the script is then executed. 
-	* This context state holds the stack and can be saved/recovered for later usage, see also MainWindow::saveContextState(), MainWindow::setContextState(), MainWindow.resetContextState(), MainWindow.deleteContextState().
+	* This context state holds the stack and can be saved/recovered for later usage, see also MainWindow::saveContextState(), MainWindow::setContextState(), MainWindow.resetContextState() and MainWindow.deleteContextState().
 	* @param sContent a string value holding the script content to execute.
 	* @return a QScriptValue value holding the return value of the script execution.
 	*/
@@ -391,6 +399,7 @@ public slots:
 
 private slots:
 	void debugTestSlot();
+	bool executeCustomActionMenu();
 	void onSubWindowClosed(CustomMDISubWindow*);
 	void onSubWindowDestroyed(CustomMDISubWindow*);
 	void externalNetworkDataRecieved(int nClientIndex, QString sAvailableData);
@@ -448,12 +457,12 @@ private slots:
 
 private:
 	//void registerFileTypeByDefinition(const QString &DocTypeName, const QString &DocTypeDesc, const QString &DocTypeExtension);
-	typedef struct DockLocationStructure
-	{
-		QRect rGeometry;
-		Qt::DockWidgetArea dockArea;
-	};
-	QMap<QDockWidget*, DockLocationStructure> mapRegisteredDockWidgetToLocationStruct;
+	//typedef struct DockLocationStructure
+	//{
+	//	QRect rGeometry;
+	//	Qt::DockWidgetArea dockArea;
+	//};
+	//QMap<QDockWidget*, DockLocationStructure> mapRegisteredDockWidgetToLocationStruct;
 	QMap<QString, QRect> mapLoadedDockWindowRects;
 	QMultiMap<QMdiSubWindow*, QDockWidget*> mapMDISubWindowToDockWidget;
 	QPair<QString,quint64> pCurrentSetContextState;
@@ -604,6 +613,7 @@ private:
 	QAction* integratePlugin(QObject *plugin, PluginCollection *collection);
 	void setupToolBars();
 	void setRenderer();
+	void implementDefaultCustomActionMenus();
 	void newDocument(const GlobalApplicationInformation::DocType &docType, int &DocIndex, const QString &strExtension = "", const QString &strCanonicalFilePath = "", const bool &bNativeMainAppView = false, const bool &bTryToInitialize = false);
 	//void setupSyntaxHighlighting(MdiChild *childWindow,MDIDocumentType tempFileType);
 	void parseRemainingGlobalSettings();
@@ -632,6 +642,7 @@ public slots:
 	//void returnToOldDockMaxMinSizes(QDockWidget* dock = NULL);//
 
 public:
+	Q_INVOKABLE QAction *registerMainMenuAction(const QStringList &lmenuItemSpecifier, const bool &bSkipSubWindowRegistration = false);
 	Q_INVOKABLE bool getSavedDockWidgetSizeHint(const QString &sDockWidgetGroupName, const QString &sDockWidgetAccessName, QRect &rSizeHint);
 	void loadSavedDockWidgetConfiguration(const QString &sSettingsFileName, const QString &sGroupName, QDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea);
 	void loadSavedWindowLayout(const QString &sSettingsFileName, const QString &sGroupName);

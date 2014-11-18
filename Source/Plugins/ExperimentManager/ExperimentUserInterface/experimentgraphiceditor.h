@@ -106,7 +106,7 @@ private slots:
     void removeNode();
     void addDefinition();
 	void toggleBlocksView();
-	void switchToDefaultView();
+	//void switchToDefaultView();
     void saveNewData();
 	void saveNewData(const QString &sName, const QString &sValue);
 	void setViewFilter(const TreeFilterSettings &newViewSettings);
@@ -114,6 +114,7 @@ private slots:
 	void treeModelChanged();
 	void childWidgetDestroyed(QWidget* pWidget);
 	void forceEmitResize();
+	void customParamListTabWidgetIndexChanged(int nIndex);
 	//void propertySelectionWidgetFocusChange();
 
 private:
@@ -126,6 +127,9 @@ private:
 
 	bool bShowGraphicalTreeView;
 
+	int nAdditionalMenuHeight;
+	int nLastCustomParamListTabWidgetIndex;
+	bool bCustomParamListTabWidgetConfigured;
 	CustomChildDockTreeViewWidget *treeView;
 	QToolBar *toolBar;
 	QWidget *dynamicGraphicWidget;
@@ -150,7 +154,7 @@ private:
 	QAction *action_Remove_Node;
 	QAction *actionAdd_Attribute;
 	QAction *actionToggleBlocksView;
-	QAction *actionSwitchToDefaultView;
+	//QAction *actionSwitchToDefaultView;
 	QAction *actionToggle_ListViewDockVisibility;
 	QAction *actionToggle_TableViewDockVisibility;
 	QMenu *menuFile;

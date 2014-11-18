@@ -77,13 +77,13 @@ bool ExperimentStructureScene::event(QEvent *event)
 void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
 {
 	QMenu mContexMenu;
-	QMenu* mViewMenu = mContexMenu.addMenu("View");
+	//QMenu* mViewMenu = mContexMenu.addMenu("View");
 	QMenu* mBlocksMenu = mContexMenu.addMenu("Blocks");
 	QMenu* mLoopsMenu = mContexMenu.addMenu("Loops");
 	QMenu* mObjectsMenu = mContexMenu.addMenu("Objects");
 	QMenu* mConnectionsMenu = mContexMenu.addMenu("Connections");
 	QAction *selectedItemAction = NULL;
-	QAction *toggleViewAction;
+	//QAction *toggleViewAction;
 	QAction* configureLoopsAction;
 	QAction* configureObjectsAction;
 	QAction *addBlockAction;
@@ -184,7 +184,7 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 		configureConnectionsAction = mConnectionsMenu->addAction("Configure Connection(s)");
 	}
 
-	toggleViewAction = mViewMenu->addAction("Toggle Orientation");
+	//toggleViewAction = mViewMenu->addAction("Toggle Orientation");
 
 	selectedItemAction = mContexMenu.exec(contextMenuEvent->screenPos());//contextMenuEvent->globalPos()// contextMenuEvent->scenePos() is available
 	if (selectedItemAction)
@@ -215,17 +215,18 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 		}
 		else if(selectedItemAction == removeBlocksAction)//(selectedItemAction == removeBlockAction) || 
 		{
-			bool bResult = false;
 			if (pExperimentTreeModel)
 			{
-				bResult = pExperimentTreeModel->removeExperimentBlocks(lSelectedBlockIds);
+				pExperimentTreeModel->removeExperimentBlocks(lSelectedBlockIds);
+				if (parentExpStructVis)
+					parentExpStructVis->clearSelection();
 			}
 		}
-		else if(selectedItemAction == toggleViewAction)
-		{
+		//else if(selectedItemAction == toggleViewAction)
+		//{
 			//bVerticalViewEnabled = !bVerticalViewEnabled;
 			//reparseModel();
-		}
+		//}
 		else if(selectedItemAction == configureLoopsAction)
 		{
 			pBlockLoopsDialog = new BlockLoopsDialog();

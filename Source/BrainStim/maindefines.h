@@ -68,10 +68,14 @@
 #define MAIN_PROGRAM_DEVICE_INTERFACE	"BrainStim.Plugins.DeviceInterface/1.0"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 #define MAIN_PROGRAM_EXTENSION_INTERFACE	"BrainStim.Plugins.ExtensionInterface/1.0"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 
+#define REGISTRY_SETTINGS_SYSTEM						"SystemSettings"
+#define REGISTRY_SETTINGS_USER							"UserSettings"
+#define REGISTRY_USER_PASSWORDHASH						"LogonUserPassHash"
 #define REGISTRY_DONOTLOADSCRIPTEXTENSION				"General/DoNotLoadScriptExtension"
 #define REGISTRY_ALLOWMULTIPLEINHERITANCE				"General/AllowMultipleInheritance"
 #define REGISTRY_RECENTFILELIST							"General/RecentFileList"
 #define REGISTRY_USERDOCUMENTSROOTDIRECTORY				"General/UserDocumentsRootDirectory"
+#define REGISTRY_ENABLECUSTOMUSERLOGINS					"General/EnableCustomUserLogins"
 #define REGISTRY_OPENINEXTERNALDEBUGGER					"Debugging/OpenExtDebug"
 #define REGISTRY_RENDERTYPE								"Rendering/RenderType"
 #define REGISTRY_HQANTIALIAS							"Rendering/HQAntiAlias"
@@ -87,11 +91,17 @@
 #define MAIN_PROGRAM_SCRIPTINCLUDES_NAME				"getScriptIncludePaths"
 #define MAIN_PROGRAM_CLOSEACTIVEDOCUMENT_NAME			"closeActiveDocument"
 #define MAIN_PROGRAM_GETSAVEDDOCKWIDGETSIZEHINT_NAME	"getSavedDockWidgetSizeHint"
+#define MAIN_PROGRAM_REGISTERMAINMENUACTION_NAME		"registerMainMenuAction"
 #define METHOD_TYPE_SIGNAL_TAG							"signal"
 #define METHOD_TYPE_SLOT_TAG							"slot"
 #define METHOD_TYPE_MEMBER_TAG							"member"
 #define METHOD_TYPE_PROPERTY_TAG						"property"
 #define METHOD_TYPE_ENUMERATOR_TAG						"enumerator"
+
+#define MENUACTION_SECTION_SEPERATOR					"|"
+#define MENUACTION_SUBMENU_SEPERATOR					"/"
+#define MENUACTION_TYPE_SCRIPTPATH						"scriptpath"
+#define MENUACTION_TYPE_MENUITEM						"menuitem"
 
 #define TYPE_BOOL_TRUE									"true"
 #define TYPE_BOOL_FALSE									"false"

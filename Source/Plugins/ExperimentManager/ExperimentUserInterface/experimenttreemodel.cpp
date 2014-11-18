@@ -48,6 +48,7 @@ ExperimentTreeModel::~ExperimentTreeModel()
 
 ExperimentTreeModel::ExperimentTreeModel(const ExperimentTreeModel& other)
 {
+	Q_UNUSED(other);
 	//TODO fill in copy constructor, should be declared for the Q_DECLARE_METATYPE macro
 }
 
@@ -1484,77 +1485,6 @@ bool ExperimentTreeModel::addUpdateExperimentBlockParameter(const ExperimentTree
 		emit modelModified();
 	return bResult;
 }
-
-
-
-//	if(nAmount < 1)
-//		return NULL;
-//
-//	QStringList sFilterList;
-//	int nTempBlockID;
-//	int nLatestFoundBlockID = -1;
-//	int nHighestFoundBlockNumber = -1;
-//	int nFoundBlockNumber = -1;
-//	QList<ExperimentTreeItem*> lstActions;
-//	QList<ExperimentTreeItem*> lstBlockTrials;
-//	QList<ExperimentTreeItem*> lstBlocks;
-//
-//	sFilterList << EXPERIMENTTREEMODEL_FILTER_TAGS;
-//	lstActions = getFilteredItemList(ACTIONS_TAG, sFilterList);
-//	foreach (ExperimentTreeItem* tmpItem1 ,lstActions)
-//	{
-//		lstBlockTrials = getFilteredItemList(BLOCKTRIALS_TAG, sFilterList, tmpItem1);
-//		foreach (ExperimentTreeItem* tmpItem2 ,lstBlockTrials)
-//		{
-//			lstBlocks = getFilteredItemList(BLOCK_TAG, sFilterList, tmpItem2);
-//			foreach (ExperimentTreeItem* tmpItem3 ,lstBlocks)
-//			{
-//				if(tmpItem3->getDefinitions().contains(ID_TAG))
-//				{
-//					nTempBlockID = tmpItem3->getDefinition(ID_TAG).value.toInt();
-//					if(nTempBlockID >= 0)
-//					{
-//						if (tmpItem3->hasChildren())
-//						{
-//							for (int i=0;i<tmpItem3->rowCount(); i++)
-//							{
-//								if(tmpItem3->child(i)->getName().toLower() == BLOCKNUMBER_TAG)
-//								{
-//									nFoundBlockNumber = tmpItem3->child(i)->getValue().toInt();
-//									if(nFoundBlockNumber > nHighestFoundBlockNumber)//Highest Block Number?
-//									{
-//										nHighestFoundBlockNumber = nFoundBlockNumber;
-//										nLatestFoundBlockID = nTempBlockID;
-//									}
-//									break;
-//								}
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//	}
-//
-//	if(lstBlockTrials.count() != 1)
-//		return NULL;
-//	ExperimentTreeItem* tmpItemBlockTrials = lstBlockTrials.at(0);
-//	ExperimentTreeItem* tmpNewBlockItem = NULL;
-//
-//	for (int nNewBlockCounter=0;nNewBlockCounter<nAmount;nNewBlockCounter++)
-//	{
-//		ExperimentTreeItem* tmpNewBlockItem = new ExperimentTreeItem(BLOCK_TAG);
-//		tmpNewBlockItem->addDefinition(ID_TAG,QString::number(nLatestFoundBlockID+1+nNewBlockCounter),TreeItemType_Attribute);
-//		tmpNewBlockItem->appendRow(new ExperimentTreeItem(NAME_TAG,"_noname_"));
-//		tmpNewBlockItem->appendRow(new ExperimentTreeItem(BLOCKNUMBER_TAG,QString::number(nHighestFoundBlockNumber+1+nNewBlockCounter)));
-//		tmpNewBlockItem->appendRow(new ExperimentTreeItem(TRIALAMOUNT_TAG,"1"));
-//		tmpNewBlockItem->appendRow(new ExperimentTreeItem(INTERNALTRIGGERAMOUNT_TAG,"1"));
-//		tmpNewBlockItem->appendRow(new ExperimentTreeItem(EXTERNALTRIGGERAMOUNT_TAG,"1"));
-//		tmpItemBlockTrials->insertRow(tmpItemBlockTrials->rowCount(),tmpNewBlockItem);
-//	}
-//	emit modelModified();
-//	return tmpNewBlockItem;
-//}
 
 ExperimentTreeItem* ExperimentTreeModel::getExperimentObjectConnectionTreeItem(const int &nConnectionID)
 {

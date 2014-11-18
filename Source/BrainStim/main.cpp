@@ -31,6 +31,7 @@
 #include "mainwindow.h"
 #include "mainappinfo.h"
 #include "mainappexchange.h"
+#include "logindialog.h"
 
 using namespace std;
 
@@ -95,13 +96,40 @@ int main(int argc, char **argv)
 	bool bProceed = true;
 	MainAppExchange appExchange(argc, argv, MAIN_PROGRAM_SHARED_MEM_KEY);
 	GlobalApplicationInformation *globAppInformation = appExchange.getGlobalAppInformationObjectPointer();
+	QVariant tmpVariant;
+	if (globAppInformation->getRegistryInformation(REGISTRY_ENABLECUSTOMUSERLOGINS, tmpVariant) == true)
+	{
+		if(tmpVariant.toBool() == true)
+		{
+			QStringList lRegisteredUsers;
+			QList<QByteArray> lRegisteredPasswordHashes;
+			globAppInformation->getRegisteredUserCredentials(lRegisteredUsers, lRegisteredPasswordHashes);
+			LoginDialog* loginDialog = new LoginDialog(NULL);
+			lRegisteredUsers.sort(Qt::CaseInsensitive);
+			QList <LoginDialog::strcUserCredential> lUserCredentials;
+			for (int i = 0; i < lRegisteredUsers.count(); i++)
+			{
+				LoginDialog::strcUserCredential tmpUserCredential;
+				tmpUserCredential.sUserName = lRegisteredUsers.at(i);
+				tmpUserCredential.baPasswordHash = lRegisteredPasswordHashes.at(i);
+				lUserCredentials.append(tmpUserCredential);
+			}
+			loginDialog->insertUsers(lUserCredentials);
+			loginDialog->exec();
+			QString sLogonName = "";
+			QByteArray baLogonHashedPass;
+			loginDialog->getCurrentUserCredentials(sLogonName, baLogonHashedPass);
+			bool bResult = globAppInformation->setCurrentUserCredentials(sLogonName, baLogonHashedPass);
+		}
+	}
 	if (appExchange.isRunning())
 	{
 		appExchange.sendMessage("Log(\"New BrainStim Instance Initializing...\");");
 		//if (appExchange.getSharedDataSegment("AllowMultipleInstance") == "false")
-		if(globAppInformation->checkRegistryInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE) == false)
+		QVariant tmpVariant;
+		if (globAppInformation->getRegistryInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE, tmpVariant) == false)
 			bProceed = false;
-		if(globAppInformation->getRegistryInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE) == false)
+		if (tmpVariant == false)
 		{
 			QStringList sFilesToOpen;
 			int i;

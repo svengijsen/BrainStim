@@ -47,6 +47,7 @@ public:
 
 	typedef struct strMainAppInformation 
 	{
+		QString sCurrentUserName;
 		QString sCompanyName;
 		QString sInternalName;
 		QString sFileVersion;
@@ -55,6 +56,7 @@ public:
 		int rRendererType;//SvgView::RendererType
 		bool bHQAntiAlias;
 		bool bAllowMultipleInheritance;
+		bool bAllowCustomUserLogins;
 		bool bEnableNetworkServer;
 		QString sHostAddress;
 		QStringList lScriptIncludeDirectories;
@@ -65,7 +67,9 @@ public:
 	MainAppInformationStructure getMainAppInformationStructure() {return mainAppInformation;};
 	static MainAppInformationStructure getStaticMainAppInformationStructureFromSharedMemory();
 	static bool copyMainAppInformationStructureToSharedMemory(const MainAppInformationStructure &mainAppInformationStructure);
-
+	
+	bool getRegisteredUserCredentials(QStringList &lUserNames, QList<QByteArray> &baPasswordHashes);
+	bool setCurrentUserCredentials(const QString &sUserName, const QByteArray &baPasswordHash);
 	void setCompanyName(const QString &sName);
 	QString getCompanyName();
 	void setFileVersionString(const QString &sVersion);
@@ -74,6 +78,7 @@ public:
 	QString getInternalName(); 
 	QString getTitle();
 	bool shouldLoadScriptBindings();
+	QString currentUserName() const;
 	bool addAppScriptIncludePath(const QString &sPath);
 	QStringList getAppScriptIncludePaths()	{return mainAppInformation.lScriptIncludeDirectories;};
 	bool shouldEnableNetworkServer();
@@ -82,21 +87,21 @@ public:
 
 	void initAndParseRegistrySettings();
 
-	bool checkRegistryInformation(const QString &sName);
-	QVariant getRegistryInformation(const QString &sName);
+	bool getRegistryInformation(const QString &sName, QVariant &vCurrentValue);
 	bool setRegistryInformation(const QString &sName, const QVariant &vValue, const QString &sType);
 
 	QVariant invokeJavaScriptConfigurationFile(const QString &sCode);
 	QString getJavaScriptConfigurationFileContents();
 	void showJavaScriptConfigurationFile();
-	
 
 public slots:
 	void parseJavaScriptConfigurationFile();
 
 private:
-	void Initialize();
+	void initialize();
+	void resetInternalStructure(bool bFullSystemReset = false);
 	void composeJavaScriptConfigurationFile();
+	bool switchRootSettingsGroup(const QString &sNewGroup);
 	//bool fetchMainAppInformationStructure();
 
 	MainAppInformationStructure mainAppInformation;

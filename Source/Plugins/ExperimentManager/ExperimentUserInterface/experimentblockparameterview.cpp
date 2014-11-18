@@ -611,25 +611,22 @@ bool ExperimentBlockParameterView::parseExperimentBlockParameters(const QList<Ex
 bool ExperimentBlockParameterView::setExperimentObjects(const QList<ExperimentStructuresNameSpace::strcExperimentObject> &lExperimentObjects) 
 {
 	hashObjectIdExperimentObjectInfo.clear();
-	if(lExperimentObjects.isEmpty() == false)
+	ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
+	for (int i = 0; i < lExperimentObjects.count(); i++)
 	{
-		ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
-		for(int i=0;i<lExperimentObjects.count();i++)
-		{
-			strcExperimentObjectInfo tmpObjectInfo;
-			tmpObjectInfo.ObjectGlobalInfo = lExperimentObjects[i];
-			tmpObjectInfo.pObjectParamDefContainer = expParamWidgets->getExperimentParameterDefinition(lExperimentObjects[i].sClass);
-			tmpObjectInfo.sObjectName = lExperimentObjects[i].sName;
-			hashObjectIdExperimentObjectInfo[lExperimentObjects[i].nID] = tmpObjectInfo;
-		}
 		strcExperimentObjectInfo tmpObjectInfo;
-		tmpObjectInfo.ObjectGlobalInfo.nID = EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID;
-		tmpObjectInfo.ObjectGlobalInfo.sClass = BLOCK_TAG;
-		tmpObjectInfo.ObjectGlobalInfo.sName = "<undefined>";
-		tmpObjectInfo.pObjectParamDefContainer = expParamWidgets->getExperimentParameterDefinition(tmpObjectInfo.ObjectGlobalInfo.sClass);
-		tmpObjectInfo.sObjectName = BLOCKPARAMVIEW_BLOCKPARAMS_PREHEADERSTRING;
-		hashObjectIdExperimentObjectInfo[tmpObjectInfo.ObjectGlobalInfo.nID] = tmpObjectInfo;
+		tmpObjectInfo.ObjectGlobalInfo = lExperimentObjects[i];
+		tmpObjectInfo.pObjectParamDefContainer = expParamWidgets->getExperimentParameterDefinition(lExperimentObjects[i].sClass);
+		tmpObjectInfo.sObjectName = lExperimentObjects[i].sName;
+		hashObjectIdExperimentObjectInfo[lExperimentObjects[i].nID] = tmpObjectInfo;
 	}
+	strcExperimentObjectInfo tmpObjectInfo;
+	tmpObjectInfo.ObjectGlobalInfo.nID = EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID;
+	tmpObjectInfo.ObjectGlobalInfo.sClass = BLOCK_TAG;
+	tmpObjectInfo.ObjectGlobalInfo.sName = "<undefined>";
+	tmpObjectInfo.pObjectParamDefContainer = expParamWidgets->getExperimentParameterDefinition(tmpObjectInfo.ObjectGlobalInfo.sClass);
+	tmpObjectInfo.sObjectName = BLOCKPARAMVIEW_BLOCKPARAMS_PREHEADERSTRING;
+	hashObjectIdExperimentObjectInfo[tmpObjectInfo.ObjectGlobalInfo.nID] = tmpObjectInfo;
 	return true;
 }
 
@@ -637,51 +634,52 @@ bool ExperimentBlockParameterView::appendExperimentBlockParameterChanges()
 {
 	hashObjectParameterRowOrColumnIndex.clear();
 	hashRowOrColumnIndexObjectIDParamName.clear();
+
+	ExperimentParameterDefinitionContainer *pTempObjectParamDefContainer;
+	//////////////DEFAULT BLOCK SECTION START//////////////////////
+	strcRowOrColumnInfo tmpColumnInfo;
+	QString sObjectParamIdentifier;
+	int nParamID;
+	pTempObjectParamDefContainer = hashObjectIdExperimentObjectInfo[EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID].pObjectParamDefContainer;
+	for (int i = 0; i < BLOCKPARAMVIEW_DEFAULTBLOCKHEADER_COUNT; i++)
+	{
+		if (i == BLOCKPARAMVIEW_BLOCKNAME_ROWORCOLUMNINDEX)
+			sObjectParamIdentifier = tr("%1%2%3%4%5%6%7").arg((int)PEM_DEFINED).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg("00").arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(NAME_TAG);
+		else if (i == BLOCKPARAMVIEW_BLOCKTRIALS_ROWORCOLUMNINDEX)
+			sObjectParamIdentifier = tr("%1%2%3%4%5%6%7").arg((int)PEM_DEFINED).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg("01").arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(TRIALAMOUNT_TAG);
+		else if (i == BLOCKPARAMVIEW_BLOCKINTTRGS_ROWORCOLUMNINDEX)
+			sObjectParamIdentifier = tr("%1%2%3%4%5%6%7").arg((int)PEM_DEFINED).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg("02").arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(INTERNALTRIGGERAMOUNT_TAG);
+		else if (i == BLOCKPARAMVIEW_BLOCKEXTTRGS_ROWORCOLUMNINDEX)
+			sObjectParamIdentifier = tr("%1%2%3%4%5%6%7").arg((int)PEM_DEFINED).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg("03").arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(EXTERNALTRIGGERAMOUNT_TAG);
+
+		if (bVerticalViewEnabled)
+			tmpColumnInfo.sHeader = lRowHeaders.at(i);
+		else
+			tmpColumnInfo.sHeader = lColumnHeaders.at(i);
+		tmpColumnInfo.nRowOrColumnIndex = i;
+		tmpColumnInfo.nObjectID = EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID;
+		if (pTempObjectParamDefContainer)
+		{
+			nParamID = pTempObjectParamDefContainer->getFirstParameterID(NAME_TAG);
+			if (nParamID >= 0)
+				tmpColumnInfo.strcParamDef = pTempObjectParamDefContainer->getParameterDefinition(nParamID);
+		}
+		hashObjectParameterRowOrColumnIndex[sObjectParamIdentifier] = tmpColumnInfo;
+		hashObjectParameterRowOrColumnIndex[sObjectParamIdentifier].eParamEditType = PEM_DEFINED;
+		hashRowOrColumnIndexObjectIDParamName[tmpColumnInfo.nRowOrColumnIndex] = sObjectParamIdentifier;
+	}
+	//////////////DEFAULT BLOCK SECTION STOP////////////////////////
+
 	if(mapUniqueParamIDExpParamBlockChanges.count() > 0)
 	{		
-		int nParamCounter=0;
+		int nParamCounter = 0;
 		int nObjectID;
 		QString sParamName;
 		QString sObjectIDGroupDefParamName;
 		QStringList lObjectIDGroupDefParamName;
 		QTableWidgetItem *tmpItem = NULL;
 		int nRowOrColumnIndex;
-		ExperimentParameterDefinitionContainer *pTempObjectParamDefContainer;
 		ParameterEditingType cParamEditType;
-
-		//////////////DEFAULT BLOCK SECTION START//////////////////////
-		strcRowOrColumnInfo tmpColumnInfo;
-		QString sObjectParamIdentifier;
-		int nParamID;
-		pTempObjectParamDefContainer = hashObjectIdExperimentObjectInfo[EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID].pObjectParamDefContainer;
-		for (int i=0; i<BLOCKPARAMVIEW_DEFAULTBLOCKHEADER_COUNT; i++)
-		{
-			if(i==BLOCKPARAMVIEW_BLOCKNAME_ROWORCOLUMNINDEX)
-				sObjectParamIdentifier = tr("%1%2%3%4%5%6%7").arg((int)PEM_DEFINED).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg("00").arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(NAME_TAG);
-			else if(i==BLOCKPARAMVIEW_BLOCKTRIALS_ROWORCOLUMNINDEX)
-				sObjectParamIdentifier = tr("%1%2%3%4%5%6%7").arg((int)PEM_DEFINED).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg("01").arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(TRIALAMOUNT_TAG);
-			else if(i==BLOCKPARAMVIEW_BLOCKINTTRGS_ROWORCOLUMNINDEX)
-				sObjectParamIdentifier = tr("%1%2%3%4%5%6%7").arg((int)PEM_DEFINED).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg("02").arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(INTERNALTRIGGERAMOUNT_TAG);
-			else if(i==BLOCKPARAMVIEW_BLOCKEXTTRGS_ROWORCOLUMNINDEX)
-				sObjectParamIdentifier = tr("%1%2%3%4%5%6%7").arg((int)PEM_DEFINED).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID).arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg("03").arg(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER).arg(EXTERNALTRIGGERAMOUNT_TAG);
-			
-			if(bVerticalViewEnabled)
-				tmpColumnInfo.sHeader = lRowHeaders.at(i);
-			else
-				tmpColumnInfo.sHeader = lColumnHeaders.at(i);
-			tmpColumnInfo.nRowOrColumnIndex = i;
-			tmpColumnInfo.nObjectID = EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID;
-			if(pTempObjectParamDefContainer)
-			{
-				nParamID = pTempObjectParamDefContainer->getFirstParameterID(NAME_TAG);
-				if(nParamID >=0)
-					tmpColumnInfo.strcParamDef = pTempObjectParamDefContainer->getParameterDefinition(nParamID);
-			}
-			hashObjectParameterRowOrColumnIndex[sObjectParamIdentifier] = tmpColumnInfo;
-			hashObjectParameterRowOrColumnIndex[sObjectParamIdentifier].eParamEditType = PEM_DEFINED;
-			hashRowOrColumnIndexObjectIDParamName[tmpColumnInfo.nRowOrColumnIndex] = sObjectParamIdentifier;
-		}
-		//////////////DEFAULT BLOCK SECTION STOP////////////////////////
 	
 		foreach(QList<strcParameterBlockChanges> tmpParamBlockChangesList,mapUniqueParamIDExpParamBlockChanges)//For each unique Parameter
 		{
@@ -879,6 +877,7 @@ void ExperimentBlockParameterView::currentChanged(const QModelIndex &current, co
 
 void ExperimentBlockParameterView::focusInEvent(QFocusEvent* event)
 {
+	Q_UNUSED(event);
 	emit onFocusTable();
 }
 

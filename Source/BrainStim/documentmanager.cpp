@@ -22,6 +22,7 @@
 #include "BrainStim.h"
 #include <QColor>
 #include <QFileInfo>
+#include <QMenuBar>
 
 DocumentManager::DocumentManager(QObject *parent) : QObject(parent)
 {
@@ -125,6 +126,138 @@ QString DocumentManager::getFileName(int DocIndex, bool bFileNameOnly)
 		return lChildDocuments.at(DocIndex).sFileName;
 	}
 	return "";	 
+}
+
+bool DocumentManager::addDockWidgetRegistration(QMdiSubWindow *subWindow, QDockWidget* dockWidget, const DocumentManager::strcDockLocation &dockWidgetLocation)
+{
+	if (lChildDocuments.isEmpty() == false)
+	{
+		for (int i = 0; i < lChildDocuments.count(); i++)
+		{
+			if (lChildDocuments[i].pMDISubWin == subWindow)
+			{
+				if (dockWidget)
+				{
+					lChildDocuments[i].mapRegisteredDockWidgetToLocationStruct.insert(dockWidget, dockWidgetLocation);
+					return true;
+				}
+			}
+		}
+	}
+	return false;
+}
+
+bool DocumentManager::addMenuActionRegistration(QMdiSubWindow *subWindow, QMenu *firstMenu, QAction *menuAction)
+{
+	if (lChildDocuments.isEmpty() == false)
+	{
+		for (int i = 0; i < lChildDocuments.count(); i++)
+		{
+			if (lChildDocuments[i].pMDISubWin == subWindow)
+			{
+				strcPluginChildDocCustomMenuDef tmpPluginChildDocCustomMenuDef;
+				tmpPluginChildDocCustomMenuDef.customRootMenu = firstMenu;
+				tmpPluginChildDocCustomMenuDef.customAction = menuAction;
+				if (menuAction)
+				{
+					if (firstMenu)
+					{
+						if (firstMenu->parent())
+							tmpPluginChildDocCustomMenuDef.parentMenu = qobject_cast<QMenu *>(firstMenu->parent());
+					}
+				}
+				lChildDocuments[i].lRegisteredMenuActions.append(tmpPluginChildDocCustomMenuDef);
+				lAllRegisteredActions.append(tmpPluginChildDocCustomMenuDef);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
+QMap<QDockWidget*, DocumentManager::strcDockLocation> DocumentManager::getDockWidgetRegistrations(QMdiSubWindow *subWindow)
+{
+	if (lChildDocuments.isEmpty() == false)
+	{
+		for (int i = 0; i < lChildDocuments.count(); i++)
+		{
+			if (lChildDocuments[i].pMDISubWin == subWindow)
+			{
+				if (lChildDocuments[i].mapRegisteredDockWidgetToLocationStruct.isEmpty() == false)
+					return lChildDocuments[i].mapRegisteredDockWidgetToLocationStruct;
+				break;
+			}
+		}
+	}
+	return QMap<QDockWidget*, DocumentManager::strcDockLocation>();
+}
+
+QList<DocumentManager::strcPluginChildDocCustomMenuDef> DocumentManager::getMenuActionRegistrations(QMdiSubWindow *subWindow)
+{
+	if (lChildDocuments.isEmpty() == false)
+	{
+		for (int i = 0; i < lChildDocuments.count(); i++)
+		{
+			if (lChildDocuments[i].pMDISubWin == subWindow)
+			{
+				if (lChildDocuments[i].lRegisteredMenuActions.isEmpty()==false)
+					return lChildDocuments[i].lRegisteredMenuActions;
+				break;
+			}
+		}
+	}
+	return QList<DocumentManager::strcPluginChildDocCustomMenuDef>();
+}
+
+void DocumentManager::appendAllMenuActionRegistration(const DocumentManager::strcPluginChildDocCustomMenuDef &customMenuDef)
+{
+	lAllRegisteredActions.append(customMenuDef);
+}
+
+void DocumentManager::removeAllMenuActionRegistrations()
+{
+	//QList<QAction *> lCurrentActions = lAllRegisteredActions.keys();
+	foreach(DocumentManager::strcPluginChildDocCustomMenuDef tmpDef, lAllRegisteredActions)
+	{
+		if (tmpDef.customRootMenu)
+		{
+			QMenu *tmpMenu = tmpDef.customRootMenu;
+			if (tmpMenu)
+			{
+				QObject *parentMenuObject = tmpMenu->parent();
+				if (parentMenuObject)
+				{
+					QMenu *parentMenu = qobject_cast<QMenu*>(parentMenuObject);
+					if (parentMenu)
+					{
+						parentMenu->removeAction(tmpMenu->menuAction());
+					}
+					else
+					{
+						QMenuBar *parentMainMenu = qobject_cast<QMenuBar*>(parentMenuObject);
+						if (parentMainMenu)
+						{
+							parentMainMenu->removeAction(tmpMenu->menuAction());
+						}
+					}
+				}
+			}
+		}
+		else if (tmpDef.parentMenu)
+		{
+			tmpDef.parentMenu->removeAction(tmpDef.customAction);
+		}
+		else
+		{
+			if (tmpDef.customAction->parent())
+			{
+				QMenuBar *parentMainMenu = qobject_cast<QMenuBar*>(tmpDef.customAction->parent());
+				if (parentMainMenu)
+					parentMainMenu->removeAction(tmpDef.customAction);
+			}
+		}
+	}
+	lAllRegisteredActions.clear();
 }
 
 QString DocumentManager::getFilePath(QMdiSubWindow *subWindow)
@@ -1033,8 +1166,27 @@ bool DocumentManager::remove(QMdiSubWindow *subWindow)
 	{
 		for (int i=0;i<lChildDocuments.count();i++)
 		{
-			if (lChildDocuments.at(i).pMDISubWin == subWindow)
+			if (lChildDocuments[i].pMDISubWin == subWindow)
 			{
+				if (lChildDocuments[i].pPluginHandlerInterface)
+				{
+					QObject *pluginObject = lChildDocuments[i].pPluginHandlerInterface->pPluginObject;
+					if (pluginObject)
+					{
+						if (!(pluginObject->metaObject()->indexOfMethod(QMetaObject::normalizedSignature(FUNC_PLUGIN_REMOVEADDFILE_FULL)) == -1))//Is the slot present?
+						{
+							bool bRetval;
+							QMetaObject::invokeMethod(pluginObject, QMetaObject::normalizedSignature(FUNC_PLUGIN_REMOVEADDFILE), Qt::DirectConnection, Q_RETURN_ARG(bool, bRetval), Q_ARG(QString, lChildDocuments[i].sFileName));
+						}
+					}
+				}
+				//if (lChildDocuments[i].lRegisteredMenuActions.isEmpty() == false)
+				//{
+				//	foreach(DocumentManager::strcPluginChildDocCustomMenuDef tmpDef, lChildDocuments[i].lRegisteredMenuActions)
+				//	{
+						//bool bResult = addMenuActionRegistration(subWindow, tmpAction);
+				//	}
+				//}
 				lChildDocuments.removeAt(i);
 				return true;
 			}

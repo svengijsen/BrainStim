@@ -29,6 +29,8 @@
 #include <QVBoxLayout>
 #include <QResizeEvent>
 #include <QGraphicsTextItem>
+#include <QComboBox>
+#include <QLabel>
 
 ExperimentStructureVisualizer::ExperimentStructureVisualizer(QWidget *parent) : QWidget(parent)
 {
@@ -49,7 +51,6 @@ ExperimentStructureVisualizer::ExperimentStructureVisualizer(QWidget *parent) : 
 	nWidgetMarginWidth = 0;
 	nWidgetMarginHeight = 0;
 	dGraphViewScale = 0.95;//zoom till 95%
-	bDrawVertical = true;
 	eConnDrawOrder = GRAPHLOOP_DRAW_ORDER_NUMBER_MASTERSIDE; //GRAPHLOOP_DRAW_ORDER_NUMBER_MASTERSIDE;//GRAPHLOOP_DRAW_ORDER_NUMBER_MASTERSIDE; GRAPHLOOP_DRAW_ORDER_UNNESTED;
 	pLoopConnections.setColor(QColor("#303030"));
 	pLoopConnections.setWidth(5);
@@ -148,58 +149,115 @@ void ExperimentStructureVisualizer::configureActions(bool bCreate)
 	}
 }
 
+int ExperimentStructureVisualizer::getAdditionalMenuHeight() const
+{
+	if (toolBar)
+	{ 
+		return toolBar->height();
+	}
+	return 0;
+}
+
 void ExperimentStructureVisualizer::setupMenuAndActions()
 {
 	toolBar = new QToolBar(this);
+	QComboBox *cmbViewSelection = new QComboBox(this);
+	cmbViewSelection->addItems(QStringList() << EXPGRAPH_VIEWSTATE_BLOCKS << EXPGRAPH_VIEWSTATE_OBJECTS);
+	QAction *tmpAction = toolBar->insertWidget(NULL, cmbViewSelection);
+	QLabel *labViewSelection = new QLabel("Show: ", this);
+	toolBar->insertWidget(tmpAction, labViewSelection);
+	connect(cmbViewSelection, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(toggleViewState(const QString &)));
+
+	QStringList mainMenuItemSpecifier;
+	QString sActionText = "Switch to plain text view";
+	mainMenuItemSpecifier.append("View");
+	mainMenuItemSpecifier.append(sActionText);
+	QAction *actionSwitchView = insertMenuAction(mainMenuItemSpecifier);
+	if (actionSwitchView)
+		connect(actionSwitchView, SIGNAL(triggered()), this, SLOT(switchToNativeView()), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 
 	//File menu///
-	buttonFile=new QToolButton(this);
-	buttonFile->setText("File ");
-	buttonFile->setPopupMode(QToolButton::InstantPopup);
-	menuFile = new QMenu();//FileButton
-	menuFile->addAction(action_Quit);
-	buttonFile->setMenu(menuFile);
-	toolBar->addWidget(buttonFile);  
+	//buttonFile=new QToolButton(this);
+	//buttonFile->setText("File ");
+	//buttonFile->setPopupMode(QToolButton::InstantPopup);
+	//menuFile = new QMenu();//FileButton
+	//menuFile->addAction(action_Quit);
+	//buttonFile->setMenu(menuFile);
+	//toolBar->addWidget(buttonFile);  
 	////Edit menu///
-	buttonEdit=new QToolButton(this);
-	buttonEdit->setText("Edit ");
-	buttonEdit->setPopupMode(QToolButton::InstantPopup);
-	menuEdit = new QMenu();//EditButton
-	//menuEdit->addAction(action_Test);
-	buttonEdit->setMenu(menuEdit);
-	toolBar->addWidget(buttonEdit);
-	//View menu//
-	menuView = new QMenu();
-	menuView->addAction(action_ToggleViewState);
-	buttonView=new QToolButton(this);
-	buttonView->setText("View ");
-	buttonView->setPopupMode(QToolButton::InstantPopup);
-	buttonView->setMenu(menuView);
-	toolBar->addWidget(buttonView);
-
-	connect(action_Quit, SIGNAL(triggered()), this, SLOT(close()));
-	connect(action_ToggleViewState, SIGNAL(triggered()), this, SLOT(toggleViewState()));
-	
+	//buttonEdit=new QToolButton(this);
+	//buttonEdit->setText("Edit ");
+	//buttonEdit->setPopupMode(QToolButton::InstantPopup);
+	//menuEdit = new QMenu();//EditButton
+	////menuEdit->addAction(action_Test);
+	//buttonEdit->setMenu(menuEdit);
+	//toolBar->addWidget(buttonEdit);
+	////View menu//
+	//menuView = new QMenu();
+	//menuView->addAction(action_ToggleViewState);
+	//buttonView=new QToolButton(this);
+	//buttonView->setText("View ");
+	//buttonView->setPopupMode(QToolButton::InstantPopup);
+	//buttonView->setMenu(menuView);
+	//toolBar->addWidget(buttonView);
+	//connect(action_Quit, SIGNAL(triggered()), this, SLOT(close()));
+	//connect(action_ToggleViewState, SIGNAL(triggered()), this, SLOT(toggleViewState()));
 	//connect(action_Test, SIGNAL(triggered()), this, SLOT(Test()));
-	
 }
 
-void ExperimentStructureVisualizer::toggleViewState()
+QAction *ExperimentStructureVisualizer::insertMenuAction(const QStringList &sMenuActionPath)
+{
+	QAction *newActionItem = NULL;
+	QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_REGISTERMAINMENUACTION_NAME, Qt::DirectConnection, Q_RETURN_ARG(QAction *, newActionItem), Q_ARG(QStringList, sMenuActionPath));
+	if (newActionItem)
+	{
+		newActionItem->setStatusTip(sMenuActionPath.last());
+		//newActionItem = new QAction(QIcon(":/resources/cut.png"), tr("Cu&t"), this);
+		//newActionItem->setShortcuts(QKeySequence::Cut);
+		return newActionItem;
+	}
+	return NULL;
+}
+
+void ExperimentStructureVisualizer::switchToNativeView()
+{
+	bool bNativeTextualView = true;
+	QString sFilePath = "";//Use the active document filepath
+	QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MainAppInfo::getMainWindowReOpenSlotName().toLatin1(), Qt::DirectConnection, Q_ARG(QString, sFilePath), Q_ARG(bool, bNativeTextualView));
+}
+
+void ExperimentStructureVisualizer::toggleViewState(const QString &sNewState)
 {
 	if(gScene)
 	{
-		if(gScene->getGraphViewState() == EXPVIS_VIEWSTATE_OBJECTS)
-			gScene->setGraphViewState(EXPVIS_VIEWSTATE_BLOCKTRIALS);
-		else if(gScene->getGraphViewState() == EXPVIS_VIEWSTATE_BLOCKTRIALS)
-			gScene->setGraphViewState(EXPVIS_VIEWSTATE_OBJECTS);
-		drawGraph();
+		if (sNewState == EXPGRAPH_VIEWSTATE_BLOCKS)
+		{
+			if (gScene->getGraphViewState() == EXPVIS_VIEWSTATE_OBJECTS)
+			{
+				gScene->setGraphViewState(EXPVIS_VIEWSTATE_BLOCKTRIALS);
+				drawGraph();
+			}
+		}
+		else if (sNewState == EXPGRAPH_VIEWSTATE_OBJECTS)
+		{
+			if (gScene->getGraphViewState() == EXPVIS_VIEWSTATE_BLOCKTRIALS)
+			{
+				gScene->setGraphViewState(EXPVIS_VIEWSTATE_OBJECTS);
+				drawGraph();
+			}
+		}
 	}
 }
 
 void ExperimentStructureVisualizer::clearSelection()
 {
 	if (gScene)
-		gScene->clearSelection();
+	{
+		if (gScene->selectedItems().count() > 0)
+			gScene->clearSelection();
+		else
+			emit GraphItemSelectionChanged(QList<ExperimentVisualizerGraphItemTypeEnum>() << ExperimentVisualizerGraphItemTypeEnum::EXPVIS_TYPE_UNDEFINED, QList<int>());
+	}
 }
 
 void ExperimentStructureVisualizer::resizeStructureView(const int &nWidth, const int &nHeight)
@@ -210,21 +268,10 @@ void ExperimentStructureVisualizer::resizeStructureView(const int &nWidth, const
 		{
 			ui->graphicsView->resetTransform();
 			ui->graphicsView->setSceneRect(QRectF());
-			ui->graphicsView->setFixedSize(nWidth - nWidgetMarginWidth, nHeight - nWidgetMarginHeight);//nWidth, nHeight); //
+			ui->graphicsView->setFixedSize(nWidth - nWidgetMarginWidth, nHeight - nWidgetMarginHeight);
 			QRectF currentSceneRect = gScene->itemsBoundingRect();
 			ui->graphicsView->fitInView(currentSceneRect, Qt::KeepAspectRatio);
 			ui->graphicsView->setSceneRect(currentSceneRect);
-
-			//QRectF currentSceneRect = gScene->itemsBoundingRect();
-			//currentSceneRect.setWidth(currentSceneRect.width()+nWidgetMarginWidth);
-			//currentSceneRect.setHeight(currentSceneRect.height()+nWidgetMarginHeight);
-			//ui->graphicsView->setSceneRect(currentSceneRect);
-			//qreal dScaleFactor;
-			//if(bDrawVertical)
-			//	dScaleFactor = (ui->graphicsView->size().height()*dGraphViewScale) / currentSceneRect.height();
-			//else
-			//	dScaleFactor = (ui->graphicsView->size().width()*dGraphViewScale) / currentSceneRect.width();
-			
 			ui->graphicsView->scale(dGraphViewScale, dGraphViewScale);
 			ui->graphicsView->centerOn(currentSceneRect.center());
 		}
@@ -580,7 +627,6 @@ bool ExperimentStructureVisualizer::drawGraph()
 				}
 			}
 		}
-
 		emit GraphRedrawn();
 		return true;
 	}
@@ -788,19 +834,6 @@ bool ExperimentStructureVisualizer::drawGraph()
 				}
 			}
 		}
-
-		//QRectF currentSceneRect = gScene->itemsBoundingRect();
-		//currentSceneRect.setWidth(currentSceneRect.width()+nWidgetMarginWidth);
-		//currentSceneRect.setHeight(currentSceneRect.height()+nWidgetMarginHeight);
-		//ui->graphicsView->setSceneRect(currentSceneRect);
-		//qreal dScaleFactor;
-		//if(bDrawVertical)
-		//	dScaleFactor = ((ui->graphicsView->size().height() - (nWidgetMarginHeight))*dGraphViewScale) / currentSceneRect.height();
-		//else
-		//	dScaleFactor = ((ui->graphicsView->size().width()-(nWidgetMarginWidth))*dGraphViewScale)/currentSceneRect.width();
-		//ui->graphicsView->resetTransform();
-		//ui->graphicsView->scale(dScaleFactor, dScaleFactor);
-		//ui->graphicsView->centerOn(currentSceneRect.center());
 		emit GraphRedrawn();
 		return true;
 	}
@@ -1036,39 +1069,6 @@ bool ExperimentStructureVisualizer::insertLoopInGraphDrawingStruct(const cBlockS
 	return bRetVal;
 }
 
-//void ExperimentStructureVisualizer::nodeContextMenu(QGVNode *node)
-//{
-//    //Context menu example
-//    QMenu menu(node->label());
-//
-//    menu.addSeparator();
-//    menu.addAction(tr("Informations"));
-//    menu.addAction(tr("Options"));
-//
-//    QAction *action = menu.exec(QCursor::pos());
-//    if(action == 0)
-//        return;
-//}
-
-//void ExperimentStructureVisualizer::nodeDoubleClick(QGVNode *node)
-//{
-//	//node->moveBy(10,10);
-//	//_scene->setNodeAttribute("pos","200,200");
-//	//QGVNode *tmpNode = _scene->getNode("SERVER1");
-//	//if(tmpNode)
-//	//{
-//	//	tmpNode->setAttribute("fillcolor","purple");
-//	//	tmpNode->updateLayout();
-//	//}
-//
-//	//_scene->setNodeAttribute("fillcolor","black");
-//
-//    QMessageBox::information(this, tr("Node double clicked"), tr("Node %1").arg(node->label()));
-//	//_scene->applyLayout();
-//	//_scene->saveLayout("E:\\Projects\\qgv\\debug\\debug.dot",0);
-//	//_scene->saveLayout("E:\\Projects\\qgv\\debug\\debug.png",1);
-//}
-
 bool ExperimentStructureVisualizer::setExperimentTreeModel(ExperimentTreeModel *pExpTreeModel) 
 {
 	pExperimentTreeModel = pExpTreeModel;
@@ -1282,7 +1282,6 @@ bool ExperimentStructureVisualizer::parseExperimentStructure()
 						}
 					}
 				}
-
 				expSceneItems.lObjects.append(tmpObjectItem);
 			}
 		}

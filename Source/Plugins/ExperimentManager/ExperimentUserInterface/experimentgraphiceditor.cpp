@@ -73,7 +73,7 @@ ExperimentGraphicEditor::ExperimentGraphicEditor(QWidget *parent) : QWidget(pare
 	action_Remove_Node = NULL;
 	actionAdd_Attribute = NULL;
 	actionToggleBlocksView = NULL;
-	actionSwitchToDefaultView = NULL;
+	//actionSwitchToDefaultView = NULL;
 	menuFile = NULL;
 	menuEdit = NULL;
 	menuView = NULL;
@@ -89,6 +89,9 @@ ExperimentGraphicEditor::ExperimentGraphicEditor(QWidget *parent) : QWidget(pare
 	bShowGraphicalTreeView = false;
 	currentViewSettings.bSkipComments = true;
 	currentViewSettings.bSkipEmptyAttributes = false;
+	nLastCustomParamListTabWidgetIndex = -1;
+	bCustomParamListTabWidgetConfigured = false;
+	nAdditionalMenuHeight = 0;
 
 	setAttribute(Qt::WA_DeleteOnClose);
 	configureActions(true);
@@ -341,7 +344,7 @@ void ExperimentGraphicEditor::createDockWindows()
 		{
 			actionToggle_ListViewDockVisibility = new QAction(TOGGLE_DOCKWIDGET_LIST_VIEW_TEXT,this);
 			connect(actionToggle_ListViewDockVisibility, SIGNAL(triggered()), pCustomPropertiesDockWidget, SLOT(toggleConfiguredVisibility()));
-			menuView->addAction(actionToggle_ListViewDockVisibility);
+			//menuView->addAction(actionToggle_ListViewDockVisibility);
 		}
 		bool bRetVal = false;
 		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(QDockWidget *, pCustomPropertiesDockWidget), Q_ARG(int, Qt::DockWidgetArea::RightDockWidgetArea));
@@ -357,7 +360,7 @@ void ExperimentGraphicEditor::createDockWindows()
 		{
 			actionToggle_TableViewDockVisibility = new QAction(TOGGLE_DOCKWIDGET_TABLE_VIEW_TEXT,this);
 			connect(actionToggle_TableViewDockVisibility, SIGNAL(triggered()), pCustomParamTableDockWidget, SLOT(toggleConfiguredVisibility()));
-			menuView->addAction(actionToggle_TableViewDockVisibility);
+			//menuView->addAction(actionToggle_TableViewDockVisibility);
 		}
 		bool bRetVal = false;
 		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(QDockWidget *, pCustomParamTableDockWidget), Q_ARG(int, Qt::DockWidgetArea::BottomDockWidgetArea));// +Qt::DockWidgetArea::LeftDockWidgetArea));
@@ -373,7 +376,7 @@ void ExperimentGraphicEditor::createDockWindows()
 		{
 			actionToggle_TableViewDockVisibility = new QAction(TOGGLE_DOCKWIDGET_TREE_VIEW_TEXT, this);
 			connect(actionToggle_TableViewDockVisibility, SIGNAL(triggered()), pCustomExperimentTreeDockWidget, SLOT(toggleConfiguredVisibility()));
-			menuView->addAction(actionToggle_TableViewDockVisibility);
+			//menuView->addAction(actionToggle_TableViewDockVisibility);
 		}
 		bool bRetVal = false;
 		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(QDockWidget *, pCustomExperimentTreeDockWidget), Q_ARG(int, Qt::DockWidgetArea::LeftDockWidgetArea));//Qt::DockWidgetArea::BottomDockWidgetArea));
@@ -414,7 +417,7 @@ void ExperimentGraphicEditor::configureActions(bool bCreate)
 		action_Remove_Node = new QAction("Remove Node", this);
 		actionAdd_Attribute = new QAction("Add Node Attribute", this);
 		actionToggleBlocksView = new QAction("Toggle Blocks View", this);
-		actionSwitchToDefaultView = new QAction("Switch to default View", this);
+		//actionSwitchToDefaultView = new QAction("Switch to default View", this);
 	}
 	else
 	{
@@ -473,11 +476,11 @@ void ExperimentGraphicEditor::configureActions(bool bCreate)
 			delete actionToggleBlocksView;
 			actionToggleBlocksView = NULL;
 		}
-		if(actionSwitchToDefaultView)
-		{
-			delete actionSwitchToDefaultView;
-			actionSwitchToDefaultView = NULL;
-		}
+		//if(actionSwitchToDefaultView)
+		//{
+		//	delete actionSwitchToDefaultView;
+		//	actionSwitchToDefaultView = NULL;
+		//}
 	}
 }
 
@@ -502,54 +505,59 @@ void ExperimentGraphicEditor::setupExperimentTreeView()
 
 void ExperimentGraphicEditor::setupMenuAndActions()
 {
-	toolBar = new QToolBar(this);
-	
+	//toolBar = new QToolBar(this);
 	//File menu///
-	buttonFile = new QToolButton(this);
-	buttonFile->setText("File ");
-	buttonFile->setPopupMode(QToolButton::InstantPopup);
-	menuFile = new QMenu();//FileButton
-	menuFile->addAction(actionNew_File);
-	menuFile->addAction(action_Open_File);
-	menuFile->addAction(action_Save);
-	menuFile->addAction(action_Close_File);
-	menuFile->addAction(action_Quit);
-	buttonFile->setMenu(menuFile);
-	toolBar->addWidget(buttonFile);
+	//buttonFile = new QToolButton(this);
+	//buttonFile->setText("File ");
+	//buttonFile->setPopupMode(QToolButton::InstantPopup);
+	//menuFile = new QMenu();//FileButton
+	//menuFile->addAction(actionNew_File);
+	//menuFile->addAction(action_Open_File);
+	//menuFile->addAction(action_Save);
+	//menuFile->addAction(action_Close_File);
+	//menuFile->addAction(action_Quit);
+	//buttonFile->setMenu(menuFile);
+	//toolBar->addWidget(buttonFile);
 	//Edit menu///
-	buttonEdit=new QToolButton(this);
-	buttonEdit->setText("Edit ");
-	buttonEdit->setPopupMode(QToolButton::InstantPopup);
-	menuEdit = new QMenu();//EditButton
-	menuEdit->addAction(actionFind);
-	menuEdit->addAction(actionAdd_Node);
-	menuEdit->addAction(actionAdd_Subnode);
-	menuEdit->addAction(action_Remove_Node);
-	menuEdit->addAction(actionAdd_Attribute);
-	buttonEdit->setMenu(menuEdit);
-	toolBar->addWidget(buttonEdit);
+	//buttonEdit=new QToolButton(this);
+	//buttonEdit->setText("Edit ");
+	//buttonEdit->setPopupMode(QToolButton::InstantPopup);
+	//menuEdit = new QMenu();//EditButton
+	//menuEdit->addAction(actionFind);
+	//menuEdit->addAction(actionAdd_Node);
+	//menuEdit->addAction(actionAdd_Subnode);
+	//menuEdit->addAction(action_Remove_Node);
+	//menuEdit->addAction(actionAdd_Attribute);
+	//buttonEdit->setMenu(menuEdit);
+	//toolBar->addWidget(buttonEdit);
 	//View menu///
-	buttonView = new QToolButton(this);
-	buttonView->setText("View ");
-	buttonView->setPopupMode(QToolButton::InstantPopup);
-	menuView = new QMenu();//ViewButton
-	menuView->addAction(actionSwitchToDefaultView);
-	menuView->addAction(actionToggleBlocksView);
-	buttonView->setMenu(menuView);
-	toolBar->addWidget(buttonView);
+	//QComboBox *cmbViewSelection = new QComboBox(this);
+	//cmbViewSelection->addItems(QStringList() << "Blocks" << "Objects");
+	//QAction *tmpAction = toolBar->insertWidget(NULL, cmbViewSelection);
+	//QLabel *labViewSelection = new QLabel("Show: ", this);
+	//toolBar->insertWidget(tmpAction, labViewSelection);
+
+	//buttonView = new QToolButton(this);
+	//buttonView->setText("View ");
+	//buttonView->setPopupMode(QToolButton::InstantPopup);
+	//menuView = new QMenu();//ViewButton
+	//menuView->addAction(actionSwitchToDefaultView);
+	//menuView->addAction(actionToggleBlocksView);
+	//buttonView->setMenu(menuView);
+	//toolBar->addWidget(buttonView);
 	
-	connect(actionNew_File, SIGNAL(triggered()), this, SLOT(newFile()));
-	connect(action_Open_File, SIGNAL(triggered()), this, SLOT(openFile()));
-	connect(action_Save, SIGNAL(triggered()), this, SLOT(saveFile()));
-	connect(action_Close_File, SIGNAL(triggered()), this, SLOT(closeFile()));
-	connect(action_Quit, SIGNAL(triggered()), this, SLOT(closeDocument()));
-	connect(actionFind, SIGNAL(triggered()), this, SLOT(showFindDialog()));
-	connect(actionAdd_Node, SIGNAL(triggered()), this, SLOT(insertNode()));
-	connect(actionAdd_Subnode, SIGNAL(triggered()), this, SLOT(insertSubnode()));
-	connect(action_Remove_Node, SIGNAL(triggered()), this, SLOT(removeNode()));
-	connect(actionAdd_Attribute, SIGNAL(triggered()), this, SLOT(addDefinition()));
-	connect(actionSwitchToDefaultView, SIGNAL(triggered()), this, SLOT(switchToDefaultView()));
-	connect(actionToggleBlocksView, SIGNAL(triggered()), this, SLOT(toggleBlocksView()));
+	//connect(actionNew_File, SIGNAL(triggered()), this, SLOT(newFile()));
+	//connect(action_Open_File, SIGNAL(triggered()), this, SLOT(openFile()));
+	//connect(action_Save, SIGNAL(triggered()), this, SLOT(saveFile()));
+	//connect(action_Close_File, SIGNAL(triggered()), this, SLOT(closeFile()));
+	//connect(action_Quit, SIGNAL(triggered()), this, SLOT(closeDocument()));
+	//connect(actionFind, SIGNAL(triggered()), this, SLOT(showFindDialog()));
+	//connect(actionAdd_Node, SIGNAL(triggered()), this, SLOT(insertNode()));
+	//connect(actionAdd_Subnode, SIGNAL(triggered()), this, SLOT(insertSubnode()));
+	//connect(action_Remove_Node, SIGNAL(triggered()), this, SLOT(removeNode()));
+	//connect(actionAdd_Attribute, SIGNAL(triggered()), this, SLOT(addDefinition()));
+	//connect(actionSwitchToDefaultView, SIGNAL(triggered()), this, SLOT(switchToDefaultView()));
+	//connect(actionToggleBlocksView, SIGNAL(triggered()), this, SLOT(toggleBlocksView()));
 }
 
 void ExperimentGraphicEditor::setupLayout()
@@ -593,7 +601,7 @@ void ExperimentGraphicEditor::newFile()
 		action_Remove_Node->setEnabled(true);
 		actionFind->setEnabled(true);
 		actionToggleBlocksView->setEnabled(true);
-		actionSwitchToDefaultView->setEnabled(true);
+		//actionSwitchToDefaultView->setEnabled(true);
 		pExpTreeModel = &loadedExpTreeModel;
 		connect(pExpTreeModel, SIGNAL(modelModified()), this, SLOT(setNewModel()));
 		//rootItem = new ExperimentTreeItem("[Root node]");
@@ -621,7 +629,7 @@ void ExperimentGraphicEditor::openFile()
 			action_Remove_Node->setEnabled(true);
 			actionFind->setEnabled(true);	
 			actionToggleBlocksView->setEnabled(true);
-			actionSwitchToDefaultView->setEnabled(true);
+			//actionSwitchToDefaultView->setEnabled(true);
 			
 			QString tmpString = expFile.readAll();			
 			expFile.close();
@@ -668,7 +676,7 @@ void ExperimentGraphicEditor::closeFile()
 	action_Remove_Node->setDisabled(true);
 	actionFind->setDisabled(true);
 	actionToggleBlocksView->setDisabled(true);
-	actionSwitchToDefaultView->setDisabled(true);
+	//actionSwitchToDefaultView->setDisabled(true);
 }
 
 QString ExperimentGraphicEditor::saveFile(const QString &sFilePath)
@@ -1105,8 +1113,11 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 
 				if(bShowGraphicalTreeView)
 				{ 
-					if(expStructVisualizer == NULL)
+					if (expStructVisualizer == NULL)
+					{
 						expStructVisualizer = new ExperimentStructureVisualizer();
+						nAdditionalMenuHeight = expStructVisualizer->getAdditionalMenuHeight();
+					}
 					if(expStructVisualizer)
 					{
 						bool bResult = connect(expStructVisualizer, SIGNAL(destroyed(QWidget*)), this, SLOT(childWidgetDestroyed(QWidget*)));
@@ -1659,6 +1670,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			{
 				pCustomParamListTabWidget = new CustomChildDockTabWidget(this);
 				pCustomParamListTabWidget->setGroupName(PLUGIN_EXMLDOC_EXTENSION);
+				connect(pCustomParamListTabWidget, SIGNAL(currentChanged(int)), this, SLOT(customParamListTabWidgetIndexChanged(int)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 			}
 			QString sTabName;
 			if(item->getName().toLower() == EXPERIMENT_TAG)
@@ -1680,6 +1692,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			else
 				sTabName = item->getName();
 			int nRemovedTabIndex = -1;
+			bCustomParamListTabWidgetConfigured = true;
 			for(int i=0;i<pCustomParamListTabWidget->count();i++)
 			{
 				if (pCustomParamListTabWidget->tabText(i) == sTabName || pCustomParamListTabWidget->tabText(i) == TAB_SELECTION_NAME)
@@ -1694,6 +1707,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			int nNewTabIndex = pCustomParamListTabWidget->insertTab(nRemovedTabIndex,tmpParametersWidget,sTabName);
 			//pCustomParamListTabWidget->setTabEnabled(nNewTabIndex, false);
 			pCustomParamListTabWidget->setCurrentIndex(nNewTabIndex);
+			bCustomParamListTabWidgetConfigured = false;
 			pCustomPropertiesDockWidget->setWidget(pCustomParamListTabWidget);
 			pCustomPropertiesDockWidget->initialize();
 		}
@@ -1785,11 +1799,13 @@ bool ExperimentGraphicEditor::selectTreeItem(const QStringList &lTextToFind, con
 						if(nRecCounter < lTextToFind.count()-1)
 							break;
 					}
-
 					QModelIndex index = pExpTreeModel->indexFromItem(tmpTreeItem);
+					QModelIndex currentIndex = treeView->selectionModel()->currentIndex();
 					QModelIndex modelIndex = filterModel->mapFromSource(index);
 					if (modelIndex.isValid())
 					{
+						if (modelIndex.internalId() == currentIndex.internalId())
+							return true;
 						treeView->selectionModel()->setCurrentIndex(modelIndex, QItemSelectionModel::ClearAndSelect);
 						showTreeItemInfo(modelIndex);
 						return true;
@@ -1875,12 +1891,12 @@ void ExperimentGraphicEditor::toggleBlocksView()
 	showTreeItemInfo(treeView->currentIndex());
 }
 
-void ExperimentGraphicEditor::switchToDefaultView()
-{
-	bool bNativeTextualView = true;
-	QString sFilePath = sCurrentCanonFilePath;
-	QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MainAppInfo::getMainWindowReOpenSlotName().toLatin1(), Qt::DirectConnection, Q_ARG(QString, sFilePath), Q_ARG(bool, bNativeTextualView));
-}
+//void ExperimentGraphicEditor::switchToDefaultView()
+//{
+//	bool bNativeTextualView = true;
+//	QString sFilePath = sCurrentCanonFilePath;
+//	QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MainAppInfo::getMainWindowReOpenSlotName().toLatin1(), Qt::DirectConnection, Q_ARG(QString, sFilePath), Q_ARG(bool, bNativeTextualView));
+//}
 
 void ExperimentGraphicEditor::addDefinition()
 {
@@ -1955,12 +1971,31 @@ void ExperimentGraphicEditor::resizeEvent(QResizeEvent *event)
 {
 	int nWidth = event->size().width();
 	int nHeight = event->size().height();
-	emit OnResized(nWidth, nHeight);
+	if (nHeight > nAdditionalMenuHeight)
+		emit OnResized(nWidth, nHeight - nAdditionalMenuHeight);
+	else
+		emit OnResized(nWidth, nHeight);
 }
 
 void ExperimentGraphicEditor::forceEmitResize()
 {
 	int nWidth = this->width();
 	int nHeight = this->height();
-	emit OnResized(nWidth, nHeight);
+	if (nHeight > nAdditionalMenuHeight)
+		emit OnResized(nWidth, nHeight - nAdditionalMenuHeight);
+	else
+		emit OnResized(nWidth, nHeight);
+}
+
+void ExperimentGraphicEditor::customParamListTabWidgetIndexChanged(int nIndex)
+{
+	if ((nIndex != nLastCustomParamListTabWidgetIndex) && (nIndex >= 0) && (bCustomParamListTabWidgetConfigured==false))
+	{
+		nLastCustomParamListTabWidgetIndex = nIndex;
+		QString sTabText = pCustomParamListTabWidget->tabText(nIndex);
+		if (sTabText.toLower() == EXPERIMENT_TAG)
+			clearSelection();
+		return;
+	}
+	nLastCustomParamListTabWidgetIndex = nIndex;
 }

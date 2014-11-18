@@ -108,6 +108,7 @@ bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags m
 	updateMenuControls();
 	parseRemainingGlobalSettings();
 	setupContextMenus();
+	implementDefaultCustomActionMenus();
 	if (startUpFiles.count()> 0) { openFiles(NULL,startUpFiles);}
 	if (BrainStimFlags.testFlag(GlobalApplicationInformation::DisableSplash)==false)
 	{
@@ -135,6 +136,78 @@ bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags m
 	}
 	bExecuteActiveDocument = BrainStimFlags & GlobalApplicationInformation::ExecuteDocument;
 	return true;
+}
+
+void MainWindow::implementDefaultCustomActionMenus()
+{
+	QString sFilePath = ":/resources/customMenuEntries.ini";
+	QSettings *sUILayoutSettings = new QSettings(sFilePath, QSettings::IniFormat);
+	sUILayoutSettings->beginGroup("CustomMenuActions");
+	QStringList lAllKeys = sUILayoutSettings->allKeys();
+	foreach(QString sTmpString, lAllKeys)
+	{
+		QStringList sSplittedString = sUILayoutSettings->value(sTmpString).toString().split(MENUACTION_SECTION_SEPERATOR);
+		if (sSplittedString.count() == 3)
+		{
+			//if (sSplittedString.at(0).toLower() == MENUACTION_TYPE_SCRIPTPATH)
+			//{
+				QStringList lSubMenuList = sSplittedString.at(2).split(MENUACTION_SUBMENU_SEPERATOR,QString::SkipEmptyParts);
+				//if (lSubMenuList.isEmpty() == false)
+				//{
+					//if (sSplittedString.at(1).isEmpty() == false)
+					//{
+						QAction *tmpAction = registerMainMenuAction(lSubMenuList, true);
+						if (sSplittedString.at(0).toLower() == MENUACTION_TYPE_SCRIPTPATH)
+						{
+							QString sCommand = QString("%1%2%3").arg(sSplittedString.at(0).toLower()).arg(MENUACTION_SECTION_SEPERATOR).arg(sSplittedString.at(1));
+							tmpAction->setData(sCommand);
+							//tmpAction->setShortcut(tr("Ctrl+Shift+C"));
+							//bool bConnectResult = 
+							connect(tmpAction, SIGNAL(triggered()), this, SLOT(executeCustomActionMenu()));
+						}
+
+					//}
+				//}
+			//}
+			//else if (sSplittedString.at(0).toLower() == MENUACTION_TYPE_MENUITEM)
+			//{
+			
+			//}
+		}
+	}
+	sUILayoutSettings->endGroup();
+
+	//QAction *testAction = registerMainMenuAction(QStringList() << "File" << "Wizards" << "Wiz1", true);
+	//QString sCommand;
+	//sCommand = QString("%1%2%3").arg(MENUACTION_TYPE_SCRIPTPATH).arg(MENUACTION_SECTION_SEPERATOR).arg("C:/Users/svengijsen/Desktop/test.qs");
+	//testAction->setData(sCommand);
+	////testAction->setShortcut(tr("Ctrl+Shift+C"));
+	//bool bConnectResult = connect(testAction, SIGNAL(triggered()), this, SLOT(executeCustomActionMenu()));
+}
+
+bool MainWindow::executeCustomActionMenu()
+{
+	QAction *action = qobject_cast<QAction *>(sender());
+	if (action)
+	{
+		QString sActionData = action->data().toString();
+		if (sActionData.isEmpty() == false)
+		{
+			QStringList lActionDataList = sActionData.split(MENUACTION_SECTION_SEPERATOR);
+			if (lActionDataList.count() == 2)
+			{
+				if (lActionDataList.at(0) == MENUACTION_TYPE_SCRIPTPATH)
+				{
+					QScriptValue scriptRetValue = executeScriptFile(lActionDataList.at(1));
+					return true;
+				}
+			}
+		}
+	}
+	else//direct function call, exit program
+	{
+	}
+	return false;
 }
 
 void MainWindow::showEvent(QShowEvent * event)
@@ -871,11 +944,12 @@ void MainWindow::unregisterDockWidgets(CustomMDISubWindow* custSubWin)
 bool MainWindow::addRegisteredDockWidgets(const Qt::DockWidgetArea debugDockArea)
 {
 	bool bOutputDockAdded = false;
+	QMap<QDockWidget*, DocumentManager::strcDockLocation> mapRegisteredDockWidgetToLocationStruct = DocManager->getDockWidgetRegistrations(activeMdiChild());
 	while (mapRegisteredDockWidgetToLocationStruct.isEmpty() == false)
 	{
 		bool bIsFirst = true;
-		QMap<QDockWidget*, DockLocationStructure>::iterator iter;
-		DockLocationStructure tmpLocation;
+		QMap<QDockWidget*, DocumentManager::strcDockLocation>::iterator iter;
+		DocumentManager::strcDockLocation tmpLocation;
 		QDockWidget* tmpDockWidget = NULL;
 		for (iter = mapRegisteredDockWidgetToLocationStruct.begin(); iter != mapRegisteredDockWidgetToLocationStruct.end(); ++iter)
 		{
@@ -974,10 +1048,11 @@ bool MainWindow::registerDockWidget(QWidget *pMDIWindowSubWidget, QDockWidget *p
 				if (sTmpDocTypeString.isEmpty() == false)
 				{
 					loadSavedDockWidgetConfiguration(UI_SETTINGS_FILENAME, sTmpDocTypeString, pDockWidget, dArea);
-					DockLocationStructure tmpDockLocation;
+					DocumentManager::strcDockLocation tmpDockLocation;
 					tmpDockLocation.dockArea = dArea;
 					tmpDockLocation.rGeometry = pDockWidget->geometry();
-					mapRegisteredDockWidgetToLocationStruct.insert(pDockWidget, tmpDockLocation);
+					if (activeMdiChild())
+						DocManager->addDockWidgetRegistration(activeMdiChild(), pDockWidget, tmpDockLocation);
 				}
 				else
 				{
@@ -1006,17 +1081,52 @@ void MainWindow::dockWidgetDestroyed(QObject *destoyedDockWidget)
 
 void MainWindow::subDocumentWindowActivated(QMdiSubWindow *subWindow)
 {
+	DocManager->removeAllMenuActionRegistrations();
 	if(subWindow)
 	{
+		QList<DocumentManager::strcPluginChildDocCustomMenuDef> lPluginChildDocCustomMenuDefs = DocManager->getMenuActionRegistrations(subWindow);
+		for (int j = 0; j<lPluginChildDocCustomMenuDefs.count(); j++)
+		{
+			if (lPluginChildDocCustomMenuDefs[j].customRootMenu)
+			{
+				if (lPluginChildDocCustomMenuDefs[j].parentMenu)
+					lPluginChildDocCustomMenuDefs[j].parentMenu->addMenu(lPluginChildDocCustomMenuDefs[j].customRootMenu);
+				else
+					menuBar()->addMenu(lPluginChildDocCustomMenuDefs[j].customRootMenu);
+			}
+			else if (lPluginChildDocCustomMenuDefs[j].customAction)
+			{
+				if (lPluginChildDocCustomMenuDefs[j].parentMenu)
+					lPluginChildDocCustomMenuDefs[j].parentMenu->addAction(lPluginChildDocCustomMenuDefs[j].customAction);
+				else
+					menuBar()->addAction(lPluginChildDocCustomMenuDefs[j].customAction);
+			}
+			DocManager->appendAllMenuActionRegistration(lPluginChildDocCustomMenuDefs[j]);
+		}
+
 		for(int i=0;i<mapMDISubWindowToDockWidget.count();i++)
 		{
 			if(mapMDISubWindowToDockWidget.keys().at(i) == subWindow)
 			{
-				mapMDISubWindowToDockWidget.values().at(i)->show();
+				if (dockWidgetArea(mapMDISubWindowToDockWidget.values()[i]) == Qt::NoDockWidgetArea)
+				{
+					QMap<QDockWidget*, DocumentManager::strcDockLocation> mapRegisteredDockWidgetToLocationStruct = DocManager->getDockWidgetRegistrations(subWindow);
+					if (mapRegisteredDockWidgetToLocationStruct.contains(mapMDISubWindowToDockWidget.values()[i]))
+					{
+						DocumentManager::strcDockLocation tmpLocationStructure = mapRegisteredDockWidgetToLocationStruct.value(mapMDISubWindowToDockWidget.values()[i]);
+						addDockWidget(tmpLocationStructure.dockArea, mapMDISubWindowToDockWidget.values()[i]);
+					}
+					else
+					{
+						addDockWidget(Qt::BottomDockWidgetArea, mapMDISubWindowToDockWidget.values()[i]);
+					}
+					mapMDISubWindowToDockWidget.values()[i]->show();
+				}
 			}
 			else
 			{
-				mapMDISubWindowToDockWidget.values().at(i)->hide();
+				if (dockWidgetArea(mapMDISubWindowToDockWidget.values()[i]) != Qt::NoDockWidgetArea)
+					removeDockWidget(mapMDISubWindowToDockWidget.values()[i]);
 			}
 		}
 	}
@@ -1677,7 +1787,18 @@ void MainWindow::write2OutputWindow(const QString &text2Write, const QString &sT
 
 void MainWindow::reOpenCurrentFile(const QString &strCanonicalFilePath, const bool &bNativeFileViewer)// See the defined MAIN_PROGRAM_REOPEN_SLOT_NAME
 {
-	QMdiSubWindow *existing = findMdiChild(strCanonicalFilePath);
+	QMdiSubWindow *existing = NULL;
+	QString sFinalPath = strCanonicalFilePath;
+	if (sFinalPath.isEmpty())
+	{
+		existing = activeMdiChild();
+		sFinalPath = DocManager->getFileName(existing);
+	}
+	else
+	{
+		existing = findMdiChild(sFinalPath);
+	}
+
 	if (existing)
 	{
 		QString sNewFileName;
@@ -1687,7 +1808,7 @@ void MainWindow::reOpenCurrentFile(const QString &strCanonicalFilePath, const bo
 			mdiArea->setActiveSubWindow(existing);
 			DocManager->setModFlagAndTitle(DocManager->getDocIndex(existing),false);//Trick for a successful closing of document, see next
 			closeActiveDocument();
-			QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), "openFiles", Qt::QueuedConnection, Q_ARG(QString, strCanonicalFilePath), Q_ARG(QStringList, QStringList()), Q_ARG(bool, bNativeFileViewer));
+			QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), "openFiles", Qt::QueuedConnection, Q_ARG(QString, sFinalPath), Q_ARG(QStringList, QStringList()), Q_ARG(bool, bNativeFileViewer));
 			QApplication::restoreOverrideCursor();
 		}
 		else if (sNewFileName.isEmpty() == false)
@@ -2357,9 +2478,10 @@ bool MainWindow::checkUserDirectories(QStringList &lPathsToCheck, bool bShowWarn
 	//Do we already have an custom valid user path defined in the registry?
 	QString sUserPath = "";
 	bool bNoRegistrySetting = false;
-	if(globAppInfo->checkRegistryInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY))
+	QVariant tmpVariant;
+	if (globAppInfo->getRegistryInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY, tmpVariant))
 	{
-		sUserPath = QDir::toNativeSeparators(globAppInfo->getRegistryInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY).toString());
+		sUserPath = tmpVariant.toString();
 	}
 	else
 	{
@@ -2762,6 +2884,20 @@ void MainWindow::executeActiveDocument()
 	//outputWindowList->scrollToBottom();
 }
 
+QScriptValue MainWindow::executeScriptFile(const QString &sFilePath)
+{
+	QFile scriptFile(sFilePath);
+	if (scriptFile.exists())
+	{
+		QString sScriptContent;
+		if (scriptFile.open(QFile::ReadOnly | QFile::Text))
+			sScriptContent = scriptFile.readAll();
+		scriptFile.close();
+		return executeScriptContent(sScriptContent);
+	}
+	return NULL;
+}
+
 QScriptValue MainWindow::executeScriptContent(const QString &sContent)
 {
 	if(AppScriptEngine)
@@ -2957,10 +3093,11 @@ bool MainWindow::parseFile(const QFile &file, const bool &bParseAsText)
 
 void MainWindow::setRenderer()
 {
-	if (globAppInfo->checkRegistryInformation(REGISTRY_RENDERTYPE))	
+	QVariant tmpVariant;
+	if (globAppInfo->getRegistryInformation(REGISTRY_RENDERTYPE, tmpVariant))
 	{
 		SvgView::RendererType type;
-		type = (SvgView::RendererType)globAppInfo->getRegistryInformation(REGISTRY_RENDERTYPE).toInt();
+		type = (SvgView::RendererType)tmpVariant.toInt();
 		switch (type)
 		{
 		case SvgView::Native://Native
@@ -2971,9 +3108,9 @@ void MainWindow::setRenderer()
 			}
 		case SvgView::OpenGL://OpenGL
 			{
-				if (globAppInfo->checkRegistryInformation(REGISTRY_HQANTIALIAS))
+				if (globAppInfo->getRegistryInformation(REGISTRY_HQANTIALIAS,tmpVariant))
 				{
-					SVGPreviewer->setHighQualityAntialiasing(globAppInfo->getRegistryInformation(REGISTRY_HQANTIALIAS).toInt());
+					SVGPreviewer->setHighQualityAntialiasing(tmpVariant.toInt());
 				}
 				else
 				{
@@ -3018,8 +3155,9 @@ void MainWindow::setCurrentFile(const QString &fileName, bool bIsNotSaved)
 void MainWindow::updateRecentFileList(const QString &fileName)
 {
 	QStringList files;
-	if(globAppInfo->checkRegistryInformation(REGISTRY_RECENTFILELIST))
-		files = globAppInfo->getRegistryInformation(REGISTRY_RECENTFILELIST).toStringList();
+	QVariant tmpVariant;
+	if (globAppInfo->getRegistryInformation(REGISTRY_RECENTFILELIST, tmpVariant))
+		files = tmpVariant.toStringList();
 	files.removeAll(fileName);
 	files.prepend(fileName);
 	while (files.size() > MaxRecentFiles)
@@ -3044,8 +3182,9 @@ void MainWindow::openRecentFile()
 void MainWindow::updateRecentFileActions()
 {
 	QStringList files;
-	if(globAppInfo->checkRegistryInformation(REGISTRY_RECENTFILELIST))
-		files = globAppInfo->getRegistryInformation(REGISTRY_RECENTFILELIST).toStringList();
+	QVariant tmpVariant;
+	if (globAppInfo->getRegistryInformation(REGISTRY_RECENTFILELIST, tmpVariant))
+		files = tmpVariant.toStringList();
 
 	int numRecentFiles = qMin(files.size(), (int)MaxRecentFiles);
 
@@ -3482,8 +3621,22 @@ void MainWindow::loadSavedWindowLayout(const QString &sSettingsFileName, const Q
 	}
 	sUILayoutSettings->beginGroup(sGroupName);
 	restoreState(sUILayoutSettings->value("state").toByteArray());
-	restoreGeometry(sUILayoutSettings->value("geometry").toByteArray());
+	//if (sGroupName == MAINWINDOW_NAME)
+		restoreGeometry(sUILayoutSettings->value("geometry").toByteArray());
 	sUILayoutSettings->endGroup();
+
+	QMdiSubWindow *subWindow = activeMdiChild();
+	if (subWindow)
+	{
+		for (int i = 0; i < mapMDISubWindowToDockWidget.count(); i++)
+		{
+			if (mapMDISubWindowToDockWidget.keys().at(i) != subWindow)
+			{
+				if (dockWidgetArea(mapMDISubWindowToDockWidget.values()[i]) != Qt::NoDockWidgetArea)
+					removeDockWidget(mapMDISubWindowToDockWidget.values()[i]);
+			}
+		}
+	}
 }
 
 void MainWindow::saveWindowLayout(const QString &sSettingsFileName, const QString &sGroupName)
@@ -3499,9 +3652,98 @@ void MainWindow::saveWindowLayout(const QString &sSettingsFileName, const QStrin
 		hashUILayoutSettings.insert(sSettingsFileName, sUILayoutSettings);
 	}
 	sUILayoutSettings->beginGroup(sGroupName);
-	sUILayoutSettings->setValue("geometry", saveGeometry());
+	//if (sGroupName == MAINWINDOW_NAME)
+		sUILayoutSettings->setValue("geometry", saveGeometry());
 	sUILayoutSettings->setValue("state", saveState());
 	sUILayoutSettings->endGroup();
+}
+
+QAction *MainWindow::registerMainMenuAction(const QStringList &lmenuItemSpecifier, const bool &bSkipSubWindowRegistration)
+{
+	QMenuBar *mainMenuBar = menuBar();
+	if (lmenuItemSpecifier.isEmpty() == false)
+	{
+		QList<QAction *> currentMenuActions = mainMenuBar->actions();
+		if (mainMenuBar)
+		{
+			QAction *currentAction = NULL;
+			QMenu *currentMenu = NULL;
+			QAction *lastAction = NULL;
+			QMenu *firstMenu = NULL;
+			bool bItemFound;
+			int nCurrentSpecItemIndex = 0;
+			bool bStartAppendingMenus = false;
+			foreach(QString sMenuItemSpec, lmenuItemSpecifier)
+			{
+				nCurrentSpecItemIndex++;
+				bItemFound = false;
+				if (bStartAppendingMenus == false)
+				{
+					foreach(currentAction, currentMenuActions)
+					{
+						QString sActionText = currentAction->text();
+						if (sActionText.remove("&").remove(".") == sMenuItemSpec)//Item found?
+						{
+							if (nCurrentSpecItemIndex == lmenuItemSpecifier.count())//Last Index?
+							{
+								//bool bResult = DocManager->menuActionRegistration(mdiArea->activeSubWindow(), currentAction);
+								//return currentAction;
+								return NULL; //! Cannot use already present menu actions...
+							}
+							bItemFound = true;
+							//if (nCurrentSpecItemIndex > 1)
+								currentMenu = currentAction->menu();
+							//else
+							//	currentMenuActions = currentMenu->actions();
+							if (currentMenu)
+							{
+								currentMenuActions = currentMenu->actions();
+								break;
+							}
+						}
+					}
+				}
+				if (bItemFound == false)
+				{
+					if (nCurrentSpecItemIndex == lmenuItemSpecifier.count())
+					{
+						if (currentMenu)
+						{
+							if (sMenuItemSpec == "_")//Separator?
+								currentAction = currentMenu->addSeparator();
+							else
+								currentAction = currentMenu->addAction(sMenuItemSpec);
+						}
+						else
+						{
+							if (sMenuItemSpec == "_")//Separator?
+								currentAction = mainMenuBar->addSeparator();
+							else
+								currentAction = mainMenuBar->addAction(sMenuItemSpec);
+						}
+						lastAction = currentAction;
+						//if (bStartAppendingMenus == false)
+						//	lastMenu = currentMenu;
+						//bool bResult =
+						if (bSkipSubWindowRegistration == false)
+							DocManager->addMenuActionRegistration(mdiArea->activeSubWindow(), firstMenu, lastAction);
+						return currentAction;
+					}
+					else
+					{
+						if (currentMenu)
+							currentMenu = currentMenu->addMenu(sMenuItemSpec);
+						else
+							currentMenu = mainMenuBar->addMenu(sMenuItemSpec);
+						if (bStartAppendingMenus == false)
+							firstMenu = currentMenu;
+					}
+					bStartAppendingMenus = true;
+				}
+			}
+		}
+	}
+	return NULL;
 }
 
 bool MainWindow::getSavedDockWidgetSizeHint(const QString &sDockWidgetGroupName, const QString &sDockWidgetAccessName, QRect &rSizeHint)
@@ -3518,8 +3760,9 @@ bool MainWindow::configureDebugger()
 {
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
-	if(globAppInfo->checkRegistryInformation(REGISTRY_OPENINEXTERNALDEBUGGER))
-		AppScriptEngine->ConfigureDebugger((bool)globAppInfo->getRegistryInformation(REGISTRY_OPENINEXTERNALDEBUGGER).toInt());
+	QVariant tmpVariant;
+	if (globAppInfo->getRegistryInformation(REGISTRY_OPENINEXTERNALDEBUGGER, tmpVariant))
+		AppScriptEngine->ConfigureDebugger((bool)tmpVariant.toInt());
 	else//default
 		AppScriptEngine->ConfigureDebugger(false);
 	return true;

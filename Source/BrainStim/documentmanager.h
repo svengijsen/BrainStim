@@ -81,16 +81,42 @@ public:
 	struct strcPluginDocHandlerInterfaceCollection
 	{
 		QHash<QString, strcPluginHandlerInterface> hDocHandlerList; //FileExtension/HandlerSlots
-	};  
+	};
+
+	struct strcPluginChildDocCustomMenuDef
+	{
+		QMenu *customRootMenu;
+		QMenu *parentMenu;
+		QAction *customAction;
+		strcPluginChildDocCustomMenuDef()
+		{
+			customRootMenu = NULL;
+			parentMenu = NULL;
+			customAction = NULL;
+		}
+	};
+
+	struct strcDockLocation
+	{
+		QRect rGeometry;
+		Qt::DockWidgetArea dockArea;
+		strcDockLocation()
+		{
+			rGeometry.setCoords(0, 0, 0, 0);
+			dockArea = Qt::DockWidgetArea::NoDockWidgetArea;
+		}
+	};
 
 	struct strDocManagerDocument
 	{
 		QString sFileName;
 		GlobalApplicationInformation::DocType dDocType;
-		QWidget * pWidget;
-		QMdiSubWindow * pMDISubWin;
+		QWidget *pWidget;
+		QMdiSubWindow *pMDISubWin;
 		strcPluginHandlerInterface *pPluginHandlerInterface;
 		bool bIsModified;
+		QList<strcPluginChildDocCustomMenuDef> lRegisteredMenuActions;
+		QMap<QDockWidget*, strcDockLocation> mapRegisteredDockWidgetToLocationStruct;
 		strDocManagerDocument()
 		{
 			sFileName = "";
@@ -134,7 +160,13 @@ public:
 	bool appendKnownDocumentFileHandlerList(const QString &strDocHandlerInfo, QObject *pluginObject);
 	bool isKnownDocumentFileHandlerIndex(const QString &strExtension);
 	QObject *getKnownDocumentFileHandlerObject(const QString &strExtension, QString &strDocHndlrName, const PluginHandlerSlotType &eHandlerSlotType);
-	int addAdditionalApiEntry(const QString &entry); 
+	int addAdditionalApiEntry(const QString &entry);
+	bool addMenuActionRegistration(QMdiSubWindow *subWindow, QMenu *firstMenu, QAction *menuAction);
+	QList<DocumentManager::strcPluginChildDocCustomMenuDef> getMenuActionRegistrations(QMdiSubWindow *subWindow);
+	bool addDockWidgetRegistration(QMdiSubWindow *subWindow, QDockWidget* dockWidget, const DocumentManager::strcDockLocation &dockWidgetLocation);
+	QMap<QDockWidget*, DocumentManager::strcDockLocation> getDockWidgetRegistrations(QMdiSubWindow *subWindow);
+	void removeAllMenuActionRegistrations();
+	void appendAllMenuActionRegistration(const DocumentManager::strcPluginChildDocCustomMenuDef &customMenuDef);
 
 public slots:
 	void signalDocManagerOutput(QString strText2Output) {emit DocumentManagerOutput(strText2Output);};	
@@ -146,6 +178,7 @@ private:
 	QString strFileExtensionList;
 	strcPluginDocHandlerInterfaceCollection lPluginDefinedPreLoadedHandlerInterfaces;	
 	QList<strDocManagerDocument> lChildDocuments;
+	QList<strcPluginChildDocCustomMenuDef> lAllRegisteredActions;
 	QStringList additionalApiEntries;
 
 	bool getLexer(QsciLexer *lexer, const QString &lexerName, QObject *parent = 0);

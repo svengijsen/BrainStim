@@ -175,7 +175,11 @@ class CustomChildDockTabWidget : public QTabWidget
 	Q_OBJECT
 
 public:
-	CustomChildDockTabWidget(QWidget *parent = NULL) { QTabWidget::setParent(parent); sGroupName = ""; };
+	CustomChildDockTabWidget(QWidget *parent = NULL) 
+	{ 
+		QTabWidget::setParent(parent); 
+		sGroupName = ""; 
+	};
 	~CustomChildDockTabWidget() {};
 
 	void setGroupName(const QString &sNewGroupName) { sGroupName = sNewGroupName; };

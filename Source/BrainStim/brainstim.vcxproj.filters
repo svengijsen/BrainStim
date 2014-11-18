@@ -338,6 +338,21 @@
     <ClCompile Include="..\..\Build_MSVC\Qt\x64\Release\Moc\moc_mainappinfo.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
+    <ClCompile Include="logindialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_logindialog.cpp">
+      <Filter>Generated Files\Debug_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_logindialog.cpp">
+      <Filter>Generated Files\Debug_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_logindialog.cpp">
+      <Filter>Generated Files\Release_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Release\Moc\moc_logindialog.cpp">
+      <Filter>Generated Files\Release_x64</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -476,6 +491,9 @@
     <CustomBuild Include="custommdisubwindow.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="logindialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="brainstim.rc" />
@@ -492,6 +510,9 @@
       <Filter>Resource Files</Filter>
     </None>
     <None Include="E:\Projects\BrainStim\Source\BrainStim\resources\qscintilla.ini">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\customMenuEntries.ini">
       <Filter>Resource Files</Filter>
     </None>
   </ItemGroup>

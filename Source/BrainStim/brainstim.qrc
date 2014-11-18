@@ -21,5 +21,6 @@
         <file>resources/runscript.png</file>
         <file>resources/qscintilla.ini</file>
         <file>resources/brainstim.js</file>
+        <file>resources/customMenuEntries.ini</file>
     </qresource>
 </RCC>

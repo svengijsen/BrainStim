@@ -30,6 +30,8 @@
 #define EXPGRAPH_AUTOLOOP_DISTANCE						100.0
 #define EXPGRAPH_AUTOLOOP_ADDITIONAL_LOOP_DISTANCE		EXPGRAPH_AUTOLOOP_DISTANCE
 #define EXPGRAPH_AUTOLOOP_TOOLTIP_TEXT					"Auto-connection"
+#define EXPGRAPH_VIEWSTATE_BLOCKS						"Blocks"
+#define EXPGRAPH_VIEWSTATE_OBJECTS						"Objects"
 
 enum ExperimentVisualizerGraphItemTypeEnum
 {
@@ -64,6 +66,7 @@ public:
 
 	bool setExperimentTreeModel(ExperimentTreeModel *pExpTreeModel);
 	void setVisualMargin(const int &nNewMarginWidth, const int &nNewMarginHeight) { nWidgetMarginWidth = nNewMarginWidth; nWidgetMarginHeight = nNewMarginHeight; };
+	int getAdditionalMenuHeight() const;
 
 public slots:
 	void resizeStructureView(const int &nWidth, const int &nHeight);
@@ -75,7 +78,8 @@ private slots:
 	//void Test();
 	void itemSelectionChanged();
 	bool reCreateAndParseExperimentStructure();
-	void toggleViewState();
+	void toggleViewState(const QString &sNewState);
+	void switchToNativeView();
 
 private:
 	Ui::ExperimentStructureVisualizer *ui;
@@ -208,11 +212,11 @@ private:
 	void resetExpScene();
 	bool insertLoopInGraphDrawingStruct(const cBlockStructure *pStrcSourceBlock, const cBlockStructure *pStrcTargetBlock, const cLoopStructure *pStrcLoop);
 	int getNumberOfBlockLoops(const int &nBlockID, const ExperimentGraphLoopTypeEnum &nConnectionType);
+	QAction *insertMenuAction(const QStringList &sMenuActionPath);
 
 	int nWidgetMarginWidth;
 	int nWidgetMarginHeight;
 	qreal dGraphViewScale;
-	bool bDrawVertical; //Otherwise horizontal
 	ExperimentGraphLoopItemDrawOrder eConnDrawOrder;
 	QAction *action_Quit;
 	QAction *action_ToggleViewState;
