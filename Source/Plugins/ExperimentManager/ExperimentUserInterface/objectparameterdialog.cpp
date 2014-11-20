@@ -89,8 +89,6 @@ void ObjectParameterDialog::parameterTypeChanged()
 		ui->leValue->clear();
 		ui->leName->clear();
 		clearParameterWidgetLayout();
-		leCustomParamValue = new QLineEdit();
-		ui->lEditParameter->insertWidget(0,leCustomParamValue);
 	}
 	else
 	{
@@ -113,6 +111,13 @@ void ObjectParameterDialog::clearParameterWidgetLayout()
 		ui->lEditParameter->setMargin(0);
 		ui->lEditParameter->setSpacing(6);//(0);
 		ui->lEditParameter->setObjectName(QStringLiteral("lEditParameter"));
+		if (eCurrentParameterEditingMode == PEM_CUSTOM)
+		{
+			if (leCustomParamValue == NULL)
+				leCustomParamValue = new QLineEdit();
+			if(ui->lEditParameter->itemAt(0)==NULL)
+				ui->lEditParameter->insertWidget(0, leCustomParamValue);
+		}
 	}
 }
 
@@ -172,7 +177,7 @@ void ObjectParameterDialog::updateSetParameter()
 		return;
 	if(eCurrentParameterEditingMode == PEM_CUSTOM)
 	{
-		if(ui->lEditParameter->itemAt(0))
+		if (ui->lEditParameter->itemAt(0))
 		{
 			QWidget* pTmpWidget = ui->lEditParameter->itemAt(0)->widget();
 			if(pTmpWidget)

@@ -1,14 +1,43 @@
 <RCC>
     <qresource prefix="/">
+    		<file>resources/remove.png</file>
+		    <file>resources/view.png</file>
         <file>resources/splash.png</file>
+        <file>resources/reload.png</file>
         <file>resources/copy.png</file>
         <file>resources/cut.png</file>
         <file>resources/new.png</file>
         <file>resources/open.png</file>
+        <file>resources/help.png</file>
+        <file>resources/restart.png</file>
+        <file>resources/abort.png</file>
         <file>resources/paste.png</file>
+        <file>resources/history.png</file>
+        <file>resources/about.png</file>
+        <file>resources/aboutQt.png</file>
+        <file>resources/log.png</file>
+        <file>resources/logClear.png</file>
+        <file>resources/logCopy.png</file>
+        <file>resources/logSave.png</file>
+        <file>resources/pluginExtension.png</file>
+        <file>resources/pluginDevice.png</file>
+        <file>resources/configure.png</file>
         <file>resources/save.png</file>
+        <file>resources/saveas.png</file>
+        <file>resources/close.png</file>
+        <file>resources/closeall.png</file>
+        <file>resources/find.png</file>
+        <file>resources/findnext.png</file>
+        <file>resources/findprev.png</file>
+        <file>resources/replace.png</file>
+        <file>resources/next.png</file>
+        <file>resources/previous.png</file>
+        <file>resources/togglemarker.png</file>
+        <file>resources/remallmarker.png</file>
+        <file>resources/nextmarker.png</file>
+        <file>resources/prevmarker.png</file>
+        <file>resources/exit.png</file>
         <file>resources/print.png</file>
-        <file>resources/config.png</file>
         <file>resources/query.png</file>
         <file>resources/update.png</file>
         <file>resources/comment.png</file>
@@ -19,6 +48,9 @@
         <file>resources/down.png</file>
         <file>resources/up.png</file>
         <file>resources/runscript.png</file>
+        <file>resources/redo.png</file>
+        <file>resources/undo.png</file>
+        <file>resources/selectall.png</file>
         <file>resources/qscintilla.ini</file>
         <file>resources/brainstim.js</file>
         <file>resources/customMenuEntries.ini</file>

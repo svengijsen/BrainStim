@@ -128,9 +128,9 @@ void ExperimentBlockParameterView::showContextMenu(const QPoint& pos)
 	QList<int> lstUsedBlockIDsInSelectionRanges;
 	QModelIndexList lstDefinedParamIndexesInSelectionRanges;
 	QRect outerSelectionIndexes; 
-	QMenu* mViewMenu = mContexMenu.addMenu("View");
-	QMenu* mBlocksMenu = mContexMenu.addMenu("Blocks");
-	QMenu* mParametersMenu = mContexMenu.addMenu("Parameters");
+	QMenu* mViewMenu = mContexMenu.addMenu(QIcon(":/resources/view.png"), "View");
+	QMenu* mBlocksMenu = mContexMenu.addMenu(QIcon(":/resources/blocks.png"), "Blocks");
+	QMenu* mParametersMenu = mContexMenu.addMenu(QIcon(":/resources/parameters.png"), "Parameters");
 	int nTempRow;
 	int nTempColumn;	
 
@@ -178,50 +178,50 @@ void ExperimentBlockParameterView::showContextMenu(const QPoint& pos)
 	}
 	lstUsedBlockIDsInSelectionRanges = bUsedBlockIDsInSelectionRanges.toList();
 
-	toggleViewAction = mViewMenu->addAction("Toggle Orientation");
+	toggleViewAction = mViewMenu->addAction(QIcon(":/resources/orientation.png"), "Toggle Orientation");
 	if(nSelectionCount>0)
 	{
 		if(bVerticalViewEnabled)
 		{
 			if(bUsedColumnIndexesInSelectionRanges.contains(0) == false)
-				moveUpLeftBlocksAction = mBlocksMenu->addAction("Move Left (Decrease BlockNumber(s)");
+				moveUpLeftBlocksAction = mBlocksMenu->addAction(QIcon(":/resources/moveleft.png"), "Move Left (Decrease BlockNumber(s)");
 			if(bUsedColumnIndexesInSelectionRanges.contains(columnCount()-1) == false)
-				moveDownRightBlocksAction = mBlocksMenu->addAction("Move Right (Increase BlockNumber(s))");
+				moveDownRightBlocksAction = mBlocksMenu->addAction(QIcon(":/resources/moveright.png"), "Move Right (Increase BlockNumber(s))");
 			
 		}
 		else
 		{
 			if(bUsedRowIndexesInSelectionRanges.contains(0) == false)
-				moveUpLeftBlocksAction = mBlocksMenu->addAction("Move Up (Decrease BlockNumber(s))");
+				moveUpLeftBlocksAction = mBlocksMenu->addAction(QIcon(":/resources/moveup.png"), "Move Up (Decrease BlockNumber(s))");
 			if(bUsedRowIndexesInSelectionRanges.contains(rowCount()-1) == false)
-				moveDownRightBlocksAction = mBlocksMenu->addAction("Move Down (Increase BlockNumber(s))");
+				moveDownRightBlocksAction = mBlocksMenu->addAction(QIcon(":/resources/movedown.png"), "Move Down (Increase BlockNumber(s))");
 		}
 	}
 
-	addBlockAction = mBlocksMenu->addAction("Add New");
-	addMultipleBlocksAction = mBlocksMenu->addAction("Add New(multiple)");
+	addBlockAction = mBlocksMenu->addAction(QIcon(":/resources/add.png"), "Add New");
+	addMultipleBlocksAction = mBlocksMenu->addAction(QIcon(":/resources/addmultiple.png"), "Add New(multiple)");
 	if(bVerticalViewEnabled)
 	{
 		if(bUsedColumnIndexesInSelectionRanges.count() == 1)
-			removeBlockAction = mBlocksMenu->addAction("Remove Selected");
+			removeBlockAction = mBlocksMenu->addAction(QIcon(":/resources/remove.png"), "Remove Selected");
 		else if(bUsedColumnIndexesInSelectionRanges.count() > 1)
-			removeBlocksAction = mBlocksMenu->addAction("Remove Multiple Selected");
+			removeBlocksAction = mBlocksMenu->addAction(QIcon(":/resources/remove.png"), "Remove Multiple Selected");
 	}
 	else
 	{
 		if(bUsedRowIndexesInSelectionRanges.count() == 1)
-			removeBlockAction = mBlocksMenu->addAction("Remove Selected");
+			removeBlockAction = mBlocksMenu->addAction(QIcon(":/resources/remove.png"), "Remove Selected");
 		else if(bUsedRowIndexesInSelectionRanges.count() > 1)
-			removeBlocksAction = mBlocksMenu->addAction("Remove Multiple Selected");
+			removeBlocksAction = mBlocksMenu->addAction(QIcon(":/resources/remove.png"), "Remove Multiple Selected");
 	}
 
-	addParametersAction = mParametersMenu->addAction("Configure Parameter(s)");
+	addParametersAction = mParametersMenu->addAction(QIcon(":/resources/configure.png"), "Configure Parameter(s)");
 	if(lstDefinedParamIndexesInSelectionRanges.isEmpty() == false)
 	{		
 		if (lstDefinedParamIndexesInSelectionRanges.count() == 1)
-			resetParametersAction = mParametersMenu->addAction("Reset Selected");
+			resetParametersAction = mParametersMenu->addAction(QIcon(":/resources/reset.png"), "Reset Selected");
 		else
-			resetParametersAction = mParametersMenu->addAction("Reset Multiple Selected");
+			resetParametersAction = mParametersMenu->addAction(QIcon(":/resources/reset.png"), "Reset Multiple Selected");
 	}
 	
 	selectedItemAction = mContexMenu.exec(globalPos);
@@ -698,18 +698,21 @@ bool ExperimentBlockParameterView::appendExperimentBlockParameterChanges()
 						sParamName = hashObjectIdExperimentObjectInfo[nObjectID].sObjectName + ":\n";
 						ExperimentParameterDefinitionStrc *tmpStruct = pTempObjectParamDefContainer->getParameterDefinition(nParamID);
 
-						if(cParamEditType == PEM_CUSTOM)
+						if (tmpStruct)
 						{
-							sParamName = sParamName + lObjectIDGroupDefParamName.at(EXPPARAMWIDGETS_UNIQUEPARAM_PARAMNAME_INDEX);
-						}
-						else if(tmpStruct->sGroupPath.isEmpty())
-						{
-							sParamName = sParamName + pTempObjectParamDefContainer->getParameterDefinition(nParamID)->sDisplayName;
-						}
-						else
-						{
-							sParamName = sParamName + pTempObjectParamDefContainer->getParameterDefinition(nParamID)->sGroupPath + EXPERIMENT_PARAM_GROUPSEP_CHAR + pTempObjectParamDefContainer->getParameterDefinition(nParamID)->sDisplayName;
-							sParamName = sParamName.replace(EXPERIMENT_PARAM_GROUPSEP_CHAR,"\n");
+							if (cParamEditType == PEM_CUSTOM)
+							{
+								sParamName = sParamName + lObjectIDGroupDefParamName.at(EXPPARAMWIDGETS_UNIQUEPARAM_PARAMNAME_INDEX);
+							}
+							else if (tmpStruct->sGroupPath.isEmpty())
+							{
+								sParamName = sParamName + tmpStruct->sDisplayName;
+							}
+							else
+							{
+								sParamName = sParamName + tmpStruct->sGroupPath + EXPERIMENT_PARAM_GROUPSEP_CHAR + tmpStruct->sDisplayName;
+								sParamName = sParamName.replace(EXPERIMENT_PARAM_GROUPSEP_CHAR, "\n");
+							}
 						}
 					}
 					else

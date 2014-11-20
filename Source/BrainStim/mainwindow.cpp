@@ -1187,9 +1187,10 @@ void MainWindow::updateMenuControls(QMdiSubWindow *mdiSubWin)
 		saveAsAction->setEnabled(hasMdiChild);
 		pasteAction->setEnabled(hasMdiChild);
 		closeAction->setEnabled(hasMdiChild);
+		reloadAction->setEnabled(hasMdiChild);
 		closeAllAction->setEnabled(hasMdiChild);
-		tileAction->setEnabled(hasMdiChild);
-		cascadeAction->setEnabled(hasMdiChild);
+		//tileAction->setEnabled(hasMdiChild);
+		//cascadeAction->setEnabled(hasMdiChild);
 		nextAction->setEnabled(hasMdiChild);
 		previousAction->setEnabled(hasMdiChild);
 		separatorAct->setVisible(hasMdiChild);
@@ -1236,9 +1237,10 @@ void MainWindow::updateMenuControls(QMdiSubWindow *mdiSubWin)
 		saveAsAction->setEnabled(hasMdiChild);
 		pasteAction->setEnabled(false);
 		closeAction->setEnabled(hasMdiChild);
+		reloadAction->setEnabled(hasMdiChild);
 		closeAllAction->setEnabled(hasMdiChild);
-		tileAction->setEnabled(hasMdiChild);
-		cascadeAction->setEnabled(hasMdiChild);
+		//tileAction->setEnabled(hasMdiChild);
+		//cascadeAction->setEnabled(hasMdiChild);
 		nextAction->setEnabled(hasMdiChild);
 		previousAction->setEnabled(hasMdiChild);
 		separatorAct->setVisible(hasMdiChild);
@@ -1423,13 +1425,20 @@ void MainWindow::createDefaultMenus()
 	connect(openAction, SIGNAL(triggered()), this, SLOT(openFiles()));
 	fileMenu->addAction(openAction);
 
+	reloadAction = new QAction(QIcon(":/resources/reload.png"), tr("Reload"), this);
+	//reloadAction->setData("Reload");
+	reloadAction->setShortcut(tr("Ctrl+R"));
+	reloadAction->setStatusTip(tr("Close the active window"));
+	connect(reloadAction, SIGNAL(triggered()), this, SLOT(reloadSubWindow()));
+	fileMenu->addAction(reloadAction);
+
 	saveAction = new QAction(QIcon(":/resources/save.png"), tr("&Save"), this);
 	saveAction->setShortcuts(QKeySequence::Save);
 	saveAction->setStatusTip(tr("Save the document to disk"));
 	connect(saveAction, SIGNAL(triggered()), this, SLOT(save()));
 	fileMenu->addAction(saveAction);
 
-	saveAsAction = new QAction(tr("Save &As..."), this);
+	saveAsAction = new QAction(QIcon(":/resources/saveas.png"), tr("Save &As..."), this);
 	saveAsAction->setShortcut(tr("Ctrl+Shift+s"));
 	saveAsAction->setStatusTip(tr("Save the document under a new name"));
 	connect(saveAsAction, SIGNAL(triggered()), this, SLOT(saveAs()));
@@ -1458,31 +1467,31 @@ void MainWindow::createDefaultMenus()
 	fileMenu->addSeparator();
 	updateRecentFileActions();
 
-	closeAction = new QAction(tr("&Close"), this);
+	closeAction = new QAction(QIcon(":/resources/close.png"), tr("&Close"), this);
 	closeAction->setData("Close");
 	closeAction->setShortcut(tr("Ctrl+Shift+C"));
 	closeAction->setStatusTip(tr("Close the active window"));
 	connect(closeAction, SIGNAL(triggered()), this, SLOT(closeSubWindow()));
 	fileMenu->addAction(closeAction);
 
-	closeAllAction = new QAction(tr("Close A&ll"), this);
+	closeAllAction = new QAction(QIcon(":/resources/closeall.png"), tr("Close A&ll"), this);
 	closeAllAction->setData("CloseAll");
 	closeAllAction->setShortcut(tr("Ctrl+Shift+F4"));
 	closeAllAction->setStatusTip(tr("Close all the windows"));
 	connect(closeAllAction, SIGNAL(triggered()), this, SLOT(closeSubWindow()));
 	fileMenu->addAction(closeAllAction);
 
-	quitAction = new QAction(tr("E&xit"), this);
+	quitAction = new QAction(QIcon(":/resources/exit.png"), tr("E&xit"), this);
 	quitAction->setShortcut(QKeySequence(tr("Alt+F4")));
 	quitAction->setStatusTip(tr("Exit the application"));
 	connect(quitAction, SIGNAL(triggered()), qApp, SLOT(closeAllWindows()));
 	fileMenu->addAction(quitAction);
 	menuBar()->addMenu(fileMenu);//the file menu..........................................................
 
-	editOutputMenu = editMenu->addMenu(tr("&Output Log Pane"));
+	editOutputMenu = editMenu->addMenu(QIcon(":/resources/log.png"), tr("&Output Log Pane"));
 
 	signalMapperCopyDebugger = new QSignalMapper(this);
-	mCopyDebuggerAction.insert(MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME,new QAction(QObject::tr("&Copy Selected Text"), 0));
+	mCopyDebuggerAction.insert(MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME, new QAction(QIcon(":/resources/logCopy.png"), QObject::tr("&Copy Selected Text"), 0));
 	//copyDebuggerAction->setShortcut(QKeySequence(""));
 	mCopyDebuggerAction.value(MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME)->setStatusTip(tr("Copy the Selected Debugger Output window line(s)."));
 	connect(mCopyDebuggerAction.value(MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME), SIGNAL(triggered()), signalMapperCopyDebugger, SLOT(map()));
@@ -1491,7 +1500,7 @@ void MainWindow::createDefaultMenus()
 	connect(signalMapperCopyDebugger, SIGNAL(mapped(const QString &)),this, SLOT(copyDebugger(const QString &)));
 
 	signalMapperClearDebugger = new QSignalMapper(this);
-	mClearDebuggerAction.insert(MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME,new QAction(QObject::tr("C&lear All Output Item(s)"), 0));
+	mClearDebuggerAction.insert(MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME, new QAction(QIcon(":/resources/logClear.png"), QObject::tr("C&lear All Output Item(s)"), 0));
 	//clearDebuggerAction->setShortcut(QKeySequence(""));
 	mClearDebuggerAction.value(MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME)->setStatusTip(tr("Clear the Debugger Output window."));
 	connect(mClearDebuggerAction.value(MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME), SIGNAL(triggered()), signalMapperClearDebugger, SLOT(map()));
@@ -1500,7 +1509,7 @@ void MainWindow::createDefaultMenus()
 	connect(signalMapperClearDebugger, SIGNAL(mapped(const QString &)),this, SLOT(clearDebugger(const QString &)));
 
 	signalMapperSaveDebugger = new QSignalMapper(this);
-	mSaveDebuggerAction.insert(MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME,new QAction(QObject::tr("&Save All Output information to a text file..."), 0));
+	mSaveDebuggerAction.insert(MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME, new QAction(QIcon(":/resources/logSave.png"), QObject::tr("&Save All Output information to a text file..."), 0));
 	//mSaveDebuggerAction->setShortcut(QKeySequence(""));
 	mSaveDebuggerAction.value(MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME)->setStatusTip(tr("Save the Debugger Output window."));
 	connect(mSaveDebuggerAction.value(MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME), SIGNAL(triggered()), signalMapperSaveDebugger, SLOT(map()));
@@ -1534,25 +1543,25 @@ void MainWindow::createDefaultMenus()
 
 	editMenu->addSeparator();
 
-	findAction = new QAction(QIcon(""), tr("&Find"), this);
+	findAction = new QAction(QIcon(":/resources/find.png"), tr("&Find"), this);
 	findAction->setShortcuts(QKeySequence::Find);
 	findAction->setStatusTip(tr("Find"));
 	connect(findAction, SIGNAL(triggered()), this, SLOT(find()));
 	editMenu->addAction(findAction);
 
-	findNextAction = new QAction(QIcon(""), tr("Find &Next"), this);
+	findNextAction = new QAction(QIcon(":/resources/findnext.png"), tr("Find &Next"), this);
 	findNextAction->setShortcuts(QKeySequence::FindNext);
 	findNextAction->setStatusTip(tr("Find Next"));
 	connect(findNextAction, SIGNAL(triggered()), this, SLOT(findNext()));
 	editMenu->addAction(findNextAction);
 
-	findPrevAction = new QAction(QIcon(""), tr("Find &Previous"), this);
+	findPrevAction = new QAction(QIcon(":/resources/findprev.png"), tr("Find &Previous"), this);
 	findPrevAction->setShortcuts(QKeySequence::FindPrevious);
 	findPrevAction->setStatusTip(tr("Find Previous"));
 	connect(findPrevAction, SIGNAL(triggered()), this, SLOT(findPrev()));
 	editMenu->addAction(findPrevAction);
 
-	replaceAction = new QAction(QIcon(""), tr("&Replace"), this);
+	replaceAction = new QAction(QIcon(":/resources/replace.png"), tr("&Replace"), this);
 	replaceAction->setShortcuts(QKeySequence::Replace);
 	replaceAction->setStatusTip(tr("Replace"));
 	connect(replaceAction, SIGNAL(triggered()), this, SLOT(replace()));
@@ -1629,22 +1638,22 @@ void MainWindow::createDefaultMenus()
 	editMenu->addAction(toLowerCaseAction);
 	menuBar()->addMenu(editMenu);//the edit menu..........................................................
 
-	tileAction = new QAction(tr("&Tile"), this);
-	tileAction->setShortcut(QKeySequence(tr("Ctrl+Alt+T")));
-	tileAction->setStatusTip(tr("Tile the windows"));
-	connect(tileAction, SIGNAL(triggered()), mdiArea, SLOT(tileSubWindows()));
+	//tileAction = new QAction(tr("&Tile"), this);
+	//tileAction->setShortcut(QKeySequence(tr("Ctrl+Alt+T")));
+	//tileAction->setStatusTip(tr("Tile the windows"));
+	//connect(tileAction, SIGNAL(triggered()), mdiArea, SLOT(tileSubWindows()));
 
-	cascadeAction = new QAction(tr("C&ascade"), this);
-	cascadeAction->setShortcut(QKeySequence(tr("Ctrl+Alt+C")));
-	cascadeAction->setStatusTip(tr("Cascade the windows"));
-	connect(cascadeAction, SIGNAL(triggered()), mdiArea, SLOT(cascadeSubWindows()));
+	//cascadeAction = new QAction(tr("C&ascade"), this);
+	//cascadeAction->setShortcut(QKeySequence(tr("Ctrl+Alt+C")));
+	//cascadeAction->setStatusTip(tr("Cascade the windows"));
+	//connect(cascadeAction, SIGNAL(triggered()), mdiArea, SLOT(cascadeSubWindows()));
 
-	nextAction = new QAction(tr("&Next"), this);
+	nextAction = new QAction(QIcon(":/resources/next.png"), tr("&Next"), this);
 	nextAction->setShortcut(QKeySequence(tr("Ctrl+Tab")));//QKeySequence::NextChild);
 	nextAction->setStatusTip(tr("Move the focus to the next window"));
 	connect(nextAction, SIGNAL(triggered()), mdiArea, SLOT(activateNextSubWindow()));
 
-	previousAction = new QAction(tr("&Previous"), this);
+	previousAction = new QAction(QIcon(":/resources/previous.png"), tr("&Previous"), this);
 	previousAction->setShortcut(QKeySequence(tr("Ctrl+Shift+Tab")));//QKeySequence::PreviousChild);
 	previousAction->setStatusTip(tr("Move the focus to the previous window"));
 	connect(previousAction, SIGNAL(triggered()), mdiArea, SLOT(activatePreviousSubWindow()));
@@ -1652,25 +1661,25 @@ void MainWindow::createDefaultMenus()
 	updateWindowMenu();
 	connect(windowMenu, SIGNAL(aboutToShow()), this, SLOT(updateWindowMenu()));//the window menu..........................................................
 
-	addRemMarkerAction = new QAction(tr("Add/Remove &marker"), this);
+	addRemMarkerAction = new QAction(QIcon(":/resources/togglemarker.png"), tr("Add/Remove &marker"), this);
 	addRemMarkerAction->setShortcut(QKeySequence(tr("F2")));
 	addRemMarkerAction->setStatusTip(tr("Add/Remove marker"));
 	connect(addRemMarkerAction, SIGNAL(triggered()), this, SLOT(toggleMarker()));
 	//markersMenu->addAction(addRemMarkerAction);
 
-	nextMarkerAction = new QAction(tr("&Next marker"), this);
+	nextMarkerAction = new QAction(QIcon(":/resources/nextmarker.png"), tr("&Next marker"), this);
 	nextMarkerAction->setShortcut(QKeySequence(tr("F4")));
 	nextMarkerAction->setStatusTip(tr("Next marker"));
 	connect(nextMarkerAction, SIGNAL(triggered()), this, SLOT(nextMarker()));
 	//markersMenu->addAction(nextMarkerAction);
 
-	prevMarkerAction = new QAction(tr("&Previous marker"), this);
+	prevMarkerAction = new QAction(QIcon(":/resources/prevmarker.png"), tr("&Previous marker"), this);
 	prevMarkerAction->setShortcut(QKeySequence(tr("F6")));
 	prevMarkerAction->setStatusTip(tr("Previous marker"));
 	connect(prevMarkerAction, SIGNAL(triggered()), this, SLOT(prevMarker()));
 	//markersMenu->addAction(prevMarkerAction);
 
-	remAllMarkerAction = new QAction(tr("&Remove all markers"), this);
+	remAllMarkerAction = new QAction(QIcon(":/resources/remallmarker.png"), tr("&Remove all markers"), this);
 	remAllMarkerAction->setShortcut(QKeySequence(tr("F8")));
 	remAllMarkerAction->setStatusTip(tr("Remove all markers"));
 	connect(remAllMarkerAction, SIGNAL(triggered()), this, SLOT(removeAllMarkers()));
@@ -1695,13 +1704,13 @@ void MainWindow::createDefaultMenus()
 	//debugScriptAction->setData(GlobalApplicationInformation::Debug);
 	//connect(debugScriptAction, SIGNAL(triggered()), this, SLOT(executeScript()));
 
-	abortDocumentAction = documentMenu->addAction(tr("&Abort"));//QIcon(":/resources/runscript.png"),tr("&Run Script"));
+	abortDocumentAction = documentMenu->addAction(QIcon(":/resources/abort.png"), tr("&Abort"));//QIcon(":/resources/runscript.png"),tr("&Run Script"));
 	abortDocumentAction->setEnabled(false);//false);
 	abortDocumentAction->setShortcut(QKeySequence(tr("F7")));
 	abortDocumentAction->setStatusTip(tr("Abort the current document"));
 	connect(abortDocumentAction, SIGNAL(triggered()), this, SLOT(abortScript()));
 
-	restartScriptEngineAction = documentMenu->addAction(tr("&Restart Script Engine"));
+	restartScriptEngineAction = documentMenu->addAction(QIcon(":/resources/restart.png"), tr("&Restart Script Engine"));
 	restartScriptEngineAction->setEnabled(false);//false);
 	restartScriptEngineAction->setShortcut(QKeySequence(tr("F9")));
 	restartScriptEngineAction->setStatusTip(tr("Force a restart of the script engine"));
@@ -1728,7 +1737,7 @@ void MainWindow::createDefaultMenus()
 	//viewMenu->addAction(debuggerDock->toggleViewAction());
 	//menuBar()->addMenu(viewMenu);//the view menu..........................................................
 
-	optionsAction = toolsMenu->addAction(tr("&Options"));
+	optionsAction = toolsMenu->addAction(QIcon(":/resources/configure.png"), tr("&Options"));
 	optionsAction->setShortcut(QKeySequence(tr("Ctrl+Alt+O")));
 	optionsAction->setStatusTip(tr("Open the options dialog"));
 	//optionsAction->setEnabled(true);
@@ -1745,23 +1754,23 @@ void MainWindow::setupHelpMenu()
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
 	helpMenu = menuBar()->addMenu(tr("&Help"));
 	
-	assistantAct = new QAction(tr("Help &Contents"), this);
+	assistantAct = new QAction(QIcon(":/resources/help.png"), tr("Help &Contents"), this);
 	assistantAct->setStatusTip(tr("Show the BrainStim Documentation"));
 	helpMenu->addAction(assistantAct);
 	assistantAct->setShortcut(QKeySequence::HelpContents);
 	connect(assistantAct, SIGNAL(triggered()), this, SLOT(showDocumentation()));
 	
-	aboutBrainStimAct = new QAction(tr("&About BrainStim"), this);
+	aboutBrainStimAct = new QAction(QIcon(":/resources/about.png"), tr("&About BrainStim"), this);
 	aboutBrainStimAct->setStatusTip(tr("Show the BrainStim About Dialog"));
 	helpMenu->addAction(aboutBrainStimAct);
 	connect(aboutBrainStimAct, SIGNAL(triggered()), this, SLOT(aboutBrainStim()));
 
-	aboutQtAct = new QAction(tr("About &Qt"), this);
+	aboutQtAct = new QAction(QIcon(":/resources/aboutQt.png"), tr("About &Qt"), this);
 	aboutQtAct->setStatusTip(tr("Show the Qt About Dialog"));
 	helpMenu->addAction(aboutQtAct);
 	connect(aboutQtAct, SIGNAL(triggered()), qApp, SLOT(aboutQt()));
 
-	historyQtAct = new QAction(tr("BrainStim &History"), this);
+	historyQtAct = new QAction(QIcon(":/resources/history.png"), tr("BrainStim &History"), this);
 	historyQtAct->setStatusTip(tr("Show the BrainStim History"));
 	helpMenu->addAction(historyQtAct);
 	connect(historyQtAct, SIGNAL(triggered()), this, SLOT(showJavaScriptConfigurationFile()));
@@ -1784,9 +1793,19 @@ void MainWindow::write2OutputWindow(const QString &text2Write, const QString &sT
 			mTabNameToOutputWindowList[sTabName]->append(text2Write);
 	}
 }
+void MainWindow::reloadSubWindow()
+{
+	//QMdiSubWindow *mdiSub = activeMdiChild();
+	//if (mdiSub)
+	//{
+	//	QString sPath = mdiSub->
+	//}
+	reOpenCurrentFile("", false);
+}
 
 void MainWindow::reOpenCurrentFile(const QString &strCanonicalFilePath, const bool &bNativeFileViewer)// See the defined MAIN_PROGRAM_REOPEN_SLOT_NAME
 {
+	QApplication::setOverrideCursor(Qt::WaitCursor);
 	QMdiSubWindow *existing = NULL;
 	QString sFinalPath = strCanonicalFilePath;
 	if (sFinalPath.isEmpty())
@@ -1809,13 +1828,14 @@ void MainWindow::reOpenCurrentFile(const QString &strCanonicalFilePath, const bo
 			DocManager->setModFlagAndTitle(DocManager->getDocIndex(existing),false);//Trick for a successful closing of document, see next
 			closeActiveDocument();
 			QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), "openFiles", Qt::QueuedConnection, Q_ARG(QString, sFinalPath), Q_ARG(QStringList, QStringList()), Q_ARG(bool, bNativeFileViewer));
-			QApplication::restoreOverrideCursor();
+			QApplication::restoreOverrideCursor(); 
 		}
 		else if (sNewFileName.isEmpty() == false)
 		{
 			updateRecentFileList(sNewFileName);
 		}
 	}
+	QApplication::restoreOverrideCursor();
 }
 
 void MainWindow::clearOutputWindow(const QString &sTabName) 
@@ -1834,19 +1854,19 @@ bool MainWindow::addOutputWindow(const QString &sTabName)
 	mTabNameToOutputWindowList[sTabName]->setContextMenuPolicy(Qt::CustomContextMenu);
 	mTabNameToConnectionList.insert(sTabName,connect(mTabNameToOutputWindowList[sTabName], &QTextEdit::customContextMenuRequested, [=](const QPoint &arg) {DebugcontextMenuEvent(arg, sTabName);}));
 	
-	mClearDebuggerAction.insert(sTabName,new QAction(QObject::tr("C&lear All Output Item(s)"), 0));
+	mClearDebuggerAction.insert(sTabName, new QAction(QIcon(":/resources/logClear.png"), QObject::tr("C&lear All Output Item(s)"), 0));
 	//clearDebuggerAction->setShortcut(QKeySequence(""));
 	mClearDebuggerAction.value(sTabName)->setStatusTip(tr("Clear the Debugger Output window."));
 	connect(mClearDebuggerAction.value(sTabName), SIGNAL(triggered()), signalMapperClearDebugger, SLOT(map()));
 	signalMapperClearDebugger->setMapping(mClearDebuggerAction.value(sTabName), sTabName);
 
-	mCopyDebuggerAction.insert(sTabName,new QAction(QObject::tr("&Copy Selected Text"), 0));
+	mCopyDebuggerAction.insert(sTabName, new QAction(QIcon(":/resources/logCopy.png"), QObject::tr("&Copy Selected Text"), 0));
 	//CopyDebuggerAction->setShortcut(QKeySequence(""));
 	mCopyDebuggerAction.value(sTabName)->setStatusTip(tr("Copy the Selected Debugger Output window line(s)."));
 	connect(mCopyDebuggerAction.value(sTabName), SIGNAL(triggered()), signalMapperCopyDebugger, SLOT(map()));
 	signalMapperCopyDebugger->setMapping(mCopyDebuggerAction.value(sTabName), sTabName);
 
-	mSaveDebuggerAction.insert(sTabName,new QAction(QObject::tr("&Save All Output information to a text file..."), 0));
+	mSaveDebuggerAction.insert(sTabName, new QAction(QIcon(":/resources/logSave.png"), QObject::tr("&Save All Output information to a text file..."), 0));
 	//SaveDebuggerAction->setShortcut(QKeySequence(""));
 	mSaveDebuggerAction.value(sTabName)->setStatusTip(tr("Save the Debugger Output window."));
 	connect(mSaveDebuggerAction.value(sTabName), SIGNAL(triggered()), signalMapperSaveDebugger, SLOT(map()));
@@ -2417,7 +2437,7 @@ bool MainWindow::popPluginIntoMenu(QObject *plugin)
 		{
 			if (!bDevicePluginsFound)
 			{
-				devicePluginMenu = pluginsMenu->addMenu(tr("&Device Plugins"));
+				devicePluginMenu = pluginsMenu->addMenu(QIcon(":/resources/pluginDevice.png"), tr("&Device Plugins"));
 				bDevicePluginsFound = true;
 			}
 			pluginAction = integratePlugin(plugin,Plugins);
@@ -2436,7 +2456,7 @@ bool MainWindow::popPluginIntoMenu(QObject *plugin)
 		{
 			if (!bExtensionPluginsFound)
 			{
-				extensionPluginMenu = pluginsMenu->addMenu(tr("&Extension Plugins"));
+				extensionPluginMenu = pluginsMenu->addMenu(QIcon(":/resources/pluginExtension.png"), tr("&Extension Plugins"));
 				bExtensionPluginsFound = true;
 			}
 			pluginAction = integratePlugin(plugin,Plugins);
@@ -3414,11 +3434,12 @@ void MainWindow::blockComment()
 void MainWindow::updateWindowMenu()
 {
 	windowMenu->clear();
+	windowMenu->addAction(reloadAction);
 	windowMenu->addAction(closeAction);
 	windowMenu->addAction(closeAllAction);
-	windowMenu->addSeparator();
-	windowMenu->addAction(tileAction);
-	windowMenu->addAction(cascadeAction);
+	//windowMenu->addSeparator();
+	//windowMenu->addAction(tileAction);
+	//windowMenu->addAction(cascadeAction);
 	windowMenu->addSeparator();
 	windowMenu->addAction(nextAction);
 	windowMenu->addAction(previousAction);

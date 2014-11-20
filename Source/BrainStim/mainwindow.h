@@ -228,6 +228,11 @@ public slots:
 	 * @param bNativeFileViewer a Boolean value determining whether the file should be opened again by the default set file-handler (defined by a plug-in) or by BrainStim directly.
 	 */
 	void reOpenCurrentFile(const QString &strCanonicalFilePath, const bool &bNativeFileViewer = false);
+	/*! \brief Re-opens the current active document.
+	*
+	* This function first closes and then re-opens the current active document, see MainWindow::reOpenCurrentFile().
+	*/
+	void reloadSubWindow();
 	/*! \brief Clears the Output Log Window.
 	 *
 	 * This function clears the Output Log Window.
@@ -519,8 +524,9 @@ private:
 	QAction *toLowerCaseAction;
 	QAction *closeAction;
 	QAction *closeAllAction;
-    QAction *tileAction;
-    QAction *cascadeAction;
+	QAction *reloadAction;
+    //QAction *tileAction;
+    //QAction *cascadeAction;
     QAction *nextAction;
     QAction *previousAction;
 	QAction *addRemMarkerAction;

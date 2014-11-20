@@ -77,11 +77,11 @@ bool ExperimentStructureScene::event(QEvent *event)
 void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
 {
 	QMenu mContexMenu;
-	//QMenu* mViewMenu = mContexMenu.addMenu("View");
-	QMenu* mBlocksMenu = mContexMenu.addMenu("Blocks");
-	QMenu* mLoopsMenu = mContexMenu.addMenu("Loops");
-	QMenu* mObjectsMenu = mContexMenu.addMenu("Objects");
-	QMenu* mConnectionsMenu = mContexMenu.addMenu("Connections");
+	//QMenu* mViewMenu = mContexMenu.addMenu(QIcon(":/resources/view.png"), "View");
+	QMenu* mBlocksMenu = mContexMenu.addMenu(QIcon(":/resources/blocks.png"), "Blocks");
+	QMenu* mLoopsMenu = mContexMenu.addMenu(QIcon(":/resources/loops.png"), "Loops");
+	QMenu* mObjectsMenu = mContexMenu.addMenu(QIcon(":/resources/objects.png"), "Objects");
+	QMenu* mConnectionsMenu = mContexMenu.addMenu(QIcon(":/resources/connections.png"), "Connections");
 	QAction *selectedItemAction = NULL;
 	//QAction *toggleViewAction;
 	QAction* configureLoopsAction;
@@ -135,14 +135,14 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 
 	if(getGraphViewState() == EXPVIS_VIEWSTATE_BLOCKTRIALS)
 	{
-		addBlockAction = mBlocksMenu->addAction("Add New");
-		addMultipleBlocksAction = mBlocksMenu->addAction("Add New(multiple)");
+		addBlockAction = mBlocksMenu->addAction(QIcon(":/resources/add.png"), "Add New");
+		addMultipleBlocksAction = mBlocksMenu->addAction(QIcon(":/resources/addmultiple.png"), "Add New(multiple)");
 		if(gSelectedBlockItems.isEmpty() == false)//Blocks selected?
 		{
 			//if(bUsedColumnIndexesInSelectionRanges.count() == 1)
-			//removeBlockAction = mBlocksMenu->addAction("Remove Selected");
+			//removeBlockAction = mBlocksMenu->addAction(QIcon(":/resources/remove.png"), "Remove Selected");
 			//else if(bUsedColumnIndexesInSelectionRanges.count() > 1)
-			removeBlocksAction = mBlocksMenu->addAction("Remove Selected");
+			removeBlocksAction = mBlocksMenu->addAction(QIcon(":/resources/remove.png"), "Remove Selected");
 		}
 		mBlocksMenu->setEnabled(true);
 
@@ -164,7 +164,7 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 		{
 
 		}
-		configureLoopsAction = mLoopsMenu->addAction("Configure Loop(s)");
+		configureLoopsAction = mLoopsMenu->addAction(QIcon(":/resources/configure.png"), "Configure Loop(s)");
 	}
 	else if(getGraphViewState() == EXPVIS_VIEWSTATE_OBJECTS)
 	{
@@ -173,18 +173,18 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 		{
 
 		}
-		//addObjectAction = mObjectsMenu->addAction("Add New");
-		configureObjectsAction = mObjectsMenu->addAction("Configure Object(s)");
+		//addObjectAction = mObjectsMenu->addAction(QIcon(":/resources/add.png"), "Add New");
+		configureObjectsAction = mObjectsMenu->addAction(QIcon(":/resources/configure.png"), "Configure Object(s)");
 		
 		mConnectionsMenu->setEnabled(true);
 		if(gSelectedMethodConnectionItems.isEmpty() == false)//Method Connections selected?
 		{
-			removeObjectConnectionAction = mConnectionsMenu->addAction("Remove Selected");
+			removeObjectConnectionAction = mConnectionsMenu->addAction(QIcon(":/resources/remove.png"), "Remove Selected");
 		}
-		configureConnectionsAction = mConnectionsMenu->addAction("Configure Connection(s)");
+		configureConnectionsAction = mConnectionsMenu->addAction(QIcon(":/resources/configure.png"), "Configure Connection(s)");
 	}
 
-	//toggleViewAction = mViewMenu->addAction("Toggle Orientation");
+	//toggleViewAction = mViewMenu->addAction(QIcon(":/resources/orientation.png"), "Toggle Orientation");
 
 	selectedItemAction = mContexMenu.exec(contextMenuEvent->screenPos());//contextMenuEvent->globalPos()// contextMenuEvent->scenePos() is available
 	if (selectedItemAction)

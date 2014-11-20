@@ -162,7 +162,8 @@ void ExperimentStructureVisualizer::setupMenuAndActions()
 {
 	toolBar = new QToolBar(this);
 	QComboBox *cmbViewSelection = new QComboBox(this);
-	cmbViewSelection->addItems(QStringList() << EXPGRAPH_VIEWSTATE_BLOCKS << EXPGRAPH_VIEWSTATE_OBJECTS);
+	cmbViewSelection->addItem(QIcon(":/resources/blocks.png"), EXPGRAPH_VIEWSTATE_BLOCKS);
+	cmbViewSelection->addItem(QIcon(":/resources/objects.png"), EXPGRAPH_VIEWSTATE_OBJECTS);
 	QAction *tmpAction = toolBar->insertWidget(NULL, cmbViewSelection);
 	QLabel *labViewSelection = new QLabel("Show: ", this);
 	toolBar->insertWidget(tmpAction, labViewSelection);

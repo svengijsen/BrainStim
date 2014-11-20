@@ -1800,11 +1800,12 @@ bool ExperimentGraphicEditor::selectTreeItem(const QStringList &lTextToFind, con
 							break;
 					}
 					QModelIndex index = pExpTreeModel->indexFromItem(tmpTreeItem);
-					QModelIndex currentIndex = treeView->selectionModel()->currentIndex();
 					QModelIndex modelIndex = filterModel->mapFromSource(index);
+					QModelIndex currentIndex = treeView->selectionModel()->currentIndex();
 					if (modelIndex.isValid())
 					{
-						if (modelIndex.internalId() == currentIndex.internalId())
+						//if (modelIndex.internalId() == currentIndex.internalId())
+						if (modelIndex == currentIndex)
 							return true;
 						treeView->selectionModel()->setCurrentIndex(modelIndex, QItemSelectionModel::ClearAndSelect);
 						showTreeItemInfo(modelIndex);
