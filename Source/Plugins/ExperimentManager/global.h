@@ -246,6 +246,7 @@ namespace ExperimentManagerNameSpace
 	#define CONNECTION_SIGNATURE_TAG		"signature"
 	#define CONNECTION_SOURCE_TAG			"source"
 	#define CONNECTION_TARGET_TAG			"target"
+	#define INIT_FINIT_NUMBER_TAG			"number"
 	#define INIT_FINIT_TYPE_TAG				"type"
 	#define INIT_FINIT_TYPE_SLOT_TAG		METHOD_TYPE_SLOT_TAG
 	#define INIT_FINIT_SIGNATURE_TAG		"signature"

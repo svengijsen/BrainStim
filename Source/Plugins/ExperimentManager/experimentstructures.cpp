@@ -742,6 +742,7 @@ cMethodStructure::cMethodStructure(const cMethodStructure& other)
 	currentScriptEngine = other.currentScriptEngine;
 	nMethodID = other.nMethodID;
 	nMethodObjectID = other.nMethodObjectID;
+	nMethodOrderNumber = other.nMethodOrderNumber;
 	sMethodSignature = other.sMethodSignature;
 	mMethodType = other.mMethodType;
 	mapParamIDtoParamStruct = other.mapParamIDtoParamStruct;
@@ -751,16 +752,18 @@ bool cMethodStructure::Initialize()
 {
 	nMethodID = -1;
 	nMethodObjectID = -1;
+	nMethodOrderNumber = -1;
 	sMethodSignature = "";
 	mMethodType = ExperimentStructuresNameSpace::METHOD_TYPE_UNDEFINED;
 	return true;
 }
 
-cMethodStructure::cMethodStructure(const int &nMethId, const int &nMethObjID, const int &nMethType, const QString &sMethSignature)
+cMethodStructure::cMethodStructure(const int &nMethId, const int &nMethOrderNumber, const int &nMethObjID, const int &nMethType, const QString &sMethSignature)
 {
 	currentScriptEngine = NULL;
 	nMethodID = nMethId;
 	nMethodObjectID = nMethObjID;
+	nMethodOrderNumber = nMethOrderNumber;
 	sMethodSignature = sMethSignature;
 	mMethodType = (ExperimentStructuresNameSpace::MethodType) nMethType;
 };
@@ -1340,12 +1343,19 @@ bool cExperimentStructure::insertObjectInitialization(cMethodStructure *pObjectI
 		if(pMethodStructureList == NULL)
 		{
 			pMethodStructureList = new QList<cMethodStructure*>();
-			pMethodStructureList->append(pObjectInitialization);
+			pMethodStructureList->insert(0,pObjectInitialization);
 			pSharedData->mObjectIdToInitializations.insert(pObjectInitialization->getMethodObjectID(), *pMethodStructureList);
 		}
 		else
 		{
-			pMethodStructureList->append(pObjectInitialization);
+			int nNewIndex = 0;
+			foreach(cMethodStructure *tmpMethodStruct, *pMethodStructureList)
+			{
+				if (tmpMethodStruct->getMethodOrderNumber() > pObjectInitialization->getMethodOrderNumber())
+					break;
+				nNewIndex++;
+			}
+			pMethodStructureList->insert(nNewIndex,pObjectInitialization);
 		}
 		return true;
 	}
@@ -1356,7 +1366,7 @@ QList<cMethodStructure*> *cExperimentStructure::getObjectInitializationList(cons
 {
 	for (QMap<int, QList<cMethodStructure*>>::iterator itInitList=pSharedData->mObjectIdToInitializations.begin();itInitList!=pSharedData->mObjectIdToInitializations.end();++itInitList)
 	{
-		if(itInitList.key() == nObjectID)
+		if (itInitList.key() == nObjectID)
 			return &itInitList.value();
 	}
 	return NULL;
@@ -1370,12 +1380,19 @@ bool cExperimentStructure::insertObjectFinalization(cMethodStructure *pObjectFin
 		if(pMethodStructureList == NULL)
 		{
 			pMethodStructureList = new QList<cMethodStructure*>();
-			pMethodStructureList->append(pObjectFinalization);
+			pMethodStructureList->insert(0, pObjectFinalization);
 			pSharedData->mObjectIdToFinalizations.insert(pObjectFinalization->getMethodObjectID(), *pMethodStructureList);
 		}
 		else
 		{
-			pMethodStructureList->append(pObjectFinalization);
+			int nNewIndex = 0;
+			foreach(cMethodStructure *tmpMethodStruct, *pMethodStructureList)
+			{
+				if (tmpMethodStruct->getMethodOrderNumber() > pObjectFinalization->getMethodOrderNumber())
+					break;
+				nNewIndex++;
+			}
+			pMethodStructureList->insert(nNewIndex, pObjectFinalization);
 		}
 		return true;
 	}

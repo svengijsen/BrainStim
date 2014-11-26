@@ -109,12 +109,14 @@ private:
 	{
 		int nMethodID;
 		int nObjectID;
+		int nOrderNumber;
 		QString sSignature;
 		ExperimentStructuresNameSpace::MethodType mType;
 		expObjectMethodItemStrc()
 		{
 			nMethodID = -1;
 			nObjectID = -1;
+			nOrderNumber = -1;
 			sSignature = "";
 			mType = ExperimentStructuresNameSpace::METHOD_TYPE_UNDEFINED;
 		}
@@ -212,7 +214,7 @@ private:
 	void resetExpScene();
 	bool insertLoopInGraphDrawingStruct(const cBlockStructure *pStrcSourceBlock, const cBlockStructure *pStrcTargetBlock, const cLoopStructure *pStrcLoop);
 	int getNumberOfBlockLoops(const int &nBlockID, const ExperimentGraphLoopTypeEnum &nConnectionType);
-	QAction *insertMenuAction(const QStringList &sMenuActionPath);
+	QAction *insertMenuAction(const QStringList &sMenuActionPath, QIcon *iMenuIcon);
 
 	int nWidgetMarginWidth;
 	int nWidgetMarginHeight;

@@ -41,5 +41,6 @@
 		    <file>resources/moveright.png</file>
 		    <file>resources/orientation.png</file>
 		    <file>resources/reset.png</file>		
+		    <file>resources/plaintext.png</file>
     </qresource>
 </RCC>

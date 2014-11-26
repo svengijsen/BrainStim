@@ -687,11 +687,15 @@ class cMethodStructure : public QObject
 	/*!  Use this property to set or retrieve the Method Object ID.
     */
 	Q_PROPERTY(int SourceObjectID WRITE setMethodObjectID READ getMethodObjectID)
+	//! \brief OrderNumber property.
+	/*!  Use this property to set or retrieve the Method Order Number.
+	*/
+	Q_PROPERTY(int OrderNumber WRITE setMethodOrderNumber READ getMethodOrderNumber)
 
 
 public:
 	cMethodStructure();
-	cMethodStructure(const int &nMethId, const int &nMethObjID, const int &nMethType, const QString &sMethSignature);
+	cMethodStructure(const int &nMethId, const int &nMethOrderNumber, const int &nMethObjID, const int &nMethType, const QString &sMethSignature);
 	cMethodStructure(const cMethodStructure& other);
 	~cMethodStructure();
 
@@ -722,6 +726,16 @@ public slots:
 	 * @return a integer value containing the requested Method Object ID.
 	 */	
 	int getMethodObjectID() const {return nMethodObjectID;};
+	//! \brief setMethodOrderNumber slot.
+	/*!  This function sets the Method Order Number to the new provided value.
+	* @param nValue a integer value (>0) holding the new Method Order Number.
+	*/
+	void setMethodOrderNumber(const int &nValue) { nMethodOrderNumber = nValue; };
+	//! \brief getMethodObjectID slot.
+	/*!  This function returns the Method Order Number.
+	* @return a integer value containing the requested Method Order Number.
+	*/
+	int getMethodOrderNumber() const { return nMethodOrderNumber; };
 	//! \brief setMethodType slot.
 	/*!  This function sets the Method Type to the new provided value, see ExperimentStructuresNameSpace::MethodType.
 	 * @param nValue a integer value (see ExperimentStructuresNameSpace::MethodType) holding the new Method Type.
@@ -790,6 +804,7 @@ private:
 	QScriptEngine* currentScriptEngine;
 	int nMethodID;
 	int nMethodObjectID;
+	int nMethodOrderNumber;
 	QString sMethodSignature;
 	ExperimentStructuresNameSpace::MethodType mMethodType;
 	QMap<int,cMethodParameterStructure*> mapParamIDtoParamStruct;

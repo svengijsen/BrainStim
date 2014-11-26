@@ -29,6 +29,10 @@ ExperimentObjectsDialog::ExperimentObjectsDialog(QWidget *parent) : QDialog(pare
 	ui = new Ui::ExperimentObjectsDialog();
 	ui->setupUi(this);
 	setWindowTitle("Configure experiment object(s)");
+	ui->pbInitMoveUp->setIcon((QIcon(":/resources/moveup.png")));
+	ui->pbInitMoveDown->setIcon((QIcon(":/resources/movedown.png")));
+	ui->pbFinitMoveUp->setIcon((QIcon(":/resources/moveup.png")));
+	ui->pbFinitMoveDown->setIcon((QIcon(":/resources/movedown.png")));
 	twCurrentObjects = new QTreeWidget(ui->groupBox_2);
 	ui->layCurrentObjects->addWidget(twCurrentObjects);
 	bool bConnectResult = false;
@@ -45,6 +49,10 @@ ExperimentObjectsDialog::ExperimentObjectsDialog(QWidget *parent) : QDialog(pare
 	bConnectResult = connect(ui->pbFinitConfigureParameters, SIGNAL(clicked()), this, SLOT(onConfigureSelectedObjectFinitParams()));
 	bConnectResult = connect(ui->pbInitAdd, SIGNAL(clicked()), this, SLOT(addSelectedInit()));
 	bConnectResult = connect(ui->pbFinitAdd, SIGNAL(clicked()), this, SLOT(addSelectedFinit()));
+	bConnectResult = connect(ui->pbInitMoveUp, SIGNAL(clicked()), this, SLOT(moveUpSelectedInit()));
+	bConnectResult = connect(ui->pbInitMoveDown, SIGNAL(clicked()), this, SLOT(moveDownSelectedInit()));
+	bConnectResult = connect(ui->pbFinitMoveUp, SIGNAL(clicked()), this, SLOT(moveUpSelectedFinit()));
+	bConnectResult = connect(ui->pbFinitMoveDown, SIGNAL(clicked()), this, SLOT(moveDownSelectedFinit()));
 
 	ui->tabWidget->setVisible(false);
 	fetchAvailableExperimentObjectClasses();
@@ -155,6 +163,10 @@ void ExperimentObjectsDialog::onObjectSelectionChanged()
 					pObjectDeclarationWidget->setVisible(true);
 					pObjectDeclarationWidget->setEnabled(true);
 					ui->pbRemove->setEnabled(true);
+					ui->pbInitMoveUp->setEnabled(true);
+					ui->pbInitMoveDown->setEnabled(true);
+					ui->pbFinitMoveUp->setEnabled(true);
+					ui->pbFinitMoveDown->setEnabled(true);
 					ui->tabWidget->setVisible(true);
 					if(ui->lwObjectInitUsed->count() > 0)
 						ui->lwObjectInitUsed->setCurrentRow(0);
@@ -214,6 +226,10 @@ void ExperimentObjectsDialog::prepareAndHideObjectConfiguration()
 		pObjectDeclarationWidget->setVisible(false);
 		pObjectDeclarationWidget->setEnabled(false);
 		ui->pbRemove->setEnabled(false);
+		ui->pbInitMoveUp->setEnabled(false);
+		ui->pbInitMoveDown->setEnabled(false);
+		ui->pbFinitMoveUp->setEnabled(false);
+		ui->pbFinitMoveDown->setEnabled(false);
 		ui->tabWidget->setVisible(false);
 	}
 	if(pObjectInitsWidget)
@@ -289,12 +305,14 @@ bool ExperimentObjectsDialog::showObjectWidgets(const strcExperimentObjectInfo &
 					ui->pbFinitRemove->setEnabled(true);
 					ui->pbFinitConfigureParameters->setEnabled(true);
 				}
+				int nIndexForItem = 0;
 				foreach(cMethodStructure* pTmpMethStruct,*pCurrentObjectInitFinitList)
 				{
 					QListWidgetItem* pTmpListWidgetItem = new QListWidgetItem();
 					pTmpListWidgetItem->setText(cMethodStructure::methodTypeToString(pTmpMethStruct->getMethodType()) + ": " + pTmpMethStruct->getMethodSignature());
 					pTmpListWidgetItem->setData(Qt::UserRole, pTmpMethStruct->getMethodID());
-					lwCurrentWidget->insertItem(pTmpMethStruct->getMethodID(),pTmpListWidgetItem);
+					lwCurrentWidget->insertItem(nIndexForItem, pTmpListWidgetItem);
+					nIndexForItem++;
 				}
 				lwCurrentWidget->setEnabled(true);
 			}
@@ -731,6 +749,7 @@ bool ExperimentObjectsDialog::addInitFinit(const bool &bIsInit)
 		tmpObjectInitFinitSpecifier.sObjectDefinitionName = "";
 		tmpObjectInitFinitSpecifier.sSignature = sNewSignature.left(nLeftBracePos);
 		tmpObjectInitFinitSpecifier.sType = METHOD_TYPE_SLOT_TAG;
+		tmpObjectInitFinitSpecifier.nOrderNumber = -1;//use next available number
 
 		ExperimentTreeModel::strcObjectInitFinitParameterSpecifier tmpObjectInitFinitParam;
 		for(int nParamCounter=0;nParamCounter<lParamsList.count();nParamCounter++)
@@ -757,6 +776,74 @@ bool ExperimentObjectsDialog::addInitFinit(const bool &bIsInit)
 		ui->pbInitAdd->setEnabled(true);
 	else
 		ui->pbFinitAdd->setEnabled(true);
+	return bResult;
+}
+
+void ExperimentObjectsDialog::moveUpSelectedInit()
+{
+	moveSelectedInitFinit(true, true);
+}
+
+void ExperimentObjectsDialog::moveDownSelectedInit()
+{
+	moveSelectedInitFinit(false, true);
+}
+
+void ExperimentObjectsDialog::moveUpSelectedFinit()
+{
+	moveSelectedInitFinit(true, false);
+}
+
+void ExperimentObjectsDialog::moveDownSelectedFinit()
+{
+	moveSelectedInitFinit(false, false);
+}
+
+bool ExperimentObjectsDialog::moveSelectedInitFinit(const bool &bMoveUp, const bool &bIsInit)
+{
+	QListWidgetItem *lwChangedSelectedItem = NULL;
+	QListWidget *InitFinitListWidget = NULL;
+	int *pSelectionIdentifier;
+	int nTotalItems;
+	int nCurrentIndex;
+	bool bResult = false;
+
+	if (pExperimentTreeModel == NULL)
+		return false;
+	if (bIsInit)
+	{
+		InitFinitListWidget = ui->lwObjectInitUsed;
+		pSelectionIdentifier = &nCurrentObjectInitSelectionIdentifier;
+	}
+	else
+	{
+		InitFinitListWidget = ui->lwObjectFinitUsed;
+		pSelectionIdentifier = &nCurrentObjectFinitSelectionIdentifier;
+	}
+	lwChangedSelectedItem = InitFinitListWidget->currentItem();
+	nTotalItems = InitFinitListWidget->count();
+	nCurrentIndex = InitFinitListWidget->currentRow();
+
+	if (nTotalItems < 2)
+		return false;
+	if (bMoveUp)	//Up
+	{
+		if (nCurrentIndex == 0)//First index?
+			return false;
+		int nIndexToSwitch = InitFinitListWidget->item(nCurrentIndex - 1)->data(Qt::UserRole).toInt();
+		bResult = pExperimentTreeModel->moveExperimentObjectInitFinit(QList<int>() << *pSelectionIdentifier, nIndexToSwitch, -1, bIsInit);
+		if (bResult)
+			InitFinitListWidget->setCurrentRow(nCurrentIndex - 1);
+	}
+	else			//Down
+	{
+		if (nCurrentIndex == (nTotalItems - 1))//Last index?
+			return false;
+		int nIndexToSwitch = InitFinitListWidget->item(nCurrentIndex + 1)->data(Qt::UserRole).toInt();
+		bResult = pExperimentTreeModel->moveExperimentObjectInitFinit(QList<int>() << *pSelectionIdentifier, nIndexToSwitch, 1, bIsInit);
+		if (bResult)
+			InitFinitListWidget->setCurrentRow(nCurrentIndex + 1);
+	}
 	return bResult;
 }
 
@@ -882,10 +969,14 @@ void ExperimentObjectsDialog::handleObjectInitFinitSelectionChanged(bool bIsInit
 		{
 			if(lwCurrentWidget)
 			{
-				if(pCurrentObjectMethodStructList->at(i)->getMethodID() == lwCurrentWidget->currentItem()->data(Qt::UserRole).toInt())
+				QListWidgetItem *tmpListWidgetItem = lwCurrentWidget->currentItem();
+				if (tmpListWidgetItem)
 				{
-					pCurrentObjectMethodStruct = pCurrentObjectMethodStructList->at(i);
-					break;
+					if (pCurrentObjectMethodStructList->at(i)->getMethodID() == tmpListWidgetItem->data(Qt::UserRole).toInt())
+					{
+						pCurrentObjectMethodStruct = pCurrentObjectMethodStructList->at(i);
+						break;
+					}
 				}
 			}
 		}
@@ -893,6 +984,7 @@ void ExperimentObjectsDialog::handleObjectInitFinitSelectionChanged(bool bIsInit
 		{
 			(*pObjectInitFinitWidget)->setParameter(INIT_FINIT_SIGNATURE_TAG,pCurrentObjectMethodStruct->getMethodSignature(),true,true);
 			(*pObjectInitFinitWidget)->setParameter(INIT_FINIT_TYPE_TAG,cMethodStructure::methodTypeToString(pCurrentObjectMethodStruct->getMethodType()),true,true);
+			(*pObjectInitFinitWidget)->setParameter(INIT_FINIT_NUMBER_TAG, QString::number(pCurrentObjectMethodStruct->getMethodOrderNumber()), true, true);
 			tmpMethodParamStrcList = pCurrentObjectMethodStruct->getMethodParameterList();
 		}
 		else

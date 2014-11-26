@@ -80,6 +80,7 @@ public:
 
 	//static bool loadDockWidgetLayout(QDockWidget *dockWidget);
 	//static bool saveDockWidgetLayout(QDockWidget *dockWidget);
+	static bool getHexedOrderNumber(const int &nNumber, QString &sResult, const int &nDecimals);
 	static bool addRegisteredMetaTypeID(const int &nMetaTypeID);
 	static bool setMainWindow(QWidget *mainWin);
 	static QString appDirPath()						{return QDir(QCoreApplication::applicationDirPath()).absolutePath();}

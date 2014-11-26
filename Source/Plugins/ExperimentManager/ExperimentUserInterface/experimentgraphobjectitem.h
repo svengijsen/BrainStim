@@ -100,10 +100,10 @@ class ExperimentGraphObjectItem : public QGraphicsItem
 		QVector<QRectF> vSignalAndSlotsRectList;
 		QVector<QRectF> vInitializationsRectList;
 		QVector<QRectF> vFinalizationsRectList;
-		QStringList lOrderedSignalSignatureList;
-		QStringList lOrderedSlotSignatureList;
-		QStringList lOrderedInitializationsList;
-		QStringList lOrderedFinalizationsList;
+		QStringList lSignalSignatureList;
+		QStringList lSlotSignatureList;
+		QStringList lInitializationsList;
+		QStringList lFinalizationsList;
 };
 
 #endif // EXPERIMENTGRAPHOBJECTITEM_H

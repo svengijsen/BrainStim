@@ -978,110 +978,123 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 		}
 	}
-	else if((item->getName().toLower() == INITIALIZATION_TAG) || (item->getName().toLower() == FINALIZATION_TAG))
+	else if ((item->getName().toLower() == INITIALIZATION_TAG) || (item->getName().toLower() == FINALIZATION_TAG))
 	{
-		ExperimentTreeItem *pTmpExpTreeItem = item->firstChild(OBJECT_TAG);
-		if(pTmpExpTreeItem)
+		int nInitFinitOrderNumber = -1;
+		ExperimentTreeItem *pTmpExpTreeItem = item->firstChild(INIT_FINIT_NUMBER_TAG);
+		if (pTmpExpTreeItem)
 		{
-			QString sParamCollName;
-			if(item->getName().toLower() == INITIALIZATION_TAG)
-				sParamCollName = INITIALIZATION_OBJECT_TAG;
-			else if(item->getName().toLower() == FINALIZATION_TAG)
-				sParamCollName = FINALIZATION_OBJECT_TAG;
-			if(staticGraphicWidgetsHashTable.contains(sParamCollName))
+			bool bConversionResult = false;
+			nInitFinitOrderNumber = pTmpExpTreeItem->getValue().toInt(&bConversionResult);
+			if (bConversionResult == false)
+				nInitFinitOrderNumber = -1;
+		}
+		if (nInitFinitOrderNumber>=0)
+		{
+			pTmpExpTreeItem = item->firstChild(OBJECT_TAG);
+			if (pTmpExpTreeItem)
 			{
-				tmpParametersWidget = staticGraphicWidgetsHashTable.value(sParamCollName);
-				tmpParametersWidget->resetParameterModifiedFlags();
-			}
-			else
-			{
-				ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
-				tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sParamCollName);
-				if(tmpParametersWidget == NULL)
+				QString sParamCollName;
+				if (item->getName().toLower() == INITIALIZATION_TAG)
+					sParamCollName = INITIALIZATION_OBJECT_TAG;
+				else if (item->getName().toLower() == FINALIZATION_TAG)
+					sParamCollName = FINALIZATION_OBJECT_TAG;
+				if (staticGraphicWidgetsHashTable.contains(sParamCollName))
 				{
-					qDebug() << __FUNCTION__ << "Could not fetch parameter collection widget named " << sParamCollName;
+					tmpParametersWidget = staticGraphicWidgetsHashTable.value(sParamCollName);
+					tmpParametersWidget->resetParameterModifiedFlags();
 				}
 				else
 				{
-					staticGraphicWidgetsHashTable.insert(sParamCollName,tmpParametersWidget);
-				}								
-			}
-			//Set the values
-			QMap<QString,TreeItemDefinition> mItemDefs = pTmpExpTreeItem->getDefinitions();
-			int nObjectId = -1;
-			if(mItemDefs.contains(ID_TAG))
-				nObjectId = mItemDefs[ID_TAG].value.toInt();
-			if(nObjectId >= 0)
-			{
-				tmpParametersWidget->setParameter(OBJECT_TAG,QString::number(nObjectId),true,true);
-				QString sTmpString = "";		
-				ExperimentTreeItem *pTmpExpTreeSubItem = pTmpExpTreeItem->firstChild(INIT_FINIT_SIGNATURE_TAG);
-				if(pTmpExpTreeSubItem)
-				{
-					sTmpString = pTmpExpTreeSubItem->getValue();
-					if(sTmpString.isEmpty() == false)
+					ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
+					tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sParamCollName);
+					if (tmpParametersWidget == NULL)
 					{
-						tmpParametersWidget->setParameter(INIT_FINIT_SIGNATURE_TAG,sTmpString,true,true);
-						pTmpExpTreeSubItem = pTmpExpTreeItem->firstChild(INIT_FINIT_TYPE_TAG);
-						if(pTmpExpTreeSubItem)
+						qDebug() << __FUNCTION__ << "Could not fetch parameter collection widget named " << sParamCollName;
+					}
+					else
+					{
+						staticGraphicWidgetsHashTable.insert(sParamCollName, tmpParametersWidget);
+					}
+				}
+				//Set the values
+				QMap<QString, TreeItemDefinition> mItemDefs = pTmpExpTreeItem->getDefinitions();
+				int nObjectId = -1;
+				if (mItemDefs.contains(ID_TAG))
+					nObjectId = mItemDefs[ID_TAG].value.toInt();
+				if (nObjectId >= 0)
+				{
+					tmpParametersWidget->setParameter(INIT_FINIT_NUMBER_TAG, QString::number(nInitFinitOrderNumber), true, true);
+					tmpParametersWidget->setParameter(OBJECT_TAG, QString::number(nObjectId), true, true);
+					QString sTmpString = "";
+					ExperimentTreeItem *pTmpExpTreeSubItem = pTmpExpTreeItem->firstChild(INIT_FINIT_SIGNATURE_TAG);
+					if (pTmpExpTreeSubItem)
+					{
+						sTmpString = pTmpExpTreeSubItem->getValue();
+						if (sTmpString.isEmpty() == false)
 						{
-							sTmpString = pTmpExpTreeSubItem->getValue();
-							if(sTmpString.isEmpty() == false)
+							tmpParametersWidget->setParameter(INIT_FINIT_SIGNATURE_TAG, sTmpString, true, true);
+							pTmpExpTreeSubItem = pTmpExpTreeItem->firstChild(INIT_FINIT_TYPE_TAG);
+							if (pTmpExpTreeSubItem)
 							{
-								tmpParametersWidget->setParameter(INIT_FINIT_TYPE_TAG,sTmpString,true,true);
-								
-								//Remove already defined arguments 
-								int nAddParamCntr=3;
-								int nParamIndexToRemove = nAddParamCntr;
-								while(tmpParametersWidget->removeParameterProperty(QString::number(nParamIndexToRemove)))
-									nParamIndexToRemove++;
-
-								pTmpExpTreeSubItem = pTmpExpTreeItem->firstChild(PARAMETERS_TAG);
-								if(pTmpExpTreeSubItem)
+								sTmpString = pTmpExpTreeSubItem->getValue();
+								if (sTmpString.isEmpty() == false)
 								{
-									if(pTmpExpTreeSubItem->hasChildren())
+									tmpParametersWidget->setParameter(INIT_FINIT_TYPE_TAG, sTmpString, true, true);
+
+									//Remove already defined arguments 
+									int nAddParamCntr = 3;
+									int nParamIndexToRemove = nAddParamCntr;
+									while (tmpParametersWidget->removeParameterProperty(QString::number(nParamIndexToRemove)))
+										nParamIndexToRemove++;
+
+									pTmpExpTreeSubItem = pTmpExpTreeItem->firstChild(PARAMETERS_TAG);
+									if (pTmpExpTreeSubItem)
 									{
-										for(int nChildCount=0;nChildCount<pTmpExpTreeSubItem->childCount();nChildCount++)
+										if (pTmpExpTreeSubItem->hasChildren())
 										{
-											if(pTmpExpTreeSubItem->child(nChildCount)->getName().toLower() == PARAMETER_TAG)
+											for (int nChildCount = 0; nChildCount < pTmpExpTreeSubItem->childCount(); nChildCount++)
 											{
-												if(pTmpExpTreeSubItem->child(nChildCount)->hasChildren())
+												if (pTmpExpTreeSubItem->child(nChildCount)->getName().toLower() == PARAMETER_TAG)
 												{
-													QString sParamName = "";
-													QString sParamValue = "";
-													QString sParamType = "";
-													ExperimentTreeItem *pTmpExpTreeSubParamItem = pTmpExpTreeSubItem->child(nChildCount)->firstChild(NAME_TAG);
-													if(pTmpExpTreeSubParamItem)
+													if (pTmpExpTreeSubItem->child(nChildCount)->hasChildren())
 													{
-														sParamName = pTmpExpTreeSubParamItem->getValue();
-														if(sParamName.isEmpty() == false)
+														QString sParamName = "";
+														QString sParamValue = "";
+														QString sParamType = "";
+														ExperimentTreeItem *pTmpExpTreeSubParamItem = pTmpExpTreeSubItem->child(nChildCount)->firstChild(NAME_TAG);
+														if (pTmpExpTreeSubParamItem)
 														{
-															pTmpExpTreeSubParamItem = pTmpExpTreeSubItem->child(nChildCount)->firstChild(VALUE_TAG);
-															if(pTmpExpTreeSubParamItem)
+															sParamName = pTmpExpTreeSubParamItem->getValue();
+															if (sParamName.isEmpty() == false)
 															{
-																sParamValue = pTmpExpTreeSubParamItem->getValue();
-																if(sParamValue.isEmpty() == false)
+																pTmpExpTreeSubParamItem = pTmpExpTreeSubItem->child(nChildCount)->firstChild(VALUE_TAG);
+																if (pTmpExpTreeSubParamItem)
 																{
-																	pTmpExpTreeSubParamItem = pTmpExpTreeSubItem->child(nChildCount)->firstChild(MEMBER_TYPE_TAG);
-																	if(pTmpExpTreeSubParamItem)
+																	sParamValue = pTmpExpTreeSubParamItem->getValue();
+																	if (sParamValue.isEmpty() == false)
 																	{
-																		sParamType = pTmpExpTreeSubParamItem->getValue();
-																		if(sParamType.isEmpty() == false)
+																		pTmpExpTreeSubParamItem = pTmpExpTreeSubItem->child(nChildCount)->firstChild(MEMBER_TYPE_TAG);
+																		if (pTmpExpTreeSubParamItem)
 																		{
-																			//Add newly defined arguments
-																			ExperimentParameterDefinitionStrc *tmpExpParamDefStrc = new ExperimentParameterDefinitionStrc();
-																			tmpExpParamDefStrc->bCanBeScriptReference = false;
-																			tmpExpParamDefStrc->bEnabled = true;
-																			tmpExpParamDefStrc->bIsEditable = false;
-																			tmpExpParamDefStrc->eType = Experiment_ParameterType_Integer;
-																			tmpExpParamDefStrc->nId = nAddParamCntr;
-																			tmpExpParamDefStrc->sDefaultValue = "0";
-																			tmpExpParamDefStrc->sName = sParamName;
-																			tmpExpParamDefStrc->sDisplayName = sParamName + "(" + sParamType + ")";
-																			tmpExpParamDefStrc->sGroupPath = "Arguments";//;Argument " + QString::number(nAddParamCntr-2);
-																			tmpExpParamDefStrc->sInformation = "an Argument of Type " + sParamType;
-																			tmpParametersWidget->addParameterProperty(tmpExpParamDefStrc,sParamValue);
-																			nAddParamCntr++;
+																			sParamType = pTmpExpTreeSubParamItem->getValue();
+																			if (sParamType.isEmpty() == false)
+																			{
+																				//Add newly defined arguments
+																				ExperimentParameterDefinitionStrc *tmpExpParamDefStrc = new ExperimentParameterDefinitionStrc();
+																				tmpExpParamDefStrc->bCanBeScriptReference = false;
+																				tmpExpParamDefStrc->bEnabled = true;
+																				tmpExpParamDefStrc->bIsEditable = false;
+																				tmpExpParamDefStrc->eType = Experiment_ParameterType_Integer;
+																				tmpExpParamDefStrc->nId = nAddParamCntr;
+																				tmpExpParamDefStrc->sDefaultValue = "0";
+																				tmpExpParamDefStrc->sName = sParamName;
+																				tmpExpParamDefStrc->sDisplayName = sParamName + "(" + sParamType + ")";
+																				tmpExpParamDefStrc->sGroupPath = "Arguments";//;Argument " + QString::number(nAddParamCntr-2);
+																				tmpExpParamDefStrc->sInformation = "an Argument of Type " + sParamType;
+																				tmpParametersWidget->addParameterProperty(tmpExpParamDefStrc, sParamValue);
+																				nAddParamCntr++;
+																			}
 																		}
 																	}
 																}

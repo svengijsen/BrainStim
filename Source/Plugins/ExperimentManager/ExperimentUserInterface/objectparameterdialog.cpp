@@ -288,13 +288,15 @@ void ObjectParameterDialog::selectedParameterChanged(int nIndex)
 		{
 			if(hashParamControlIndexToUniqueHexParamID.contains(nIndex))
 			{
-				if(mapUniqueHexParamIDToParamDef.contains(hashParamControlIndexToUniqueHexParamID[nIndex]))
+				QString sHexParamID = hashParamControlIndexToUniqueHexParamID[nIndex];
+				if (mapUniqueHexParamIDToParamDef.contains(sHexParamID))
 				{
+					strcParameterDefinition tmpParamDef = mapUniqueHexParamIDToParamDef[sHexParamID];
 					QString sResolvedValue;
-					if(mapUniqueHexParamIDToParamDef[hashParamControlIndexToUniqueHexParamID[nIndex]].bIsChanged)
-						sResolvedValue = VariantExtensionPropertyManager::resolveParameterValueType(mapUniqueHexParamIDToParamDef[hashParamControlIndexToUniqueHexParamID[nIndex]].sValue,mapUniqueHexParamIDToParamDef[hashParamControlIndexToUniqueHexParamID[nIndex]].ParamDef.eType,true).toString();
+					if (tmpParamDef.bIsChanged)
+						sResolvedValue = VariantExtensionPropertyManager::resolveParameterValueType(tmpParamDef.sValue, tmpParamDef.ParamDef.eType, true).toString();
 					else
-						sResolvedValue = VariantExtensionPropertyManager::resolveParameterValueType(mapUniqueHexParamIDToParamDef[hashParamControlIndexToUniqueHexParamID[nIndex]].ParamDef.sDefaultValue,mapUniqueHexParamIDToParamDef[hashParamControlIndexToUniqueHexParamID[nIndex]].ParamDef.eType,true).toString();
+						sResolvedValue = VariantExtensionPropertyManager::resolveParameterValueType(tmpParamDef.ParamDef.sDefaultValue, tmpParamDef.ParamDef.eType, true).toString();
 					ui->leValue->setText(sResolvedValue);
 
 					if(expParamVizualizer && (ui->rdbParamType_2->isChecked() == false))
@@ -557,6 +559,7 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 	int nTempParameterID = -1;
 	int nNrOfParameters = -1;
 	int nTempCurrentBlockObjectCount = -1;
+	int nAdditionalCustomParamPreviousBlocksCounter = 0;
 	QString sTempParamName;
 	QString sTempParamValue;
 	QString uniqueObjParamIdentifier;
@@ -581,7 +584,7 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 		if(tTmpTreeItemDefs.contains(ID_TAG))
 		{
 			nTempBlockID = tTmpTreeItemDefs[ID_TAG].value.toInt();
-			if(nTempBlockID == nBlockID)
+			if ((nTempBlockID == nBlockID) || (eParamEditingMode == PEM_CUSTOM))
 			{
 				//Objects
 				QList<ExperimentTreeItem*> lExpTreeObjectItems;
@@ -603,10 +606,10 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 						nNrOfParameters = ExperimentTreeModel::getStaticTreeElements(lObjectParameterSearchPath, lExpTreeObjectParameterItems, lExpTreeObjectItems.at(j));
 						if(nNrOfParameters > 0)
 						{
-							for (int k=0;k<nNrOfParameters;k++)//For each Parameter
+							for (int nParamCnt = 0; nParamCnt<nNrOfParameters; nParamCnt++)//For each Parameter
 							{
 								//ParameterID
-								tTmpTreeItemDefs = lExpTreeObjectParameterItems.at(k)->getDefinitions();
+								tTmpTreeItemDefs = lExpTreeObjectParameterItems.at(nParamCnt)->getDefinitions();
 								if(tTmpTreeItemDefs.contains(ID_TAG))
 									nTempParameterID = tTmpTreeItemDefs[ID_TAG].value.toInt();
 								else
@@ -614,14 +617,14 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 									
 								//ParameterName
 								sTempParamName = "";
-								pTmpExpTreeItem = lExpTreeObjectParameterItems.at(k)->firstChild(NAME_TAG);
+								pTmpExpTreeItem = lExpTreeObjectParameterItems.at(nParamCnt)->firstChild(NAME_TAG);
 								if(pTmpExpTreeItem)
 									sTempParamName = pTmpExpTreeItem->getValue();
 								else
 									continue;
 
 								//ParameterValue
-								pTmpExpTreeItem = lExpTreeObjectParameterItems.at(k)->firstChild(VALUE_TAG);
+								pTmpExpTreeItem = lExpTreeObjectParameterItems.at(nParamCnt)->firstChild(VALUE_TAG);
 								if((pTmpExpTreeItem) && (sTempParamName.isEmpty() == false))
 								{
 									sTempParamValue = pTmpExpTreeItem->getValue();
@@ -631,7 +634,8 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 										ExperimentParameterDefinitionStrc tmpExpCustomParamStruct;
 										tmpExpCustomParamStruct.bEnabled = true;
 										tmpExpCustomParamStruct.eType = Experiment_ParameterType_String;
-										tmpExpCustomParamStruct.nId = k;
+										tmpExpCustomParamStruct.nId = nAdditionalCustomParamPreviousBlocksCounter;
+										nAdditionalCustomParamPreviousBlocksCounter++;
 										tmpExpCustomParamStruct.sDefaultValue = "";
 										tmpExpCustomParamStruct.sName = sTempParamName;
 										tmpExpCustomParamStruct.sDisplayName = tmpExpCustomParamStruct.sName;
@@ -658,12 +662,36 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 									}
 									else if((mapUniqueHexParamIDToParamDef.contains(tmpString)) && (eParamEditingMode == PEM_CUSTOM))
 									{
-										ui->cmbParameter->addItem(sTempParamName);
-										mapUniqueHexParamIDToParamDef[tmpString].sFullDisplayName = sTempParamName;
-										mapUniqueHexParamIDToParamDef[tmpString].bIsChanged = true;
-										mapUniqueHexParamIDToParamDef[tmpString].sValue = sTempParamValue;										
-										hashParamControlIndexToUniqueHexParamID.insert(ui->cmbParameter->count()-1,tmpString);										
-										ui->cmbParameter->setItemData(ui->cmbParameter->count()-1, QColor(Qt::darkMagenta), Qt::DecorationRole);
+										int bCustomAlreadyPresentIndex = ui->cmbParameter->findText(sTempParamName, Qt::MatchFixedString);//case-insensitive!
+										if (bCustomAlreadyPresentIndex < 0)
+										{
+											ui->cmbParameter->addItem(sTempParamName);
+											mapUniqueHexParamIDToParamDef[tmpString].sFullDisplayName = sTempParamName;
+										}
+										if (nTempBlockID == nBlockID)
+										{
+											mapUniqueHexParamIDToParamDef[tmpString].bIsChanged = true;
+											mapUniqueHexParamIDToParamDef[tmpString].sValue = sTempParamValue;
+											if (bCustomAlreadyPresentIndex < 0)
+											{
+												hashParamControlIndexToUniqueHexParamID.insert(ui->cmbParameter->count() - 1, tmpString);
+												ui->cmbParameter->setItemData(ui->cmbParameter->count() - 1, QColor(Qt::darkMagenta), Qt::DecorationRole);
+											}
+											else
+											{
+												ui->cmbParameter->setItemData(bCustomAlreadyPresentIndex, QColor(Qt::darkMagenta), Qt::DecorationRole);
+											}
+										}
+										else
+										{
+											if (bCustomAlreadyPresentIndex < 0)
+											{
+												mapUniqueHexParamIDToParamDef[tmpString].bIsChanged = false;
+												mapUniqueHexParamIDToParamDef[tmpString].sValue = "<undefined>";
+												hashParamControlIndexToUniqueHexParamID.insert(ui->cmbParameter->count() - 1, tmpString);
+												//ui->cmbParameter->setItemData(ui->cmbParameter->count() - 1, QColor(Qt::darkMagenta), Qt::DecorationRole);
+											}
+										}
 									}
 									else
 									{
@@ -688,9 +716,12 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 		{
 			if(mapUniqueHexParamIDToParamDef.values().at(i).bIsChanged == false)
 			{
-				ui->cmbParameter->addItem(mapUniqueHexParamIDToParamDef.values().at(i).sFullDisplayName);
-				tmpString = mapUniqueHexParamIDToParamDef.keys().at(i);
-				hashParamControlIndexToUniqueHexParamID.insert(ui->cmbParameter->count()-1,tmpString);
+				if (ui->cmbParameter->findText(mapUniqueHexParamIDToParamDef.values().at(i).sFullDisplayName, Qt::MatchFixedString) < 0)//case-insensitive!
+				{
+					ui->cmbParameter->addItem(mapUniqueHexParamIDToParamDef.values().at(i).sFullDisplayName);
+					tmpString = mapUniqueHexParamIDToParamDef.keys().at(i);
+					hashParamControlIndexToUniqueHexParamID.insert(ui->cmbParameter->count() - 1, tmpString);
+				}
 			}			
 		}
 	}

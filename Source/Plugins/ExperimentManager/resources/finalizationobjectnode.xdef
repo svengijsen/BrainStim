@@ -10,7 +10,7 @@
 	        <name>object</name>
 	        <displayname>Object</displayname>
 	        <grouppath></grouppath>
-	        <information>The initialization object</information>
+	        <information>The finalization object</information>
 	        <type>dynamicenuminteger</type>
 	        <scriptable>false</scriptable>
 	        <defaultvalue>0</defaultvalue>
@@ -28,9 +28,30 @@
 	      			<casesensitive>false</casesensitive>
 	      		</regularexpression>
 	      	</restriction>
-	    </parameter>	
-	
+	    </parameter>
+	    
 	    <parameter id="1">
+	        <enabled>true</enabled>
+	        <editable>false</editable>
+	        <name>number</name>
+	        <displayname>Number(order)</displayname>
+	        <grouppath></grouppath>
+	        <information>The finalization method number, that can define the order of execution</information>
+	        <type>integer</type>
+	        <defaultvalue></defaultvalue>
+	      	<restriction>
+	      		<minimal>
+	      			<enabled>true</enabled>
+	      			<value>0</value>
+	      		</minimal>
+	      		<maximal>
+	      			<enabled>false</enabled>
+	      			<value>0</value>
+	      		</maximal> 
+	      	</restriction>
+	    </parameter>
+	
+	    <parameter id="2">
 	        <enabled>true</enabled>
 	        <editable>false</editable>
 	        <name>type</name>
@@ -48,7 +69,7 @@
 	      	</restriction>	             	
 	    </parameter>	       
 	    
-	    <parameter id="2">
+	    <parameter id="3">
 	        <enabled>true</enabled>
 	        <editable>false</editable>
 	        <name>signature</name>
@@ -59,13 +80,13 @@
 	        <defaultvalue></defaultvalue>
 	    </parameter>
 	    
-	    <parameter id="3">
+	    <parameter id="4">
 	        <enabled>false</enabled>
 	        <editable>false</editable>
 	        <name>param1</name>
 	        <displayname>parameter 1</displayname>
 	        <grouppath>Arguments;Argument 1</grouppath>
-	        <information>The used arguments for the initialization</information>
+	        <information>The used arguments for the finalization</information>
 	        <type>int</type>
 	        <defaultvalue>3</defaultvalue>
 	    </parameter>

@@ -152,6 +152,17 @@ void MainAppInfo::CloseMainLogFile()
 	}	
 }
 
+bool MainAppInfo::getHexedOrderNumber(const int &nNumber, QString &sResult, const int &nDecimals)
+{
+	if (nNumber < 0)
+		return false;
+	sResult = QString("%1").arg(nNumber, nDecimals, 16, QChar('0'));
+	//sResult = QString::number(nNumber).toLatin1().toHex();
+	//while (sResult.length() < nDecimals)
+	//	sResult = "0" + sResult;
+	return true;
+}
+
 bool MainAppInfo::addRegisteredMetaTypeID(const int &nMetaTypeID)
 {
 	if(nMetaTypeID > 0)

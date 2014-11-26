@@ -43,6 +43,10 @@ public:
 private slots:
 	void onObjectSelectionChanged();
 	void onNewObjectNameChanged(const QString &sText);
+	void moveUpSelectedInit();
+	void moveDownSelectedInit();
+	void moveUpSelectedFinit();
+	void moveDownSelectedFinit();
 	void addSelectedObject();
 	void addSelectedInit();
 	void addSelectedFinit();
@@ -89,6 +93,7 @@ private:
 	void configureAvailableObjectInitFinits();
 	void handleExperimentObjectInitFinitEditFinished(const QString &sParamName, const QString &sNewValue, const bool bIsInit);
 	bool addInitFinit(const bool &bIsInit);
+	bool moveSelectedInitFinit(const bool &bMoveUp, const bool &bIsInit);
 
 	Ui::ExperimentObjectsDialog *ui;
 

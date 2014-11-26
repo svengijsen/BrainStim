@@ -105,6 +105,21 @@ public:
 		TypedExperimentParameterContainer *typedExpParamCntnr;
 	} objectElement;
 
+	struct strcInvokeObjectDefs
+	{
+		const QMetaObject* pMetaObject;
+		QObject *pObject;
+		QByteArray baSignature;
+		int nOrderNumber;
+		QList<QGenericArgument> lGenArgs;
+		strcInvokeObjectDefs()
+		{
+			nOrderNumber = 0;
+			pMetaObject = NULL;
+			pObject = NULL;
+		}
+	};
+
 	static QScriptValue ctor__experimentManager(QScriptContext* context, QScriptEngine* engine);
 	static QScriptValue ctor__experimentStateEnum(QScriptContext *context, QScriptEngine *engine);
 	//static QScriptValue toExperimentStateEnumScriptValue(QScriptEngine *engine, const ExperimentState &s);

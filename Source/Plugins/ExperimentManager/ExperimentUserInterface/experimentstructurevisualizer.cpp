@@ -173,7 +173,8 @@ void ExperimentStructureVisualizer::setupMenuAndActions()
 	QString sActionText = "Switch to plain text view";
 	mainMenuItemSpecifier.append("View");
 	mainMenuItemSpecifier.append(sActionText);
-	QAction *actionSwitchView = insertMenuAction(mainMenuItemSpecifier);
+	QIcon *menuIcon = new QIcon(":/resources/plaintext.png");
+	QAction *actionSwitchView = insertMenuAction(mainMenuItemSpecifier, menuIcon);
 	if (actionSwitchView)
 		connect(actionSwitchView, SIGNAL(triggered()), this, SLOT(switchToNativeView()), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 
@@ -206,10 +207,10 @@ void ExperimentStructureVisualizer::setupMenuAndActions()
 	//connect(action_Test, SIGNAL(triggered()), this, SLOT(Test()));
 }
 
-QAction *ExperimentStructureVisualizer::insertMenuAction(const QStringList &sMenuActionPath)
+QAction *ExperimentStructureVisualizer::insertMenuAction(const QStringList &sMenuActionPath, QIcon *iMenuIcon)
 {
 	QAction *newActionItem = NULL;
-	QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_REGISTERMAINMENUACTION_NAME, Qt::DirectConnection, Q_RETURN_ARG(QAction *, newActionItem), Q_ARG(QStringList, sMenuActionPath));
+	QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_REGISTERMAINMENUACTION_NAME, Qt::DirectConnection, Q_RETURN_ARG(QAction *, newActionItem), Q_ARG(QStringList, sMenuActionPath), Q_ARG(QIcon*, iMenuIcon));
 	if (newActionItem)
 	{
 		newActionItem->setStatusTip(sMenuActionPath.last());
@@ -633,10 +634,10 @@ bool ExperimentStructureVisualizer::drawGraph()
 	}
 	else if(gScene->getGraphViewState() == EXPVIS_VIEWSTATE_OBJECTS)
 	{
-		QHash<int,QList<strcMethodInfo>> hashObjectIDToUsedMethodConnections;
-		QHash<int,QList<strcMethodInfo>> hashObjectIDToInitializations;
-		QHash<int,QList<strcMethodInfo>> hashObjectIDToFinalizations;
-		QHash<int,QList<strcMethodInfo>> hashObjectIDToUsedMethods;
+		QHash<int, QMap<QString, strcMethodInfo>> hashObjectIDToUsedMethodConnections;
+		QHash<int, QMap<QString, strcMethodInfo>> hashObjectIDToInitializations;
+		QHash<int, QMap<QString, strcMethodInfo>> hashObjectIDToFinalizations;
+		QHash<int, QList<strcMethodInfo>> hashObjectIDToUsedMethods; //QHash<int, QMap<QString, strcMethodInfo>> hashObjectIDToUsedMethods;
 
 		//OBJECT PARSING//
 		if(expSceneItems.lObjects.isEmpty() == false)
@@ -649,13 +650,13 @@ bool ExperimentStructureVisualizer::drawGraph()
 				{ //METHOD CONNECTIONS//
 					foreach(expObjectMethodConnectionItemStrc* pExpObjectMethodConnectionItemStrc,expSceneItems.lObjects[i].lObjectMethodConnections)
 					{
-						QList<strcMethodInfo> tmpStrcMethodConnectionInfoList;
+						QMap<QString, strcMethodInfo> tmpStrcMethodConnectionInfoList;
 						strcMethodInfo tmpStrcMethodConnectionInfo;
 						bool bSignatureFound;
 
 						//Sources
 						if(hashObjectIDToUsedMethodConnections.contains(pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.nObjectID) == false)
-							hashObjectIDToUsedMethodConnections.insert(pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.nObjectID,QList<strcMethodInfo>());
+							hashObjectIDToUsedMethodConnections.insert(pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.nObjectID,QMap<QString,strcMethodInfo>());
 						tmpStrcMethodConnectionInfoList = hashObjectIDToUsedMethodConnections[pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.nObjectID];
 						bSignatureFound = false;
 						foreach(tmpStrcMethodConnectionInfo,tmpStrcMethodConnectionInfoList)
@@ -670,11 +671,14 @@ bool ExperimentStructureVisualizer::drawGraph()
 						{
 							tmpStrcMethodConnectionInfo.sMethodSignature = pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.sSignature;
 							tmpStrcMethodConnectionInfo.mExperimentVisualizerMethodType = pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.mType;
-							hashObjectIDToUsedMethodConnections[pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.nObjectID].append(tmpStrcMethodConnectionInfo);
+							QString sHexedOrderNumber = "0000";
+							//bool bHexedResult = 
+								MainAppInfo::getHexedOrderNumber(pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.nOrderNumber, sHexedOrderNumber, 4);
+							hashObjectIDToUsedMethodConnections[pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.nObjectID].insert(sHexedOrderNumber,tmpStrcMethodConnectionInfo);
 						}
 						//Targets
 						if(hashObjectIDToUsedMethodConnections.contains(pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.nObjectID) == false)
-							hashObjectIDToUsedMethodConnections.insert(pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.nObjectID,QList<strcMethodInfo>());
+							hashObjectIDToUsedMethodConnections.insert(pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.nObjectID,QMap<QString,strcMethodInfo>());
 						tmpStrcMethodConnectionInfoList = hashObjectIDToUsedMethodConnections[pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.nObjectID];
 						bSignatureFound = false;
 						foreach(tmpStrcMethodConnectionInfo,tmpStrcMethodConnectionInfoList)
@@ -689,7 +693,10 @@ bool ExperimentStructureVisualizer::drawGraph()
 						{
 							tmpStrcMethodConnectionInfo.sMethodSignature = pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.sSignature;
 							tmpStrcMethodConnectionInfo.mExperimentVisualizerMethodType = pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.mType;
-							hashObjectIDToUsedMethodConnections[pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.nObjectID].append(tmpStrcMethodConnectionInfo);
+							QString sHexedOrderNumber = "0000";
+							//bool bHexedResult = 
+								MainAppInfo::getHexedOrderNumber(pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.nOrderNumber, sHexedOrderNumber, 4);
+							hashObjectIDToUsedMethodConnections[pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.nObjectID].insert(sHexedOrderNumber,tmpStrcMethodConnectionInfo);
 						}
 					}
 				}
@@ -698,12 +705,12 @@ bool ExperimentStructureVisualizer::drawGraph()
 					foreach(expObjectMethodItemStrc* pExpObjectInitializationItemStrc,expSceneItems.lObjects[i].lObjectInitializations)
 					{
 
-						QList<strcMethodInfo> tmpStrcMethodInfoList;
+						QMap<QString, strcMethodInfo> tmpStrcMethodInfoList;
 						strcMethodInfo tmpStrcMethodInfo;
 						bool bSignatureFound;
 
 						if(hashObjectIDToInitializations.contains(pExpObjectInitializationItemStrc->nObjectID) == false)
-							hashObjectIDToInitializations.insert(pExpObjectInitializationItemStrc->nObjectID,QList<strcMethodInfo>());
+							hashObjectIDToInitializations.insert(pExpObjectInitializationItemStrc->nObjectID,QMap<QString,strcMethodInfo>());
 						tmpStrcMethodInfoList = hashObjectIDToInitializations[pExpObjectInitializationItemStrc->nObjectID];
 						bSignatureFound = false;
 						foreach(tmpStrcMethodInfo,tmpStrcMethodInfoList)
@@ -719,7 +726,10 @@ bool ExperimentStructureVisualizer::drawGraph()
 							tmpStrcMethodInfo.sMethodSignature = pExpObjectInitializationItemStrc->sSignature;
 							tmpStrcMethodInfo.mExperimentVisualizerMethodType = pExpObjectInitializationItemStrc->mType;
 							tmpStrcMethodInfo.bIsInitialization = true;
-							hashObjectIDToInitializations[pExpObjectInitializationItemStrc->nObjectID].append(tmpStrcMethodInfo);
+							QString sHexedOrderNumber = "0000";
+							//bool bHexedResult = 
+								MainAppInfo::getHexedOrderNumber(pExpObjectInitializationItemStrc->nOrderNumber, sHexedOrderNumber, 4);
+							hashObjectIDToInitializations[pExpObjectInitializationItemStrc->nObjectID].insert(sHexedOrderNumber,tmpStrcMethodInfo);
 						}
 					}
 				}
@@ -728,12 +738,12 @@ bool ExperimentStructureVisualizer::drawGraph()
 					foreach(expObjectMethodItemStrc* pExpObjectFinalizationItemStrc,expSceneItems.lObjects[i].lObjectFinalizations)
 					{
 
-						QList<strcMethodInfo> tmpStrcMethodInfoList;
+						QMap<QString,strcMethodInfo> tmpStrcMethodInfoList;
 						strcMethodInfo tmpStrcMethodInfo;
 						bool bSignatureFound;
 
 						if(hashObjectIDToFinalizations.contains(pExpObjectFinalizationItemStrc->nObjectID) == false)
-							hashObjectIDToFinalizations.insert(pExpObjectFinalizationItemStrc->nObjectID,QList<strcMethodInfo>());
+							hashObjectIDToFinalizations.insert(pExpObjectFinalizationItemStrc->nObjectID,QMap<QString,strcMethodInfo>());
 						tmpStrcMethodInfoList = hashObjectIDToFinalizations[pExpObjectFinalizationItemStrc->nObjectID];
 						bSignatureFound = false;
 						foreach(tmpStrcMethodInfo,tmpStrcMethodInfoList)
@@ -749,7 +759,10 @@ bool ExperimentStructureVisualizer::drawGraph()
 							tmpStrcMethodInfo.sMethodSignature = pExpObjectFinalizationItemStrc->sSignature;
 							tmpStrcMethodInfo.mExperimentVisualizerMethodType = pExpObjectFinalizationItemStrc->mType;
 							tmpStrcMethodInfo.bIsFinalization = true;
-							hashObjectIDToFinalizations[pExpObjectFinalizationItemStrc->nObjectID].append(tmpStrcMethodInfo);
+							QString sHexedOrderNumber = "0000";
+							//bool bHexedResult = 
+								MainAppInfo::getHexedOrderNumber(pExpObjectFinalizationItemStrc->nOrderNumber, sHexedOrderNumber, 4);
+							hashObjectIDToFinalizations[pExpObjectFinalizationItemStrc->nObjectID].insert(sHexedOrderNumber,tmpStrcMethodInfo);
 						}
 					}
 				}
@@ -763,11 +776,11 @@ bool ExperimentStructureVisualizer::drawGraph()
 				expSceneItems.lObjects[i].gGraphObjectItem->setCaption(expSceneItems.lObjects[i].sName);// + " (" + expSceneItems.lObjects[i].sClass + ")");
 
 				if(hashObjectIDToInitializations.contains(expSceneItems.lObjects[i].nId))
-					hashObjectIDToUsedMethods[expSceneItems.lObjects[i].nId].append(hashObjectIDToInitializations[expSceneItems.lObjects[i].nId]);
+					hashObjectIDToUsedMethods[expSceneItems.lObjects[i].nId].append(hashObjectIDToInitializations[expSceneItems.lObjects[i].nId].values());
 				if(hashObjectIDToUsedMethodConnections.contains(expSceneItems.lObjects[i].nId))
-					hashObjectIDToUsedMethods[expSceneItems.lObjects[i].nId].append(hashObjectIDToUsedMethodConnections[expSceneItems.lObjects[i].nId]);
+					hashObjectIDToUsedMethods[expSceneItems.lObjects[i].nId].append(hashObjectIDToUsedMethodConnections[expSceneItems.lObjects[i].nId].values());
 				if(hashObjectIDToFinalizations.contains(expSceneItems.lObjects[i].nId))
-					hashObjectIDToUsedMethods[expSceneItems.lObjects[i].nId].append(hashObjectIDToFinalizations[expSceneItems.lObjects[i].nId]);
+					hashObjectIDToUsedMethods[expSceneItems.lObjects[i].nId].append(hashObjectIDToFinalizations[expSceneItems.lObjects[i].nId].values());
 				if(hashObjectIDToUsedMethods.contains(expSceneItems.lObjects[i].nId))
 					expSceneItems.lObjects[i].gGraphObjectItem->setMethods(hashObjectIDToUsedMethods[expSceneItems.lObjects[i].nId]);
 
@@ -1259,6 +1272,7 @@ bool ExperimentStructureVisualizer::parseExperimentStructure()
 							expObjectMethodItemStrc* pTmpExpObjectMethodItemStrc = new expObjectMethodItemStrc;
 							pTmpExpObjectMethodItemStrc->nMethodID = pTmpMethodStructure->getMethodID();
 							pTmpExpObjectMethodItemStrc->nObjectID = pTmpMethodStructure->getMethodObjectID();
+							pTmpExpObjectMethodItemStrc->nOrderNumber = pTmpMethodStructure->getMethodOrderNumber();
 							pTmpExpObjectMethodItemStrc->mType = (ExperimentStructuresNameSpace::MethodType)pTmpMethodStructure->getMethodType();
 							pTmpExpObjectMethodItemStrc->sSignature = pTmpMethodStructure->getMethodSignature();
 							tmpObjectItem.lObjectInitializations.append(pTmpExpObjectMethodItemStrc);
@@ -1277,6 +1291,7 @@ bool ExperimentStructureVisualizer::parseExperimentStructure()
 							expObjectMethodItemStrc* pTmpExpObjectMethodItemStrc = new expObjectMethodItemStrc;
 							pTmpExpObjectMethodItemStrc->nMethodID = pTmpMethodStructure->getMethodID();
 							pTmpExpObjectMethodItemStrc->nObjectID = pTmpMethodStructure->getMethodObjectID();
+							pTmpExpObjectMethodItemStrc->nOrderNumber = pTmpMethodStructure->getMethodOrderNumber();
 							pTmpExpObjectMethodItemStrc->mType = (ExperimentStructuresNameSpace::MethodType)pTmpMethodStructure->getMethodType();
 							pTmpExpObjectMethodItemStrc->sSignature = pTmpMethodStructure->getMethodSignature();
 							tmpObjectItem.lObjectFinalizations.append(pTmpExpObjectMethodItemStrc);

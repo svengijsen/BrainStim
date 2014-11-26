@@ -297,6 +297,7 @@ bool ExperimentTreeModel::addExperimentObjectInitFinit(const ExperimentTreeModel
 	QStringList sFilterList;
 	int nTempInitFinitID;
 	QList<int> lFoundInitFinitIds;
+	int nHighestFoundInitFinitOrderNumber = -1;
 	QString sMainSectionTag;
 	QString sSubSectionTag;
 	bool bAppendReady = false;
@@ -327,7 +328,18 @@ bool ExperimentTreeModel::addExperimentObjectInitFinit(const ExperimentTreeModel
 				nTempInitFinitID = tmpItem2->getDefinition(ID_TAG).value.toInt();
 				if(nTempInitFinitID >= 0)
 				{
-					lFoundInitFinitIds.append(nTempInitFinitID); 
+					lFoundInitFinitIds.append(nTempInitFinitID);
+					ExperimentTreeItem *tmpTreeItem = tmpItem2->firstChild(INIT_FINIT_NUMBER_TAG);
+					if (tmpTreeItem)
+					{
+						bool bConversionResult = false;
+						int nTempOrderNumber = tmpTreeItem->getValue().toInt(&bConversionResult);
+						if (bConversionResult)
+						{
+							if (nTempOrderNumber > nHighestFoundInitFinitOrderNumber)
+								nHighestFoundInitFinitOrderNumber = nTempOrderNumber;
+						}
+					}
 				}
 			}
 		}
@@ -354,6 +366,9 @@ bool ExperimentTreeModel::addExperimentObjectInitFinit(const ExperimentTreeModel
 			pParametersItem->appendRow(pParameterItem);
 		}
 		pObjectItem->appendRow(pParametersItem);
+		ExperimentTreeItem* pOrderNumberItem = new ExperimentTreeItem(INIT_FINIT_NUMBER_TAG);
+		pOrderNumberItem->setValue(QString::number(nHighestFoundInitFinitOrderNumber+1));
+		tmpNewConnectionItem->appendRow(pOrderNumberItem);
 		tmpNewConnectionItem->appendRow(pObjectItem);
 		list1.at(0)->insertRow(list1.at(0)->rowCount(),tmpNewConnectionItem);
 
@@ -1147,6 +1162,111 @@ ExperimentTreeItem* ExperimentTreeModel::getExperimentBlockTreeItem(const int &n
 	return NULL;
 }
 
+bool ExperimentTreeModel::moveExperimentObjectInitFinit(const QList<int> &lInitFinitsToMove, const int &nInitFinitIDToSwitch, const int &nMoveDirection, const bool &bIsInit)
+{
+	QStringList sFilterList;
+	int nTempInitFinitID;
+	int nInitFinitNumberToSwitch = -1;
+	QList<ExperimentTreeItem*> lstInitializations;
+	QList<ExperimentTreeItem*> lstInitialization;
+	QMap<int, int> mapNewInitFinitNumbers;//InitFinitNumber, InitFinitID	//QMap items are ordered by key -> BlockNumber!
+	QList<int> lstNewOrderedInitFinitIDList;
+
+	sFilterList << EXPERIMENTTREEMODEL_FILTER_TAGS;
+	if (bIsInit)
+		lstInitializations = getFilteredItemList(INITIALIZATIONS_TAG, sFilterList);
+	else
+		lstInitializations = getFilteredItemList(FINALIZATIONS_TAG, sFilterList);
+	foreach(ExperimentTreeItem* tmpItem1, lstInitializations)
+	{
+		if (bIsInit)
+			lstInitialization = getFilteredItemList(INITIALIZATION_TAG, sFilterList, tmpItem1);
+		else
+			lstInitialization = getFilteredItemList(FINALIZATION_TAG, sFilterList, tmpItem1);
+		foreach(ExperimentTreeItem* tmpItem2, lstInitialization)
+		{
+			if (tmpItem2->getDefinitions().contains(ID_TAG))
+			{
+				nTempInitFinitID = tmpItem2->getDefinition(ID_TAG).value.toInt();
+				if (nTempInitFinitID >= 0)
+				{
+					if (tmpItem2->hasChildren())
+					{
+						for (int i = 0; i < tmpItem2->rowCount(); i++)
+						{
+							if (tmpItem2->child(i)->getName().toLower() == INIT_FINIT_NUMBER_TAG)
+							{
+								int nTempInitFinitNumber = tmpItem2->child(i)->getValue().toInt();
+								mapNewInitFinitNumbers.insert(nTempInitFinitNumber, nTempInitFinitID);
+								if (nTempInitFinitID == nInitFinitIDToSwitch)
+									nInitFinitNumberToSwitch = nTempInitFinitNumber;
+								break;
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	if (mapNewInitFinitNumbers.isEmpty())
+		return false;
+	bool bInitFinitIDsInjected = false;
+	foreach(nTempInitFinitID, mapNewInitFinitNumbers)
+	{
+		if (nTempInitFinitID == nInitFinitIDToSwitch)
+		{
+			if (bInitFinitIDsInjected == false)
+			{
+				if (nMoveDirection == -1)
+				{
+					lstNewOrderedInitFinitIDList.append(lInitFinitsToMove);
+					lstNewOrderedInitFinitIDList.append(nInitFinitIDToSwitch);
+				}
+				else if (nMoveDirection == 1)
+				{
+					lstNewOrderedInitFinitIDList.append(nInitFinitIDToSwitch);
+					lstNewOrderedInitFinitIDList.append(lInitFinitsToMove);
+				}
+				bInitFinitIDsInjected = true;
+			}
+		}
+		else if (lstNewOrderedInitFinitIDList.contains(nTempInitFinitID) == false)
+		{
+			if (lInitFinitsToMove.contains(nTempInitFinitID) == false)
+				lstNewOrderedInitFinitIDList.append(nTempInitFinitID);
+		}
+	}
+	if (bInitFinitIDsInjected == false)
+		return false;
+
+	bool bRetVal = false;
+	int nNewInitFinitNumberCounter = 0;
+	ExperimentTreeItem* tmpExpItem;
+	foreach(nTempInitFinitID, lstNewOrderedInitFinitIDList)
+	{
+		tmpExpItem = getExperimentObjectInitFinitTreeItem(nTempInitFinitID, bIsInit);
+		if (tmpExpItem)
+		{
+			if (tmpExpItem->hasChildren())
+			{
+				for (int i = 0; i < tmpExpItem->rowCount(); i++)
+				{
+					if (tmpExpItem->child(i)->getName().toLower() == INIT_FINIT_NUMBER_TAG)
+					{
+						tmpExpItem->child(i)->setValue(QString::number(nNewInitFinitNumberCounter));
+						nNewInitFinitNumberCounter++;
+						bRetVal = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+	if (bRetVal)
+		emit modelModified();
+	return bRetVal;
+}
+
 bool ExperimentTreeModel::moveExperimentBlocks(const QList<int> &lBlockIDsToMove, const int &nBlockIDToSwitch, const int &nBlockNumberChangeDirection)
 {
 	QStringList sFilterList;
@@ -1180,7 +1300,7 @@ bool ExperimentTreeModel::moveExperimentBlocks(const QList<int> &lBlockIDsToMove
 								if(tmpItem3->child(i)->getName().toLower() == BLOCKNUMBER_TAG)
 								{
 									int nTempBlockNumber = tmpItem3->child(i)->getValue().toInt();
-									mapNewBlockNumbers.insert(tmpItem3->child(i)->getValue().toInt(),nTempBlockID);
+									mapNewBlockNumbers.insert(nTempBlockNumber, nTempBlockID);
 									if(nTempBlockID == nBlockIDToSwitch)
 										nBlockNumberToSwitch = nTempBlockNumber;
 									break;
@@ -1216,7 +1336,8 @@ bool ExperimentTreeModel::moveExperimentBlocks(const QList<int> &lBlockIDsToMove
 		}
 		else if(lstNewOrderedBlockIDList.contains(nTempBlockID) == false)
 		{
-			lstNewOrderedBlockIDList.append(nTempBlockID);
+			if (lBlockIDsToMove.contains(nTempBlockID) == false)
+				lstNewOrderedBlockIDList.append(nTempBlockID);
 		}
 	}
 	if(bBlockIDsInjected == false)

@@ -156,7 +156,7 @@ void MainWindow::implementDefaultCustomActionMenus()
 				//{
 					//if (sSplittedString.at(1).isEmpty() == false)
 					//{
-						QAction *tmpAction = registerMainMenuAction(lSubMenuList, true);
+						QAction *tmpAction = registerMainMenuAction(lSubMenuList, NULL, true);
 						if (sSplittedString.at(0).toLower() == MENUACTION_TYPE_SCRIPTPATH)
 						{
 							QString sCommand = QString("%1%2%3").arg(sSplittedString.at(0).toLower()).arg(MENUACTION_SECTION_SEPERATOR).arg(sSplittedString.at(1));
@@ -1795,11 +1795,6 @@ void MainWindow::write2OutputWindow(const QString &text2Write, const QString &sT
 }
 void MainWindow::reloadSubWindow()
 {
-	//QMdiSubWindow *mdiSub = activeMdiChild();
-	//if (mdiSub)
-	//{
-	//	QString sPath = mdiSub->
-	//}
 	reOpenCurrentFile("", false);
 }
 
@@ -3679,7 +3674,7 @@ void MainWindow::saveWindowLayout(const QString &sSettingsFileName, const QStrin
 	sUILayoutSettings->endGroup();
 }
 
-QAction *MainWindow::registerMainMenuAction(const QStringList &lmenuItemSpecifier, const bool &bSkipSubWindowRegistration)
+QAction *MainWindow::registerMainMenuAction(const QStringList &lmenuItemSpecifier, QIcon *iMenuIcon, const bool &bSkipSubWindowRegistration)
 {
 	QMenuBar *mainMenuBar = menuBar();
 	if (lmenuItemSpecifier.isEmpty() == false)
@@ -3731,16 +3726,24 @@ QAction *MainWindow::registerMainMenuAction(const QStringList &lmenuItemSpecifie
 						if (currentMenu)
 						{
 							if (sMenuItemSpec == "_")//Separator?
+							{
 								currentAction = currentMenu->addSeparator();
+							}
 							else
+							{
 								currentAction = currentMenu->addAction(sMenuItemSpec);
+							}
 						}
 						else
 						{
 							if (sMenuItemSpec == "_")//Separator?
+							{
 								currentAction = mainMenuBar->addSeparator();
+							}
 							else
+							{
 								currentAction = mainMenuBar->addAction(sMenuItemSpec);
+							}
 						}
 						lastAction = currentAction;
 						//if (bStartAppendingMenus == false)
@@ -3748,6 +3751,8 @@ QAction *MainWindow::registerMainMenuAction(const QStringList &lmenuItemSpecifie
 						//bool bResult =
 						if (bSkipSubWindowRegistration == false)
 							DocManager->addMenuActionRegistration(mdiArea->activeSubWindow(), firstMenu, lastAction);
+						if (iMenuIcon)
+							currentAction->setIcon(*iMenuIcon);
 						return currentAction;
 					}
 					else

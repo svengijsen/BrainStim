@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>440</width>
-    <height>310</height>
+    <width>715</width>
+    <height>392</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -16,11 +16,23 @@
   <widget class="QTabWidget" name="tabWidget">
    <property name="geometry">
     <rect>
-     <x>0</x>
+     <x>10</x>
      <y>0</y>
-     <width>441</width>
-     <height>261</height>
+     <width>701</width>
+     <height>341</height>
     </rect>
+   </property>
+   <property name="sizePolicy">
+    <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+     <horstretch>0</horstretch>
+     <verstretch>0</verstretch>
+    </sizepolicy>
+   </property>
+   <property name="maximumSize">
+    <size>
+     <width>701</width>
+     <height>341</height>
+    </size>
    </property>
    <property name="currentIndex">
     <number>0</number>
@@ -526,13 +538,31 @@
      </widget>
     </widget>
    </widget>
+   <widget class="QWidget" name="tabPlugins">
+    <attribute name="title">
+     <string>Plugins</string>
+    </attribute>
+    <widget class="QTabWidget" name="twPlugins">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>10</y>
+       <width>681</width>
+       <height>291</height>
+      </rect>
+     </property>
+     <property name="currentIndex">
+      <number>-1</number>
+     </property>
+    </widget>
+   </widget>
   </widget>
   <widget class="QWidget" name="layoutWidget">
    <property name="geometry">
     <rect>
      <x>10</x>
-     <y>270</y>
-     <width>421</width>
+     <y>350</y>
+     <width>691</width>
      <height>36</height>
     </rect>
    </property>
@@ -559,7 +589,7 @@
       </property>
       <property name="sizeHint" stdset="0">
        <size>
-        <width>131</width>
+        <width>558</width>
         <height>31</height>
        </size>
       </property>

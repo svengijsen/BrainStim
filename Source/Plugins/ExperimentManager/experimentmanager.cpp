@@ -1202,11 +1202,13 @@ bool ExperimentManager::finalizeExperimentObjects()
 
 bool ExperimentManager::initializeExperiment(bool bFinalize)
 {
+	bool bRetVal = false;
 	if (!currentExperimentTree)
 	{
 		qDebug() << __FUNCTION__ << "(" << bFinalize << ")::No Experiment loaded!";
 		return false;
 	}
+	QMap<QString, strcInvokeObjectDefs> mapHexNumberToObjectInitializationsInvokeDefs;
 	QStringList strList;
 	strList.clear();
 	strList.append(ROOT_TAG);
@@ -1246,7 +1248,32 @@ bool ExperimentManager::initializeExperiment(bool bFinalize)
 				sParameterTypes.clear();
 				sParameterValues.clear();
 				pExpTreeItem = lExpTreeItems.at(i);
-				if (pExpTreeItem) 
+				int nInitMethodOrderNumber = -1;
+				QString sInitMethodOrderHexNumber = "";
+
+				//Get the order number
+				ExperimentTreeItem *pExpTreeParentItem = pExpTreeItem->parent();
+				if (pExpTreeParentItem)
+				{
+					ExperimentTreeItem *pExpTreeNumberItem = pExpTreeParentItem->firstChild(INIT_FINIT_NUMBER_TAG);
+					if (pExpTreeNumberItem)
+					{
+						bool bSuccesConversion = false;
+						nInitMethodOrderNumber = pExpTreeNumberItem->getValue().toInt(&bSuccesConversion);
+						if (bSuccesConversion == false)
+						{
+							nInitMethodOrderNumber = -1;
+						}
+						else
+						{
+							QString sInitMethodOrderHexNumber = "0000";
+							//bool bHexedResult = 
+								MainAppInfo::getHexedOrderNumber(nInitMethodOrderNumber, sInitMethodOrderHexNumber, 4);
+						}
+					}
+				}
+				//
+				if (pExpTreeItem && (nInitMethodOrderNumber>=0))
 				{
 					tTmpTreeItemDefs = pExpTreeItem->getDefinitions();
 					tmpString = "";
@@ -1500,66 +1527,65 @@ bool ExperimentManager::initializeExperiment(bool bFinalize)
 									break;
 								}
 							}
-							if(!(sourceMetaObject->invokeMethod(pSourceObject,sSignature.toLatin1(),sArguments0,sArguments1,sArguments2,sArguments3,sArguments4,sArguments5,sArguments6,sArguments7,sArguments8,sArguments9)))
-							{
-								//QStringList methods;
-								//for(int i = sourceMetaObject->methodOffset(); i < sourceMetaObject->methodCount(); ++i)
-								//	methods << QString::fromLatin1(sourceMetaObject->method(i).signature());
-								qDebug() << __FUNCTION__ << "(" << bFinalize << ")::Could not invoke the Method(" << sSignature << ")!";
-								//bSucceeded = true;
-								//break;							
-
-								//int id = QMetaType::type(QString("QIODevice::OpenMode").toLatin1());//OPENMODE_ENUM_META_TYPE_NAME
-								//if (id != -1) {
-								//	void *myClassPtr = QMetaType::construct(id);
-								//	//myClassPtr->setValue("ReadOnly");
-								//	QVariant tmpVariant = QVariant::fromValue(myClassPtr);
-								//	QIODevice::OpenMode *s = (QIODevice::OpenMode *)myClassPtr;
-								//	//s = (QIODevice::OpenMode)*myClassPtr;
-								//	//QVariant var;
-								//	//var.setValue(s); // copy s into the variant
-
-								//	//...
-
-								//		// retrieve the value
-								//		//MyStruct s2 = var.value<MyStruct>();
-
-								//	QMetaType::destroy(id, myClassPtr);
-								//	myClassPtr = 0;
-								//}
-
-								return false;
-							}
+							strcInvokeObjectDefs sObjInitInvokeDef;
+							sObjInitInvokeDef.pMetaObject = sourceMetaObject;
+							sObjInitInvokeDef.pObject = pSourceObject;
+							sObjInitInvokeDef.nOrderNumber = nInitMethodOrderNumber;
+							sObjInitInvokeDef.baSignature = sSignature.toLatin1();
+							sObjInitInvokeDef.lGenArgs << sArguments0 << sArguments1 << sArguments2 << sArguments3 << sArguments4 << sArguments5 << sArguments6 << sArguments7 << sArguments8 << sArguments9;
+							mapHexNumberToObjectInitializationsInvokeDefs.insert(sInitMethodOrderHexNumber, sObjInitInvokeDef);
 							continue;
 						}
 						else//No parameters?
 						{
-							if(!(sourceMetaObject->invokeMethod(pSourceObject,sSignature.toLatin1())))
-							{
-								qDebug() << __FUNCTION__ << "(" << bFinalize << ")::Could not invoke the Method(" << sSignature << ")!";
-								return false;
-							}
+							strcInvokeObjectDefs sObjInitInvokeDef;
+							sObjInitInvokeDef.pMetaObject = sourceMetaObject;
+							sObjInitInvokeDef.pObject = pSourceObject;
+							sObjInitInvokeDef.nOrderNumber = nInitMethodOrderNumber;
+							sObjInitInvokeDef.baSignature = sSignature.toLatin1();
+							//sObjInitInvokeDef.lGenArgs;
+							mapHexNumberToObjectInitializationsInvokeDefs.insert(sInitMethodOrderHexNumber, sObjInitInvokeDef);
 							continue;
 						}
 					}
 					else//No Parameters?
 					{
-						if(!(sourceMetaObject->invokeMethod(pSourceObject,sSignature.toLatin1())))
-						{
-							qDebug() << "initializeExperimentObjects(" << bFinalize << ")::Could not invoke the Method(" << sSignature << ")!";
-						}
+						strcInvokeObjectDefs sObjInitInvokeDef;
+						sObjInitInvokeDef.pMetaObject = sourceMetaObject;
+						sObjInitInvokeDef.pObject = pSourceObject;
+						sObjInitInvokeDef.nOrderNumber = nInitMethodOrderNumber;
+						sObjInitInvokeDef.baSignature = sSignature.toLatin1();
+						//sObjInitInvokeDef.lGenArgs;
+						mapHexNumberToObjectInitializationsInvokeDefs.insert(sInitMethodOrderHexNumber, sObjInitInvokeDef);
 						continue;
 					}
 				}
 			}
 		}
-		return true;
+		bRetVal = true;
 	}
 	else if(nNumberOfDefinedInitializations == 0)//this can be correct, there are no object initializations defined...
 	{
-		return true;
+		bRetVal = true;
 	}
-	return false;
+	else
+	{
+		bRetVal = false;
+	}
+	if (bRetVal)
+	{
+		foreach(strcInvokeObjectDefs tmpObjInitInvokeDef, mapHexNumberToObjectInitializationsInvokeDefs)
+		{
+			if (!(tmpObjInitInvokeDef.pMetaObject->invokeMethod(tmpObjInitInvokeDef.pObject, tmpObjInitInvokeDef.baSignature, tmpObjInitInvokeDef.lGenArgs.value(0, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(1, QGenericArgument())
+				, tmpObjInitInvokeDef.lGenArgs.value(2, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(3, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(4, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(5, QGenericArgument())
+				, tmpObjInitInvokeDef.lGenArgs.value(6, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(7, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(8, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(9, QGenericArgument()))))
+			{
+				qDebug() << __FUNCTION__ << "(isFinalize:" << bFinalize << ")::Could not invoke the Method(" << tmpObjInitInvokeDef.baSignature << ")!";
+				return false;
+			}
+		}
+	}
+	return bRetVal;
 }
 
 bool ExperimentManager::expandExperimentBlockParameterValue(QString &sValue)
@@ -2438,14 +2464,23 @@ bool ExperimentManager::createExperimentStructureFromTreeItemList(const QList<Ex
 							tmpMethod->setMethodID(tTmpTreeItemDefs[ID_TAG].value.toInt());//Copy the Method ID
 
 							ExperimentTreeItem *pSelectedExperimentTreeItem = NULL;
+							int nMethodOrderNumber = -1;
+							pSelectedExperimentTreeItem = lFoundExpTreeItems.at(i)->firstChild(INIT_FINIT_NUMBER_TAG);
+							if (pSelectedExperimentTreeItem)
+							{
+								bool bConversionResult = false;
+								nMethodOrderNumber = pSelectedExperimentTreeItem->getValue().toInt(&bConversionResult);
+								if (bConversionResult == false)
+									nMethodOrderNumber = -1;
+							}
 							pSelectedExperimentTreeItem = lFoundExpTreeItems.at(i)->firstChild(OBJECT_TAG);
-							if(pSelectedExperimentTreeItem)
+							if (pSelectedExperimentTreeItem && (nMethodOrderNumber>=0))
 							{
 								tTmpTreeItemDefs = pSelectedExperimentTreeItem->getDefinitions();
 								if(tTmpTreeItemDefs.contains(ID_TAG))
 								{
 									tmpMethod->setMethodObjectID(tTmpTreeItemDefs[ID_TAG].value.toInt());//Copy the Object ID
-
+									tmpMethod->setMethodOrderNumber(nMethodOrderNumber);
 									tmpTreeItem = pSelectedExperimentTreeItem->firstChild(INIT_FINIT_TYPE_TAG);
 									if(tmpTreeItem)//Is there a Object method type defined?
 									{

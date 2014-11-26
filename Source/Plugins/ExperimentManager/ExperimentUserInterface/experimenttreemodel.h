@@ -114,6 +114,7 @@ class ExperimentTreeModel : public QStandardItemModel
 		struct strcObjectInitFinitSpecifier
 		{
 			int nInitFinitID;
+			int nOrderNumber;
 			int nObjectID;
 			QString sType;
 			QString sSignature;
@@ -122,6 +123,7 @@ class ExperimentTreeModel : public QStandardItemModel
 			strcObjectInitFinitSpecifier()
 			{
 				nInitFinitID = -1;
+				nOrderNumber = -1;
 				nObjectID = -1;
 				sType = METHOD_TYPE_SLOT_TAG;
 				sSignature = "";
@@ -169,6 +171,8 @@ class ExperimentTreeModel : public QStandardItemModel
 
 		bool removeExperimentBlocks(const QList<int> &lBlockIDs);
 		bool moveExperimentBlocks(const QList<int> &lBlockIDsToMove, const int &nBlockIDToSwitch, const int &nBlockNumberChangeDirection);
+		bool moveExperimentObjectInitFinit(const QList<int> &lInitFinitsToMove, const int &nInitFinitIDToSwitch, const int &nMoveDirection, const bool &bIsInit);
+	
 	public slots:
 		bool initializeExperiment();
 		bool resetExperiment();

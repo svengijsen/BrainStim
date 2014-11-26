@@ -94,6 +94,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
     <xsd:complexType name="object_init_finit">
       <xsd:all>
+      	<xsd:element type="xsd:integer" name="number"/>
         <xsd:element name="object">
           <xsd:complexType>
             <xsd:all>

@@ -648,7 +648,7 @@ public slots:
 	//void returnToOldDockMaxMinSizes(QDockWidget* dock = NULL);//
 
 public:
-	Q_INVOKABLE QAction *registerMainMenuAction(const QStringList &lmenuItemSpecifier, const bool &bSkipSubWindowRegistration = false);
+	Q_INVOKABLE QAction *registerMainMenuAction(const QStringList &lmenuItemSpecifier, QIcon *iMenuIcon = NULL, const bool &bSkipSubWindowRegistration = false);
 	Q_INVOKABLE bool getSavedDockWidgetSizeHint(const QString &sDockWidgetGroupName, const QString &sDockWidgetAccessName, QRect &rSizeHint);
 	void loadSavedDockWidgetConfiguration(const QString &sSettingsFileName, const QString &sGroupName, QDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea);
 	void loadSavedWindowLayout(const QString &sSettingsFileName, const QString &sGroupName);

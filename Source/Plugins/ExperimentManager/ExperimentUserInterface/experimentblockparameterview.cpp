@@ -538,10 +538,10 @@ bool ExperimentBlockParameterView::parseExperimentBlockParameters(const QList<Ex
 							nNrOfParameters = ExperimentTreeModel::getStaticTreeElements(lObjectParameterSearchPath, lExpTreeObjectParameterItems, lExpTreeObjectItems.at(j));
 							if(nNrOfParameters > 0)
 							{
-								for (int k=0;k<nNrOfParameters;k++)//For each Parameter
+								for (int nParamCntr = 0; nParamCntr<nNrOfParameters; nParamCntr++)//For each Parameter
 								{
 									//ParameterID
-									tTmpTreeItemDefs = lExpTreeObjectParameterItems.at(k)->getDefinitions();
+									tTmpTreeItemDefs = lExpTreeObjectParameterItems.at(nParamCntr)->getDefinitions();
 									if(tTmpTreeItemDefs.contains(ID_TAG))
 										nParameterID = tTmpTreeItemDefs[ID_TAG].value.toInt();
 									else
@@ -549,14 +549,14 @@ bool ExperimentBlockParameterView::parseExperimentBlockParameters(const QList<Ex
 
 									//ParameterName
 									sParamName = "";
-									pTmpExpTreeItem = lExpTreeObjectParameterItems.at(k)->firstChild(NAME_TAG);
+									pTmpExpTreeItem = lExpTreeObjectParameterItems.at(nParamCntr)->firstChild(NAME_TAG);
 									if(pTmpExpTreeItem)
 										sParamName = pTmpExpTreeItem->getValue().toLower();
 									else
 										continue;
 
 									//ParameterValue
-									pTmpExpTreeItem = lExpTreeObjectParameterItems.at(k)->firstChild(VALUE_TAG);
+									pTmpExpTreeItem = lExpTreeObjectParameterItems.at(nParamCntr)->firstChild(VALUE_TAG);
 									if(pTmpExpTreeItem)
 									{
 										strcParameterBlockChanges paramBlockChanges;
@@ -574,16 +574,42 @@ bool ExperimentBlockParameterView::parseExperimentBlockParameters(const QList<Ex
 										{
 											nTmpParamID = hashObjectIdExperimentObjectInfo[nObjectID].pObjectParamDefContainer->getFirstParameterID(sParamName.toLower());
 											nTmpParamDefID = -1;
-											if(nTmpParamID>=0)
+											if (nTmpParamID >= 0)
+											{
 												nTmpParamDefID = hashObjectIdExperimentObjectInfo[nObjectID].pObjectParamDefContainer->getParameterDefinition(nTmpParamID)->nId;
-											else
-												nTmpParamDefID = k;
+											}
 										}
-										else
+										bool bUniqueObjParamIdentifierAlreadyDefined = false;
+										if (nTmpParamDefID < 0)
 										{
-											nTmpParamDefID = k;
+											if (currentParamEditType == PEM_CUSTOM)
+											{
+												QStringList lCurrentKeys = mapUniqueParamIDExpParamBlockChanges.keys();
+												foreach(QString tmpParamKey, lCurrentKeys)
+												{
+													QStringList lParamKeyItems = tmpParamKey.split(EXPPARAMWIDGETS_UNIQUEPARAM_SPLITTER, QString::KeepEmptyParts);
+													if (lParamKeyItems.count() > 3)
+													{
+														if ((lParamKeyItems[3].toLower() == sParamName.toLower()) &&
+															(lParamKeyItems[0].toLower() == QString::number((int)currentParamEditType)) &&
+															(lParamKeyItems[1].toLower() == QString::number(nObjectID)))
+														{
+															uniqueObjParamIdentifier = tmpParamKey;
+															bUniqueObjParamIdentifierAlreadyDefined = true;
+															break;
+														}
+													}
+												}
+												if (bUniqueObjParamIdentifierAlreadyDefined == false)
+													nTmpParamDefID = nParamCntr;
+											}
+											else
+											{
+												nTmpParamDefID = nParamCntr;
+											}
 										}
-										uniqueObjParamIdentifier = ExperimentParameterWidgets::getUniqueParameterIndentifier(currentParamEditType,nObjectID,nTmpParamDefID,sParamName);
+										if (bUniqueObjParamIdentifierAlreadyDefined == false)
+											uniqueObjParamIdentifier = ExperimentParameterWidgets::getUniqueParameterIndentifier(currentParamEditType,nObjectID,nTmpParamDefID,sParamName);
 										if(mapUniqueParamIDExpParamBlockChanges.contains(uniqueObjParamIdentifier))
 										{
 											mapUniqueParamIDExpParamBlockChanges[uniqueObjParamIdentifier].append(paramBlockChanges);
@@ -698,13 +724,14 @@ bool ExperimentBlockParameterView::appendExperimentBlockParameterChanges()
 						sParamName = hashObjectIdExperimentObjectInfo[nObjectID].sObjectName + ":\n";
 						ExperimentParameterDefinitionStrc *tmpStruct = pTempObjectParamDefContainer->getParameterDefinition(nParamID);
 
-						if (tmpStruct)
+						if (cParamEditType == PEM_CUSTOM)
 						{
-							if (cParamEditType == PEM_CUSTOM)
-							{
-								sParamName = sParamName + lObjectIDGroupDefParamName.at(EXPPARAMWIDGETS_UNIQUEPARAM_PARAMNAME_INDEX);
-							}
-							else if (tmpStruct->sGroupPath.isEmpty())
+							sParamName = sParamName + lObjectIDGroupDefParamName.at(EXPPARAMWIDGETS_UNIQUEPARAM_PARAMNAME_INDEX);
+						}
+						else if (tmpStruct)
+						{
+
+							if (tmpStruct->sGroupPath.isEmpty())
 							{
 								sParamName = sParamName + tmpStruct->sDisplayName;
 							}

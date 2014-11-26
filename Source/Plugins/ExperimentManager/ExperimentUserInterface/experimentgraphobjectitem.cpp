@@ -159,7 +159,7 @@ void ExperimentGraphObjectItem::paint(QPainter *painter, const QStyleOptionGraph
 		fCurrent.setBold(false);
 		fCurrent.setItalic(true);
 		int nInitializationsCounter = 0;
-		foreach(QString sSignature, lOrderedInitializationsList)
+		foreach(QString sSignature, lInitializationsList)
 		{
 			painter->drawText(vInitializationsRectList.at(nInitializationsCounter),Qt::AlignLeft | Qt::AlignVCenter," " + sSignature);
 			nInitializationsCounter++;
@@ -174,12 +174,12 @@ void ExperimentGraphObjectItem::paint(QPainter *painter, const QStyleOptionGraph
 		fCurrent.setBold(false);
 		fCurrent.setItalic(true);
 		int nMethodCounter = 0;
-		foreach(QString sSignature, lOrderedSignalSignatureList)
+		foreach(QString sSignature, lSignalSignatureList)
 		{
 			painter->drawText(vSignalAndSlotsRectList.at(nMethodCounter),Qt::AlignLeft | Qt::AlignVCenter," " + sSignature);
 			nMethodCounter++;
 		}
-		foreach(QString sSignature, lOrderedSlotSignatureList)
+		foreach(QString sSignature, lSlotSignatureList)
 		{
 			painter->drawText(vSignalAndSlotsRectList.at(nMethodCounter),Qt::AlignLeft | Qt::AlignVCenter," " + sSignature);
 			nMethodCounter++;
@@ -194,7 +194,7 @@ void ExperimentGraphObjectItem::paint(QPainter *painter, const QStyleOptionGraph
 		fCurrent.setBold(false);
 		fCurrent.setItalic(true);
 		int nFinalizationsCounter = 0;
-		foreach(QString sSignature, lOrderedFinalizationsList)
+		foreach(QString sSignature, lFinalizationsList)
 		{
 			painter->drawText(vFinalizationsRectList.at(nFinalizationsCounter),Qt::AlignLeft | Qt::AlignVCenter," " + sSignature);
 			nFinalizationsCounter++;
@@ -220,12 +220,12 @@ void ExperimentGraphObjectItem::setMethods(const QList<strcMethodInfo> &lMethodS
 	rAdditionalFinalizationsHeight = 0;
 
 	vInitializationsRectList.clear();
-	lOrderedInitializationsList.clear();
+	lInitializationsList.clear();
 	vSignalAndSlotsRectList.clear();
-	lOrderedSignalSignatureList.clear();
-	lOrderedSlotSignatureList.clear();
+	lSignalSignatureList.clear();
+	lSlotSignatureList.clear();
 	vFinalizationsRectList.clear();
-	lOrderedFinalizationsList.clear();
+	lFinalizationsList.clear();
 	QRectF tmpMethodRect;
 
 	if(lMethodSignatureList.isEmpty() == false)
@@ -244,14 +244,14 @@ void ExperimentGraphObjectItem::setMethods(const QList<strcMethodInfo> &lMethodS
 				//	lOrderedSignalSignatureList.append(lMethodSignatureList.at(i).sMethodSignature);
 				//else if(lMethodSignatureList.at(i).mExperimentVisualizerMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SLOT)
 				//	lOrderedSlotSignatureList.append(lMethodSignatureList.at(i).sMethodSignature);
-				lOrderedInitializationsList.append(lMethodSignatureList.at(i).sMethodSignature);
+				lInitializationsList.append(lMethodSignatureList.at(i).sMethodSignature);
 				nInitCounter++;
 			}
 		}
 		if(nInitCounter > 0)
 		{
 			rInitializationBox.setBottom(rAdditionalInitializationsHeight + EXPGRAPHOBJECTITEM_METHOD_HEIGHT + (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE/2));
-			lOrderedInitializationsList.sort();
+			//lOrderedInitializationsList.sort();
 			rTotalHeight = rAdditionalInitializationsHeight;
 		}
 
@@ -267,17 +267,17 @@ void ExperimentGraphObjectItem::setMethods(const QList<strcMethodInfo> &lMethodS
 				tmpMethodRect.setCoords(rInitializationBox.left()+EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE, rAdditionalMethodConnectionsHeight,rInitializationBox.right()-EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE,rAdditionalMethodConnectionsHeight+EXPGRAPHOBJECTITEM_METHOD_HEIGHT);
 				vSignalAndSlotsRectList.append(tmpMethodRect);
 				if(lMethodSignatureList.at(i).mExperimentVisualizerMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL)
-					lOrderedSignalSignatureList.append(lMethodSignatureList.at(i).sMethodSignature);
+					lSignalSignatureList.append(lMethodSignatureList.at(i).sMethodSignature);
 				else if(lMethodSignatureList.at(i).mExperimentVisualizerMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SLOT)
-					lOrderedSlotSignatureList.append(lMethodSignatureList.at(i).sMethodSignature);
+					lSlotSignatureList.append(lMethodSignatureList.at(i).sMethodSignature);
 				nMethodCounter++;
 			}
 		}
 		if(nMethodCounter>0)
 		{
 			rConnectionsBox.setBottom(rAdditionalMethodConnectionsHeight + EXPGRAPHOBJECTITEM_METHOD_HEIGHT + (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE/2));
-			lOrderedSignalSignatureList.sort();
-			lOrderedSlotSignatureList.sort();
+			//lOrderedSignalSignatureList.sort();
+			//lOrderedSlotSignatureList.sort();
 			rTotalHeight = rAdditionalMethodConnectionsHeight;
 		}
 
@@ -295,14 +295,14 @@ void ExperimentGraphObjectItem::setMethods(const QList<strcMethodInfo> &lMethodS
 				//	lOrderedSignalSignatureList.append(lMethodSignatureList.at(i).sMethodSignature);
 				//else if(lMethodSignatureList.at(i).mExperimentVisualizerMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SLOT)
 				//	lOrderedSlotSignatureList.append(lMethodSignatureList.at(i).sMethodSignature);
-				lOrderedFinalizationsList.append(lMethodSignatureList.at(i).sMethodSignature);
+				lFinalizationsList.append(lMethodSignatureList.at(i).sMethodSignature);
 				nFinitCounter++;
 			}
 		}
 		if(nFinitCounter > 0)
 		{
 			rFinalizationBox.setBottom(rAdditionalFinalizationsHeight + EXPGRAPHOBJECTITEM_METHOD_HEIGHT + (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE/2));
-			lOrderedFinalizationsList.sort();
+			//lOrderedFinalizationsList.sort();
 			rTotalHeight = rAdditionalFinalizationsHeight;
 		}
 	}
@@ -315,13 +315,13 @@ int ExperimentGraphObjectItem::getMethodLocationIndex(const QString &sSignature,
 {
 	if(mMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL)
 	{
-		return lOrderedSignalSignatureList.indexOf(sSignature);
+		return lSignalSignatureList.indexOf(sSignature);
 	}
 	else if(mMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SLOT)
 	{
-		int nTmpSlotIndex = lOrderedSlotSignatureList.indexOf(sSignature);
+		int nTmpSlotIndex = lSlotSignatureList.indexOf(sSignature);
 		if(nTmpSlotIndex >= 0)
-			return lOrderedSignalSignatureList.count() + lOrderedSlotSignatureList.indexOf(sSignature);
+			return lSignalSignatureList.count() + lSlotSignatureList.indexOf(sSignature);
 	}
 	return -1;
 }

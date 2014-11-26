@@ -155,9 +155,9 @@
       <widget class="QWidget" name="horizontalLayoutWidget_3">
        <property name="geometry">
         <rect>
-         <x>360</x>
+         <x>370</x>
          <y>10</y>
-         <width>431</width>
+         <width>421</width>
          <height>251</height>
         </rect>
        </property>
@@ -184,7 +184,7 @@
         <rect>
          <x>10</x>
          <y>30</y>
-         <width>341</width>
+         <width>311</width>
          <height>181</height>
         </rect>
        </property>
@@ -203,6 +203,38 @@
        </property>
        <property name="text">
         <string>Configure Argument(s)</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbInitMoveUp">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>330</x>
+         <y>50</y>
+         <width>41</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbInitMoveDown">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>330</x>
+         <y>130</y>
+         <width>41</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </widget>
@@ -307,9 +339,9 @@
       <widget class="QWidget" name="horizontalLayoutWidget_4">
        <property name="geometry">
         <rect>
-         <x>360</x>
+         <x>370</x>
          <y>10</y>
-         <width>431</width>
+         <width>421</width>
          <height>251</height>
         </rect>
        </property>
@@ -320,7 +352,7 @@
         <rect>
          <x>10</x>
          <y>30</y>
-         <width>341</width>
+         <width>311</width>
          <height>181</height>
         </rect>
        </property>
@@ -355,6 +387,38 @@
        </property>
        <property name="text">
         <string>Configure Argument(s)</string>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbFinitMoveUp">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>330</x>
+         <y>50</y>
+         <width>41</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
+       </property>
+      </widget>
+      <widget class="QPushButton" name="pbFinitMoveDown">
+       <property name="enabled">
+        <bool>false</bool>
+       </property>
+       <property name="geometry">
+        <rect>
+         <x>330</x>
+         <y>130</y>
+         <width>41</width>
+         <height>61</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string/>
        </property>
       </widget>
      </widget>
