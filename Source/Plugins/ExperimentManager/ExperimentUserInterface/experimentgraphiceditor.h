@@ -59,8 +59,8 @@ class ExperimentTreeItem;
 class TreeFilterProxyModel;
 class ExperimentManager;
 class cExperimentStructure;
-class ExperimentParameterDefinitionContainer;
-class ExperimentParameterVisualizer;
+class PropertySettingDefinition;
+class PropertySettingsWidget;
 class ExperimentBlockParameterView;
 
 class ExperimentGraphicEditor : public QWidget
@@ -176,8 +176,8 @@ private:
 	ExperimentStructureVisualizer *expStructVisualizer;
 	ExperimentBlockParameterView *expBlockParamView;
 	cExperimentStructure *tmpExpStruct;					//Only temporarily use!
-	ExperimentParameterDefinitionContainer *tmpExpObjectParamDefs;
-	QHash<QString, ExperimentParameterVisualizer *> staticGraphicWidgetsHashTable;
+	PropertySettingDefinition *tmpExpObjectParamDefs;
+	QHash<QString, PropertySettingsWidget *> staticGraphicWidgetsHashTable;
 };
 
 #endif // ExperimentGraphicEditor_H

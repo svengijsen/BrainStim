@@ -25,6 +25,7 @@
 #include <QMessageBox>
 #include "ui_optionpage.h"
 #include "globalapplicationinformation.h"
+#include "propertysettingswidget.h"
 
 class OptionPage : public QDialog
 {
@@ -34,9 +35,12 @@ public:
 	OptionPage(QWidget *parent, GlobalApplicationInformation *g_AppInfo);
 	~OptionPage();
 
+	bool setPluginTabControlWidgets(QMap<QString, PropertySettingsWidget *> &lPluginOptionWidgets);
+
 private:
 	Ui::OptionPageClass ui;
 	GlobalApplicationInformation *glob_AppInfo;
+	QMap<QString, PropertySettingsWidget *> mapPluginWidgets;
 
 private slots:
 	void on_rdb_3DRenderer_3_toggled(bool);
@@ -51,6 +55,7 @@ private slots:
 	void currentScriptMoveUp();
 	void currentScriptMoveDown();
 	void currentScriptDelete();
+	void pluginSettingEditFinished(const QString &sParamName, const QString &sNewValue);
 
 private:
 	void applySettings();

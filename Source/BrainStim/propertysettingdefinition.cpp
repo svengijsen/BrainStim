@@ -1,4 +1,4 @@
-//ExperimentManagerplugin
+//BrainStim
 //Copyright (C) 2014  Sven Gijsen
 //
 //This file is part of BrainStim.
@@ -16,18 +16,19 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "experimentparameterdefinition.h"
-#include "global.h"
+#include "propertysettingdefinition.h"
+//sven #include "global.h"
+#include "maindefines.h"
 #include <QUrl>
 #include <QFile>
 #include <QDebug>
 
-ExperimentParameterDefinitionContainer::ExperimentParameterDefinitionContainer()
+PropertySettingDefinition::PropertySettingDefinition()
 {
 
 }
 
-ExperimentParameterDefinitionContainer::~ExperimentParameterDefinitionContainer()
+PropertySettingDefinition::~PropertySettingDefinition()
 {
 	if(expParamDefinitions.isEmpty() == false)
 	{
@@ -43,7 +44,7 @@ ExperimentParameterDefinitionContainer::~ExperimentParameterDefinitionContainer(
 	}	
 }
 
-int ExperimentParameterDefinitionContainer::getFirstParameterID(const QString &sName)
+int PropertySettingDefinition::getFirstParameterID(const QString &sName)
 {
 	if(expParamDefinitions.isEmpty())
 		return -1;
@@ -56,7 +57,7 @@ int ExperimentParameterDefinitionContainer::getFirstParameterID(const QString &s
 	return -1;
 }
 
-bool ExperimentParameterDefinitionContainer::getParameterIDList(const QString &sName, QList<int> &sList)
+bool PropertySettingDefinition::getParameterIDList(const QString &sName, QList<int> &sList)
 {
 	if(expParamDefinitions.isEmpty())
 		return false;
@@ -73,7 +74,7 @@ bool ExperimentParameterDefinitionContainer::getParameterIDList(const QString &s
 	return bValueFound;
 }
 
-QString ExperimentParameterDefinitionContainer::getParameterName(const int &nId)
+QString PropertySettingDefinition::getParameterName(const int &nId)
 {
 	if((expParamDefinitions.isEmpty()) || (nId<0))
 		return "";
@@ -85,7 +86,7 @@ QString ExperimentParameterDefinitionContainer::getParameterName(const int &nId)
 	return "";
 }
 
-ExperimentParameterDefinitionStrc *ExperimentParameterDefinitionContainer::getParameterDefinition(const int &nId)
+PropertySettingDefinitionStrc *PropertySettingDefinition::getParameterDefinition(const int &nId)
 {
 	if((expParamDefinitions.isEmpty()) || (nId<0))
 		return NULL;
@@ -97,7 +98,7 @@ ExperimentParameterDefinitionStrc *ExperimentParameterDefinitionContainer::getPa
 	return NULL;
 }
 
-bool ExperimentParameterDefinitionContainer::loadFromFile(const QString &sFilePath)
+bool PropertySettingDefinition::loadFromFile(const QString &sFilePath)
 {
 	QFile* file = new QFile(sFilePath);
     if (!file->open(QIODevice::ReadOnly | QIODevice::Text)) 
@@ -115,19 +116,19 @@ bool ExperimentParameterDefinitionContainer::loadFromFile(const QString &sFilePa
             continue;
         else if(token == QXmlStreamReader::StartElement) 
 		{
-			if(xml.name() == EXPERIMENT_GROUPS_TAG)
+			if (xml.name() == PROPERTYSETTINGS_GROUPS_TAG)
 			{
 				continue;
 			}
-			else if(xml.name() == EXPERIMENT_GROUP_TAG)
+			else if (xml.name() == PROPERTYSETTINGS_GROUP_TAG)
 			{
 				expGroupDefinitions.append(*(this->parseGroupDefinition(xml)));
 			}
-            else if(xml.name() == EXPERIMENT_PARAMETERS_TAG)
+            else if(xml.name() == PROPERTYSETTINGS_PARAMETERS_TAG)
 			{
                 continue;
 			}
-            else if(xml.name() == EXPERIMENT_PARAMETER_TAG)
+            else if(xml.name() == PROPERTYSETTINGS_PARAMETER_TAG)
 			{
                 expParamDefinitions.append(*(this->parseParameterDefinition(xml)));
 			}
@@ -142,25 +143,25 @@ bool ExperimentParameterDefinitionContainer::loadFromFile(const QString &sFilePa
 	return true;
 }
 
-ExperimentGroupDefinitionStrc *ExperimentParameterDefinitionContainer::parseGroupDefinition(QXmlStreamReader& xml)
+PropertySettingGroupDefinitionStrc *PropertySettingDefinition::parseGroupDefinition(QXmlStreamReader& xml)
 {
-	ExperimentGroupDefinitionStrc *tmpGroupDef = NULL;
+	PropertySettingGroupDefinitionStrc *tmpGroupDef = NULL;
     /* Let's check that we're really getting a group definition. */
-    if((xml.tokenType() != QXmlStreamReader::StartElement) || (xml.name() != EXPERIMENT_GROUP_TAG))
+	if ((xml.tokenType() != QXmlStreamReader::StartElement) || (xml.name() != PROPERTYSETTINGS_GROUP_TAG))
         return NULL;
-	ExperimentDefinitionSection expParamCurrectSection = Experiment_GroupSection_Group;
+	PropertySettingDefinitionSection expParamCurrectSection = PropertySetting_GroupSection_Group;
     /* Let's get the attributes for group definition */
     QXmlStreamAttributes attributes = xml.attributes();
     /* Let's check that the group definition has a id attribute. */
 	int nID = -1;
 	//QVariant::Type vType;
-    if(attributes.hasAttribute(EXPERIMENT_ID_TAG)) 
+	if (attributes.hasAttribute(PROPERTYSETTINGS_ID_TAG))
 	{
         /* We'll add it to the map. */		
-		nID = attributes.value(EXPERIMENT_ID_TAG).toInt();
+		nID = attributes.value(PROPERTYSETTINGS_ID_TAG).toInt();
 		if(nID < 0)
 			return NULL;
-		tmpGroupDef = new ExperimentGroupDefinitionStrc;
+		tmpGroupDef = new PropertySettingGroupDefinitionStrc;
 		tmpGroupDef->nId = nID;
     }
     /* Next element... */
@@ -169,30 +170,30 @@ ExperimentGroupDefinitionStrc *ExperimentParameterDefinitionContainer::parseGrou
      * We'll continue the loop until we hit an EndElement property definition.  */
 	QStringRef tmpStringRef = xml.name();
 	QXmlStreamReader::TokenType tmpToken = xml.tokenType();
-    while(!((tmpToken == QXmlStreamReader::EndElement) && (tmpStringRef == EXPERIMENT_GROUP_TAG))) 
+	while (!((tmpToken == QXmlStreamReader::EndElement) && (tmpStringRef == PROPERTYSETTINGS_GROUP_TAG)))
 	{		
         if(tmpToken == QXmlStreamReader::StartElement)
 		{
-			if(tmpStringRef == EXPERIMENT_DEPENDENCY_TAG)
+			if (tmpStringRef == PROPERTYSETTINGS_DEPENDENCY_TAG)
 			{
-				expParamCurrectSection = Experiment_GroupSection_Dependency;
+				expParamCurrectSection = PropertySetting_GroupSection_Dependency;
 				QXmlStreamAttributes depAttributes = xml.attributes();
 				/* Let's check that the parameter dependency has a id attribute. */
 				int nDepID = -1;
-				if(depAttributes.hasAttribute(EXPERIMENT_ID_TAG)) 
+				if (depAttributes.hasAttribute(PROPERTYSETTINGS_ID_TAG))
 				{
 					/* We'll add it to the map. */		
-					nDepID = depAttributes.value(EXPERIMENT_ID_TAG).toInt();
+					nDepID = depAttributes.value(PROPERTYSETTINGS_ID_TAG).toInt();
 					if((nDepID < 0) || (tmpGroupDef == NULL))
 						return NULL;
-					ExperimentParameterDefinitionDependencyStrc tmpStruct;
+					PropertySettingDefinitionDependencyStrc tmpStruct;
 					tmpStruct.nId = nDepID;					
 					tmpGroupDef->Dependencies.append(tmpStruct);
 				}
 			}
-			else if((expParamCurrectSection == Experiment_GroupSection_Dependency) && (tmpStringRef == EXPERIMENT_REGEXP_TAG))
+			else if ((expParamCurrectSection == PropertySetting_GroupSection_Dependency) && (tmpStringRef == PROPERTYSETTINGS_REGEXP_TAG))
 			{
-				expParamCurrectSection = Experiment_GroupSection_Dependency_RegExp;
+				expParamCurrectSection = PropertySetting_GroupSection_Dependency_RegExp;
 			}			
 			else
 			{
@@ -201,14 +202,14 @@ ExperimentGroupDefinitionStrc *ExperimentParameterDefinitionContainer::parseGrou
 		}
 		else if(tmpToken == QXmlStreamReader::EndElement)
 		{
-			if(tmpStringRef == EXPERIMENT_DEPENDENCY_TAG)
+			if (tmpStringRef == PROPERTYSETTINGS_DEPENDENCY_TAG)
 			{
-				expParamCurrectSection = Experiment_GroupSection_Group;
+				expParamCurrectSection = PropertySetting_GroupSection_Group;
 			}			
-			else if(tmpStringRef == EXPERIMENT_REGEXP_TAG) 
+			else if (tmpStringRef == PROPERTYSETTINGS_REGEXP_TAG)
 			{
-				if(expParamCurrectSection == Experiment_ParameterSection_Dependency_RegExp)
-					expParamCurrectSection = Experiment_ParameterSection_Dependency;
+				if(expParamCurrectSection == PropertySetting_DefinitionSection_Dependency_RegExp)
+					expParamCurrectSection = PropertySetting_DefinitionSection_Dependency;
 			}			
 		}
         xml.readNext();
@@ -218,25 +219,25 @@ ExperimentGroupDefinitionStrc *ExperimentParameterDefinitionContainer::parseGrou
     return tmpGroupDef;
 }
 
-ExperimentParameterDefinitionStrc *ExperimentParameterDefinitionContainer::parseParameterDefinition(QXmlStreamReader& xml)
+PropertySettingDefinitionStrc *PropertySettingDefinition::parseParameterDefinition(QXmlStreamReader& xml)
 {
-	ExperimentParameterDefinitionStrc *tmpParamDef = NULL;
+	PropertySettingDefinitionStrc *tmpParamDef = NULL;
     /* Let's check that we're really getting a parameter definition. */
-    if((xml.tokenType() != QXmlStreamReader::StartElement) || (xml.name() != EXPERIMENT_PARAMETER_TAG))
+    if((xml.tokenType() != QXmlStreamReader::StartElement) || (xml.name() != PROPERTYSETTINGS_PARAMETER_TAG))
         return NULL;
-	ExperimentDefinitionSection expParamCurrectSection = Experiment_ParameterSection_Parameter;
+	PropertySettingDefinitionSection expParamCurrectSection = PropertySetting_DefinitionSection_Parameter;
     /* Let's get the attributes for parameter definition */
     QXmlStreamAttributes attributes = xml.attributes();
     /* Let's check that the parameter definition has a id attribute. */
 	int nID = -1;
 	//QVariant::Type vType;
-    if(attributes.hasAttribute(EXPERIMENT_ID_TAG)) 
+	if (attributes.hasAttribute(PROPERTYSETTINGS_ID_TAG))
 	{
         /* We'll add it to the map. */		
-		nID = attributes.value(EXPERIMENT_ID_TAG).toInt();
+		nID = attributes.value(PROPERTYSETTINGS_ID_TAG).toInt();
 		if(nID < 0)
 			return NULL;
-		tmpParamDef = new ExperimentParameterDefinitionStrc;
+		tmpParamDef = new PropertySettingDefinitionStrc;
 		tmpParamDef->nId = nID;
     }
     /* Next element... */
@@ -245,46 +246,46 @@ ExperimentParameterDefinitionStrc *ExperimentParameterDefinitionContainer::parse
      * We'll continue the loop until we hit an EndElement property definition.  */
 	QStringRef tmpStringRef = xml.name();
 	QXmlStreamReader::TokenType tmpToken = xml.tokenType();
-    while(!((tmpToken == QXmlStreamReader::EndElement) && (tmpStringRef == EXPERIMENT_PARAMETER_TAG))) 
+    while(!((tmpToken == QXmlStreamReader::EndElement) && (tmpStringRef == PROPERTYSETTINGS_PARAMETER_TAG))) 
 	{		
         if(tmpToken == QXmlStreamReader::StartElement)
 		{
-			if(tmpStringRef == EXPERIMENT_RESTRICTION_TAG)
+			if (tmpStringRef == PROPERTYSETTINGS_RESTRICTION_TAG)
 			{
-				expParamCurrectSection = Experiment_ParameterSection_Restriction;
+				expParamCurrectSection = PropertySetting_DefinitionSection_Restriction;
 			}
-			else if(tmpStringRef == EXPERIMENT_DEPENDENCY_TAG)
+			else if (tmpStringRef == PROPERTYSETTINGS_DEPENDENCY_TAG)
 			{
-				expParamCurrectSection = Experiment_ParameterSection_Dependency;
+				expParamCurrectSection = PropertySetting_DefinitionSection_Dependency;
 				QXmlStreamAttributes depAttributes = xml.attributes();
 				/* Let's check that the parameter dependency has a id attribute. */
 				int nDepID = -1;
-				if(depAttributes.hasAttribute(EXPERIMENT_ID_TAG)) 
+				if (depAttributes.hasAttribute(PROPERTYSETTINGS_ID_TAG))
 				{
 					/* We'll add it to the map. */		
-					nDepID = depAttributes.value(EXPERIMENT_ID_TAG).toInt();
+					nDepID = depAttributes.value(PROPERTYSETTINGS_ID_TAG).toInt();
 					if((nDepID < 0) || (tmpParamDef == NULL))
 						return NULL;
-					ExperimentParameterDefinitionDependencyStrc tmpStruct;
+					PropertySettingDefinitionDependencyStrc tmpStruct;
 					tmpStruct.nId = nDepID;
 					tmpParamDef->Dependencies.append(tmpStruct);
 				}
 			}
-			else if((expParamCurrectSection == Experiment_ParameterSection_Dependency) && (tmpStringRef == EXPERIMENT_REGEXP_TAG))
+			else if ((expParamCurrectSection == PropertySetting_DefinitionSection_Dependency) && (tmpStringRef == PROPERTYSETTINGS_REGEXP_TAG))
 			{
-				expParamCurrectSection = Experiment_ParameterSection_Dependency_RegExp;
+				expParamCurrectSection = PropertySetting_DefinitionSection_Dependency_RegExp;
 			}
-			else if((expParamCurrectSection == Experiment_ParameterSection_Restriction) && (tmpStringRef == EXPERIMENT_MINIMAL_TAG))
+			else if ((expParamCurrectSection == PropertySetting_DefinitionSection_Restriction) && (tmpStringRef == PROPERTYSETTINGS_MINIMAL_TAG))
 			{
-				expParamCurrectSection = Experiment_ParameterSection_Restriction_Minimal;
+				expParamCurrectSection = PropertySetting_DefinitionSection_Restriction_Minimal;
 			}
-			else if((expParamCurrectSection == Experiment_ParameterSection_Restriction) && (tmpStringRef == EXPERIMENT_MAXIMAL_TAG))
+			else if ((expParamCurrectSection == PropertySetting_DefinitionSection_Restriction) && (tmpStringRef == PROPERTYSETTINGS_MAXIMAL_TAG))
 			{
-				expParamCurrectSection = Experiment_ParameterSection_Restriction_Maximal;
+				expParamCurrectSection = PropertySetting_DefinitionSection_Restriction_Maximal;
 			}
-			else if((expParamCurrectSection == Experiment_ParameterSection_Restriction) && (tmpStringRef == EXPERIMENT_REGEXP_TAG))
+			else if((expParamCurrectSection == PropertySetting_DefinitionSection_Restriction) && (tmpStringRef == PROPERTYSETTINGS_REGEXP_TAG))
 			{
-				expParamCurrectSection = Experiment_ParameterSection_Restriction_RegExp;
+				expParamCurrectSection = PropertySetting_DefinitionSection_Restriction_RegExp;
 			}
 			else
 			{
@@ -293,26 +294,26 @@ ExperimentParameterDefinitionStrc *ExperimentParameterDefinitionContainer::parse
 		}
 		else if(tmpToken == QXmlStreamReader::EndElement)
 		{
-			if((tmpStringRef == EXPERIMENT_RESTRICTION_TAG) || (tmpStringRef == EXPERIMENT_DEPENDENCY_TAG))
+			if ((tmpStringRef == PROPERTYSETTINGS_RESTRICTION_TAG) || (tmpStringRef == PROPERTYSETTINGS_DEPENDENCY_TAG))
 			{
-				expParamCurrectSection = Experiment_ParameterSection_Parameter;
+				expParamCurrectSection = PropertySetting_DefinitionSection_Parameter;
 			}			
-			else if(tmpStringRef == EXPERIMENT_REGEXP_TAG) 
+			else if(tmpStringRef == PROPERTYSETTINGS_REGEXP_TAG) 
 			{
-				if(expParamCurrectSection == Experiment_ParameterSection_Dependency_RegExp)
-					expParamCurrectSection = Experiment_ParameterSection_Dependency;
-				else if(expParamCurrectSection == Experiment_ParameterSection_Restriction_RegExp)
-					expParamCurrectSection = Experiment_ParameterSection_Restriction;
+				if(expParamCurrectSection == PropertySetting_DefinitionSection_Dependency_RegExp)
+					expParamCurrectSection = PropertySetting_DefinitionSection_Dependency;
+				else if(expParamCurrectSection == PropertySetting_DefinitionSection_Restriction_RegExp)
+					expParamCurrectSection = PropertySetting_DefinitionSection_Restriction;
 			}
-			else if(tmpStringRef == EXPERIMENT_MINIMAL_TAG) 
+			else if (tmpStringRef == PROPERTYSETTINGS_MINIMAL_TAG)
 			{
-				if(expParamCurrectSection == Experiment_ParameterSection_Restriction_Minimal)
-					expParamCurrectSection = Experiment_ParameterSection_Restriction;
+				if(expParamCurrectSection == PropertySetting_DefinitionSection_Restriction_Minimal)
+					expParamCurrectSection = PropertySetting_DefinitionSection_Restriction;
 			}
-			else if(tmpStringRef == EXPERIMENT_MAXIMAL_TAG) 
+			else if (tmpStringRef == PROPERTYSETTINGS_MAXIMAL_TAG)
 			{
-				if(expParamCurrectSection == Experiment_ParameterSection_Restriction_Maximal)
-					expParamCurrectSection = Experiment_ParameterSection_Restriction;
+				if(expParamCurrectSection == PropertySetting_DefinitionSection_Restriction_Maximal)
+					expParamCurrectSection = PropertySetting_DefinitionSection_Restriction;
 			}
 		}
         xml.readNext();
@@ -322,7 +323,7 @@ ExperimentParameterDefinitionStrc *ExperimentParameterDefinitionContainer::parse
     return tmpParamDef;
 }
 
-bool ExperimentParameterDefinitionContainer::addGroupDataToStructure(QXmlStreamReader& xml, ExperimentGroupDefinitionStrc &expGroupDefStrc, ExperimentDefinitionSection &expParamSection) const
+bool PropertySettingDefinition::addGroupDataToStructure(QXmlStreamReader& xml, PropertySettingGroupDefinitionStrc &expGroupDefStrc, PropertySettingDefinitionSection &expParamSection) const
 {
     /* We need a start element, like <foo> */
     if(xml.tokenType() != QXmlStreamReader::StartElement)
@@ -336,18 +337,18 @@ bool ExperimentParameterDefinitionContainer::addGroupDataToStructure(QXmlStreamR
     if(xml.tokenType() != QXmlStreamReader::Characters)
         return false;  
 
-	if(expParamSection == Experiment_GroupSection_Group)
+	if(expParamSection == PropertySetting_GroupSection_Group)
 	{
 		/* Now we can add it to the map.*/
-		if(elementName == EXPERIMENT_ENABLED_TAG) 
+		if (elementName == PROPERTYSETTINGS_ENABLED_TAG)
 		{
 			bool bNewValue = false;
 			const QString tmpString = xml.text().trimmed().toString();
-			if(tmpString == BOOL_TRUE_TAG)
+			if (tmpString == TYPE_BOOL_TRUE)
 			{
 				bNewValue = true;
 			}
-			else if(tmpString != BOOL_FALSE_TAG)
+			else if (tmpString != TYPE_BOOL_FALSE)
 			{
 				qDebug() << __FUNCTION__ << "wrong defined boolean value for parameter " << elementName << "(> " << tmpString << ")";
 				return false;
@@ -355,15 +356,15 @@ bool ExperimentParameterDefinitionContainer::addGroupDataToStructure(QXmlStreamR
 			expGroupDefStrc.bEnabled = bNewValue;
 			return true;
 		}
-		else if(elementName == EXPERIMENT_GROUPPATH_TAG) 
+		else if (elementName == PROPERTYSETTINGS_GROUPPATH_TAG)
 		{
 			expGroupDefStrc.sGroupPath = xml.text().trimmed().toString();
 			return true;
 		}
 	}	
-	else if(expParamSection == Experiment_GroupSection_Dependency)
+	else if(expParamSection == PropertySetting_GroupSection_Dependency)
 	{
-		if(elementName == EXPERIMENT_RELATION_TAG) 
+		if (elementName == PROPERTYSETTINGS_RELATION_TAG)
 		{
 			const QString tmpString = xml.text().trimmed().toString();
 			if(tmpString.isEmpty())
@@ -390,15 +391,15 @@ bool ExperimentParameterDefinitionContainer::addGroupDataToStructure(QXmlStreamR
 			}			
 			return true;
 		}
-		else if(elementName == EXPERIMENT_AUTOHIDE_TAG) 
+		else if (elementName == PROPERTYSETTINGS_AUTOHIDE_TAG)
 		{
 			bool bNewValue = false;
 			const QString tmpString = xml.text().trimmed().toString();
-			if(tmpString == BOOL_TRUE_TAG)
+			if (tmpString == TYPE_BOOL_TRUE)
 			{
 				bNewValue = true;
 			}
-			else if(tmpString != BOOL_FALSE_TAG)
+			else if (tmpString != TYPE_BOOL_FALSE)
 			{
 				qDebug() << __FUNCTION__ << "wrong defined boolean value for parameter " << elementName << "(> " << tmpString << ")";
 				return false;
@@ -415,28 +416,28 @@ bool ExperimentParameterDefinitionContainer::addGroupDataToStructure(QXmlStreamR
 			return true;
 		}
 	}
-	else if(expParamSection == Experiment_GroupSection_Dependency_RegExp)
+	else if(expParamSection == PropertySetting_GroupSection_Dependency_RegExp)
 	{
-		if(elementName == EXPERIMENT_PATTERN_TAG) 
+		if (elementName == PROPERTYSETTINGS_PATTERN_TAG)
 		{
-			if(expParamSection == Experiment_GroupSection_Dependency_RegExp)
+			if(expParamSection == PropertySetting_GroupSection_Dependency_RegExp)
 				expGroupDefStrc.Dependencies.last().rRegularExpression.setPattern(xml.text().trimmed().toString());
 			return true;
 		}
-		else if(elementName == EXPERIMENT_CASESENSITIVE_TAG) 
+		else if (elementName == PROPERTYSETTINGS_CASESENSITIVE_TAG)
 		{
 			QRegularExpression::PatternOptions tmpOptions = QRegularExpression::NoPatternOption;
 			const QString tmpString = xml.text().trimmed().toString();
-			if(tmpString == BOOL_FALSE_TAG)
+			if (tmpString == TYPE_BOOL_FALSE)
 			{
 				tmpOptions = QRegularExpression::CaseInsensitiveOption;
 			}
-			else if(tmpString != BOOL_TRUE_TAG)
+			else if (tmpString != TYPE_BOOL_TRUE)
 			{
 				qDebug() << __FUNCTION__ << "wrong defined boolean value for parameter " << elementName << "(> " << tmpString << ")";
 				return false;
 			}
-			if(expParamSection == Experiment_GroupSection_Dependency_RegExp)
+			if(expParamSection == PropertySetting_GroupSection_Dependency_RegExp)
 				expGroupDefStrc.Dependencies.last().rRegularExpression.setPatternOptions(tmpOptions);
 			return true;
 		}
@@ -444,7 +445,7 @@ bool ExperimentParameterDefinitionContainer::addGroupDataToStructure(QXmlStreamR
 	return false;
 }
 
-bool ExperimentParameterDefinitionContainer::addParameterDataToStructure(QXmlStreamReader& xml, ExperimentParameterDefinitionStrc &expParamDefStrc, ExperimentDefinitionSection &expParamSection) const
+bool PropertySettingDefinition::addParameterDataToStructure(QXmlStreamReader& xml, PropertySettingDefinitionStrc &expParamDefStrc, PropertySettingDefinitionSection &expParamSection) const
 {
     /* We need a start element, like <foo> */
     if(xml.tokenType() != QXmlStreamReader::StartElement)
@@ -458,18 +459,18 @@ bool ExperimentParameterDefinitionContainer::addParameterDataToStructure(QXmlStr
     if(xml.tokenType() != QXmlStreamReader::Characters)
         return false;  
 
-	if(expParamSection == Experiment_ParameterSection_Parameter)
+	if(expParamSection == PropertySetting_DefinitionSection_Parameter)
 	{
 		/* Now we can add it to the map.*/
-		if(elementName == EXPERIMENT_ENABLED_TAG) 
+		if (elementName == PROPERTYSETTINGS_ENABLED_TAG)
 		{
 			bool bNewValue = false;
 			const QString tmpString = xml.text().trimmed().toString();
-			if(tmpString == BOOL_TRUE_TAG)
+			if (tmpString == TYPE_BOOL_TRUE)
 			{
 				bNewValue = true;
 			}
-			else if(tmpString != BOOL_FALSE_TAG)
+			else if (tmpString != TYPE_BOOL_FALSE)
 			{
 				qDebug() << __FUNCTION__ << "wrong defined boolean value for parameter " << elementName << "(> " << tmpString << ")";
 				return false;
@@ -477,15 +478,15 @@ bool ExperimentParameterDefinitionContainer::addParameterDataToStructure(QXmlStr
 			expParamDefStrc.bEnabled = bNewValue;
 			return true;
 		}
-		else if(elementName == EXPERIMENT_EDITABLE_TAG)
+		else if (elementName == PROPERTYSETTINGS_EDITABLE_TAG)
 		{
 			bool bNewValue = false;
 			const QString tmpString = xml.text().trimmed().toString();
-			if(tmpString == BOOL_TRUE_TAG)
+			if (tmpString == TYPE_BOOL_TRUE)
 			{
 				bNewValue = true;
 			}
-			else if(tmpString != BOOL_FALSE_TAG)
+			else if (tmpString != TYPE_BOOL_FALSE)
 			{
 				qDebug() << __FUNCTION__ << "wrong defined boolean value for parameter " << elementName << "(> " << tmpString << ")";
 				return false;
@@ -493,7 +494,7 @@ bool ExperimentParameterDefinitionContainer::addParameterDataToStructure(QXmlStr
 			expParamDefStrc.bIsEditable = bNewValue;
 			return true;
 		}
-		else if(elementName == EXPERIMENT_NAME_TAG) 
+		else if (elementName == PROPERTYSETTINGS_NAME_TAG)
 		{
 			const QString tmpString = xml.text().trimmed().toString();
 			if(tmpString.isEmpty())
@@ -504,7 +505,7 @@ bool ExperimentParameterDefinitionContainer::addParameterDataToStructure(QXmlStr
 			expParamDefStrc.sName = tmpString;
 			return true;
 		}
-		else if(elementName == EXPERIMENT_DISPLAYNAME_TAG) 
+		else if (elementName == PROPERTYSETTINGS_DISPLAYNAME_TAG)
 		{
 			const QString tmpString = xml.text().trimmed().toString();
 			if(tmpString.isEmpty())
@@ -515,21 +516,26 @@ bool ExperimentParameterDefinitionContainer::addParameterDataToStructure(QXmlStr
 			expParamDefStrc.sDisplayName = tmpString;
 			return true;
 		}
-		else if(elementName == EXPERIMENT_GROUPPATH_TAG) 
+		else if (elementName == PROPERTYSETTINGS_GROUPPATH_TAG)
 		{
 			expParamDefStrc.sGroupPath = xml.text().trimmed().toString();//tmpString;
 			return true;
 		}
-		else if(elementName == EXPERIMENT_INFORMATION_TAG) 
+		else if (elementName == PROPERTYSETTINGS_INFORMATION_TAG)
 		{
 			expParamDefStrc.sInformation = xml.text().trimmed().toString();//tmpString;
 			return true;
 		}
-		else if(elementName == EXPERIMENT_TYPE_TAG) 
+		else if (elementName == PROPERTYSETTINGS_TYPE_TAG)
 		{
 			const QString tmpString = xml.text().trimmed().toString();
-			ExperimentParameterTypeName tmpExpParTypeName = mParamDefinitionsTypesMap[tmpString];
-			if(tmpExpParTypeName == Experiment_ParameterType_Unknown)
+			if (mCustomParamDefinitionsTypesMap.contains(tmpString))
+			{
+				expParamDefStrc.eType = mCustomParamDefinitionsTypesMap.value(tmpString);
+				return true;
+			}
+			PropertySettingTypeName tmpExpParTypeName = mParamDefinitionsTypesMap[tmpString];
+			if(tmpExpParTypeName == PropertySetting_Type_Unknown)
 			{
 				qDebug() << __FUNCTION__ << "unknown defined string value for parameter " << elementName << "(> " << tmpString << ")";
 				return false;
@@ -537,15 +543,15 @@ bool ExperimentParameterDefinitionContainer::addParameterDataToStructure(QXmlStr
 			expParamDefStrc.eType = tmpExpParTypeName;
 			return true;
 		}
-		else if(elementName == EXPERIMENT_SCRIPTABLE_TAG) 
+		else if (elementName == PROPERTYSETTINGS_SCRIPTABLE_TAG)
 		{
 			bool bNewValue = false;
 			const QString tmpString = xml.text().trimmed().toString();
-			if(tmpString == BOOL_TRUE_TAG)
+			if (tmpString == TYPE_BOOL_TRUE)
 			{
 				bNewValue = true;
 			}
-			else if(tmpString != BOOL_FALSE_TAG)
+			else if (tmpString != TYPE_BOOL_FALSE)
 			{
 				qDebug() << __FUNCTION__ << "wrong defined boolean value for parameter " << elementName << "(> " << tmpString << ")";
 				return false;
@@ -553,59 +559,59 @@ bool ExperimentParameterDefinitionContainer::addParameterDataToStructure(QXmlStr
 			expParamDefStrc.bCanBeScriptReference = bNewValue;
 			return true;
 		}
-		else if(elementName == EXPERIMENT_DEFAULTVALUE_TAG) 
+		else if (elementName == PROPERTYSETTINGS_DEFAULTVALUE_TAG)
 		{
 			expParamDefStrc.sDefaultValue = xml.text().trimmed().toString();//tmpString;
 			return true;
 		}
 	}
-	else if((expParamSection == Experiment_ParameterSection_Restriction_Minimal) || (expParamSection == Experiment_ParameterSection_Restriction_Maximal))
+	else if((expParamSection == PropertySetting_DefinitionSection_Restriction_Minimal) || (expParamSection == PropertySetting_DefinitionSection_Restriction_Maximal))
 	{
-		if(elementName == EXPERIMENT_ENABLED_TAG) 
+		if (elementName == PROPERTYSETTINGS_ENABLED_TAG)
 		{
 			bool bNewValue = false;
 			const QString tmpString = xml.text().trimmed().toString();
-			if(tmpString == BOOL_TRUE_TAG)
+			if (tmpString == TYPE_BOOL_TRUE)
 			{
 				bNewValue = true;
 			}
-			else if(tmpString != BOOL_FALSE_TAG)
+			else if (tmpString != TYPE_BOOL_FALSE)
 			{
 				qDebug() << __FUNCTION__ << "wrong defined boolean value for parameter " << elementName << "(> " << tmpString << ")";
 				return false;
 			}
-			if(expParamSection == Experiment_ParameterSection_Restriction_Minimal)
+			if(expParamSection == PropertySetting_DefinitionSection_Restriction_Minimal)
 				expParamDefStrc.Restriction.MinimalValue.bEnabled = bNewValue;
-			else if(expParamSection == Experiment_ParameterSection_Restriction_Maximal)
+			else if(expParamSection == PropertySetting_DefinitionSection_Restriction_Maximal)
 				expParamDefStrc.Restriction.MaximalValue.bEnabled = bNewValue;
 			return true;
 		}
-		else if(elementName == EXPERIMENT_VALUE_TAG) 
+		else if (elementName == PROPERTYSETTINGS_VALUE_TAG)
 		{
-			if(expParamSection == Experiment_ParameterSection_Restriction_Minimal)
+			if(expParamSection == PropertySetting_DefinitionSection_Restriction_Minimal)
 				expParamDefStrc.Restriction.MinimalValue.vValue = xml.text().trimmed().toString();
-			else if(expParamSection == Experiment_ParameterSection_Restriction_Maximal)
+			else if(expParamSection == PropertySetting_DefinitionSection_Restriction_Maximal)
 				expParamDefStrc.Restriction.MaximalValue.vValue = xml.text().trimmed().toString();
 			return true;
 		}
 	}
-	else if(expParamSection == Experiment_ParameterSection_Restriction)
+	else if(expParamSection == PropertySetting_DefinitionSection_Restriction)
 	{
-		if(elementName == EXPERIMENT_ALLOWED_TAG) 
+		if (elementName == PROPERTYSETTINGS_ALLOWED_TAG)
 		{
 			QString tmpString = xml.text().trimmed().toString();
 			if(tmpString.isEmpty())
 				return true;
-			const QStringList tmpStringList = tmpString.split(EXPERIMENT_LISTSEP_CHAR,QString::SkipEmptyParts);
+			const QStringList tmpStringList = tmpString.split(PROPERTYSETTINGS_LISTSEP_CHAR, QString::SkipEmptyParts);
 			if(tmpStringList.isEmpty())
 				return true;
 			expParamDefStrc.Restriction.lAllowedValues = tmpStringList;
 			return true;
 		}
 	}
-	else if(expParamSection == Experiment_ParameterSection_Dependency)
+	else if(expParamSection == PropertySetting_DefinitionSection_Dependency)
 	{
-		if(elementName == EXPERIMENT_RELATION_TAG) 
+		if (elementName == PROPERTYSETTINGS_RELATION_TAG)
 		{
 			const QString tmpString = xml.text().trimmed().toString();
 			if(tmpString.isEmpty())
@@ -633,35 +639,47 @@ bool ExperimentParameterDefinitionContainer::addParameterDataToStructure(QXmlStr
 			return true;
 		}
 	}
-	else if((expParamSection == Experiment_ParameterSection_Dependency_RegExp) || (expParamSection == Experiment_ParameterSection_Restriction_RegExp))
+	else if((expParamSection == PropertySetting_DefinitionSection_Dependency_RegExp) || (expParamSection == PropertySetting_DefinitionSection_Restriction_RegExp))
 	{
-		if(elementName == EXPERIMENT_PATTERN_TAG) 
+		if (elementName == PROPERTYSETTINGS_PATTERN_TAG)
 		{
-			if(expParamSection == Experiment_ParameterSection_Dependency_RegExp)
+			if(expParamSection == PropertySetting_DefinitionSection_Dependency_RegExp)
 				expParamDefStrc.Dependencies.last().rRegularExpression.setPattern(xml.text().trimmed().toString());
-			else if(expParamSection == Experiment_ParameterSection_Restriction_RegExp)
+			else if(expParamSection == PropertySetting_DefinitionSection_Restriction_RegExp)
 				expParamDefStrc.Restriction.rRegularExpression.setPattern(xml.text().trimmed().toString());
 			return true;
 		}
-		else if(elementName == EXPERIMENT_CASESENSITIVE_TAG) 
+		else if (elementName == PROPERTYSETTINGS_CASESENSITIVE_TAG)
 		{
 			QRegularExpression::PatternOptions tmpOptions = QRegularExpression::NoPatternOption;
 			const QString tmpString = xml.text().trimmed().toString();
-			if(tmpString == BOOL_FALSE_TAG)
+			if (tmpString == TYPE_BOOL_FALSE)
 			{
 				tmpOptions = QRegularExpression::CaseInsensitiveOption;
 			}
-			else if(tmpString != BOOL_TRUE_TAG)
+			else if (tmpString != TYPE_BOOL_TRUE)
 			{
 				qDebug() << __FUNCTION__ << "wrong defined boolean value for parameter " << elementName << "(> " << tmpString << ")";
 				return false;
 			}
-			if(expParamSection == Experiment_ParameterSection_Dependency_RegExp)
+			if(expParamSection == PropertySetting_DefinitionSection_Dependency_RegExp)
 				expParamDefStrc.Dependencies.last().rRegularExpression.setPatternOptions(tmpOptions);
-			else if(expParamSection == Experiment_ParameterSection_Restriction_RegExp)
+			else if(expParamSection == PropertySetting_DefinitionSection_Restriction_RegExp)
 				expParamDefStrc.Restriction.rRegularExpression.setPatternOptions(tmpOptions);
 			return true;
 		}
 	}
 	return false;
+}
+
+bool PropertySettingDefinition::registerCustomPropertySettingDefinitionsTypes(const QHash<int, strcCustomVariantMetaTypeDescription> &hashCustomParamTypeToVariantMetaTypeInfo)
+{
+	QHashIterator<int, strcCustomVariantMetaTypeDescription> iter(hashCustomParamTypeToVariantMetaTypeInfo);
+	while (iter.hasNext()) 
+	{
+		iter.next();
+		if (mParamDefinitionsTypesMap.contains(iter.value().sName) == false)
+			mCustomParamDefinitionsTypesMap.insert(iter.value().sName, (int)iter.key());
+	}
+	return true;
 }

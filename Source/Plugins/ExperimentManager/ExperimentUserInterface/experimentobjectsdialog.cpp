@@ -19,8 +19,8 @@
 #include "experimentobjectsdialog.h"
 #include "ui_ExperimentObjectsDialog.h"
 #include "experimentmanager.h"
-#include "experimentparameterwidgets.h"
-#include "experimentparametervisualizer.h"
+#include "propertysettingswidgetcontainer.h"
+//sven #include "experimentparametervisualizer.h"
 #include "experimentmethodparamsconfiguration.h"
 
 ExperimentObjectsDialog::ExperimentObjectsDialog(QWidget *parent) : QDialog(parent), bIsObjectDeleting(false), bIsParsing(false), bDisableEditUpdates(false), pCurrentExpStructure(NULL), twCurrentObjects(NULL), layoutObjectDeclarationTreeWidgetParent(NULL), layoutObjectInitTreeWidgetParent(NULL), layoutObjectFinitTreeWidgetParent(NULL), pExpParamWidgets(NULL), pObjectDeclarationWidget(NULL), pObjectInitsWidget(NULL), pObjectFinitsWidget(NULL), pObjectInitFinitWidget(NULL), pExperimentTreeModel(NULL), nCurrentObjectSelectionIdentifier(-1), nCurrentObjectInitSelectionIdentifier(-1), nCurrentObjectFinitSelectionIdentifier(-1)
@@ -254,7 +254,7 @@ bool ExperimentObjectsDialog::showObjectWidgets(const strcExperimentObjectInfo &
 	ui->lwObjectFinitUsed->setEnabled(false);
 
 	if(pExpParamWidgets == NULL)
-		pExpParamWidgets = ExperimentParameterWidgets::instance();
+		pExpParamWidgets = PropertySettingsWidgetContainer::instance();
 	if(pObjectDeclarationWidget == NULL)
 	{
 		pObjectDeclarationWidget = pExpParamWidgets->getExperimentParameterWidget(DECLARATIONS_OBJECT_TAG);
@@ -999,11 +999,11 @@ void ExperimentObjectsDialog::handleObjectInitFinitSelectionChanged(bool bIsInit
 	}
 	if(tmpMethodParamStrcList.isEmpty()==false)
 	{
-		mapParamDefinitionsTypesStrc mParamDefinitionsTypesMap;
+		mapPropertySettingDefinitionsTypesStrc mParamDefinitionsTypesMap;
 		foreach(cMethodParameterStructure *pTmpExpParamStrc, tmpMethodParamStrcList)
 		{
 			//Add defined arguments
-			ExperimentParameterDefinitionStrc *tmpExpParamDefStrc = new ExperimentParameterDefinitionStrc();
+			PropertySettingDefinitionStrc *tmpExpParamDefStrc = new PropertySettingDefinitionStrc();
 			tmpExpParamDefStrc->bCanBeScriptReference = false;
 			tmpExpParamDefStrc->bEnabled = true;
 			tmpExpParamDefStrc->bIsEditable = false;

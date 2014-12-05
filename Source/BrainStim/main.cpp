@@ -119,7 +119,8 @@ int main(int argc, char **argv)
 			QString sLogonName = "";
 			QByteArray baLogonHashedPass;
 			loginDialog->getCurrentUserCredentials(sLogonName, baLogonHashedPass);
-			bool bResult = globAppInformation->setCurrentUserCredentials(sLogonName, baLogonHashedPass);
+			//bool bResult = 
+				globAppInformation->setCurrentUserCredentials(sLogonName, baLogonHashedPass);
 		}
 	}
 	if (appExchange.isRunning())

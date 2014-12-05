@@ -29,7 +29,8 @@
 #include "qml2viewer.h"
 #include "experimenttreeitem.h"
 #include "ExperimentUserInterface/experimentgraphiceditor.h"
-#include "ExperimentUserInterFace/experimentparameterwidgets.h"
+#include "propertysettingswidgetcontainer.h"
+#include "experimentpropertysettingextensions.h"
 
 QScriptValue ExperimentManager::ctor__experimentManager(QScriptContext* context, QScriptEngine* engine)
 {
@@ -81,7 +82,47 @@ void ExperimentManager::DefaultConstruct()
 	expParamWidgets = NULL;
 	sConfiguredActiveScreen = NULL;
 	RegisterMetaTypes();
-	expParamWidgets = ExperimentParameterWidgets::instance();
+	expParamWidgets = PropertySettingsWidgetContainer::instance();
+
+	int nNewTypeIdentifier = expParamWidgets->registerCustomVariabeleType((QVariant::Type) rotationDirectionTypeId(), "rotationdirection");
+	if (nNewTypeIdentifier >= 0)
+	{
+		RotationDirectionPropertyType *tmpRotationDirectionPropertyType = new RotationDirectionPropertyType();
+		MainAppInfo::registerCustomPropertySettingObject((QObject*)tmpRotationDirectionPropertyType, nNewTypeIdentifier);
+	}
+	nNewTypeIdentifier = expParamWidgets->registerCustomVariabeleType((QVariant::Type) eccentricityDirectionTypeId(), "eccentricitydirection");
+	if (nNewTypeIdentifier >= 0)
+	{
+		EccentricityDirectionPropertyType *tmpEccentricityDirectionPropertyType = new EccentricityDirectionPropertyType();
+		MainAppInfo::registerCustomPropertySettingObject((QObject*)tmpEccentricityDirectionPropertyType, nNewTypeIdentifier);
+	}
+	nNewTypeIdentifier = expParamWidgets->registerCustomVariabeleType((QVariant::Type) movementDirectionTypeId(), "movementdirection");
+	if (nNewTypeIdentifier >= 0)
+	{
+		MovementDirectionPropertyType *tmpMovementDirectionPropertyType = new MovementDirectionPropertyType();
+		MainAppInfo::registerCustomPropertySettingObject((QObject*)tmpMovementDirectionPropertyType, nNewTypeIdentifier);
+	}
+	nNewTypeIdentifier = expParamWidgets->registerCustomVariabeleType((QVariant::Type) methodTypeTypeId(), "methodtype");
+	if (nNewTypeIdentifier >= 0)
+	{
+		MethodTypePropertyType *tmpMethodTypePropertyType = new MethodTypePropertyType();
+		MainAppInfo::registerCustomPropertySettingObject((QObject*)tmpMethodTypePropertyType, nNewTypeIdentifier);
+	}
+
+	bool bResult = expParamWidgets->loadExperimentParameterDefinition(BLOCK_OBJECT_PARAMDEF_PATH, BLOCK_TAG, true);
+	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(RETINOTOPYMAPPER_PARAMDEF_PATH, RETINOTOPYMAPPER_NAME, true);
+	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(EXPERIMENT_PARAMDEF_PATH, EXPERIMENT_TAG, true);
+	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(DECLARATIONS_OBJECT_PARAMDEF_PATH, DECLARATIONS_OBJECT_TAG, true);
+	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(INITIALIZATION_OBJECT_PARAMDEF_PATH, INITIALIZATION_OBJECT_TAG, true);
+	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(FINALIZATION_OBJECT_PARAMDEF_PATH, FINALIZATION_OBJECT_TAG, true);
+	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(CONNECTION_OBJECT_PARAMDEF_PATH, CONNECTION_OBJECT_TAG, true);
+	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(BLOCK_OBJECT_PARAMDEF_PATH, BLOCK_TAG, true);
+	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(LOOP_OBJECT_PARAMDEF_PATH, LOOP_TAG, true);
+	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(INITIALIZATIONS_PARAMETER_PARAMDEF_PATH, INITIALIZATIONS_PARAMETER_TAG, true);
+	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(FINALIZATIONS_PARAMETER_PARAMDEF_PATH, FINALIZATIONS_PARAMETER_TAG, true);
+	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(BLOCK_PARAMETER_PARAMDEF_PATH, BLOCK_PARAMETER_TAG, true);
+	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(QML2VIEWER_PARAMDEF_PATH, QML2VIEWER_NAME, true);
+	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(OBJECT_DEFINITION_PARAMDEF_PATH, OBJECT_DEFINITION_TAG, true);
 	changeCurrentExperimentState(ExperimentManager_Constructed);
 }
 
@@ -273,7 +314,7 @@ bool ExperimentManager::getExperimentObjectScriptValue(const int &nObjectID,cons
 						if (lExperimentObjectList[i].ExpBlockParams->contains(sKeyName.toLower()))
 						{
 							if(lExperimentObjectList[i].typedExpParamCntnr)
-								return lExperimentObjectList[i].typedExpParamCntnr->getExperimentParameter(sKeyName,sScriptValue,currentScriptEngine);
+								return lExperimentObjectList[i].typedExpParamCntnr->getPropertySetting(sKeyName,sScriptValue,currentScriptEngine);
 							else
 								return false;
 						}
@@ -307,8 +348,8 @@ bool ExperimentManager::setExperimentObjectFromScriptValue(const int &nObjectID,
 							{
 								QString tmpString = sScriptValue.toString();
 								if(expandExperimentBlockParameterValue(tmpString))
-									return lExperimentObjectList[i].typedExpParamCntnr->setExperimentParameter(sKeyName,tmpString);
-								return lExperimentObjectList[i].typedExpParamCntnr->setExperimentParameter(sKeyName,sScriptValue);
+									return lExperimentObjectList[i].typedExpParamCntnr->setPropertySetting(sKeyName,tmpString);
+								return lExperimentObjectList[i].typedExpParamCntnr->setPropertySetting(sKeyName,sScriptValue);
 							}
 							return false;
 						}
@@ -1017,7 +1058,7 @@ bool ExperimentManager::configureExperiment()
 				if (!tmpString.isEmpty())
 				{
 					expandExperimentBlockParameterValue(tmpString);
-					if (tmpString == BOOL_TRUE_TAG)
+					if (tmpString == TYPE_BOOL_TRUE)
 						cExperimentBlockTrialStructure->setExperimentDebugMode(true);
 					else
 						cExperimentBlockTrialStructure->setExperimentDebugMode(false);
@@ -2134,7 +2175,7 @@ bool ExperimentManager::createExperimentStructureFromTreeItemList(const QList<Ex
 					if (tmpTreeItem)//Is there a Experiment DebugMode defined?
 					{
 						QString sTmpString = tmpTreeItem->getValue().toLower();
-						if (sTmpString == BOOL_FALSE_TAG)
+						if (sTmpString == TYPE_BOOL_FALSE)
 							expStruct->setExperimentDebugMode(false);
 						else
 							expStruct->setExperimentDebugMode(true);

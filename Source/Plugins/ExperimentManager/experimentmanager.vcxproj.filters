@@ -139,12 +139,6 @@
     <ClCompile Include="ExperimentUserInterface\experimentgraphiceditor.cpp">
       <Filter>Source Files\ExperimentUserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="ExperimentUserInterface\experimentparametervisualizer.cpp">
-      <Filter>Source Files\ExperimentUserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="ExperimentUserInterface\experimentstructurevisualizer.cpp">
-      <Filter>Source Files\ExperimentUserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="ExperimentUserInterface\experimenttreefilterproxymodel.cpp">
       <Filter>Source Files\ExperimentUserInterface</Filter>
     </ClCompile>
@@ -158,15 +152,6 @@
       <Filter>Source Files\ExperimentUserInterface</Filter>
     </ClCompile>
     <ClCompile Include="ExperimentUserInterface\qgraphicsviewec.cpp">
-      <Filter>Source Files\ExperimentUserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="experimentparameterdefinition.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="ExperimentUserInterface\parameterpropertyextensions.cpp">
-      <Filter>Source Files\ExperimentUserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="ExperimentUserInterface\experimentparameterwidgets.cpp">
       <Filter>Source Files\ExperimentUserInterface</Filter>
     </ClCompile>
     <ClCompile Include="ExperimentUserInterface\experimentblockparameterview.cpp">
@@ -296,18 +281,6 @@
       <Filter>Generated Files\Release_Win32</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_prtformatmanager.cpp">
-      <Filter>Generated Files\Release_x64</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_ParameterPropertyExtensions.cpp">
-      <Filter>Generated Files\Debug_Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_ParameterPropertyExtensions.cpp">
-      <Filter>Generated Files\Debug_x64</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_ParameterPropertyExtensions.cpp">
-      <Filter>Generated Files\Release_Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_ParameterPropertyExtensions.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_OpenGLWindow.cpp">
@@ -442,18 +415,6 @@
     <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_ExperimentTimer.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_ExperimentStructureVisualizer.cpp">
-      <Filter>Generated Files\Debug_Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_ExperimentStructureVisualizer.cpp">
-      <Filter>Generated Files\Debug_x64</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_ExperimentStructureVisualizer.cpp">
-      <Filter>Generated Files\Release_Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_ExperimentStructureVisualizer.cpp">
-      <Filter>Generated Files\Release_x64</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_ExperimentStructures.cpp">
       <Filter>Generated Files\Debug_Win32</Filter>
     </ClCompile>
@@ -464,30 +425,6 @@
       <Filter>Generated Files\Release_Win32</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_ExperimentStructures.cpp">
-      <Filter>Generated Files\Release_x64</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_ExperimentParameterWidgets.cpp">
-      <Filter>Generated Files\Debug_Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_ExperimentParameterWidgets.cpp">
-      <Filter>Generated Files\Debug_x64</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_ExperimentParameterWidgets.cpp">
-      <Filter>Generated Files\Release_Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_ExperimentParameterWidgets.cpp">
-      <Filter>Generated Files\Release_x64</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_ExperimentParameterVisualizer.cpp">
-      <Filter>Generated Files\Debug_Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_ExperimentParameterVisualizer.cpp">
-      <Filter>Generated Files\Debug_x64</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_ExperimentParameterVisualizer.cpp">
-      <Filter>Generated Files\Release_Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_ExperimentParameterVisualizer.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
     <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_ExperimentObjectsDialog.cpp">
@@ -661,6 +598,36 @@
     <ClCompile Include="ExperimentUserInterface\experimentmethodparamsconfiguration.cpp">
       <Filter>Source Files\ExperimentUserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_experimentstructurevisualizer.cpp">
+      <Filter>Generated Files\Debug_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_experimentstructurevisualizer.cpp">
+      <Filter>Generated Files\Debug_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_experimentstructurevisualizer.cpp">
+      <Filter>Generated Files\Release_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_experimentstructurevisualizer.cpp">
+      <Filter>Generated Files\Release_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="ExperimentUserInterface\experimentstructurevisualizer.cpp">
+      <Filter>Source Files\ExperimentUserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="ExperimentUserInterface\experimentpropertysettingextensions.cpp">
+      <Filter>Source Files\ExperimentUserInterface</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_experimentpropertysettingextensions.cpp">
+      <Filter>Generated Files\Debug_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_experimentpropertysettingextensions.cpp">
+      <Filter>Generated Files\Debug_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_experimentpropertysettingextensions.cpp">
+      <Filter>Generated Files\Release_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_experimentpropertysettingextensions.cpp">
+      <Filter>Generated Files\Release_x64</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h">
@@ -696,12 +663,6 @@
     <ClInclude Include="..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_AttributeWidget.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_ExperimentParameterVisualizer.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_ExperimentStructureVisualizer.h">
-      <Filter>Generated Files</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_FindDialog.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
@@ -727,6 +688,9 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_experimentmethodparamsconfiguration.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_experimentstructurevisualizer.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -776,9 +740,6 @@
     <CustomBuild Include="currenttime.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="experimentparameter.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="experimentstructures.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
@@ -815,12 +776,6 @@
     <CustomBuild Include="ExperimentUserInterface\experimentgraphiceditor.h">
       <Filter>Header Files\ExperimentUserInterface</Filter>
     </CustomBuild>
-    <CustomBuild Include="ExperimentUserInterface\experimentparametervisualizer.h">
-      <Filter>Header Files\ExperimentUserInterface</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ExperimentUserInterface\experimentstructurevisualizer.h">
-      <Filter>Header Files\ExperimentUserInterface</Filter>
-    </CustomBuild>
     <CustomBuild Include="ExperimentUserInterface\experimenttreefilterproxymodel.h">
       <Filter>Header Files\ExperimentUserInterface</Filter>
     </CustomBuild>
@@ -836,23 +791,8 @@
     <CustomBuild Include="ExperimentUserInterface\attributewidget.ui">
       <Filter>Form Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="ExperimentUserInterface\experimentparametervisualizer.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ExperimentUserInterface\experimentstructurevisualizer.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="ExperimentUserInterface\finddialog.ui">
       <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="experimentparameterdefinition.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ExperimentUserInterface\parameterpropertyextensions.h">
-      <Filter>Header Files\ExperimentUserInterface</Filter>
-    </CustomBuild>
-    <CustomBuild Include="ExperimentUserInterface\experimentparameterwidgets.h">
-      <Filter>Header Files\ExperimentUserInterface</Filter>
     </CustomBuild>
     <CustomBuild Include="ExperimentUserInterface\experimentblockparameterview.h">
       <Filter>Header Files\ExperimentUserInterface</Filter>
@@ -894,6 +834,15 @@
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="ExperimentUserInterface\experimentmethodparamsconfiguration.h">
+      <Filter>Header Files\ExperimentUserInterface</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ExperimentUserInterface\experimentstructurevisualizer.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ExperimentUserInterface\experimentstructurevisualizer.h">
+      <Filter>Header Files\ExperimentUserInterface</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ExperimentUserInterface\experimentpropertysettingextensions.h">
       <Filter>Header Files\ExperimentUserInterface</Filter>
     </CustomBuild>
   </ItemGroup>

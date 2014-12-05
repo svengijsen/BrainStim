@@ -48,6 +48,7 @@ class QToolButton;
 class QVBoxLayout;
 class QGraphicsViewEc;
 class ExperimentTreeModel;
+class ExperimentStructureScene;
 
 namespace Ui {class ExperimentStructureVisualizer;};
 

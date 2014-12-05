@@ -29,7 +29,7 @@
 #include "blockloopsdialog.h"
 #include "experimentobjectsdialog.h"
 #include "objectconnectionsdialog.h"
-#include "ExperimentStructureVisualizer.h"
+//sven #include "ExperimentStructureVisualizer.h"
 
 ExperimentStructureScene::ExperimentStructureScene(ExperimentStructureVisualizer *parent) : QGraphicsScene((QObject*)parent), pBlockLoopsDialog(NULL), pExperimentObjectsDialog(NULL), pObjectConnectionsDialog(NULL), pExpStruct(NULL), pExperimentTreeModel(NULL), parentExpStructVis(parent)
 {

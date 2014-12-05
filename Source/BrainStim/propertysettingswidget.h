@@ -1,4 +1,4 @@
-//ExperimentManagerplugin
+//BrainStim
 //Copyright (C) 2014  Sven Gijsen
 //
 //This file is part of BrainStim.
@@ -16,25 +16,26 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef EXPERIMENTPARAMETERVISUALIZER_H
-#define EXPERIMENTPARAMETERVISUALIZER_H
+#ifndef PROPERTYSETTINGSWIDGET_H
+#define PROPERTYSETTINGSWIDGET_H
 
 #include <QWidget>
 #include <QVBoxLayout>
+#include "mainappinfo.h"
 #include "qtpropertymanager.h"
 #include "qtvariantproperty.h"
 #include "qteditorfactory.h"
 #include "qttreepropertybrowser.h"
 
-#include "experimentparameter.h"
-#include "experimentparameterdefinition.h"
-#include "parameterpropertyextensions.h"
+#include "propertysetting.h"
+#include "propertysettingdefinition.h"
+#include "propertysettingextensions.h"
 
-namespace Ui {class ExperimentParameterVisualizer;};
+namespace Ui { class PropertySettingsWidget; };
 
-#define EXPPARAMVIS_ENUM_SPEC_DIVIDER					"_"
+#define PROPSETTWIDGET_ENUM_SPEC_DIVIDER					"_"
 
-class ExperimentParameterVisualizer : public QWidget
+class PropertySettingsWidget : public QWidget
 {
 	Q_OBJECT
 
@@ -65,7 +66,7 @@ private:
 	struct propertyDependencyStruct
 	{
 		QtVariantProperty *vProperty;
-		QList<ExperimentParameterDefinitionDependencyStrc> definitions;
+		QList<PropertySettingDefinitionDependencyStrc> definitions;
 		propertyDependencyStruct()
 		{
 			vProperty = NULL;
@@ -97,28 +98,32 @@ private:
 	};
 
 public:
-	explicit ExperimentParameterVisualizer(QWidget *parent = NULL);
-	ExperimentParameterVisualizer(const ExperimentParameterVisualizer& other);
-	~ExperimentParameterVisualizer();
+	explicit PropertySettingsWidget(QWidget *parent = NULL);
+	PropertySettingsWidget(const PropertySettingsWidget& other);
+	~PropertySettingsWidget();
 
 	bool checkIfParameterExists(const QString &sName);
-	bool addParameterProperty(const ExperimentParameterDefinitionStrc *expParamDef, const QVariant &vValue);
+	bool addParameterProperty(const PropertySettingDefinitionStrc *expParamDef, const QVariant &vValue);
 	bool removeParameterProperty(const QString &sUniquePropertyIdentifier);
 	bool configurePropertyEditSignaling(const bool &bEnable);
 	bool hasPropertyEditSignaling() {return bPropertyEditSignaling;};
 	bool setParameter(const QString &sName, const QString &sValue, const bool &bSetModified = true, const bool &bIsInitializing = false);
-	bool addGroupProperties(const QList<ExperimentGroupDefinitionStrc> *expParamDef);
+	bool addGroupProperties(const QList<PropertySettingGroupDefinitionStrc> *expParamDef);
 	bool parseDependencies(QtVariantProperty *variantProperty = NULL);
-	bool addDependency(QtVariantProperty *variantProperty, const ExperimentParameterDefinitionDependencyStrc &dependencyParamDef);
+	bool addDependency(QtVariantProperty *variantProperty, const PropertySettingDefinitionDependencyStrc &dependencyParamDef);
 	void setAutoDepencyParsing(bool bEnable);
 	bool resetParameterModifiedFlags(const bool &bOnlyNonDerivedParameters = true);
 	bool setAllowedParameterValues(const QString &sName, const QStringList &lAllowedValues, const QVariantList &vTranslatedValues = QVariantList());
 
 	QWidget *getParameterEditWidget(const QString &sName, const QString &sDerivedPrefixName, QString &sReturnUniquePropertyIdentifier, const QVariant &vValue, const bool &bDoInitWithValue, const bool &bIsScriptable);
 	bool setWidgetParameter(const QString &sUniquePropertyIdentifier, const QString &sValue, const bool &bSetModified = true);
-	VariantExtensionPropertyFactory *getVariantPropertyFactory() {return variantExtensionFactory;};
+	VariantExtensionPropertySettingFactory *getVariantPropertyFactory() {return variantExtensionFactory;};
 	bool getEnumeratedParameterPropertyValue(const QString &sFullEnumValueName, QVariant &vEnumValue);
 	bool getEnumeratedParameterPropertyValue(QtProperty *pProperty, const QString &sEnumString, QVariant &vEnumValue);
+
+	bool registerCustomVariabeleTypes(const QHash<int, strcCustomVariantMetaTypeDescription> &hashCustomVarTypeToVariantMetaType);
+	bool isRegisteredCustomVariabeleType(QVariant::Type typeCustomVariant);
+	int getRegisteredCustomVariantMetaType(QVariant::Type typeCustomVariant);
 
 public slots:
 	void resizeParameterView(const int &nWidth, const int &nHeight);
@@ -131,25 +136,25 @@ private slots:
 //	void focusOutEvent(QFocusEvent* event);
 
 private:
-	Ui::ExperimentParameterVisualizer *ui;
+	Ui::PropertySettingsWidget *ui;
 	QVBoxLayout *mainLayout;
 	QtTreePropertyBrowser *propertyEditor;
 	QtGroupPropertyManager* groupManager;
 	propertyContainerItems lGroupPropertyCollection;
-	VariantExtensionPropertyManager* lVariantPropertyManager;
-	VariantExtensionPropertyFactory *variantExtensionFactory;
+	VariantExtensionPropertySettingManager* lVariantPropertyManager;
+	VariantExtensionPropertySettingFactory *variantExtensionFactory;
 	QList<propertyDependencyStruct> lPropertyDependencies;
 	QHash<QString, propertyParameterValueDef> lParameterPropertyNamedHash;
 	QHash<QString, enumValueStruct> lEnumeratedParameterPropertyValuesHash;
-	QHash<QtProperty*, ExperimentParameterDefinitionStrc*> lVariantPropertyDefinitionHash;
+	QHash<QtProperty*, PropertySettingDefinitionStrc*> lVariantPropertyDefinitionHash;
+	QHash<int, strcCustomVariantMetaTypeDescription> hashRegisteredCustomVariabeleTypeToVariantMetaTypes;
 	bool bAutoDepencyParsing;
 	bool bPropertyEditSignaling;
 
-	//void ExperimentParameterVisualizerDefaultConstruct();
 	bool addPropertyToSubGroup(const QString &sPropertyGroupNames, QtVariantProperty *item1, QList<propertyContainerItem> *pRootGroupPropertyItemList, QString &sSandPath = QString(""));
 	void deleteSubGroupProperties(QList<propertyContainerItem> *pRootGroupPropertyItemList);
 
 	bool registerDerivedParameterProperty(const propertyParameterValueDef &baseVPropertyDef, QtVariantProperty *derivedProperty, QString &sUniqueDerivedPropertyIdentifier);
 };
 
-#endif // EXPERIMENTPARAMETERVISUALIZER_H
+#endif // PROPERTYSETTINGSWIDGET_H

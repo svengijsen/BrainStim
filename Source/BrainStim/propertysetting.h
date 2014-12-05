@@ -1,4 +1,4 @@
-//ExperimentManagerplugin
+//BrainStim
 //Copyright (C) 2014  Sven Gijsen
 //
 //This file is part of BrainStim.
@@ -16,8 +16,8 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef EXPERIMENTPARAMETER_H
-#define EXPERIMENTPARAMETER_H
+#ifndef PROPERTYSETTING_H
+#define PROPERTYSETTING_H
 
 #include <QObject>
 #include <QString>
@@ -25,6 +25,183 @@
 #include <QColor>
 #include <QScriptEngine>
 
+
+#define PROPERTYSETTINGS_PARAMETERS_TAG					"parameters"
+#define PROPERTYSETTINGS_PARAMETER_TAG					"parameter"
+#define PROPERTYSETTINGS_GROUP_TAG						"group"
+#define PROPERTYSETTINGS_GROUPS_TAG						"groups"
+#define PROPERTYSETTINGS_ID_TAG							"id"
+#define PROPERTYSETTINGS_ENABLED_TAG					"enabled"
+#define PROPERTYSETTINGS_EDITABLE_TAG					"editable"
+#define PROPERTYSETTINGS_SCRIPTABLE_TAG					"scriptable"
+#define PROPERTYSETTINGS_NAME_TAG						"name"
+#define PROPERTYSETTINGS_DISPLAYNAME_TAG				"displayname"
+#define PROPERTYSETTINGS_GROUPPATH_TAG					"grouppath"
+#define PROPERTYSETTINGS_AUTOHIDE_TAG					"autohide"
+#define PROPERTYSETTINGS_INFORMATION_TAG				"information"
+#define PROPERTYSETTINGS_TYPE_TAG						"type"
+#define PROPERTYSETTINGS_DEFAULTVALUE_TAG				"defaultvalue"
+#define PROPERTYSETTINGS_RESTRICTION_TAG				"restriction"
+#define PROPERTYSETTINGS_MINIMAL_TAG					"minimal"
+#define PROPERTYSETTINGS_MAXIMAL_TAG					"maximal"
+#define PROPERTYSETTINGS_VALUE_TAG						"value"
+#define PROPERTYSETTINGS_ALLOWED_TAG					"allowed"
+#define PROPERTYSETTINGS_DEPENDENCIES_TAG				"dependencies"
+#define PROPERTYSETTINGS_DEPENDENCY_TAG					"dependency"
+#define PROPERTYSETTINGS_RELATION_TAG					"relationid"
+#define PROPERTYSETTINGS_REGEXP_TAG						"regularexpression"
+#define PROPERTYSETTINGS_PATTERN_TAG					"pattern"
+#define PROPERTYSETTINGS_CASESENSITIVE_TAG				"casesensitive"
+#define PROPERTYSETTINGS_LISTSEP_CHAR					";"
+#define PROPERTYSETTINGS_PARAM_GROUPSEP_CHAR			";"
+
+enum PropertySettingEditingType
+{
+	PSET_DEFINED = 0,
+	PSET_CUSTOM = 1
+};
+
+enum PropertySettingDefinitionSection
+{
+	PropertySetting_DefinitionSection_Root = 0,
+	PropertySetting_DefinitionSection_Parameter = 1,
+	PropertySetting_DefinitionSection_Restriction = 2,
+	PropertySetting_DefinitionSection_Restriction_Minimal = 3,
+	PropertySetting_DefinitionSection_Restriction_Maximal = 4,
+	PropertySetting_DefinitionSection_Restriction_RegExp = 5,
+	PropertySetting_DefinitionSection_Dependency = 6,
+	PropertySetting_DefinitionSection_Dependency_RegExp = 7,
+	PropertySetting_GroupSection_Group = 8,
+	PropertySetting_GroupSection_Dependency = 9,
+	PropertySetting_GroupSection_Dependency_RegExp = 10
+};
+
+enum PropertySettingTypeName
+{
+	PropertySetting_Type_Unknown = 0,
+	PropertySetting_Type_String = 1,
+	PropertySetting_Type_StringArray = 2,
+	PropertySetting_Type_Color = 3,
+	PropertySetting_Type_Integer = 4,
+	PropertySetting_Type_Float = 5,
+	PropertySetting_Type_Double = 6,
+	PropertySetting_Type_Boolean = 7,
+	PropertySetting_Type_FilePath = 8,
+	PropertySetting_Type_DynamicStringEnum = 9,
+	PropertySetting_Type_DynamicIntegerEnum = 10,//Filled at runtime
+
+	//<<...insert here...>>
+	
+	PropertySetting_Type_FirstCustom = 11
+	//See also below here!!!	
+};
+
+struct mapPropertySettingDefinitionsTypesStrc : QMap < QString, PropertySettingTypeName >
+{
+	mapPropertySettingDefinitionsTypesStrc()
+	{
+		this->operator[]("string") = PropertySetting_Type_String;
+		this->operator[]("stringarray") = PropertySetting_Type_StringArray;
+		this->operator[]("color") = PropertySetting_Type_Color;
+		this->operator[]("integer") = PropertySetting_Type_Integer;
+		this->operator[]("short") = PropertySetting_Type_Integer;
+		this->operator[]("int") = PropertySetting_Type_Integer;
+		this->operator[]("float") = PropertySetting_Type_Float;
+		this->operator[]("double") = PropertySetting_Type_Double;
+		this->operator[]("boolean") = PropertySetting_Type_Boolean;
+		this->operator[]("filepath") = PropertySetting_Type_FilePath;
+		this->operator[]("dynamicenumstring") = PropertySetting_Type_DynamicStringEnum;
+		this->operator[]("dynamicenuminteger") = PropertySetting_Type_DynamicIntegerEnum;
+	};
+	~mapPropertySettingDefinitionsTypesStrc(){};
+};
+
+struct PropertySettingMinMaxRestrictionStrc
+{
+	bool bEnabled;
+	QVariant vValue;
+	PropertySettingMinMaxRestrictionStrc()
+	{
+		this->bEnabled = false;
+		this->vValue = NULL;
+	};
+	~PropertySettingMinMaxRestrictionStrc() {};
+};
+
+struct PropertySettingDefinitionRestrictionStrc
+{
+	QStringList lAllowedValues;
+	PropertySettingMinMaxRestrictionStrc MinimalValue;
+	PropertySettingMinMaxRestrictionStrc MaximalValue;
+	QRegularExpression rRegularExpression;
+};
+
+struct PropertySettingDefinitionDependencyStrc
+{
+	int nId;
+	int nDependencyParameterID;
+	bool bHideWhenInactive;
+	QRegularExpression rRegularExpression;
+	PropertySettingDefinitionDependencyStrc()
+	{
+		this->nId = -1;
+		this->nDependencyParameterID = -1;
+		this->bHideWhenInactive = false;
+	};
+	~PropertySettingDefinitionDependencyStrc() {};
+};
+
+struct PropertySettingDefinitionStrc
+{
+	int nId;
+	bool bEnabled;
+	bool bIsEditable;
+	QString sName;
+	QString sDisplayName;
+	QString sGroupPath;//Can also be a directory like "Root;Item 1;SubItem A"
+	QString sInformation;
+	int eType;//see(PropertySettingTypeName + custom?)
+	//PropertySettingEditingType eEditType;
+	bool bCanBeScriptReference;
+	QString sDefaultValue;
+	//QList<PropertySettingDefinitionRestrictionStrc> Restrictions;
+	PropertySettingDefinitionRestrictionStrc Restriction;
+	QList<PropertySettingDefinitionDependencyStrc> Dependencies;
+
+	PropertySettingDefinitionStrc()
+	{
+		nId = -1;
+		bEnabled = false;
+		bIsEditable = false;
+		sName = "";
+		sDisplayName = "";
+		sGroupPath = "";
+		sInformation = "";
+		eType = PropertySetting_Type_Unknown;
+		sDefaultValue = "";
+		bCanBeScriptReference = false;
+		//eEditType = PSET_DEFINED;
+	};
+	~PropertySettingDefinitionStrc() {};
+};
+
+struct PropertySettingGroupDefinitionStrc
+{
+	int nId;
+	bool bEnabled;
+	QString sGroupPath;
+	QList<PropertySettingDefinitionDependencyStrc> Dependencies;
+
+	PropertySettingGroupDefinitionStrc()
+	{
+		nId = -1;
+		bEnabled = false;
+		sGroupPath = "";
+	};
+	~PropertySettingGroupDefinitionStrc() {};
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 template <typename T>
 QVariantList toVariantList( const QList<T> &list )
@@ -37,51 +214,51 @@ QVariantList toVariantList( const QList<T> &list )
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class TypedExperimentParameterContainer
+class TypedPropertySettingContainer
 {
 public:
-	TypedExperimentParameterContainer() {};
-	~TypedExperimentParameterContainer() 
+	TypedPropertySettingContainer() {};
+	~TypedPropertySettingContainer() 
 	{
-		for (int i=0;i<lCustomAllocatedParameterNames.count();i++)
+		for (int i=0;i<lCustomAllocatedSettingNames.count();i++)
 		{
-			if(hIntContainer.contains(lCustomAllocatedParameterNames[i]))
+			if(hIntContainer.contains(lCustomAllocatedSettingNames[i]))
 			{
-				delete hIntContainer.take(lCustomAllocatedParameterNames[i]);
+				delete hIntContainer.take(lCustomAllocatedSettingNames[i]);
 				continue;
 			}
-			else if(hDoubleContainer.contains(lCustomAllocatedParameterNames[i]))
+			else if(hDoubleContainer.contains(lCustomAllocatedSettingNames[i]))
 			{
-				delete hDoubleContainer.take(lCustomAllocatedParameterNames[i]);
+				delete hDoubleContainer.take(lCustomAllocatedSettingNames[i]);
 				continue;
 			}
-			else if(hFloatContainer.contains(lCustomAllocatedParameterNames[i]))
+			else if(hFloatContainer.contains(lCustomAllocatedSettingNames[i]))
 			{
-				delete hFloatContainer.take(lCustomAllocatedParameterNames[i]);
+				delete hFloatContainer.take(lCustomAllocatedSettingNames[i]);
 				continue;
 			}
-			else if(hBoolContainer.contains(lCustomAllocatedParameterNames[i]))
+			else if(hBoolContainer.contains(lCustomAllocatedSettingNames[i]))
 			{
-				delete hBoolContainer.take(lCustomAllocatedParameterNames[i]);
+				delete hBoolContainer.take(lCustomAllocatedSettingNames[i]);
 				continue;
 			}
-			else if(hQStringContainer.contains(lCustomAllocatedParameterNames[i]))
+			else if(hQStringContainer.contains(lCustomAllocatedSettingNames[i]))
 			{
-				delete hQStringContainer.take(lCustomAllocatedParameterNames[i]);
+				delete hQStringContainer.take(lCustomAllocatedSettingNames[i]);
 				continue;
 			}
-			else if(hQStringListContainer.contains(lCustomAllocatedParameterNames[i]))
+			else if(hQStringListContainer.contains(lCustomAllocatedSettingNames[i]))
 			{
-				delete hQStringListContainer.take(lCustomAllocatedParameterNames[i]);
+				delete hQStringListContainer.take(lCustomAllocatedSettingNames[i]);
 				continue;
 			}
-			else if(hQColorContainer.contains(lCustomAllocatedParameterNames[i]))
+			else if(hQColorContainer.contains(lCustomAllocatedSettingNames[i]))
 			{
-				delete hQColorContainer.take(lCustomAllocatedParameterNames[i]);
+				delete hQColorContainer.take(lCustomAllocatedSettingNames[i]);
 				continue;
 			}
 		}
-		lCustomAllocatedParameterNames.clear();
+		lCustomAllocatedSettingNames.clear();
 
 		hIntContainer.clear();
 		hDoubleContainer.clear();
@@ -92,7 +269,7 @@ public:
 		hQColorContainer.clear();
 	};
 
-	template< typename T1 > bool createExperimentParameter(const QString &strKeyName, QVariant pExpParam)//These are custom defined parameters
+	template< typename T1 > bool createPropertySetting(const QString &strKeyName, QVariant pExpParam)//These are custom defined parameters
 	{
 		if (typeid(T1) == typeid(int))
 		{
@@ -105,7 +282,7 @@ public:
 			else
 			{
 				tmpTypeVar = new int(pExpParam.toInt());//allocate a new type
-				lCustomAllocatedParameterNames.append(strKeyName.toLower());//Store the custom allocated parameter name
+				lCustomAllocatedSettingNames.append(strKeyName.toLower());//Store the custom allocated parameter name
 			}			
 			hIntContainer.insert(strKeyName.toLower(),tmpTypeVar);
 			return true;
@@ -121,7 +298,7 @@ public:
 			else
 			{
 				tmpTypeVar = new double(pExpParam.toDouble());//allocate a new type
-				lCustomAllocatedParameterNames.append(strKeyName.toLower());//Store the custom allocated parameter name
+				lCustomAllocatedSettingNames.append(strKeyName.toLower());//Store the custom allocated parameter name
 			}			
 			hDoubleContainer.insert(strKeyName.toLower(),tmpTypeVar);
 			return true;
@@ -137,7 +314,7 @@ public:
 			else
 			{
 				tmpTypeVar = new float(pExpParam.toFloat());//allocate a new type
-				lCustomAllocatedParameterNames.append(strKeyName.toLower());//Store the custom allocated parameter name
+				lCustomAllocatedSettingNames.append(strKeyName.toLower());//Store the custom allocated parameter name
 			}			
 			hFloatContainer.insert(strKeyName.toLower(),tmpTypeVar);
 			return true;
@@ -153,7 +330,7 @@ public:
 			else
 			{
 				tmpTypeVar = new bool(pExpParam.toBool());//allocate a new type
-				lCustomAllocatedParameterNames.append(strKeyName.toLower());//Store the custom allocated parameter name
+				lCustomAllocatedSettingNames.append(strKeyName.toLower());//Store the custom allocated parameter name
 			}			
 			hBoolContainer.insert(strKeyName.toLower(),tmpTypeVar);
 			return true;
@@ -174,7 +351,7 @@ public:
 			else
 			{
 				tmpTypeVar = new QString(pExpParam.toString());//allocate a new type
-				lCustomAllocatedParameterNames.append(strKeyName.toLower());//Store the custom allocated parameter name
+				lCustomAllocatedSettingNames.append(strKeyName.toLower());//Store the custom allocated parameter name
 			}
 			hQStringContainer.insert(strKeyName.toLower(),tmpTypeVar);
 			return true;
@@ -190,7 +367,7 @@ public:
 			else
 			{
 				tmpTypeVar = new QStringList(pExpParam.toStringList());//allocate a new type
-				lCustomAllocatedParameterNames.append(strKeyName.toLower());//Store the custom allocated parameter name
+				lCustomAllocatedSettingNames.append(strKeyName.toLower());//Store the custom allocated parameter name
 			}			
 			hQStringListContainer.insert(strKeyName.toLower(),tmpTypeVar);
 			return true;
@@ -206,7 +383,7 @@ public:
 			else
 			{
 				tmpTypeVar = new QColor(pExpParam.value<QColor>());//allocate a new type
-				lCustomAllocatedParameterNames.append(strKeyName.toLower());//Store the custom allocated parameter name
+				lCustomAllocatedSettingNames.append(strKeyName.toLower());//Store the custom allocated parameter name
 			}			
 			hQColorContainer.insert(strKeyName.toLower(),tmpTypeVar);
 			return true;
@@ -225,7 +402,7 @@ public:
 				else
 				{
 					tmpTypeVar = new QString(pExpParam.toString());//allocate a new type
-					lCustomAllocatedParameterNames.append(strKeyName.toLower());//Store the custom allocated parameter name
+					lCustomAllocatedSettingNames.append(strKeyName.toLower());//Store the custom allocated parameter name
 				}				
 				hQStringContainer.insert(strKeyName.toLower(),tmpTypeVar);
 				return true;
@@ -239,7 +416,7 @@ public:
 		return false;
 	}
 
-	template< typename T1 > bool insertExperimentParameter(const QString &strKeyName, T1 *pExpParam = NULL)
+	template< typename T1 > bool insertPropertySetting(const QString &strKeyName, T1 *pExpParam = NULL)
 	{
 		if(pExpParam == NULL)
 			return false;
@@ -295,7 +472,7 @@ public:
 		return false;
 	}
 
-	template< typename T2 > T2 *getExperimentParameter(const QString &strKeyName)
+	template< typename T2 > T2 *getPropertySetting(const QString &strKeyName)
 	{
 		if (typeid(T2) == typeid(int))
 		{
@@ -332,7 +509,7 @@ public:
 		return NULL;
 	};
 
-	bool getExperimentParameter(const QString &strKeyName, QScriptValue &scriptVal, QScriptEngine *currentScriptEngine = NULL)
+	bool getPropertySetting(const QString &strKeyName, QScriptValue &scriptVal, QScriptEngine *currentScriptEngine = NULL)
 	{
 		QString strKeyNameLow = strKeyName.toLower();
 		if (hIntContainer.contains(strKeyNameLow))
@@ -405,7 +582,7 @@ public:
 		return false;
 	};
 
-	bool setExperimentParameter(const QString &strKeyName, const QScriptValue &scriptVal)
+	bool setPropertySetting(const QString &strKeyName, const QScriptValue &scriptVal)
 	{
 		QString strKeyNameLow = strKeyName.toLower();
 		if (hIntContainer.contains(strKeyNameLow))
@@ -480,7 +657,7 @@ private:
 	QHash<QString, QString*> hQStringContainer;
 	QHash<QString, QStringList*> hQStringListContainer;
 
-	QStringList lCustomAllocatedParameterNames;
+	QStringList lCustomAllocatedSettingNames;
 };
 
-#endif // EXPERIMENTPARAMETER_H
+#endif // PROPERTYSETTING_H

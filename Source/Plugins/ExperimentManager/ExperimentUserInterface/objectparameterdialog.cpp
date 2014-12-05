@@ -19,9 +19,12 @@
 #include "objectparameterdialog.h"
 #include "ui_ObjectParameterDialog.h"
 #include "experimentmanager.h"
-#include "experimentparameterwidgets.h"
-#include "parameterpropertyextensions.h"
-#include "experimentparametervisualizer.h"
+//sven #include "propertysettingswidgetcontainer.h"
+//sven #include "parameterpropertyextensions.h"
+//sven #include "experimentparametervisualizer.h"
+#include "propertysettingswidgetcontainer.h"//sven
+#include "propertysettingextensions.h"//sven
+#include "propertysettingswidget.h"//sven
 
 ObjectParameterDialog::ObjectParameterDialog(QWidget *parent) : QDialog(parent), pCurrentExpTree(NULL), pCurrentExpStructure(NULL), pParameterEditWidget(NULL), bIsParsing(false)
 {
@@ -49,7 +52,7 @@ ObjectParameterDialog::ObjectParameterDialog(QWidget *parent) : QDialog(parent),
 	leCustomParamValue = NULL;
 	
 	clearAllParsedStructures();
-	eCurrentParameterEditingMode = PEM_DEFINED;
+	eCurrentParameterEditingMode = PSET_DEFINED;
 }
 
 ObjectParameterDialog::~ObjectParameterDialog()
@@ -61,7 +64,7 @@ ObjectParameterDialog::~ObjectParameterDialog()
 void ObjectParameterDialog::parameterNameChanged(const QString &sNewName)
 {
 	Q_UNUSED(sNewName);
-	if(eCurrentParameterEditingMode == PEM_CUSTOM)
+	if(eCurrentParameterEditingMode == PSET_CUSTOM)
 	{
 		if(ui->cmbParameter->currentIndex() >= 0)
 		{
@@ -76,15 +79,15 @@ void ObjectParameterDialog::parameterNameChanged(const QString &sNewName)
 void ObjectParameterDialog::parameterTypeChanged()
 {
 	bIsParsing = true;
-	if(ui->rdbParamType_1->isChecked() && (eCurrentParameterEditingMode != PEM_DEFINED))//pre-defined
+	if(ui->rdbParamType_1->isChecked() && (eCurrentParameterEditingMode != PSET_DEFINED))//pre-defined
 	{
-		eCurrentParameterEditingMode = PEM_DEFINED;
+		eCurrentParameterEditingMode = PSET_DEFINED;
 		ui->leName->setReadOnly(true);
 		clearParameterWidgetLayout();
 	}
-	else if (ui->rdbParamType_2->isChecked() && (eCurrentParameterEditingMode != PEM_CUSTOM))//custom
+	else if (ui->rdbParamType_2->isChecked() && (eCurrentParameterEditingMode != PSET_CUSTOM))//custom
 	{
-		eCurrentParameterEditingMode = PEM_CUSTOM;
+		eCurrentParameterEditingMode = PSET_CUSTOM;
 		ui->leName->setReadOnly(false);
 		ui->leValue->clear();
 		ui->leName->clear();
@@ -111,7 +114,7 @@ void ObjectParameterDialog::clearParameterWidgetLayout()
 		ui->lEditParameter->setMargin(0);
 		ui->lEditParameter->setSpacing(6);//(0);
 		ui->lEditParameter->setObjectName(QStringLiteral("lEditParameter"));
-		if (eCurrentParameterEditingMode == PEM_CUSTOM)
+		if (eCurrentParameterEditingMode == PSET_CUSTOM)
 		{
 			if (leCustomParamValue == NULL)
 				leCustomParamValue = new QLineEdit();
@@ -169,13 +172,13 @@ void ObjectParameterDialog::updateSetParameter()
 	if(cParameterSpecifier.nObjectID < 0)
 		return;
 	cParameterSpecifier.sParamHexID = hashParamControlIndexToUniqueHexParamID[nCurrentParameter];
-	if(eCurrentParameterEditingMode == PEM_CUSTOM)
+	if(eCurrentParameterEditingMode == PSET_CUSTOM)
 		cParameterSpecifier.sParamName = ui->leName->text();//mapUniqueHexParamIDToParamDef[cParameterSpecifier.sParamHexID].ParamDef.sName.toLower();
 	else
 		cParameterSpecifier.sParamName = mapUniqueHexParamIDToParamDef[cParameterSpecifier.sParamHexID].ParamDef.sName.toLower();
 	if(cParameterSpecifier.sParamName.isEmpty())
 		return;
-	if(eCurrentParameterEditingMode == PEM_CUSTOM)
+	if(eCurrentParameterEditingMode == PSET_CUSTOM)
 	{
 		if (ui->lEditParameter->itemAt(0))
 		{
@@ -186,7 +189,7 @@ void ObjectParameterDialog::updateSetParameter()
 				if(pTmpLineEdit)
 				{
 					bool bShouldOnlyUpdate = (ui->leName->text().toLower() == mapUniqueHexParamIDToParamDef[cParameterSpecifier.sParamHexID].ParamDef.sName.toLower()); 
-					if(pCurrentExpTree->addUpdateExperimentBlockParameter(cParameterSpecifier, pTmpLineEdit->text(),(eCurrentParameterEditingMode == PEM_CUSTOM)))
+					if(pCurrentExpTree->addUpdateExperimentBlockParameter(cParameterSpecifier, pTmpLineEdit->text(),(eCurrentParameterEditingMode == PSET_CUSTOM)))
 					{
 						parseParameters(cParameterSpecifier.nObjectID, cParameterSpecifier.nBlockID, eCurrentParameterEditingMode);
 						if(bShouldOnlyUpdate)
@@ -204,7 +207,7 @@ void ObjectParameterDialog::updateSetParameter()
 			}
 		}
 	}
-	else if(eCurrentParameterEditingMode == PEM_DEFINED)
+	else if(eCurrentParameterEditingMode == PSET_DEFINED)
 	{
 		if(pCurrentExpTree)
 		{
@@ -212,7 +215,7 @@ void ObjectParameterDialog::updateSetParameter()
 			{
 				cLastUserChange.eChangeEditingMode = eCurrentParameterEditingMode;
 				cLastUserChange.sParamName = cParameterSpecifier.sParamName;
-				cLastUserChange.sParamNewValue = VariantExtensionPropertyManager::resolveParameterValueType(ui->leValue->text(), mapUniqueHexParamIDToParamDef[cParameterSpecifier.sParamHexID].ParamDef.eType,false).toString();
+				cLastUserChange.sParamNewValue = VariantExtensionPropertySettingManager::resolveParameterValueType(ui->leValue->text(), mapUniqueHexParamIDToParamDef[cParameterSpecifier.sParamHexID].ParamDef.eType,false).toString();
 				cLastUserChange.bSettingFinished = true;
 			}
 			if((cLastUserChange.bSettingFinished == true) && (cLastUserChange.sParamName.toLower() == cParameterSpecifier.sParamName) && (cLastUserChange.sParamNewValue.isEmpty() == false))
@@ -294,9 +297,9 @@ void ObjectParameterDialog::selectedParameterChanged(int nIndex)
 					strcParameterDefinition tmpParamDef = mapUniqueHexParamIDToParamDef[sHexParamID];
 					QString sResolvedValue;
 					if (tmpParamDef.bIsChanged)
-						sResolvedValue = VariantExtensionPropertyManager::resolveParameterValueType(tmpParamDef.sValue, tmpParamDef.ParamDef.eType, true).toString();
+						sResolvedValue = VariantExtensionPropertySettingManager::resolveParameterValueType(tmpParamDef.sValue, tmpParamDef.ParamDef.eType, true).toString();
 					else
-						sResolvedValue = VariantExtensionPropertyManager::resolveParameterValueType(tmpParamDef.ParamDef.sDefaultValue, tmpParamDef.ParamDef.eType, true).toString();
+						sResolvedValue = VariantExtensionPropertySettingManager::resolveParameterValueType(tmpParamDef.ParamDef.sDefaultValue, tmpParamDef.ParamDef.eType, true).toString();
 					ui->leValue->setText(sResolvedValue);
 
 					if(expParamVizualizer && (ui->rdbParamType_2->isChecked() == false))
@@ -374,7 +377,7 @@ void ObjectParameterDialog::selectedParameterChanged(int nIndex)
 					if(pTmpLineEdit)
 					{
 						pTmpLineEdit->clear();
-						if(eCurrentParameterEditingMode == PEM_CUSTOM)
+						if(eCurrentParameterEditingMode == PSET_CUSTOM)
 						{
 							ui->pbUpdate->setText("New");
 							ui->pbUpdate->setEnabled(true);
@@ -475,7 +478,7 @@ void ObjectParameterDialog::clearAllParsedStructures()
 	ui->pbUpdate->setText("New/Update value");
 }
 				
-bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBlockID, const ParameterEditingType &eParamEditingMode)
+bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBlockID, const PropertySettingEditingType &eParamEditingMode)
 {
 	bool bWasParsing = bIsParsing;
 	bIsParsing = true;	
@@ -506,10 +509,10 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 		bIsParsing = bWasParsing;
 		return bResult;	
 	}
-	ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
-	ExperimentParameterDefinitionContainer *expParamDefContainer = NULL;
-	QList<ExperimentParameterDefinitionStrc> *lTmpExpParamDefStrc = NULL;
-	ExperimentParameterDefinitionStrc tmpExpParamDefStrc;
+	PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
+	PropertySettingDefinition *expParamDefContainer = NULL;
+	QList<PropertySettingDefinitionStrc> *lTmpExpParamDefStrc = NULL;
+	PropertySettingDefinitionStrc tmpExpParamDefStrc;
 	QString tmpString;
 
 	for(int i=0;i<lCurrentExpObjects.count();i++)
@@ -530,7 +533,7 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 		}
 	}
 
-	if(eParamEditingMode != PEM_CUSTOM)
+	if(eParamEditingMode != PSET_CUSTOM)
 	{
 		if(lTmpExpParamDefStrc == NULL)
 		{
@@ -546,7 +549,7 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 				strcParameterDefinition tmpParamDef;
 				tmpParamDef.ParamDef = tmpExpParamDefStrc;
 				tmpParamDef.sFullDisplayName = tmpString;
-				mapUniqueHexParamIDToParamDef[QString::number((int)PEM_DEFINED) + QString(tmpExpParamDefStrc.nId).toLatin1().toHex()] = tmpParamDef;
+				mapUniqueHexParamIDToParamDef[QString::number((int)PSET_DEFINED) + QString(tmpExpParamDefStrc.nId).toLatin1().toHex()] = tmpParamDef;
 				hashParamNameToParamID.insert(tmpExpParamDefStrc.sName,tmpExpParamDefStrc.nId);
 			}
 		}
@@ -566,9 +569,9 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 	QStringList lObjectSearchPath;
 	QStringList lObjectParameterSearchPath;
 	lObjectSearchPath << OBJECT_TAG;
-	if(eParamEditingMode == PEM_CUSTOM)
+	if(eParamEditingMode == PSET_CUSTOM)
 		lObjectParameterSearchPath << CUSTOM_PARAMETERS_TAG << PARAMETER_TAG;
-	else //if(eParamEditingMode == PEM_DEFINED)
+	else //if(eParamEditingMode == PSET_DEFINED)
 		lObjectParameterSearchPath << PARAMETERS_TAG << PARAMETER_TAG;
 	for (int i=0;i<nBlockCount;i++) //for each block
 	{
@@ -584,7 +587,7 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 		if(tTmpTreeItemDefs.contains(ID_TAG))
 		{
 			nTempBlockID = tTmpTreeItemDefs[ID_TAG].value.toInt();
-			if ((nTempBlockID == nBlockID) || (eParamEditingMode == PEM_CUSTOM))
+			if ((nTempBlockID == nBlockID) || (eParamEditingMode == PSET_CUSTOM))
 			{
 				//Objects
 				QList<ExperimentTreeItem*> lExpTreeObjectItems;
@@ -628,12 +631,12 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 								if((pTmpExpTreeItem) && (sTempParamName.isEmpty() == false))
 								{
 									sTempParamValue = pTmpExpTreeItem->getValue();
-									if((eParamEditingMode == PEM_CUSTOM) && (hashParamNameToParamID.contains(sTempParamName.toLower())==false))
+									if((eParamEditingMode == PSET_CUSTOM) && (hashParamNameToParamID.contains(sTempParamName.toLower())==false))
 									{
 										tmpString = "Custom: " + sTempParamName;
-										ExperimentParameterDefinitionStrc tmpExpCustomParamStruct;
+										PropertySettingDefinitionStrc tmpExpCustomParamStruct;
 										tmpExpCustomParamStruct.bEnabled = true;
-										tmpExpCustomParamStruct.eType = Experiment_ParameterType_String;
+										tmpExpCustomParamStruct.eType = PropertySetting_Type_String;
 										tmpExpCustomParamStruct.nId = nAdditionalCustomParamPreviousBlocksCounter;
 										nAdditionalCustomParamPreviousBlocksCounter++;
 										tmpExpCustomParamStruct.sDefaultValue = "";
@@ -652,7 +655,7 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 									else
 										tmpString = "";
 									bResult = true;
-									if((mapUniqueHexParamIDToParamDef.contains(tmpString)) && (eParamEditingMode == PEM_DEFINED))
+									if((mapUniqueHexParamIDToParamDef.contains(tmpString)) && (eParamEditingMode == PSET_DEFINED))
 									{
 										ui->cmbParameter->addItem(mapUniqueHexParamIDToParamDef[tmpString].sFullDisplayName);
 										mapUniqueHexParamIDToParamDef[tmpString].bIsChanged = true;
@@ -660,7 +663,7 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 										hashParamControlIndexToUniqueHexParamID.insert(ui->cmbParameter->count()-1,tmpString);										
 										ui->cmbParameter->setItemData(ui->cmbParameter->count()-1, QColor(Qt::red), Qt::DecorationRole);
 									}
-									else if((mapUniqueHexParamIDToParamDef.contains(tmpString)) && (eParamEditingMode == PEM_CUSTOM))
+									else if((mapUniqueHexParamIDToParamDef.contains(tmpString)) && (eParamEditingMode == PSET_CUSTOM))
 									{
 										int bCustomAlreadyPresentIndex = ui->cmbParameter->findText(sTempParamName, Qt::MatchFixedString);//case-insensitive!
 										if (bCustomAlreadyPresentIndex < 0)

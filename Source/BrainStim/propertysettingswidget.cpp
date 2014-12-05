@@ -1,4 +1,4 @@
-//ExperimentManagerplugin
+//BrainStim
 //Copyright (C) 2014  Sven Gijsen
 //
 //This file is part of BrainStim.
@@ -16,11 +16,11 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "experimentparametervisualizer.h"
+#include "propertysettingswidget.h"
 #include <QDebug>
-#include "ui_ExperimentParameterVisualizer.h"
+#include "ui_PropertySettingsWidget.h"
 
-ExperimentParameterVisualizer::ExperimentParameterVisualizer(QWidget *parent) : QWidget(parent)
+PropertySettingsWidget::PropertySettingsWidget(QWidget *parent) : QWidget(parent)
 {
 	propertyEditor = NULL;
 	mainLayout = NULL;
@@ -30,7 +30,7 @@ ExperimentParameterVisualizer::ExperimentParameterVisualizer(QWidget *parent) : 
 	bAutoDepencyParsing = false;
 	bPropertyEditSignaling = false;
 
-	ui = new Ui::ExperimentParameterVisualizer();
+	ui = new Ui::PropertySettingsWidget();
 	ui->setupUi(this);
 
 	mainLayout = new QVBoxLayout(this);
@@ -40,12 +40,12 @@ ExperimentParameterVisualizer::ExperimentParameterVisualizer(QWidget *parent) : 
 	//connect(this, SIGNAL(editFinished(const QString&, const QString&)), this, SLOT(itemEditedSignalHandler(const QString&, const QString&)), Qt::UniqueConnection);
 }
 
-ExperimentParameterVisualizer::ExperimentParameterVisualizer(const ExperimentParameterVisualizer& other)
+PropertySettingsWidget::PropertySettingsWidget(const PropertySettingsWidget& other)
 {
 	Q_UNUSED(other);
 };
 
-ExperimentParameterVisualizer::~ExperimentParameterVisualizer()
+PropertySettingsWidget::~PropertySettingsWidget()
 {
 	lParameterPropertyNamedHash.clear();
 	lVariantPropertyDefinitionHash.clear();
@@ -76,7 +76,7 @@ ExperimentParameterVisualizer::~ExperimentParameterVisualizer()
 	emit destroyed(this);
 }
 
-void ExperimentParameterVisualizer::deleteSubGroupProperties(QList<propertyContainerItem> *pRootGroupPropertyItem)
+void PropertySettingsWidget::deleteSubGroupProperties(QList<propertyContainerItem> *pRootGroupPropertyItem)
 {
 	if(pRootGroupPropertyItem == NULL) 
 		return;
@@ -97,7 +97,7 @@ void ExperimentParameterVisualizer::deleteSubGroupProperties(QList<propertyConta
 	}
 }
 
-bool ExperimentParameterVisualizer::addPropertyToSubGroup(const QString &sPropertyGroupNames, QtVariantProperty *item1, QList<propertyContainerItem> *pRootGroupPropertyItemList, QString &sSandPath)
+bool PropertySettingsWidget::addPropertyToSubGroup(const QString &sPropertyGroupNames, QtVariantProperty *item1, QList<propertyContainerItem> *pRootGroupPropertyItemList, QString &sSandPath)
 {	
 	if(groupManager == NULL)
 		groupManager = new QtGroupPropertyManager(this);
@@ -106,7 +106,7 @@ bool ExperimentParameterVisualizer::addPropertyToSubGroup(const QString &sProper
 	if(pRootGroupPropertyItemList == NULL)
 		return false;
 	
-	QStringList tmpPropGroups = sPropertyGroupNames.split(EXPERIMENT_LISTSEP_CHAR, QString::SkipEmptyParts);
+	QStringList tmpPropGroups = sPropertyGroupNames.split(PROPERTYSETTINGS_LISTSEP_CHAR, QString::SkipEmptyParts);
 	propertyContainerItem tmpPropertyContainerItem;
 	
 	if(pRootGroupPropertyItemList->isEmpty() == false)
@@ -122,7 +122,7 @@ bool ExperimentParameterVisualizer::addPropertyToSubGroup(const QString &sProper
 				}
 				else
 				{
-					sSandPath = sSandPath + tmpPropGroups.first() + EXPERIMENT_PARAM_GROUPSEP_CHAR;
+					sSandPath = sSandPath + tmpPropGroups.first() + PROPERTYSETTINGS_PARAM_GROUPSEP_CHAR;
 					tmpPropGroups.removeFirst();
 					if(pRootGroupPropertyItemList->at(j).pSubItems == NULL)
 						(*pRootGroupPropertyItemList)[j].pSubItems = new QList<propertyContainerItem>;
@@ -145,7 +145,7 @@ bool ExperimentParameterVisualizer::addPropertyToSubGroup(const QString &sProper
 						tmpPropertyContainerItem.lGroupProperty = tmpProperty;
 						pRootGroupPropertyItemList->at(j).pSubItems->append(tmpPropertyContainerItem);
 					}
-					return addPropertyToSubGroup(tmpPropGroups.join(EXPERIMENT_LISTSEP_CHAR), item1, pRootGroupPropertyItemList->at(j).pSubItems,sSandPath);
+					return addPropertyToSubGroup(tmpPropGroups.join(PROPERTYSETTINGS_LISTSEP_CHAR), item1, pRootGroupPropertyItemList->at(j).pSubItems, sSandPath);
 				}
 			}
 		}
@@ -160,14 +160,14 @@ bool ExperimentParameterVisualizer::addPropertyToSubGroup(const QString &sProper
 	return true;
 }
 
-bool ExperimentParameterVisualizer::addGroupProperties(const QList<ExperimentGroupDefinitionStrc> *expParamDef)
+bool PropertySettingsWidget::addGroupProperties(const QList<PropertySettingGroupDefinitionStrc> *expParamDef)
 {
 	if(expParamDef == NULL)
 		return false;
 	if(expParamDef->isEmpty())
 		return false;
 	if(lVariantPropertyManager == NULL)
-		lVariantPropertyManager = new VariantExtensionPropertyManager(this);
+		lVariantPropertyManager = new VariantExtensionPropertySettingManager(this);
 	if(groupManager == NULL)
 		groupManager = new QtGroupPropertyManager(this);	
 
@@ -179,7 +179,7 @@ bool ExperimentParameterVisualizer::addGroupProperties(const QList<ExperimentGro
 	bool bFirstLoop;
 	bool bItemAlreadyExists;
 
-	for (QList<ExperimentGroupDefinitionStrc>::const_iterator it=expParamDef->cbegin();it!=expParamDef->cend();++it)
+	for (QList<PropertySettingGroupDefinitionStrc>::const_iterator it=expParamDef->cbegin();it!=expParamDef->cend();++it)
 	{
 		pCurrentRootGroupPropertyItemList = &lGroupPropertyCollection.propItem;
 		bFirstLoop = true;
@@ -188,7 +188,7 @@ bool ExperimentParameterVisualizer::addGroupProperties(const QList<ExperimentGro
 		if(it->sGroupPath.isEmpty() == false)
 		{
 			sSandPath = "";
-			sCurrentRelativePathItems = it->sGroupPath.split(EXPERIMENT_LISTSEP_CHAR,QString::SkipEmptyParts);
+			sCurrentRelativePathItems = it->sGroupPath.split(PROPERTYSETTINGS_LISTSEP_CHAR, QString::SkipEmptyParts);
 			if(sCurrentRelativePathItems.isEmpty())
 				continue;
 			while(sCurrentRelativePathItems.isEmpty() == false)
@@ -242,14 +242,14 @@ bool ExperimentParameterVisualizer::addGroupProperties(const QList<ExperimentGro
 						//Configure Dependencies?
 						if(it->Dependencies.isEmpty() == false)
 						{
-							for (QList<ExperimentParameterDefinitionDependencyStrc>::const_iterator itDep=it->Dependencies.cbegin();itDep!=it->Dependencies.cend();++itDep)
+							for (QList<PropertySettingDefinitionDependencyStrc>::const_iterator itDep=it->Dependencies.cbegin();itDep!=it->Dependencies.cend();++itDep)
 							{
 								addDependency((QtVariantProperty *)tmpProperty,(*itDep));
 							}
 						}
 					}
 				}
-				sSandPath = sSandPath + sCurrentRelativePathItems.takeFirst() + EXPERIMENT_LISTSEP_CHAR;
+				sSandPath = sSandPath + sCurrentRelativePathItems.takeFirst() + PROPERTYSETTINGS_LISTSEP_CHAR;
 				bFirstLoop = false;
 			}
 		}		
@@ -257,18 +257,18 @@ bool ExperimentParameterVisualizer::addGroupProperties(const QList<ExperimentGro
 	return true;
 }
 
-bool ExperimentParameterVisualizer::getEnumeratedParameterPropertyValue(QtProperty *pProperty, const QString &sEnumString, QVariant &vEnumValue)
+bool PropertySettingsWidget::getEnumeratedParameterPropertyValue(QtProperty *pProperty, const QString &sEnumString, QVariant &vEnumValue)
 {
-	const ExperimentParameterDefinitionStrc *tmpExpParamStruct = lVariantPropertyDefinitionHash[pProperty];
+	const PropertySettingDefinitionStrc *tmpExpParamStruct = lVariantPropertyDefinitionHash[pProperty];
 	if(tmpExpParamStruct)
 	{
-		QString sSearchVal = QString(tmpExpParamStruct->sName + EXPPARAMVIS_ENUM_SPEC_DIVIDER + sEnumString).toLower();
+		QString sSearchVal = QString(tmpExpParamStruct->sName + PROPSETTWIDGET_ENUM_SPEC_DIVIDER + sEnumString).toLower();
 		return getEnumeratedParameterPropertyValue(sSearchVal,vEnumValue);
 	}
 	return false;
 }
 
-bool ExperimentParameterVisualizer::getEnumeratedParameterPropertyValue(const QString &sFullEnumValueName, QVariant &vEnumValue)
+bool PropertySettingsWidget::getEnumeratedParameterPropertyValue(const QString &sFullEnumValueName, QVariant &vEnumValue)
 {	
 	if(lEnumeratedParameterPropertyValuesHash.contains(sFullEnumValueName))
 	{
@@ -282,7 +282,7 @@ bool ExperimentParameterVisualizer::getEnumeratedParameterPropertyValue(const QS
 	return false;
 }
 
-bool ExperimentParameterVisualizer::resetParameterModifiedFlags(const bool &bOnlyNonDerivedParameters)
+bool PropertySettingsWidget::resetParameterModifiedFlags(const bool &bOnlyNonDerivedParameters)
 {	
 	foreach (propertyParameterValueDef tmpPropParamValDef,lParameterPropertyNamedHash)
 	{
@@ -294,7 +294,7 @@ bool ExperimentParameterVisualizer::resetParameterModifiedFlags(const bool &bOnl
 	return true;
 }
 
-bool ExperimentParameterVisualizer::checkIfParameterExists(const QString &sName)
+bool PropertySettingsWidget::checkIfParameterExists(const QString &sName)
 {
 	QList<propertyParameterValueDef> tmpParamValueDefs;
 	tmpParamValueDefs = lParameterPropertyNamedHash.values(sName.toLower());
@@ -303,7 +303,7 @@ bool ExperimentParameterVisualizer::checkIfParameterExists(const QString &sName)
 	return true;
 }
 
-bool ExperimentParameterVisualizer::setAllowedParameterValues(const QString &sName, const QStringList &lAllowedValues, const QVariantList &vTranslatedValues)
+bool PropertySettingsWidget::setAllowedParameterValues(const QString &sName, const QStringList &lAllowedValues, const QVariantList &vTranslatedValues)
 {
 	bool bResult = false;
 	QList<propertyParameterValueDef> tmpParamValueDefs;
@@ -325,11 +325,11 @@ bool ExperimentParameterVisualizer::setAllowedParameterValues(const QString &sNa
 				if(vTranslatedValues.count() > nTempEnumValue)
 				{
 					tmpEnumValueStruct.vTranslationValue = vTranslatedValues.at(nTempEnumValue);
-					lEnumeratedParameterPropertyValuesHash.insert(QString(sName + EXPPARAMVIS_ENUM_SPEC_DIVIDER + QString::number(nTempEnumValue)).toLower(),tmpEnumValueStruct);
+					lEnumeratedParameterPropertyValuesHash.insert(QString(sName + PROPSETTWIDGET_ENUM_SPEC_DIVIDER + QString::number(nTempEnumValue)).toLower(), tmpEnumValueStruct);
 				}
 				else
 				{
-					lEnumeratedParameterPropertyValuesHash.insert(QString(sName + EXPPARAMVIS_ENUM_SPEC_DIVIDER + lAllowedValues.at(nTempEnumValue)).toLower(),tmpEnumValueStruct);
+					lEnumeratedParameterPropertyValuesHash.insert(QString(sName + PROPSETTWIDGET_ENUM_SPEC_DIVIDER + lAllowedValues.at(nTempEnumValue)).toLower(), tmpEnumValueStruct);
 				}
 			}
 			//if(lParameterPropertyNamedHash.contains(sName.toLower()))
@@ -345,7 +345,7 @@ bool ExperimentParameterVisualizer::setAllowedParameterValues(const QString &sNa
 	return bResult;
 }
 
-bool ExperimentParameterVisualizer::setParameter(const QString &sName, const QString &sValue, const bool &bSetModified, const bool &bIsInitializing)
+bool PropertySettingsWidget::setParameter(const QString &sName, const QString &sValue, const bool &bSetModified, const bool &bIsInitializing)
 {
 	QList<propertyParameterValueDef> tmpParamValueDefs;
 	tmpParamValueDefs = lParameterPropertyNamedHash.values(sName.toLower());
@@ -360,90 +360,90 @@ bool ExperimentParameterVisualizer::setParameter(const QString &sName, const QSt
 			if(bTempPropertyEditSignalingValue && bIsInitializing)
 				configurePropertyEditSignaling(false);
 
-			if(VariantExtensionPropertyManager::isScriptReferenceString(sValue))
+			bool bIsCustomMetaType = false;
+			foreach(strcCustomVariantMetaTypeDescription tmpMetaDescription, hashRegisteredCustomVariabeleTypeToVariantMetaTypes)
 			{
-				tmpParamValueDef.vProperty->setValue(sValue);
-			}
-			else if(tmpParamValueDef.vType == (QVariant::Type) QtVariantPropertyManager::enumTypeId())
-			{
-				QString tmpString = QString(sName + EXPPARAMVIS_ENUM_SPEC_DIVIDER + sValue).toLower();
-				QVariant vEnumValue;
-				if(getEnumeratedParameterPropertyValue(tmpString,vEnumValue))
+				if (tmpMetaDescription.vType == tmpParamValueDef.vType)
 				{
-					tmpParamValueDef.vProperty->setValue(vEnumValue);
-				}
-				else
-				{
-					//Enum not registered...
-					qDebug() << __FUNCTION__ << "Enumerated value(" << tmpString << ") not registered.";
-					bFailed = true;
+					bIsCustomMetaType = true;
+					break;
 				}
 			}
-			else if(tmpParamValueDef.vType == QVariant::Color)
-			{
-				tmpParamValueDef.vProperty->setValue(QColor(sValue));
-			}
-			else if(tmpParamValueDef.vType == QVariant::Bool)
-			{
-				if(sValue.toLower() == "true")
-				{
-					tmpParamValueDef.vProperty->setValue(true);
-				}
-				else if(sValue.toLower() == "false")
-				{
-					tmpParamValueDef.vProperty->setValue(false);
-				}
-				else
-				{
-					qDebug() << __FUNCTION__ << "Wrong defined boolean value(" << sValue << ").";
-					bFailed = true;
-				}
-			}
-			else if(tmpParamValueDef.vType == QVariant::Int)
-			{
-				tmpParamValueDef.vProperty->setValue(sValue.toInt());
-			}
-			else if(tmpParamValueDef.vType == QVariant::String)
+			if (bIsCustomMetaType)
 			{
 				tmpParamValueDef.vProperty->setValue(sValue);
 			}
-			else if(tmpParamValueDef.vType == QVariant::Double)
-			{
-				tmpParamValueDef.vProperty->setValue(sValue.toDouble());
-			}
-			else if(tmpParamValueDef.vType == (QVariant::Type) VariantExtensionPropertyManager::stringArrayTypeId())
-			{
-				tmpParamValueDef.vProperty->setValue(sValue);
-			}
-			else if(tmpParamValueDef.vType == (QVariant::Type) VariantExtensionPropertyManager::rotationDirectionTypeId())
-			{
-				tmpParamValueDef.vProperty->setValue(sValue.toInt());
-			}
-			else if(tmpParamValueDef.vType == (QVariant::Type) VariantExtensionPropertyManager::eccentricityDirectionTypeId())
-			{
-				tmpParamValueDef.vProperty->setValue(sValue);
-			}
-			else if(tmpParamValueDef.vType == (QVariant::Type) VariantExtensionPropertyManager::movementDirectionTypeId())
-			{
-				tmpParamValueDef.vProperty->setValue(sValue);
-			}
-			else if(tmpParamValueDef.vType == (QVariant::Type) VariantExtensionPropertyManager::filePathTypeId())
-			{
-				tmpParamValueDef.vProperty->setValue(sValue);
-			}
-			else if(tmpParamValueDef.vType == (QVariant::Type) VariantExtensionPropertyManager::methodTypeTypeId())
-			{
-				tmpParamValueDef.vProperty->setValue(sValue);
-			}
-			//else if(tmpParamValueDef.vType == (QVariant::Type) VariantExtensionPropertyManager::scriptable_QVariantTypeId())
-			//{
-			//	tmpParamValueDef.vProperty->setValue(sValue);
-			//}
 			else
 			{
-				//Unknown Type..
-				qDebug() << __FUNCTION__ << "Unknown Type(" << tmpParamValueDef.vType << ").";
-				bFailed = true;
+				if (VariantExtensionPropertySettingManager::isScriptReferenceString(sValue))
+				{
+					tmpParamValueDef.vProperty->setValue(sValue);
+				}
+				else if (tmpParamValueDef.vType == (QVariant::Type) QtVariantPropertyManager::enumTypeId())
+				{
+					QString tmpString = QString(sName + PROPSETTWIDGET_ENUM_SPEC_DIVIDER + sValue).toLower();
+					QVariant vEnumValue;
+					if (getEnumeratedParameterPropertyValue(tmpString, vEnumValue))
+					{
+						tmpParamValueDef.vProperty->setValue(vEnumValue);
+					}
+					else
+					{
+						//Enum not registered...
+						qDebug() << __FUNCTION__ << "Enumerated value(" << tmpString << ") not registered.";
+						bFailed = true;
+					}
+				}
+				else if (tmpParamValueDef.vType == QVariant::Color)
+				{
+					tmpParamValueDef.vProperty->setValue(QColor(sValue));
+				}
+				else if (tmpParamValueDef.vType == QVariant::Bool)
+				{
+					if (sValue.toLower() == "true")
+					{
+						tmpParamValueDef.vProperty->setValue(true);
+					}
+					else if (sValue.toLower() == "false")
+					{
+						tmpParamValueDef.vProperty->setValue(false);
+					}
+					else
+					{
+						qDebug() << __FUNCTION__ << "Wrong defined boolean value(" << sValue << ").";
+						bFailed = true;
+					}
+				}
+				else if (tmpParamValueDef.vType == QVariant::Int)
+				{
+					tmpParamValueDef.vProperty->setValue(sValue.toInt());
+				}
+				else if (tmpParamValueDef.vType == QVariant::String)
+				{
+					tmpParamValueDef.vProperty->setValue(sValue);
+				}
+				else if (tmpParamValueDef.vType == QVariant::Double)
+				{
+					tmpParamValueDef.vProperty->setValue(sValue.toDouble());
+				}
+				else if (tmpParamValueDef.vType == (QVariant::Type) VariantExtensionPropertySettingManager::stringArrayTypeId())
+				{
+					tmpParamValueDef.vProperty->setValue(sValue);
+				}
+				else if (tmpParamValueDef.vType == (QVariant::Type) VariantExtensionPropertySettingManager::filePathTypeId())
+				{
+					tmpParamValueDef.vProperty->setValue(sValue);
+				}
+				else if (tmpParamValueDef.vType == (QVariant::Type) VariantExtensionPropertySettingManager::scriptable_QVariantTypeId())
+				{
+					tmpParamValueDef.vProperty->setValue(sValue);
+				}
+				else
+				{
+					//Unknown Type..
+					qDebug() << __FUNCTION__ << "Unknown Type(" << tmpParamValueDef.vType << ").";
+					bFailed = true;
+				}
 			}
 			if(bSetModified && (bFailed == false))
 				tmpParamValueDef.vProperty->setModified(true);
@@ -460,7 +460,7 @@ bool ExperimentParameterVisualizer::setParameter(const QString &sName, const QSt
 	return true;
 }
 
-QWidget *ExperimentParameterVisualizer::getParameterEditWidget(const QString &sName, const QString &sDerivedPrefixName, QString &sReturnUniquePropertyIdentifier, const QVariant &vValue, const bool &bDoInitWithValue, const bool &bIsScriptable)
+QWidget *PropertySettingsWidget::getParameterEditWidget(const QString &sName, const QString &sDerivedPrefixName, QString &sReturnUniquePropertyIdentifier, const QVariant &vValue, const bool &bDoInitWithValue, const bool &bIsScriptable)
 {
 	if(variantExtensionFactory)
 	{
@@ -479,7 +479,7 @@ QWidget *ExperimentParameterVisualizer::getParameterEditWidget(const QString &sN
 	return NULL;
 }
 
-bool ExperimentParameterVisualizer::registerDerivedParameterProperty(const propertyParameterValueDef &baseVPropertyDef, QtVariantProperty *derivedProperty, QString &sUniqueDerivedPropertyIdentifier)
+bool PropertySettingsWidget::registerDerivedParameterProperty(const propertyParameterValueDef &baseVPropertyDef, QtVariantProperty *derivedProperty, QString &sUniqueDerivedPropertyIdentifier)
 {
 	if(derivedProperty == NULL)
 		return false;
@@ -489,12 +489,12 @@ bool ExperimentParameterVisualizer::registerDerivedParameterProperty(const prope
 	tmpParamValueDef.vProperty = derivedProperty;
 	tmpParamValueDef.bIsDerived = true;
 	lParameterPropertyNamedHash.insertMulti(sUniqueDerivedPropertyIdentifier,tmpParamValueDef);
-	ExperimentParameterDefinitionStrc *tmpExpParStruct = lVariantPropertyDefinitionHash[baseVPropertyDef.vProperty];
+	PropertySettingDefinitionStrc *tmpExpParStruct = lVariantPropertyDefinitionHash[baseVPropertyDef.vProperty];
 	lVariantPropertyDefinitionHash.insertMulti(derivedProperty,tmpExpParStruct);
 	
 	if(tmpExpParStruct->Dependencies.isEmpty() == false)
 	{
-		for (QList<ExperimentParameterDefinitionDependencyStrc>::const_iterator it=tmpExpParStruct->Dependencies.cbegin();it!=tmpExpParStruct->Dependencies.cend();++it)
+		for (QList<PropertySettingDefinitionDependencyStrc>::const_iterator it=tmpExpParStruct->Dependencies.cbegin();it!=tmpExpParStruct->Dependencies.cend();++it)
 		{
 			addDependency(derivedProperty,(*it));
 		}
@@ -506,7 +506,7 @@ bool ExperimentParameterVisualizer::registerDerivedParameterProperty(const prope
 	//return true;
 }
 
-bool ExperimentParameterVisualizer::setWidgetParameter(const QString &sUniquePropertyIdentifier, const QString &sValue, const bool &bSetModified)
+bool PropertySettingsWidget::setWidgetParameter(const QString &sUniquePropertyIdentifier, const QString &sValue, const bool &bSetModified)
 {
 	if(variantExtensionFactory)
 	{
@@ -515,7 +515,7 @@ bool ExperimentParameterVisualizer::setWidgetParameter(const QString &sUniquePro
 	return false;
 }
 
-bool ExperimentParameterVisualizer::configurePropertyEditSignaling(const bool &bEnable)
+bool PropertySettingsWidget::configurePropertyEditSignaling(const bool &bEnable)
 {
 	bool bResult = false;
 	if(lVariantPropertyManager)
@@ -535,7 +535,7 @@ bool ExperimentParameterVisualizer::configurePropertyEditSignaling(const bool &b
 	return false;
 }
 
-bool ExperimentParameterVisualizer::removeParameterProperty(const QString &sUniquePropertyIdentifier)
+bool PropertySettingsWidget::removeParameterProperty(const QString &sUniquePropertyIdentifier)
 {
 	QtProperty *tmpProperty = lVariantPropertyManager->qtProperty(sUniquePropertyIdentifier);
 	if(tmpProperty)
@@ -553,7 +553,7 @@ bool ExperimentParameterVisualizer::removeParameterProperty(const QString &sUniq
 	return false;
 }
 
-bool ExperimentParameterVisualizer::addParameterProperty(const ExperimentParameterDefinitionStrc *expParamDef, const QVariant &vValue)
+bool PropertySettingsWidget::addParameterProperty(const PropertySettingDefinitionStrc *expParamDef, const QVariant &vValue)
 {
 	if(expParamDef == NULL)
 		return false;
@@ -564,78 +564,78 @@ bool ExperimentParameterVisualizer::addParameterProperty(const ExperimentParamet
 	bool bDoEnumeratedList = false;
 
 	if(lVariantPropertyManager == NULL)
-		lVariantPropertyManager = new VariantExtensionPropertyManager(this);		
+		lVariantPropertyManager = new VariantExtensionPropertySettingManager(this);		
 
 	QVariant::Type varType;
-	if(expParamDef->eType == Experiment_ParameterType_Color)
+
+	bool bCustomFound = false;
+	QHashIterator<int, strcCustomVariantMetaTypeDescription> iter(hashRegisteredCustomVariabeleTypeToVariantMetaTypes);
+	while (iter.hasNext()) 
 	{
-		varType = QVariant::Color;
+		iter.next();
+		if (iter.key() == expParamDef->eType)
+		{
+			bCustomFound = true;
+			varType = (QVariant::Type)iter.value().vType;
+			break;
+		}
 	}
-	else if(expParamDef->eType == Experiment_ParameterType_Boolean)
+	if (bCustomFound == false)
 	{
-		varType = QVariant::Bool;		
-	}
-	else if(expParamDef->eType == Experiment_ParameterType_Integer)
-	{
-		varType = QVariant::Int;
-		bDoMinMax = true;
-	}
-	else if(expParamDef->eType == Experiment_ParameterType_RotationDirection)
-	{
-		varType = (QVariant::Type) VariantExtensionPropertyManager::rotationDirectionTypeId();
-	}
-	else if(expParamDef->eType == Experiment_ParameterType_EccentricityDirection)
-	{
-		varType = (QVariant::Type) VariantExtensionPropertyManager::eccentricityDirectionTypeId();
-	}
-	else if(expParamDef->eType == Experiment_ParameterType_MovementDirection)
-	{
-		varType = (QVariant::Type) VariantExtensionPropertyManager::movementDirectionTypeId();
-	}	
-	else if(expParamDef->eType == Experiment_ParameterType_String)
-	{		
-		if(expParamDef->Restriction.lAllowedValues.isEmpty() == false)
+		if (expParamDef->eType == PropertySetting_Type_Color)
+		{
+			varType = QVariant::Color;
+		}
+		else if (expParamDef->eType == PropertySetting_Type_Boolean)
+		{
+			varType = QVariant::Bool;
+		}
+		else if (expParamDef->eType == PropertySetting_Type_Integer)
+		{
+			varType = QVariant::Int;
+			bDoMinMax = true;
+		}
+		else if (expParamDef->eType == PropertySetting_Type_String)
+		{
+			if (expParamDef->Restriction.lAllowedValues.isEmpty() == false)
+			{
+				varType = (QVariant::Type) QtVariantPropertyManager::enumTypeId();
+				bDoEnumeratedList = true;
+			}
+			else
+			{
+				varType = QVariant::String;
+			}
+		}
+		else if (expParamDef->eType == PropertySetting_Type_DynamicStringEnum)
 		{
 			varType = (QVariant::Type) QtVariantPropertyManager::enumTypeId();
 			bDoEnumeratedList = true;
+		}
+		else if (expParamDef->eType == PropertySetting_Type_DynamicIntegerEnum)
+		{
+			varType = (QVariant::Type) QtVariantPropertyManager::enumTypeId();
+			bDoEnumeratedList = true;
+		}
+		else if ((expParamDef->eType == PropertySetting_Type_Float) || (expParamDef->eType == PropertySetting_Type_Double))
+		{
+			varType = QVariant::Double;
+			bDoMinMax = true;
+		}
+		else if (expParamDef->eType == PropertySetting_Type_StringArray)
+		{
+			varType = (QVariant::Type) VariantExtensionPropertySettingManager::stringArrayTypeId();
+		}
+		else if (expParamDef->eType == PropertySetting_Type_FilePath)
+		{
+			varType = (QVariant::Type) VariantExtensionPropertySettingManager::filePathTypeId();
 		}
 		else
 		{
 			varType = QVariant::String;
 		}
 	}
-	else if(expParamDef->eType == Experiment_ParameterType_DynamicStringEnum)
-	{		
-		varType = (QVariant::Type) QtVariantPropertyManager::enumTypeId();
-		bDoEnumeratedList = true;
-	}
-	else if(expParamDef->eType == Experiment_ParameterType_DynamicIntegerEnum)
-	{		
-		varType = (QVariant::Type) QtVariantPropertyManager::enumTypeId();
-		bDoEnumeratedList = true;
-	}
-	else if ((expParamDef->eType == Experiment_ParameterType_Float) || (expParamDef->eType == Experiment_ParameterType_Double))
-	{
-		varType = QVariant::Double;
-		bDoMinMax = true;
-	}
-	else if(expParamDef->eType == Experiment_ParameterType_StringArray)
-	{
-		varType = (QVariant::Type) VariantExtensionPropertyManager::stringArrayTypeId();
-	}
-	else if(expParamDef->eType == Experiment_ParameterType_FilePath)
-	{
-		varType = (QVariant::Type) VariantExtensionPropertyManager::filePathTypeId();
-	}
-	else if(expParamDef->eType == Experiment_ParameterType_MethodType)
-	{
-		varType = (QVariant::Type) VariantExtensionPropertyManager::methodTypeTypeId();
-	}
-	else
-	{
-		varType = QVariant::String;
-	}
-	QtVariantProperty *tmpVariantProperty = lVariantPropertyManager->addVariantExtensionProperty(varType,expParamDef->bCanBeScriptReference,expParamDef->sDisplayName);
+	QtVariantProperty *tmpVariantProperty = lVariantPropertyManager->addVariantExtensionProperty(varType, expParamDef->bCanBeScriptReference, expParamDef->sDisplayName);
 	tmpVariantProperty->setPropertyId(QString::number(expParamDef->nId));
 	propertyParameterValueDef tmpParamValueDef;
 	tmpParamValueDef.vType = varType;
@@ -643,7 +643,7 @@ bool ExperimentParameterVisualizer::addParameterProperty(const ExperimentParamet
 	tmpParamValueDef.bIsDerived = false;
 	tmpVariantProperty->setEnabled(expParamDef->bIsEditable);
 	lParameterPropertyNamedHash.insertMulti(expParamDef->sName.toLower(),tmpParamValueDef);
-	lVariantPropertyDefinitionHash.insertMulti(tmpVariantProperty,(ExperimentParameterDefinitionStrc *)expParamDef);
+	lVariantPropertyDefinitionHash.insertMulti(tmpVariantProperty,(PropertySettingDefinitionStrc *)expParamDef);
 
 	if(bDoEnumeratedList)
 	{
@@ -657,7 +657,7 @@ bool ExperimentParameterVisualizer::addParameterProperty(const ExperimentParamet
 			{
 				tmpEnumValueStruct.nEnumControlIndex = nTempEnumValue;
 				//tmpEnumValueStruct.vTranslationValue
-				lEnumeratedParameterPropertyValuesHash.insert(QString(expParamDef->sName + EXPPARAMVIS_ENUM_SPEC_DIVIDER + sAllowedValue).toLower(),tmpEnumValueStruct);
+				lEnumeratedParameterPropertyValuesHash.insert(QString(expParamDef->sName + PROPSETTWIDGET_ENUM_SPEC_DIVIDER + sAllowedValue).toLower(), tmpEnumValueStruct);
 				//QMap<int, QIcon> enumIcons;
 				//enumIcons[0] = QIcon(":/demo/images/up.png");
 				//enumIcons[1] = QIcon(":/demo/images/right.png");
@@ -680,8 +680,8 @@ bool ExperimentParameterVisualizer::addParameterProperty(const ExperimentParamet
 
 	if(variantExtensionFactory == NULL)
 	{
-		variantExtensionFactory = new VariantExtensionPropertyFactory(this);
-		//VariantExtensionPropertyFactory *tmpFactory = new VariantExtensionPropertyFactory(this);
+		variantExtensionFactory = new VariantExtensionPropertySettingFactory(this);
+		//VariantExtensionPropertySettingFactory *tmpFactory = new VariantExtensionPropertySettingFactory(this);
 		propertyEditor->setFactoryForManager((QtVariantPropertyManager*)lVariantPropertyManager, (QtVariantEditorFactory*)variantExtensionFactory);
 	}
 		
@@ -745,7 +745,7 @@ bool ExperimentParameterVisualizer::addParameterProperty(const ExperimentParamet
 
 	if(expParamDef->Dependencies.isEmpty() == false)
 	{
-		for (QList<ExperimentParameterDefinitionDependencyStrc>::const_iterator it=expParamDef->Dependencies.cbegin();it!=expParamDef->Dependencies.cend();++it)
+		for (QList<PropertySettingDefinitionDependencyStrc>::const_iterator it=expParamDef->Dependencies.cbegin();it!=expParamDef->Dependencies.cend();++it)
 		{
 			addDependency(tmpVariantProperty,(*it));
 		}
@@ -756,7 +756,7 @@ bool ExperimentParameterVisualizer::addParameterProperty(const ExperimentParamet
 	return parseDependencies();
 }
 
-void ExperimentParameterVisualizer::itemEditedHandler(const QString &sParamName, const QString &sNewValue, const bool &bIsDerivedProperty)
+void PropertySettingsWidget::itemEditedHandler(const QString &sParamName, const QString &sNewValue, const bool &bIsDerivedProperty)
 {
 	if(bIsDerivedProperty)
 		emit derivedItemEditFinished(sParamName, sNewValue);
@@ -764,12 +764,12 @@ void ExperimentParameterVisualizer::itemEditedHandler(const QString &sParamName,
 		emit rootItemEditFinished(sParamName,sNewValue);
 }
 
-//void ExperimentParameterVisualizer::focusOutEvent(QFocusEvent* event)
+//void PropertySettingsWidget::focusOutEvent(QFocusEvent* event)
 //{ 
 //	emit outOfFocus(); 
 //}
 
-void ExperimentParameterVisualizer::propertyValueChanged(QtProperty *property, const QVariant &value)
+void PropertySettingsWidget::propertyValueChanged(QtProperty *property, const QVariant &value)
 {
 	Q_UNUSED(value);
 	bool bIsDerivedProperty = false;
@@ -788,17 +788,17 @@ void ExperimentParameterVisualizer::propertyValueChanged(QtProperty *property, c
 
 	if(bAutoDepencyParsing && (bIsDerivedProperty==false))
 		parseDependencies((QtVariantProperty*) property);
-	QList<ExperimentParameterDefinitionStrc*> lParamDefs = lVariantPropertyDefinitionHash.values(property);
-	foreach(ExperimentParameterDefinitionStrc* paramDef, lParamDefs)
+	QList<PropertySettingDefinitionStrc*> lParamDefs = lVariantPropertyDefinitionHash.values(property);
+	foreach(PropertySettingDefinitionStrc* paramDef, lParamDefs)
 	{
 		if(paramDef == NULL)
 			continue;
 
-		if(VariantExtensionPropertyManager::isScriptReferenceString(value.toString()))// && (value.toString().size() > 2))
+		if(VariantExtensionPropertySettingManager::isScriptReferenceString(value.toString()))// && (value.toString().size() > 2))
 		{
 			itemEditedHandler(QString(paramDef->sName), value.toString(), bIsDerivedProperty);
 		}
-		else if(paramDef->eType == Experiment_ParameterType_String)
+		else if(paramDef->eType == PropertySetting_Type_String)
 		{
 			if(paramDef->Restriction.lAllowedValues.isEmpty() == true)
 			{				
@@ -822,7 +822,7 @@ void ExperimentParameterVisualizer::propertyValueChanged(QtProperty *property, c
 				}
 			}			
 		}
-		else if(paramDef->eType == Experiment_ParameterType_DynamicStringEnum)
+		else if(paramDef->eType == PropertySetting_Type_DynamicStringEnum)
 		{
 			if(paramDef->Restriction.lAllowedValues.isEmpty() == true)
 			{				
@@ -846,7 +846,7 @@ void ExperimentParameterVisualizer::propertyValueChanged(QtProperty *property, c
 				}
 			}			
 		}
-		else if(paramDef->eType == Experiment_ParameterType_DynamicIntegerEnum)
+		else if(paramDef->eType == PropertySetting_Type_DynamicIntegerEnum)
 		{
 			if(paramDef->Restriction.lAllowedValues.isEmpty() == true)
 			{				
@@ -862,7 +862,7 @@ void ExperimentParameterVisualizer::propertyValueChanged(QtProperty *property, c
 				}
 				else if(paramDef->Restriction.lAllowedValues.count() > nIndex)
 				{
-					QString sSearchVal = QString(paramDef->sName + EXPPARAMVIS_ENUM_SPEC_DIVIDER + QString::number(nIndex)).toLower();
+					QString sSearchVal = QString(paramDef->sName + PROPSETTWIDGET_ENUM_SPEC_DIVIDER + QString::number(nIndex)).toLower();
 					QVariant vEnumValue;
 					if(getEnumeratedParameterPropertyValue(sSearchVal,vEnumValue))
 					{
@@ -879,48 +879,40 @@ void ExperimentParameterVisualizer::propertyValueChanged(QtProperty *property, c
 				}
 			}			
 		}
-		else if(paramDef->eType == Experiment_ParameterType_StringArray)
+		else if(paramDef->eType == PropertySetting_Type_StringArray)
 		{
 			itemEditedHandler(QString(paramDef->sName), value.toString(), bIsDerivedProperty);
 		}
-		else if(paramDef->eType == Experiment_ParameterType_Color)
+		else if(paramDef->eType == PropertySetting_Type_Color)
 		{
 			itemEditedHandler(QString(paramDef->sName), value.toString(), bIsDerivedProperty);
 		}
-		else if(paramDef->eType == Experiment_ParameterType_Integer)
+		else if(paramDef->eType == PropertySetting_Type_Integer)
 		{
 			itemEditedHandler(QString(paramDef->sName), value.toString(), bIsDerivedProperty);
 		}
-		else if(paramDef->eType == Experiment_ParameterType_Float)
+		else if(paramDef->eType == PropertySetting_Type_Float)
 		{
 			itemEditedHandler(QString(paramDef->sName), value.toString(), bIsDerivedProperty);
 		}
-		else if(paramDef->eType == Experiment_ParameterType_Double)
+		else if(paramDef->eType == PropertySetting_Type_Double)
 		{
 			itemEditedHandler(QString(paramDef->sName), value.toString(), bIsDerivedProperty);
 		}
-		else if(paramDef->eType == Experiment_ParameterType_Boolean)
+		else if(paramDef->eType == PropertySetting_Type_Boolean)
 		{
 			itemEditedHandler(QString(paramDef->sName), value.toString(), bIsDerivedProperty);
 		}
-		else if(paramDef->eType == Experiment_ParameterType_RotationDirection)
-		{
-			itemEditedHandler(QString(paramDef->sName), QString::number((int)RotationDirectionPropertyWidget::rotationDirectionEnum(value.toString())), bIsDerivedProperty);
-		}
-		else if(paramDef->eType == Experiment_ParameterType_MovementDirection)
-		{
-			itemEditedHandler(QString(paramDef->sName), QString::number((int)MovementDirectionPropertyWidget::movementDirectionEnum(value.toString())), bIsDerivedProperty);
-		}
-		else if(paramDef->eType == Experiment_ParameterType_EccentricityDirection)
-		{
-			itemEditedHandler(QString(paramDef->sName), QString::number((int)EccentricityDirectionPropertyWidget::eccentricityDirectionEnum(value.toString())), bIsDerivedProperty);
-		}
-		else if(paramDef->eType == Experiment_ParameterType_FilePath)
+		else if(paramDef->eType == PropertySetting_Type_FilePath)
 		{
 			itemEditedHandler(QString(paramDef->sName), value.toString(), bIsDerivedProperty);
 		}
-		else if(paramDef->eType == Experiment_ParameterType_MethodType)
+		else if (hashRegisteredCustomVariabeleTypeToVariantMetaTypes.contains(paramDef->eType))
 		{
+			//QString sResolvedValue = VariantExtensionPropertySettingManager::resolveParameterValueType(value, paramDef->eType, true).toString();
+			//itemEditedHandler(QString(paramDef->sName), sResolvedValue, bIsDerivedProperty);
+			//QString sResolvedValue = VariantExtensionPropertySettingManager::resolveParameterValueType(value, paramDef->eType, false).toString();
+			//itemEditedHandler(QString(paramDef->sName), sResolvedValue, bIsDerivedProperty);
 			itemEditedHandler(QString(paramDef->sName), value.toString(), bIsDerivedProperty);
 		}
 		else
@@ -930,7 +922,7 @@ void ExperimentParameterVisualizer::propertyValueChanged(QtProperty *property, c
 	}
 }
 
-bool ExperimentParameterVisualizer::addDependency(QtVariantProperty *variantProperty, const ExperimentParameterDefinitionDependencyStrc &dependencyParamDef)
+bool PropertySettingsWidget::addDependency(QtVariantProperty *variantProperty, const PropertySettingDefinitionDependencyStrc &dependencyParamDef)
 {
 	for (QList<propertyDependencyStruct>::iterator it=lPropertyDependencies.begin();it!=lPropertyDependencies.end();++it)
 	{
@@ -947,7 +939,7 @@ bool ExperimentParameterVisualizer::addDependency(QtVariantProperty *variantProp
 	return true;
 }
 
-bool ExperimentParameterVisualizer::parseDependencies(QtVariantProperty *variantProperty)
+bool PropertySettingsWidget::parseDependencies(QtVariantProperty *variantProperty)
 {
 	if(lPropertyDependencies.isEmpty())
 		return true;
@@ -960,7 +952,7 @@ bool ExperimentParameterVisualizer::parseDependencies(QtVariantProperty *variant
 	{
 		if(variantProperty != NULL)
 		{
-			for (QList<ExperimentParameterDefinitionDependencyStrc>::const_iterator itDef=itDependency->definitions.cbegin();itDef!=itDependency->definitions.cend();++itDef)
+			for (QList<PropertySettingDefinitionDependencyStrc>::const_iterator itDef=itDependency->definitions.cbegin();itDef!=itDependency->definitions.cend();++itDef)
 			{
 				if(QString::number(itDef->nDependencyParameterID) == variantProperty->propertyId())
 				{
@@ -989,7 +981,7 @@ bool ExperimentParameterVisualizer::parseDependencies(QtVariantProperty *variant
 		if(variantProperty != NULL)
 		{
 			bool bPropertyFound = false;
-			for (QList<ExperimentParameterDefinitionDependencyStrc>::const_iterator itDef=itDependency->definitions.cbegin();itDef!=itDependency->definitions.cend();++itDef)
+			for (QList<PropertySettingDefinitionDependencyStrc>::const_iterator itDef=itDependency->definitions.cbegin();itDef!=itDependency->definitions.cend();++itDef)
 			{
 				if(QString::number(itDef->nDependencyParameterID) == variantProperty->propertyId())
 				{
@@ -1019,7 +1011,7 @@ bool ExperimentParameterVisualizer::parseDependencies(QtVariantProperty *variant
 				if(nID == 0)
 					continue;
 			}
-			for (QList<ExperimentParameterDefinitionDependencyStrc>::const_iterator itDef=itDependency->definitions.cbegin();itDef!=itDependency->definitions.cend();++itDef)
+			for (QList<PropertySettingDefinitionDependencyStrc>::const_iterator itDef=itDependency->definitions.cbegin();itDef!=itDependency->definitions.cend();++itDef)
 			{
 				if(itDef->nDependencyParameterID == nID)
 				{
@@ -1044,16 +1036,49 @@ bool ExperimentParameterVisualizer::parseDependencies(QtVariantProperty *variant
 	return true;
 }
 
-void ExperimentParameterVisualizer::setAutoDepencyParsing(bool bEnable)
+void PropertySettingsWidget::setAutoDepencyParsing(bool bEnable)
 {
 	bAutoDepencyParsing = bEnable;
 }
 
-void ExperimentParameterVisualizer::resizeParameterView(const int &nWidth, const int &nHeight)
+void PropertySettingsWidget::resizeParameterView(const int &nWidth, const int &nHeight)
 {	
 	Q_UNUSED(nWidth);
 	this->setFixedWidth(300);
 	this->setFixedHeight(nHeight - 50);
+}
+
+bool PropertySettingsWidget::registerCustomVariabeleTypes(const QHash<int, strcCustomVariantMetaTypeDescription> &hashCustomVarTypeToVariantMetaType)
+{
+	QHashIterator<int, strcCustomVariantMetaTypeDescription> iter(hashCustomVarTypeToVariantMetaType);
+	while (iter.hasNext()) 
+	{
+		iter.next();
+		hashRegisteredCustomVariabeleTypeToVariantMetaTypes.insert(iter.key(), iter.value());
+	}
+	return true;
+}
+
+bool PropertySettingsWidget::isRegisteredCustomVariabeleType(QVariant::Type typeCustomVariant)
+{
+	foreach(strcCustomVariantMetaTypeDescription tmpMetaDescription, hashRegisteredCustomVariabeleTypeToVariantMetaTypes)
+	{
+		if (tmpMetaDescription.vType == typeCustomVariant)
+			return true;
+	}
+	return false;
+}
+
+int PropertySettingsWidget::getRegisteredCustomVariantMetaType(QVariant::Type typeCustomVariant)
+{
+	QHashIterator<int, strcCustomVariantMetaTypeDescription> iter(hashRegisteredCustomVariabeleTypeToVariantMetaTypes);
+	while (iter.hasNext())
+	{
+		iter.next();
+		if (iter.value().vType == typeCustomVariant)
+			return iter.key();
+	}
+	return -1;
 }
 
 

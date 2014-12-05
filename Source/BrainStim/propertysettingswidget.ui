@@ -1,8 +1,8 @@
 <UI version="4.0" >
- <class>ExperimentParameterVisualizer</class>
- <widget class="QWidget" name="ExperimentParameterVisualizer" >
+ <class>PropertySettingsWidget</class>
+ <widget class="QWidget" name="PropertySettingsWidget" >
   <property name="objectName" >
-   <string notr="true">ExperimentParameterVisualizer</string>
+   <string notr="true">PropertySettingsWidget</string>
   </property>
   <property name="geometry" >
    <rect>
@@ -13,7 +13,7 @@
    </rect>
   </property>
   <property name="windowTitle" >
-   <string>ExperimentParameterVisualizer</string>
+   <string>PropertySettingsWidget</string>
   </property>  
  </widget>
  <layoutDefault spacing="6" margin="11" />

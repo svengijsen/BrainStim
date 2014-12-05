@@ -23,12 +23,15 @@
 #include <QTreeWidget>
 #include <QHBoxLayout>
 #include "experimenttreemodel.h"
-#include "experimentparameterdefinition.h"
+//sven #include "experimentparameterdefinition.h"
+#include "propertysettingswidgetcontainer.h"//sven
+#include "propertysettingswidget.h"//sven
+//class PropertySettingsWidget;//sven
 
 namespace Ui {class BlockLoopsDialog;};
 
-class ExperimentParameterWidgets;
-class ExperimentParameterVisualizer;
+//class PropertySettingsWidgetContainer;
+class PropertySettingsWidget;
 
 class BlockLoopsDialog : public QDialog
 {
@@ -94,8 +97,8 @@ private:
 	QHash<int, strcBlockLoopInfo> hashIntToBlockLoopInfo;
 	QHash<int, strcBlockInfo> hashComboBlockIndexToBlockStructure;
 	QHBoxLayout *layoutTreeWidgetParent;
-	ExperimentParameterWidgets *pExpParamWidgets;
-	ExperimentParameterVisualizer *pParametersWidget;
+	PropertySettingsWidgetContainer *pExpParamWidgets;
+	PropertySettingsWidget *pParametersWidget;
 	int nCurrentBlockLoopSelectionIdentifier;
 };
 

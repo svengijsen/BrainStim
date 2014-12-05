@@ -30,3 +30,4 @@ Install/firebird.conf
 Install/firebird.msg
 Install/Xsd/*.xsd
 Install/*.ini
+/Source/BrainStim/brainstim.aps

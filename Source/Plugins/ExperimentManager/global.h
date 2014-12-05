@@ -260,8 +260,6 @@ namespace ExperimentManagerNameSpace
 	#define HREF_TAG						"href"
 	#define FOLDER_TAG						"folder"
 	#define TITLE_TAG						"title"
-	#define BOOL_FALSE_TAG					"false"
-	#define BOOL_TRUE_TAG					"true"
 	#define FOLDED_TAG						"folded"
 	#define EVENT_TAG						"event"
 }

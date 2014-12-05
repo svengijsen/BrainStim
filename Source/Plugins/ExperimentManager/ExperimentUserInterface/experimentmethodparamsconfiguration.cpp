@@ -18,7 +18,7 @@
 
 #include "global.h"
 #include "experimentmethodparamsconfiguration.h"
-#include "ExperimentParameterWidgets.h"
+#include "PropertySettingsWidgetContainer.h"
 #include "ExperimentManager.h"
 
 ExperimentMethodParamsConfigurationDialog::ExperimentMethodParamsConfigurationDialog(QWidget *parent) : QDialog(parent), pCurrentExpTree(NULL), bIsInitialized(false), tmpParametersWidget(NULL), nInitFinitId(-1), bIsInit(true), nSelectedRow(-1)
@@ -45,7 +45,7 @@ bool ExperimentMethodParamsConfigurationDialog::initialize()
 {
 	if (bIsInitialized)
 		return true;
-	ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
+	PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
 	tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(INITIALIZATIONS_PARAMETER_TAG);
 	if (tmpParametersWidget == NULL)
 	{

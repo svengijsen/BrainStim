@@ -43,6 +43,7 @@
 #include <QtTest\QTest>
 #include <QtTest\QTestEventList>
 
+#include "optionpage.h"
 #include "documentwindow.h"
 #include "documentmanager.h"
 #include "plugininterface.h"
@@ -53,6 +54,7 @@
 #include "assistant.h"
 #include "networkserver.h"
 #include "custommdisubwindow.h"
+#include "propertysettingswidget.h"
 
 class SvgView;
 class DeviceControl;
@@ -468,6 +470,8 @@ private:
 	//	Qt::DockWidgetArea dockArea;
 	//};
 	//QMap<QDockWidget*, DockLocationStructure> mapRegisteredDockWidgetToLocationStruct;
+	QMap<QString, PropertySettingsWidget *> mapPluginOptionWidgetsByPluginName;
+	OptionPage *pMainOptionPage;
 	QMap<QString, QRect> mapLoadedDockWindowRects;
 	QMultiMap<QMdiSubWindow*, QDockWidget*> mapMDISubWindowToDockWidget;
 	QPair<QString,quint64> pCurrentSetContextState;

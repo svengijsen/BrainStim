@@ -21,11 +21,11 @@
 
 #include <QDialog>
 #include "experimenttreemodel.h"
-#include "experimentparameterdefinition.h"
+//sven #include "experimentparameterdefinition.h"
 
 namespace Ui {class ObjectParameterDialog;};
 
-class ExperimentParameterVisualizer;
+class PropertySettingsWidget;
 class ObjectParameterDialog : public QDialog
 {
 	Q_OBJECT
@@ -51,7 +51,7 @@ private slots:
 	void derivedItemEditFinished(const QString& sParamName, const QString& sNewValue);
 
 private:
-	bool parseParameters(const int &nObjectID, const int &nBlockID, const ParameterEditingType &eParamEditingMode);
+	bool parseParameters(const int &nObjectID, const int &nBlockID, const PropertySettingEditingType &eParamEditingMode);
 	void clearAllParsedStructures();
 	void clearParameterWidgetLayout();
 
@@ -62,7 +62,7 @@ private:
 		bool bIsChanged;
 		QString sFullDisplayName;
 		QString sValue;
-		ExperimentParameterDefinitionStrc ParamDef;
+		PropertySettingDefinitionStrc ParamDef;
 		strcParameterDefinition()
 		{
 			Reset();
@@ -77,7 +77,7 @@ private:
 
 	struct strcLastChange 
 	{
-		ParameterEditingType eChangeEditingMode;
+		PropertySettingEditingType eChangeEditingMode;
 		QString sParamName;
 		QString sParamNewValue;
 		bool bSettingFinished;
@@ -89,7 +89,7 @@ private:
 		void Reset()
 		{
 			bSettingFinished = false;
-			eChangeEditingMode = PEM_CUSTOM;
+			eChangeEditingMode = PSET_CUSTOM;
 			sParamName = "";
 			sParamNewValue = "";
 		}
@@ -97,11 +97,11 @@ private:
 
 	bool bIsParsing;
 	QWidget *pParameterEditWidget;
-	ParameterEditingType eCurrentParameterEditingMode;
+	PropertySettingEditingType eCurrentParameterEditingMode;
 
 	QHash<int, int> hObjectControlIndexToObjectID;
 	QHash<int, int> hBlockControlIndexToBlockID;
-	ExperimentParameterVisualizer *expParamVizualizer;
+	PropertySettingsWidget *expParamVizualizer;
 	ExperimentTreeModel *pCurrentExpTree;
 	cExperimentStructure *pCurrentExpStructure;
 	QList<ExperimentStructuresNameSpace::strcExperimentObject> lCurrentExpObjects;

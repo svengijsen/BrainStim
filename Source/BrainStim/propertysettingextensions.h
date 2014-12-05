@@ -1,4 +1,4 @@
-//ExperimentManagerplugin
+//BrainStim
 //Copyright (C) 2014  Sven Gijsen
 //
 //This file is part of BrainStim.
@@ -16,8 +16,8 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#ifndef PARAMETERPROPERTYEXTENSIONS_H
-#define PARAMETERPROPERTYEXTENSIONS_H
+#ifndef PROPERTYSETTINGEXTENSIONS_H
+#define PROPERTYSETTINGEXTENSIONS_H
 
 #include "qtvariantproperty.h"
 #include <QVBoxLayout>
@@ -27,13 +27,12 @@
 #include <QPlainTextEdit>
 #include <QDialogButtonBox>
 #include <QToolButton>
-#include "experimentparameterdefinition.h"
-#include "experimentstructures.h"
+#include "propertysettingdefinition.h"
 
 #define EXPERIMENT_PARAMETER_ARRAYSEP_CHAR		","
 #define EXPERIMENT_PARAMETER_DERIVED_CHAR		"_"
 
-class PropertyWidgetBase : public QWidget
+class PropertySettingBase : public QWidget
 {
 	Q_OBJECT
 
@@ -41,8 +40,8 @@ signals:
 	void PropertyWidgetChanged(const QString&);
 
 public:
-	PropertyWidgetBase(QWidget *parent = NULL);
-	~PropertyWidgetBase();
+	PropertySettingBase(QWidget *parent = NULL);
+	~PropertySettingBase();
 
 	struct strcCustomFixedWidget
 	{
@@ -100,24 +99,16 @@ class StringArrayPropertyType{};
 Q_DECLARE_METATYPE(StringArrayPropertyType)
 class FilePathPropertyType{};
 Q_DECLARE_METATYPE(FilePathPropertyType)
-class RotationDirectionPropertyType{};
-Q_DECLARE_METATYPE(RotationDirectionPropertyType)
-class MovementDirectionPropertyType{};
-Q_DECLARE_METATYPE(MovementDirectionPropertyType)
-class EccentricityDirectionPropertyType{};
-Q_DECLARE_METATYPE(EccentricityDirectionPropertyType)
-class MethodTypePropertyType{};
-Q_DECLARE_METATYPE(MethodTypePropertyType)
-//class Scriptable_QVariantPropertyType{};
-//Q_DECLARE_METATYPE(Scriptable_QVariantPropertyType)
+class Scriptable_QVariantPropertyType{};
+Q_DECLARE_METATYPE(Scriptable_QVariantPropertyType)
 
-class ScriptableQVariantPropertyWidget : public PropertyWidgetBase 
+class ScriptableVariantPropertySetting : public PropertySettingBase 
 {
 	Q_OBJECT
 
 public:
-	ScriptableQVariantPropertyWidget(QWidget *parent = NULL);
-	~ScriptableQVariantPropertyWidget();
+	ScriptableVariantPropertySetting(QWidget *parent = NULL);
+	~ScriptableVariantPropertySetting();
 
 	void setDerivedEditorAndManager(QtVariantPropertyManager *pManager, QWidget *pWidget, const int &nPropertyType, QtProperty *pDerivedProp);
 	void setFixedValue(const QString &sValue);
@@ -132,13 +123,13 @@ private:
 	QtVariantPropertyManager *pDerivedQVariantSubWidgetManager;
 };
 
-class StringArrayPropertyWidget : public PropertyWidgetBase 
+class StringArrayPropertySetting : public PropertySettingBase 
 {
 	Q_OBJECT
 
 public:
-	StringArrayPropertyWidget(QWidget *parent = NULL);
-	~StringArrayPropertyWidget();
+	StringArrayPropertySetting(QWidget *parent = NULL);
+	~StringArrayPropertySetting();
 
 	void setFixedValue(const QString &sValue);
 	void setSeperator(const QString &sSeperator);
@@ -159,13 +150,13 @@ private:
 	QString sCurrentSeperator;
 };
 
-class FilePathPropertyWidget : public PropertyWidgetBase
+class FilePathPropertySetting : public PropertySettingBase
 {
 	Q_OBJECT
 
 public:
-	FilePathPropertyWidget(QWidget *parent = NULL);
-	~FilePathPropertyWidget();
+	FilePathPropertySetting(QWidget *parent = NULL);
+	~FilePathPropertySetting();
 
 	void setFixedValue(const QString &sValue);
 
@@ -182,149 +173,18 @@ private:
 	QPixmap *pixmapIcon;
 };
 
-class RotationDirectionPropertyWidget : public PropertyWidgetBase 
-{
-	Q_OBJECT
-
-private slots:
-	void currentIndexChangedSlot(int nIndex);
-
-public:
-	RotationDirectionPropertyWidget(QWidget *parent = NULL);
-	~RotationDirectionPropertyWidget();
-
-	enum RotationDirectionEnum
-	{
-		ROTATION_DIR_COUNTERCLOCKWISE	= -1,
-		ROTATION_DIR_UNDEFINED			=  0,
-		ROTATION_DIR_CLOCKWISE			=  1
-	};
-
-	static QString rotationDirectionString(enum RotationDirectionEnum);
-	static RotationDirectionEnum rotationDirectionEnum(const QString &sName);
-	void setFixedValue(const QString &sValue);
-
-private:
-	void createEditorComponents();
-	void destroyEditorComponents();
-
-	static QMap<int, RotationDirectionEnum> indexToEnumHash;
-	static QMap<int, QString> mRotationDirection;
-
-	QComboBox *cmbSelection;
-};
-
-class MethodTypePropertyWidget : public PropertyWidgetBase 
-{
-	Q_OBJECT
-
-		private slots:
-			void currentIndexChangedSlot(int nIndex);
-
-public:
-	MethodTypePropertyWidget(QWidget *parent = NULL);
-	~MethodTypePropertyWidget();
-
-	void setFixedValue(const QString &sValue);
-
-private:
-	void createEditorComponents();
-	void destroyEditorComponents();
-
-	static QMap<int, ExperimentStructuresNameSpace::MethodType> indexToEnumMap;
-	static QMap<int, QString> mapMethodType;
-
-	QComboBox *cmbSelection;
-};
-
-class MovementDirectionPropertyWidget : public PropertyWidgetBase 
-{
-	Q_OBJECT
-
-private slots:
-	void currentIndexChangedSlot(int nIndex);
-
-public:
-	MovementDirectionPropertyWidget(QWidget *parent = NULL);
-	~MovementDirectionPropertyWidget();
-
-	enum MovementDirectionEnum
-	{
-		MOVEMENT_DIR_DOWNUP				= -1,
-		MOVEMENT_DIR_UNDEFINED			=  0,
-		MOVEMENT_DIR_UPDOWN				=  1
-	};
-
-	static QString movementDirectionString(enum MovementDirectionEnum eValue);
-	static MovementDirectionEnum movementDirectionEnum(const QString &sName);
-	void setFixedValue(const QString &sValue);
-
-private:
-	void createEditorComponents();
-	void destroyEditorComponents();
-
-	static QMap<int, MovementDirectionEnum> indexToEnumHash;
-	static QMap<int, QString> mMovementDirection;
-
-	QComboBox *cmbSelection;
-};
-
-class EccentricityDirectionPropertyWidget : public PropertyWidgetBase 
-{
-	Q_OBJECT
-
-private slots:
-	void currentIndexChangedSlot(int nIndex);
-
-public:
-	EccentricityDirectionPropertyWidget(QWidget *parent = NULL);
-	~EccentricityDirectionPropertyWidget();
-
-	enum EccentricityDirectionEnum
-	{
-		ECCENTRICITY_DIR_DECREASE		= -1,
-		ECCENTRICITY_DIR_UNDEFINED		=  0,
-		ECCENTRICITY_DIR_INCREASE		=  1
-	};
-
-	static QString eccentricityDirectionString(enum EccentricityDirectionEnum eValue);
-	static EccentricityDirectionEnum eccentricityDirectionEnum(const QString &sName);
-	void setFixedValue(const QString &sValue);
-
-private:
-	void createEditorComponents();
-	void destroyEditorComponents();
-
-	static QMap<int, EccentricityDirectionEnum> indexToEnumHash;
-	static QMap<int, QString> mEccentricityDirection;
-
-	QComboBox *cmbSelection;
-};
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
-class ExperimentParameterVisualizer;
-class VariantExtensionPropertyManager :	public QtVariantPropertyManager
+class PropertySettingsWidget;
+class VariantExtensionPropertySettingManager :	public QtVariantPropertyManager
 {
 	Q_OBJECT
 
 public:
 
-	VariantExtensionPropertyManager(ExperimentParameterVisualizer *parentParamVisualizer = NULL);
-	~VariantExtensionPropertyManager();
+	VariantExtensionPropertySettingManager(PropertySettingsWidget *parentPropSettWidget = NULL);
+	~VariantExtensionPropertySettingManager();
 
-	static int rotationDirectionTypeId()
-	{
-		return qMetaTypeId<RotationDirectionPropertyType>();
-	}
-	static int movementDirectionTypeId()
-	{
-		return qMetaTypeId<MovementDirectionPropertyType>();
-	}
-	static int eccentricityDirectionTypeId()
-	{
-		return qMetaTypeId<EccentricityDirectionPropertyType>();
-	}
 	static int stringArrayTypeId()
 	{
 		return qMetaTypeId<StringArrayPropertyType>();
@@ -333,14 +193,10 @@ public:
 	{
 		return qMetaTypeId<FilePathPropertyType>();
 	}
-	static int methodTypeTypeId()
+	static int scriptable_QVariantTypeId()
 	{
-		return qMetaTypeId<MethodTypePropertyType>();
+		return qMetaTypeId<Scriptable_QVariantPropertyType>();
 	}
-	//static int scriptable_QVariantTypeId()
-	//{
-	//	return qMetaTypeId<Scriptable_QVariantPropertyType>();
-	//}
 
 	bool isPropertyTypeSupported(int nPropertyType) const;
 	bool isCustomProperty(const QtProperty *pProperty) const;
@@ -358,7 +214,7 @@ public:
 
 public slots:
 	void setValue(QtProperty *property, const QVariant &val);
-	static QVariant resolveParameterValueType(const QVariant &vInput, const ExperimentParameterTypeName &sType, const bool &bToView);
+	static QVariant resolveParameterValueType(const QVariant &vInput, const int &nVariantType, const bool &bToView);
 
 protected:
 	QString valueText(const QtProperty *property) const;
@@ -378,18 +234,19 @@ private:
 		}
 	};
 	QMap<const QtProperty *, VariantExtensionPropertyData> mapVariantExtensionPropertyData;
-	ExperimentParameterVisualizer *parentParameterVisualizer;
+	PropertySettingsWidget *parentPropertySettingsWidget;
+
 };
 
 //////////////////////////////////////////////////////////////////////////////////
 
-class VariantExtensionPropertyFactory :	public QtVariantEditorFactory
+class VariantExtensionPropertySettingFactory :	public QtVariantEditorFactory
 {
 	Q_OBJECT
 
 public:
-	VariantExtensionPropertyFactory(ExperimentParameterVisualizer *pParentExpVis = NULL) : QtVariantEditorFactory((QObject*)pParentExpVis), pExperimentVisualizer(pParentExpVis) {};
-	~VariantExtensionPropertyFactory(){};
+	VariantExtensionPropertySettingFactory(PropertySettingsWidget *pPropSettWidget = NULL) : QtVariantEditorFactory((QObject*)pPropSettWidget), parentPropSettWidget(pPropSettWidget) {};
+	~VariantExtensionPropertySettingFactory(){};
 
 	QWidget *getEditorWidget(QtVariantPropertyManager *manager, QtVariantProperty *vProperty, const QString &sDerivedPrefixName, QWidget *parent, QString &sReturnUniquePropertyIdentifier, QtVariantProperty *&pDerivedVariantProperty, const QVariant &vValue, const bool &bDoInitWithValue, const bool &bIsScriptable);
 	bool setPropertyValue(QtVariantPropertyManager *manager, const QString &sUniquePropertyIdentifier, const QString &sValue, const bool &bSetModified = true);
@@ -402,11 +259,11 @@ private:
 
 	QMap<QtProperty *, QList<QWidget *>> createdEditors;
 	QMap<QWidget *, QtProperty *> editorToProperty;
-	ExperimentParameterVisualizer *pExperimentVisualizer;
+	PropertySettingsWidget *parentPropSettWidget;
 
 protected:
 	QWidget *createEditor(QtVariantPropertyManager *manager, QtProperty *property, QWidget *parent);
 };
 
-#endif
+#endif//PROPERTYSETTINGEXTENSIONS_H
 

@@ -19,8 +19,9 @@
 #include "objectconnectionsdialog.h"
 #include "ui_ObjectConnectionsDialog.h"
 #include "experimentmanager.h"
-#include "experimentparameterwidgets.h"
-#include "experimentparametervisualizer.h"
+#include "propertysettingswidgetcontainer.h"
+//sven #include "experimentparametervisualizer.h"
+#include "propertysettingswidget.h"//sven
 
 ObjectConnectionsDialog::ObjectConnectionsDialog(QWidget *parent) : QDialog(parent), bIsParsing(false), pCurrentExpStructure(NULL), twCurrentConnections(NULL), layoutTreeWidgetParent(NULL), pExpParamWidgets(NULL), pParametersWidget(NULL), pExperimentTreeModel(NULL), nCurrentObjectConnectionSelectionIdentifier(-1)
 {
@@ -138,7 +139,7 @@ void ObjectConnectionsDialog::prepareAndHideObjectConnectionConfiguration()
 bool ObjectConnectionsDialog::showConnectionWidget(const strcObjectConnectionInfo &ObjectConnectionInfoStrc)
 {
 	if(pExpParamWidgets == NULL)
-		pExpParamWidgets = ExperimentParameterWidgets::instance();
+		pExpParamWidgets = PropertySettingsWidgetContainer::instance();
 	if(pParametersWidget == NULL)
 	{
 		pParametersWidget = pExpParamWidgets->getExperimentParameterWidget(CONNECTION_OBJECT_TAG);

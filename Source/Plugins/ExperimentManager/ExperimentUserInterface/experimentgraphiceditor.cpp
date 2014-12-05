@@ -40,9 +40,10 @@
 #include "experimentgraphiceditor.h"
 #include "experimenttreeitem.h"
 #include "experimentstructurevisualizer.h"
-#include "experimentparametervisualizer.h"
-#include "experimentparameterdefinition.h"
-#include "experimentparameterwidgets.h"
+//sven #include "experimentparametervisualizer.h"
+//sven #include "experimentparameterdefinition.h"
+#include "propertysettingswidget.h"//sven
+#include "propertysettingswidgetcontainer.h"//sven
 #include "experimentblockparameterview.h"
 
 ExperimentGraphicEditor::ExperimentGraphicEditor(QWidget *parent) : QWidget(parent)
@@ -246,8 +247,8 @@ ExperimentGraphicEditor::~ExperimentGraphicEditor()
 
 void ExperimentGraphicEditor::configureCustomParameterWidgets()
 {
-	ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
-	ExperimentParameterVisualizer* tmpParametersWidget = NULL;
+	PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
+	PropertySettingsWidget* tmpParametersWidget = NULL;
 	
 	//Object Declarations
 	tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(DECLARATIONS_OBJECT_TAG);
@@ -765,7 +766,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 	if(treeView->model() == NULL)
 		return;
 	selectedIndex = index;	
-	ExperimentParameterVisualizer *tmpParametersWidget = NULL;
+	PropertySettingsWidget *tmpParametersWidget = NULL;
 	QVariant tmpVarValue;
 	QList<int> nIDList;
 	QModelIndex originalIndex = dynamic_cast<TreeFilterProxyModel*>(treeView->model())->mapToSource(index);
@@ -794,7 +795,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 			else
 			{
-				ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
+				PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
 				tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sParamCollName);
 				if(tmpParametersWidget == NULL)
 					qDebug() << __FUNCTION__ << "Could not fetch parameter collection widget named " << sParamCollName;
@@ -835,7 +836,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 			else
 			{
-				ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
+				PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
 				tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sParamCollName);
 				if(tmpParametersWidget == NULL)
 				{
@@ -878,7 +879,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 		}
 		else
 		{
-			ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
+			PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
 			tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sParamCollName);
 			if(tmpParametersWidget == NULL)
 				qDebug() << __FUNCTION__ << "Could not fetch parameter collection widget named " << sParamCollName;
@@ -911,7 +912,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 			else
 			{
-				ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
+				PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
 				tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sParamCollName);
 				if(tmpParametersWidget == NULL)
 				{
@@ -1006,7 +1007,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 				}
 				else
 				{
-					ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
+					PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
 					tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sParamCollName);
 					if (tmpParametersWidget == NULL)
 					{
@@ -1081,11 +1082,11 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 																			if (sParamType.isEmpty() == false)
 																			{
 																				//Add newly defined arguments
-																				ExperimentParameterDefinitionStrc *tmpExpParamDefStrc = new ExperimentParameterDefinitionStrc();
+																				PropertySettingDefinitionStrc *tmpExpParamDefStrc = new PropertySettingDefinitionStrc();
 																				tmpExpParamDefStrc->bCanBeScriptReference = false;
 																				tmpExpParamDefStrc->bEnabled = true;
 																				tmpExpParamDefStrc->bIsEditable = false;
-																				tmpExpParamDefStrc->eType = Experiment_ParameterType_Integer;
+																				tmpExpParamDefStrc->eType = PropertySetting_Type_Integer;
 																				tmpExpParamDefStrc->nId = nAddParamCntr;
 																				tmpExpParamDefStrc->sDefaultValue = "0";
 																				tmpExpParamDefStrc->sName = sParamName;
@@ -1185,7 +1186,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 			else
 			{
-				ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
+				PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
 				tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sParamCollName);
 				if(tmpParametersWidget == NULL)
 				{
@@ -1277,7 +1278,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 										}
 										else
 										{
-											ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
+											PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
 											tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sParamCollName);
 											if(tmpParametersWidget == NULL)
 												qDebug() << __FUNCTION__ << "Could not fetch parameter collection widget named " << sParamCollName;
@@ -1367,7 +1368,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 					}
 					if(sParamCollName.isEmpty() == false)
 					{
-						ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
+						PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
 						if(bParamCollectionPresent == false)
 						{
 							if(staticGraphicWidgetsHashTable.contains(sParamCollName + CUSTOMOBJECTPARAMS_POSTSTRING))
@@ -1419,8 +1420,8 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 						}
 						if(child && bParamCollectionPresent)
 						{
-							QList<ExperimentParameterDefinitionStrc> *lExpParamsDefStrcs = new QList<ExperimentParameterDefinitionStrc>;
-							ExperimentParameterDefinitionStrc tmpExperimentParameterDefinitionStrc;
+							QList<PropertySettingDefinitionStrc> *lExpParamsDefStrcs = new QList<PropertySettingDefinitionStrc>;
+							PropertySettingDefinitionStrc tmpExperimentParameterDefinitionStrc;
 							if((child->getName().toLower() == PARAMETER_TAG))
 							{
 								if(child->hasChildren())
@@ -1446,7 +1447,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 												if(tmpParametersWidget->checkIfParameterExists(sName)==false)
 												{
 													tmpExperimentParameterDefinitionStrc.bEnabled = true;
-													tmpExperimentParameterDefinitionStrc.eType = Experiment_ParameterType_String;
+													tmpExperimentParameterDefinitionStrc.eType = PropertySetting_Type_String;
 													tmpExperimentParameterDefinitionStrc.nId = i;
 													tmpExperimentParameterDefinitionStrc.sName = sName;
 													tmpExperimentParameterDefinitionStrc.sDisplayName = sName;
@@ -1502,7 +1503,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 				}
 				else
 				{
-					ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
+					PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
 					tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sParamCollName);
 					if(tmpParametersWidget == NULL)
 					{
@@ -1540,7 +1541,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 			else
 			{
-				ExperimentParameterWidgets *expParamWidgets = ExperimentParameterWidgets::instance();
+				PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
 				tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sParamCollName);
 				if(tmpParametersWidget == NULL)
 				{

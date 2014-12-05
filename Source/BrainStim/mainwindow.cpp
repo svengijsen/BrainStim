@@ -23,7 +23,6 @@
 #include "svgview.h"
 #include "aboutqtdialog.h"  
 #include "sleepthread.h"
-#include "optionpage.h"
 #include <QPluginLoader>
 #include <QtPlugin>
 #include <QFileInfo>
@@ -34,6 +33,7 @@
 #include <QTabWidget>
 #include "outputlistdelegate.h"
 #include "custommdisubwindow.h"
+#include "propertysettingswidgetcontainer.h"
 
 #include "../Plugins/ParallelPortDevice/parallelport.h"
 #include "../Plugins/ExperimentManager/experimentmanager.h"
@@ -45,6 +45,7 @@ GlobalApplicationInformation *MainWindow::globAppInfo = NULL;
 MainWindow::MainWindow() : DocumentWindow(), SVGPreviewer(new SvgView)
 {
 	Plugins = NULL;
+	pMainOptionPage = NULL;
 	tcpServer = NULL;
 	DocManager = NULL;
 	AppScriptEngine = NULL;
@@ -282,6 +283,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
 			}
 		}
 	}
+	if (pMainOptionPage)
+	{
+		delete pMainOptionPage;
+		pMainOptionPage = NULL;
+	}
+	MainAppInfo::destructCustomPropertySettingObjects();
 	shutdownNetworkServer();
 }
 
@@ -2995,10 +3002,16 @@ void MainWindow::openOptionsDialog()
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
 	int returnVal;
-	OptionPage MainOptionPage(this, globAppInfo);
-	returnVal = MainOptionPage.exec();
+	if (pMainOptionPage)
+	{
+		delete pMainOptionPage;
+	}
+	pMainOptionPage = new OptionPage(this, globAppInfo);
+	pMainOptionPage->setPluginTabControlWidgets(mapPluginOptionWidgetsByPluginName);
+	returnVal = pMainOptionPage->exec();
 
-	switch (returnVal) {
+	switch (returnVal) 
+	{
 	case QDialog::Accepted:
 		// Ok was clicked
 		parseRemainingGlobalSettings();
@@ -4114,10 +4127,84 @@ void MainWindow::findPrev()
 #ifdef DEBUG
 void MainWindow::debugTestSlot()
 {
-	//write2OutputWindow("debugTestSlot() called");
-	//QRect tmpRect = debugLogDock->geometry();
-	//tmpRect.setHeight(200);
-	//debugLogDock->widget()->setGeometry(tmpRect);
-	//debugLogDock->setGeometry(tmpRect);
+	QString sName = "ExperimentManager";
+	QString sPath = "E:/Projects/BrainStim/Source/Plugins/ExperimentManager/resources/";
+
+	PropertySettingsWidgetContainer *tmpExpParWidgets = PropertySettingsWidgetContainer::instance();
+	if (tmpExpParWidgets->loadExperimentParameterDefinition(sName.toLower() + ".xdef", sName.toLower(), true, sPath))
+	{
+		PropertySettingsWidget *tmpExpParamViz = tmpExpParWidgets->getExperimentParameterWidget(sName.toLower());
+		if (tmpExpParamViz)
+		{
+			//QString sParamName = "block_number";
+			//QString sParamValue = "99";
+			//if (tmpExpParamViz->checkIfParameterExists(sParamName))
+			//{
+			//	tmpExpParamViz->setParameter(sParamName, sParamValue, false, true);
+			//}
+			mapPluginOptionWidgetsByPluginName.insert(sName, tmpExpParamViz);
+		}
+	}
+
+	//if (tmpExpParWidgets->createCustomExperimentParameterWidgetCollection(sName.toLower(), true))
+
+	/*
+	if(tmpParametersWidget)
+	{
+	if(tmpParametersWidget->checkIfParameterExists(sName)==false)
+	{
+	tmpExperimentParameterDefinitionStrc.bEnabled = true;
+	tmpExperimentParameterDefinitionStrc.eType = PropertySetting_Type_String;
+	tmpExperimentParameterDefinitionStrc.nId = i;
+	tmpExperimentParameterDefinitionStrc.sName = sName;
+	tmpExperimentParameterDefinitionStrc.sDisplayName = sName;
+	tmpExperimentParameterDefinitionStrc.bCanBeScriptReference = true;
+	tmpExperimentParameterDefinitionStrc.sInformation = EXPERIMENT_CUSTOMPARAM_INFOSTRING;
+
+	lExpParamsDefStrcs->append(tmpExperimentParameterDefinitionStrc);
+
+	tmpParametersWidget = expParamWidgets->insertCustomExperimentParameterWidget(sParamCollName + CUSTOMOBJECTPARAMS_POSTSTRING,lExpParamsDefStrcs);
+	if(tmpParametersWidget)
+	{
+	tmpParametersWidget->setParameter(sName,sValue,true,true);
+	}
+	}
+	else
+	{
+	tmpParametersWidget->setParameter(sName,sValue,true,true);
+	}
+	}
+	*/
+
+
+	/*
+		if(pExpParamWidgets == NULL)
+		pExpParamWidgets = PropertySettingsWidgetContainer::instance();
+		if(pParametersWidget == NULL)
+		{
+		pParametersWidget = pExpParamWidgets->getExperimentParameterWidget(LOOP_TAG);
+		if(pParametersWidget)
+		{
+		if(layoutTreeWidgetParent)
+		layoutTreeWidgetParent->insertWidget(0,pParametersWidget);
+		connect((QObject*)pParametersWidget, SIGNAL(rootItemEditFinished(const QString&, const QString&)), this, SLOT(blockLoopDefinitionItemEditFinished(const QString&, const QString&)),Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
+		}
+		else
+		{
+		qDebug() << __FUNCTION__ << "Could not fetch the Loop widget.";
+		return false;
+		}
+		}
+		if(blockLoopInfoStrc.pLoopStruct)
+		{
+		pParametersWidget->setParameter(NAME_TAG,blockLoopInfoStrc.pLoopStruct->getLoopName(),true,true);
+		pParametersWidget->setParameter(LOOP_NUMBER_TAG,QString::number(blockLoopInfoStrc.pLoopStruct->getLoopNumber()),true,true);
+		pParametersWidget->setParameter(LOOP_AMOUNT_TAG,QString::number(blockLoopInfoStrc.pLoopStruct->getNumberOfLoops()),true,true);
+		pParametersWidget->setParameter(LOOP_TARGETBLOCKID_TAG,QString::number(blockLoopInfoStrc.pLoopStruct->getTargetBlockID()),true,true);
+		}
+		return true;
+	*/
+
+
 }
 #endif

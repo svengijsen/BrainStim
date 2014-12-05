@@ -19,8 +19,9 @@
 #include "blockloopsdialog.h"
 #include "ui_BlockLoopsDialog.h"
 #include "experimentmanager.h"
-#include "experimentparameterwidgets.h"
-#include "experimentparametervisualizer.h"
+#include "propertysettingswidget.h"//sven
+//sven #include "experimentparametervisualizer.h"
+#include "./../../BrainStim/propertysettingswidgetcontainer.h"//sven
 
 BlockLoopsDialog::BlockLoopsDialog(QWidget *parent) : QDialog(parent), bIsParsing(false), pCurrentExpStructure(NULL), twCurrentLoops(NULL), layoutTreeWidgetParent(NULL), pExpParamWidgets(NULL), pParametersWidget(NULL), pExperimentTreeModel(NULL), nCurrentBlockLoopSelectionIdentifier(-1)
 {
@@ -143,7 +144,7 @@ void BlockLoopsDialog::prepareAndHideBlockLoopConfiguration()
 bool BlockLoopsDialog::showLoopWidget(const strcBlockLoopInfo &blockLoopInfoStrc)
 {
 	if(pExpParamWidgets == NULL)
-		pExpParamWidgets = ExperimentParameterWidgets::instance();
+		pExpParamWidgets = PropertySettingsWidgetContainer::instance();
 	if(pParametersWidget == NULL)
 	{
 		pParametersWidget = pExpParamWidgets->getExperimentParameterWidget(LOOP_TAG);

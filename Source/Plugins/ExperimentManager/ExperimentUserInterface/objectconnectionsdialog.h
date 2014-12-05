@@ -23,12 +23,12 @@
 #include <QTreeWidget>
 #include <QHBoxLayout>
 #include "experimenttreemodel.h"
-#include "experimentparameterdefinition.h"
+//sven #include "experimentparameterdefinition.h"
 
 namespace Ui {class ObjectConnectionsDialog;};
 
-class ExperimentParameterWidgets;
-class ExperimentParameterVisualizer;
+class PropertySettingsWidgetContainer;
+class PropertySettingsWidget;
 
 class ObjectConnectionsDialog : public QDialog
 {
@@ -96,8 +96,8 @@ private:
 	QHash<int, QMetaMethod> hashFromComboMethodIndexToMetaMethod;
 	QHash<int, QMetaMethod> hashToComboMethodIndexToMetaMethod;
 	QHBoxLayout *layoutTreeWidgetParent;
-	ExperimentParameterWidgets *pExpParamWidgets;
-	ExperimentParameterVisualizer *pParametersWidget;
+	PropertySettingsWidgetContainer *pExpParamWidgets;
+	PropertySettingsWidget *pParametersWidget;
 	int nCurrentObjectConnectionSelectionIdentifier;
 };
 

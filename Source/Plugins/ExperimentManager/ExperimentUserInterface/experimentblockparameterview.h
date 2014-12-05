@@ -22,7 +22,9 @@
 #include <QTableWidgetItem>
 #include "mainappinfo.h"
 #include "experimentstructures.h"
-#include "experimentparameterdefinition.h"
+//sven #include "experimentparameterdefinition.h"
+#include "propertysettingdefinition.h"//sven 
+
 
 #define BLOCKPARAMVIEW_DEFAULTBLOCKHEADER_COUNT			4
 //#define BLOCKPARAMVIEW_BLOCKNUMBER_ROWORCOLUMNINDEX	0
@@ -87,22 +89,22 @@ private:
 		int nRowOrColumnIndex;
 		int nObjectID;
 		QString sHeader;
-		ParameterEditingType eParamEditType;
-		ExperimentParameterDefinitionStrc *strcParamDef;
+		PropertySettingEditingType eParamEditType;
+		PropertySettingDefinitionStrc *strcParamDef;
 		strcRowOrColumnInfo()
 		{
 			nRowOrColumnIndex = -1;
 			nObjectID = -1;
 			sHeader = "";
 			strcParamDef = NULL;
-			eParamEditType = PEM_DEFINED;
+			eParamEditType = PSET_DEFINED;
 		}
 	};
 
 	struct strcExperimentObjectInfo
 	{
 		ExperimentStructuresNameSpace::strcExperimentObject ObjectGlobalInfo;
-		ExperimentParameterDefinitionContainer *pObjectParamDefContainer;
+		PropertySettingDefinition *pObjectParamDefContainer;
 		QString sObjectName;
 		strcExperimentObjectInfo()
 		{

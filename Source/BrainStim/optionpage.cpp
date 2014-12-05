@@ -43,6 +43,44 @@ OptionPage::~OptionPage()
 {
 	disconnect(ui.buttonBox, SIGNAL(accepted()), this, SLOT(validateAndApplySettings()));	
 	disconnect(ui.buttonBox, SIGNAL(rejected()), this, SLOT(reject()));
+	for (int i = 0; i < ui.twPlugins->count();i++)
+	{
+		if (ui.twPlugins->widget(i))
+			ui.twPlugins->widget(i)->setParent(NULL);//To prevent a automatic destruction
+	}
+}
+
+bool OptionPage::setPluginTabControlWidgets(QMap<QString, PropertySettingsWidget *> &lPluginOptionWidgets)
+{
+	mapPluginWidgets.clear();
+	mapPluginWidgets = lPluginOptionWidgets;
+	QMapIterator<QString, PropertySettingsWidget *> iter(mapPluginWidgets);
+	while (iter.hasNext()) 
+	{
+		iter.next();
+		if (iter.value())
+		{
+
+			//if (glob_AppInfo->getRegistryInformation(REGISTRY_ENABLENETWORKSERVER, tmpVariant))
+
+			QString sParamName = "block_number";
+			QString sParamValue = "99";
+			if (iter.value()->checkIfParameterExists(sParamName))
+			{
+				iter.value()->setParameter(sParamName, sParamValue, false, true);
+			}
+
+			connect((QObject*)iter.value(), SIGNAL(rootItemEditFinished(const QString&, const QString&)), this, SLOT(pluginSettingEditFinished(const QString&, const QString&)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
+			ui.twPlugins->addTab(iter.value(), iter.key());
+		}
+	}
+	return true;
+}
+
+void OptionPage::pluginSettingEditFinished(const QString &sParamName, const QString &sNewValue)
+{
+	int p = 9;
+	//const QString &sParamName, const QString &sNewValue
 }
 
 void OptionPage::validateAndApplySettings()

@@ -23,12 +23,12 @@
 #include <QTreeWidget>
 #include <QHBoxLayout>
 #include "experimenttreemodel.h"
-#include "experimentparameterdefinition.h"
+//sven #include "experimentparameterdefinition.h"
 
 namespace Ui {class ExperimentObjectsDialog;};
 
-class ExperimentParameterWidgets;
-class ExperimentParameterVisualizer;
+class PropertySettingsWidgetContainer;
+class PropertySettingsWidget;
 
 class ExperimentObjectsDialog : public QDialog
 {
@@ -108,11 +108,11 @@ private:
 	QHBoxLayout *layoutObjectDeclarationTreeWidgetParent;
 	QHBoxLayout *layoutObjectInitTreeWidgetParent;
 	QHBoxLayout *layoutObjectFinitTreeWidgetParent;
-	ExperimentParameterWidgets *pExpParamWidgets;
-	ExperimentParameterVisualizer *pObjectDeclarationWidget;
-	ExperimentParameterVisualizer *pObjectInitsWidget;
-	ExperimentParameterVisualizer *pObjectFinitsWidget;
-	ExperimentParameterVisualizer **pObjectInitFinitWidget;
+	PropertySettingsWidgetContainer *pExpParamWidgets;
+	PropertySettingsWidget *pObjectDeclarationWidget;
+	PropertySettingsWidget *pObjectInitsWidget;
+	PropertySettingsWidget *pObjectFinitsWidget;
+	PropertySettingsWidget **pObjectInitFinitWidget;
 	int nCurrentObjectSelectionIdentifier;
 	int nCurrentObjectInitSelectionIdentifier;
 	int nCurrentObjectFinitSelectionIdentifier;

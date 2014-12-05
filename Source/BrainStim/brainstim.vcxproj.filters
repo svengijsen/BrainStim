@@ -353,6 +353,54 @@
     <ClCompile Include="..\..\Build_MSVC\Qt\x64\Release\Moc\moc_logindialog.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_propertysettingextensions.cpp">
+      <Filter>Generated Files\Debug_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_propertysettingextensions.cpp">
+      <Filter>Generated Files\Debug_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_propertysettingextensions.cpp">
+      <Filter>Generated Files\Release_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Release\Moc\moc_propertysettingextensions.cpp">
+      <Filter>Generated Files\Release_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_propertysettingswidget.cpp">
+      <Filter>Generated Files\Debug_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_propertysettingswidget.cpp">
+      <Filter>Generated Files\Debug_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_propertysettingswidget.cpp">
+      <Filter>Generated Files\Release_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Release\Moc\moc_propertysettingswidget.cpp">
+      <Filter>Generated Files\Release_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_propertysettingswidgetcontainer.cpp">
+      <Filter>Generated Files\Debug_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_propertysettingswidgetcontainer.cpp">
+      <Filter>Generated Files\Debug_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_propertysettingswidgetcontainer.cpp">
+      <Filter>Generated Files\Release_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Release\Moc\moc_propertysettingswidgetcontainer.cpp">
+      <Filter>Generated Files\Release_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="propertysettingdefinition.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="propertysettingextensions.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="propertysettingswidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="propertysettingswidgetcontainer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -372,6 +420,15 @@
     </ClInclude>
     <ClInclude Include="brainstim.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="propertysetting.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="propertysettingdefinition.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_propertysettingswidget.h">
+      <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -493,6 +550,18 @@
     </CustomBuild>
     <CustomBuild Include="logindialog.h">
       <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="propertysettingextensions.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="propertysettingswidget.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="propertysettingswidgetcontainer.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="propertysettingswidget.ui">
+      <Filter>Form Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

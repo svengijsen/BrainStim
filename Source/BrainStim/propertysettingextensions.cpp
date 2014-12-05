@@ -1,4 +1,4 @@
-//ExperimentManagerplugin
+//BrainStim
 //Copyright (C) 2014  Sven Gijsen
 //
 //This file is part of BrainStim.
@@ -16,23 +16,24 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "parameterpropertyextensions.h"
-#include "experimentparametervisualizer.h"
+#include "propertysettingextensions.h"
+#include "propertysettingswidget.h"
 #include <QFileDialog>
 #include <QCheckBox>
+#include <QMetaMethod>
 
-QMap<int, QString> RotationDirectionPropertyWidget::mRotationDirection;
-QMap<int, RotationDirectionPropertyWidget::RotationDirectionEnum> RotationDirectionPropertyWidget::indexToEnumHash;
-QMap<int, QString> MovementDirectionPropertyWidget::mMovementDirection;
-QMap<int, MovementDirectionPropertyWidget::MovementDirectionEnum> MovementDirectionPropertyWidget::indexToEnumHash;
-QMap<int, QString> EccentricityDirectionPropertyWidget::mEccentricityDirection;
-QMap<int, EccentricityDirectionPropertyWidget::EccentricityDirectionEnum> EccentricityDirectionPropertyWidget::indexToEnumHash;
-QMap<int, QString> MethodTypePropertyWidget::mapMethodType;
-QMap<int, ExperimentStructuresNameSpace::MethodType> MethodTypePropertyWidget::indexToEnumMap;
+//QMap<int, QString> RotationDirectionPropertySetting::mRotationDirection;
+//QMap<int, RotationDirectionPropertySetting::RotationDirectionEnum> RotationDirectionPropertySetting::indexToEnumHash;
+//QMap<int, QString> MovementDirectionPropertySetting::mMovementDirection;
+//QMap<int, MovementDirectionPropertySetting::MovementDirectionEnum> MovementDirectionPropertySetting::indexToEnumHash;
+//sven QMap<int, QString> EccentricityDirectionPropertyWidget::mEccentricityDirection;
+//sven QMap<int, EccentricityDirectionPropertyWidget::EccentricityDirectionEnum> EccentricityDirectionPropertyWidget::indexToEnumHash;
+//sven QMap<int, QString> MethodTypePropertyWidget::mapMethodType;
+//sven QMap<int, ExperimentStructuresNameSpace::MethodType> MethodTypePropertyWidget::indexToEnumMap;
 
 ///////////////////////////////////////////////////////////////////////////////
 
-PropertyWidgetBase::PropertyWidgetBase(QWidget *parent) : parentWidget(parent), QWidget(parent)
+PropertySettingBase::PropertySettingBase(QWidget *parent) : parentWidget(parent), QWidget(parent)
 {
 	layout = NULL;
 	sIconSize = NULL;
@@ -57,7 +58,7 @@ PropertyWidgetBase::PropertyWidgetBase(QWidget *parent) : parentWidget(parent), 
 	this->setFocusPolicy(Qt::ClickFocus);//Important!!!
 }
 
-PropertyWidgetBase::~PropertyWidgetBase()
+PropertySettingBase::~PropertySettingBase()
 {
 	if (layout)
 	{
@@ -76,13 +77,13 @@ PropertyWidgetBase::~PropertyWidgetBase()
 	}
 }
 
-void PropertyWidgetBase::installEventFilterFromWidget(QWidget *pWidget)
+void PropertySettingBase::installEventFilterFromWidget(QWidget *pWidget)
 {
-	pWidget->installEventFilter((PropertyWidgetBase*)this);
+	pWidget->installEventFilter((PropertySettingBase*)this);
 	pEventFilterWidget = pWidget;
 }
 
-bool PropertyWidgetBase::eventFilter(QObject* object, QEvent* event)
+bool PropertySettingBase::eventFilter(QObject* object, QEvent* event)
 {
 	if(((object == pEventFilterWidget) || (object == leVariabeleParameter)) && event->type() == QEvent::FocusOut)//QEvent::MouseClick) 
 	{
@@ -95,7 +96,7 @@ bool PropertyWidgetBase::eventFilter(QObject* object, QEvent* event)
 	return false;
 }
 
-void PropertyWidgetBase::createNewLayout()
+void PropertySettingBase::createNewLayout()
 {
 	if(layout)
 	{
@@ -114,7 +115,7 @@ void PropertyWidgetBase::createNewLayout()
 	}
 }
 
-QHBoxLayout *PropertyWidgetBase::getMainLayout()
+QHBoxLayout *PropertySettingBase::getMainLayout()
 { 
 	if(layout == NULL)
 	{
@@ -128,13 +129,13 @@ QHBoxLayout *PropertyWidgetBase::getMainLayout()
 	return layout; 
 }
 
-void PropertyWidgetBase::setCustomFixedWidgetList(const QList<strcCustomFixedWidget> &lCustFixWidgets)
+void PropertySettingBase::setCustomFixedWidgetList(const QList<strcCustomFixedWidget> &lCustFixWidgets)
 {
 	lCustomFixedWidgets = lCustFixWidgets;
 	addCustomFixedWidgetsToLayout();
 }
 
-void PropertyWidgetBase::setScriptability(const bool &bIsScriptable) 
+void PropertySettingBase::setScriptability(const bool &bIsScriptable) 
 {
 	if(bIsScriptableParameter != bIsScriptable)
 	{
@@ -143,10 +144,10 @@ void PropertyWidgetBase::setScriptability(const bool &bIsScriptable)
 	}
 }
 
-void PropertyWidgetBase::setValue(const QString &sValue)
+void PropertySettingBase::setValue(const QString &sValue)
 {
 	bool bSomethingChanged = false;
-	bool bIsScriptRef = VariantExtensionPropertyManager::isScriptReferenceString(sValue);
+	bool bIsScriptRef = VariantExtensionPropertySettingManager::isScriptReferenceString(sValue);
 	if(bIsFixedParamValue != (bIsScriptRef == false))//Is the stored bIsFixedParamValue value incorrect?
 	{
 		changeParamValueType(bIsScriptRef == false);
@@ -176,7 +177,7 @@ void PropertyWidgetBase::setValue(const QString &sValue)
 	}
 }
 
-QString PropertyWidgetBase::getValue()
+QString PropertySettingBase::getValue()
 {
 	if(bIsFixedParamValue)
 	{
@@ -190,26 +191,26 @@ QString PropertyWidgetBase::getValue()
 	}
 }
 
-void PropertyWidgetBase::setAndEmitEditedValue(const QString &sValue)
+void PropertySettingBase::setAndEmitEditedValue(const QString &sValue)
 {
 	setValue(sValue);
 	emit PropertyWidgetChanged(sValue);
 }
 
-void PropertyWidgetBase::variabeleParameterNameChanged(const QString &sParamName)
+void PropertySettingBase::variabeleParameterNameChanged(const QString &sParamName)
 {
 	if(sParamName.isEmpty())
 		return;
 	setAndEmitEditedValue("{" + sParamName + "}");
 }
 
-void PropertyWidgetBase::changeParamValueTypeClicked()
+void PropertySettingBase::changeParamValueTypeClicked()
 {
 	changeParamValueType(!bIsFixedParamValue);
 	setAndEmitEditedValue(getValue());
 }
 
-void PropertyWidgetBase::changeParamValueType(const bool &bNewParamValueIsFixed, const bool &bForceUpdate)
+void PropertySettingBase::changeParamValueType(const bool &bNewParamValueIsFixed, const bool &bForceUpdate)
 {
 	if(bForceUpdate == false)
 	{
@@ -227,7 +228,7 @@ void PropertyWidgetBase::changeParamValueType(const bool &bNewParamValueIsFixed,
 		changeParamValueButton->setIcon(iFixedIcon);
 		if(leVariabeleParameter)
 		{
-			leVariabeleParameter->removeEventFilter((PropertyWidgetBase*)this);
+			leVariabeleParameter->removeEventFilter((PropertySettingBase*)this);
 			delete leVariabeleParameter;
 			leVariabeleParameter = NULL;
 		}
@@ -241,14 +242,14 @@ void PropertyWidgetBase::changeParamValueType(const bool &bNewParamValueIsFixed,
 		createNewLayout();
 		leVariabeleParameter = new QLineEdit();
 		connect(leVariabeleParameter, SIGNAL(textEdited(QString)), this, SLOT(variabeleParameterNameChanged(QString)));
-		leVariabeleParameter->installEventFilter((PropertyWidgetBase*)this);
+		leVariabeleParameter->installEventFilter((PropertySettingBase*)this);
 		QString sNewExtractedValue = sCurrentVariabeleValue.mid(1,sCurrentVariabeleValue.length()-2);
 		leVariabeleParameter->setText(sNewExtractedValue);
 		layout->addWidget(leVariabeleParameter, 9);		
 	}
 }
 
-void PropertyWidgetBase::addCustomFixedWidgetsToLayout()
+void PropertySettingBase::addCustomFixedWidgetsToLayout()
 {
 	if(lCustomFixedWidgets.isEmpty()==false)
 	{
@@ -266,7 +267,7 @@ void PropertyWidgetBase::addCustomFixedWidgetsToLayout()
 	}
 }
 
-void PropertyWidgetBase::removeCustomFixedWidgetsFromLayout()
+void PropertySettingBase::removeCustomFixedWidgetsFromLayout()
 {
 	if(lCustomFixedWidgets.isEmpty()==false)
 	{
@@ -282,18 +283,18 @@ void PropertyWidgetBase::removeCustomFixedWidgetsFromLayout()
 
 ///////////////////////////////////////////////////////////////////////////////
 
-ScriptableQVariantPropertyWidget::ScriptableQVariantPropertyWidget(QWidget *parent) : PropertyWidgetBase(parent), derivedQVariantSubWidget(NULL), derivedQVariantSubWidgetProperty(NULL), derivedQVariantSubWidgetType(-1), pDerivedQVariantSubWidgetManager(NULL)
+ScriptableVariantPropertySetting::ScriptableVariantPropertySetting(QWidget *parent) : PropertySettingBase(parent), derivedQVariantSubWidget(NULL), derivedQVariantSubWidgetProperty(NULL), derivedQVariantSubWidgetType(-1), pDerivedQVariantSubWidgetManager(NULL)
 {
 	//this->setFocusPolicy(Qt::ClickFocus);//Important!!!
 }
 
-ScriptableQVariantPropertyWidget::~ScriptableQVariantPropertyWidget()
+ScriptableVariantPropertySetting::~ScriptableVariantPropertySetting()
 {
 	//if(derivedQVariantSubWidget)//is destructed in base class?
 	//if(parentLayout)//is destructed in base class!
 }
 
-void ScriptableQVariantPropertyWidget::setDerivedEditorAndManager(QtVariantPropertyManager *pManager, QWidget *pWidget, const int &nPropertyType, QtProperty *pDerivedProp)
+void ScriptableVariantPropertySetting::setDerivedEditorAndManager(QtVariantPropertyManager *pManager, QWidget *pWidget, const int &nPropertyType, QtProperty *pDerivedProp)
 {
 	if(pManager)
 	{
@@ -323,7 +324,7 @@ void ScriptableQVariantPropertyWidget::setDerivedEditorAndManager(QtVariantPrope
 	return;
 }
 
-void ScriptableQVariantPropertyWidget::derivedEditorSelectionChanged(const int &nIndex)
+void ScriptableVariantPropertySetting::derivedEditorSelectionChanged(const int &nIndex)
 {
 	if(derivedQVariantSubWidgetType>0)
 	{
@@ -337,7 +338,7 @@ void ScriptableQVariantPropertyWidget::derivedEditorSelectionChanged(const int &
 	}
 }
 
-void ScriptableQVariantPropertyWidget::setFixedValue(const QString &sValue)
+void ScriptableVariantPropertySetting::setFixedValue(const QString &sValue)
 {
 	QString sObjectName = derivedQVariantSubWidget->objectName();
 	if(derivedQVariantSubWidget)
@@ -365,7 +366,7 @@ void ScriptableQVariantPropertyWidget::setFixedValue(const QString &sValue)
 
 ///////////////////////////////////////////////////////////////////////////////
 
-StringArrayPropertyWidget::StringArrayPropertyWidget(QWidget *parent) : PropertyWidgetBase(parent)
+StringArrayPropertySetting::StringArrayPropertySetting(QWidget *parent) : PropertySettingBase(parent)
 {
 	tmpDialog = NULL;
 	dialogLayout = NULL;
@@ -376,7 +377,7 @@ StringArrayPropertyWidget::StringArrayPropertyWidget(QWidget *parent) : Property
 	createEditorComponents();
 }
 
-void StringArrayPropertyWidget::createEditorComponents()
+void StringArrayPropertySetting::createEditorComponents()
 {
 	destroyEditorComponents();
 	cmbStringArrayConf = new QComboBox(getParentWidget());
@@ -396,7 +397,7 @@ void StringArrayPropertyWidget::createEditorComponents()
 	setCustomFixedWidgetList(lTmpCustomFixedWidgetList);
 }
 
-void StringArrayPropertyWidget::destroyEditorComponents()
+void StringArrayPropertySetting::destroyEditorComponents()
 {
 	if(cmbStringArrayConf)
 	{
@@ -405,7 +406,7 @@ void StringArrayPropertyWidget::destroyEditorComponents()
 	}
 }
 
-void StringArrayPropertyWidget::setFixedValue(const QString &sValue)
+void StringArrayPropertySetting::setFixedValue(const QString &sValue)
 {
 	if(cmbStringArrayConf->count() > 1)
 	{
@@ -414,7 +415,7 @@ void StringArrayPropertyWidget::setFixedValue(const QString &sValue)
 	}
 }
 
-StringArrayPropertyWidget::~StringArrayPropertyWidget()
+StringArrayPropertySetting::~StringArrayPropertySetting()
 {
 	if(cmbStringArrayConf)
 	{
@@ -443,12 +444,12 @@ StringArrayPropertyWidget::~StringArrayPropertyWidget()
 	}
 }
 
-void StringArrayPropertyWidget::setSeperator(const QString &sSeperator)
+void StringArrayPropertySetting::setSeperator(const QString &sSeperator)
 {
 	sCurrentSeperator = sSeperator;
 }
 
-void StringArrayPropertyWidget::currentIndexChangedSlot(int nIndex)
+void StringArrayPropertySetting::currentIndexChangedSlot(int nIndex)
 {
 	if(nIndex==1)//Edit
 	{
@@ -473,7 +474,7 @@ void StringArrayPropertyWidget::currentIndexChangedSlot(int nIndex)
 	}
 }
 
-void StringArrayPropertyWidget::checkAcception()
+void StringArrayPropertySetting::checkAcception()
 {	
 	if(tmpDialog)
 	{
@@ -483,7 +484,7 @@ void StringArrayPropertyWidget::checkAcception()
 
 /////////////////////////////////////////////////////////////////////////////////
 
-FilePathPropertyWidget::FilePathPropertyWidget(QWidget *parent): PropertyWidgetBase(parent)
+FilePathPropertySetting::FilePathPropertySetting(QWidget *parent): PropertySettingBase(parent)
 {
 	browseButton = NULL;
 	leFilePath = NULL;
@@ -491,7 +492,7 @@ FilePathPropertyWidget::FilePathPropertyWidget(QWidget *parent): PropertyWidgetB
 	//this->setFocusPolicy(Qt::ClickFocus);//Important!!!
 }
 
-FilePathPropertyWidget::~FilePathPropertyWidget()
+FilePathPropertySetting::~FilePathPropertySetting()
 {
 	if(browseButton)
 	{
@@ -510,7 +511,7 @@ FilePathPropertyWidget::~FilePathPropertyWidget()
 	}
 }
 
-void FilePathPropertyWidget::createEditorComponents()
+void FilePathPropertySetting::createEditorComponents()
 {
 	destroyEditorComponents();
 	browseButton = new QToolButton(getParentWidget());
@@ -536,7 +537,7 @@ void FilePathPropertyWidget::createEditorComponents()
 	setCustomFixedWidgetList(lTmpCustomFixedWidgetList);
 }
 
-void FilePathPropertyWidget::destroyEditorComponents()
+void FilePathPropertySetting::destroyEditorComponents()
 {
 	if(browseButton)
 	{
@@ -551,7 +552,7 @@ void FilePathPropertyWidget::destroyEditorComponents()
 	}
 }
 
-void FilePathPropertyWidget::browseForFile()
+void FilePathPropertySetting::browseForFile()
 {
 	QString sFileName = QFileDialog::getOpenFileName(this, tr("Select File"), "", tr("All Files (*.*)"));//tr("Experiment Files (*.exml);;XML Files (*.xml)"));
 	if(sFileName.isEmpty()==false)
@@ -561,327 +562,328 @@ void FilePathPropertyWidget::browseForFile()
 	return;
 }
 
-void FilePathPropertyWidget::setFixedValue(const QString &sValue)
+void FilePathPropertySetting::setFixedValue(const QString &sValue)
 {
 	if(leFilePath->text() != sValue)
 		leFilePath->setText(sValue);
 }
 
-void FilePathPropertyWidget::currentTextChangedSlot(const QString &sText)
+void FilePathPropertySetting::currentTextChangedSlot(const QString &sText)
 {
 	setAndEmitEditedValue(sText);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
 
-RotationDirectionPropertyWidget::RotationDirectionPropertyWidget(QWidget *parent) : PropertyWidgetBase(parent) 
-{
-	cmbSelection = NULL;
-	createEditorComponents();
-}
-
-RotationDirectionPropertyWidget::~RotationDirectionPropertyWidget()
-{
-	destroyEditorComponents();
-}
-
-void RotationDirectionPropertyWidget::createEditorComponents()
-{
-	destroyEditorComponents();
-	cmbSelection = new QComboBox(getParentWidget());
-	int nIndex = 0;
-	cmbSelection->addItem(QIcon(":/resources/clockwise.png"),rotationDirectionString(ROTATION_DIR_CLOCKWISE), ROTATION_DIR_CLOCKWISE);
-	indexToEnumHash[nIndex] = ROTATION_DIR_CLOCKWISE;
-	nIndex++;
-	cmbSelection->addItem(QIcon(":/resources/counterclockwise.png"),rotationDirectionString(ROTATION_DIR_COUNTERCLOCKWISE), ROTATION_DIR_COUNTERCLOCKWISE);
-	indexToEnumHash[nIndex] = ROTATION_DIR_COUNTERCLOCKWISE;
-	nIndex++;
-	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));
-
-	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
-	strcCustomFixedWidget sTmpCustomFixedWidget;
-	sTmpCustomFixedWidget.pCustomWidget = cmbSelection;
-	sTmpCustomFixedWidget.nStretch = 9;
-	lTmpCustomFixedWidgetList.append(sTmpCustomFixedWidget);
-	setCustomFixedWidgetList(lTmpCustomFixedWidgetList);
-}
-
-void RotationDirectionPropertyWidget::destroyEditorComponents()
-{
-	if(cmbSelection)
-	{
-		delete cmbSelection;
-		cmbSelection = NULL;
-	}
-}
-
-void RotationDirectionPropertyWidget::setFixedValue(const QString &sValue)
-{
-	cmbSelection->setCurrentText(sValue);
-}
-
-QString RotationDirectionPropertyWidget::rotationDirectionString(enum RotationDirectionEnum eValue)
-{
-	if(mRotationDirection.isEmpty())
-	{
-		mRotationDirection[RotationDirectionPropertyWidget::ROTATION_DIR_UNDEFINED] = "Undefined";
-		mRotationDirection[RotationDirectionPropertyWidget::ROTATION_DIR_CLOCKWISE] = "Clockwise";	
-		mRotationDirection[RotationDirectionPropertyWidget::ROTATION_DIR_COUNTERCLOCKWISE] = "CounterClockwise";
-	}
-	return mRotationDirection[eValue];
-}
-
-RotationDirectionPropertyWidget::RotationDirectionEnum RotationDirectionPropertyWidget::rotationDirectionEnum(const QString &sName)
-{
-	if(QString::compare(mRotationDirection[RotationDirectionPropertyWidget::ROTATION_DIR_CLOCKWISE], sName, Qt::CaseInsensitive) == 0)
-		return ROTATION_DIR_CLOCKWISE;
-	else if(QString::compare(mRotationDirection[RotationDirectionPropertyWidget::ROTATION_DIR_COUNTERCLOCKWISE], sName, Qt::CaseInsensitive) == 0)
-		return ROTATION_DIR_COUNTERCLOCKWISE;
-	//else if(QString::compare(mRotationDirection[RotationDirectionPropertyWidget::ROTATION_DIR_UNDEFINED], sName, Qt::CaseInsensitive) == 0)
-	//	return ROTATION_DIR_UNDEFINED;
-	return ROTATION_DIR_UNDEFINED; 
-}
-
-void RotationDirectionPropertyWidget::currentIndexChangedSlot(int nIndex)
-{
-	emit PropertyWidgetChanged(QString::number((int)indexToEnumHash[nIndex]));
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-
-MovementDirectionPropertyWidget::MovementDirectionPropertyWidget(QWidget *parent) : PropertyWidgetBase(parent) 
-{
-	cmbSelection = NULL;
-	createEditorComponents();
-}
-
-MovementDirectionPropertyWidget::~MovementDirectionPropertyWidget()
-{
-	destroyEditorComponents();
-}
-
-void MovementDirectionPropertyWidget::createEditorComponents()
-{
-	destroyEditorComponents();
-	cmbSelection = new QComboBox(getParentWidget());
-	int nIndex = 0;
-	cmbSelection->addItem(QIcon(":/resources/upwards.png"),movementDirectionString(MOVEMENT_DIR_DOWNUP), MOVEMENT_DIR_DOWNUP);
-	indexToEnumHash[nIndex] = MOVEMENT_DIR_DOWNUP;
-	nIndex++;
-	cmbSelection->addItem(QIcon(":/resources/downwards.png"),movementDirectionString(MOVEMENT_DIR_UPDOWN), MOVEMENT_DIR_UPDOWN);
-	indexToEnumHash[nIndex] = MOVEMENT_DIR_UPDOWN;
-	nIndex++;
-	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));
-
-	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
-	strcCustomFixedWidget sTmpCustomFixedWidget;
-	sTmpCustomFixedWidget.pCustomWidget = cmbSelection;
-	sTmpCustomFixedWidget.nStretch = 9;
-	lTmpCustomFixedWidgetList.append(sTmpCustomFixedWidget);
-	setCustomFixedWidgetList(lTmpCustomFixedWidgetList);
-}
-
-void MovementDirectionPropertyWidget::destroyEditorComponents()
-{
-	if(cmbSelection)
-	{
-		delete cmbSelection;
-		cmbSelection = NULL;
-	}
-}
-
-void MovementDirectionPropertyWidget::setFixedValue(const QString &sValue)
-{
-	cmbSelection->setCurrentText(sValue);
-}
-
-QString MovementDirectionPropertyWidget::movementDirectionString(enum MovementDirectionEnum eValue)
-{
-	if(mMovementDirection.isEmpty())
-	{
-		mMovementDirection[MovementDirectionPropertyWidget::MOVEMENT_DIR_UNDEFINED] = "Undefined";
-		mMovementDirection[MovementDirectionPropertyWidget::MOVEMENT_DIR_DOWNUP] = "Upwards";	
-		mMovementDirection[MovementDirectionPropertyWidget::MOVEMENT_DIR_UPDOWN] = "Downwards";
-	}
-	return mMovementDirection[eValue];
-}
-
-MovementDirectionPropertyWidget::MovementDirectionEnum MovementDirectionPropertyWidget::movementDirectionEnum(const QString &sName)
-{
-	if(QString::compare(mMovementDirection[MovementDirectionPropertyWidget::MOVEMENT_DIR_DOWNUP], sName, Qt::CaseInsensitive) == 0)
-		return MOVEMENT_DIR_DOWNUP;
-	else if(QString::compare(mMovementDirection[MovementDirectionPropertyWidget::MOVEMENT_DIR_UPDOWN], sName, Qt::CaseInsensitive) == 0)
-		return MOVEMENT_DIR_UPDOWN;
-	//else if(QString::compare(mMovementDirection[MovementDirectionPropertyWidget::MOVEMENT_DIR_UNDEFINED], sName, Qt::CaseInsensitive) == 0)
-	//	return MOVEMENT_DIR_UNDEFINED;
-	return MOVEMENT_DIR_UNDEFINED; 
-}
-
-void MovementDirectionPropertyWidget::currentIndexChangedSlot(int nIndex)
-{
-	emit PropertyWidgetChanged(QString::number((int)indexToEnumHash[nIndex]));
-}
+//RotationDirectionPropertySetting::RotationDirectionPropertySetting(QWidget *parent) : PropertySettingBase(parent) 
+//{
+//	cmbSelection = NULL;
+//	createEditorComponents();
+//}
+//
+//RotationDirectionPropertySetting::~RotationDirectionPropertySetting()
+//{
+//	destroyEditorComponents();
+//}
+//
+//void RotationDirectionPropertySetting::createEditorComponents()
+//{
+//	destroyEditorComponents();
+//	cmbSelection = new QComboBox(getParentWidget());
+//	int nIndex = 0;
+//	cmbSelection->addItem(QIcon(":/resources/clockwise.png"),rotationDirectionString(ROTATION_DIR_CLOCKWISE), ROTATION_DIR_CLOCKWISE);
+//	indexToEnumHash[nIndex] = ROTATION_DIR_CLOCKWISE;
+//	nIndex++;
+//	cmbSelection->addItem(QIcon(":/resources/counterclockwise.png"),rotationDirectionString(ROTATION_DIR_COUNTERCLOCKWISE), ROTATION_DIR_COUNTERCLOCKWISE);
+//	indexToEnumHash[nIndex] = ROTATION_DIR_COUNTERCLOCKWISE;
+//	nIndex++;
+//	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));
+//
+//	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
+//	strcCustomFixedWidget sTmpCustomFixedWidget;
+//	sTmpCustomFixedWidget.pCustomWidget = cmbSelection;
+//	sTmpCustomFixedWidget.nStretch = 9;
+//	lTmpCustomFixedWidgetList.append(sTmpCustomFixedWidget);
+//	setCustomFixedWidgetList(lTmpCustomFixedWidgetList);
+//}
+//
+//void RotationDirectionPropertySetting::destroyEditorComponents()
+//{
+//	if(cmbSelection)
+//	{
+//		delete cmbSelection;
+//		cmbSelection = NULL;
+//	}
+//}
+//
+//void RotationDirectionPropertySetting::setFixedValue(const QString &sValue)
+//{
+//	cmbSelection->setCurrentText(sValue);
+//}
+//
+//QString RotationDirectionPropertySetting::rotationDirectionString(enum RotationDirectionEnum eValue)
+//{
+//	if(mRotationDirection.isEmpty())
+//	{
+//		mRotationDirection[RotationDirectionPropertySetting::ROTATION_DIR_UNDEFINED] = "Undefined";
+//		mRotationDirection[RotationDirectionPropertySetting::ROTATION_DIR_CLOCKWISE] = "Clockwise";	
+//		mRotationDirection[RotationDirectionPropertySetting::ROTATION_DIR_COUNTERCLOCKWISE] = "CounterClockwise";
+//	}
+//	return mRotationDirection[eValue];
+//}
+//
+//RotationDirectionPropertySetting::RotationDirectionEnum RotationDirectionPropertySetting::rotationDirectionEnum(const QString &sName)
+//{
+//	if(QString::compare(mRotationDirection[RotationDirectionPropertySetting::ROTATION_DIR_CLOCKWISE], sName, Qt::CaseInsensitive) == 0)
+//		return ROTATION_DIR_CLOCKWISE;
+//	else if(QString::compare(mRotationDirection[RotationDirectionPropertySetting::ROTATION_DIR_COUNTERCLOCKWISE], sName, Qt::CaseInsensitive) == 0)
+//		return ROTATION_DIR_COUNTERCLOCKWISE;
+//	//else if(QString::compare(mRotationDirection[RotationDirectionPropertySetting::ROTATION_DIR_UNDEFINED], sName, Qt::CaseInsensitive) == 0)
+//	//	return ROTATION_DIR_UNDEFINED;
+//	return ROTATION_DIR_UNDEFINED; 
+//}
+//
+//void RotationDirectionPropertySetting::currentIndexChangedSlot(int nIndex)
+//{
+//	emit PropertyWidgetChanged(QString::number((int)indexToEnumHash[nIndex]));
+//}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-MethodTypePropertyWidget::MethodTypePropertyWidget(QWidget *parent) : PropertyWidgetBase(parent) 
-{
-	cmbSelection = NULL;
-	createEditorComponents();
-}
-
-MethodTypePropertyWidget::~MethodTypePropertyWidget()
-{
-	destroyEditorComponents();
-}
-
-void MethodTypePropertyWidget::createEditorComponents()
-{
-	destroyEditorComponents();
-	cmbSelection = new QComboBox(getParentWidget());
-	int nIndex = 0;
-	cmbSelection->addItem(QIcon(":/resources/signal.png"),cMethodStructure::methodTypeToString((int)ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL), ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL);
-	indexToEnumMap[nIndex] =  ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL;
-	nIndex++;
-	cmbSelection->addItem(QIcon(":/resources/slot.png"),cMethodStructure::methodTypeToString((int)ExperimentStructuresNameSpace::METHOD_TYPE_SLOT), ExperimentStructuresNameSpace::METHOD_TYPE_SLOT);
-	indexToEnumMap[nIndex] = ExperimentStructuresNameSpace::METHOD_TYPE_SLOT;
-	nIndex++;
-	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));
-
-	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
-	strcCustomFixedWidget sTmpCustomFixedWidget;
-	sTmpCustomFixedWidget.pCustomWidget = cmbSelection;
-	sTmpCustomFixedWidget.nStretch = 9;
-	lTmpCustomFixedWidgetList.append(sTmpCustomFixedWidget);
-	setCustomFixedWidgetList(lTmpCustomFixedWidgetList);
-}
-
-void MethodTypePropertyWidget::destroyEditorComponents()
-{
-	if(cmbSelection)
-	{
-		delete cmbSelection;
-		cmbSelection = NULL;
-	}
-}
-
-void MethodTypePropertyWidget::setFixedValue(const QString &sValue)
-{
-	cmbSelection->setCurrentText(sValue);
-}
-
-void MethodTypePropertyWidget::currentIndexChangedSlot(int nIndex)
-{
-	emit PropertyWidgetChanged(cMethodStructure::methodTypeToString((int)indexToEnumMap[nIndex]));
-}
-
-////////////////////////////////////////////////////////////////////////////////////////
-
-EccentricityDirectionPropertyWidget::EccentricityDirectionPropertyWidget(QWidget *parent) : PropertyWidgetBase(parent) 
-{
-	cmbSelection = NULL;
-	createEditorComponents();
-}
-
-EccentricityDirectionPropertyWidget::~EccentricityDirectionPropertyWidget()
-{
-	destroyEditorComponents();
-}
-
-void EccentricityDirectionPropertyWidget::createEditorComponents()
-{
-	destroyEditorComponents();
-	cmbSelection = new QComboBox(getParentWidget());
-	int nIndex = 0;
-	cmbSelection->addItem(QIcon(":/resources/decrease.png"),eccentricityDirectionString(ECCENTRICITY_DIR_DECREASE), ECCENTRICITY_DIR_DECREASE);
-	indexToEnumHash[nIndex] = ECCENTRICITY_DIR_DECREASE;
-	nIndex++;
-	cmbSelection->addItem(QIcon(":/resources/increase.png"),eccentricityDirectionString(ECCENTRICITY_DIR_INCREASE), ECCENTRICITY_DIR_INCREASE);
-	indexToEnumHash[nIndex] = ECCENTRICITY_DIR_INCREASE;
-	nIndex++;
-	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));	
-
-	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
-	strcCustomFixedWidget sTmpCustomFixedWidget;
-	sTmpCustomFixedWidget.pCustomWidget = cmbSelection;
-	sTmpCustomFixedWidget.nStretch = 9;
-	lTmpCustomFixedWidgetList.append(sTmpCustomFixedWidget);
-	setCustomFixedWidgetList(lTmpCustomFixedWidgetList);
-}
-
-void EccentricityDirectionPropertyWidget::destroyEditorComponents()
-{
-	if(cmbSelection)
-	{
-		delete cmbSelection;
-		cmbSelection = NULL;
-	}
-}
-
-void EccentricityDirectionPropertyWidget::setFixedValue(const QString &sValue)
-{
-	cmbSelection->setCurrentText(sValue);
-}
-
-QString EccentricityDirectionPropertyWidget::eccentricityDirectionString(enum EccentricityDirectionEnum eValue)
-{
-	if(mEccentricityDirection.isEmpty())
-	{
-		mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_UNDEFINED] = "Undefined";
-		mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_DECREASE] = "Decrease";	
-		mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_INCREASE] = "Increase";
-	}
-	return mEccentricityDirection[eValue];
-}
-
-EccentricityDirectionPropertyWidget::EccentricityDirectionEnum EccentricityDirectionPropertyWidget::eccentricityDirectionEnum(const QString &sName)
-{
-	if(QString::compare(mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_INCREASE], sName, Qt::CaseInsensitive) == 0)
-		return ECCENTRICITY_DIR_INCREASE;
-	else if(QString::compare(mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_DECREASE], sName, Qt::CaseInsensitive) == 0)
-		return ECCENTRICITY_DIR_DECREASE;
-	//else if(QString::compare(mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_UNDEFINED], sName, Qt::CaseInsensitive) == 0)
-	//	return ECCENTRICITY_DIR_UNDEFINED;
-	return ECCENTRICITY_DIR_UNDEFINED; 
-}
-
-void EccentricityDirectionPropertyWidget::currentIndexChangedSlot(int nIndex)
-{
-	emit PropertyWidgetChanged(QString::number((int)indexToEnumHash[nIndex]));
-}
+//MovementDirectionPropertySetting::MovementDirectionPropertySetting(QWidget *parent) : PropertySettingBase(parent) 
+//{
+//	cmbSelection = NULL;
+//	createEditorComponents();
+//}
+//
+//MovementDirectionPropertySetting::~MovementDirectionPropertySetting()
+//{
+//	destroyEditorComponents();
+//}
+//
+//void MovementDirectionPropertySetting::createEditorComponents()
+//{
+//	destroyEditorComponents();
+//	cmbSelection = new QComboBox(getParentWidget());
+//	int nIndex = 0;
+//	cmbSelection->addItem(QIcon(":/resources/upwards.png"),movementDirectionString(MOVEMENT_DIR_DOWNUP), MOVEMENT_DIR_DOWNUP);
+//	indexToEnumHash[nIndex] = MOVEMENT_DIR_DOWNUP;
+//	nIndex++;
+//	cmbSelection->addItem(QIcon(":/resources/downwards.png"),movementDirectionString(MOVEMENT_DIR_UPDOWN), MOVEMENT_DIR_UPDOWN);
+//	indexToEnumHash[nIndex] = MOVEMENT_DIR_UPDOWN;
+//	nIndex++;
+//	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));
+//
+//	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
+//	strcCustomFixedWidget sTmpCustomFixedWidget;
+//	sTmpCustomFixedWidget.pCustomWidget = cmbSelection;
+//	sTmpCustomFixedWidget.nStretch = 9;
+//	lTmpCustomFixedWidgetList.append(sTmpCustomFixedWidget);
+//	setCustomFixedWidgetList(lTmpCustomFixedWidgetList);
+//}
+//
+//void MovementDirectionPropertySetting::destroyEditorComponents()
+//{
+//	if(cmbSelection)
+//	{
+//		delete cmbSelection;
+//		cmbSelection = NULL;
+//	}
+//}
+//
+//void MovementDirectionPropertySetting::setFixedValue(const QString &sValue)
+//{
+//	cmbSelection->setCurrentText(sValue);
+//}
+//
+//QString MovementDirectionPropertySetting::movementDirectionString(enum MovementDirectionEnum eValue)
+//{
+//	if(mMovementDirection.isEmpty())
+//	{
+//		mMovementDirection[MovementDirectionPropertySetting::MOVEMENT_DIR_UNDEFINED] = "Undefined";
+//		mMovementDirection[MovementDirectionPropertySetting::MOVEMENT_DIR_DOWNUP] = "Upwards";	
+//		mMovementDirection[MovementDirectionPropertySetting::MOVEMENT_DIR_UPDOWN] = "Downwards";
+//	}
+//	return mMovementDirection[eValue];
+//}
+//
+//MovementDirectionPropertySetting::MovementDirectionEnum MovementDirectionPropertySetting::movementDirectionEnum(const QString &sName)
+//{
+//	if(QString::compare(mMovementDirection[MovementDirectionPropertySetting::MOVEMENT_DIR_DOWNUP], sName, Qt::CaseInsensitive) == 0)
+//		return MOVEMENT_DIR_DOWNUP;
+//	else if(QString::compare(mMovementDirection[MovementDirectionPropertySetting::MOVEMENT_DIR_UPDOWN], sName, Qt::CaseInsensitive) == 0)
+//		return MOVEMENT_DIR_UPDOWN;
+//	//else if(QString::compare(mMovementDirection[MovementDirectionPropertySetting::MOVEMENT_DIR_UNDEFINED], sName, Qt::CaseInsensitive) == 0)
+//	//	return MOVEMENT_DIR_UNDEFINED;
+//	return MOVEMENT_DIR_UNDEFINED; 
+//}
+//
+//void MovementDirectionPropertySetting::currentIndexChangedSlot(int nIndex)
+//{
+//	emit PropertyWidgetChanged(QString::number((int)indexToEnumHash[nIndex]));
+//}
 
 ////////////////////////////////////////////////////////////////////////////////////////
 
-VariantExtensionPropertyManager::VariantExtensionPropertyManager(ExperimentParameterVisualizer *parentParamVisualizer) : QtVariantPropertyManager((QObject*)parentParamVisualizer), parentParameterVisualizer(parentParamVisualizer)
+//sven MethodTypePropertyWidget::MethodTypePropertyWidget(QWidget *parent) : PropertySettingBase(parent) 
+//{
+//	cmbSelection = NULL;
+//	createEditorComponents();
+//}
+//
+//MethodTypePropertyWidget::~MethodTypePropertyWidget()
+//{
+//	destroyEditorComponents();
+//}
+//
+//void MethodTypePropertyWidget::createEditorComponents()
+//{
+//	destroyEditorComponents();
+//	cmbSelection = new QComboBox(getParentWidget());
+//	int nIndex = 0;
+//	cmbSelection->addItem(QIcon(":/resources/signal.png"),cMethodStructure::methodTypeToString((int)ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL), ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL);
+//	indexToEnumMap[nIndex] =  ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL;
+//	nIndex++;
+//	cmbSelection->addItem(QIcon(":/resources/slot.png"),cMethodStructure::methodTypeToString((int)ExperimentStructuresNameSpace::METHOD_TYPE_SLOT), ExperimentStructuresNameSpace::METHOD_TYPE_SLOT);
+//	indexToEnumMap[nIndex] = ExperimentStructuresNameSpace::METHOD_TYPE_SLOT;
+//	nIndex++;
+//	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));
+//
+//	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
+//	strcCustomFixedWidget sTmpCustomFixedWidget;
+//	sTmpCustomFixedWidget.pCustomWidget = cmbSelection;
+//	sTmpCustomFixedWidget.nStretch = 9;
+//	lTmpCustomFixedWidgetList.append(sTmpCustomFixedWidget);
+//	setCustomFixedWidgetList(lTmpCustomFixedWidgetList);
+//}
+//
+//void MethodTypePropertyWidget::destroyEditorComponents()
+//{
+//	if(cmbSelection)
+//	{
+//		delete cmbSelection;
+//		cmbSelection = NULL;
+//	}
+//}
+//
+//void MethodTypePropertyWidget::setFixedValue(const QString &sValue)
+//{
+//	cmbSelection->setCurrentText(sValue);
+//}
+//
+//void MethodTypePropertyWidget::currentIndexChangedSlot(int nIndex)
+//{
+//	emit PropertyWidgetChanged(cMethodStructure::methodTypeToString((int)indexToEnumMap[nIndex]));
+//}
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+//sven EccentricityDirectionPropertyWidget::EccentricityDirectionPropertyWidget(QWidget *parent) : PropertySettingBase(parent) 
+//{
+//	cmbSelection = NULL;
+//	createEditorComponents();
+//}
+//
+//EccentricityDirectionPropertyWidget::~EccentricityDirectionPropertyWidget()
+//{
+//	destroyEditorComponents();
+//}
+//
+//void EccentricityDirectionPropertyWidget::createEditorComponents()
+//{
+//	destroyEditorComponents();
+//	cmbSelection = new QComboBox(getParentWidget());
+//	int nIndex = 0;
+//	cmbSelection->addItem(QIcon(":/resources/decrease.png"),eccentricityDirectionString(ECCENTRICITY_DIR_DECREASE), ECCENTRICITY_DIR_DECREASE);
+//	indexToEnumHash[nIndex] = ECCENTRICITY_DIR_DECREASE;
+//	nIndex++;
+//	cmbSelection->addItem(QIcon(":/resources/increase.png"),eccentricityDirectionString(ECCENTRICITY_DIR_INCREASE), ECCENTRICITY_DIR_INCREASE);
+//	indexToEnumHash[nIndex] = ECCENTRICITY_DIR_INCREASE;
+//	nIndex++;
+//	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));	
+//
+//	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
+//	strcCustomFixedWidget sTmpCustomFixedWidget;
+//	sTmpCustomFixedWidget.pCustomWidget = cmbSelection;
+//	sTmpCustomFixedWidget.nStretch = 9;
+//	lTmpCustomFixedWidgetList.append(sTmpCustomFixedWidget);
+//	setCustomFixedWidgetList(lTmpCustomFixedWidgetList);
+//}
+//
+//void EccentricityDirectionPropertyWidget::destroyEditorComponents()
+//{
+//	if(cmbSelection)
+//	{
+//		delete cmbSelection;
+//		cmbSelection = NULL;
+//	}
+//}
+//
+//void EccentricityDirectionPropertyWidget::setFixedValue(const QString &sValue)
+//{
+//	cmbSelection->setCurrentText(sValue);
+//}
+//
+//QString EccentricityDirectionPropertyWidget::eccentricityDirectionString(enum EccentricityDirectionEnum eValue)
+//{
+//	if(mEccentricityDirection.isEmpty())
+//	{
+//		mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_UNDEFINED] = "Undefined";
+//		mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_DECREASE] = "Decrease";	
+//		mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_INCREASE] = "Increase";
+//	}
+//	return mEccentricityDirection[eValue];
+//}
+//
+//EccentricityDirectionPropertyWidget::EccentricityDirectionEnum EccentricityDirectionPropertyWidget::eccentricityDirectionEnum(const QString &sName)
+//{
+//	if(QString::compare(mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_INCREASE], sName, Qt::CaseInsensitive) == 0)
+//		return ECCENTRICITY_DIR_INCREASE;
+//	else if(QString::compare(mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_DECREASE], sName, Qt::CaseInsensitive) == 0)
+//		return ECCENTRICITY_DIR_DECREASE;
+//	//else if(QString::compare(mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_UNDEFINED], sName, Qt::CaseInsensitive) == 0)
+//	//	return ECCENTRICITY_DIR_UNDEFINED;
+//	return ECCENTRICITY_DIR_UNDEFINED; 
+//}
+//
+//void EccentricityDirectionPropertyWidget::currentIndexChangedSlot(int nIndex)
+//{
+//	emit PropertyWidgetChanged(QString::number((int)indexToEnumHash[nIndex]));
+//}
+
+////////////////////////////////////////////////////////////////////////////////////////
+
+VariantExtensionPropertySettingManager::VariantExtensionPropertySettingManager(PropertySettingsWidget *parentPropSettWidget) : QtVariantPropertyManager((QObject*)parentPropSettWidget), parentPropertySettingsWidget(parentPropSettWidget)
+{
+
+}
+
+VariantExtensionPropertySettingManager::~VariantExtensionPropertySettingManager(void)
 {
 }
 
-VariantExtensionPropertyManager::~VariantExtensionPropertyManager(void)
-{
-}
-
-bool VariantExtensionPropertyManager::isPropertyTypeSupported(int nPropertyType) const
+bool VariantExtensionPropertySettingManager::isPropertyTypeSupported(int nPropertyType) const
 {
 	if(isCustomPropertyType(nPropertyType))
 		return true;
 	return QtVariantPropertyManager::isPropertyTypeSupported(nPropertyType);
 }
 
-bool VariantExtensionPropertyManager::isCustomProperty(const QtProperty *pProperty) const
+bool VariantExtensionPropertySettingManager::isCustomProperty(const QtProperty *pProperty) const
 {
 	if(isCustomPropertyType(propertyType(pProperty)))
 		return true;
 	return false;
 }
 
-bool VariantExtensionPropertyManager::isScriptableProperty(const QtProperty *pProperty) const
+bool VariantExtensionPropertySettingManager::isScriptableProperty(const QtProperty *pProperty) const
 {
 	if(mapVariantExtensionPropertyData.contains(pProperty))
 		return mapVariantExtensionPropertyData[pProperty].bIsScriptable;
 	return false;
 }
 
-bool VariantExtensionPropertyManager::hasScriptReferenceValue(const QtProperty *pProperty) const
+bool VariantExtensionPropertySettingManager::hasScriptReferenceValue(const QtProperty *pProperty) const
 {
 	if(isScriptableProperty(pProperty))
 	{
@@ -890,14 +892,14 @@ bool VariantExtensionPropertyManager::hasScriptReferenceValue(const QtProperty *
 	return false;
 }
 
-bool VariantExtensionPropertyManager::isScriptReferenceString(const QString &sValue)
+bool VariantExtensionPropertySettingManager::isScriptReferenceString(const QString &sValue)
 {
 	if(sValue.startsWith("{") && sValue.endsWith("}"))
 		return true;
 	return false;
 }
 
-bool VariantExtensionPropertyManager::isScriptReferenceValue(const QVariant &vValue) const
+bool VariantExtensionPropertySettingManager::isScriptReferenceValue(const QVariant &vValue) const
 {
 	if(vValue.type() == QVariant::String)
 	{
@@ -906,7 +908,7 @@ bool VariantExtensionPropertyManager::isScriptReferenceValue(const QVariant &vVa
 	return false;
 }
 
-bool VariantExtensionPropertyManager::isManagedProperty(const QtProperty *pProperty) const
+bool VariantExtensionPropertySettingManager::isManagedProperty(const QtProperty *pProperty) const
 {
 	if(mapVariantExtensionPropertyData.contains(pProperty))
 	{
@@ -915,7 +917,7 @@ bool VariantExtensionPropertyManager::isManagedProperty(const QtProperty *pPrope
 	return false;
 }
 
-bool VariantExtensionPropertyManager::shouldPullMappedData(const QtProperty *pProperty) const
+bool VariantExtensionPropertySettingManager::shouldPullMappedData(const QtProperty *pProperty) const
 {
 	bool _bDoPullMappedData = false;
 	bool _bIsManaged = isManagedProperty(pProperty);
@@ -936,7 +938,7 @@ bool VariantExtensionPropertyManager::shouldPullMappedData(const QtProperty *pPr
 	return _bDoPullMappedData;
 }
 
-bool VariantExtensionPropertyManager::shouldPushMappedData(const QtProperty *pProperty, const QVariant &sNewValue) const
+bool VariantExtensionPropertySettingManager::shouldPushMappedData(const QtProperty *pProperty, const QVariant &sNewValue) const
 {
 	bool _bDoPushMappedData = false;
 	bool _bIsManaged = isManagedProperty(pProperty);
@@ -955,7 +957,7 @@ bool VariantExtensionPropertyManager::shouldPushMappedData(const QtProperty *pPr
 				bool _bNewDataIsScriptRef = false;
 				if(sNewValue.type() == QVariant::String)
 				{
-					if(VariantExtensionPropertyManager::isScriptReferenceString(sNewValue.toString()))
+					if(VariantExtensionPropertySettingManager::isScriptReferenceString(sNewValue.toString()))
 						_bNewDataIsScriptRef = true;
 				}
 				if(_bNewDataIsScriptRef)
@@ -966,19 +968,22 @@ bool VariantExtensionPropertyManager::shouldPushMappedData(const QtProperty *pPr
 	return _bDoPushMappedData;
 }
 
-bool VariantExtensionPropertyManager::isCustomPropertyType(const int &nPropertyType) const
+bool VariantExtensionPropertySettingManager::isCustomPropertyType(const int &nPropertyType) const
 {
-	if( (nPropertyType == (QVariant::Type) VariantExtensionPropertyManager::movementDirectionTypeId()) ||
-		(nPropertyType == (QVariant::Type) VariantExtensionPropertyManager::eccentricityDirectionTypeId()) ||
-		(nPropertyType == (QVariant::Type) VariantExtensionPropertyManager::rotationDirectionTypeId()) ||
-		(nPropertyType == (QVariant::Type) VariantExtensionPropertyManager::filePathTypeId()) ||
-		(nPropertyType == (QVariant::Type) VariantExtensionPropertyManager::stringArrayTypeId()) ||
-		(nPropertyType == (QVariant::Type) VariantExtensionPropertyManager::methodTypeTypeId()) 	)
+	if ((nPropertyType == (QVariant::Type) VariantExtensionPropertySettingManager::filePathTypeId()) ||
+		(nPropertyType == (QVariant::Type) VariantExtensionPropertySettingManager::stringArrayTypeId()))
+	{
 		return true;
+	}
+	else if (parentPropertySettingsWidget)
+	{
+		if (parentPropertySettingsWidget->isRegisteredCustomVariabeleType((QVariant::Type) nPropertyType))
+			return true;
+	}
 	return false;
 }
 
-QtVariantProperty *VariantExtensionPropertyManager::addVariantExtensionProperty(int propertyType, const bool &bIsScriptable, const QString &name)
+QtVariantProperty *VariantExtensionPropertySettingManager::addVariantExtensionProperty(int propertyType, const bool &bIsScriptable, const QString &name)
 {
 	QtVariantProperty *tmpVarProp = QtVariantPropertyManager::addProperty(propertyType,name);//call the base class property
 	if(tmpVarProp)
@@ -991,29 +996,50 @@ QtVariantProperty *VariantExtensionPropertyManager::addVariantExtensionProperty(
 	return tmpVarProp;
 }
 
-QVariant VariantExtensionPropertyManager::value(const QtProperty *property) const
+QVariant VariantExtensionPropertySettingManager::value(const QtProperty *property) const
 {
 	if(shouldPullMappedData(property))
 		return mapVariantExtensionPropertyData[property].sValue;
 	return QtVariantPropertyManager::value(property);
 }
 
-QVariant VariantExtensionPropertyManager::resolveParameterValueType(const QVariant &vInput, const ExperimentParameterTypeName &sType, const bool &bToView)
+QVariant VariantExtensionPropertySettingManager::resolveParameterValueType(const QVariant &vInput, const int &nVariantType, const bool &bToView)
 {
 	bool bIsScriptDefined = false;
+	bool bIsCustomDefined = false;
+	if (nVariantType >= PropertySetting_Type_FirstCustom)
+	{
+		QObject *tmpObject = MainAppInfo::getCustomPropertySettingObject(nVariantType);
+		if (tmpObject)
+		{
+			QVariant vRetVal;
+			QByteArray normalizedSignature = QMetaObject::normalizedSignature(PLUGIN_CUSTOMTYPE_RESOLVEPARAM_METHOD_FULL);
+			int methodIndex = tmpObject->metaObject()->indexOfMethod(normalizedSignature);
+			QMetaMethod method = tmpObject->metaObject()->method(methodIndex);
+			bool bInvokeResult = method.invoke(tmpObject,
+				Qt::DirectConnection,
+				Q_RETURN_ARG(QVariant, vRetVal),
+				Q_ARG(QVariant, vInput),
+				Q_ARG(bool, bToView));
+			if (bInvokeResult)
+				return vRetVal;
+		}
+		return NULL;
+	}
+
 	if(bToView)
 	{
 		if(vInput.canConvert<QString>())
 		{
 			QString tmpString = vInput.toString();
-			if(VariantExtensionPropertyManager::isScriptReferenceString(tmpString))// && (tmpString.size() > 2))
+			if(VariantExtensionPropertySettingManager::isScriptReferenceString(tmpString))// && (tmpString.size() > 2))
 				bIsScriptDefined = true;
 		}
 		if(bIsScriptDefined)
 		{
 			return vInput;
 		}
-		else if(sType == Experiment_ParameterType_Boolean)
+		else if (nVariantType == PropertySetting_Type_Boolean)
 		{
 			if(vInput.toString().contains("true",Qt::CaseInsensitive))
 				return "True";
@@ -1022,23 +1048,7 @@ QVariant VariantExtensionPropertyManager::resolveParameterValueType(const QVaria
 			else
 				return NULL;
 		}
-		else if(sType == Experiment_ParameterType_RotationDirection)
-		{
-			return RotationDirectionPropertyWidget::rotationDirectionString((RotationDirectionPropertyWidget::RotationDirectionEnum)vInput.toInt());
-		}
-		else if(sType == Experiment_ParameterType_EccentricityDirection)
-		{
-			return EccentricityDirectionPropertyWidget::eccentricityDirectionString((EccentricityDirectionPropertyWidget::EccentricityDirectionEnum)vInput.toInt());
-		}
-		else if(sType == Experiment_ParameterType_MovementDirection)
-		{
-			return MovementDirectionPropertyWidget::movementDirectionString((MovementDirectionPropertyWidget::MovementDirectionEnum)vInput.toInt());
-		}
-		else if(sType == Experiment_ParameterType_FilePath)
-		{
-			return vInput;
-		}
-		else if(sType == Experiment_ParameterType_MethodType)
+		else if (nVariantType == PropertySetting_Type_FilePath)
 		{
 			return vInput;
 		}
@@ -1052,30 +1062,14 @@ QVariant VariantExtensionPropertyManager::resolveParameterValueType(const QVaria
 		if(vInput.canConvert<QString>())
 		{
 			QString tmpString = vInput.toString();
-			if(VariantExtensionPropertyManager::isScriptReferenceString(tmpString))// && (tmpString.size() > 2))
+			if(VariantExtensionPropertySettingManager::isScriptReferenceString(tmpString))// && (tmpString.size() > 2))
 				bIsScriptDefined = true;
 		}
 		if(bIsScriptDefined)
 		{
 			return vInput;
 		}
-		else if(sType == Experiment_ParameterType_RotationDirection)
-		{
-			return (int)RotationDirectionPropertyWidget::rotationDirectionEnum(vInput.toString());
-		}
-		else if(sType == Experiment_ParameterType_EccentricityDirection)
-		{
-			return (int)EccentricityDirectionPropertyWidget::eccentricityDirectionEnum(vInput.toString());
-		}
-		else if(sType == Experiment_ParameterType_MovementDirection)
-		{
-			return (int)MovementDirectionPropertyWidget::movementDirectionEnum(vInput.toString());
-		}
-		else if(sType == Experiment_ParameterType_FilePath)
-		{
-			return vInput;
-		}
-		else if(sType == Experiment_ParameterType_MethodType)
+		else if (nVariantType == PropertySetting_Type_FilePath)
 		{
 			return vInput;
 		}
@@ -1087,7 +1081,7 @@ QVariant VariantExtensionPropertyManager::resolveParameterValueType(const QVaria
 	return NULL;
 }
 
-void VariantExtensionPropertyManager::setValue(QtProperty *property, const QVariant &val)
+void VariantExtensionPropertySettingManager::setValue(QtProperty *property, const QVariant &val)
 {
 	int nPropertyType = propertyType(property);
 	QString sFinalStringValue = val.toString();
@@ -1098,7 +1092,7 @@ void VariantExtensionPropertyManager::setValue(QtProperty *property, const QVari
 			return;	
 		bool bIsInteger = false;
 		int nEnumValue = val.toInt(&bIsInteger);
-		if(VariantExtensionPropertyManager::isScriptReferenceValue(val))
+		if(VariantExtensionPropertySettingManager::isScriptReferenceValue(val))
 		{
 			if(nPropertyType == QVariant::Color)
 			{
@@ -1119,21 +1113,21 @@ void VariantExtensionPropertyManager::setValue(QtProperty *property, const QVari
 			}
 			data.sValue = val.toString();
 		}
-		else if((bIsInteger) && (nPropertyType == (QVariant::Type) VariantExtensionPropertyManager::rotationDirectionTypeId()))
-		{
-			RotationDirectionPropertyWidget::RotationDirectionEnum tmpEnum = (RotationDirectionPropertyWidget::RotationDirectionEnum)val.toInt();
-			data.sValue = RotationDirectionPropertyWidget::rotationDirectionString(tmpEnum);
-		}
-		else if((bIsInteger) && (nPropertyType == (QVariant::Type) VariantExtensionPropertyManager::movementDirectionTypeId()))
-		{
-			MovementDirectionPropertyWidget::MovementDirectionEnum tmpEnum = (MovementDirectionPropertyWidget::MovementDirectionEnum)val.toInt();
-			data.sValue = MovementDirectionPropertyWidget::movementDirectionString(tmpEnum);
-		}
-		else if((bIsInteger) && (nPropertyType == (QVariant::Type) VariantExtensionPropertyManager::eccentricityDirectionTypeId()))
-		{
-			EccentricityDirectionPropertyWidget::EccentricityDirectionEnum tmpEnum = (EccentricityDirectionPropertyWidget::EccentricityDirectionEnum)nEnumValue;
-			data.sValue = EccentricityDirectionPropertyWidget::eccentricityDirectionString(tmpEnum);
-		}
+		//else if((bIsInteger) && (nPropertyType == (QVariant::Type) VariantExtensionPropertySettingManager::rotationDirectionTypeId()))
+		//{
+		//	RotationDirectionPropertySetting::RotationDirectionEnum tmpEnum = (RotationDirectionPropertySetting::RotationDirectionEnum)val.toInt();
+		//	data.sValue = RotationDirectionPropertySetting::rotationDirectionString(tmpEnum);
+		//}
+		//else if((bIsInteger) && (nPropertyType == (QVariant::Type) VariantExtensionPropertySettingManager::movementDirectionTypeId()))
+		//{
+		//	MovementDirectionPropertySetting::MovementDirectionEnum tmpEnum = (MovementDirectionPropertySetting::MovementDirectionEnum)val.toInt();
+		//	data.sValue = MovementDirectionPropertySetting::movementDirectionString(tmpEnum);
+		//}
+		//sven else if((bIsInteger) && (nPropertyType == (QVariant::Type) VariantExtensionPropertySettingManager::eccentricityDirectionTypeId()))
+		//{
+		//	EccentricityDirectionPropertyWidget::EccentricityDirectionEnum tmpEnum = (EccentricityDirectionPropertyWidget::EccentricityDirectionEnum)nEnumValue;
+		//	data.sValue = EccentricityDirectionPropertyWidget::eccentricityDirectionString(tmpEnum);
+		//}
 		else
 		{
 			data.sValue = val.toString();
@@ -1150,10 +1144,10 @@ void VariantExtensionPropertyManager::setValue(QtProperty *property, const QVari
 		{
 			if(val.type() == QVariant::String)//This special case we need to perform a type conversion
 			{
-				if(parentParameterVisualizer)
+				if (parentPropertySettingsWidget)
 				{
 					QVariant vEnumValue;
-					if(parentParameterVisualizer->getEnumeratedParameterPropertyValue(property,val.toString().toLower(),vEnumValue))
+					if (parentPropertySettingsWidget->getEnumeratedParameterPropertyValue(property, val.toString().toLower(), vEnumValue))
 					{	
 						sFinalStringValue = vEnumValue.toString();
 					}
@@ -1183,14 +1177,14 @@ void VariantExtensionPropertyManager::setValue(QtProperty *property, const QVari
 	QtVariantPropertyManager::setValue(property, sFinalStringValue);
 }
 
-QString VariantExtensionPropertyManager::valueText(const QtProperty *property) const
+QString VariantExtensionPropertySettingManager::valueText(const QtProperty *property) const
 {
 	if (shouldPullMappedData(property))
 		return value(property).toString(); 
 	return QtVariantPropertyManager::valueText(property);		
 }
 
-void VariantExtensionPropertyManager::initializeProperty(QtProperty *property)
+void VariantExtensionPropertySettingManager::initializeProperty(QtProperty *property)
 { 	
 	mapVariantExtensionPropertyData[property] = VariantExtensionPropertyData();
 	if(isCustomProperty(property))
@@ -1200,7 +1194,7 @@ void VariantExtensionPropertyManager::initializeProperty(QtProperty *property)
 	return QtVariantPropertyManager::initializeProperty(property);
 }
 
-void VariantExtensionPropertyManager::uninitializeProperty(QtProperty *property)
+void VariantExtensionPropertySettingManager::uninitializeProperty(QtProperty *property)
 {
 	if(isManagedProperty(property))
 		mapVariantExtensionPropertyData.remove(property); 
@@ -1208,7 +1202,7 @@ void VariantExtensionPropertyManager::uninitializeProperty(QtProperty *property)
 
 ///////////////////////////////////////////////////////////////////////////
 
-void VariantExtensionPropertyFactory::slotEditorDestroyed(QObject *obj)
+void VariantExtensionPropertySettingFactory::slotEditorDestroyed(QObject *obj)
 {
 	Q_UNUSED(obj);
 	QWidget* pTmpWidget = (QWidget*)obj;
@@ -1225,7 +1219,7 @@ void VariantExtensionPropertyFactory::slotEditorDestroyed(QObject *obj)
 	}
 }
 
-bool VariantExtensionPropertyFactory::setPropertyValue(QtVariantPropertyManager *manager, const QString &sUniquePropertyIdentifier, const QString &sValue, const bool &bSetModified)
+bool VariantExtensionPropertySettingFactory::setPropertyValue(QtVariantPropertyManager *manager, const QString &sUniquePropertyIdentifier, const QString &sValue, const bool &bSetModified)
 {
 	if(manager)
 	{
@@ -1244,7 +1238,7 @@ bool VariantExtensionPropertyFactory::setPropertyValue(QtVariantPropertyManager 
 	return false;
 }
 
-QWidget *VariantExtensionPropertyFactory::getEditorWidget(QtVariantPropertyManager *manager, QtVariantProperty *vProperty, const QString &sDerivedPrefixName, QWidget *parent, QString &sReturnUniquePropertyIdentifier, QtVariantProperty *&pDerivedVariantProperty, const QVariant &vValue, const bool &bDoInitWithValue, const bool &bIsScriptable)
+QWidget *VariantExtensionPropertySettingFactory::getEditorWidget(QtVariantPropertyManager *manager, QtVariantProperty *vProperty, const QString &sDerivedPrefixName, QWidget *parent, QString &sReturnUniquePropertyIdentifier, QtVariantProperty *&pDerivedVariantProperty, const QVariant &vValue, const bool &bDoInitWithValue, const bool &bIsScriptable)
 {
 	sReturnUniquePropertyIdentifier = "";
 	pDerivedVariantProperty = NULL;
@@ -1277,7 +1271,7 @@ QWidget *VariantExtensionPropertyFactory::getEditorWidget(QtVariantPropertyManag
 			}
 			if(varProperty == NULL)
 			{		
-				if (VariantExtensionPropertyManager *tmpVariantExtPropMngr = qobject_cast<VariantExtensionPropertyManager *>(manager)) 
+				if (VariantExtensionPropertySettingManager *tmpVariantExtPropMngr = qobject_cast<VariantExtensionPropertySettingManager *>(manager)) 
 				{
 					varProperty = tmpVariantExtPropMngr->addVariantExtensionProperty(vProperty->propertyType(),bIsScriptable,vProperty->propertyName());
 				}
@@ -1303,7 +1297,7 @@ QWidget *VariantExtensionPropertyFactory::getEditorWidget(QtVariantPropertyManag
 			QWidget *tmpWidget = createEditor(manager,varProperty,parent);
 			if(tmpWidget)
 			{
-				if (PropertyWidgetBase *pPropWidgetBase = qobject_cast<PropertyWidgetBase *>(tmpWidget))
+				if (PropertySettingBase *pPropWidgetBase = qobject_cast<PropertySettingBase *>(tmpWidget))
 				{
 					pPropWidgetBase->setScriptability(bIsScriptable);
 				}
@@ -1314,44 +1308,13 @@ QWidget *VariantExtensionPropertyFactory::getEditorWidget(QtVariantPropertyManag
 	return NULL;
 }
 
-QWidget *VariantExtensionPropertyFactory::createEditor(QtVariantPropertyManager *manager, QtProperty *property, QWidget *parent)
+QWidget *VariantExtensionPropertySettingFactory::createEditor(QtVariantPropertyManager *manager, QtProperty *property, QWidget *parent)
 {
 	bool bResult;
 	int nPropertyType = manager->propertyType(property);
-	//int nTest = QVariant::String;
-	if (nPropertyType == VariantExtensionPropertyManager::rotationDirectionTypeId()) 
+	if (nPropertyType == VariantExtensionPropertySettingManager::stringArrayTypeId()) 
 	{
-		RotationDirectionPropertyWidget *editor = new RotationDirectionPropertyWidget(parent);
-		editor->setValue(manager->value(property).toString());
-		createdEditors[property].append(editor);
-		editorToProperty[editor] = property;
-		bResult = connect(editor, SIGNAL(PropertyWidgetChanged(const QString&)), this, SLOT(slotCustomPropertyChanged(const QString &)), Qt::UniqueConnection);
-		bResult = connect(editor, SIGNAL(destroyed(QObject *)), this, SLOT(slotEditorDestroyed(QObject *)), Qt::UniqueConnection);
-		return editor;
-	}
-	else if (nPropertyType == VariantExtensionPropertyManager::movementDirectionTypeId()) 
-	{
-		MovementDirectionPropertyWidget *editor = new MovementDirectionPropertyWidget(parent);
-		editor->setValue(manager->value(property).toString());
-		createdEditors[property].append(editor);
-		editorToProperty[editor] = property;
-		bResult = connect(editor, SIGNAL(PropertyWidgetChanged(const QString&)), this, SLOT(slotCustomPropertyChanged(const QString &)), Qt::UniqueConnection);
-		bResult = connect(editor, SIGNAL(destroyed(QObject *)), this, SLOT(slotEditorDestroyed(QObject *)), Qt::UniqueConnection);
-		return editor;
-	}
-	else if (nPropertyType == VariantExtensionPropertyManager::eccentricityDirectionTypeId()) 
-	{
-		EccentricityDirectionPropertyWidget *editor = new EccentricityDirectionPropertyWidget(parent);
-		editor->setValue(manager->value(property).toString());
-		createdEditors[property].append(editor);
-		editorToProperty[editor] = property;
-		bResult = connect(editor, SIGNAL(PropertyWidgetChanged(const QString&)), this, SLOT(slotCustomPropertyChanged(const QString &)), Qt::UniqueConnection);
-		bResult = connect(editor, SIGNAL(destroyed(QObject *)), this, SLOT(slotEditorDestroyed(QObject *)), Qt::UniqueConnection);
-		return editor;
-	}
-	else if (nPropertyType == VariantExtensionPropertyManager::stringArrayTypeId()) 
-	{
-		StringArrayPropertyWidget *editor = new StringArrayPropertyWidget(parent);
+		StringArrayPropertySetting *editor = new StringArrayPropertySetting(parent);
 		createdEditors[property].append(editor);
 		editorToProperty[editor] = property;
 		bResult = connect(editor, SIGNAL(PropertyWidgetChanged(const QString&)), this, SLOT(slotCustomPropertyChanged(const QString &)), Qt::UniqueConnection);
@@ -1360,9 +1323,9 @@ QWidget *VariantExtensionPropertyFactory::createEditor(QtVariantPropertyManager 
 		bResult = connect(editor, SIGNAL(destroyed(QObject *)), this, SLOT(slotEditorDestroyed(QObject *)), Qt::UniqueConnection);
 		return editor;
 	}
-	else if (nPropertyType == VariantExtensionPropertyManager::filePathTypeId()) 
+	else if (nPropertyType == VariantExtensionPropertySettingManager::filePathTypeId()) 
 	{
-		FilePathPropertyWidget *editor = new FilePathPropertyWidget(parent);
+		FilePathPropertySetting *editor = new FilePathPropertySetting(parent);
 		createdEditors[property].append(editor);
 		editorToProperty[editor] = property;
 		bResult = connect(editor, SIGNAL(PropertyWidgetChanged(const QString&)), this, SLOT(slotCustomPropertyChanged(const QString &)), Qt::UniqueConnection);
@@ -1371,29 +1334,43 @@ QWidget *VariantExtensionPropertyFactory::createEditor(QtVariantPropertyManager 
 		bResult = connect(editor, SIGNAL(destroyed(QObject *)), this, SLOT(slotEditorDestroyed(QObject *)), Qt::UniqueConnection);
 		return editor;
 	}
-	else if (nPropertyType == VariantExtensionPropertyManager::methodTypeTypeId()) 
+	else if ((parentPropSettWidget) && (parentPropSettWidget->isRegisteredCustomVariabeleType(((QVariant::Type)nPropertyType))))//or use alternatively (MainAppInfo::getCustomPropertySettingObject((QVariant::Type)nPropertyType))//or use alternatively 
 	{
-		MethodTypePropertyWidget *editor = new MethodTypePropertyWidget(parent);
-		editor->setValue(manager->value(property).toString());
-		createdEditors[property].append(editor);
-		editorToProperty[editor] = property;
-		bResult = connect(editor, SIGNAL(PropertyWidgetChanged(const QString&)), this, SLOT(slotCustomPropertyChanged(const QString &)), Qt::UniqueConnection);
-		bResult = connect(editor, SIGNAL(destroyed(QObject *)), this, SLOT(slotEditorDestroyed(QObject *)), Qt::UniqueConnection);
-		return editor;
+		int nCustMetaType = parentPropSettWidget->getRegisteredCustomVariantMetaType((QVariant::Type)nPropertyType);
+		if (nCustMetaType >= 0)
+		{
+			QWidget *editor = MainAppInfo::setAndRetrieveCustomPropertySettingEditorWidget(nCustMetaType, manager->value(property).toString());
+			if (editor)
+			{
+				//already in above function???
+				editor->setParent(parent);
+				PropertySettingBase *customEditor = qobject_cast<PropertySettingBase*>(editor);
+				if (customEditor)
+				{
+					customEditor->setValue(manager->value(property).toString());
+					createdEditors[property].append(editor);
+					editorToProperty[editor] = property;
+					bResult = connect(editor, SIGNAL(PropertyWidgetChanged(const QString&)), this, SLOT(slotCustomPropertyChanged(const QString &)), Qt::UniqueConnection);
+					bResult = connect(editor, SIGNAL(destroyed(QObject *)), this, SLOT(slotEditorDestroyed(QObject *)), Qt::UniqueConnection);
+					return editor;
+				}
+			}
+		}
+		return NULL;
 	}
-	//else if (nPropertyType == VariantExtensionPropertyManager::scriptable_QVariantTypeId()) {}
+	//else if (nPropertyType == VariantExtensionPropertySettingManager::scriptable_QVariantTypeId()) {}
 	else
 	{
 		QWidget* tmpDefaultWidget;
 		bool bIsScriptable = false;
-		if (VariantExtensionPropertyManager *tmpVariantExtPropMngr = qobject_cast<VariantExtensionPropertyManager *>(manager)) 
+		if (VariantExtensionPropertySettingManager *tmpVariantExtPropMngr = qobject_cast<VariantExtensionPropertySettingManager *>(manager)) 
 		{
 			bIsScriptable = tmpVariantExtPropMngr->isScriptableProperty(property);
 		}
 		if(bIsScriptable)
 		{
 			QWidget* tmpDefaultWidget = QtVariantEditorFactory::createEditor(manager,property,parent);
-			ScriptableQVariantPropertyWidget *editor = new ScriptableQVariantPropertyWidget(parent);
+			ScriptableVariantPropertySetting *editor = new ScriptableVariantPropertySetting(parent);
 			editor->setDerivedEditorAndManager(manager, tmpDefaultWidget, nPropertyType, property);
 			if(editor)
 			{
@@ -1423,7 +1400,7 @@ QWidget *VariantExtensionPropertyFactory::createEditor(QtVariantPropertyManager 
 	}
 }
 
-void VariantExtensionPropertyFactory::slotCustomPropertyChanged(const QString &val)
+void VariantExtensionPropertySettingFactory::slotCustomPropertyChanged(const QString &val)
 {
 	QObject *sendObj = sender();
 	if(sendObj->isWidgetType())

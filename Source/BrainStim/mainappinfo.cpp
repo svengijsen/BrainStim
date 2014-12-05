@@ -27,11 +27,7 @@ QFile *MainAppInfo::mainLogFile = NULL;//Needed to initialize the static variabl
 QWidget *MainAppInfo::mainWindow = NULL;//Needed to initialize the static variable!
 QString MainAppInfo::sAppUserPath = "";//Needed to initialize the static variable!
 QList<int> MainAppInfo::lRegisteredMetaTypeIds = QList<int>();//Needed to initialize the static variable!
-//QSettings *MainAppInfo::sDockWidgetSettings = NULL;
-
-MainAppInfo::~MainAppInfo()
-{
-}
+QHash<int, QObject *> MainAppInfo::hashRegisteredCustomPropertySettingObjects = QHash<int, QObject *>();//Needed to initialize the static variable!
 
 QString MainAppInfo::outputsDirPath()
 {
@@ -242,3 +238,59 @@ bool MainAppInfo::CreateHashTableFromEnumeration(const QString &sTypeName, QHash
 	}
 	return false;
 }
+
+bool MainAppInfo::registerCustomPropertySettingObject(QObject* objCustomPropSettObj, const int &nVariantType)
+{
+	if ((objCustomPropSettObj) && (MainAppInfo::hashRegisteredCustomPropertySettingObjects.contains(nVariantType) == false))
+	{
+		MainAppInfo::hashRegisteredCustomPropertySettingObjects.insert(nVariantType, objCustomPropSettObj);
+	}
+	return true;
+}
+
+QObject *MainAppInfo::getCustomPropertySettingObject(const int &nVariantType)
+{
+	if (MainAppInfo::hashRegisteredCustomPropertySettingObjects.contains(nVariantType))
+		return MainAppInfo::hashRegisteredCustomPropertySettingObjects.value(nVariantType);
+	return NULL;
+}
+
+QWidget *MainAppInfo::setAndRetrieveCustomPropertySettingEditorWidget(const int &nVariantType, const QString &sValue)
+{
+	QWidget *tmpEditorObject = NULL;
+	if (MainAppInfo::hashRegisteredCustomPropertySettingObjects.contains(nVariantType))
+	{
+		QObject *tmpObject = getCustomPropertySettingObject(nVariantType);
+		if (tmpObject)
+		{
+			QByteArray normalizedSignature = QMetaObject::normalizedSignature(PLUGIN_CUSTOMTYPE_GETNEWEDITOR_METHOD_FULL);
+			int methodIndex = tmpObject->metaObject()->indexOfMethod(normalizedSignature);
+			QMetaMethod method = tmpObject->metaObject()->method(methodIndex);
+			bool bInvokeResult = method.invoke(tmpObject,
+				Qt::DirectConnection,
+				Q_RETURN_ARG(QWidget *, tmpEditorObject));
+			if (tmpEditorObject)
+			{
+				QByteArray normalizedSignature = QMetaObject::normalizedSignature("setValue(QString)");
+				int methodIndex = tmpEditorObject->metaObject()->indexOfMethod(normalizedSignature);
+				QMetaMethod method = tmpEditorObject->metaObject()->method(methodIndex);
+				bool bInvokeResult = method.invoke(tmpEditorObject,
+					Qt::DirectConnection,
+					Q_RETURN_ARG(QWidget *, tmpEditorObject));
+			}
+		}
+	}
+	return tmpEditorObject;
+}
+
+void MainAppInfo::destructCustomPropertySettingObjects()
+{
+	foreach(QObject *tmpObject,hashRegisteredCustomPropertySettingObjects.values())
+	{
+		if (tmpObject)
+			delete tmpObject;
+	}
+	hashRegisteredCustomPropertySettingObjects.clear();
+}
+
+

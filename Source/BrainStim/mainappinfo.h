@@ -42,10 +42,9 @@ private:
 	static QWidget *mainWindow;
 	static QString sAppUserPath;
 	static QList<int> lRegisteredMetaTypeIds;
+	static QHash<int, QObject *> hashRegisteredCustomPropertySettingObjects;
 
 public:
-
-	~MainAppInfo();
 	struct QPairFirstComparer
 	{
 		template<typename T1, typename T2>
@@ -78,6 +77,9 @@ public:
 		return -1;
 	}
 
+	static bool registerCustomPropertySettingObject(QObject* objCustomPropSettObj, const int &nVariantType);
+	static QObject *getCustomPropertySettingObject(const int &nVariantType);
+	static QWidget *setAndRetrieveCustomPropertySettingEditorWidget(const int &nVariantType, const QString &sValue);
 	//static bool loadDockWidgetLayout(QDockWidget *dockWidget);
 	//static bool saveDockWidgetLayout(QDockWidget *dockWidget);
 	static bool getHexedOrderNumber(const int &nNumber, QString &sResult, const int &nDecimals);
@@ -144,7 +146,9 @@ public:
 	static void CloseMainLogFile();
 	static bool CreateHashTableFromEnumeration(const QString &sTypeName, QHash<QString, int> &hTable, const QMetaObject metaObject);
 
-private:	
+	static void destructCustomPropertySettingObjects();
+
+private:
 	static QDir appDebugDirPath()
 	{
 		QDir appDebugDir = QDir(appDirPath());

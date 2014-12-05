@@ -21,6 +21,7 @@
 
 #include <QGraphicsScene>
 #include <QGraphicsItem>
+#include "experimentstructurevisualizer.h"
 
 class BlockLoopsDialog;
 class ExperimentObjectsDialog;
@@ -28,6 +29,7 @@ class cExperimentStructure;
 class ExperimentTreeModel;
 class ObjectConnectionsDialog;
 class ExperimentStructureVisualizer;
+class PropertySettingsWidget; //sven
 
 enum ExperimentStructureItemType 
 { 

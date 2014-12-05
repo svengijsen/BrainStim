@@ -24,7 +24,8 @@
 #include "experimentgraphiceditor_global.h"
 #include "experimentstructures.h"
 #include "experimenttreeitem.h"
-#include "experimentparameterdefinition.h"
+//sven #include "experimentparameterdefinition.h"
+#include "propertysetting.h"// sven
 
 #define EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID		-1
 #define EXPERIMENTTREEMODEL_FILTER_TAGS				"TAGS"
@@ -57,14 +58,14 @@ class ExperimentTreeModel : public QStandardItemModel
 			int nObjectID;
 			QString sParamHexID;
 			QString sParamName;
-			ParameterEditingType cParamEditType;
+			PropertySettingEditingType cParamEditType;
 			strcParameterSpecifier()
 			{
 				nBlockID = -1;
 				nObjectID = -1;
 				sParamName = "";
 				sParamHexID = "";
-				cParamEditType = PEM_DEFINED;
+				cParamEditType = PSET_DEFINED;
 			}
 		};
 

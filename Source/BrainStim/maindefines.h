@@ -98,6 +98,9 @@
 #define METHOD_TYPE_PROPERTY_TAG						"property"
 #define METHOD_TYPE_ENUMERATOR_TAG						"enumerator"
 
+#define PLUGIN_CUSTOMTYPE_GETNEWEDITOR_METHOD_FULL		"getNewEditorObject()"
+#define PLUGIN_CUSTOMTYPE_RESOLVEPARAM_METHOD_FULL		"resolveParameterValueType(QVariant, bool)"
+
 #define MENUACTION_SECTION_SEPERATOR					"|"
 #define MENUACTION_SUBMENU_SEPERATOR					"/"
 #define MENUACTION_TYPE_SCRIPTPATH						"scriptpath"

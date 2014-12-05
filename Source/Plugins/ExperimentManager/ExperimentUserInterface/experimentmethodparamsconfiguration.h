@@ -22,7 +22,8 @@
 #include <QDialog>
 #include "ui_experimentmethodparamsconfiguration.h"
 #include "ExperimentTreeModel.h"
-#include "experimentparametervisualizer.h"
+//sven #include "experimentparametervisualizer.h"
+#include "propertysettingswidget.h"//sven
 
 class ExperimentMethodParamsConfigurationDialog : public QDialog
 {
@@ -48,7 +49,7 @@ private:
 
 	bool bIsInitialized;
 	ExperimentTreeModel *pCurrentExpTree;
-	ExperimentParameterVisualizer *tmpParametersWidget;
+	PropertySettingsWidget *tmpParametersWidget;
 	int nInitFinitId;
 	bool bIsInit;
 	int nSelectedRow;

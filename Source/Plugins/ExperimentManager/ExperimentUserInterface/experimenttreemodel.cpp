@@ -23,7 +23,7 @@
 #include <QLineEdit>
 #include <QComboBox>
 #include "experimenttreemodel.h"
-#include "experimentparameterdefinition.h"
+//sven #include "experimentparameterdefinition.h"
 
 ExperimentTreeModel::ExperimentTreeModel(QObject *parent) : QStandardItemModel(parent)
 {
@@ -919,7 +919,7 @@ bool ExperimentTreeModel::renameExperimentParameter(const ExperimentTreeModel::s
 			{
 				for (int i=0;i<tmpExpTreeItem->rowCount(); i++)
 				{
-					if(tmpExpTreeItem->child(i)->getName().toLower() == EXPERIMENT_NAME_TAG)
+					if (tmpExpTreeItem->child(i)->getName().toLower() == PROPERTYSETTINGS_NAME_TAG)
 					{
 						tmpExpTreeItem->child(i)->setValue(sNewName);
 						bResult = true;
@@ -1587,7 +1587,7 @@ bool ExperimentTreeModel::addUpdateExperimentBlockParameter(const ExperimentTree
 			{
 				for (int i=0;i<tmpExpTreeItem->rowCount(); i++)
 				{
-					if(tmpExpTreeItem->child(i)->getName().toLower() == EXPERIMENT_VALUE_TAG)
+					if (tmpExpTreeItem->child(i)->getName().toLower() == PROPERTYSETTINGS_VALUE_TAG)
 					{
 						tmpExpTreeItem->child(i)->setValue(sNewValue);
 						bResult = true;
@@ -1736,9 +1736,9 @@ void ExperimentTreeModel::saveNewData(const QString &sName, const QString &sValu
 				bDoBreak = true;
 			for (int j=0;j<totalChilds;j++)
 			{
-				if((m_parent->getName() == EXPERIMENT_PARAMETERS_TAG) || (m_parent->getName() == EXPERIMENT_CUSTOMPARAMETERS_TAG))
+				if ((m_parent->getName() == PARAMETERS_TAG) || (m_parent->getName() == CUSTOM_PARAMETERS_TAG))
 				{
-					if(m_parent->child(j)->getName() == EXPERIMENT_PARAMETER_TAG)
+					if(m_parent->child(j)->getName() == PARAMETER_TAG)
 					{
 						if(m_parent->child(j)->hasChildren())
 						{
@@ -1747,7 +1747,7 @@ void ExperimentTreeModel::saveNewData(const QString &sName, const QString &sValu
 							while (it.hasNext()) 
 							{
 								it.next();
-								if(it.key().toLower() == EXPERIMENT_ID_TAG)
+								if (it.key().toLower() == PROPERTYSETTINGS_ID_TAG)
 								{
 									if(it.value().value.toInt() > nHighestIDNumber)
 									{
@@ -1761,7 +1761,7 @@ void ExperimentTreeModel::saveNewData(const QString &sName, const QString &sValu
 							nValueIndex = -1;
 							for(int i=0;i<m_parent->child(j)->childCount();i++)
 							{
-								if(m_parent->child(j)->child(i)->getName() == EXPERIMENT_NAME_TAG)
+								if (m_parent->child(j)->child(i)->getName() == PROPERTYSETTINGS_NAME_TAG)
 								{
 									if (sRelativeNames[0].compare(m_parent->child(j)->child(i)->getValue(), Qt::CaseInsensitive) == 0)
 									{
@@ -1772,7 +1772,7 @@ void ExperimentTreeModel::saveNewData(const QString &sName, const QString &sValu
 										continue;	
 									}							
 								}
-								else if(m_parent->child(j)->child(i)->getName() == EXPERIMENT_VALUE_TAG)
+								else if (m_parent->child(j)->child(i)->getName() == PROPERTYSETTINGS_VALUE_TAG)
 								{
 									sTempString2 = m_parent->child(j)->child(i)->getValue();
 									nValueIndex = i;
@@ -1849,22 +1849,22 @@ void ExperimentTreeModel::saveNewData(const QString &sName, const QString &sValu
 		}		
 		if(bParamFound == false)
 		{
-			if((m_parent->getName() == EXPERIMENT_PARAMETERS_TAG) || (m_parent->getName() == EXPERIMENT_CUSTOMPARAMETERS_TAG))
+			if((m_parent->getName() == PARAMETERS_TAG) || (m_parent->getName() == CUSTOM_PARAMETERS_TAG))
 			{
 				//we need to add this new data to the tree model
-				ExperimentTreeItem *item = new ExperimentTreeItem(EXPERIMENT_PARAMETER_TAG, "");
+				ExperimentTreeItem *item = new ExperimentTreeItem(PARAMETER_TAG, "");
 				m_parent->appendRow(item);			
 				TreeItemDefinition tmpTreeItemDefinition;
 				tmpTreeItemDefinition.type = TreeItemType_Attribute;
 				tmpTreeItemDefinition.value = QString::number(nHighestIDNumber + 1);
 				QMap<QString,TreeItemDefinition> m_definitions = item->getDefinitions();
-				m_definitions.insert(QString(EXPERIMENT_ID_TAG).toUpper(), tmpTreeItemDefinition);
+				m_definitions.insert(QString(PROPERTYSETTINGS_ID_TAG).toUpper(), tmpTreeItemDefinition);
 				item->setDefinitions(m_definitions);
 				//Append the name
-				ExperimentTreeItem *subNameItem = new ExperimentTreeItem(EXPERIMENT_NAME_TAG, sRelativeNames[0]);
+				ExperimentTreeItem *subNameItem = new ExperimentTreeItem(PROPERTYSETTINGS_NAME_TAG, sRelativeNames[0]);
 				item->appendRow(subNameItem);			
 				//Append the value
-				subNameItem = new ExperimentTreeItem(EXPERIMENT_VALUE_TAG, sValue);
+				subNameItem = new ExperimentTreeItem(PROPERTYSETTINGS_VALUE_TAG, sValue);
 				item->appendRow(subNameItem);
 				bModelChanged = true;
 			}
@@ -1887,7 +1887,7 @@ void ExperimentTreeModel::saveNewData(QWidget *widgetContainer, const QModelInde
 
 		if(gridLayout == NULL)
 		{
-			//ExperimentParameterVisualizer *paramVisualizer = dynamic_cast<ExperimentParameterVisualizer*>(widgetContainer->layout());
+			//PropertySettingsWidget *paramVisualizer = dynamic_cast<PropertySettingsWidget*>(widgetContainer->layout());
 		}
 		else
 		{

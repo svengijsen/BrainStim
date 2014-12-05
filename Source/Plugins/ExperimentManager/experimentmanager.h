@@ -34,7 +34,8 @@
 #include "./../../BrainStim/mainappinfo.h"
 #include "experimentlogger.h"
 #include "xmlmessagehandler.h"
-#include "experimentparameter.h"
+//sven #include "experimentparameter.h"
+#include "propertysetting.h"//sven
 #include "experimentstructures.h"
 
 #ifdef Q_OS_WIN32 //Are we on Windows?
@@ -42,6 +43,7 @@
 #endif
 
 #define EXPERIMENTMANAGER_SCRIPTCONTEXT_NAME	"EM"
+#define EXPERIMENT_CUSTOMPARAM_INFOSTRING		"Custom user defined parameter."
 
 using namespace ExperimentManagerNameSpace;
 
@@ -49,7 +51,7 @@ class cExperimentStructure;
 class ExperimentTreeItem;
 class ExperimentGraphicEditor;
 class ExperimentTreeModel;
-class ExperimentParameterWidgets;
+class PropertySettingsWidgetContainer;
 
 //!  The ExperimentManager class. 
 /*!
@@ -102,7 +104,7 @@ public:
 		QString sObjectName;
 		ExperimentSubObjectState nCurrentState;
 		tParsedParameterList *ExpBlockParams;
-		TypedExperimentParameterContainer *typedExpParamCntnr;
+		TypedPropertySettingContainer *typedExpParamCntnr;
 	} objectElement;
 
 	struct strcInvokeObjectDefs
@@ -124,7 +126,7 @@ public:
 	static QScriptValue ctor__experimentStateEnum(QScriptContext *context, QScriptEngine *engine);
 	//static QScriptValue toExperimentStateEnumScriptValue(QScriptEngine *engine, const ExperimentState &s);
 	//static void fromExperimentStateEnumScriptValue(const QScriptValue &obj, ExperimentState &s);
-	//static ExperimentParameterDefinitionContainer *getExperimentParameterDefinition(const QString &sCollectionName);
+	//static PropertySettingDefinition *getExperimentParameterDefinition(const QString &sCollectionName);
 
 	ExperimentState getCurrExperimentState() { return experimentCurrentState; }
 	void cleanupSingletons();
@@ -158,7 +160,7 @@ public:
 							if (lExperimentObjectList[i].ExpBlockParams->contains(sKeyName.toLower()))
 							{
 								if(lExperimentObjectList[i].typedExpParamCntnr)
-									return lExperimentObjectList[i].typedExpParamCntnr->getExperimentParameter<T>(sKeyName);
+									return lExperimentObjectList[i].typedExpParamCntnr->getPropertySetting<T>(sKeyName);
 								else
 									return NULL;
 							}
@@ -186,15 +188,15 @@ public:
 							if ((lExperimentObjectList[i].ExpBlockParams == NULL) || (lExperimentObjectList[i].ExpBlockParams->isEmpty()))
 								return false;
 							if(lExperimentObjectList[i].typedExpParamCntnr == NULL)
-								lExperimentObjectList[i].typedExpParamCntnr = new TypedExperimentParameterContainer();
+								lExperimentObjectList[i].typedExpParamCntnr = new TypedPropertySettingContainer();
 							bool bRetVal;
 							if(bCreateVariabeleInMemory)
 							{
-								bRetVal = lExperimentObjectList[i].typedExpParamCntnr->createExperimentParameter<T>(sKeyName,tVariabele);
+								bRetVal = lExperimentObjectList[i].typedExpParamCntnr->createPropertySetting<T>(sKeyName,tVariabele);
 							}
 							else
 							{
-								bRetVal = lExperimentObjectList[i].typedExpParamCntnr->insertExperimentParameter<T>(sKeyName,&tVariabele);
+								bRetVal = lExperimentObjectList[i].typedExpParamCntnr->insertPropertySetting<T>(sKeyName,&tVariabele);
 							}
 							return bRetVal;
 						}
@@ -440,7 +442,7 @@ private:
 	void changeCurrentExperimentState(ExperimentState expCurrState);
 	QObject *getObjectElementById(int nID);
 		
-	ExperimentParameterWidgets *expParamWidgets;
+	PropertySettingsWidgetContainer *expParamWidgets;
 	QList<ExperimentTreeItem*> ExperimentTreeBlockItemList;
 	QList<ExperimentTreeItem*> ExperimentObjectTreeItemList;
 	QList<ExperimentTreeItem*> ExperimentTreeItemList;
