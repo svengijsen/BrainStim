@@ -21,7 +21,6 @@
 
 #include <QDialog>
 #include "experimenttreemodel.h"
-//sven #include "experimentparameterdefinition.h"
 
 namespace Ui {class ObjectParameterDialog;};
 

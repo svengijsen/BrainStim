@@ -79,7 +79,7 @@ public:
 
 	static bool registerCustomPropertySettingObject(QObject* objCustomPropSettObj, const int &nVariantType);
 	static QObject *getCustomPropertySettingObject(const int &nVariantType);
-	static QWidget *setAndRetrieveCustomPropertySettingEditorWidget(const int &nVariantType, const QString &sValue);
+	static QWidget *retrieveCustomPropertySettingEditorWidget(const int &nVariantType);// , const QString &sValue);
 	//static bool loadDockWidgetLayout(QDockWidget *dockWidget);
 	//static bool saveDockWidgetLayout(QDockWidget *dockWidget);
 	static bool getHexedOrderNumber(const int &nNumber, QString &sResult, const int &nDecimals);

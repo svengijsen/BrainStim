@@ -65,10 +65,24 @@ public:
 	~RotationDirectionPropertyType() { ; };
 	Q_INVOKABLE QVariant resolveParameterValueType(const QVariant &vInput, const bool &bToView)
 	{
+		bool bIsInteger = false;
+		int nIntegerValue = vInput.toInt(&bIsInteger);
 		if (bToView)
-			return RotationDirectionPropertySetting::rotationDirectionString((RotationDirectionPropertySetting::RotationDirectionEnum)vInput.toInt());
+		{
+			if (bIsInteger)
+				return RotationDirectionPropertySetting::rotationDirectionString((RotationDirectionPropertySetting::RotationDirectionEnum)nIntegerValue);
+			else
+				return vInput.toString();
+		}
 		else
-			return (int)RotationDirectionPropertySetting::rotationDirectionEnum(vInput.toString());
+		{
+			if (bIsInteger)
+				return nIntegerValue;
+			else if (VariantExtensionPropertySettingManager::isScriptReferenceString(vInput.toString()))
+				return vInput.toString();
+			else
+				return (int)RotationDirectionPropertySetting::rotationDirectionEnum(vInput.toString());
+		}
 	};
 
 	Q_INVOKABLE QWidget* getNewEditorObject()
@@ -120,10 +134,24 @@ public:
 	~MovementDirectionPropertyType() { ; };
 	Q_INVOKABLE QVariant resolveParameterValueType(const QVariant &vInput, const bool &bToView)
 	{
+		bool bIsInteger = false;
+		int nIntegerValue = vInput.toInt(&bIsInteger);
 		if (bToView)
-			return MovementDirectionPropertySetting::movementDirectionString((MovementDirectionPropertySetting::MovementDirectionEnum)vInput.toInt());
+		{
+			if (bIsInteger)
+				return MovementDirectionPropertySetting::movementDirectionString((MovementDirectionPropertySetting::MovementDirectionEnum)vInput.toInt());
+			else
+				return vInput.toString();
+		}
 		else
-			return (int)MovementDirectionPropertySetting::movementDirectionEnum(vInput.toString());
+		{
+			if (bIsInteger)
+				return nIntegerValue;
+			else if (VariantExtensionPropertySettingManager::isScriptReferenceString(vInput.toString()))
+				return vInput.toString();
+			else
+				return (int)MovementDirectionPropertySetting::movementDirectionEnum(vInput.toString());
+		}
 	};
 
 	Q_INVOKABLE QWidget* getNewEditorObject()
@@ -174,10 +202,24 @@ public:
 	~EccentricityDirectionPropertyType() { ; };
 	Q_INVOKABLE QVariant resolveParameterValueType(const QVariant &vInput, const bool &bToView)
 	{
+		bool bIsInteger = false;
+		int nIntegerValue = vInput.toInt(&bIsInteger);
 		if (bToView)
-			return EccentricityDirectionPropertyWidget::eccentricityDirectionString((EccentricityDirectionPropertyWidget::EccentricityDirectionEnum)vInput.toInt());
+		{
+			if (bIsInteger)
+				return EccentricityDirectionPropertyWidget::eccentricityDirectionString((EccentricityDirectionPropertyWidget::EccentricityDirectionEnum)vInput.toInt());
+			else
+				return vInput.toString();
+		}
 		else
-			return (int)EccentricityDirectionPropertyWidget::eccentricityDirectionEnum(vInput.toString());
+		{
+			if (bIsInteger)
+				return nIntegerValue;
+			else if (VariantExtensionPropertySettingManager::isScriptReferenceString(vInput.toString()))
+				return vInput.toString();
+			else
+				return (int)EccentricityDirectionPropertyWidget::eccentricityDirectionEnum(vInput.toString());
+		}
 	};
 
 	Q_INVOKABLE QWidget* getNewEditorObject()

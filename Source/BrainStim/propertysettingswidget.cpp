@@ -361,17 +361,22 @@ bool PropertySettingsWidget::setParameter(const QString &sName, const QString &s
 				configurePropertyEditSignaling(false);
 
 			bool bIsCustomMetaType = false;
-			foreach(strcCustomVariantMetaTypeDescription tmpMetaDescription, hashRegisteredCustomVariabeleTypeToVariantMetaTypes)
+
+			QHashIterator<int, strcCustomVariantMetaTypeDescription> iter(hashRegisteredCustomVariabeleTypeToVariantMetaTypes);
+			while (iter.hasNext())
 			{
-				if (tmpMetaDescription.vType == tmpParamValueDef.vType)
+				iter.next();
+				if (iter.value().vType == tmpParamValueDef.vType)
 				{
+					QVariant vResolvedParameterValue = VariantExtensionPropertySettingManager::resolveParameterValueType(sValue, iter.key(), true);
+					tmpParamValueDef.vProperty->setValue(vResolvedParameterValue.toString());//sValue);
 					bIsCustomMetaType = true;
 					break;
 				}
 			}
 			if (bIsCustomMetaType)
 			{
-				tmpParamValueDef.vProperty->setValue(sValue);
+
 			}
 			else
 			{

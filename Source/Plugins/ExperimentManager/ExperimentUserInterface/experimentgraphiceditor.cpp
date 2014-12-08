@@ -40,10 +40,8 @@
 #include "experimentgraphiceditor.h"
 #include "experimenttreeitem.h"
 #include "experimentstructurevisualizer.h"
-//sven #include "experimentparametervisualizer.h"
-//sven #include "experimentparameterdefinition.h"
-#include "propertysettingswidget.h"//sven
-#include "propertysettingswidgetcontainer.h"//sven
+#include "propertysettingswidget.h"
+#include "propertysettingswidgetcontainer.h"
 #include "experimentblockparameterview.h"
 
 ExperimentGraphicEditor::ExperimentGraphicEditor(QWidget *parent) : QWidget(parent)

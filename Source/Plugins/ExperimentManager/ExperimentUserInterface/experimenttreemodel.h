@@ -24,8 +24,7 @@
 #include "experimentgraphiceditor_global.h"
 #include "experimentstructures.h"
 #include "experimenttreeitem.h"
-//sven #include "experimentparameterdefinition.h"
-#include "propertysetting.h"// sven
+#include "propertysetting.h"
 
 #define EXPERIMENTTREEMODEL_BLOCKOBJECT_INDEXID		-1
 #define EXPERIMENTTREEMODEL_FILTER_TAGS				"TAGS"

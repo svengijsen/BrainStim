@@ -17,7 +17,6 @@
 //
 
 #include "propertysettingdefinition.h"
-//sven #include "global.h"
 #include "maindefines.h"
 #include <QUrl>
 #include <QFile>

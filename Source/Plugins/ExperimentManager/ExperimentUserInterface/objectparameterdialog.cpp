@@ -19,12 +19,9 @@
 #include "objectparameterdialog.h"
 #include "ui_ObjectParameterDialog.h"
 #include "experimentmanager.h"
-//sven #include "propertysettingswidgetcontainer.h"
-//sven #include "parameterpropertyextensions.h"
-//sven #include "experimentparametervisualizer.h"
-#include "propertysettingswidgetcontainer.h"//sven
-#include "propertysettingextensions.h"//sven
-#include "propertysettingswidget.h"//sven
+#include "propertysettingswidgetcontainer.h"
+#include "propertysettingextensions.h"
+#include "propertysettingswidget.h"
 
 ObjectParameterDialog::ObjectParameterDialog(QWidget *parent) : QDialog(parent), pCurrentExpTree(NULL), pCurrentExpStructure(NULL), pParameterEditWidget(NULL), bIsParsing(false)
 {

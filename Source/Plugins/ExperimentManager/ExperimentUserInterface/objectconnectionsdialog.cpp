@@ -20,8 +20,7 @@
 #include "ui_ObjectConnectionsDialog.h"
 #include "experimentmanager.h"
 #include "propertysettingswidgetcontainer.h"
-//sven #include "experimentparametervisualizer.h"
-#include "propertysettingswidget.h"//sven
+#include "propertysettingswidget.h"
 
 ObjectConnectionsDialog::ObjectConnectionsDialog(QWidget *parent) : QDialog(parent), bIsParsing(false), pCurrentExpStructure(NULL), twCurrentConnections(NULL), layoutTreeWidgetParent(NULL), pExpParamWidgets(NULL), pParametersWidget(NULL), pExperimentTreeModel(NULL), nCurrentObjectConnectionSelectionIdentifier(-1)
 {

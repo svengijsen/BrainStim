@@ -255,7 +255,7 @@ QObject *MainAppInfo::getCustomPropertySettingObject(const int &nVariantType)
 	return NULL;
 }
 
-QWidget *MainAppInfo::setAndRetrieveCustomPropertySettingEditorWidget(const int &nVariantType, const QString &sValue)
+QWidget *MainAppInfo::retrieveCustomPropertySettingEditorWidget(const int &nVariantType)//, const QString &sValue)
 {
 	QWidget *tmpEditorObject = NULL;
 	if (MainAppInfo::hashRegisteredCustomPropertySettingObjects.contains(nVariantType))
@@ -269,15 +269,15 @@ QWidget *MainAppInfo::setAndRetrieveCustomPropertySettingEditorWidget(const int 
 			bool bInvokeResult = method.invoke(tmpObject,
 				Qt::DirectConnection,
 				Q_RETURN_ARG(QWidget *, tmpEditorObject));
-			if (tmpEditorObject)
-			{
-				QByteArray normalizedSignature = QMetaObject::normalizedSignature("setValue(QString)");
-				int methodIndex = tmpEditorObject->metaObject()->indexOfMethod(normalizedSignature);
-				QMetaMethod method = tmpEditorObject->metaObject()->method(methodIndex);
-				bool bInvokeResult = method.invoke(tmpEditorObject,
-					Qt::DirectConnection,
-					Q_RETURN_ARG(QWidget *, tmpEditorObject));
-			}
+			//if (tmpEditorObject)
+			//{
+			//	QByteArray normalizedSignature = QMetaObject::normalizedSignature("setValue(QString)");
+			//	int methodIndex = tmpEditorObject->metaObject()->indexOfMethod(normalizedSignature);
+			//	QMetaMethod method = tmpEditorObject->metaObject()->method(methodIndex);
+			//	bool bInvokeResult = method.invoke(tmpEditorObject,
+			//		Qt::DirectConnection,
+			//		Q_RETURN_ARG(QWidget *, tmpEditorObject));
+			//}
 		}
 	}
 	return tmpEditorObject;

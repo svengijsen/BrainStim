@@ -18,7 +18,6 @@
 
 #include "propertysettingswidgetcontainer.h"
 #include "propertysettingswidget.h"
-//sven #include "global.h"
 #include <QDir>
 #include <QDebug>
 
@@ -134,7 +133,7 @@ bool PropertySettingsWidgetContainer::loadExperimentParameterDefinition(const QS
 //	QList<ExperimentControlDefinitionLocationInfo> sExpContrDefLocLst;
 //	ExperimentControlDefinitionLocationInfo tmpExpContrDefLoc;
 //
-//	//sven tmpExpContrDefLoc.sName = RETINOTOPYMAPPER_NAME;
+//	//tmpExpContrDefLoc.sName = RETINOTOPYMAPPER_NAME;
 //	//tmpExpContrDefLoc.sPathToDefFile = RETINOTOPYMAPPER_PARAMDEF_PATH;
 //	//sExpContrDefLocLst.append(tmpExpContrDefLoc);
 //

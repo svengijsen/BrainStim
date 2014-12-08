@@ -17,9 +17,6 @@
 //
 
 #include "experimentpropertysettingextensions.h"
-//#include "propertysettingswidget.h"
-//#include <QFileDialog>
-//#include <QCheckBox>
 
 QMap<int, QString> RotationDirectionPropertySetting::mRotationDirection;
 QMap<int, RotationDirectionPropertySetting::RotationDirectionEnum> RotationDirectionPropertySetting::indexToEnumHash;
@@ -75,7 +72,12 @@ void RotationDirectionPropertySetting::destroyEditorComponents()
 
 void RotationDirectionPropertySetting::setFixedValue(const QString &sValue)
 {
-	cmbSelection->setCurrentText(sValue);
+	bool bIsInteger = false;
+	int nIntValue = sValue.toInt(&bIsInteger);
+	if (bIsInteger)
+		cmbSelection->setCurrentText(rotationDirectionString((RotationDirectionEnum)nIntValue));
+	else
+		cmbSelection->setCurrentText(sValue);
 }
 
 QString RotationDirectionPropertySetting::rotationDirectionString(enum RotationDirectionEnum eValue)
@@ -150,7 +152,12 @@ void MovementDirectionPropertySetting::destroyEditorComponents()
 
 void MovementDirectionPropertySetting::setFixedValue(const QString &sValue)
 {
-	cmbSelection->setCurrentText(sValue);
+	bool bIsInteger = false;
+	int nIntValue = sValue.toInt(&bIsInteger);
+	if (bIsInteger)
+		cmbSelection->setCurrentText(movementDirectionString((MovementDirectionEnum)nIntValue));
+	else
+		cmbSelection->setCurrentText(sValue);
 }
 
 QString MovementDirectionPropertySetting::movementDirectionString(enum MovementDirectionEnum eValue)
@@ -278,7 +285,12 @@ void EccentricityDirectionPropertyWidget::destroyEditorComponents()
 
 void EccentricityDirectionPropertyWidget::setFixedValue(const QString &sValue)
 {
-	cmbSelection->setCurrentText(sValue);
+	bool bIsInteger = false;
+	int nIntValue = sValue.toInt(&bIsInteger);
+	if (bIsInteger)
+		cmbSelection->setCurrentText(eccentricityDirectionString((EccentricityDirectionEnum)nIntValue));
+	else
+		cmbSelection->setCurrentText(sValue);
 }
 
 QString EccentricityDirectionPropertyWidget::eccentricityDirectionString(enum EccentricityDirectionEnum eValue)

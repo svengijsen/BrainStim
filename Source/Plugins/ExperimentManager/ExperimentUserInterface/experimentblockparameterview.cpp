@@ -17,11 +17,8 @@
 //
 
 #include "experimentblockparameterview.h"
-//sven #include "propertysettingswidgetcontainer.h"
-//sven #include "parameterpropertyextensions.h"
-//sven #include "experimentparametervisualizer.h"
-#include "propertysettingswidget.h"//sven
-#include "propertysettingswidgetcontainer.h"//sven
+#include "propertysettingswidget.h"
+#include "propertysettingswidgetcontainer.h"
 #include "propertysettingextensions.h"
 #include "objectparameterdialog.h"
 #include "../experimentmanager.h"

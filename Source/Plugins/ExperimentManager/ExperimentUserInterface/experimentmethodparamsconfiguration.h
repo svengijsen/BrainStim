@@ -22,8 +22,7 @@
 #include <QDialog>
 #include "ui_experimentmethodparamsconfiguration.h"
 #include "ExperimentTreeModel.h"
-//sven #include "experimentparametervisualizer.h"
-#include "propertysettingswidget.h"//sven
+#include "propertysettingswidget.h"
 
 class ExperimentMethodParamsConfigurationDialog : public QDialog
 {

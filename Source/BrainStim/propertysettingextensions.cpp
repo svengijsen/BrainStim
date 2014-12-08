@@ -22,15 +22,6 @@
 #include <QCheckBox>
 #include <QMetaMethod>
 
-//QMap<int, QString> RotationDirectionPropertySetting::mRotationDirection;
-//QMap<int, RotationDirectionPropertySetting::RotationDirectionEnum> RotationDirectionPropertySetting::indexToEnumHash;
-//QMap<int, QString> MovementDirectionPropertySetting::mMovementDirection;
-//QMap<int, MovementDirectionPropertySetting::MovementDirectionEnum> MovementDirectionPropertySetting::indexToEnumHash;
-//sven QMap<int, QString> EccentricityDirectionPropertyWidget::mEccentricityDirection;
-//sven QMap<int, EccentricityDirectionPropertyWidget::EccentricityDirectionEnum> EccentricityDirectionPropertyWidget::indexToEnumHash;
-//sven QMap<int, QString> MethodTypePropertyWidget::mapMethodType;
-//sven QMap<int, ExperimentStructuresNameSpace::MethodType> MethodTypePropertyWidget::indexToEnumMap;
-
 ///////////////////////////////////////////////////////////////////////////////
 
 PropertySettingBase::PropertySettingBase(QWidget *parent) : parentWidget(parent), QWidget(parent)
@@ -573,284 +564,6 @@ void FilePathPropertySetting::currentTextChangedSlot(const QString &sText)
 	setAndEmitEditedValue(sText);
 }
 
-/////////////////////////////////////////////////////////////////////////////////
-
-//RotationDirectionPropertySetting::RotationDirectionPropertySetting(QWidget *parent) : PropertySettingBase(parent) 
-//{
-//	cmbSelection = NULL;
-//	createEditorComponents();
-//}
-//
-//RotationDirectionPropertySetting::~RotationDirectionPropertySetting()
-//{
-//	destroyEditorComponents();
-//}
-//
-//void RotationDirectionPropertySetting::createEditorComponents()
-//{
-//	destroyEditorComponents();
-//	cmbSelection = new QComboBox(getParentWidget());
-//	int nIndex = 0;
-//	cmbSelection->addItem(QIcon(":/resources/clockwise.png"),rotationDirectionString(ROTATION_DIR_CLOCKWISE), ROTATION_DIR_CLOCKWISE);
-//	indexToEnumHash[nIndex] = ROTATION_DIR_CLOCKWISE;
-//	nIndex++;
-//	cmbSelection->addItem(QIcon(":/resources/counterclockwise.png"),rotationDirectionString(ROTATION_DIR_COUNTERCLOCKWISE), ROTATION_DIR_COUNTERCLOCKWISE);
-//	indexToEnumHash[nIndex] = ROTATION_DIR_COUNTERCLOCKWISE;
-//	nIndex++;
-//	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));
-//
-//	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
-//	strcCustomFixedWidget sTmpCustomFixedWidget;
-//	sTmpCustomFixedWidget.pCustomWidget = cmbSelection;
-//	sTmpCustomFixedWidget.nStretch = 9;
-//	lTmpCustomFixedWidgetList.append(sTmpCustomFixedWidget);
-//	setCustomFixedWidgetList(lTmpCustomFixedWidgetList);
-//}
-//
-//void RotationDirectionPropertySetting::destroyEditorComponents()
-//{
-//	if(cmbSelection)
-//	{
-//		delete cmbSelection;
-//		cmbSelection = NULL;
-//	}
-//}
-//
-//void RotationDirectionPropertySetting::setFixedValue(const QString &sValue)
-//{
-//	cmbSelection->setCurrentText(sValue);
-//}
-//
-//QString RotationDirectionPropertySetting::rotationDirectionString(enum RotationDirectionEnum eValue)
-//{
-//	if(mRotationDirection.isEmpty())
-//	{
-//		mRotationDirection[RotationDirectionPropertySetting::ROTATION_DIR_UNDEFINED] = "Undefined";
-//		mRotationDirection[RotationDirectionPropertySetting::ROTATION_DIR_CLOCKWISE] = "Clockwise";	
-//		mRotationDirection[RotationDirectionPropertySetting::ROTATION_DIR_COUNTERCLOCKWISE] = "CounterClockwise";
-//	}
-//	return mRotationDirection[eValue];
-//}
-//
-//RotationDirectionPropertySetting::RotationDirectionEnum RotationDirectionPropertySetting::rotationDirectionEnum(const QString &sName)
-//{
-//	if(QString::compare(mRotationDirection[RotationDirectionPropertySetting::ROTATION_DIR_CLOCKWISE], sName, Qt::CaseInsensitive) == 0)
-//		return ROTATION_DIR_CLOCKWISE;
-//	else if(QString::compare(mRotationDirection[RotationDirectionPropertySetting::ROTATION_DIR_COUNTERCLOCKWISE], sName, Qt::CaseInsensitive) == 0)
-//		return ROTATION_DIR_COUNTERCLOCKWISE;
-//	//else if(QString::compare(mRotationDirection[RotationDirectionPropertySetting::ROTATION_DIR_UNDEFINED], sName, Qt::CaseInsensitive) == 0)
-//	//	return ROTATION_DIR_UNDEFINED;
-//	return ROTATION_DIR_UNDEFINED; 
-//}
-//
-//void RotationDirectionPropertySetting::currentIndexChangedSlot(int nIndex)
-//{
-//	emit PropertyWidgetChanged(QString::number((int)indexToEnumHash[nIndex]));
-//}
-
-////////////////////////////////////////////////////////////////////////////////////////
-
-//MovementDirectionPropertySetting::MovementDirectionPropertySetting(QWidget *parent) : PropertySettingBase(parent) 
-//{
-//	cmbSelection = NULL;
-//	createEditorComponents();
-//}
-//
-//MovementDirectionPropertySetting::~MovementDirectionPropertySetting()
-//{
-//	destroyEditorComponents();
-//}
-//
-//void MovementDirectionPropertySetting::createEditorComponents()
-//{
-//	destroyEditorComponents();
-//	cmbSelection = new QComboBox(getParentWidget());
-//	int nIndex = 0;
-//	cmbSelection->addItem(QIcon(":/resources/upwards.png"),movementDirectionString(MOVEMENT_DIR_DOWNUP), MOVEMENT_DIR_DOWNUP);
-//	indexToEnumHash[nIndex] = MOVEMENT_DIR_DOWNUP;
-//	nIndex++;
-//	cmbSelection->addItem(QIcon(":/resources/downwards.png"),movementDirectionString(MOVEMENT_DIR_UPDOWN), MOVEMENT_DIR_UPDOWN);
-//	indexToEnumHash[nIndex] = MOVEMENT_DIR_UPDOWN;
-//	nIndex++;
-//	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));
-//
-//	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
-//	strcCustomFixedWidget sTmpCustomFixedWidget;
-//	sTmpCustomFixedWidget.pCustomWidget = cmbSelection;
-//	sTmpCustomFixedWidget.nStretch = 9;
-//	lTmpCustomFixedWidgetList.append(sTmpCustomFixedWidget);
-//	setCustomFixedWidgetList(lTmpCustomFixedWidgetList);
-//}
-//
-//void MovementDirectionPropertySetting::destroyEditorComponents()
-//{
-//	if(cmbSelection)
-//	{
-//		delete cmbSelection;
-//		cmbSelection = NULL;
-//	}
-//}
-//
-//void MovementDirectionPropertySetting::setFixedValue(const QString &sValue)
-//{
-//	cmbSelection->setCurrentText(sValue);
-//}
-//
-//QString MovementDirectionPropertySetting::movementDirectionString(enum MovementDirectionEnum eValue)
-//{
-//	if(mMovementDirection.isEmpty())
-//	{
-//		mMovementDirection[MovementDirectionPropertySetting::MOVEMENT_DIR_UNDEFINED] = "Undefined";
-//		mMovementDirection[MovementDirectionPropertySetting::MOVEMENT_DIR_DOWNUP] = "Upwards";	
-//		mMovementDirection[MovementDirectionPropertySetting::MOVEMENT_DIR_UPDOWN] = "Downwards";
-//	}
-//	return mMovementDirection[eValue];
-//}
-//
-//MovementDirectionPropertySetting::MovementDirectionEnum MovementDirectionPropertySetting::movementDirectionEnum(const QString &sName)
-//{
-//	if(QString::compare(mMovementDirection[MovementDirectionPropertySetting::MOVEMENT_DIR_DOWNUP], sName, Qt::CaseInsensitive) == 0)
-//		return MOVEMENT_DIR_DOWNUP;
-//	else if(QString::compare(mMovementDirection[MovementDirectionPropertySetting::MOVEMENT_DIR_UPDOWN], sName, Qt::CaseInsensitive) == 0)
-//		return MOVEMENT_DIR_UPDOWN;
-//	//else if(QString::compare(mMovementDirection[MovementDirectionPropertySetting::MOVEMENT_DIR_UNDEFINED], sName, Qt::CaseInsensitive) == 0)
-//	//	return MOVEMENT_DIR_UNDEFINED;
-//	return MOVEMENT_DIR_UNDEFINED; 
-//}
-//
-//void MovementDirectionPropertySetting::currentIndexChangedSlot(int nIndex)
-//{
-//	emit PropertyWidgetChanged(QString::number((int)indexToEnumHash[nIndex]));
-//}
-
-////////////////////////////////////////////////////////////////////////////////////////
-
-//sven MethodTypePropertyWidget::MethodTypePropertyWidget(QWidget *parent) : PropertySettingBase(parent) 
-//{
-//	cmbSelection = NULL;
-//	createEditorComponents();
-//}
-//
-//MethodTypePropertyWidget::~MethodTypePropertyWidget()
-//{
-//	destroyEditorComponents();
-//}
-//
-//void MethodTypePropertyWidget::createEditorComponents()
-//{
-//	destroyEditorComponents();
-//	cmbSelection = new QComboBox(getParentWidget());
-//	int nIndex = 0;
-//	cmbSelection->addItem(QIcon(":/resources/signal.png"),cMethodStructure::methodTypeToString((int)ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL), ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL);
-//	indexToEnumMap[nIndex] =  ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL;
-//	nIndex++;
-//	cmbSelection->addItem(QIcon(":/resources/slot.png"),cMethodStructure::methodTypeToString((int)ExperimentStructuresNameSpace::METHOD_TYPE_SLOT), ExperimentStructuresNameSpace::METHOD_TYPE_SLOT);
-//	indexToEnumMap[nIndex] = ExperimentStructuresNameSpace::METHOD_TYPE_SLOT;
-//	nIndex++;
-//	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));
-//
-//	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
-//	strcCustomFixedWidget sTmpCustomFixedWidget;
-//	sTmpCustomFixedWidget.pCustomWidget = cmbSelection;
-//	sTmpCustomFixedWidget.nStretch = 9;
-//	lTmpCustomFixedWidgetList.append(sTmpCustomFixedWidget);
-//	setCustomFixedWidgetList(lTmpCustomFixedWidgetList);
-//}
-//
-//void MethodTypePropertyWidget::destroyEditorComponents()
-//{
-//	if(cmbSelection)
-//	{
-//		delete cmbSelection;
-//		cmbSelection = NULL;
-//	}
-//}
-//
-//void MethodTypePropertyWidget::setFixedValue(const QString &sValue)
-//{
-//	cmbSelection->setCurrentText(sValue);
-//}
-//
-//void MethodTypePropertyWidget::currentIndexChangedSlot(int nIndex)
-//{
-//	emit PropertyWidgetChanged(cMethodStructure::methodTypeToString((int)indexToEnumMap[nIndex]));
-//}
-
-////////////////////////////////////////////////////////////////////////////////////////
-
-//sven EccentricityDirectionPropertyWidget::EccentricityDirectionPropertyWidget(QWidget *parent) : PropertySettingBase(parent) 
-//{
-//	cmbSelection = NULL;
-//	createEditorComponents();
-//}
-//
-//EccentricityDirectionPropertyWidget::~EccentricityDirectionPropertyWidget()
-//{
-//	destroyEditorComponents();
-//}
-//
-//void EccentricityDirectionPropertyWidget::createEditorComponents()
-//{
-//	destroyEditorComponents();
-//	cmbSelection = new QComboBox(getParentWidget());
-//	int nIndex = 0;
-//	cmbSelection->addItem(QIcon(":/resources/decrease.png"),eccentricityDirectionString(ECCENTRICITY_DIR_DECREASE), ECCENTRICITY_DIR_DECREASE);
-//	indexToEnumHash[nIndex] = ECCENTRICITY_DIR_DECREASE;
-//	nIndex++;
-//	cmbSelection->addItem(QIcon(":/resources/increase.png"),eccentricityDirectionString(ECCENTRICITY_DIR_INCREASE), ECCENTRICITY_DIR_INCREASE);
-//	indexToEnumHash[nIndex] = ECCENTRICITY_DIR_INCREASE;
-//	nIndex++;
-//	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));	
-//
-//	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
-//	strcCustomFixedWidget sTmpCustomFixedWidget;
-//	sTmpCustomFixedWidget.pCustomWidget = cmbSelection;
-//	sTmpCustomFixedWidget.nStretch = 9;
-//	lTmpCustomFixedWidgetList.append(sTmpCustomFixedWidget);
-//	setCustomFixedWidgetList(lTmpCustomFixedWidgetList);
-//}
-//
-//void EccentricityDirectionPropertyWidget::destroyEditorComponents()
-//{
-//	if(cmbSelection)
-//	{
-//		delete cmbSelection;
-//		cmbSelection = NULL;
-//	}
-//}
-//
-//void EccentricityDirectionPropertyWidget::setFixedValue(const QString &sValue)
-//{
-//	cmbSelection->setCurrentText(sValue);
-//}
-//
-//QString EccentricityDirectionPropertyWidget::eccentricityDirectionString(enum EccentricityDirectionEnum eValue)
-//{
-//	if(mEccentricityDirection.isEmpty())
-//	{
-//		mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_UNDEFINED] = "Undefined";
-//		mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_DECREASE] = "Decrease";	
-//		mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_INCREASE] = "Increase";
-//	}
-//	return mEccentricityDirection[eValue];
-//}
-//
-//EccentricityDirectionPropertyWidget::EccentricityDirectionEnum EccentricityDirectionPropertyWidget::eccentricityDirectionEnum(const QString &sName)
-//{
-//	if(QString::compare(mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_INCREASE], sName, Qt::CaseInsensitive) == 0)
-//		return ECCENTRICITY_DIR_INCREASE;
-//	else if(QString::compare(mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_DECREASE], sName, Qt::CaseInsensitive) == 0)
-//		return ECCENTRICITY_DIR_DECREASE;
-//	//else if(QString::compare(mEccentricityDirection[EccentricityDirectionPropertyWidget::ECCENTRICITY_DIR_UNDEFINED], sName, Qt::CaseInsensitive) == 0)
-//	//	return ECCENTRICITY_DIR_UNDEFINED;
-//	return ECCENTRICITY_DIR_UNDEFINED; 
-//}
-//
-//void EccentricityDirectionPropertyWidget::currentIndexChangedSlot(int nIndex)
-//{
-//	emit PropertyWidgetChanged(QString::number((int)indexToEnumHash[nIndex]));
-//}
-
 ////////////////////////////////////////////////////////////////////////////////////////
 
 VariantExtensionPropertySettingManager::VariantExtensionPropertySettingManager(PropertySettingsWidget *parentPropSettWidget) : QtVariantPropertyManager((QObject*)parentPropSettWidget), parentPropertySettingsWidget(parentPropSettWidget)
@@ -1006,7 +719,6 @@ QVariant VariantExtensionPropertySettingManager::value(const QtProperty *propert
 QVariant VariantExtensionPropertySettingManager::resolveParameterValueType(const QVariant &vInput, const int &nVariantType, const bool &bToView)
 {
 	bool bIsScriptDefined = false;
-	bool bIsCustomDefined = false;
 	if (nVariantType >= PropertySetting_Type_FirstCustom)
 	{
 		QObject *tmpObject = MainAppInfo::getCustomPropertySettingObject(nVariantType);
@@ -1091,7 +803,7 @@ void VariantExtensionPropertySettingManager::setValue(QtProperty *property, cons
 		if (data.sValue == val) 
 			return;	
 		bool bIsInteger = false;
-		int nEnumValue = val.toInt(&bIsInteger);
+		val.toInt(&bIsInteger);
 		if(VariantExtensionPropertySettingManager::isScriptReferenceValue(val))
 		{
 			if(nPropertyType == QVariant::Color)
@@ -1113,21 +825,14 @@ void VariantExtensionPropertySettingManager::setValue(QtProperty *property, cons
 			}
 			data.sValue = val.toString();
 		}
-		//else if((bIsInteger) && (nPropertyType == (QVariant::Type) VariantExtensionPropertySettingManager::rotationDirectionTypeId()))
-		//{
-		//	RotationDirectionPropertySetting::RotationDirectionEnum tmpEnum = (RotationDirectionPropertySetting::RotationDirectionEnum)val.toInt();
-		//	data.sValue = RotationDirectionPropertySetting::rotationDirectionString(tmpEnum);
-		//}
-		//else if((bIsInteger) && (nPropertyType == (QVariant::Type) VariantExtensionPropertySettingManager::movementDirectionTypeId()))
-		//{
-		//	MovementDirectionPropertySetting::MovementDirectionEnum tmpEnum = (MovementDirectionPropertySetting::MovementDirectionEnum)val.toInt();
-		//	data.sValue = MovementDirectionPropertySetting::movementDirectionString(tmpEnum);
-		//}
-		//sven else if((bIsInteger) && (nPropertyType == (QVariant::Type) VariantExtensionPropertySettingManager::eccentricityDirectionTypeId()))
-		//{
-		//	EccentricityDirectionPropertyWidget::EccentricityDirectionEnum tmpEnum = (EccentricityDirectionPropertyWidget::EccentricityDirectionEnum)nEnumValue;
-		//	data.sValue = EccentricityDirectionPropertyWidget::eccentricityDirectionString(tmpEnum);
-		//}
+		else if ((parentPropertySettingsWidget) && (parentPropertySettingsWidget->isRegisteredCustomVariabeleType(((QVariant::Type)nPropertyType))))//or use alternatively (MainAppInfo::getCustomPropertySettingObject((QVariant::Type)nPropertyType))//or use alternatively 
+		{
+			int nCustMetaType = parentPropertySettingsWidget->getRegisteredCustomVariantMetaType((QVariant::Type)nPropertyType);
+			if (nCustMetaType >= 0)
+				data.sValue = resolveParameterValueType(val, nCustMetaType, false).toString();
+			else
+				data.sValue = val.toString();
+		}
 		else
 		{
 			data.sValue = val.toString();
@@ -1179,8 +884,18 @@ void VariantExtensionPropertySettingManager::setValue(QtProperty *property, cons
 
 QString VariantExtensionPropertySettingManager::valueText(const QtProperty *property) const
 {
+	int nPropertyType = propertyType(property);
 	if (shouldPullMappedData(property))
-		return value(property).toString(); 
+	{
+		QVariant vValue = value(property);
+		if ((parentPropertySettingsWidget) && (parentPropertySettingsWidget->isRegisteredCustomVariabeleType(((QVariant::Type)nPropertyType))))//or use alternatively (MainAppInfo::getCustomPropertySettingObject((QVariant::Type)nPropertyType))//or use alternatively 
+		{
+			int nCustMetaType = parentPropertySettingsWidget->getRegisteredCustomVariantMetaType((QVariant::Type)nPropertyType);
+			if (nCustMetaType >= 0)
+				return resolveParameterValueType(vValue, nCustMetaType, true).toString();
+		}
+		return vValue.toString();
+	}
 	return QtVariantPropertyManager::valueText(property);		
 }
 
@@ -1336,18 +1051,19 @@ QWidget *VariantExtensionPropertySettingFactory::createEditor(QtVariantPropertyM
 	}
 	else if ((parentPropSettWidget) && (parentPropSettWidget->isRegisteredCustomVariabeleType(((QVariant::Type)nPropertyType))))//or use alternatively (MainAppInfo::getCustomPropertySettingObject((QVariant::Type)nPropertyType))//or use alternatively 
 	{
+		QString sPropValue = manager->value(property).toString();
 		int nCustMetaType = parentPropSettWidget->getRegisteredCustomVariantMetaType((QVariant::Type)nPropertyType);
 		if (nCustMetaType >= 0)
 		{
-			QWidget *editor = MainAppInfo::setAndRetrieveCustomPropertySettingEditorWidget(nCustMetaType, manager->value(property).toString());
+			QWidget *editor = MainAppInfo::retrieveCustomPropertySettingEditorWidget(nCustMetaType);// , manager->value(property).toString());
 			if (editor)
 			{
-				//already in above function???
 				editor->setParent(parent);
 				PropertySettingBase *customEditor = qobject_cast<PropertySettingBase*>(editor);
 				if (customEditor)
 				{
-					customEditor->setValue(manager->value(property).toString());
+					QString sPropValue = manager->value(property).toString();
+					customEditor->setValue(sPropValue);
 					createdEditors[property].append(editor);
 					editorToProperty[editor] = property;
 					bResult = connect(editor, SIGNAL(PropertyWidgetChanged(const QString&)), this, SLOT(slotCustomPropertyChanged(const QString &)), Qt::UniqueConnection);
@@ -1409,7 +1125,7 @@ void VariantExtensionPropertySettingFactory::slotCustomPropertyChanged(const QSt
 		QtProperty *property = editorToProperty[sendWidget];
 		if(property)
 		{
-			this->propertyManager(property)->setValue(property,val);
+			this->propertyManager(property)->setValue(property, val);
 			//property->setModified(true);
 			return;
 		}

@@ -23,7 +23,6 @@
 #include <QTreeWidget>
 #include <QHBoxLayout>
 #include "experimenttreemodel.h"
-//sven #include "experimentparameterdefinition.h"
 
 namespace Ui {class ObjectConnectionsDialog;};
 

@@ -23,10 +23,8 @@
 #include <QTreeWidget>
 #include <QHBoxLayout>
 #include "experimenttreemodel.h"
-//sven #include "experimentparameterdefinition.h"
-#include "propertysettingswidgetcontainer.h"//sven
-#include "propertysettingswidget.h"//sven
-//class PropertySettingsWidget;//sven
+#include "propertysettingswidgetcontainer.h"
+#include "propertysettingswidget.h"
 
 namespace Ui {class BlockLoopsDialog;};
 

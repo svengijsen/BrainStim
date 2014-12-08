@@ -22,8 +22,7 @@
 #include <QTableWidgetItem>
 #include "mainappinfo.h"
 #include "experimentstructures.h"
-//sven #include "experimentparameterdefinition.h"
-#include "propertysettingdefinition.h"//sven 
+#include "propertysettingdefinition.h" 
 
 
 #define BLOCKPARAMVIEW_DEFAULTBLOCKHEADER_COUNT			4

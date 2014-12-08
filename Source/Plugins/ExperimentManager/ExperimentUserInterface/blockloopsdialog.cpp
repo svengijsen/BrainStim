@@ -19,9 +19,8 @@
 #include "blockloopsdialog.h"
 #include "ui_BlockLoopsDialog.h"
 #include "experimentmanager.h"
-#include "propertysettingswidget.h"//sven
-//sven #include "experimentparametervisualizer.h"
-#include "./../../BrainStim/propertysettingswidgetcontainer.h"//sven
+#include "propertysettingswidget.h"
+#include "./../../BrainStim/propertysettingswidgetcontainer.h"
 
 BlockLoopsDialog::BlockLoopsDialog(QWidget *parent) : QDialog(parent), bIsParsing(false), pCurrentExpStructure(NULL), twCurrentLoops(NULL), layoutTreeWidgetParent(NULL), pExpParamWidgets(NULL), pParametersWidget(NULL), pExperimentTreeModel(NULL), nCurrentBlockLoopSelectionIdentifier(-1)
 {

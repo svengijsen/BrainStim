@@ -34,8 +34,7 @@
 #include "./../../BrainStim/mainappinfo.h"
 #include "experimentlogger.h"
 #include "xmlmessagehandler.h"
-//sven #include "experimentparameter.h"
-#include "propertysetting.h"//sven
+#include "propertysetting.h"
 #include "experimentstructures.h"
 
 #ifdef Q_OS_WIN32 //Are we on Windows?

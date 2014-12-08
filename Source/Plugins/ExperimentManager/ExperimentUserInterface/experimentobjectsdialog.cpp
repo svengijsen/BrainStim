@@ -20,7 +20,6 @@
 #include "ui_ExperimentObjectsDialog.h"
 #include "experimentmanager.h"
 #include "propertysettingswidgetcontainer.h"
-//sven #include "experimentparametervisualizer.h"
 #include "experimentmethodparamsconfiguration.h"
 
 ExperimentObjectsDialog::ExperimentObjectsDialog(QWidget *parent) : QDialog(parent), bIsObjectDeleting(false), bIsParsing(false), bDisableEditUpdates(false), pCurrentExpStructure(NULL), twCurrentObjects(NULL), layoutObjectDeclarationTreeWidgetParent(NULL), layoutObjectInitTreeWidgetParent(NULL), layoutObjectFinitTreeWidgetParent(NULL), pExpParamWidgets(NULL), pObjectDeclarationWidget(NULL), pObjectInitsWidget(NULL), pObjectFinitsWidget(NULL), pObjectInitFinitWidget(NULL), pExperimentTreeModel(NULL), nCurrentObjectSelectionIdentifier(-1), nCurrentObjectInitSelectionIdentifier(-1), nCurrentObjectFinitSelectionIdentifier(-1)

@@ -29,7 +29,7 @@ class cExperimentStructure;
 class ExperimentTreeModel;
 class ObjectConnectionsDialog;
 class ExperimentStructureVisualizer;
-class PropertySettingsWidget; //sven
+class PropertySettingsWidget;
 
 enum ExperimentStructureItemType 
 { 
