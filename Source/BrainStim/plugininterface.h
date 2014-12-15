@@ -31,6 +31,7 @@ public:
 	virtual ~PluginInterface() {}
 	virtual int ConfigureScriptEngine(QScriptEngine &eng) = 0;
 	virtual QString GetPluginInformation(void) {return strPluginInformation;}
+	virtual QString GetPluginInternalName(void) { return strPluginInternalName; }
 	
 	void fetchGlobalAppInfo() {m_MainAppInfo = NULL; m_MainAppInfo = new GlobalApplicationInformation::MainAppInformationStructure(GlobalApplicationInformation::getStaticMainAppInformationStructureFromSharedMemory());};
 	void deleteGlobalAppInfo() {delete m_MainAppInfo; m_MainAppInfo = NULL;};
@@ -74,6 +75,7 @@ public slots:
 	
 protected:
 	QString strPluginInformation;
+	QString strPluginInternalName;
 
 private:
 	GlobalApplicationInformation::MainAppInformationStructure *m_MainAppInfo;

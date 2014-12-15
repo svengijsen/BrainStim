@@ -1139,6 +1139,8 @@ QList<cObjectStructure*> &cExperimentStructure::getObjectList()
 cBlockStructure* cExperimentStructure::getNextClosestBlockNumberByFromNumber(const int &startBlockNumber)
 {
 	//result is an cBlockStructure* with ID=startID or first closest higher value
+	if (startBlockNumber < 0)
+		return NULL;
 	if(pSharedData->lBlocks.isEmpty())//Are there any blocks defined?
 		return NULL;
 	//First try the expected location

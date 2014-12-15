@@ -19,43 +19,44 @@ Attributes only apply to readonly non user data, like the ID
 		<object ID="0">            
 			<class>QML2Viewer</class>
 			<name>QML2Viewer_Object_1</name>
-			<constructor>
-				<param1/>
-			</constructor>
 		</object>
 
 		<object ID="1">
 			<class>TriggerTimer</class>
 			<name>Timer_Object_1</name>
-			<constructor>
-				<param1/>
-			</constructor>
 		</object>
 	</declarations>
 
 	<connections>
-		<object ID="1">
-			<type>signal</type>
-			<signature>timeout()</signature>
-			<target ID="0">
-				<type>slot</type>     
+		<connection ID="0">
+			<source>
+				<object>1</object>
+				<signature>timeout()</signature>
+				<type>signal</type>
+			</source>
+			<target>
+				<object>0</object>
 				<signature>incrementExternalTrigger()</signature>
+				<type>slot</type>
 			</target>
-		</object>
+		</connection>	
 	</connections>
 
 	<initializations>
-		<object ID="1">
-			<type>slot</type>
-			<signature>startTimer</signature>
-			<parameters>
-				<parameter ID="0">
-		        	<name>msec</name>
-		        	<value>1000</value>
-		        	<type>double</type>
-				</parameter>
-			</parameters>
-		</object> 
+		<initialization ID="0">
+			<number>0</number>
+			<object ID="1">
+				<type>slot</type>
+				<signature>startTimer</signature>
+				<parameters>
+					<parameter ID="0">
+					<name>msec</name>
+					<value>1000</value>
+					<type>double</type>
+					</parameter>
+				</parameters>
+			</object>
+		</initialization>
 	</initializations>        
 
 	<actions>
@@ -102,10 +103,13 @@ Attributes only apply to readonly non user data, like the ID
 	</actions>
 
 	<finalizations>
-		<object ID="1">
-			<type>slot</type>
-			<signature>stopTimer</signature>
-		</object>
+		<finalization ID="0">
+			<number>0</number>
+			<object ID="1">
+				<type>slot</type>
+				<signature>stopTimer</signature>
+			</object>
+		</finalization>
 	</finalizations>
 
 </EXML>

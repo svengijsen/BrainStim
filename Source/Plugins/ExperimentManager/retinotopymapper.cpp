@@ -123,7 +123,6 @@ void RetinotopyMapper::initialize()
 	experimentManager = NULL;
 	bNoChangesSinceLastFrame = false;
 	//getObjectID() = -1;
-	sActiveStimScreen = NULL;
 	rectScreenRes = QGuiApplication::primaryScreen()->geometry();	
 	firstBlockTrialPaintFrame = false;	
 	//lastTriggerNumber = -1;
@@ -143,6 +142,26 @@ void RetinotopyMapper::initialize()
 	nextNewBlockEntered = false;
 	nextNewCycleEntered = false;
 	fCalculatedCortMagFacTimingConst = 1.0f;
+}
+
+QScreen* RetinotopyMapper::getActiveStimuliOutputScreen()
+{
+	return sConfiguredActiveScreen;
+}
+
+bool RetinotopyMapper::setActiveStimuliOutputScreen(int nScreenNumber)
+{
+	if (nScreenNumber >= 0)
+	{
+		if (nScreenNumber < QGuiApplication::screens().count())
+		{
+			sConfiguredActiveScreen = QGuiApplication::screens().at(nScreenNumber);
+			if (sConfiguredActiveScreen)
+				rectScreenRes = sConfiguredActiveScreen->geometry();
+			return true;
+		}
+	}
+	return false;
 }
 
 void RetinotopyMapper::parseExperimentObjectBlockParameters(bool bInit)
@@ -461,23 +480,23 @@ bool RetinotopyMapper::startObject()
 	retinoMapperWindow->setFormat(format);
 	retinoMapperWindow->setSurfaceType(QSurface::OpenGLSurface);	
 	retinoMapperWindow->setAnimating(true);	
-	if(sActiveStimScreen == NULL)
+	if (sConfiguredActiveScreen == NULL)
 	{
-		sActiveStimScreen = retinoMapperWindow->grabScreenUnderMouseCursor();
-		if(sActiveStimScreen)
+		sConfiguredActiveScreen = retinoMapperWindow->grabScreenUnderMouseCursor();
+		if (sConfiguredActiveScreen)
 		{
-			rectScreenRes = sActiveStimScreen->geometry();
+			rectScreenRes = sConfiguredActiveScreen->geometry();
 			adjustStimScreenArea();
-			retinoMapperWindow->setScreen(sActiveStimScreen);
+			retinoMapperWindow->setScreen(sConfiguredActiveScreen);
 		}
 	}
 	else
 	{
-		retinoMapperWindow->setScreen(sActiveStimScreen);
+		retinoMapperWindow->setScreen(sConfiguredActiveScreen);
 	}	
-	if((stimWidthPixelAmount > sActiveStimScreen->size().width()) || (stimHeightPixelAmount > sActiveStimScreen->size().height()))
+	if ((stimWidthPixelAmount > sConfiguredActiveScreen->size().width()) || (stimHeightPixelAmount > sConfiguredActiveScreen->size().height()))
 	{
-		qWarning() << __FUNCTION__ << "Choosen Stimuli size exceeds active Screen resolution!"; 
+		qWarning() << __FUNCTION__ << "Chosen Stimuli size exceeds active Screen resolution!"; 
 		emit ExperimentEngine::UserWantsToClose();
 	}
 
@@ -599,9 +618,9 @@ bool RetinotopyMapper::setExperimentManager(ExperimentManager *expManager)
 		experimentManager = expManager;
 		if(expManager)
 		{
-			sActiveStimScreen = expManager->getActiveStimuliOutputScreen();
-			if(sActiveStimScreen)
-				rectScreenRes = sActiveStimScreen->geometry();
+			sConfiguredActiveScreen = expManager->getActiveStimuliOutputScreen();
+			if (sConfiguredActiveScreen)
+				rectScreenRes = sConfiguredActiveScreen->geometry();
 		}
 		ExperimentEngine::setExperimentManager(expManager);//Important!
 	}

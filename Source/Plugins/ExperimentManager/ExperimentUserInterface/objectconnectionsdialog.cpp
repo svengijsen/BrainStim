@@ -228,14 +228,41 @@ void ObjectConnectionsDialog::toObjectChanged(int nChangedIndex)
 	if(tmpObjectStruct)
 	{
 		QStringList lMethods = getObjectMethodsList(tmpObjectStruct->getObjectClass(),hashToComboMethodIndexToMetaMethod);
-		for(int i=0;i<lMethods.count();i++)
+		if (lMethods.isEmpty() == false)
 		{
-			if(hashToComboMethodIndexToMetaMethod[i].methodType()== QMetaMethod::Signal)
-				ui->cmbToMethod->addItem(QIcon(":/resources/signal.png"), lMethods.at(i));
-			else if(hashToComboMethodIndexToMetaMethod[i].methodType()== QMetaMethod::Slot)
-				ui->cmbToMethod->addItem(QIcon(":/resources/slot.png"), lMethods.at(i));
-			else
-				ui->cmbToMethod->addItem(lMethods.at(i));
+			QStringList tmpListSignals;
+			QStringList tmpListSlots;
+			QStringList tmpListUnknown;
+			for (int i = 0; i < lMethods.count(); i++)
+			{
+				if (hashToComboMethodIndexToMetaMethod[i].methodType() == QMetaMethod::Signal)
+					tmpListSignals.append(lMethods.at(i));
+				else if (hashToComboMethodIndexToMetaMethod[i].methodType() == QMetaMethod::Slot)
+					tmpListSlots.append(lMethods.at(i));
+				else
+					tmpListUnknown.append(lMethods.at(i));
+			}
+			foreach(QString tmpString, tmpListSignals)
+				ui->cmbToMethod->addItem(QIcon(":/resources/signal.png"), tmpString);
+			foreach(QString tmpString, tmpListSlots)
+				ui->cmbToMethod->addItem(QIcon(":/resources/slot.png"), tmpString);
+			foreach(QString tmpString, tmpListUnknown)
+				ui->cmbToMethod->addItem(tmpString);
+			//ui->cmbToMethod->addItem(QIcon(":/resources/signal.png"), lMethods.at(i));
+			//ui->cmbToMethod->addItem(QIcon(":/resources/slot.png"), );
+			//ui->cmbToMethod->addItem(lMethods.at(i));
+
+
+			//	sMetaClassName = QMetaType::typeName(nMetaTypeID);
+			//	tmpMappedList.insert("Class: " + sMetaClassName, sMetaClassName);
+			//}
+			//QMapIterator<QString, QString> iter(tmpMappedList);
+			//while (iter.hasNext())
+			//{
+			//	iter.next();
+			//	ui->cmbObjects->addItem(iter.key(), iter.value());
+			//}
+
 		}
 	}
 }
@@ -259,26 +286,41 @@ QStringList ObjectConnectionsDialog::getObjectMethodsList(const QString &sObject
 	int metaID = QMetaType::type(sObjectClass.toLatin1());
 	if (metaID > 0)
 	{
-		QObject *pObject = static_cast< QObject* > ( QMetaType::create(metaID) );//( QMetaType::construct(metaID) );
+		QObject *pObject = static_cast< QObject* > ( QMetaType::create(metaID) );
 		const QMetaObject* metaObject = pObject->metaObject();
 
 		QStringList lMetaMethods;
+		QMap<QString, int> mapSignaturesToMethodID;
 
-		for(int i = 0; i < metaObject->methodCount(); ++i)//metaObject->methodOffset()
+		for(int i = 0; i < metaObject->methodCount(); ++i)
 		{
 			if(metaObject->method(i).methodType()== QMetaMethod::Signal)
 			{
-				lMetaMethods << QString::fromLatin1(metaObject->method(i).methodSignature());
-				hashIndexToMetataMethod.insert(hashIndexToMetataMethod.count(),metaObject->method(i));
+				mapSignaturesToMethodID.insert(QString::fromLatin1(metaObject->method(i).methodSignature()).toLower(), i);
 			}
 		}
-		for(int i = 0; i < metaObject->methodCount(); ++i)//metaObject->methodOffset()
+		QMapIterator<QString, int> iterSignals(mapSignaturesToMethodID);
+		while (iterSignals.hasNext())
+		{
+			iterSignals.next();
+			lMetaMethods.append(QString::fromLatin1(metaObject->method(iterSignals.value()).methodSignature()));
+			hashIndexToMetataMethod.insert(hashIndexToMetataMethod.count(), metaObject->method(iterSignals.value()));
+		}
+
+		mapSignaturesToMethodID.clear();
+		for(int i = 0; i < metaObject->methodCount(); ++i)
 		{
 			if(metaObject->method(i).methodType()== QMetaMethod::Slot)
 			{
-				lMetaMethods << QString::fromLatin1(metaObject->method(i).methodSignature());
-				hashIndexToMetataMethod.insert(hashIndexToMetataMethod.count(),metaObject->method(i));
+				mapSignaturesToMethodID.insert(QString::fromLatin1(metaObject->method(i).methodSignature()).toLower(), i);
 			}
+		}
+		QMapIterator<QString, int> iterSlots(mapSignaturesToMethodID);
+		while (iterSlots.hasNext())
+		{
+			iterSlots.next();
+			lMetaMethods.append(QString::fromLatin1(metaObject->method(iterSlots.value()).methodSignature()));
+			hashIndexToMetataMethod.insert(hashIndexToMetataMethod.count(), metaObject->method(iterSlots.value()));
 		}
 		return lMetaMethods;
 	}

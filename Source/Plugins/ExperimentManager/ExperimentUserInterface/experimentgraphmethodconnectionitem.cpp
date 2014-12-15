@@ -63,7 +63,7 @@ QPainterPath ExperimentGraphMethodConnectionItem::shape() const
 
 int ExperimentGraphMethodConnectionItem::type() const
 {
-	return ExperimentStructureItemType::TypeMethodConnectionItem;
+	return ExperimentManagerNameSpace::TypeMethodConnectionItem;
 }
 
 void ExperimentGraphMethodConnectionItem::renderGraphItem()

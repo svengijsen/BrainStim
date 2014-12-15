@@ -132,8 +132,13 @@ function ExperimentStateChanged(currentState)
 {
 //The signal where this slot is connected to contains 1 parameters (that holds the current Experiment Manager State).
 	
-	Log(ExperimentManagerObj.getCurrentExperimentState());	
-	if(currentState == ExperimentManager.ExperimentState.ExperimentManager_IsStarting)//ExperimentManager_IsStarting
+	Log(ExperimentManagerObj.getCurrentExperimentState());
+	if(currentState == ExperimentManager.ExperimentState.ExperimentManager_PreParsed)//ExperimentManager_PreParsed
+	{
+		ExperimentManagerObj.setActiveStimuliOutputScreen(0);
+		?? QML2Viewer_Object_1.setActiveStimuliOutputScreen(0);
+	}
+	else if(currentState == ExperimentManager.ExperimentState.ExperimentManager_IsStarting)//ExperimentManager_IsStarting
 	{
 		cExperimentStructure_Object = ExperimentManagerObj.getExperimentStructure();
 		cExperimentStructure_Object.experimentStarted.connect(this, ExperimentStarted);

@@ -134,6 +134,27 @@ public slots:
 	
 	QScriptValue getWindow();
 
+	QScreen* getActiveStimuliOutputScreen();
+	bool setActiveStimuliOutputScreen(int nScreenNumber);
+	/*! \brief Sets the presentation window mode.
+	*
+	*  This function sets the mode for the presentation window.
+	*  It can been shown either full-screen where the root object defined in the QML file is automatically resized to the full-screen window size or
+	*  in a windowed mode, see also QML2Viewer::setTopLeftWindowPosition, where the size of the window is automatically sized to the size of the root object defined in the QML file.
+	* @param bIsFullScreen a boolean value specifying whether the mode for the presentation window should be full-screen (=default mode).
+	* See QML2Viewer::setTopLeftWindowPosition.
+	*/
+	void setWindowMode(const bool &bIsFullScreen, const bool &bIsFrameless = true);
+	/*! \brief Sets the top-left position of the presentation window and allows to specify whether this window should be a frame-less window or not.
+	*
+	*  This function sets the top-left position of the presentation window and allows to specify whether this window should be a frame-less window or not.
+	*  this function can only make a difference in a non full-screen presentation window mode, see QML2Viewer::setWindowMode.
+	* @param nXposition a integer value specifying the top-left X position of the presentation window.
+	* @param nYposition a integer value specifying the top-left Y position of the presentation window.
+	* See QML2Viewer::setWindowMode.
+	*/
+	void setTopLeftWindowPosition(const int &nXposition, const int &nYposition);
+
 protected:
 	bool eventFilter(QObject *target, QEvent *event);
 
@@ -148,7 +169,6 @@ private:
 	bool qml2EventRoutine(QString strContent = "");
 	void deleteQML2ViewerWindow();
 
-	QScreen *sActiveStimScreen;
 	ExperimentManager *experimentManager;
 	cExperimentStructure *currentExperimentStructure;
 	QFile tmpFile;
@@ -165,6 +185,9 @@ private:
 	bool bParameterChanged;
 	bool bFirstQuickWindowActivation;
 	bool bExperimentUnlocked;
+	bool bFullScreenMode;
+	bool bIsFramelessWindow;
+	QPoint pointWindowStartPosition;
 };
 Q_DECLARE_METATYPE(QML2Viewer)
 Q_DECLARE_METATYPE(QML2Viewer*)

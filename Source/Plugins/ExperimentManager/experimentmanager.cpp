@@ -573,26 +573,43 @@ bool ExperimentManager::validateExperiment()
 	schema.setMessageHandler(&messageHandler);
 	schema.load(currentValidationFile);
 
-	bool errorOccurred = false;
-	if (!schema.isValid()) 
+	bool bDoValidate = true;
+	bool bSettingFound = false;
+	QString sMenuActionPath = QString(MAIN_PROGRAM_PLUGINS_REGISTRY_DIRNAME) + "/" + QString(PLUGIN_INTERNAL_NAME).toLower() + "/" + QString(SETTING_ENABLEAUTOEXMLVALIDATION);
+	QString sTmpResult = "";
+	if (QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_GETSTOREDSETTINGVALUE_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bSettingFound), Q_ARG(QString, sMenuActionPath), Q_ARG(QString*, &sTmpResult)))
 	{
-		errorOccurred = true;
+		if (bSettingFound)
+		{
+			if (sTmpResult.toLower() == "false")
+			{
+				bDoValidate = false;
+			}
+		}
 	} 
-	else 
+	if (bDoValidate)
 	{
-		QXmlSchemaValidator validator(schema);
-		if (!validator.validate(currentExperimentFile))
+		bool errorOccurred = false;
+		if (!schema.isValid())
+		{
 			errorOccurred = true;
+		}
+		else
+		{
+			QXmlSchemaValidator validator(schema);
+			if (!validator.validate(currentExperimentFile))
+				errorOccurred = true;
+		}
+		if (errorOccurred)
+		{
+			errorOccurred = errorOccurred;
+			QString strMessage = messageHandler.statusMessage();
+			int nColumn = messageHandler.column();
+			int nLine = messageHandler.line();
+			qDebug() << __FUNCTION__ << QString("Invalid schema, " + strMessage + "(line:" + QString::number(nLine) + ", col:" + QString::number(nColumn) + ")");
+			return true;
+		}
 	}
-	if (errorOccurred) 
-	{
-		errorOccurred = errorOccurred;
-		QString strMessage = messageHandler.statusMessage();
-		int nColumn = messageHandler.column();
-		int nLine = messageHandler.line();
-		qDebug() << __FUNCTION__ << QString("Invalid schema, " + strMessage + "(line:" + QString::number(nLine) + ", col:" + QString::number(nColumn) + ")");
-		return true;
-	} 
 	return true;
 }
 
@@ -2113,7 +2130,7 @@ int ExperimentManager::createExperimentBlockParamsFromTreeItemList(const int &nB
 					}
 					else
 					{
-						return -1;//No Objects defined		
+						return 0;//No Objects parameters defined		
 					}
 				}
 				else

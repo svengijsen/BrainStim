@@ -29,6 +29,7 @@ ParallelPortPlugin::ParallelPortPlugin(short BaseAddress, QObject *parent)
 	PPortObject = new ParallelPort(nBaseAddress,parent);
 	PPortDiagObject = new PPort_Dialog();
 	strPluginInformation = PLUGIN_INFORMATION;
+	strPluginInternalName = PLUGIN_INTERNAL_NAME;
 }
 
 ParallelPortPlugin::~ParallelPortPlugin()

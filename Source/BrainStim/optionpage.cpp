@@ -18,6 +18,7 @@
 
 
 #include "optionpage.h"
+#include "PropertySettingsWidgetContainer.h"
 #include <QFileDialog>
 #include <QListWidgetItem>
 
@@ -54,24 +55,50 @@ bool OptionPage::setPluginTabControlWidgets(QMap<QString, PropertySettingsWidget
 {
 	mapPluginWidgets.clear();
 	mapPluginWidgets = lPluginOptionWidgets;
+	PropertySettingsWidgetContainer *tmpExpParWidgets = PropertySettingsWidgetContainer::instance();
+	PropertySettingDefinition *tmpPropSettDef = NULL;
+	QList<PropertySettingDefinitionStrc> *lTmpPropSettDefStrc = NULL;
 	QMapIterator<QString, PropertySettingsWidget *> iter(mapPluginWidgets);
+	QVariant tmpVariant;
+	QString sTmpRegistryValue;
+	QString sTmpRegPath;
+	QString sPluginLowerName;
+
 	while (iter.hasNext()) 
 	{
 		iter.next();
-		if (iter.value())
+		PropertySettingsWidget *tmpPropSettWidget = iter.value();
+		if (tmpPropSettWidget)
 		{
-
-			//if (glob_AppInfo->getRegistryInformation(REGISTRY_ENABLENETWORKSERVER, tmpVariant))
-
-			QString sParamName = "block_number";
-			QString sParamValue = "99";
-			if (iter.value()->checkIfParameterExists(sParamName))
+			sPluginLowerName = iter.key().toLower();
+			tmpPropSettDef = tmpExpParWidgets->getExperimentParameterDefinition(sPluginLowerName);
+			if (tmpPropSettDef)
 			{
-				iter.value()->setParameter(sParamName, sParamValue, false, true);
-			}
+				lTmpPropSettDefStrc = tmpPropSettDef->getParameterDefinitions();
+				if (lTmpPropSettDefStrc)
+				{
+					foreach(PropertySettingDefinitionStrc tmpPropSettDefStrc, *lTmpPropSettDefStrc)
+					{
+						sTmpRegistryValue = tmpPropSettDefStrc.sDefaultValue;
+						sTmpRegPath = QString(MAIN_PROGRAM_PLUGINS_REGISTRY_DIRNAME) + "/" + sPluginLowerName + "/" + tmpPropSettDefStrc.sName;
+						if (glob_AppInfo->getRegistryInformation(sTmpRegPath, tmpVariant))
+						{
+							sTmpRegistryValue = tmpVariant.toString();
+							if (tmpPropSettWidget->checkIfParameterExists(tmpPropSettDefStrc.sName))
+							{
+								tmpPropSettWidget->setParameter(tmpPropSettDefStrc.sName, sTmpRegistryValue, false, true);
+							}
+						}
+						else
+						{
+							glob_AppInfo->setRegistryInformation(sTmpRegPath, sTmpRegistryValue, "string");
+						}
 
-			connect((QObject*)iter.value(), SIGNAL(rootItemEditFinished(const QString&, const QString&)), this, SLOT(pluginSettingEditFinished(const QString&, const QString&)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
-			ui.twPlugins->addTab(iter.value(), iter.key());
+					}
+					connect((QObject*)tmpPropSettWidget, SIGNAL(rootItemEditFinished(const QString&, const QString&)), this, SLOT(pluginSettingEditFinished(const QString&, const QString&)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
+					ui.twPlugins->addTab(tmpPropSettWidget, iter.key());
+				}
+			}
 		}
 	}
 	return true;
@@ -79,8 +106,21 @@ bool OptionPage::setPluginTabControlWidgets(QMap<QString, PropertySettingsWidget
 
 void OptionPage::pluginSettingEditFinished(const QString &sParamName, const QString &sNewValue)
 {
-	int p = 9;
-	//const QString &sParamName, const QString &sNewValue
+	QMapIterator<QString, PropertySettingsWidget *> iter(mapPluginWidgets);
+	while (iter.hasNext())
+	{
+		iter.next();
+		PropertySettingsWidget *tmpPropSettWidget = iter.value();
+		if (tmpPropSettWidget)
+		{
+			if (tmpPropSettWidget->checkIfParameterExists(sParamName))
+			{
+				QString sTmpRegPath = QString(MAIN_PROGRAM_PLUGINS_REGISTRY_DIRNAME) + "/" + iter.key().toLower() + "/" + sParamName;
+				mapSettingsApplyPending.insert(sTmpRegPath, sNewValue);
+			}
+		}
+	}
+
 }
 
 void OptionPage::validateAndApplySettings()
@@ -169,6 +209,15 @@ void OptionPage::applySettings()
 		lNewIncludePaths.append(ui.lwScriptIncludeDirs->item(i)->text());
 	}
 	glob_AppInfo->setRegistryInformation(REGISTRY_SCRIPTING_INCLUDEPATHS,lNewIncludePaths,"stringlist");
+
+	//Pending Plugin changes settings...
+	QMapIterator<QString, QString> iter(mapSettingsApplyPending);
+	while (iter.hasNext())
+	{
+		iter.next();
+		glob_AppInfo->setRegistryInformation(iter.key(), iter.value(), "string");
+	}
+	mapSettingsApplyPending.clear();
 }
 
 void OptionPage::readSettings()

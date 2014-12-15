@@ -20,6 +20,7 @@
 #define EXPERIMENTSTRUCTUREVISUALIZER_H
 
 #include <QWidget>
+#include "global.h"
 #include "experimentstructures.h"
 #include "experimentstructurescene.h"
 #include "experimentgraphobjectitem.h"
@@ -39,7 +40,11 @@ enum ExperimentVisualizerGraphItemTypeEnum
 	EXPVIS_TYPE_BLOCK				= 1,
 	EXPVIS_TYPE_LOOP				= 2,
 	EXPVIS_TYPE_OBJECT				= 3,
-	EXPVIS_TYPE_METHOD_CONNECTION	= 4
+	EXPVIS_TYPE_METHOD_CONNECTION	= 4,
+	EXPVIS_TYPE_INIT				= 5,
+	EXPVIS_TYPE_FINIT				= 6,
+	EXPVIS_TYPE_SIGNALSLOT			= 7,
+	EXPVIS_TYPE_PARAMETERS			= 8
 };
 
 class QMenu;
@@ -106,20 +111,37 @@ private:
 		}
 	};
 
+	struct expMethodInitFinitItemStrc
+	{
+		QString sName;
+		int nId;
+		int nNumber;
+		ExperimentGraphSubObjectTextItem *gGraphSubObjectTextItem;
+		expMethodInitFinitItemStrc()
+		{
+			sName = "";
+			nId = -1;
+			nNumber = -1;
+			gGraphSubObjectTextItem = NULL;
+		}
+	};
+
 	struct expObjectMethodItemStrc
 	{
 		int nMethodID;
 		int nObjectID;
 		int nOrderNumber;
 		QString sSignature;
-		ExperimentStructuresNameSpace::MethodType mType;
+		ExperimentManagerNameSpace::ExperimentStructureItemType itemType;
+		ExperimentGraphSubObjectTextItem *gGraphSubObjectTextItem;
 		expObjectMethodItemStrc()
 		{
 			nMethodID = -1;
 			nObjectID = -1;
 			nOrderNumber = -1;
 			sSignature = "";
-			mType = ExperimentStructuresNameSpace::METHOD_TYPE_UNDEFINED;
+			itemType = ExperimentManagerNameSpace::TypeUndefined;
+			gGraphSubObjectTextItem = NULL;
 		}
 	};
 
@@ -248,6 +270,7 @@ public:
 	expConnItemStrc *getGraphLoopItemStruct(const ExperimentGraphLoopItem *pExpGraphBlockItem);
 	expObjectItemStrc *getGraphObjectItemStruct(const ExperimentGraphObjectItem *pExpGraphObjectItem);
 	expObjectMethodConnectionItemStrc *getGraphMethodConnectionItemStruct(const ExperimentGraphMethodConnectionItem *pExpGraphMethodConnItem);
+	ExperimentManagerNameSpace::ExperimentStructureItemType ConnMethodTypeToGraphMethodType(const ExperimentStructuresNameSpace::MethodType &connMethodType);
 };
 
 #endif // EXPERIMENTSTRUCTUREVISUALIZER_H

@@ -589,8 +589,8 @@ bool ObjectParameterDialog::parseParameters(const int &nObjectID, const int &nBl
 				//Objects
 				QList<ExperimentTreeItem*> lExpTreeObjectItems;
 				nTempCurrentBlockObjectCount = ExperimentTreeModel::getStaticTreeElements(lObjectSearchPath, lExpTreeObjectItems, pTmpExpTreeItem);
-				if(nTempCurrentBlockObjectCount == 0)
-					continue;
+				if (nTempCurrentBlockObjectCount == 0)
+					bResult = true;
 				for (int j=0;j<nTempCurrentBlockObjectCount;j++)//For each Object
 				{
 					//ObjectID

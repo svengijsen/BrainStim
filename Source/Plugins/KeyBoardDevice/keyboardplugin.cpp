@@ -28,6 +28,7 @@ KeyBoardPlugin::KeyBoardPlugin(QObject *parent)
 	KeyBoardObject = new KeyBoardCapture(parent);
 	KeyBoardDiagObject = new KeyBoard_Dialog();
 	strPluginInformation = PLUGIN_INFORMATION;
+	strPluginInternalName = PLUGIN_INTERNAL_NAME;
 }
 
 KeyBoardPlugin::~KeyBoardPlugin()

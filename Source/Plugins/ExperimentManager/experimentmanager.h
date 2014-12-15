@@ -41,7 +41,7 @@
 #include <windows.h>
 #endif
 
-#define EXPERIMENTMANAGER_SCRIPTCONTEXT_NAME	"EM"
+//#define EXPERIMENTMANAGER_SCRIPTCONTEXT_NAME	"EM"
 #define EXPERIMENT_CUSTOMPARAM_INFOSTRING		"Custom user defined parameter."
 
 using namespace ExperimentManagerNameSpace;
@@ -271,7 +271,7 @@ public slots:
 	 *  @param sFormat a string value containing the custom Date/Time format, if left empty the value "yyyyMMddHHmmsszzz" is used.
 	 *  @return a string value containing the current date/time string.
 	 */	
-	static QString getCurrentDateTimeStamp(const QString &sFormat = MainAppInfo::stdDateTimeFormat());
+	QString getCurrentDateTimeStamp(const QString &sFormat = MainAppInfo::stdDateTimeFormat());
 	/*! \brief Inserts a specified object parameter for the current experiment block.
 	 *
 	 *  Inserts a specified object parameter with an object ID, a parameter name and a parameter value in the current experiment block definitions.

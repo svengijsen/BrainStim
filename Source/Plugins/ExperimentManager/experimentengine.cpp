@@ -25,6 +25,7 @@ ExperimentEngine::ExperimentEngine(QObject *parent)	: QObject(parent)
 	thisMetaObject = NULL;
 	pExperimentManager = NULL;
 	currentScriptEngine = NULL;
+	sConfiguredActiveScreen = NULL;
 	bExperimentShouldStop = false;
 	init();
 	nObjectID = -1;
@@ -48,6 +49,7 @@ ExperimentEngine::~ExperimentEngine()
 	{
 		currentScriptEngine = NULL;//not owned by this class
 	}
+	sConfiguredActiveScreen = NULL;
 }
 
 bool ExperimentEngine::insertExpObjectBlockParameter(const int nObjectID,const QString sName,const QString sValue,bool bIsInitializing, bool bIsCustom)

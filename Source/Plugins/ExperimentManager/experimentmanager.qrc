@@ -1,5 +1,6 @@
 <RCC>
     <qresource prefix="/">
+		<file>resources/experimentmanager.xdef</file>
         <file>resources/retinotopymapper.xdef</file>
         <file>resources/downwards.png</file>
         <file>resources/increase.png</file>
@@ -25,22 +26,22 @@
         <file>resources/clockwise.png</file>
         <file>resources/counterclockwise.png</file>
         <file>resources/decrease.png</file>
-				<file>resources/emptyexperiment.exml</file>
-				<file>resources/blocks.png</file>
-		    <file>resources/objects.png</file>
-		    <file>resources/connections.png</file>
-		    <file>resources/loops.png</file>
-		    <file>resources/parameters.png</file>
-		    <file>resources/view.png</file>
-		    <file>resources/add.png</file>
-		    <file>resources/addmultiple.png</file>
-		    <file>resources/configure.png</file>
-		    <file>resources/moveup.png</file>
-		    <file>resources/movedown.png</file>
-		    <file>resources/moveleft.png</file>
-		    <file>resources/moveright.png</file>
-		    <file>resources/orientation.png</file>
-		    <file>resources/reset.png</file>		
-		    <file>resources/plaintext.png</file>
+		<file>resources/emptyexperiment.exml</file>
+		<file>resources/blocks.png</file>
+		<file>resources/objects.png</file>
+		<file>resources/connections.png</file>
+		<file>resources/loops.png</file>
+		<file>resources/parameters.png</file>
+		<file>resources/view.png</file>
+		<file>resources/add.png</file>
+		<file>resources/addmultiple.png</file>
+		<file>resources/configure.png</file>
+		<file>resources/moveup.png</file>
+		<file>resources/movedown.png</file>
+		<file>resources/moveleft.png</file>
+		<file>resources/moveright.png</file>
+		<file>resources/orientation.png</file>
+		<file>resources/reset.png</file>		
+		<file>resources/plaintext.png</file>
     </qresource>
 </RCC>

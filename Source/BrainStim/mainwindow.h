@@ -394,6 +394,21 @@ public slots:
 	 * This function searches (backwards) for the last provided String of text inside the currently active document starting from the current cursor position.
 	 */	
 	void findPrev();
+	/*! \brief Use this function to retrieve the current date/time.
+	*
+	*  This function returns the current date/time string that can be custom formatted.
+	*  @param sFormat a string value containing the custom Date/Time format, if left empty the value "yyyyMMddHHmmsszzz" is used.
+	*  @return a string value containing the current date/time string.
+	*/
+	QString getCurrentDateTimeStamp(const QString &sFormat = MainAppInfo::stdDateTimeFormat());
+	/*! \brief Use this function to retrieve a stored setting value.
+	*
+	*  This function returns a stored setting using the provided path to the settings variable.
+	*  @param sSettingPath a string value containing the path to the settings variable.
+	*  @param sResult a string value containing the requested settings variable value.
+	*  @return a boolean value determining whether the settings variable could be found.
+	*/
+	bool getStoredSettingValue(const QString &sSettingPath, QString *sResult);
 	/*! \brief Closes the BrainStim application.
 	 *
 	 * This function closes the BrainStim application.
@@ -646,6 +661,7 @@ private:
 	void loadMainWindowLayout(const QString &sGroupSection);
 	bool addRegisteredDockWidgets(const Qt::DockWidgetArea debugDockArea);
 	//void setDockSize(QDockWidget* dock, int setWidth, int setHeight);
+	bool getPluginCustomConfigurationOptions(const QString &sInternalPluginName);
 
 public slots:
 	void updateMenuControls(QMdiSubWindow *mdiSubWin);

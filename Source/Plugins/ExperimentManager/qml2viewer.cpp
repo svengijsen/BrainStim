@@ -138,12 +138,14 @@ void QML2Viewer::initialize()
 	experimentManager = NULL;
 	currentExperimentStructure = NULL;
 	nQML2ViewerID = -1;
-	sActiveStimScreen = NULL;
 	rectScreenRes = QGuiApplication::primaryScreen()->geometry();	
 	quick2ViewerWindow = NULL;
 	rootObject = NULL;
 	imgLstModel = NULL;
 	last_qmlMainFilePath = "";
+	bIsFramelessWindow = true;
+	bFullScreenMode = true;
+	pointWindowStartPosition = QPoint(0, 0);
 }
 
 bool QML2Viewer::initObject()
@@ -248,22 +250,67 @@ QScriptValue QML2Viewer::getWindow()
 	return NULL;
 }
 
+QScreen* QML2Viewer::getActiveStimuliOutputScreen()
+{
+	return sConfiguredActiveScreen;
+}
+
+bool QML2Viewer::setActiveStimuliOutputScreen(int nScreenNumber)
+{
+	if (nScreenNumber >= 0)
+	{
+		if (nScreenNumber < QGuiApplication::screens().count())
+		{
+			sConfiguredActiveScreen = QGuiApplication::screens().at(nScreenNumber);
+			if (sConfiguredActiveScreen)
+				rectScreenRes = sConfiguredActiveScreen->geometry();
+			return true;
+		}
+	}
+	return false;
+}
+
+void QML2Viewer::setWindowMode(const bool &bIsFullScreen, const bool &bIsFrameless)
+{
+	bFullScreenMode = bIsFullScreen;
+	bIsFramelessWindow = bIsFrameless;
+}
+
+void QML2Viewer::setTopLeftWindowPosition(const int &nXposition, const int &nYposition)
+{
+	pointWindowStartPosition.setX(nXposition);
+	pointWindowStartPosition.setY(nYposition);
+}
+
 bool QML2Viewer::startObject()
 {	
-	if(sActiveStimScreen == NULL)
+	if(sConfiguredActiveScreen == NULL)
 	{
-		sActiveStimScreen = quick2ViewerWindow->grabScreenUnderMouseCursor();
-		if(sActiveStimScreen)
+		sConfiguredActiveScreen = quick2ViewerWindow->grabScreenUnderMouseCursor();
+		if (sConfiguredActiveScreen)
 		{
-			rectScreenRes = sActiveStimScreen->geometry();
-			quick2ViewerWindow->setScreen(sActiveStimScreen);
+			rectScreenRes = sConfiguredActiveScreen->geometry();
+			quick2ViewerWindow->setScreen(sConfiguredActiveScreen);
 		}
 	}
 	else
 	{
-		quick2ViewerWindow->setScreen(sActiveStimScreen);
+		quick2ViewerWindow->setScreen(sConfiguredActiveScreen);
 	}	
-	quick2ViewerWindow->showFullScreen();//Fastest uncomment this
+
+	if (bFullScreenMode)
+	{
+		quick2ViewerWindow->setResizeMode(QQuickView::SizeRootObjectToView);
+		quick2ViewerWindow->showFullScreen();
+	}
+	else
+	{
+		if (bIsFramelessWindow == false)
+			quick2ViewerWindow->setFlags(Qt::Window);
+		quick2ViewerWindow->setPosition(pointWindowStartPosition);
+		quick2ViewerWindow->setResizeMode(QQuickView::SizeViewToRootObject);
+		quick2ViewerWindow->show();
+	}
 	return true;
 }
 
@@ -621,9 +668,12 @@ bool QML2Viewer::setExperimentManager(ExperimentManager *expManager)
 		experimentManager = expManager;
 		if(expManager)
 		{
-			sActiveStimScreen = expManager->getActiveStimuliOutputScreen();
-			if(sActiveStimScreen)
-				rectScreenRes = sActiveStimScreen->geometry();
+			if (sConfiguredActiveScreen == NULL)
+			{
+				sConfiguredActiveScreen = expManager->getActiveStimuliOutputScreen();
+				if (sConfiguredActiveScreen)
+					rectScreenRes = sConfiguredActiveScreen->geometry();
+			}
 		}
 		ExperimentEngine::setExperimentManager(expManager);//Important!
 	}

@@ -20,6 +20,7 @@
 #ifndef EXPMANAGER_GLOBAL_H
 #define EXPMANAGER_GLOBAL_H
 
+#include <QGraphicsItem>
 #include "../../BrainStim/mainappinfo.h"
 #include "randomgenerator.h"
 class ExperimentManager;
@@ -72,6 +73,24 @@ namespace ExperimentManagerNameSpace
 		EXML_Actions,
 		EXML_Object,
 		EXML_Event
+	};
+
+	enum ExperimentStructureItemType
+	{
+		TypeUndefined					= 0,
+		TypeBlockItem					= QGraphicsItem::UserType + 1,
+		TypeAutoLoopConnectionItem		= QGraphicsItem::UserType + 2,
+		TypeLoopConnectionItem			= QGraphicsItem::UserType + 3,
+		TypeObjectItem					= QGraphicsItem::UserType + 4,
+		TypeMethodConnectionItem		= QGraphicsItem::UserType + 5,
+		TypeObjectInitializationItem	= QGraphicsItem::UserType + 6,
+		TypeObjectFinalizationItem		= QGraphicsItem::UserType + 7,
+		TypeObjectSignalMethodItem		= QGraphicsItem::UserType + 8,
+		TypeObjectSlotMethodItem		= QGraphicsItem::UserType + 9,
+		TypeGroupInitializationsItem	= QGraphicsItem::UserType + 10,
+		TypeGroupFinalizationsItem		= QGraphicsItem::UserType + 11,
+		TypeGroupConnectionsItem		= QGraphicsItem::UserType + 12,
+		TypeParametersFirstBlock		= QGraphicsItem::UserType + 13
 	};
 
 	struct EXML_DocVersion //Structure to hold the version information

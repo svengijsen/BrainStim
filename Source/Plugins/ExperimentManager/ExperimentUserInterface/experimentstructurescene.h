@@ -31,15 +31,6 @@ class ObjectConnectionsDialog;
 class ExperimentStructureVisualizer;
 class PropertySettingsWidget;
 
-enum ExperimentStructureItemType 
-{ 
-	TypeBlockItem				= QGraphicsItem::UserType + 1,
-	TypeAutoLoopConnectionItem	= QGraphicsItem::UserType + 2,
-	TypeLoopConnectionItem		= QGraphicsItem::UserType + 3,
-	TypeObjectItem				= QGraphicsItem::UserType + 4,
-	TypeMethodConnectionItem	= QGraphicsItem::UserType + 5
-};
-
 enum ExperimentVisualizerGraphViewState
 {
 	EXPVIS_VIEWSTATE_BLOCKTRIALS	= 0,

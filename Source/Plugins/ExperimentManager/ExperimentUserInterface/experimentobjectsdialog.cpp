@@ -110,12 +110,20 @@ ExperimentObjectsDialog::~ExperimentObjectsDialog()
 void ExperimentObjectsDialog::fetchAvailableExperimentObjectClasses()
 {
 	ui->cmbObjects->clear();
+	//ui->cmbObjects->setInsertPolicy(QComboBox::InsertAlphabetically);
 	QList<int> lRegisteredMetaTypeIds = MainAppInfo::getRegisteredMetaTypeIdList();
 	QString sMetaClassName;
+	QMap<QString,QString> tmpMappedList;
 	foreach(int nMetaTypeID,lRegisteredMetaTypeIds)
 	{
 		sMetaClassName = QMetaType::typeName(nMetaTypeID);
-		ui->cmbObjects->addItem("Class: " + sMetaClassName, sMetaClassName);
+		tmpMappedList.insert(sMetaClassName.toLower(), sMetaClassName);
+	}
+	QMapIterator<QString, QString> iter(tmpMappedList);
+	while (iter.hasNext())
+	{
+		iter.next();
+		ui->cmbObjects->addItem("Class: " + iter.value(), iter.value());
 	}
 }
 
@@ -1062,6 +1070,7 @@ void ExperimentObjectsDialog::configureAvailableObjectInitFinits()
 			}
 			if(lMetaSlots.isEmpty() == false)
 			{
+				lMetaSlots.sort(Qt::CaseInsensitive);
 				ui->pbInitAdd->setEnabled(true);
 				ui->cmbObjectInitAvailable->addItems(lMetaSlots);
 				ui->pbFinitAdd->setEnabled(true);

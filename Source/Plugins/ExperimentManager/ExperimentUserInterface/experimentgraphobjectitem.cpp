@@ -20,6 +20,392 @@
 #include "experimentstructurescene.h"
 #include <QStyleOptionGraphicsItem>
 
+ExperimentGraphSubObjectTextItem::ExperimentGraphSubObjectTextItem(QGraphicsItem *parent) : QGraphicsItem(parent)
+{
+	nItemStateFlags = 0;
+	nItemID = -1;
+	sItemText = "<undefined>";
+	eGraphItemType = ExperimentManagerNameSpace::TypeUndefined;
+}
+
+void ExperimentGraphSubObjectTextItem::setGeometry(const QRectF &rectGeometry)
+{
+	rBoundingBox = rectGeometry;
+	sBoundingBoxPath = QPainterPath();
+	sBoundingBoxPath.addRect(rectGeometry);
+	update();
+}
+
+void ExperimentGraphSubObjectTextItem::setItemText(const QString &sText)
+{
+	sItemText = sText;
+	update();
+}
+
+QPainterPath ExperimentGraphSubObjectTextItem::shape() const
+{
+	return sBoundingBoxPath;
+}
+
+QRectF ExperimentGraphSubObjectTextItem::boundingRect() const
+{
+	qreal penWidth = 1;
+	return QRectF(rBoundingBox.x() - penWidth / 2, rBoundingBox.y() - penWidth / 2, rBoundingBox.width() + penWidth, rBoundingBox.height() + penWidth);
+}
+
+void ExperimentGraphSubObjectTextItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+	Q_UNUSED(event);
+	if (this->isSelected() == false)
+		this->setZValue(2);
+	update();
+}
+
+//void QGraphicsItem::hoverMoveEvent ( QGraphicsSceneHoverEvent * event )
+
+void ExperimentGraphSubObjectTextItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+	Q_UNUSED(event);
+	if (this->isSelected() == false)
+		this->setZValue(0);
+	else
+		this->setZValue(1);
+	update();
+}
+
+void ExperimentGraphSubObjectTextItem::setGraphItemType(ExperimentManagerNameSpace::ExperimentStructureItemType graphItemType)
+{
+	eGraphItemType = graphItemType;
+}
+
+int ExperimentGraphSubObjectTextItem::type() const 
+{ 
+	return eGraphItemType;
+}
+
+void ExperimentGraphSubObjectTextItem::setActiveStates(int nFlags)
+{//Use StateFlag
+	nItemStateFlags = nFlags;
+	if(nItemStateFlags & QStyle::State_Selected)
+		setFlag(QGraphicsItem::ItemIsSelectable);
+	else
+		setFlag(QGraphicsItem::ItemIsSelectable, false);
+	if (nItemStateFlags & QStyle::State_MouseOver)
+		setAcceptHoverEvents(true);
+	else
+		setAcceptHoverEvents(false);
+}
+
+void ExperimentGraphSubObjectTextItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	if (rBoundingBox.height() == 0)
+		return;
+	Q_UNUSED(widget);
+	if ((option->state & QStyle::State_Selected) && (nItemStateFlags & QStyle::State_Selected))
+	{
+		fCurrent.setBold(true);
+		fCurrent.setItalic(true);
+		pBrush.setColor(Qt::green);
+		pBrush.setStyle(Qt::SolidPattern);
+		pPen.setColor(Qt::green);
+	}
+	else if ((option->state & QStyle::State_MouseOver) && (nItemStateFlags & QStyle::State_MouseOver))
+	{
+		fCurrent.setBold(true);
+		fCurrent.setItalic(false);
+		pBrush.setColor(Qt::yellow);
+		pBrush.setStyle(Qt::SolidPattern);
+		pPen.setColor(Qt::yellow);
+	}
+	else
+	{
+		fCurrent.setBold(false);
+		fCurrent.setItalic(false);
+		pBrush.setColor(Qt::blue);
+		//pBrush.setStyle(Qt::NoBrush);
+		pBrush.setColor(Qt::white);
+		pBrush.setStyle(Qt::SolidPattern);
+		pPen.setColor(Qt::blue);
+	}
+
+	////Outer-Box
+	painter->setPen(pPen);
+	painter->setBrush(pBrush);
+	painter->setRenderHint(QPainter::Antialiasing);
+	painter->drawPath(sBoundingBoxPath);
+
+	////Header-Text
+	QRectF rectInnerObject = QRectF(rBoundingBox.left(), rBoundingBox.top(), rBoundingBox.width(), rBoundingBox.height());
+	fCurrent.setPointSizeF(rectInnerObject.height() / 3);
+	pBrush.setStyle(Qt::NoBrush);
+	painter->setBrush(pBrush);
+	if (eGraphItemType == ExperimentManagerNameSpace::TypeParametersFirstBlock)
+	{
+		fCurrent.setItalic(true);
+		painter->setFont(fCurrent);
+		pPen.setColor(Qt::darkRed);
+		painter->setPen(pPen);
+		painter->drawText(rectInnerObject, Qt::AlignCenter, " " + sItemText);
+	}
+	else
+	{
+		fCurrent.setItalic(false);
+		painter->setFont(fCurrent);
+		pPen.setColor(Qt::darkBlue);
+		painter->setPen(pPen);
+		painter->drawText(rectInnerObject, Qt::AlignLeft | Qt::AlignVCenter, " " + sItemText);
+	}
+}
+
+//QVariant ExperimentGraphSubObjectTextItem::itemChange(GraphicsItemChange change, const QVariant &value)
+//{
+//	if (change == QGraphicsItem::ItemSelectedChange)
+//	{
+//		if (value == true)
+//		{
+//			// do stuff if selected
+//			int a = 99;
+//		}
+//		else
+//		{
+//			int b = 99;
+//			// do stuff if not selected
+//		}
+//	}
+//	return QGraphicsItem::itemChange(change, value);
+//}
+
+void ExperimentGraphSubObjectTextItem::renderGraphItem()
+{
+
+}
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
+ExperimentGraphSubObjectItem::ExperimentGraphSubObjectItem(QGraphicsItem *parent) : QGraphicsItem(parent)
+{
+	eGraphItemType = ExperimentManagerNameSpace::TypeUndefined;
+	sHeaderText = "<undefined>";
+	nItemStateFlags = 0;
+}
+
+void ExperimentGraphSubObjectItem::setGeometry(const QRectF &rectGeometry)
+{
+	rBoundingBox = rectGeometry;
+	sBoundingBoxPath = QPainterPath();
+	sBoundingBoxPath.addRoundedRect(rectGeometry, 5, 5);
+	update();
+}
+
+void ExperimentGraphSubObjectItem::setHeaderText(const QString &sText)
+{
+	sHeaderText = sText;
+	update();
+}
+
+void ExperimentGraphSubObjectItem::setGraphItemType(ExperimentManagerNameSpace::ExperimentStructureItemType graphItemType)
+{
+	eGraphItemType = graphItemType;
+}
+
+int ExperimentGraphSubObjectItem::type() const
+{
+	return eGraphItemType;
+}
+
+void ExperimentGraphSubObjectItem::setSubItems(const QMap<int, QString> &mapSubItemIDsToStringList)
+{
+	mapSubItemIDToStringList = mapSubItemIDsToStringList;
+	foreach(ExperimentGraphSubObjectTextItem* tmpSubTextItem, mExpGraphSubObjectNameToTextItems)
+	{
+		if (tmpSubTextItem)
+			delete tmpSubTextItem;
+	}
+	mExpGraphSubObjectNameToTextItems.clear();
+	QMapIterator<int, QString> iter(mapSubItemIDToStringList);
+	while (iter.hasNext())
+	{
+		iter.next();
+		ExperimentGraphSubObjectTextItem* tmpNewSubTextItem = new ExperimentGraphSubObjectTextItem(this);
+		tmpNewSubTextItem->setItemText(iter.value());
+		tmpNewSubTextItem->setItemID(iter.key());
+		int nActiveStates;
+		if (eGraphItemType == ExperimentManagerNameSpace::TypeGroupConnectionsItem)
+		{
+			tmpNewSubTextItem->setGraphItemType(ExperimentManagerNameSpace::TypeMethodConnectionItem);
+			nActiveStates = QStyle::State_MouseOver;
+		}
+		else if (eGraphItemType == ExperimentManagerNameSpace::TypeGroupInitializationsItem)
+		{
+			if (iter.key() == -1)
+			{
+				tmpNewSubTextItem->setGraphItemType(ExperimentManagerNameSpace::TypeParametersFirstBlock);
+				nActiveStates = QStyle::State_Selected + QStyle::State_MouseOver;
+			}
+			else
+			{
+				tmpNewSubTextItem->setGraphItemType(ExperimentManagerNameSpace::TypeObjectInitializationItem);
+				nActiveStates = QStyle::State_Selected + QStyle::State_MouseOver;
+			}
+			if (iter.value().endsWith("()") == false)
+			{
+				tmpNewSubTextItem->setItemText(iter.value() + "()");
+			}
+		}
+		else if (eGraphItemType == ExperimentManagerNameSpace::TypeGroupFinalizationsItem)
+		{
+			tmpNewSubTextItem->setGraphItemType(ExperimentManagerNameSpace::TypeObjectFinalizationItem);
+			nActiveStates = QStyle::State_Selected + QStyle::State_MouseOver;
+			if (iter.value().endsWith("()") == false)
+			{
+				tmpNewSubTextItem->setItemText(iter.value() + "()");
+			}
+		}
+		else if (eGraphItemType == ExperimentManagerNameSpace::TypeUndefined)
+		{
+			nActiveStates = 0;
+		}
+		else
+		{
+			nActiveStates = QStyle::State_Selected + QStyle::State_MouseOver;
+		}
+		tmpNewSubTextItem->setActiveStates(nActiveStates);
+		mExpGraphSubObjectNameToTextItems.insertMulti(iter.value(), tmpNewSubTextItem);
+	}
+	update();
+}
+
+QPainterPath ExperimentGraphSubObjectItem::shape() const
+{
+	return sBoundingBoxPath;
+}
+
+QRectF ExperimentGraphSubObjectItem::boundingRect() const
+{
+	qreal penWidth = 1;
+	return QRectF(rBoundingBox.x() - penWidth / 2, rBoundingBox.y() - penWidth / 2, rBoundingBox.width() + penWidth, rBoundingBox.height() + penWidth);
+}
+
+void ExperimentGraphSubObjectItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
+{
+	Q_UNUSED(event);
+	if (this->isSelected() == false)
+		this->setZValue(2);
+	update();
+}
+
+//void QGraphicsItem::hoverMoveEvent ( QGraphicsSceneHoverEvent * event )
+
+void ExperimentGraphSubObjectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
+{
+	Q_UNUSED(event);
+	if (this->isSelected() == false)
+		this->setZValue(0);
+	else
+		this->setZValue(1);
+	update();
+}
+
+void ExperimentGraphSubObjectItem::setActiveStates(int nFlags)
+{//Use StateFlag
+	nItemStateFlags = nFlags;
+	if (nItemStateFlags & QStyle::State_Selected)
+		setFlag(QGraphicsItem::ItemIsSelectable);
+	else
+		setFlag(QGraphicsItem::ItemIsSelectable, false);
+	if (nItemStateFlags & QStyle::State_MouseOver)
+		setAcceptHoverEvents(true);
+	else
+		setAcceptHoverEvents(false);
+}
+
+void ExperimentGraphSubObjectItem::paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget)
+{
+	Q_UNUSED(widget);
+	if ((option->state & QStyle::State_Selected) && (nItemStateFlags & QStyle::State_Selected))
+	{
+		fCurrent.setBold(true);
+		pBrush.setColor(Qt::green);
+		pBrush.setStyle(Qt::SolidPattern);
+		pPen.setColor(Qt::green);
+	}
+	else if ((option->state & QStyle::State_MouseOver) && (nItemStateFlags & QStyle::State_MouseOver))
+	{
+		fCurrent.setBold(true);
+		pBrush.setColor(Qt::lightGray);
+		pBrush.setStyle(Qt::SolidPattern);
+		pPen.setColor(Qt::yellow);
+	}
+	else
+	{
+		fCurrent.setBold(false);
+		pBrush.setColor(Qt::blue);
+		//pBrush.setStyle(Qt::NoBrush);
+		pBrush.setColor(QColor(233,233,233));
+		pBrush.setStyle(Qt::SolidPattern);
+		pPen.setColor(Qt::blue);
+	}
+
+	////Outer-Box
+	painter->setPen(pPen);
+	painter->setBrush(pBrush);
+	painter->setRenderHint(QPainter::Antialiasing);
+	painter->drawPath(sBoundingBoxPath);
+
+	////Header-Text
+	QRectF rectInnerObject = QRectF(rBoundingBox.left(), rBoundingBox.top(), rBoundingBox.width(), rBoundingBox.height() / (1 + mapSubItemIDToStringList.count()));
+	fCurrent.setPointSizeF(rectInnerObject.height()/3);
+	fCurrent.setItalic(false);
+	painter->setFont(fCurrent);
+	pPen.setColor(Qt::darkBlue);
+	painter->setPen(pPen);
+	pBrush.setStyle(Qt::NoBrush);
+	painter->setBrush(pBrush);
+	painter->drawText(rectInnerObject, Qt::AlignCenter | Qt::AlignVCenter, " " + sHeaderText);//Qt::AlignHCenter | Qt::AlignTop, "FINALIZATIONS:"
+	
+	////Sub-Items
+	int nItemHeight = rBoundingBox.height() / (mapSubItemIDToStringList.count() + 1);
+	if (mapSubItemIDToStringList.count() == mExpGraphSubObjectNameToTextItems.count())
+	{
+		QMapIterator<int, QString> iterSub(mapSubItemIDToStringList);
+		while (iterSub.hasNext())
+		{
+			iterSub.next();
+			rectInnerObject.setTop(rectInnerObject.top() + nItemHeight);
+			rectInnerObject.setBottom(rectInnerObject.top() + nItemHeight);
+			ExperimentGraphSubObjectTextItem *tmpExpGraphSubTextItem = mExpGraphSubObjectNameToTextItems.value(iterSub.value(), NULL); //mExpGraphSubObjectNameToTextItems.value(lSubItemTextList[i]);
+			if (tmpExpGraphSubTextItem)
+				tmpExpGraphSubTextItem->setGeometry(rectInnerObject);
+		}
+	}
+}
+
+//QVariant ExperimentGraphSubObjectItem::itemChange(GraphicsItemChange change, const QVariant &value)
+//{
+//	if (change == QGraphicsItem::ItemSelectedChange)
+//	{
+//		if (value == true)
+//		{
+//			// do stuff if selected
+//			int a = 99;
+//		}
+//		else
+//		{
+//			int b = 99;
+//			// do stuff if not selected
+//		}
+//	}
+//	return QGraphicsItem::itemChange(change, value);
+//}
+
+void ExperimentGraphSubObjectItem::renderGraphItem()
+{
+
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////////
+
 ExperimentGraphObjectItem::ExperimentGraphObjectItem(QGraphicsItem *parent) : QGraphicsItem(parent)
 {
 	fCurrent.setFamily("Times");
@@ -51,6 +437,10 @@ ExperimentGraphObjectItem::ExperimentGraphObjectItem(QGraphicsItem *parent) : QG
 
 	setAcceptHoverEvents(true);
 	setFlag(QGraphicsItem::ItemIsSelectable);
+
+	subGraphItemInitializations = NULL;
+	subGraphItemFinalizations = NULL;
+	subGraphItemSignalSlots = NULL;
 }
 
 void ExperimentGraphObjectItem::setCaption(const QString &sName)
@@ -60,13 +450,13 @@ void ExperimentGraphObjectItem::setCaption(const QString &sName)
 }
 
 int ExperimentGraphObjectItem::type() const
-{
-	return ExperimentStructureItemType::TypeObjectItem;
+{ 
+	return ExperimentManagerNameSpace::TypeObjectItem;
 }
 
 QPainterPath ExperimentGraphObjectItem::shape() const
 {
-	return sBoundingBoxPath;//pShapePath;
+	return sBoundingBoxPath;
 }
 
 QRectF ExperimentGraphObjectItem::boundingRect() const
@@ -81,8 +471,6 @@ void ExperimentGraphObjectItem::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 		this->setZValue(2);
 	update();
 }
-
-//void QGraphicsItem::hoverMoveEvent ( QGraphicsSceneHoverEvent * event )
 
 void ExperimentGraphObjectItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
@@ -141,65 +529,60 @@ void ExperimentGraphObjectItem::paint(QPainter *painter, const QStyleOptionGraph
 
 	//Outlines
 	painter->setPen(pObjectOutlinePen);
-	if(vInitializationsRectList.isEmpty() == false)
-		painter->drawRect(rInitializationBox);
-	if(vSignalAndSlotsRectList.isEmpty() == false)
-		painter->drawRect(rConnectionsBox);
-	if(vFinalizationsRectList.isEmpty() == false)
-		painter->drawRect(rFinalizationBox);
+	if (mapInitializationsIDToSignatureList.isEmpty() == false)
+	{
+		if (subGraphItemInitializations == NULL)
+		{
+			subGraphItemInitializations = new ExperimentGraphSubObjectItem(this);
+			subGraphItemInitializations->setActiveStates(QStyle::State_MouseOver);//QStyle::State_Selected + 
+			subGraphItemInitializations->setGeometry(rInitializationBox);
+			subGraphItemInitializations->setHeaderText("INITIALIZATIONS:");
+			subGraphItemInitializations->setGraphItemType(ExperimentManagerNameSpace::TypeGroupInitializationsItem);
+			subGraphItemInitializations->setSubItems(mapInitializationsIDToSignatureList);
+		}
+	}
+
+	//Lets combine the two lists because an ID is not needed and a combined list generates non-unique IDs a ID with value -1 is always used here...
+	QMap<int,QString> mapConnectionsSignatureList;
+	QMapIterator<int, QString> iter1(mapSignalLocationIndexToSignatureList);
+	while (iter1.hasNext())
+	{
+		iter1.next();
+		mapConnectionsSignatureList.insertMulti(iter1.key(), iter1.value());
+	}
+	QMapIterator<int, QString> iter2(mapSlotLocationIndexToSignatureList);
+	while (iter2.hasNext())
+	{
+		iter2.next();
+		mapConnectionsSignatureList.insertMulti(iter2.key(), iter2.value());
+	}
+
+	if (mapConnectionsSignatureList.isEmpty() == false)
+	{
+		if (subGraphItemSignalSlots == NULL)
+		{
+			subGraphItemSignalSlots = new ExperimentGraphSubObjectItem(this);
+			subGraphItemSignalSlots->setActiveStates(QStyle::State_MouseOver);
+			subGraphItemSignalSlots->setGeometry(rConnectionsBox);
+			subGraphItemSignalSlots->setHeaderText("CONNECTIONS:");
+			subGraphItemSignalSlots->setGraphItemType(ExperimentManagerNameSpace::TypeGroupConnectionsItem);
+			subGraphItemSignalSlots->setSubItems(mapConnectionsSignatureList);
+		}
+	}
+	if (mapFinalizationsIDToSignatureList.isEmpty() == false)
+	{
+		if (subGraphItemFinalizations == NULL)
+		{
+			subGraphItemFinalizations = new ExperimentGraphSubObjectItem(this);
+			subGraphItemFinalizations->setActiveStates(QStyle::State_MouseOver);
+			subGraphItemFinalizations->setGeometry(rFinalizationBox);
+			subGraphItemFinalizations->setHeaderText("FINALIZATIONS:");
+			subGraphItemFinalizations->setGraphItemType(ExperimentManagerNameSpace::TypeGroupFinalizationsItem);
+			subGraphItemFinalizations->setSubItems(mapFinalizationsIDToSignatureList);
+		}
+	}
 	painter->drawRect(rBoundingBox);
-
 	painter->setPen(pHeaderPen);
-
-	//INITIALIZATIONS
-	if(vInitializationsRectList.isEmpty() == false)
-	{
-		painter->drawText(rInitializationBox, Qt::AlignHCenter | Qt::AlignTop, "INITIALIZATIONS:");
-		painter->drawRects(vInitializationsRectList);
-		fCurrent.setBold(false);
-		fCurrent.setItalic(true);
-		int nInitializationsCounter = 0;
-		foreach(QString sSignature, lInitializationsList)
-		{
-			painter->drawText(vInitializationsRectList.at(nInitializationsCounter),Qt::AlignLeft | Qt::AlignVCenter," " + sSignature);
-			nInitializationsCounter++;
-		}
-	}
-
-	//METHODS
-	if(vSignalAndSlotsRectList.isEmpty() == false)
-	{
-		painter->drawText(rConnectionsBox, Qt::AlignHCenter | Qt::AlignTop, "SIGNAL/SLOTS:");
-		painter->drawRects(vSignalAndSlotsRectList);
-		fCurrent.setBold(false);
-		fCurrent.setItalic(true);
-		int nMethodCounter = 0;
-		foreach(QString sSignature, lSignalSignatureList)
-		{
-			painter->drawText(vSignalAndSlotsRectList.at(nMethodCounter),Qt::AlignLeft | Qt::AlignVCenter," " + sSignature);
-			nMethodCounter++;
-		}
-		foreach(QString sSignature, lSlotSignatureList)
-		{
-			painter->drawText(vSignalAndSlotsRectList.at(nMethodCounter),Qt::AlignLeft | Qt::AlignVCenter," " + sSignature);
-			nMethodCounter++;
-		}
-	}
-
-	//FINALIZATIONS
-	if(vFinalizationsRectList.isEmpty() == false)
-	{
-		painter->drawText(rFinalizationBox, Qt::AlignHCenter | Qt::AlignTop, "FINALIZATIONS:");
-		painter->drawRects(vFinalizationsRectList);
-		fCurrent.setBold(false);
-		fCurrent.setItalic(true);
-		int nFinalizationsCounter = 0;
-		foreach(QString sSignature, lFinalizationsList)
-		{
-			painter->drawText(vFinalizationsRectList.at(nFinalizationsCounter),Qt::AlignLeft | Qt::AlignVCenter," " + sSignature);
-			nFinalizationsCounter++;
-		}
-	}
 }
 
 void ExperimentGraphObjectItem::renderGraphItem()
@@ -219,65 +602,84 @@ void ExperimentGraphObjectItem::setMethods(const QList<strcMethodInfo> &lMethodS
 	rAdditionalMethodConnectionsHeight = 0;
 	rAdditionalFinalizationsHeight = 0;
 
-	vInitializationsRectList.clear();
-	lInitializationsList.clear();
-	vSignalAndSlotsRectList.clear();
-	lSignalSignatureList.clear();
-	lSlotSignatureList.clear();
-	vFinalizationsRectList.clear();
-	lFinalizationsList.clear();
-	QRectF tmpMethodRect;
+	if (subGraphItemInitializations)
+	{
+		delete subGraphItemInitializations;
+		subGraphItemInitializations = NULL;
+	}
+	if (subGraphItemFinalizations)
+	{
+		delete subGraphItemFinalizations;
+		subGraphItemFinalizations = NULL;
+	}
+	if (subGraphItemSignalSlots)
+	{
+		delete subGraphItemSignalSlots;
+		subGraphItemSignalSlots = NULL;
+	}
+
+	mapInitializationsIDToSignatureList.clear();
+	mapSignalIDToSignatureList.clear();
+	mapSlotIDToSignatureList.clear();
+	mapFinalizationsIDToSignatureList.clear();
+	mapInitializationsLocationIndexToSignatureList.clear();
+	mapSignalLocationIndexToSignatureList.clear();
+	mapSlotLocationIndexToSignatureList.clear();
+	mapFinalizationsLocationIndexToSignatureList.clear();
+
+	//INITIALIZATIONS//
+	rInitializationBox.setCoords(rectInnerObject.left() + (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE / 2), rectInnerObject.bottom() + (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE / 2), rectInnerObject.right() - (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE / 2), rectInnerObject.bottom());
+	int nInitCounter = 0;
+
+	rAdditionalInitializationsHeight = rInitializationBox.bottom() + EXPGRAPHOBJECTITEM_HEADER_HEIGHT + (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE / 2) + (nInitCounter*(EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE + EXPGRAPHOBJECTITEM_METHOD_HEIGHT));
+	mapInitializationsIDToSignatureList.insert(-1, "<PARAMETERS>");
+	nInitCounter++;
 
 	if(lMethodSignatureList.isEmpty() == false)
 	{
-		//INITIALIZATIONS//
-		rInitializationBox.setCoords(rectInnerObject.left()+(EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE/2), rectInnerObject.bottom()+(EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE/2),rectInnerObject.right()-(EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE/2),rectInnerObject.bottom());
-		int nInitCounter = 0;
 		for(int i=0;i<lMethodSignatureList.count();i++)
 		{
 			if(lMethodSignatureList.at(i).bIsInitialization)
 			{
 				rAdditionalInitializationsHeight = rInitializationBox.bottom()+EXPGRAPHOBJECTITEM_HEADER_HEIGHT+(EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE/2) + (nInitCounter*(EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE + EXPGRAPHOBJECTITEM_METHOD_HEIGHT));
-				tmpMethodRect.setCoords(rectInnerObject.left()+EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE, rAdditionalInitializationsHeight,rectInnerObject.right()-EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE,rAdditionalInitializationsHeight+EXPGRAPHOBJECTITEM_METHOD_HEIGHT);
-				vInitializationsRectList.append(tmpMethodRect);
-				//if(lMethodSignatureList.at(i).mExperimentVisualizerMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL)
-				//	lOrderedSignalSignatureList.append(lMethodSignatureList.at(i).sMethodSignature);
-				//else if(lMethodSignatureList.at(i).mExperimentVisualizerMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SLOT)
-				//	lOrderedSlotSignatureList.append(lMethodSignatureList.at(i).sMethodSignature);
-				lInitializationsList.append(lMethodSignatureList.at(i).sMethodSignature);
+				mapInitializationsIDToSignatureList.insert(lMethodSignatureList.at(i).nMethodID, lMethodSignatureList.at(i).sMethodSignature);
 				nInitCounter++;
 			}
 		}
 		if(nInitCounter > 0)
 		{
 			rInitializationBox.setBottom(rAdditionalInitializationsHeight + EXPGRAPHOBJECTITEM_METHOD_HEIGHT + (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE/2));
-			//lOrderedInitializationsList.sort();
 			rTotalHeight = rAdditionalInitializationsHeight;
 		}
 
 		//METHODS//
 		rConnectionsBox.setCoords(rInitializationBox.left(), rInitializationBox.bottom()+(EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE/2),rInitializationBox.right(),rInitializationBox.bottom()+(EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE/2));
 		int nMethodCounter = 0;
+		//int nSignalCounter = 0;
+		//int nSlotCounter = 0;
 		for(int i=0;i<lMethodSignatureList.count();i++)
 		{
 			if((lMethodSignatureList.at(i).bIsInitialization==false)&&(lMethodSignatureList.at(i).bIsFinalization==false))
 			{
-				QRectF tmpMethodRect;
 				rAdditionalMethodConnectionsHeight = rConnectionsBox.bottom() + EXPGRAPHOBJECTITEM_HEADER_HEIGHT + (nMethodCounter*(EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE + EXPGRAPHOBJECTITEM_METHOD_HEIGHT));
-				tmpMethodRect.setCoords(rInitializationBox.left()+EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE, rAdditionalMethodConnectionsHeight,rInitializationBox.right()-EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE,rAdditionalMethodConnectionsHeight+EXPGRAPHOBJECTITEM_METHOD_HEIGHT);
-				vSignalAndSlotsRectList.append(tmpMethodRect);
-				if(lMethodSignatureList.at(i).mExperimentVisualizerMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL)
-					lSignalSignatureList.append(lMethodSignatureList.at(i).sMethodSignature);
-				else if(lMethodSignatureList.at(i).mExperimentVisualizerMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SLOT)
-					lSlotSignatureList.append(lMethodSignatureList.at(i).sMethodSignature);
+				if (lMethodSignatureList.at(i).mExperimentVisualizerMethodType == ExperimentManagerNameSpace::TypeObjectSignalMethodItem)
+				{
+					mapSignalIDToSignatureList.insert(lMethodSignatureList.at(i).nMethodID, lMethodSignatureList.at(i).sMethodSignature);
+					mapSignalLocationIndexToSignatureList.insert(mapSignalLocationIndexToSignatureList.count(), lMethodSignatureList.at(i).sMethodSignature);
+					//nSignalCounter++;
+				}
+				else if (lMethodSignatureList.at(i).mExperimentVisualizerMethodType == ExperimentManagerNameSpace::TypeObjectSlotMethodItem)
+				{
+					mapSlotIDToSignatureList.insert(lMethodSignatureList.at(i).nMethodID, lMethodSignatureList.at(i).sMethodSignature);
+					mapSlotLocationIndexToSignatureList.insert(mapSlotLocationIndexToSignatureList.count(), lMethodSignatureList.at(i).sMethodSignature);
+					//nSlotCounter++;
+				}
 				nMethodCounter++;
 			}
 		}
 		if(nMethodCounter>0)
 		{
 			rConnectionsBox.setBottom(rAdditionalMethodConnectionsHeight + EXPGRAPHOBJECTITEM_METHOD_HEIGHT + (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE/2));
-			//lOrderedSignalSignatureList.sort();
-			//lOrderedSlotSignatureList.sort();
 			rTotalHeight = rAdditionalMethodConnectionsHeight;
 		}
 
@@ -289,46 +691,41 @@ void ExperimentGraphObjectItem::setMethods(const QList<strcMethodInfo> &lMethodS
 			if(lMethodSignatureList.at(i).bIsFinalization)
 			{
 				rAdditionalFinalizationsHeight = rConnectionsBox.bottom()+EXPGRAPHOBJECTITEM_HEADER_HEIGHT+(EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE/2) + (nFinitCounter*(EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE + EXPGRAPHOBJECTITEM_METHOD_HEIGHT));
-				tmpMethodRect.setCoords(rectInnerObject.left()+EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE,rAdditionalFinalizationsHeight,rectInnerObject.right()-EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE,rAdditionalFinalizationsHeight+EXPGRAPHOBJECTITEM_METHOD_HEIGHT);
-				vFinalizationsRectList.append(tmpMethodRect);
-				//if(lMethodSignatureList.at(i).mExperimentVisualizerMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL)
-				//	lOrderedSignalSignatureList.append(lMethodSignatureList.at(i).sMethodSignature);
-				//else if(lMethodSignatureList.at(i).mExperimentVisualizerMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SLOT)
-				//	lOrderedSlotSignatureList.append(lMethodSignatureList.at(i).sMethodSignature);
-				lFinalizationsList.append(lMethodSignatureList.at(i).sMethodSignature);
+				mapFinalizationsIDToSignatureList.insert(lMethodSignatureList.at(i).nMethodID, lMethodSignatureList.at(i).sMethodSignature);
 				nFinitCounter++;
 			}
 		}
 		if(nFinitCounter > 0)
 		{
 			rFinalizationBox.setBottom(rAdditionalFinalizationsHeight + EXPGRAPHOBJECTITEM_METHOD_HEIGHT + (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE/2));
-			//lOrderedFinalizationsList.sort();
 			rTotalHeight = rAdditionalFinalizationsHeight;
 		}
 	}
-
 	prepareGeometryChange();//Needs to be called before a geometry change which affect the bounding region
 	renderGraphItem();
 }
 
-int ExperimentGraphObjectItem::getMethodLocationIndex(const QString &sSignature, const ExperimentStructuresNameSpace::MethodType &mMethodType)
+int ExperimentGraphObjectItem::getMethodLocationIndex(const QString &sSignature, const ExperimentManagerNameSpace::ExperimentStructureItemType &mItemGraphType)
 {
-	if(mMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL)
+	if ((mItemGraphType == ExperimentManagerNameSpace::TypeObjectSlotMethodItem) || (mItemGraphType == ExperimentManagerNameSpace::TypeObjectSignalMethodItem))
 	{
-		return lSignalSignatureList.indexOf(sSignature);
-	}
-	else if(mMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SLOT)
-	{
-		int nTmpSlotIndex = lSlotSignatureList.indexOf(sSignature);
-		if(nTmpSlotIndex >= 0)
-			return lSignalSignatureList.count() + lSlotSignatureList.indexOf(sSignature);
+		if (mapSignalLocationIndexToSignatureList.values().contains(sSignature))
+		{
+			return mapSignalLocationIndexToSignatureList.key(sSignature);
+		}
+		else
+		{
+			int nTmpSlotIndex = mapSlotLocationIndexToSignatureList.key(sSignature);
+			if (nTmpSlotIndex >= 0)
+				return mapSignalLocationIndexToSignatureList.count() + nTmpSlotIndex;
+		}
 	}
 	return -1;
 }
 
-int ExperimentGraphObjectItem::getMethodLocationPosition(const QString &sSignature, const ExperimentStructuresNameSpace::MethodType &mMethodType)
+int ExperimentGraphObjectItem::getMethodLocationPosition(const QString &sSignature, const ExperimentManagerNameSpace::ExperimentStructureItemType &mItemGraphType)
 {
-	int nIndex = getMethodLocationIndex(sSignature,mMethodType)+1;
+	int nIndex = getMethodLocationIndex(sSignature, mItemGraphType) + 1;
 	if(nIndex>0)
 	{
 		return this->pos().y() + rAdditionalInitializationsHeight + EXPGRAPHOBJECTITEM_HEADER_HEIGHT + (EXPGRAPHOBJECTITEM_METHOD_HEIGHT / 2) + (nIndex * (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE + EXPGRAPHOBJECTITEM_METHOD_HEIGHT));

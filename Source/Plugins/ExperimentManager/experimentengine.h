@@ -164,7 +164,20 @@ public slots:
 	 *  The parameter bIsCustom (default = false) defines whether this parameter should be treated as a custom parameter.
 	 */
 	bool insertExpObjectBlockParameter(const int nObjectID,const QString sName,const QString sValue,bool bIsInitializing = true, bool bIsCustom = false);
-	
+	/*! \brief Returns a QScreen object representing the active Stimuli Output Screen.
+	*
+	*  This function returns a pointer to an QScreen object representing the active configured Stimuli Output Screen.
+	*  @return a pointer to an QScreen object.
+	*/
+	virtual QScreen* getActiveStimuliOutputScreen() = NULL;
+	/*! \brief Sets a Screen referred by it's Screen Number as the current active Stimuli Output Screen.
+	*
+	*  This function sets a Screen referred by it's Screen Number as the current active Stimuli Output Screen.
+	*  @param nScreenNumber a integer value representing the Screen Number that should be set as the current active Stimuli Output Screen.
+	*  @return a boolean value determining whether this function executed successfully.
+	*/
+	virtual bool setActiveStimuliOutputScreen(int nScreenNumber) = NULL;
+
 protected:
 	int checkForNextBlockTrial();
 	bool isDebugMode();
@@ -180,6 +193,8 @@ protected:
 	void initBlockTrial();
 	ExperimentSubObjectState getSubObjectState() {return currentSubObjectState;};
 	bool changeSubObjectState(ExperimentSubObjectState newSubObjectState);
+
+	QScreen *sConfiguredActiveScreen;
 
 protected slots:
 	void animate(bool bOnlyCheckBlockTrials = false);

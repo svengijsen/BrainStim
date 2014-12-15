@@ -61,7 +61,7 @@ void ExperimentGraphBlockItem::setCaption(const QString &sName)
 
 int ExperimentGraphBlockItem::type() const
 {
-	return ExperimentStructureItemType::TypeBlockItem;
+	return ExperimentManagerNameSpace::TypeBlockItem;
 }
 
 QPainterPath ExperimentGraphBlockItem::shape() const

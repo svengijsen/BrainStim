@@ -146,6 +146,8 @@ public slots:
 	bool installCustomScriptHandlerFunction(QString FuncName);
 	bool setExperimentManager(ExperimentManager *expManager);
 	bool setExperimentObjectReadyToUnlock();
+	QScreen* getActiveStimuliOutputScreen();
+	bool setActiveStimuliOutputScreen(int nScreenNumber);
 
 protected:
 	bool eventFilter(QObject *target, QEvent *event);
@@ -192,7 +194,6 @@ private:
 	QStringList randomizeTriggerStepsArray;
 	bool bNoChangesSinceLastFrame;
 	ExperimentManager *experimentManager;
-	QScreen *sActiveStimScreen;
 
 	QColor movingDotsColor;
 	QColor cCheckerColor1;

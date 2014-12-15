@@ -2003,7 +2003,7 @@ void MainWindow::createDockWindows()
 	debugLogDock = new QDockWidget(MAINWINDOW_DOCK_OUTPUTWINDOW_NAME, this);
 	debugLogDock->setAccessibleName(MAINWINDOW_DOCK_OUTPUTWINDOW_NAME);
 	debugLogDock->setObjectName(MAINWINDOW_DOCK_OUTPUTWINDOW_NAME);
-	debugLogDock->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);	
+	debugLogDock->setAllowedAreas(Qt::AllDockWidgetAreas);// Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
 	mTabNameToOutputWindowList.insert(MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME,new QTextEdit());
 	mTabNameToOutputWindowList[MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME]->setReadOnly(true);
 	outputTabWidget = new CustomChildDockTabWidget();
@@ -2073,6 +2073,8 @@ void MainWindow::setupDynamicPlugins()
 			if (iDevice) 
 			{
 				iDevice->fetchGlobalAppInfo();
+				QString sTmpInternalPluginName = iDevice->GetPluginInternalName();
+				bool bCustomConfFoundAndAdded = getPluginCustomConfigurationOptions(sTmpInternalPluginName);
 				bInterfaceResolved = true;
 			}
 			else 
@@ -2081,6 +2083,8 @@ void MainWindow::setupDynamicPlugins()
 				if (iExtension) 
 				{
 					iExtension->fetchGlobalAppInfo();
+					QString sTmpInternalPluginName = iExtension->GetPluginInternalName();
+					bool bCustomConfFoundAndAdded = getPluginCustomConfigurationOptions(sTmpInternalPluginName);
 					bInterfaceResolved = true;
 				}				
 			}
@@ -2177,6 +2181,8 @@ void MainWindow::setupDynamicPlugins()
 				if (iDevice) 
 				{
 					iDevice->fetchGlobalAppInfo();
+					QString sTmpInternalPluginName = iDevice->GetPluginInternalName();
+					bool bCustomConfFoundAndAdded = getPluginCustomConfigurationOptions(sTmpInternalPluginName);
 					bInterfaceResolved = true;
 				}
 				else 
@@ -2185,6 +2191,8 @@ void MainWindow::setupDynamicPlugins()
 					if (iExtension) 
 					{
 						iExtension->fetchGlobalAppInfo();
+						QString sTmpInternalPluginName = iExtension->GetPluginInternalName();
+						bool bCustomConfFoundAndAdded = getPluginCustomConfigurationOptions(sTmpInternalPluginName);
 						bInterfaceResolved = true;
 					}				
 				}
@@ -4124,87 +4132,62 @@ void MainWindow::findPrev()
 	}
 }
 
+QString MainWindow::getCurrentDateTimeStamp(const QString &sFormat)
+{
+	return (QDateTime::currentDateTime().toString(sFormat));
+}
+
+bool MainWindow::getStoredSettingValue(const QString &sSettingPath, QString *sResult)
+{
+	QVariant varTmpValue;
+	if (globAppInfo->getRegistryInformation(sSettingPath, varTmpValue))
+	{
+		*sResult = varTmpValue.toString();
+		return true;
+	}
+	return false;
+}
+
+bool MainWindow::getPluginCustomConfigurationOptions(const QString &sInternalPluginName)
+{
+	if (sInternalPluginName.isEmpty())
+		return false;
+	QString sPath = ":/resources/";
+	QString sResolvedFileName = sInternalPluginName.toLower() + ".xdef";
+	if (QFile(sPath + sResolvedFileName).exists())
+	{
+		PropertySettingsWidgetContainer *tmpExpParWidgets = PropertySettingsWidgetContainer::instance();
+		if (tmpExpParWidgets->loadExperimentParameterDefinition(sResolvedFileName, sInternalPluginName.toLower(), true, sPath))
+		{
+			PropertySettingsWidget *tmpExpParamViz = tmpExpParWidgets->getExperimentParameterWidget(sInternalPluginName.toLower());
+			if (tmpExpParamViz)
+			{
+				mapPluginOptionWidgetsByPluginName.insert(sInternalPluginName, tmpExpParamViz);
+				return true;
+			}
+		}
+	}
+	return false;
+}
+
 #ifdef DEBUG
 void MainWindow::debugTestSlot()
 {
-	QString sName = "ExperimentManager";
-	QString sPath = "E:/Projects/BrainStim/Source/Plugins/ExperimentManager/resources/";
+	//QString sName = "ExperimentManager";
+	//QString sPath = ":/resources/";
+	//QString sResolvedFileName = sName.toLower() + ".xdef";
 
-	PropertySettingsWidgetContainer *tmpExpParWidgets = PropertySettingsWidgetContainer::instance();
-	if (tmpExpParWidgets->loadExperimentParameterDefinition(sName.toLower() + ".xdef", sName.toLower(), true, sPath))
-	{
-		PropertySettingsWidget *tmpExpParamViz = tmpExpParWidgets->getExperimentParameterWidget(sName.toLower());
-		if (tmpExpParamViz)
-		{
-			//QString sParamName = "block_number";
-			//QString sParamValue = "99";
-			//if (tmpExpParamViz->checkIfParameterExists(sParamName))
-			//{
-			//	tmpExpParamViz->setParameter(sParamName, sParamValue, false, true);
-			//}
-			mapPluginOptionWidgetsByPluginName.insert(sName, tmpExpParamViz);
-		}
-	}
-
-	//if (tmpExpParWidgets->createCustomExperimentParameterWidgetCollection(sName.toLower(), true))
-
-	/*
-	if(tmpParametersWidget)
-	{
-	if(tmpParametersWidget->checkIfParameterExists(sName)==false)
-	{
-	tmpExperimentParameterDefinitionStrc.bEnabled = true;
-	tmpExperimentParameterDefinitionStrc.eType = PropertySetting_Type_String;
-	tmpExperimentParameterDefinitionStrc.nId = i;
-	tmpExperimentParameterDefinitionStrc.sName = sName;
-	tmpExperimentParameterDefinitionStrc.sDisplayName = sName;
-	tmpExperimentParameterDefinitionStrc.bCanBeScriptReference = true;
-	tmpExperimentParameterDefinitionStrc.sInformation = EXPERIMENT_CUSTOMPARAM_INFOSTRING;
-
-	lExpParamsDefStrcs->append(tmpExperimentParameterDefinitionStrc);
-
-	tmpParametersWidget = expParamWidgets->insertCustomExperimentParameterWidget(sParamCollName + CUSTOMOBJECTPARAMS_POSTSTRING,lExpParamsDefStrcs);
-	if(tmpParametersWidget)
-	{
-	tmpParametersWidget->setParameter(sName,sValue,true,true);
-	}
-	}
-	else
-	{
-	tmpParametersWidget->setParameter(sName,sValue,true,true);
-	}
-	}
-	*/
-
-
-	/*
-		if(pExpParamWidgets == NULL)
-		pExpParamWidgets = PropertySettingsWidgetContainer::instance();
-		if(pParametersWidget == NULL)
-		{
-		pParametersWidget = pExpParamWidgets->getExperimentParameterWidget(LOOP_TAG);
-		if(pParametersWidget)
-		{
-		if(layoutTreeWidgetParent)
-		layoutTreeWidgetParent->insertWidget(0,pParametersWidget);
-		connect((QObject*)pParametersWidget, SIGNAL(rootItemEditFinished(const QString&, const QString&)), this, SLOT(blockLoopDefinitionItemEditFinished(const QString&, const QString&)),Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
-		}
-		else
-		{
-		qDebug() << __FUNCTION__ << "Could not fetch the Loop widget.";
-		return false;
-		}
-		}
-		if(blockLoopInfoStrc.pLoopStruct)
-		{
-		pParametersWidget->setParameter(NAME_TAG,blockLoopInfoStrc.pLoopStruct->getLoopName(),true,true);
-		pParametersWidget->setParameter(LOOP_NUMBER_TAG,QString::number(blockLoopInfoStrc.pLoopStruct->getLoopNumber()),true,true);
-		pParametersWidget->setParameter(LOOP_AMOUNT_TAG,QString::number(blockLoopInfoStrc.pLoopStruct->getNumberOfLoops()),true,true);
-		pParametersWidget->setParameter(LOOP_TARGETBLOCKID_TAG,QString::number(blockLoopInfoStrc.pLoopStruct->getTargetBlockID()),true,true);
-		}
-		return true;
-	*/
-
-
+	//if (QFile(sPath + sResolvedFileName).exists())
+	//{
+	//	PropertySettingsWidgetContainer *tmpExpParWidgets = PropertySettingsWidgetContainer::instance();
+	//	if (tmpExpParWidgets->loadExperimentParameterDefinition(sResolvedFileName, sName.toLower(), true, sPath))
+	//	{
+	//		PropertySettingsWidget *tmpExpParamViz = tmpExpParWidgets->getExperimentParameterWidget(sName.toLower());
+	//		if (tmpExpParamViz)
+	//		{
+	//			mapPluginOptionWidgetsByPluginName.insert(sName, tmpExpParamViz);
+	//		}
+	//	}
+	//}
 }
 #endif

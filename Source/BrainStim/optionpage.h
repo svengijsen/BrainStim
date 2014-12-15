@@ -61,6 +61,8 @@ private:
 	void applySettings();
 	bool checkSettings();
 	bool validateIPAddressString(QString &input) const;
+
+	QMap<QString, QString> mapSettingsApplyPending;
 };
 
 #endif // OPTIONPAGE_H

@@ -103,6 +103,9 @@ void ExperimentStructureVisualizer::resetExpScene()
 	expSceneItems.sExperimentName = "<undefined>";
 	expSceneItems.lLoops.clear();
 	expSceneItems.lBlocks.clear();
+	//expSceneItems.lInits.clear();
+	//expSceneItems.lFinits.clear();
+	//expSceneItems.lSignalSlots.clear();
 	if(expSceneItems.lObjects.isEmpty() == false)
 	{
 		for (int i=0;i<expSceneItems.lObjects.count();i++)
@@ -302,7 +305,7 @@ void ExperimentStructureVisualizer::itemSelectionChanged()
 		{
 			gScene->selectedItems().at(i)->setZValue(1);
 
-			expBlockItemStrc *pExpBlockItemStrc = getGraphBlockItemStruct((ExperimentGraphBlockItem*)gScene->selectedItems()[i]);//pExpGraphBlockItem);
+			expBlockItemStrc *pExpBlockItemStrc = getGraphBlockItemStruct((ExperimentGraphBlockItem*)gScene->selectedItems()[i]);
 			if(pExpBlockItemStrc)
 			{
 				QList<ExperimentVisualizerGraphItemTypeEnum> lGraphTypeEnums;
@@ -312,7 +315,65 @@ void ExperimentStructureVisualizer::itemSelectionChanged()
 				emit GraphItemSelectionChanged(lGraphTypeEnums,lItemsIds);
 				return;
 			}	
-			expConnItemStrc *pExpConnItemStrc = getGraphLoopItemStruct((ExperimentGraphLoopItem*)gScene->selectedItems()[i]);//
+
+			int nGraphType = gScene->selectedItems()[i]->type();
+			ExperimentManagerNameSpace::ExperimentStructureItemType eGraphType = (ExperimentManagerNameSpace::ExperimentStructureItemType)nGraphType;
+			if (eGraphType == ExperimentManagerNameSpace::TypeObjectInitializationItem)
+			{
+				ExperimentGraphSubObjectTextItem *pExpGraphSubTextItem = qgraphicsitem_cast<ExperimentGraphSubObjectTextItem *>(gScene->selectedItems()[i]);
+				if (pExpGraphSubTextItem)
+				{
+					QList<ExperimentVisualizerGraphItemTypeEnum> lGraphTypeEnums;
+					QList<int> lItemsIds;
+					lGraphTypeEnums.append(ExperimentVisualizerGraphItemTypeEnum::EXPVIS_TYPE_INIT);
+					lItemsIds.append(pExpGraphSubTextItem->getItemID());
+					emit GraphItemSelectionChanged(lGraphTypeEnums, lItemsIds);
+					return;
+				}
+			}
+			else if (eGraphType == ExperimentManagerNameSpace::TypeObjectFinalizationItem)
+			{
+				ExperimentGraphSubObjectTextItem *pExpGraphSubTextItem = qgraphicsitem_cast<ExperimentGraphSubObjectTextItem *>(gScene->selectedItems()[i]);
+				if (pExpGraphSubTextItem)
+				{
+					QList<ExperimentVisualizerGraphItemTypeEnum> lGraphTypeEnums;
+					QList<int> lItemsIds;
+					lGraphTypeEnums.append(ExperimentVisualizerGraphItemTypeEnum::EXPVIS_TYPE_FINIT);
+					lItemsIds.append(pExpGraphSubTextItem->getItemID());
+					emit GraphItemSelectionChanged(lGraphTypeEnums, lItemsIds);
+					return;
+				}
+			}
+			else if (eGraphType == ExperimentManagerNameSpace::TypeParametersFirstBlock)
+			{
+				ExperimentGraphSubObjectTextItem *pExpGraphSubTextItem = qgraphicsitem_cast<ExperimentGraphSubObjectTextItem *>(gScene->selectedItems()[i]);
+				if (pExpGraphSubTextItem)
+				{
+					QList<ExperimentVisualizerGraphItemTypeEnum> lGraphTypeEnums;
+					QList<int> lItemsIds;
+					if (pExpGraphSubTextItem->parentItem())
+					{
+						if (pExpGraphSubTextItem->parentItem()->parentItem())
+						{
+							expObjectItemStrc *pExpObjectItemStrc = getGraphObjectItemStruct((ExperimentGraphObjectItem*)pExpGraphSubTextItem->parentItem()->parentItem());
+							if (pExpObjectItemStrc)
+							{
+								lGraphTypeEnums.append(ExperimentVisualizerGraphItemTypeEnum::EXPVIS_TYPE_BLOCK);
+								lItemsIds.append(parsedExpStruct->getNextClosestBlockNumberByFromNumber(0)->getBlockID());
+								lGraphTypeEnums.append(ExperimentVisualizerGraphItemTypeEnum::EXPVIS_TYPE_OBJECT);
+								lItemsIds.append(pExpObjectItemStrc->nId);
+								lGraphTypeEnums.append(ExperimentVisualizerGraphItemTypeEnum::EXPVIS_TYPE_PARAMETERS);
+								lItemsIds.append(-1);
+								emit GraphItemSelectionChanged(lGraphTypeEnums, lItemsIds);
+								return;
+							}
+							return;
+						}
+					}
+				}
+			}
+
+			expConnItemStrc *pExpConnItemStrc = getGraphLoopItemStruct((ExperimentGraphLoopItem*)gScene->selectedItems()[i]);
 			if(pExpConnItemStrc)
 			{
 				QList<ExperimentVisualizerGraphItemTypeEnum> lGraphTypeEnums;
@@ -324,7 +385,7 @@ void ExperimentStructureVisualizer::itemSelectionChanged()
 				emit GraphItemSelectionChanged(lGraphTypeEnums,lItemsIds);
 				return;
 			}
-			expObjectItemStrc *pExpObjectItemStrc = getGraphObjectItemStruct((ExperimentGraphObjectItem*)gScene->selectedItems()[i]);//
+			expObjectItemStrc *pExpObjectItemStrc = getGraphObjectItemStruct((ExperimentGraphObjectItem*)gScene->selectedItems()[i]);
 			if(pExpObjectItemStrc)
 			{
 				QList<ExperimentVisualizerGraphItemTypeEnum> lGraphTypeEnums;
@@ -334,7 +395,7 @@ void ExperimentStructureVisualizer::itemSelectionChanged()
 				emit GraphItemSelectionChanged(lGraphTypeEnums,lItemsIds);
 				return;
 			}
-			expObjectMethodConnectionItemStrc *pExpObjectMethodConnectionItemStrc = getGraphMethodConnectionItemStruct((ExperimentGraphMethodConnectionItem*)gScene->selectedItems()[i]);//
+			expObjectMethodConnectionItemStrc *pExpObjectMethodConnectionItemStrc = getGraphMethodConnectionItemStruct((ExperimentGraphMethodConnectionItem*)gScene->selectedItems()[i]);
 			if(pExpObjectMethodConnectionItemStrc) 
 			{
 				QList<ExperimentVisualizerGraphItemTypeEnum> lGraphTypeEnums;
@@ -648,6 +709,7 @@ bool ExperimentStructureVisualizer::drawGraph()
 			{
 				if(expSceneItems.lObjects[i].lObjectMethodConnections.isEmpty() == false)
 				{ //METHOD CONNECTIONS//
+					int nMethodConnCounter = 0;
 					foreach(expObjectMethodConnectionItemStrc* pExpObjectMethodConnectionItemStrc,expSceneItems.lObjects[i].lObjectMethodConnections)
 					{
 						QMap<QString, strcMethodInfo> tmpStrcMethodConnectionInfoList;
@@ -670,10 +732,12 @@ bool ExperimentStructureVisualizer::drawGraph()
 						if(bSignatureFound == false)
 						{
 							tmpStrcMethodConnectionInfo.sMethodSignature = pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.sSignature;
-							tmpStrcMethodConnectionInfo.mExperimentVisualizerMethodType = pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.mType;
+							tmpStrcMethodConnectionInfo.nMethodID = nMethodConnCounter;//pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.nMethodID;
+							tmpStrcMethodConnectionInfo.mExperimentVisualizerMethodType = pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.itemType;
 							QString sHexedOrderNumber = "0000";
 							//bool bHexedResult = 
-								MainAppInfo::getHexedOrderNumber(pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.nOrderNumber, sHexedOrderNumber, 4);
+							MainAppInfo::getHexedOrderNumber(nMethodConnCounter, sHexedOrderNumber, 4);
+							nMethodConnCounter++;
 							hashObjectIDToUsedMethodConnections[pExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.nObjectID].insert(sHexedOrderNumber,tmpStrcMethodConnectionInfo);
 						}
 						//Targets
@@ -692,10 +756,12 @@ bool ExperimentStructureVisualizer::drawGraph()
 						if(bSignatureFound == false)
 						{
 							tmpStrcMethodConnectionInfo.sMethodSignature = pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.sSignature;
-							tmpStrcMethodConnectionInfo.mExperimentVisualizerMethodType = pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.mType;
+							tmpStrcMethodConnectionInfo.nMethodID = nMethodConnCounter; // pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.nMethodID;
+							tmpStrcMethodConnectionInfo.mExperimentVisualizerMethodType = pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.itemType;
 							QString sHexedOrderNumber = "0000";
 							//bool bHexedResult = 
-								MainAppInfo::getHexedOrderNumber(pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.nOrderNumber, sHexedOrderNumber, 4);
+							MainAppInfo::getHexedOrderNumber(nMethodConnCounter, sHexedOrderNumber, 4);
+							nMethodConnCounter++;
 							hashObjectIDToUsedMethodConnections[pExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.nObjectID].insert(sHexedOrderNumber,tmpStrcMethodConnectionInfo);
 						}
 					}
@@ -724,7 +790,8 @@ bool ExperimentStructureVisualizer::drawGraph()
 						if(bSignatureFound == false)
 						{
 							tmpStrcMethodInfo.sMethodSignature = pExpObjectInitializationItemStrc->sSignature;
-							tmpStrcMethodInfo.mExperimentVisualizerMethodType = pExpObjectInitializationItemStrc->mType;
+							tmpStrcMethodInfo.nMethodID = pExpObjectInitializationItemStrc->nMethodID;
+							tmpStrcMethodInfo.mExperimentVisualizerMethodType = pExpObjectInitializationItemStrc->itemType;
 							tmpStrcMethodInfo.bIsInitialization = true;
 							QString sHexedOrderNumber = "0000";
 							//bool bHexedResult = 
@@ -757,7 +824,8 @@ bool ExperimentStructureVisualizer::drawGraph()
 						if(bSignatureFound == false)
 						{
 							tmpStrcMethodInfo.sMethodSignature = pExpObjectFinalizationItemStrc->sSignature;
-							tmpStrcMethodInfo.mExperimentVisualizerMethodType = pExpObjectFinalizationItemStrc->mType;
+							tmpStrcMethodInfo.nMethodID = pExpObjectFinalizationItemStrc->nMethodID;
+							tmpStrcMethodInfo.mExperimentVisualizerMethodType = pExpObjectFinalizationItemStrc->itemType;
 							tmpStrcMethodInfo.bIsFinalization = true;
 							QString sHexedOrderNumber = "0000";
 							//bool bHexedResult = 
@@ -781,7 +849,7 @@ bool ExperimentStructureVisualizer::drawGraph()
 					hashObjectIDToUsedMethods[expSceneItems.lObjects[i].nId].append(hashObjectIDToUsedMethodConnections[expSceneItems.lObjects[i].nId].values());
 				if(hashObjectIDToFinalizations.contains(expSceneItems.lObjects[i].nId))
 					hashObjectIDToUsedMethods[expSceneItems.lObjects[i].nId].append(hashObjectIDToFinalizations[expSceneItems.lObjects[i].nId].values());
-				if(hashObjectIDToUsedMethods.contains(expSceneItems.lObjects[i].nId))
+				if (hashObjectIDToUsedMethods.contains(expSceneItems.lObjects[i].nId))
 					expSceneItems.lObjects[i].gGraphObjectItem->setMethods(hashObjectIDToUsedMethods[expSceneItems.lObjects[i].nId]);
 
 				expSceneItems.lObjects[i].gGraphObjectItem->setPos(0,rLastObjectBottomPos+EXPGRAPHOBJECTITEM_OBJECT_DISTANCE);//(nCurrentBlockNumber*nBlockDistance) + nAdditionalLoopConnsBlockDistance);
@@ -817,22 +885,17 @@ bool ExperimentStructureVisualizer::drawGraph()
 					//	expSceneItems.lObjects[i].gGraphObjectItem->setSignalsAndSlots(hashObjectIDToUsedSignatures[expSceneItems.lObjects[i].nId]);
 					foreach(expObjectMethodConnectionItemStrc* pExpObjMethodConnItemStrc,expSceneItems.lObjects[i].lObjectMethodConnections)
 					{
-						//if(pExpObjMethodConnItemStrc->gGraphObjectMethodConnItem)
-						//{
-						//	delete pExpObjMethodConnItemStrc->gGraphObjectMethodConnItem;
-						//	pExpObjMethodConnItemStrc->gGraphObjectMethodConnItem = NULL;
-						//}
 						pExpObjMethodConnItemStrc->gGraphObjectMethodConnItem = new ExperimentGraphMethodConnectionItem();
 						pTmpSourceGraphObject = getGraphObjectItemPointer(pExpObjMethodConnItemStrc->cSourceConnectionMethod.nObjectID);
 						pTmpTargetGraphObject = getGraphObjectItemPointer(pExpObjMethodConnItemStrc->cTargetConnectionMethod.nObjectID);
 						if(pTmpSourceGraphObject && pTmpTargetGraphObject)
 						{
-							if((pExpObjMethodConnItemStrc->cSourceConnectionMethod.mType == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL) || (pExpObjMethodConnItemStrc->cSourceConnectionMethod.mType == ExperimentStructuresNameSpace::METHOD_TYPE_SLOT))
-								tmpSourceMethodYOffsetPosition = pTmpSourceGraphObject->getMethodLocationPosition(pExpObjMethodConnItemStrc->cSourceConnectionMethod.sSignature, pExpObjMethodConnItemStrc->cSourceConnectionMethod.mType);
+							if ((pExpObjMethodConnItemStrc->cSourceConnectionMethod.itemType == ExperimentManagerNameSpace::TypeObjectSignalMethodItem) || (pExpObjMethodConnItemStrc->cSourceConnectionMethod.itemType == ExperimentManagerNameSpace::TypeObjectSlotMethodItem))
+								tmpSourceMethodYOffsetPosition = pTmpSourceGraphObject->getMethodLocationPosition(pExpObjMethodConnItemStrc->cSourceConnectionMethod.sSignature, pExpObjMethodConnItemStrc->cSourceConnectionMethod.itemType);
 							if(tmpSourceMethodYOffsetPosition >= 0)
 							{
-								if((pExpObjMethodConnItemStrc->cTargetConnectionMethod.mType == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL) || (pExpObjMethodConnItemStrc->cTargetConnectionMethod.mType == ExperimentStructuresNameSpace::METHOD_TYPE_SLOT))
-									tmpTargetMethodYOffsetPosition = pTmpTargetGraphObject->getMethodLocationPosition(pExpObjMethodConnItemStrc->cTargetConnectionMethod.sSignature, pExpObjMethodConnItemStrc->cTargetConnectionMethod.mType);
+								if ((pExpObjMethodConnItemStrc->cTargetConnectionMethod.itemType == ExperimentManagerNameSpace::TypeObjectSignalMethodItem) || (pExpObjMethodConnItemStrc->cTargetConnectionMethod.itemType == ExperimentManagerNameSpace::TypeObjectSlotMethodItem))
+									tmpTargetMethodYOffsetPosition = pTmpTargetGraphObject->getMethodLocationPosition(pExpObjMethodConnItemStrc->cTargetConnectionMethod.sSignature, pExpObjMethodConnItemStrc->cTargetConnectionMethod.itemType);
 								if(tmpTargetMethodYOffsetPosition >= 0)
 								{									
 									tmpXOffset = EXPGRAPHOBJECTITEM_OBJECT_CONNECTION_START_WIDTH_DISTANCE + (EXPGRAPHOBJECTITEM_OBJECT_CONNECTION_DISTANCE * nGlobalAllObjectMethodConnCounter);
@@ -1087,7 +1150,6 @@ bool ExperimentStructureVisualizer::setExperimentTreeModel(ExperimentTreeModel *
 {
 	pExperimentTreeModel = pExpTreeModel;
 	connect(pExperimentTreeModel, SIGNAL(modelModified()), this, SLOT(reCreateAndParseExperimentStructure()), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
-	//bool bResult = connect(pExperimentTreeModel, ExperimentTreeModel::modelModified, this, SLOT(reCreateAndParseExperimentStructure()), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 	if(gScene)
 	{
 		gScene->setExperimentTreeModel(pExperimentTreeModel);
@@ -1252,10 +1314,12 @@ bool ExperimentStructureVisualizer::parseExperimentStructure()
 							pTmpExpObjectMethodConnectionItemStrc->nMethodConnectionID = pTmpMethodConnectionStructure->getMethodConnectionID();
 							pTmpExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.nObjectID = pTmpMethodConnectionStructure->getSourceObjectID();
 							pTmpExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.nObjectID = pTmpMethodConnectionStructure->getTargetObjectID();
-							pTmpExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.mType = (ExperimentStructuresNameSpace::MethodType)pTmpMethodConnectionStructure->getSourceMethodType();
-							pTmpExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.mType = (ExperimentStructuresNameSpace::MethodType)pTmpMethodConnectionStructure->getTargetMethodType();
+							pTmpExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.itemType = ConnMethodTypeToGraphMethodType((ExperimentStructuresNameSpace::MethodType)pTmpMethodConnectionStructure->getSourceMethodType());
+							pTmpExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.itemType = ConnMethodTypeToGraphMethodType((ExperimentStructuresNameSpace::MethodType)pTmpMethodConnectionStructure->getTargetMethodType());
 							pTmpExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.sSignature = pTmpMethodConnectionStructure->getSourceSignature();
 							pTmpExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.sSignature = pTmpMethodConnectionStructure->getTargetSignature();
+							//??pTmpExpObjectMethodConnectionItemStrc->cSourceConnectionMethod.nMethodID = pTmpMethodConnectionStructure->getMethodConnectionID();
+							//??pTmpExpObjectMethodConnectionItemStrc->cTargetConnectionMethod.nMethodID = pTmpMethodConnectionStructure->getTargetSignature();
 							tmpObjectItem.lObjectMethodConnections.append(pTmpExpObjectMethodConnectionItemStrc);
 						}
 					}
@@ -1273,7 +1337,7 @@ bool ExperimentStructureVisualizer::parseExperimentStructure()
 							pTmpExpObjectMethodItemStrc->nMethodID = pTmpMethodStructure->getMethodID();
 							pTmpExpObjectMethodItemStrc->nObjectID = pTmpMethodStructure->getMethodObjectID();
 							pTmpExpObjectMethodItemStrc->nOrderNumber = pTmpMethodStructure->getMethodOrderNumber();
-							pTmpExpObjectMethodItemStrc->mType = (ExperimentStructuresNameSpace::MethodType)pTmpMethodStructure->getMethodType();
+							pTmpExpObjectMethodItemStrc->itemType = ExperimentManagerNameSpace::TypeObjectInitializationItem;
 							pTmpExpObjectMethodItemStrc->sSignature = pTmpMethodStructure->getMethodSignature();
 							tmpObjectItem.lObjectInitializations.append(pTmpExpObjectMethodItemStrc);
 						}
@@ -1292,7 +1356,7 @@ bool ExperimentStructureVisualizer::parseExperimentStructure()
 							pTmpExpObjectMethodItemStrc->nMethodID = pTmpMethodStructure->getMethodID();
 							pTmpExpObjectMethodItemStrc->nObjectID = pTmpMethodStructure->getMethodObjectID();
 							pTmpExpObjectMethodItemStrc->nOrderNumber = pTmpMethodStructure->getMethodOrderNumber();
-							pTmpExpObjectMethodItemStrc->mType = (ExperimentStructuresNameSpace::MethodType)pTmpMethodStructure->getMethodType();
+							pTmpExpObjectMethodItemStrc->itemType = ExperimentManagerNameSpace::TypeObjectFinalizationItem;
 							pTmpExpObjectMethodItemStrc->sSignature = pTmpMethodStructure->getMethodSignature();
 							tmpObjectItem.lObjectFinalizations.append(pTmpExpObjectMethodItemStrc);
 						}
@@ -1308,6 +1372,23 @@ bool ExperimentStructureVisualizer::parseExperimentStructure()
 		gScene->setExperimentStructure(parsedExpStruct);
 	}
 	return drawGraph();
+}
+
+ExperimentStructureItemType ExperimentStructureVisualizer::ConnMethodTypeToGraphMethodType(const ExperimentStructuresNameSpace::MethodType &connMethodType)
+{
+	if (connMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL)
+	{
+		return TypeObjectSignalMethodItem;
+	}
+	else if (connMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_SLOT)
+	{
+		return TypeObjectSlotMethodItem;
+	}
+	else if (connMethodType == ExperimentStructuresNameSpace::METHOD_TYPE_UNDEFINED)
+	{
+		return TypeUndefined;
+	}
+	return TypeUndefined;
 }
 
 ExperimentGraphBlockItem *ExperimentStructureVisualizer::getGraphBlockItemPointer(const int &nBlockID)

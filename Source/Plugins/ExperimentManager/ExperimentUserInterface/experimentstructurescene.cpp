@@ -112,15 +112,15 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 	//{
 	foreach(QGraphicsItem *graphItem,gItemList)
 	{
-		if(graphItem->type() == ExperimentStructureItemType::TypeBlockItem)
+		if (graphItem->type() == ExperimentManagerNameSpace::TypeBlockItem)
 			gSelectedBlockItems.append(qgraphicsitem_cast<ExperimentGraphBlockItem*>(graphItem));
-		else if(graphItem->type() == ExperimentStructureItemType::TypeAutoLoopConnectionItem)
+		else if (graphItem->type() == ExperimentManagerNameSpace::TypeAutoLoopConnectionItem)
 			gSelectedAutoConnectionItems.append(qgraphicsitem_cast<ExperimentGraphLoopItem*>(graphItem));
-		else if(graphItem->type() == ExperimentStructureItemType::TypeLoopConnectionItem)
+		else if (graphItem->type() == ExperimentManagerNameSpace::TypeLoopConnectionItem)
 			gSelectedLoopConnectionItems.append(qgraphicsitem_cast<ExperimentGraphLoopItem*>(graphItem));
-		else if(graphItem->type() == ExperimentStructureItemType::TypeObjectItem)
+		else if (graphItem->type() == ExperimentManagerNameSpace::TypeObjectItem)
 			gSelectedObjectItems.append(qgraphicsitem_cast<ExperimentGraphObjectItem*>(graphItem));
-		else if(graphItem->type() == ExperimentStructureItemType::TypeMethodConnectionItem)
+		else if (graphItem->type() == ExperimentManagerNameSpace::TypeMethodConnectionItem)
 			gSelectedMethodConnectionItems.append(qgraphicsitem_cast<ExperimentGraphMethodConnectionItem*>(graphItem));
 	}
 	if (parentExpStructVis)

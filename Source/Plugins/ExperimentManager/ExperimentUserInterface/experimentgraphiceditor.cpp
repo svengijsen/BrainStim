@@ -741,13 +741,37 @@ void ExperimentGraphicEditor::changeSelection(QList<ExperimentVisualizerGraphIte
 			lTmpList.append(CONNECTION_TAG);
 			lTmpStringListList.append(QStringList()<<"TAGS");
 		}
+		else if (eTmpEnum == EXPVIS_TYPE_INIT)
+		{
+			lTmpList.append(INITIALIZATION_TAG);
+			lTmpStringListList.append(QStringList() << "TAGS");
+		}
+		else if (eTmpEnum == EXPVIS_TYPE_FINIT)
+		{
+			lTmpList.append(FINALIZATION_TAG);
+			lTmpStringListList.append(QStringList() << "TAGS");
+		}
+		else if (eTmpEnum == EXPVIS_TYPE_PARAMETERS)
+		{
+			lTmpList.append(PARAMETERS_TAG);
+			lTmpStringListList.append(QStringList() << "TAGS");
+		}
 		else
 		{
 			lTmpList.append(EXPERIMENT_TAG);
 			lTmpStringListList.append(QStringList()<<"TAGS");
 		}
 	}
-	selectTreeItem(lTmpList,lTmpStringListList,lItemIds);
+	if (selectTreeItem(lTmpList, lTmpStringListList, lItemIds) == false)
+	{
+		lTmpList.clear();
+		lTmpList.append(EXPERIMENT_TAG);
+		lTmpStringListList.clear();
+		lTmpStringListList.append(QStringList() << "TAGS");
+		lItemIds.clear();
+		lItemIds.append(-1);
+		selectTreeItem(lTmpList, lTmpStringListList, lItemIds);
+	}
 }
 
 void ExperimentGraphicEditor::clearSelection()
@@ -1789,8 +1813,12 @@ bool ExperimentGraphicEditor::selectTreeItem(const QStringList &lTextToFind, con
 									bCorrectItemFound = true;
 								}
 							}
-							if(bCorrectItemFound==false)
+							if (bCorrectItemFound == false)
+							{
+								if ((i + 1) == nItemCount)
+									return false;
 								continue;
+							}
 						}
 						else
 						{

@@ -66,9 +66,9 @@ QPainterPath ExperimentGraphLoopItem::shape() const
 int ExperimentGraphLoopItem::type() const
 {
 	if(bIsAutoLoopType)
-		return ExperimentStructureItemType::TypeAutoLoopConnectionItem;
+		return ExperimentManagerNameSpace::TypeAutoLoopConnectionItem;
 	else
-		return ExperimentStructureItemType::TypeLoopConnectionItem;
+		return ExperimentManagerNameSpace::TypeLoopConnectionItem;
 }
 
 void ExperimentGraphLoopItem::renderGraphItem()

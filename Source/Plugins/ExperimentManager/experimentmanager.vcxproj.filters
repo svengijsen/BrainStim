@@ -172,9 +172,6 @@
     <ClCompile Include="E:\Projects\BrainStim\Source\Plugins\ExperimentManager\ExperimentUserInterface\blockloopsdialog.cpp">
       <Filter>Source Files\ExperimentUserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="ExperimentUserInterface\experimentgraphobjectitem.cpp">
-      <Filter>Source Files\ExperimentUserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="ExperimentUserInterface\experimentgraphloopitem.cpp">
       <Filter>Source Files\ExperimentUserInterface</Filter>
     </ClCompile>
@@ -628,6 +625,9 @@
     <ClCompile Include="..\..\..\Build_MSVC\Qt\x64\Release\Moc\moc_experimentpropertysettingextensions.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
+    <ClCompile Include="ExperimentUserInterface\experimentgraphobjectitem.cpp">
+      <Filter>Source Files\ExperimentUserInterface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h">
@@ -671,9 +671,6 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_BlockLoopsDialog.h">
       <Filter>Generated Files</Filter>
-    </ClInclude>
-    <ClInclude Include="ExperimentUserInterface\experimentgraphobjectitem.h">
-      <Filter>Header Files\ExperimentUserInterface</Filter>
     </ClInclude>
     <ClInclude Include="ExperimentUserInterface\experimentgraphloopitem.h">
       <Filter>Header Files\ExperimentUserInterface</Filter>
@@ -843,6 +840,9 @@
       <Filter>Header Files\ExperimentUserInterface</Filter>
     </CustomBuild>
     <CustomBuild Include="ExperimentUserInterface\experimentpropertysettingextensions.h">
+      <Filter>Header Files\ExperimentUserInterface</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ExperimentUserInterface\experimentgraphobjectitem.h">
       <Filter>Header Files\ExperimentUserInterface</Filter>
     </CustomBuild>
   </ItemGroup>
