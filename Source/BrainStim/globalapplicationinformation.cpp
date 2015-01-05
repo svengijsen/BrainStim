@@ -364,6 +364,12 @@ bool GlobalApplicationInformation::setRegistryInformation(const QString &sName, 
 			AppRegistrySettings->setValue(sName, vValue.toPoint());
 		else if(sType.toLower()=="size")
 			AppRegistrySettings->setValue(sName, vValue.toSize());
+		else if (sType.toLower() == "bytearray")
+			AppRegistrySettings->setValue(sName, vValue.toByteArray());
+		else if (sType.toLower() == "rectf")
+			AppRegistrySettings->setValue(sName, vValue.toRectF());
+		else if (sType.toLower() == "rect")
+			AppRegistrySettings->setValue(sName, vValue.toRect());
 		else
 			bRetval = false;
 	}

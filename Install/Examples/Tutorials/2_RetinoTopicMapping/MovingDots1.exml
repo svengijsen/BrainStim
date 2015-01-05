@@ -1,0 +1,310 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EXML>
+<!-- 
+This is a comment example
+Place you own text here..
+Attributes only apply to readonly non user data, like the ID
+-->
+
+<EXML version="2.2.0.0">
+	<defines>
+		<experiment ID="0">
+			<name>Retinotopic Mapping Experiment with the use of a TriggerTimer or ParallelPort</name>
+			<debugmode>false</debugmode>
+		</experiment>
+	</defines>
+		
+    <declarations>
+   
+        <object ID="0">
+            <class>TriggerTimer</class>
+            <name>Timer_Object_1</name>
+            <constructor>
+                <param1/>
+            </constructor>
+        </object>
+
+        <object ID="1">            
+            <class>RetinotopyMapper</class>
+            <name>RetinoMap_RenderWidgetGL</name>
+            <constructor>
+                <param1/>
+            </constructor>
+        </object> 
+
+        <object ID="2">
+            <class>ParallelPort</class>
+            <name>ParallelPort_Object_1</name>
+            <constructor>
+                <param1/>
+            </constructor>
+        </object> 
+
+    </declarations>	
+    <connections>
+   
+        <object ID="0">
+        	<type>signal</type>
+        	<signature>timeout()</signature>
+          <target ID="1">
+          	<type>slot</type>     
+          	<signature>incrementExternalTrigger()</signature>      
+          </target>
+        </object>
+ 
+        <object ID="2">
+        	<type>signal</type>
+        	<signature>CaptureThreadTriggered(short)</signature>
+          <target ID="1">
+          	<type>slot</type>     
+          	<signature>incrementExternalTrigger()</signature>      
+          </target>
+        </object>    
+
+	</connections>
+    
+    <initializations>       
+   
+        <object ID="2">
+        	<type>slot</type>
+        	<signature>StartCaptureThread</signature>
+        	<parameters>
+		      	<parameter ID="0">
+		        	<name>baseAddress</name>
+		        	<value>889</value>
+		        	<type>const short</type>
+		        </parameter>
+		        <parameter ID="1">
+		        	<name>mask</name>
+		        	<value>32</value>
+		        	<type>const short</type>		        	
+						</parameter>		        	
+		        <parameter ID="2">	 	
+		        	<name>method</name>
+		        	<value>2</value>	 
+		        	<type>const short</type>		        	       	
+		        </parameter>
+		        <parameter ID="3">	      	
+		        	<name>postLHDelay</name>
+		        	<value>100</value>
+		        	<type>const int</type>		        	
+		        </parameter>       	
+		        <parameter ID="4">    	
+		        	<name>postHLDelay</name>
+		        	<value>100</value>	
+		        	<type>const int</type>		        	        	
+		        </parameter>        	
+        	</parameters>
+        </object>   
+   
+        <object ID="0">
+        	<type>slot</type>
+        	<signature>startTimer</signature>
+        	<parameters>
+		      	<parameter ID="0">
+		        	<name>msec</name>
+		        	<value>1000</value>
+		        	<type>double</type>
+		        </parameter>  	
+        	</parameters>
+        </object>
+ 
+    </initializations>        
+     
+    <actions>
+    	<blocks>
+
+		<block ID="0">
+	        <name>Fixation_Block</name>
+	        <block_number>0</block_number>            
+	        <nr_of_trials>1</nr_of_trials>
+	        <nr_of_internal_triggers>2</nr_of_internal_triggers>
+	        <nr_of_external_triggers>1</nr_of_external_triggers>	 
+	        <object ID="1">
+	        	<parameters>
+			        <parameter ID="0">
+			        	<name>RetinoPattern</name>
+			        	<value>fixation</value>
+			        </parameter>
+			        <parameter ID="1">
+			        	<name>ShowFixPoint</name>
+			        	<value>true</value>
+			        </parameter>
+			        <parameter ID="2">
+			        	<name>InternalTriggerDuration</name>
+			        	<value>1000</value>
+			        </parameter>
+			        <parameter ID="3">
+			        	<name>OutputTriggerFrame</name>
+			        	<value>false</value>
+			        </parameter>
+			        <parameter ID="4">
+			        	<name>OutputFrameType</name>
+			        	<value>Mask</value>
+			        </parameter>			        			        	        			        
+			        <parameter ID="5">
+			        	<name>AntiAliasing</name>
+			        	<value>true</value>
+			        </parameter>	
+			        <parameter ID="6">   	
+			        	<name>StimulusWidthSpan</name>
+			        	<value>768</value>
+			        </parameter>	
+			        <parameter ID="7">     	
+			        	<name>StimulusHeightSpan</name>
+			        	<value>768</value>	
+			        </parameter>
+			        <parameter ID="8">
+			        	<name>OutputFrameFormat</name>
+			        	<value>PNG</value>
+			        </parameter>
+			        <parameter ID="10">
+			        	<name>FixationSize</name>
+			        	<value>8</value>
+			        </parameter>	
+			        <parameter ID="11">
+			        	<name>StimuliRefreshRate</name>
+			        	<value>30</value>
+			        </parameter>
+			        <parameter ID="12">
+			        	<name>BackGroundColor</name>
+			        	<value>#575757</value>
+			        </parameter>
+				        <parameter ID="13">
+			        	<name>FixationColor</name>
+			        	<value>#FF0000</value>
+			        </parameter>
+				        <parameter ID="14">
+			        	<name>CheckerColor1</name>
+			        	<value>#FFFFFF</value>
+			        </parameter>
+				        <parameter ID="15">
+			        	<name>CheckerColor2</name>
+			        	<value>#000000</value>
+			        </parameter>			
+			    	</parameters>    
+		    	</object>   
+	    	</block>
+	    	
+	    	<block ID="1">
+	        <name>MovingDots_Block</name>
+	        <block_number>1</block_number>            
+	        <nr_of_trials>1</nr_of_trials>
+	        <nr_of_internal_triggers>25</nr_of_internal_triggers>
+	        <nr_of_external_triggers>1</nr_of_external_triggers>
+	        <object ID="1">
+	        	<parameters>
+			        <parameter ID="0">
+			        	<name>ShowFixPoint</name>
+			        	<value>true</value>
+			        </parameter>	
+			        <parameter ID="3">
+			        	<name>RetinoPattern</name>
+			        	<value>MovingDots</value>
+			        </parameter>	
+			        <parameter ID="4">
+			        	<name>MovingDotsMinMoveSpeed</name>
+			        	<value>2.0</value>
+			        </parameter>
+			        <parameter ID="5">
+			        	<name>MovingDotsMaxMoveSpeed</name>
+			        	<value>4.0</value>
+			        </parameter>			        
+			        <parameter ID="6">
+			        	<name>MovingDotsNrOfDots</name>
+			        	<value>200</value>
+			        </parameter>
+			        <parameter ID="7">
+			        	<name>MovingDotsDotSize</name>
+			        	<value>10</value>
+			        </parameter>
+			        <parameter ID="8">
+			        	<name>MovingDotsHemifield</name>
+			        	<value>Both</value>
+			        </parameter>
+			        <parameter ID="9">
+			        	<name>MovingDotsPixelFromCenter</name>
+			        	<value>100</value>
+			        </parameter>			        			        			        			        
+			        <parameter ID="10">
+			        	<name>MovingDotsStationairy</name>
+			        	<value>false</value>
+			        </parameter>
+			        <parameter ID="11">
+			        	<name>MovingDotsColor</name>
+			        	<value>#FFFFFF</value>
+			        </parameter>			        
+			        <parameter ID="12">
+			        	<name>MovingDotsHemiFieldWidth</name>
+			        	<value>300</value>
+			        </parameter>
+			        <parameter ID="13">
+			        	<name>MovingDotsHemiFieldHeight</name>
+			        	<value>600</value>
+			        </parameter>
+			        <parameter ID="14">
+			        	<name>MovingDotsMinMoveAngle</name>
+			        	<value>0</value>
+			        </parameter>
+			        <parameter ID="15">
+			        	<name>MovingDotsMaxMoveAngle</name>
+			        	<value>0</value>
+			        </parameter>			        
+			    	</parameters>			    	 
+		    	</object>   
+	    	</block>
+
+	    	<block ID="2">
+	        <name>MovingDots_Block_2</name>
+	        <block_number>2</block_number>            
+	        <nr_of_trials>1</nr_of_trials>
+	        <nr_of_internal_triggers>1</nr_of_internal_triggers>
+	        <nr_of_external_triggers>1</nr_of_external_triggers>
+	        <object ID="1">
+	        	<parameters>
+			        <parameter ID="12">
+			        	<name>MovingDotsHemiFieldWidth</name>
+			        	<value>300</value>
+			        </parameter>
+			</parameters>	
+		</object>   
+	    	</block>
+	    	
+		<block ID="3">
+	        <name>Fixation_Block</name>
+	        <block_number>3</block_number>
+	        <nr_of_trials>1</nr_of_trials>
+	        <nr_of_internal_triggers>8</nr_of_internal_triggers>	
+	        <nr_of_external_triggers>1</nr_of_external_triggers> 
+	        <object ID="1">
+	        	<parameters>
+			        <parameter ID="0">
+			        	<name>RetinoPattern</name>
+			        	<value>fixation</value>
+			        </parameter>
+			        <parameter ID="1">
+			        	<name>ShowFixPoint</name>
+			        	<value>true</value>
+			        </parameter>
+			    	</parameters>    
+		    	</object>   
+	    	</block>
+	    	    	
+    	</blocks>
+    </actions>
+    
+    <finalizations>
+
+        <object ID="0">
+        	<type>slot</type>
+        	<signature>stopTimer</signature>
+        </object>
+
+        <object ID="2">
+        	<type>slot</type>
+        	<signature>StopCaptureThread</signature>
+        </object>
+
+    </finalizations>    
+
+</EXML>

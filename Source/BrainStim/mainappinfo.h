@@ -90,6 +90,7 @@ public:
 	static bool setAppUserPath(QString sPath)		{sAppUserPath = sPath;return true;}
 	static QStringList getUserFolderList()			{return (QStringList() << MAIN_PROGRAM_EXAMPLES_DIRNAME << MAIN_PROGRAM_OUTPUTS_DIRNAME); }
 	static QString appDocDirPath()					{return (appDirPath() + QDir::separator() + MAIN_PROGRAM_DOC_DIRNAME + QDir::separator());}
+	static QString appMenuDirPath()					{return (appDirPath() + QDir::separator() + MAIN_PROGRAM_MENUS_DIRNAME + QDir::separator()); }
 	static QString appExampleDirPath()				{return (MainAppInfo::appUserPath() + QDir::separator() + MAIN_PROGRAM_EXAMPLES_DIRNAME + QDir::separator());}//appDirPath() + QDir::separator() + MAIN_PROGRAM_EXAMPLES_DIRNAME + QDir::separator());}
 	static QString appLogFilePath()					{return (appDirPath() + QDir::separator() + MAIN_PROGRAM_LOGFILE_NAME);}
 	static QString appXsdFilePath()					{return (appDirPath() + QDir::separator() + MAIN_PROGRAM_XSD_DIRNAME + QDir::separator());}

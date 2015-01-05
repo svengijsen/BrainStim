@@ -1,0 +1,14 @@
+- Function MotorImagery:ExperimentStateChanged(2,20140929100823357) called(5).
+- Function MotorImagery:ExperimentStateChanged(3,20140929100823359) called(9).
+- Function MotorImagery:ExperimentStateChanged(4,20140929100823361) called(13).
+- Function MotorImagery:ExperimentStateChanged(5,20140929100823385) called(19).
+- Function MotorImagery:ExperimentStateChanged(6,20140929100823385) called(26).
+- Function MotorImagery:ExperimentStateChanged(7,20140929100823434) called(31).
+0;Experiment Started(2014-09-29, 10::08::23.434)
+- Function MotorImagery:NewInitBlockTrial() called(37).
+- Function MotorImagery:NewInitBlockTrial() called(82).
+- Function MotorImagery:NewInitBlockTrial() called(125).
+- Function MotorImagery:NewInitBlockTrial() called(168).
+- Function MotorImagery:ExperimentStateChanged(8,20140929100836333) called(211).
+- Function MotorImagery:ExperimentStateChanged(9,20140929100836493) called(215).
+13057;Experiment Stopped(2014-09-29, 10::08::36.493)

@@ -1,0 +1,283 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EXML>
+<!-- 
+This is a comment example
+Place you own text here..
+Attributes only apply to readonly non user data, like the ID
+-->
+
+<EXML version="2.2.0.0">
+	<defines>
+		<experiment ID="0">
+			<name>Retinotopic Mapping Experiment with the use of a TriggerTimer or ParallelPort</name>
+			<debugmode>false</debugmode>
+		</experiment>
+	</defines>
+		
+    <declarations>
+  
+        <object ID="0">
+            <class>TriggerTimer</class>
+            <name>Timer_Object_1</name>
+            <constructor>
+                <param1/>
+            </constructor>
+        </object>
+
+        <object ID="1">            
+            <class>RetinotopyMapper</class>
+            <name>RetinoMap_RenderWidgetGL</name>
+            <constructor>
+                <param1/>
+            </constructor>
+        </object> 
+	
+        <object ID="2">
+            <class>ParallelPort</class>
+            <name>ParallelPort_Object_1</name>
+            <constructor>
+                <param1/>
+            </constructor>
+        </object>   
+	
+    </declarations>
+    
+    <connections>
+
+        <object ID="0">
+        	<type>signal</type>
+        	<signature>timeout()</signature>
+          <target ID="1">
+          	<type>slot</type>     
+          	<signature>incrementExternalTrigger()</signature>      
+          </target>
+        </object>
+	
+	<object ID="2">
+		<type>signal</type>
+        	<signature>CaptureThreadTriggered(short)</signature>
+		<target ID="1">
+			<type>slot</type>     
+			<signature>incrementExternalTrigger()</signature>      
+		</target>
+        </object>	
+	
+    </connections>
+    
+    <initializations>       
+ 
+        <object ID="2">
+        	<type>slot</type>
+        	<signature>StartCaptureThread</signature>
+        	<parameters>
+		      	<parameter ID="0">
+		        	<name>baseAddress</name>
+		        	<value>889</value>
+		        	<type>const short</type>
+		        </parameter>
+		        <parameter ID="1">
+		        	<name>mask</name>
+		        	<value>32</value>
+		        	<type>const short</type>		        	
+						</parameter>		        	
+		        <parameter ID="2">	 	
+		        	<name>method</name>
+		        	<value>2</value>	 
+		        	<type>const short</type>		        	       	
+		        </parameter>
+		        <parameter ID="3">	      	
+		        	<name>postLHDelay</name>
+		        	<value>100</value>
+		        	<type>const int</type>		        	
+		        </parameter>       	
+		        <parameter ID="4">    	
+		        	<name>postHLDelay</name>
+		        	<value>100</value>	
+		        	<type>const int</type>		        	        	
+		        </parameter>        	
+        	</parameters>
+        </object>   
+
+        <object ID="0">
+        	<type>slot</type>
+        	<signature>startTimer</signature>
+        	<parameters>
+		      	<parameter ID="0">
+		        	<name>msec</name>
+		        	<value>200</value>
+		        	<type>double</type>
+		        </parameter>  	
+        	</parameters>
+        </object>
+ 
+    </initializations>        
+     
+    <actions>
+    	<blocks>
+
+	    <block ID="0">
+	        <name>Fixation_Block</name>
+	        <block_number>0</block_number>            
+	        <nr_of_trials>1</nr_of_trials>
+	        <nr_of_internal_triggers>8</nr_of_internal_triggers>	 
+	        <nr_of_external_triggers>1</nr_of_external_triggers>
+	        <object ID="1">
+	        	<parameters>
+			        <parameter ID="0">
+			        	<name>RetinoPattern</name>
+			        	<value>fixation</value>
+			        </parameter>
+			        <parameter ID="1">
+			        	<name>ShowFixPoint</name>
+			        	<value>true</value>
+			        </parameter>
+			        <parameter ID="2">
+			        	<name>InternalTriggerDuration</name>
+			        	<value>200</value>
+			        </parameter>
+			        <parameter ID="3">
+			        	<name>OutputTriggerFrame</name>
+			        	<value>false</value>
+			        </parameter>
+			        <parameter ID="4">
+			        	<name>OutputFrameType</name>
+			        	<value>Mask</value>
+			        </parameter>			        			        	        			        
+			        <parameter ID="5">
+			        	<name>AntiAliasing</name>
+			        	<value>true</value>
+			        </parameter>	
+			        <parameter ID="6">   	
+			        	<name>StimulusWidthSpan</name>
+			        	<value>768</value>
+			        </parameter>	
+			        <parameter ID="7">     	
+			        	<name>StimulusHeightSpan</name>
+			        	<value>768</value>	
+			        </parameter>
+			        <parameter ID="8">
+			        	<name>OutputFrameFormat</name>
+			        	<value>PNG</value>
+			        </parameter>
+			        <parameter ID="10">
+			        	<name>FixationSize</name>
+			        	<value>8</value>
+			        </parameter>	
+			        <parameter ID="11">
+			        	<name>CycleTriggerAmount</name>
+			        	<value>1</value>
+			        </parameter>	
+			        <parameter ID="12">
+			        	<name>StimuliRefreshRate</name>
+			        	<value>30</value>
+			        </parameter>			        
+			    	</parameters>    
+		    	</object>   
+	    	</block>
+	    	
+	    	<block ID="1">
+	        <name>PolarAngle_Block</name>
+	        <block_number>1</block_number>            
+	        <nr_of_trials>6</nr_of_trials>
+	        <nr_of_internal_triggers>36</nr_of_internal_triggers>
+	        <nr_of_external_triggers>1</nr_of_external_triggers>
+	        <object ID="1">
+	        	<parameters>
+			        <parameter ID="0">
+			        	<name>ShowFixPoint</name>
+			        	<value>true</value>
+			        </parameter>	        	
+			        <parameter ID="1">
+			        	<name>CycleTriggerAmount</name>
+			        	<value>12</value>
+			        </parameter>
+			        <parameter ID="2">
+			        	<name>EmptyTriggerSteps</name>
+			        	<value>4</value>
+			        </parameter>			        
+			        <parameter ID="3">
+			        	<name>PolarWedgeSpan</name>
+			        	<value>30</value>
+							</parameter>		        	
+			        <parameter ID="4">	 	
+			        	<name>PolarCheckAmount</name>
+			        	<value>5</value>	        	
+			        </parameter>
+			        <parameter ID="5">	      	
+			        	<name>PolarRingAmount</name>
+			        	<value>10</value>
+			        </parameter>       	
+			        <parameter ID="6">    	
+			        	<name>PolarRotationDirection</name>
+			        	<value>1</value>	        	
+			        </parameter>
+			        <parameter ID="7">   
+			        	<name>FlickrFrequency</name>
+			        	<value>7.5</value>
+			        </parameter>	        	
+			        <parameter ID="8">	    	
+			        	<name>CorticalMagnitudeFactor</name>
+			        	<value>0</value>	        	
+			        </parameter> 
+			        <parameter ID="9">
+			        	<name>RetinoPattern</name>
+			        	<value>PolarAngle</value>
+			        </parameter>	
+			        <parameter ID="10">
+			        	<name>GapDiameter</name>
+			        	<value>0</value>
+			        </parameter>
+	    				<parameter ID="11">
+			        	<name>DiscreteTriggerSteps</name>
+			        	<value>true</value>
+			        </parameter>			        
+			        <parameter ID="12">
+			        	<name>RandomizeTriggerSteps</name>
+			        	<value>false</value>
+			        </parameter>			                
+			        <parameter ID="12">
+			        	<name>DisableCortMagFac</name>
+			        	<value>true</value>
+			        </parameter>
+			    	</parameters>			    	 
+		    	</object>   
+	    	</block>	    	
+	    	
+                <block ID="2">
+	        <name>Fixation_Block</name>
+	        <block_number>2</block_number>            
+	        <nr_of_trials>1</nr_of_trials>
+	        <nr_of_internal_triggers>8</nr_of_internal_triggers>	
+	        <nr_of_external_triggers>1</nr_of_external_triggers> 
+	        <object ID="1">
+	        	<parameters>
+			        <parameter ID="0">
+			        	<name>RetinoPattern</name>
+			        	<value>fixation</value>
+			        </parameter>
+			        <parameter ID="1">
+			        	<name>ShowFixPoint</name>
+			        	<value>true</value>
+			        </parameter>
+			    	</parameters>    
+		    	</object>   
+	    	</block>	
+ 	
+    	</blocks>
+    </actions>
+    
+    <finalizations>
+
+        <object ID="0">
+        	<type>slot</type>
+        	<signature>stopTimer</signature>
+        </object>
+
+        <object ID="2">
+        	<type>slot</type>
+        	<signature>StopCaptureThread</signature>
+        </object>
+
+    </finalizations>    
+
+</EXML>

@@ -3,7 +3,7 @@ Include("ReplaceInFile.qs");
 var tmpString;
 var InstallProcess = new QProcess();
 var tmpByteArray = new QByteArray();
-var tmpStringList =  Array[];
+var tmpStringList =  new Array();
 var tmpString = new String();
 var sBinairySteps;
 var bDoCleanup;
@@ -11,7 +11,6 @@ var bFileProccessed;
 var nCounter;
 var bSkipStep;
 var sBinairyPath;
-var changeSet;
 
 var sScriptPath = ToWindowsPath(BrainStim.getActiveDocumentFileLocation());
 var sInstallJammerPath = BrainStim.getEnvironmentVariabele("PROGRAMFILES(x86)") + "/InstallJammer/installjammer.exe";
@@ -19,14 +18,101 @@ var strInstallConfigurationFileName = "InstallJammer_(32+64bit)";
 var strInstallConfigurationFile = ToWindowsPath(BrainStim.getActiveDocumentFileLocation() + "/" + strInstallConfigurationFileName + ".mpi");
 var strInstallConfigurationFileCopy = sScriptPath + "\\" + strInstallConfigurationFileName + "_tmpCopy.mpi" ;
 var sInstallerAppName = tr("BrainStim");//BrainStim
-var arrConfigList = Array["win32","x64"];
+var arrConfigList = new Array("win32","x64");
 var sInstallerConfiguration = tr(arrConfigList[0]);//win32 or x64
-var sInstallerVersion = tr("2.2.0.0");//<Major>.<Minor>.<Build>.<Revision>
+var sInstallerVersion = tr("1.0.0.1");//<Major>.<Minor>.<Build>.<Revision>
 var sInstallerPlatform = tr("Windows");
-var sQtDirectory_default = tr("C:/Qt/5.1.0");
-var sBrainStimProjectDirectory_default = tr("E:/Projects/BrainStim");
-var sQtDirectory = sQtDirectory_default;
-var sBrainStimProjectDirectory = sBrainStimProjectDirectory_default;//tr("D:/Projects/Sven.Gijsen/BrainStim");//sBrainStimProjectDirectory_default
+
+
+
+var installJammerChangesCount = 10;
+var installJammerProjectFileChanges = ReplaceInFile_CreateArray(2*installJammerChangesCount, 2);
+//-------per change-(x0 = 32, x1 = 64)---------
+//[change+0][x] = new replacement string(32-bit or 64-bit)
+//[change+1][x] = jammer-file string to replace(32-bit or 64-bit)
+//----------------------------------------------
+var installJammerProjectFileFromToChangesSelection = ReplaceInFile_CreateArray(installJammerChangesCount,2);
+//-------per change----------------------------
+//[change+0] = final from replacement string(32-bit and 64-bit)
+//[change+1] = final to replacement string(32-bit and 64-bit)
+//----------------------------------------------
+var nCurrentChangeCounter = 0;
+var nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr("E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0] = installJammerProjectFileChanges[0][0];//make sure this is also defined like this in the default installjammer file
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr("E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1];//make sure this is also defined like this in the default installjammer file
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0];
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];
+
+nCurrentChangeCounter = nCurrentChangeCounter + 1;
+nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr("E:/Libraries/Qt5.3.2_ScriptBindings/Win32/bindings/script");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];//make sure this is also defined like this in the default installjammer file
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr("E:/Libraries/Qt5.3.2_ScriptBindings/x64/bindings/script");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1];//make sure this is also defined like this in the default installjammer file
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0];
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];
+
+nCurrentChangeCounter = nCurrentChangeCounter + 1;
+nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = tr("E:/Projects/BrainStim");//From
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0];//To
+
+nCurrentChangeCounter = nCurrentChangeCounter + 1;
+nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr("E:/Libraries/Firebird/Firebird-2.5.3.26778-0/Win32/Release");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];//make sure this is also defined like this in the default installjammer file
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr("E:/Libraries/Firebird/Firebird-2.5.3.26778-0/x64/Release");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1];//make sure this is also defined like this in the default installjammer file
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0];
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];
+
+nCurrentChangeCounter = nCurrentChangeCounter + 1;
+nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr("E:/Libraries/InpOut_1500/Win32");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];//make sure this is also defined like this in the default installjammer file
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr("E:/Libraries/InpOut_1500/x64");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1];//make sure this is also defined like this in the default installjammer file
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0];
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];
+
+nCurrentChangeCounter = nCurrentChangeCounter + 1;
+nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr("E:/Libraries/QScintilla-gpl-2.7.2/lib/Win32/Release");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];//make sure this is also defined like this in the default installjammer file
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr("E:/Libraries/QScintilla-gpl-2.7.2/lib/x64/Release");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1];//make sure this is also defined like this in the default installjammer file
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0];
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];
+
+nCurrentChangeCounter = nCurrentChangeCounter + 1;
+nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr("E:/Libraries/Ogre/OGRE-SDK-1.8.2-vc110-x86-28.05.2013/bin/Release");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];//make sure this is also defined like this in the default installjammer file
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr("E:/Libraries/Ogre/OGRE-SDK-1.8.2-vc110-x64-28.05.2013/bin/Release");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1];//make sure this is also defined like this in the default installjammer file
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0];
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];
+
+nCurrentChangeCounter = nCurrentChangeCounter + 1;
+nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr("E:/Libraries/HIDAPI/Win32/bin");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];//make sure this is also defined like this in the default installjammer file
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr("E:/Libraries/HIDAPI/x64/bin");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1];//make sure this is also defined like this in the default installjammer file
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0];
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];
+
+nCurrentChangeCounter = nCurrentChangeCounter + 1;
+nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = tr("E:/Libraries/VC_Redist/VC_2013");//From
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0];//To
+nCurrentChangeCounter = nCurrentChangeCounter + 1;
+nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = tr("E:/Libraries/VC_Redist/VC_2013/x86/Microsoft.VC120");//From
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0];//To
+
 var srcFile = new QFile(strInstallConfigurationFile);
 var dstFile = new QFile(strInstallConfigurationFileCopy);
 
@@ -160,7 +246,7 @@ ConnectDisconnectScriptFunctions(true);
 //Log(getString("This is an Title", "Some Text....","default x"));
 
 bDoCleanup = false;
-sBinairySteps = 5;
+sBinairySteps = 6;
 
 for(nCounter=1;nCounter<=sBinairySteps;nCounter++)
 {
@@ -178,11 +264,25 @@ for(nCounter=1;nCounter<=sBinairySteps;nCounter++)
 		sInstallerConfiguration = getItem("Choose the BrainStim configuration","BrainStim configuration:",arrConfigList);
 		Log("BrainStim configuration = " + sInstallerConfiguration);
 		
-		sQtDirectory = getString("Choose the Qt directory","Qt directory:",sQtDirectory);
-		Log("Qt directory = " + sQtDirectory);
+		if(sInstallerConfiguration == "x64")
+		{
+			installJammerProjectFileFromToChangesSelection[0][0] = installJammerProjectFileChanges[1][1];
+			installJammerProjectFileFromToChangesSelection[0][1] = installJammerProjectFileChanges[0][1];
+			installJammerProjectFileFromToChangesSelection[1][0] = installJammerProjectFileChanges[3][1];
+			installJammerProjectFileFromToChangesSelection[1][1] = installJammerProjectFileChanges[2][1];
+		}
+		
+		installJammerProjectFileFromToChangesSelection[0][1] = getString("Choose the Qt directory","Qt directory:",installJammerProjectFileFromToChangesSelection[0][1]);
+		Log("Qt directory = " + installJammerProjectFileFromToChangesSelection[0][1]);
 
-		sBrainStimProjectDirectory = getString("Choose the BrainStim project directory","BrainStim project directory:",sBrainStimProjectDirectory);
-		Log("BrainStim project directory = " + sBrainStimProjectDirectory);	
+		installJammerProjectFileFromToChangesSelection[1][1]  = getString("Choose the Qt bindings directory","Qt bindings directory:",installJammerProjectFileFromToChangesSelection[1][1]);
+		Log("Qt bindings directory = " + installJammerProjectFileFromToChangesSelection[1][1]);
+		
+		installJammerProjectFileFromToChangesSelection[2][1] = getString("Choose the BrainStim project directory","BrainStim project directory:",installJammerProjectFileFromToChangesSelection[2][1]);
+		Log("BrainStim project directory = " + installJammerProjectFileFromToChangesSelection[2][1]);	
+		
+		if(getItem("Start Installer Building?","Do you really whish to proceed?:", Array("Yes","No")) == "No")
+			nCounter = sBinairySteps;
 		
 		bSkipStep = true;
 	}	
@@ -192,26 +292,20 @@ for(nCounter=1;nCounter<=sBinairySteps;nCounter++)
 			dstFile.remove();//Copy Doesn't Overwrite!
 		//if (srcFile.copy(strInstallConfigurationFileCopy))//Copy Doesn't Overwrite!
 		//	Log("File (" + strInstallConfigurationFile + ") copied!");
-		changeSet = ReplaceInFile_CreateArray(2,2);
-		changeSet[0][0] = sQtDirectory_default;
-		changeSet[0][1] = sQtDirectory;
-		changeSet[1][0] = sBrainStimProjectDirectory_default;
-		changeSet[1][1] = sBrainStimProjectDirectory;
-		ReplaceInFile_ReplaceInFiles(strInstallConfigurationFile,strInstallConfigurationFileCopy,changeSet);//
-		
+		ReplaceInFile_ReplaceInFiles(strInstallConfigurationFile,strInstallConfigurationFileCopy,installJammerProjectFileFromToChangesSelection);//
 		bSkipStep = true;
 	}
 	else if (nCounter==3)
 	{
 		informationMessage("Please remove the unwanted component(s) from the copied installer script file (except the Default and the [" + sInstallerConfiguration + "] components.");
-		tmpStringList = Array[];//Reset list
+		tmpStringList = new Array();//Reset list
 		tmpStringList[0] = strInstallConfigurationFileCopy;
 		sBinairyPath = sInstallJammerPath;
 		//bSkipStep = true;
 	}
 	else if (nCounter==4)
 	{
-		tmpStringList = Array[];//Reset list
+		tmpStringList = new Array();//Reset list
 		tmpStringList[0] = "-DAppName";
 		tmpStringList[1] = sInstallerAppName;
 		tmpStringList[2] = "-DPlatformName";

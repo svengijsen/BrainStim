@@ -70,9 +70,11 @@ class QSplashScreen;
 QT_END_NAMESPACE
 
 #define DOCKITEM_SETTINGNAME_GEOMETRY			"geometry"
+#define DOCKITEM_SETTINGNAME_STATE				"state"
 #define DOCKITEM_SETTINGNAME_ISFLOATING			"isFloating"
 #define DOCKITEM_SETTINGNAME_DOCKWIDGETAREA		"dockWidgetArea"
 #define DOCKITEM_SETTINGNAME_ISVISIBLE			"isVisible"
+#define DOCKITEM_SETTINGNAME_USERINTERFACE		"UserInterface"
 
 typedef struct QScriptContextStructure
 {
@@ -409,6 +411,14 @@ public slots:
 	*  @return a boolean value determining whether the settings variable could be found.
 	*/
 	bool getStoredSettingValue(const QString &sSettingPath, QString *sResult);
+	/*! \brief Use this function to copy a complete directory path recursively.
+	*
+	*  This function copies a complete directory path recursively to another directory path.
+	*  @param srcFilePath a string value containing the path to the directory to copy from.
+	*  @param tgtFilePath a string value containing the path to the directory to copy to.
+	*  @return a boolean value determining whether the directory path copy succeeded.
+	*/
+	bool copyDirectoryRecursively(const QString &srcFilePath, const QString &tgtFilePath);
 	/*! \brief Closes the BrainStim application.
 	 *
 	 * This function closes the BrainStim application.
@@ -417,10 +427,10 @@ public slots:
 
 #ifdef DEBUG
 	QString testFunction(QString inp = "");
+	void debugTestSlot();
 #endif
 
 private slots:
-	void debugTestSlot();
 	bool executeCustomActionMenu();
 	void onSubWindowClosed(CustomMDISubWindow*);
 	void onSubWindowDestroyed(CustomMDISubWindow*);
@@ -619,7 +629,7 @@ private:
     QStringList pluginFileNames;
 	PluginCollection *Plugins;
 	GlobalApplicationInformation::MainAppInformationStructure *mainAppInfoStruct;
-	QHash<QString, QSettings *> hashUILayoutSettings;
+	//QHash<QString, QSettings *> hashUILayoutSettings;
 
 	enum { MaxRecentFiles = 10 };
 	QList<QAction *> recentFileActs;
@@ -638,7 +648,8 @@ private:
 	QAction* integratePlugin(QObject *plugin, PluginCollection *collection);
 	void setupToolBars();
 	void setRenderer();
-	void implementDefaultCustomActionMenus();
+	bool implementPluginCustomActionMenus();
+	bool implementCustomActionMenu(const QString &sMenuIniFilePath);
 	void newDocument(const GlobalApplicationInformation::DocType &docType, int &DocIndex, const QString &strExtension = "", const QString &strCanonicalFilePath = "", const bool &bNativeMainAppView = false, const bool &bTryToInitialize = false);
 	//void setupSyntaxHighlighting(MdiChild *childWindow,MDIDocumentType tempFileType);
 	void parseRemainingGlobalSettings();

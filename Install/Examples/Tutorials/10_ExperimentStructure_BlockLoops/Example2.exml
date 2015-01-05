@@ -1,0 +1,153 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EXML>
+<!-- 
+This is a comment example
+Place you own text here..
+Attributes only apply to readonly non user data, like the ID
+-->
+
+<EXML version="2.2.0.0">
+<defines>
+	<experiment ID="0">
+		<name>QML Example Experiment</name>
+		<debugmode>true</debugmode>
+	</experiment>
+</defines>
+		
+<declarations> 
+	<object ID="0">            
+		<class>QML2Viewer</class>
+		<name>qmlWidget_Object_1</name>
+		<constructor>
+			<param1/>
+		</constructor>
+	</object>
+        <object ID="1">
+		<class>TriggerTimer</class>
+		<name>Timer_Object_1</name>
+		<constructor>
+			<param1/>
+		</constructor>
+	</object>	
+</declarations>
+    
+<connections>
+	<object ID="1">
+		<type>signal</type>
+        	<signature>timeout()</signature>
+		<target ID="0">
+			<type>slot</type>     
+			<signature>incrementExternalTrigger()</signature>      
+		</target>
+	</object>	
+</connections>
+    
+<initializations>        
+	<object ID="1">
+		<type>slot</type>
+        	<signature>startTimer</signature>
+        	<parameters>
+		      	<parameter ID="0">
+		        	<name>msec</name>
+		        	<value>100</value>
+		        	<type>double</type>
+		        </parameter>  	
+        	</parameters>
+        </object> 
+</initializations>        
+     
+<actions>
+	<blocks>
+		<block ID="0">
+			<name>QMLExample_Block_A</name>
+			<block_number>0</block_number>            
+			<nr_of_trials>2</nr_of_trials>
+			<nr_of_internal_triggers>4</nr_of_internal_triggers>
+			<nr_of_external_triggers>1</nr_of_external_triggers>	 
+			<object ID="0">
+				<parameters>
+					<parameter ID="0">
+						<name>QmlMainFilePath</name>
+						<value>Example1.qml</value>
+					</parameter>			
+				</parameters>
+			</object>
+			<loops>
+				<loop ID="0">
+					<name>Loop_A(1st)</name>
+					<loop_number>1</loop_number>          
+					<nr_of_loops>1</nr_of_loops>
+					<target_block>0</target_block> 
+				</loop>
+			</loops>			
+		</block>	 
+		 
+		<block ID="1">
+			<name>QMLExample_Block_B</name>
+			<block_number>1</block_number>            
+			<nr_of_trials>1</nr_of_trials>
+			<nr_of_internal_triggers>4</nr_of_internal_triggers>
+			<nr_of_external_triggers>1</nr_of_external_triggers>	 
+			<object ID="0">
+				<parameters>
+				</parameters>    
+			</object>   
+		</block>
+
+		<block ID="2">
+			<name>QMLExample_Block_C</name>
+			<block_number>2</block_number>            
+			<nr_of_trials>1</nr_of_trials>
+			<nr_of_internal_triggers>4</nr_of_internal_triggers>
+			<nr_of_external_triggers>1</nr_of_external_triggers>	 
+			<object ID="0">
+				<parameters>
+				</parameters>    
+			</object> 
+			<loops>
+				<loop ID="1">
+					<name>Loop_C(1st)</name>
+					<loop_number>1</loop_number>          
+					<nr_of_loops>1</nr_of_loops>
+					<target_block>1</target_block> 
+				</loop>
+				<loop ID="2">
+					<name>Loop_C(2nd)</name>
+					<loop_number>2</loop_number>          
+					<nr_of_loops>1</nr_of_loops>
+					<target_block>0</target_block> 
+				</loop>
+			</loops>
+		</block>
+
+		<block ID="3">
+			<name>QMLExample_Block_D</name>
+			<block_number>3</block_number>            
+			<nr_of_trials>1</nr_of_trials>
+			<nr_of_internal_triggers>4</nr_of_internal_triggers>
+			<nr_of_external_triggers>1</nr_of_external_triggers>	 
+			<object ID="0">
+				<parameters>
+				</parameters>    
+			</object> 
+			<loops>
+				<loop ID="3">
+					<name>Loop_D(1st)</name>
+					<loop_number>1</loop_number>          
+					<nr_of_loops>1</nr_of_loops>
+					<target_block>0</target_block> 
+				</loop>
+			</loops>
+		</block>			
+	    
+	</blocks>
+</actions>
+    
+<finalizations>
+	<object ID="1">
+		<type>slot</type>
+        	<signature>stopTimer</signature>
+        </object>
+</finalizations>    
+    
+</EXML>

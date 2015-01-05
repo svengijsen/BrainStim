@@ -64,8 +64,8 @@ function ReplaceInFile_CreateArray(length)
 	//ReplaceInFile_CreateArray();     	// [] or new Array()
 	//ReplaceInFile_CreateArray(2);    	// new Array(2)
 	//ReplaceInFile_CreateArray(3, 2); 	// [new Array(2),
-					//  new Array(2),
-					//  new Array(2)]
+							//  new Array(2),
+							//  new Array(2)]
 	var a = new Array(length || 0);
 	if (arguments.length > 1) 
 	{
@@ -80,15 +80,15 @@ function ReplaceInFile_CreateArray(length)
 
 function CreateNewContent(strTemplate,changeSetArray)
 {
-	var nNumberOfChanges = changeSet.length;
+	var nNumberOfChanges = changeSetArray.length;
 	var regex;
 	if(nNumberOfChanges > 0)
 	{
 		for(var i=0;i<nNumberOfChanges;i++)
 		{
-			regex = new RegExp(changeSet[i][0] , "g");//Global, replace all
-			strTemplate = strTemplate.replace(regex , changeSet[i][1]);
-			Log("Replaced: \"" + changeSet[i][0] + "\" with \"" + changeSet[i][1] + "\"");
+			regex = new RegExp(changeSetArray[i][0] , "g");//Global, replace all
+			strTemplate = strTemplate.replace(regex , changeSetArray[i][1]);
+			Log("Replaced: \"" + changeSetArray[i][0] + "\" with \"" + changeSetArray[i][1] + "\"");
 		}
 	}
 	return strTemplate;

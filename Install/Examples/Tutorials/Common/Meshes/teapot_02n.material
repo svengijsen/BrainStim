@@ -1,0 +1,14 @@
+
+material teapot_02n/porcelain
+{
+	technique
+	{
+		pass
+		{
+			ambient 0.917647 0.882353 0.807843 1
+			diffuse 0.917647 0.882353 0.807843 1
+		}
+
+	}
+
+}

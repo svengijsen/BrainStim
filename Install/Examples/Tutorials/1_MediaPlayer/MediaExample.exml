@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EXML>
+<!-- 
+This is a comment example
+Place you own text here..
+Attributes only apply to readonly non user data, like the ID
+-->
+
+<EXML version="2.2.0.0">
+    <defines>
+	<experiment ID="0">
+		<name>QML Example Experiment</name>
+		<debugmode>true</debugmode>
+	</experiment>
+    </defines>
+		
+    <declarations> 
+        <object ID="0">            
+            <class>QML2Viewer</class>
+            <name>qmlWidget_Object_1</name>
+            <constructor>
+                <param1/>
+            </constructor>
+        </object>
+        <object ID="1">
+            <class>TriggerTimer</class>
+            <name>Timer_Object_1</name>
+            <constructor>
+                <param1/>
+            </constructor>
+        </object>	
+    </declarations>
+    
+    <connections>
+        <object ID="1">
+        	<type>signal</type>
+        	<signature>timeout()</signature>
+          <target ID="0">
+          	<type>slot</type>     
+          	<signature>incrementExternalTrigger()</signature>      
+          </target>
+        </object>	
+    </connections>
+    
+    <initializations>        
+        <object ID="1">
+        	<type>slot</type>
+        	<signature>startTimer</signature>
+        	<parameters>
+		      	<parameter ID="0">
+		        	<name>msec</name>
+		        	<value>1000</value>
+		        	<type>double</type>
+		        </parameter>  	
+        	</parameters>
+        </object> 
+    </initializations>        
+     
+    <actions>
+    	<blocks>
+	    <block ID="0">
+	        <name>QMLExample_Block_Fixation</name>
+	        <block_number>0</block_number>            
+	        <nr_of_trials>1</nr_of_trials>
+	        <nr_of_internal_triggers>4</nr_of_internal_triggers>
+	        <nr_of_external_triggers>1</nr_of_external_triggers>	 
+	        <object ID="0">
+	        	<parameters>
+				<parameter ID="0">
+					<name>QmlMainFilePath</name>
+					<value>MediaExample.qml</value>
+				</parameter>			
+				<parameter ID="1">
+					<name>StimulusWidthSpan</name>
+					<value>768</value>
+				</parameter>
+				<parameter ID="2">
+					<name>StimulusHeightSpan</name>
+					<value>768</value>
+				</parameter>
+			        <parameter ID="3">
+			        	<name>BackGroundColor</name>
+			        	<value>#575757</value>
+			        </parameter>
+			   	</parameters>    
+		    </object>   
+	    </block>	 
+	 
+	    <block ID="1">
+	        <name>QMLExample_Block_SoundEffects</name>
+	        <block_number>1</block_number>            
+	        <nr_of_trials>2</nr_of_trials>
+	        <nr_of_internal_triggers>5</nr_of_internal_triggers>
+	        <nr_of_external_triggers>1</nr_of_external_triggers>	 
+	        <object ID="0">
+	        	<parameters>
+			</parameters>    
+		    </object>   
+	    </block>	    
+	    
+    	</blocks>
+    </actions>
+    
+    <finalizations>
+        <object ID="1">
+        	<type>slot</type>
+        	<signature>stopTimer</signature>
+        </object>
+    </finalizations>    
+    
+</EXML>

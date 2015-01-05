@@ -23,11 +23,19 @@
 #include <QObject>
 #include <QtScript>
 
-#ifdef WIN32   // Windows system specific
+#ifdef WIN32   // Windows 32 system specific
+#include <windows.h>
+#else
+#ifdef WIN64   // Windows 64 system specific
 #include <windows.h>
 #else          // Unix based system specific
 #include <sys/time.h>
+#endif          
 #endif
+
+//// Unix based system specific
+//#include <sys/time.h>
+//#endif
 
 //!  The ExperimentTimer class. 
 /*!

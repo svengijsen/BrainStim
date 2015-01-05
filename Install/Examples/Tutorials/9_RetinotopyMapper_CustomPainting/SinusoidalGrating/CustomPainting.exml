@@ -1,0 +1,160 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE EXML>
+<!-- 
+This is a comment example
+Place you own text here..
+Attributes only apply to readonly non user data, like the ID
+-->
+
+<EXML version="2.2.0.0">
+
+	<defines>
+		<experiment ID="0">
+			<name>RetinotopicMappingCustomPainting</name>
+			<debugmode>true</debugmode>
+		</experiment>
+	</defines>
+		
+	<declarations>
+		<object ID="0">
+			<class>TriggerTimer</class>
+			<name>Timer_Object_1</name>
+			<constructor>
+				<param1/>
+			</constructor>
+		</object>
+		<object ID="1">            
+			<class>RetinotopyMapper</class>
+			<name>RetinoMap_Object_1</name>
+			<constructor>
+				<param1/>
+			</constructor>
+		</object> 
+	</declarations>
+    
+	<connections>
+		<object ID="0">
+			<type>signal</type>
+			<signature>timeout()</signature>
+			<target ID="1">
+				<type>slot</type>     
+				<signature>incrementExternalTrigger()</signature>      
+			</target>
+		</object>
+	</connections>
+    
+	<initializations>   
+		<object ID="0">
+			<type>slot</type>
+			<signature>startTimer</signature>
+			<parameters>
+				<parameter ID="0">
+					<name>msec</name>
+					<value>1000</value>
+					<type>double</type>
+				</parameter>  	
+			</parameters>
+		</object> 
+	</initializations>        
+     
+	<actions>
+		<blocks>
+			<block ID="0">
+				<name>Fixation_Block_begin</name>
+				<block_number>0</block_number>            
+				<nr_of_trials>1</nr_of_trials>
+				<nr_of_internal_triggers>2</nr_of_internal_triggers>
+				<nr_of_external_triggers>1</nr_of_external_triggers>	 
+				<object ID="1">
+					<parameters>
+						<parameter ID="0">
+							<name>RetinoPattern</name>
+							<value>fixation</value>
+						</parameter>
+						<parameter ID="1">
+							<name>ShowFixPoint</name>
+							<value>true</value>
+						</parameter>
+						<parameter ID="2">
+							<name>FixationSize</name>
+							<value>12</value>
+						</parameter>	
+						<parameter ID="3">
+							<name>StimulusWidthSpan</name>
+							<value>768</value>
+						</parameter>
+						<parameter ID="4">
+							<name>StimulusHeightSpan</name>
+							<value>768</value>
+						</parameter>
+						<parameter ID="5">
+							<name>StimuliRefreshRate</name>
+							<value>30</value>
+						</parameter>
+						<parameter ID="6">
+							<name>BackGroundColor</name>
+							<value>#575757</value>
+						</parameter>
+						<parameter ID="7">
+							<name>FixationColor</name>
+							<value>#FF0000</value>
+						</parameter>
+						<parameter ID="8">
+							<name>StimuliRefreshRate</name>
+							<value>30</value>
+						</parameter>						
+					</parameters>    
+				</object>   
+			</block>
+			
+			<block ID="1">
+				<name>CustomPainting_Block</name>
+				<block_number>1</block_number>            
+				<nr_of_trials>1</nr_of_trials>
+				<nr_of_internal_triggers>8</nr_of_internal_triggers>
+				<nr_of_external_triggers>1</nr_of_external_triggers>
+				<object ID="1">
+					<parameters>
+						<parameter ID="0">
+							<name>RetinoPattern</name>
+							<value>custom</value>
+						</parameter>	
+						<parameter ID="1">
+							<name>ShowFixPoint</name>
+							<value>false</value>
+						</parameter>
+					</parameters>			    	 
+				</object>   
+			</block>
+			
+			<block ID="2">
+				<name>Fixation_Block_end</name>
+				<block_number>2</block_number>            
+				<nr_of_trials>1</nr_of_trials>
+				<nr_of_internal_triggers>2</nr_of_internal_triggers>
+				<nr_of_external_triggers>1</nr_of_external_triggers>
+				<object ID="1">
+					<parameters>
+						<parameter ID="0">
+							<name>RetinoPattern</name>
+							<value>fixation</value>
+						</parameter>	
+						<parameter ID="1">
+							<name>ShowFixPoint</name>
+							<value>true</value>
+						</parameter>
+					</parameters>			    	 
+				</object>   
+			</block>			
+			
+		</blocks>
+	</actions>
+	
+	<finalizations>
+		<object ID="0">
+			<type>slot</type>
+			<signature>stopTimer</signature>
+		</object>
+	</finalizations>    
+
+</EXML>

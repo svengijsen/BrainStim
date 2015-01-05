@@ -1,0 +1,65 @@
+
+FileVersion:        2
+
+ResolutionOfTime:   Volumes
+
+Experiment:         FingerTapping_Left_Right_Index
+
+BackgroundColor:    0 0 0
+TextColor:          255 255 255
+TimeCourseColor:    255 255 255
+TimeCourseThick:    3
+ReferenceFuncColor: 0 0 80
+ReferenceFuncThick: 3
+
+NrOfConditions:     5
+
+Rest
+1
+ 281  290
+Color: 122 107 79
+
+Rest_LeftIndex
+7
+   1   10
+  41   50
+ 141  150
+ 181  190
+ 221  230
+ 241  250
+ 261  270
+Color: 170 255 255
+
+Rest_RightIndex
+7
+  21   30
+  61   70
+  81   90
+ 101  110
+ 121  130
+ 161  170
+ 201  210
+Color: 255 170 255
+
+Block_RightIndex
+7
+  31   40
+  71   80
+  91  100
+ 111  120
+ 131  140
+ 171  180
+ 211  220
+Color: 255 0 0
+
+Block_LeftIndex
+7
+  11   20
+  51   60
+ 151  160
+ 191  200
+ 231  240
+ 251  260
+ 271  280
+Color: 40 150 255
+

@@ -100,6 +100,7 @@ void MainAppInfo::MyOutputHandler(QtMsgType type, const QMessageLogContext &cont
 	bSkipErrorForLogWindow = bSkipErrorForLogWindow || (msg.contains("warning X3206: implicit truncation of vector type"));
 	bSkipErrorForLogWindow = bSkipErrorForLogWindow || (msg.contains("BitBlt failed (The handle is invalid.)"));
 	bSkipErrorForLogWindow = bSkipErrorForLogWindow || (msg.contains("QWindowsNativeFileDialogBase::selectNameFilter: Invalid parameter 'Directories' not found in"));
+	bSkipErrorForLogWindow = bSkipErrorForLogWindow || (msg.contains("QWindowsGLContext::getProcAddress"));
 	switch (type) 
 	{
 	case QtDebugMsg:
