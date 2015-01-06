@@ -50,7 +50,7 @@ protected:
 
 private:
 	//QQuickWindow* window_;
-
+	QObject *parentObject;
 	//void configureEventFilter(QObject* parentObject);
     class QtQuick2ApplicationViewerPrivate *d;
 	Qml2Interface *qml2InterfaceObject;

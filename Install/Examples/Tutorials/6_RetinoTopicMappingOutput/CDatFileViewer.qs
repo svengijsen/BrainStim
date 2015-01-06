@@ -38,7 +38,7 @@ function CleanupScript()
 	dialog_object = null;
 	Dialog = null;
 	CleanupScript = null;
-	StimulGL.cleanupScript();
+	BrainStim.cleanupScript();
 	Log("CleanupScript() exited successfully")
 }
 

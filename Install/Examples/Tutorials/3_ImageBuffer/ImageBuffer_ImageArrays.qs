@@ -2,10 +2,10 @@ var time = QTime.currentTime();
 var format = "hhmmsszzz"
 var currtimetext = time.toString(format);
 var seperator = "?"
-var RootDir = StimulGL.getActiveDocumentFileLocation() + "/../Common/Images/Faces_Houses_Objects/";
+var RootDir = BrainStim.getActiveDocumentFileLocation() + "/../Common/Images/Faces_Houses_Objects/";
 var tmpString;
 
-var Houses_ImagesPath = Array[];
+var Houses_ImagesPath = new Array();
 for (var i=1;i<46;i++)
 {
 	if(i<10)
@@ -18,7 +18,7 @@ for (var i=1;i<46;i++)
 	}		
 }
 
-var Objects_ImagesPath = Array[];
+var Objects_ImagesPath = new Array();
 for (var i=1;i<46;i++)
 {
 	if(i<10)
@@ -31,7 +31,7 @@ for (var i=1;i<46;i++)
 	}		
 }
 
-var Males_ImagesPath = Array[];
+var Males_ImagesPath = new Array();
 for (var i=1;i<46;i=i+2)
 {
 	if(i<10)
@@ -44,7 +44,7 @@ for (var i=1;i<46;i=i+2)
 	}		
 }
 
-var Females_ImagesPath = Array[];
+var Females_ImagesPath = new Array();
 for (var i=2;i<46;i=i+2)
 {
 	if(i<10)
@@ -57,13 +57,13 @@ for (var i=2;i<46;i=i+2)
 	}		
 }
 
-var Fixation_Block = Array[];
+var Fixation_Block = new Array();
 for (var i=0;i<10;i++)
 {
 	Fixation_Block.push("fixation"); 
 }
 
-var Test_Block = Array[];
+var Test_Block = new Array();
 for (var i=0;i<10;i++)
 {
 	Test_Block.push("test"); 

@@ -1,13 +1,13 @@
 import QtQuick 2.0
-import StimulGL_QMLExtensions 1.2 as MyStimulGLExtensions // import types from the plugin
+import BrainStim_QMLExtensions 1.0 as MyBrainStimExtensions // import types from the plugin
 import "../Common/QML/"
 
 Rectangle 
 {
 	id: page
 	property bool bOgre3DItemLoaded: false
-	width: 1680
-	height: 1050
+	//width: 1680
+	//height: 1050
 	color: "black"
 
 	Rectangle 
@@ -104,7 +104,7 @@ Rectangle
 	Component 
 	{
 		id: id_OgreComponent
-		MyStimulGLExtensions.OgreItem 
+		MyBrainStimExtensions.OgreItem 
 		{
 			id: id_ogreitem
 			property int nCamDistance: 15
@@ -273,7 +273,7 @@ Rectangle
 //				if(page.bOgre3DItemLoaded == false)
 //				{
 					//Qt.createComponent(id_OgreComponent);
-//					functionsID.addOgreResourceLocation("E:\\projects\\experiments\\stimulgl\\Joel\\3DFace\\faces_2.0_final","FileSystem");
+//					functionsID.addOgreResourceLocation("E:\\projects\\experiments\\.....l","FileSystem");
 //					functionsID.addOgreMesh3DModel("SceneNodeNormalHead1","EntityHeadNormal1","face_01n.mesh");
 //					id_OgreViewPort.ogreLoader.sourceComponent = id_OgreComponent;			
 //					event.accepted = true;

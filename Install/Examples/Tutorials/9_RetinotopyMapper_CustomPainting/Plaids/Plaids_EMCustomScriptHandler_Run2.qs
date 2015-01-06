@@ -28,9 +28,9 @@ var bStaticPlaids = true; //Setting this to true makes the Stimuli Static
 // we set here the order of trials (or mini-blocks) by setting which of the prepared plaids to use and whether moving or static (how to put this in .exml file?)
 // note that number of trials defined here must match number of trials in .exml file
 // the plaids defined: 0 -> pattern-1 (white intersections), 1 -> component, 2 -> pattern-2 (black intersections), 3 -> grating right, 4 grating left
-var usePlaidForTrialOrder1Array = Array[];
-var isStaticPlaidOrder1Array = Array[];
-var upOrDownDirOrder1Array = Array[];
+var usePlaidForTrialOrder1Array = new Array();
+var isStaticPlaidOrder1Array = new Array();
+var upOrDownDirOrder1Array = new Array();
 usePlaidForTrialOrder1Array[0] = 1;  isStaticPlaidOrder1Array[0] = true;	  upOrDownDirOrder1Array[0] = 1;  // pattern static
 usePlaidForTrialOrder1Array[1] = 1;  isStaticPlaidOrder1Array[1] = false;  upOrDownDirOrder1Array[1] = 1; // pattern
 usePlaidForTrialOrder1Array[2] = 0;  isStaticPlaidOrder1Array[2] = false;  upOrDownDirOrder1Array[2] = 1; // component
@@ -50,9 +50,9 @@ usePlaidForTrialOrder1Array[15] = 1;  isStaticPlaidOrder1Array[15] = false;   up
 usePlaidForTrialOrder1Array[16] = 0;  isStaticPlaidOrder1Array[16] = false;  upOrDownDirOrder1Array[16] = -1;
 usePlaidForTrialOrder1Array[17] = 0;  isStaticPlaidOrder1Array[17] = true;   upOrDownDirOrder1Array[17] = -1;
 
-var usePlaidForTrialOrder2Array = Array[];
-var isStaticPlaidOrder2Array = Array[];
-var upOrDownDirOrder2Array = Array[];
+var usePlaidForTrialOrder2Array = new Array();
+var isStaticPlaidOrder2Array = new Array();
+var upOrDownDirOrder2Array = new Array();
 usePlaidForTrialOrder2Array[0] = 1;  isStaticPlaidOrder2Array[0] = true;	  upOrDownDirOrder2Array[0] = -1;  // pattern static
 usePlaidForTrialOrder2Array[1] = 1;  isStaticPlaidOrder2Array[1] = false;  upOrDownDirOrder2Array[1] = -1; // pattern
 usePlaidForTrialOrder2Array[2] = 0;  isStaticPlaidOrder2Array[2] = false;  upOrDownDirOrder2Array[2] = -1; // component
@@ -84,7 +84,7 @@ var colorFixation = new QColor(colFixation);
 var nCurrentBlock = -1;
 var nCurrentTrial = -1;
 var nCurrentTrigger = -1;
-var sCurrentScriptLocation = StimulGL.getActiveDocumentFileLocation();
+var sCurrentScriptLocation = BrainStim.getActiveDocumentFileLocation();
 var nScreenIndex = QApplication.desktop().screenNumber();
 var nScreenSizeRect = QApplication.desktop().screenGeometry(nScreenIndex);
 var nScreenWidth = nScreenSizeRect.width();
@@ -92,7 +92,7 @@ var nScreenHeight = nScreenSizeRect.height();
 var nScreenMax = Math.max(nScreenWidth,nScreenHeight);
 var nStimuliMax = Math.max(nStimuliWidth,nStimuliHeight);
 var numberOfDifferentPlaides = 5;
-var pixFinishedFinalPlaidsArray = Array[];
+var pixFinishedFinalPlaidsArray = new Array(0);
 var nAdditionalAnimationPlaidsViewportHeight = nStripeDistance/(Math.sin((90.0-nStripeAngle)  * (Math.PI / 180.0)));
 //Log("nAdditionalAnimationPlaidsViewportHeight: " + nAdditionalAnimationPlaidsViewportHeight);
 var sizePlaidsMaskViewport = new QSize(nPlaidsViewportWidth, nPlaidsViewportHeight);
@@ -181,7 +181,7 @@ function CustomScriptHandlerFunction()
 function createPlaidsImagesArray()
 {
 	pixFinishedFinalPlaidsArray = null;
-	pixFinishedFinalPlaidsArray = Array[];
+	pixFinishedFinalPlaidsArray = new Array(numberOfDifferentPlaides);
 	for (var i=0;i<numberOfDifferentPlaides;i++)
 	{
 		pixFinishedFinalPlaidsArray[i] = new QPixmap();
@@ -501,15 +501,16 @@ function CleanupScript()
 	expTimer = null;
 	sizePlaidsMaskViewport = null;
 	KeyBoardCaptureObj = null;
-	KeyCaptureDetectFunction = null;	
-	pixFinishedFinalPlaidsArray = null;	
+	KeyCaptureDetectFunction = null;		
 	for (var i=0;i<pixFinishedFinalPlaidsArray.length;i++)
 	{
 		pixFinishedFinalPlaidsArray[i] = null;
 	}	
+	pixFinishedFinalPlaidsArray = null;
 	createPlaidsImagesArray = null;
 	CleanupScript = null;
-	StimulGL.cleanupScript();
+	Log("Going to call BrainStim.cleanupScript()...");
+	BrainStim.cleanupScript();
 }
 
 ////////////////////////////////////////////////////Main Program///////////////////////////////////////////////////////////////////////

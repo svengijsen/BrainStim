@@ -24,6 +24,7 @@
 #include <QDir>
 #include <QtQml>
 #include "defines.h"
+#include "qml2viewer.h"
 
 class QtQuick2ApplicationViewerPrivate
 {
@@ -47,7 +48,7 @@ QString QtQuick2ApplicationViewerPrivate::adjustPath(const QString &path)
     return path;
 }
 
-QtQuick2ApplicationViewer::QtQuick2ApplicationViewer(QObject *parent) : QQuickView(), d(new QtQuick2ApplicationViewerPrivate())
+QtQuick2ApplicationViewer::QtQuick2ApplicationViewer(QObject *parent) : QQuickView(), d(new QtQuick2ApplicationViewerPrivate()), parentObject(parent)
 {
 	Q_UNUSED(parent);
 	//configureEventFilter(parent);
@@ -56,7 +57,15 @@ QtQuick2ApplicationViewer::QtQuick2ApplicationViewer(QObject *parent) : QQuickVi
 		connect(engine(), &QQmlEngine::quit, this, &QtQuick2ApplicationViewer::qtQuick2EngineQuit);
     setResizeMode(QQuickView::SizeRootObjectToView);
 	this->setFlags(Qt::FramelessWindowHint);
-	qml2InterfaceObject = new Qml2Interface(this);	
+	qml2InterfaceObject = new Qml2Interface(this);
+	if (parentObject)
+	{
+		QML2Viewer *tmpParentViewer = qobject_cast<QML2Viewer*>(parentObject);
+		if (tmpParentViewer)
+		{
+			qml2InterfaceObject->setQMLViewerObject(tmpParentViewer);
+		}
+	}
 }
 
 void QtQuick2ApplicationViewer::qtQuick2EngineQuit()

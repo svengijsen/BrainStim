@@ -1,4 +1,4 @@
-var scriptRootPath = StimulGL.getActiveDocumentFileLocation();
+var scriptRootPath = BrainStim.getActiveDocumentFileLocation();
 var qsFilePath = scriptRootPath + "/" + "ImageBuffer_ImageArrays.qs";
 var exmlFilePath = scriptRootPath + "/" + "ImageBuffer.exml";
 var sSeperator = "?";
@@ -26,7 +26,7 @@ function CleanupScript()
 	NewQMLSourceLoaded = null;
 	tmpPixMap = null;
 	tmpString = null;
-	StimulGL.cleanupScript();
+	BrainStim.cleanupScript();
 }
 
 function NewInitBlockTrial()

@@ -124,7 +124,7 @@ function Window(parent)
 		starPath.lineTo(50 + 40 * Math.cos(0.8 * i * Math.PI),50 + 40 * Math.sin(0.8 * i * Math.PI));
 	}
 	starPath.closeSubpath();
-	this.renderAreas = Array[Window.NumRenderAreas];
+	this.renderAreas = new Array(Window.NumRenderAreas);
 	this.renderAreas[0] = new RenderArea(rectPath);
 	this.renderAreas[1] = new RenderArea(roundRectPath);
 	this.renderAreas[2] = new RenderArea(ellipsePath);
@@ -282,7 +282,7 @@ function ScriptCleanupFunction()//Cleanup
 	ScriptCleanupFunction = null;	
 	//Write something to the Log Output Pane so we know that this Function executed successfully.
 	Log("Finished script Cleanup!");
-	StimulGL.cleanupScript();
+	BrainStim.cleanupScript();
 }
 
 var win = new Window();

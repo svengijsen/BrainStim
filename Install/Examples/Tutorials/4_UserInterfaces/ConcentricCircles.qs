@@ -80,7 +80,7 @@ function Window(parent)
 	layout.addWidget(intLabel, 1, 0);
 	layout.addWidget(floatLabel, 2, 0);
 	this.timer = new QTimer(this);
-	this.CircleWidgets = Array[];
+	this.CircleWidgets = new Array();
 	this.CircleWidgetCount = 0;
 	for (var i = 0; i < 2; ++i) 
 	{
@@ -150,7 +150,7 @@ function ScriptCleanupFunction()//Cleanup
 	ScriptCleanupFunction = null;	
 	//Write something to the Log Output Pane so we know that this Function executed successfully.
 	Log("Finished script Cleanup!");
-	StimulGL.cleanupScript();
+	BrainStim.cleanupScript();
 }
 
 var win = new Window();

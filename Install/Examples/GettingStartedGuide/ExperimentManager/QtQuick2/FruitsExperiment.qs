@@ -136,7 +136,7 @@ function ExperimentStateChanged(currentState)
 	if(currentState == ExperimentManager.ExperimentState.ExperimentManager_PreParsed)//ExperimentManager_PreParsed
 	{
 		ExperimentManagerObj.setActiveStimuliOutputScreen(0);
-		?? QML2Viewer_Object_1.setActiveStimuliOutputScreen(0);
+		//QML2Viewer_Object_1.setActiveStimuliOutputScreen(0);
 	}
 	else if(currentState == ExperimentManager.ExperimentState.ExperimentManager_IsStarting)//ExperimentManager_IsStarting
 	{

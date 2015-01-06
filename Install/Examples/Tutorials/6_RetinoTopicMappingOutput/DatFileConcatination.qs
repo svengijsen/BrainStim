@@ -1,12 +1,12 @@
 var DatFileConcat_ImageProcessorObj = new ImageProcessor();
-var DatFileConcat_currentScriptLocation = StimulGL.getActiveDocumentFileLocation();
+var DatFileConcat_currentScriptLocation = BrainStim.getActiveDocumentFileLocation();
 var DatFileConcat_searchDialogOptions = QFileDialog.DontResolveSymlinks | QFileDialog.ShowDirsOnly | QFileDialog.DontUseNativeDialog;
 var DatFileConcat_saveDialogOptions = QFileDialog.DontUseNativeDialog;//0
 var DatFileConcat_searchDatDirectory = "";
 var DatFileConcat_resultCDatDirectory = "";
 var sCDATFileName = "result.cdat";
 var nFilesSplitted;
-var fileArray = Array[];
+var fileArray = new Array();
 var dirInfo = new QDir();
 var bProceed = true;
 
@@ -14,7 +14,7 @@ function DatFileConcat_concat(searchDatDirectory,resultConcatDatPath)
 {
 	var dirDirectory;
 	var dirFileCount;
-	var filePathArray = Array[];
+	var filePathArray = new Array();
 	var selectedSaveFilter;
 	var i;
 	
@@ -46,6 +46,7 @@ function DatFileConcat_concat(searchDatDirectory,resultConcatDatPath)
 				}
 				if (resultConcatDatPath.length != 0)
 				{
+					//Log("from: " + filePathArray);
 					if(DatFileConcat_ImageProcessorObj.ConcatenateDatFiles(filePathArray,resultConcatDatPath,true))
 						Log("CDAT File(" + resultConcatDatPath + ") Created!");
 					return true;
@@ -60,8 +61,8 @@ function DatFileConcat_split(sourceCDatPath,resultDatDirectory)
 {
 	var dirDirectory;
 	var dirFileCount;
-	//var fileArray = Array[];
-	var filePathArray = Array[];
+	//var fileArray = new Array();
+	var filePathArray = new Array();
 	var selectedSaveFilter;
 	var i;
 	
@@ -122,7 +123,7 @@ if (nFilesSplitted > 0)
 	for(var i=0;i<nFilesSplitted;i++)
 	{
 		tmpFilestr = DatFileConcat_resultCDatDirectory + "result_" + i;
-		Log(DatFileConcat_ImageProcessorObj.ConvertDatToPngFile(tmpFilestr + ".dat", tmpFilestr + ".png", true));	
+		Log("Dat2Png: " + DatFileConcat_ImageProcessorObj.ConvertDatToPngFile(tmpFilestr + ".dat", tmpFilestr + ".png", true));	
 	}
 }
 DatFileConcat_CleanupScript();

@@ -146,7 +146,7 @@ function ScriptCleanupFunction()//Cleanup
 	ScriptCleanupFunction = null;	
 	//Write something to the Log Output Pane so we know that this Function executed successfully.
 	Log("Finished script Cleanup!");
-	StimulGL.cleanupScript();
+	BrainStim.cleanupScript();
 }
 
 var screenshot = new Screenshot();

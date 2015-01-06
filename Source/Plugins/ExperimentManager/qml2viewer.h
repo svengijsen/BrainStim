@@ -52,6 +52,8 @@ public:
 	static QScriptValue ctor_QML2Viewer(QScriptContext* context, QScriptEngine* engine);
 
 	QScreen *grabScreenUnderMouseCursor();
+	ExperimentManager *getExperimentManager() { return experimentManager; };
+	QString getCurrentFilePath() { return qmlMainFilePath; };
 	
 public slots:
 

@@ -1,6 +1,6 @@
 var ExperimentManagerObj = new ExperimentManager(); 					//Here we create the Experiment Manager object that can run experiments.
-var currentScriptLocation = StimulGL.getActiveDocumentFileLocation();		//Here we store the directory-path from this script file for further usage.
-var scriptRootPath = StimulGL.getActiveDocumentFileLocation();
+var currentScriptLocation = BrainStim.getActiveDocumentFileLocation();		//Here we store the directory-path from this script file for further usage.
+var scriptRootPath = BrainStim.getActiveDocumentFileLocation();
 var exmlFilePath = scriptRootPath + "/" + "Ogre3D_Example2.exml";
 var meshSourceLocation = QDir.cleanPath(scriptRootPath + "/../Common/Meshes");
 Log(meshSourceLocation);
@@ -10,10 +10,10 @@ var currentRunArrayCounter = 0;
 var timerTriggerInterval = 1000;
 var currentExperimentState;
 var cBlockStructure_Object0;
-var arr3DObjects = Array[ 
+var arr3DObjects = new Array( 
 					"face_05n.mesh",
-					"teapot_02n.mesh"];	
-var arrViewpoints = Array[ 
+					"teapot_02n.mesh");	
+var arrViewpoints = new Array( 
 					-60,
 					-45,
 					-30,
@@ -22,9 +22,9 @@ var arrViewpoints = Array[
 					 15,
 					 30,
 					 45,
-					 60];
+					 60);
 var nTrials = 18;				
-var runArray = Array[];	
+var runArray = new Array();	
 
 function preConfigureExperimentParameters()
 {
@@ -234,9 +234,9 @@ function CleanupScript()
 	cExperimentStructure_Object = null;
 	cBlockStructure_Object0 = null;
 	//Finalize
-	Log("Going to call StimulGL.cleanupScript()...");
-	StimulGL.cleanupScript();
-	//StimulGL.quit();
+	Log("Going to call BrainStim.cleanupScript()...");
+	BrainStim.cleanupScript();
+	//BrainStim.quit();
 }
 
 GenerateExperiment();

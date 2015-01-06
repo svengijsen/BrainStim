@@ -1,4 +1,4 @@
-var sDefaultPath = StimulGL.getActiveDocumentFileLocation() + "/../Common/XML";
+var sDefaultPath = BrainStim.getActiveDocumentFileLocation() + "/../Common/XML";
 
 function tr(s) { return s; }
 
@@ -201,7 +201,7 @@ XbelReader.prototype.createChildItem = function(item)
 function MainWindow()
 {
 	QMainWindow.call(this);
-	var labels = Array[];
+	var labels = new Array();
 	labels.push(tr("Title"));
 	labels.push(tr("Location"));
 	this.treeWidget = new QTreeWidget();
@@ -347,7 +347,7 @@ function ScriptCleanupFunction()//Cleanup
 	ScriptCleanupFunction = null;	
 	//Write something to the Log Output Pane so we know that this Function executed successfully.
 	Log("Finished script Cleanup!");
-	StimulGL.cleanupScript();
+	BrainStim.cleanupScript();
 }
 
 var mainWin = new MainWindow();

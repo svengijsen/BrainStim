@@ -1,12 +1,12 @@
 // This example shows how you can make use of the Experiment Manager.
 
 var ExperimentManagerObj = new ExperimentManager(); 				//Here we create the Experiment Manager object that can run experiments.
-var currentScriptLocation = StimulGL.getActiveDocumentFileLocation();	//Here we store the directory-path from this script file for further usage.
-var SoundPathArray = Array["./../Common/Sounds/1.wav",
+var currentScriptLocation = BrainStim.getActiveDocumentFileLocation();	//Here we store the directory-path from this script file for further usage.
+var SoundPathArray = new Array("./../Common/Sounds/1.wav",
 						"./../Common/Sounds/2.wav",
 						"./../Common/Sounds/3.wav",
 						"./../Common/Sounds/4.wav",
-						"./../Common/Sounds/5.wav"];
+						"./../Common/Sounds/5.wav");
 var functionName;
 var MainItem;
 var Param1;
@@ -27,7 +27,7 @@ function CleanupScript() //Cleanup the script
 	CleanupScript = null;
 	//Write something to the Log Output Pane so we know that this Function executed successfully.
 	Log("Finished script cleanup, ready for garbage collection!");
-	StimulGL.cleanupScript();
+	BrainStim.cleanupScript();
 }
 
 function ConnectDisconnectScriptFunctions(Connect)

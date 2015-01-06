@@ -1,6 +1,6 @@
 var ExperimentManagerObj = new ExperimentManager();
 var ExperimentTimerObj = new ExperimentTimer();
-var currentScriptLocation = StimulGL.getActiveDocumentFileLocation();
+var currentScriptLocation = BrainStim.getActiveDocumentFileLocation();
 var nCurrentBlock = -1;
 var nCurrentTrial = -1;
 var nCurrentTrigger = -1;
@@ -22,7 +22,7 @@ function CustomScriptHandlerFunction(QPaintObject)
 				var nAngle = 45;														//The angle of the grating
 				var nPhaseOffset = 0.25 * ExperimentTimerObj.getElapsedTimeInSec();				//The phase offset (0.0 --> 1.0), here we make it dynamic (change each trigger)
 				var myStimWindowRect = QPaintObject.window();								//Retrieve the size stimulus area
-				myStimWindowRect.setHeight(myStimWindowRect.height() -1);						//We need to fix this, because StimulGL adds an additional pixel...
+				myStimWindowRect.setHeight(myStimWindowRect.height() -1);						//We need to fix this, because BrainStim adds an additional pixel...
 				QPaintObject.translate(myStimWindowRect.width()/2,myStimWindowRect.height()/2);		//Translate the painters object
 				QPaintObject.rotate(nAngle);												//Rotate the painters object
 				QPaintObject.translate(myStimWindowRect.width()/-2,myStimWindowRect.height()/-2);		//Translate the painters object (back to original position)				
@@ -81,7 +81,7 @@ function CleanupScript()
 	ExperimentStructureChanged = null;
 	ConnectDisconnectScriptFunctions = null;	
 	CleanupScript = null;
-	StimulGL.cleanupScript();
+	BrainStim.cleanupScript();
 }
 
 function ExperimentStructureChanged()

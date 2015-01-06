@@ -1,21 +1,24 @@
 import QtQuick 2.0
-import StimulGL_QMLExtensions 1.2 as MyStimulGLExtensions // import types from the plugin
+import BrainStim_QMLExtensions 1.0 as MyBrainStimExtensions // import types from the plugin
+import BrainStim.Interface 1.0;
 
 Rectangle 
 {
 	id: page
-	width: 640; height: 480
 	color: "#FF00FF"
 	
-	MyStimulGLExtensions.OgreItem 
+	MyBrainStimExtensions.OgreItem 
 	{
 		id: id_ogreitem
-		width: 1680; height: 1050
+		width: parent.width/2;
+		height: parent.height/2;
+		anchors.centerIn: page
 		Component.onCompleted: 
 		{
-			console.log(id_ogreitem.addResourceLocation("E:/projects/StimulGL/Install/examples/Tutorials/Common/Meshes/ogre","FileSystem"));
-			console.log(id_ogreitem.createEntity("EntityHead1", "ogrehead.mesh"));
-			console.log(id_ogreitem.createSceneNode("SceneNodeHead1", "EntityHead1",0,0,0));
+			console.log("current working directory: " + BrainStimAPI.getCurrentDirectory());
+			console.log("addResourceLocation: " + id_ogreitem.addResourceLocation(BrainStimAPI.getCurrentDirectory() + "/../Common/Meshes/ogre","FileSystem"));
+			console.log("createEntity: " + id_ogreitem.createEntity("EntityHead1", "ogrehead.mesh"));
+			console.log("createSceneNode: " + id_ogreitem.createSceneNode("SceneNodeHead1", "EntityHead1",0,0,0));
 		}		
 	}
 

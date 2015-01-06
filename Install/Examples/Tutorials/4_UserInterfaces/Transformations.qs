@@ -12,7 +12,7 @@ function RenderArea(parent)
 	this.xBoundingRect = fontMetrics.boundingRect(tr("x"));
 	this.yBoundingRect = fontMetrics.boundingRect(tr("y"));
 	this.shape = new QPainterPath();
-	this.operations = Array[];
+	this.operations = new Array();
 }
 
 RenderArea.prototype = new QWidget();
@@ -116,8 +116,8 @@ function Window(parent)
 	var layout = new QGridLayout();
 	layout.addWidget(this.originalRenderArea, 0, 0);
 	layout.addWidget(this.shapeComboBox, 1, 0);
-	this.transformedRenderAreas = Array[Window.NumTransformedAreas];
-	this.operationComboBoxes = Array[Window.NumTransformedAreas];
+	this.transformedRenderAreas = new Array(Window.NumTransformedAreas);
+	this.operationComboBoxes = new Array(Window.NumTransformedAreas);
 	for (var i = 0; i < Window.NumTransformedAreas; ++i) 
 	{
 		this.transformedRenderAreas[i] = new RenderArea();
@@ -184,7 +184,7 @@ Window.prototype.setupShapes = function()
 	font.setPixelSize(50);
 	var fontBoundingRect = new QFontMetrics(font).boundingRect(tr("Qt"));	
 	text.addText(-new QPointF(fontBoundingRect.center()), font, tr("Qt"));
-	this.shapes = Array[];
+	this.shapes = new Array();
 	this.shapes.push(clock);
 	this.shapes.push(house);
 	this.shapes.push(text);
@@ -193,7 +193,7 @@ Window.prototype.setupShapes = function()
 
 Window.prototype.operationChanged = function()
 {
-	var operations = Array[];
+	var operations = new Array();
 	for (var i = 0; i < Window.NumTransformedAreas; ++i) 
 	{
 		var index = this.operationComboBoxes[i].currentIndex;
@@ -255,7 +255,7 @@ function ScriptCleanupFunction()//Cleanup
 	ScriptCleanupFunction = null;	
 	//Write something to the Log Output Pane so we know that this Function executed successfully.
 	Log("Finished script Cleanup!");
-	StimulGL.cleanupScript();
+	BrainStim.cleanupScript();
 }
 
 var win = new Window();
