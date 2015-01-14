@@ -1,5 +1,5 @@
 //ExperimentManagerplugin
-//Copyright (C) 2014  Sven Gijsen
+//Copyright (C) 2015  Sven Gijsen
 //
 //This file is part of BrainStim.
 //BrainStim is free software: you can redistribute it and/or modify
@@ -177,6 +177,7 @@ class ExperimentTreeModel : public QStandardItemModel
 		bool initializeExperiment();
 		bool resetExperiment();
 		bool addExperimentBlocks(const int &nAmount = 1);
+
 	public:
 		bool removeExperimentParameters(const QList<ExperimentTreeModel::strcParameterSpecifier> lstParameterSpecifiers);
 		bool renameExperimentParameter(const ExperimentTreeModel::strcParameterSpecifier &cParameterSpecifier, const QString &sNewName);
@@ -185,15 +186,15 @@ class ExperimentTreeModel : public QStandardItemModel
 		bool addExperimentBlockLoop(const int &nSourceBlockId, const int &nTargetBlockId, const int &nLoopAmount, const QString &sLoopName);
 		bool removeExperimentBlockLoop(const ExperimentTreeModel::strcBlockLoopSpecifier &cBlockLoopSpecifier);
 		bool changeExperimentBlockLoopNumber(const ExperimentTreeModel::strcBlockLoopSpecifier &cBlockLoopSpecifier, const int &nLoopNumberCorrection);
-		bool addExperimentObject(const QString &sObjectName, const QString &sClassName);
+		bool addExperimentObject(const QString &sObjectName, const QString &sClassName, const int &nForcedObjectID = -1);
 		bool removeExperimentObject(const int &nObjectId);
 		bool updateExperimentObject(const ExperimentTreeModel::strcObjectSpecifier &cObjectSpecifier, const QString &sNewValue);
-		bool addObjectConnection(const ExperimentTreeModel::strcObjectConnectionSpecifier &cConnectionSpecifier);
+		bool addObjectConnection(const ExperimentTreeModel::strcObjectConnectionSpecifier &cConnectionSpecifier, int nForcedConnectionID = -1);
 		bool removeObjectConnection(const int &nConnectionId);
 		bool updateObjectConnection(const ExperimentTreeModel::strcObjectConnectionSpecifier &cConnectionSpecifier, const QString &sNewValue);
 		bool updateExperimentObjectInitFinitParameter(const ExperimentTreeModel::strcObjectInitFinitSpecifier &cObjectInitFinitSpecifier, const QString &sNewValue, const bool bIsInit);
 		bool removeExperimentObjectInitFinit(const int &nInitFinitId, const bool bIsInit);
-		bool addExperimentObjectInitFinit(const ExperimentTreeModel::strcObjectInitFinitSpecifier &cObjectInitFinitSpecifier, const bool bIsInit);
+		bool addExperimentObjectInitFinit(const ExperimentTreeModel::strcObjectInitFinitSpecifier &cObjectInitFinitSpecifier, const bool bIsInit, const int nForcedInitFinitID = -1);
 
 		ExperimentTreeItem* getExperimentObjectTreeItem(const int &nObjectID);
 		ExperimentTreeItem* getExperimentBlockTreeItem(const int &nBlockID);

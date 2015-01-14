@@ -1,5 +1,5 @@
 //ExperimentManagerplugin
-//Copyright (C) 2014  Sven Gijsen and Michael Luehrs
+//Copyright (C) 2015  Sven Gijsen and Michael Luehrs
 //
 //This file is part of BrainStim.
 //BrainStim is free software: you can redistribute it and/or modify

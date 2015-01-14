@@ -30,7 +30,7 @@ Rectangle
 		objectName: "functions"
 		function setTextFunction(sText)
 		{
-			//console.log("setTextFunction() Got parameters:", sText)//only for debugging writes to stimulGL output file
+			//console.log("setTextFunction() Got parameters:", sText)//only for debugging writes to BrainStim output file
 			txtInfo.text = sText;
 			return true;
 		}

@@ -1,5 +1,5 @@
 //ExperimentManagerplugin
-//Copyright (C) 2014  Sven Gijsen
+//Copyright (C) 2015  Sven Gijsen
 //
 //This file is part of BrainStim.
 //BrainStim is free software: you can redistribute it and/or modify
@@ -751,7 +751,7 @@ bool ExperimentObjectsDialog::addInitFinit(const bool &bIsInit)
 		//			nInitFinitSpecifierID = pTmpMethStrc->getMethodID()+1;
 		//	}
 		//}
-		tmpObjectInitFinitSpecifier.nInitFinitID = 0;//nInitFinitSpecifierID;
+		tmpObjectInitFinitSpecifier.nInitFinitID = 0;//optional, not needed here (can be commented) see below;
 		tmpObjectInitFinitSpecifier.nObjectID = nCurrentObjectSelectionIdentifier;
 		tmpObjectInitFinitSpecifier.sObjectDefinitionName = "";
 		tmpObjectInitFinitSpecifier.sSignature = sNewSignature.left(nLeftBracePos);
@@ -769,7 +769,7 @@ bool ExperimentObjectsDialog::addInitFinit(const bool &bIsInit)
 			tmpObjectInitFinitSpecifier.lParameters.append(tmpObjectInitFinitParam);
 		}
 
-		if(pExperimentTreeModel->addExperimentObjectInitFinit(tmpObjectInitFinitSpecifier, bIsInit) == false)
+		if(pExperimentTreeModel->addExperimentObjectInitFinit(tmpObjectInitFinitSpecifier, bIsInit, -1) == false)
 		{
 			qDebug() << __FUNCTION__ << "Could not add the new" << sInitFinitString << "method";
 		}
@@ -861,7 +861,7 @@ void ExperimentObjectsDialog::addSelectedObject()
 	{
 		QString sObjectName = ui->leObjectName->text();
 		QString sClassName = ui->cmbObjects->itemData(ui->cmbObjects->currentIndex(),Qt::UserRole).toString();
-		if(pExperimentTreeModel->addExperimentObject(sObjectName, sClassName) == false)
+		if(pExperimentTreeModel->addExperimentObject(sObjectName, sClassName, -1) == false)
 		{
 			qDebug() << __FUNCTION__ << "Could not add the new object";
 		}

@@ -1,5 +1,5 @@
 //ExperimentManagerplugin
-//Copyright (C) 2014  Sven Gijsen
+//Copyright (C) 2015  Sven Gijsen
 //
 //This file is part of BrainStim.
 //BrainStim is free software: you can redistribute it and/or modify
@@ -85,6 +85,8 @@ private:
 	cObjectStructure *cObjectStructureObject;
 	cLoopStructure *cLoopStructureObject;
 	cMethodStructure *cMethodStructureObject;
+	cMethodParameterStructure *cMethodParameterStructureObject;
+	cBlockParameterStructure *cBlockParameterStructureObject;
 	cMethodConnectionStructure *cMethodConnectionStructureObject;
 	ImageProcessor *ImageProcessorObject;
 	PrtFormatManager *PrtFormatManagerObject;

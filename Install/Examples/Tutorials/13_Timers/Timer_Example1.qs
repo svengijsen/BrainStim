@@ -1,5 +1,5 @@
 var KeyBoardCaptureObj = new KeyBoardCapture();
-var currentScriptLocation = StimulGL.getActiveDocumentFileLocation();
+var currentScriptLocation = BrainStim.getActiveDocumentFileLocation();
 var tmpTimeObject;
 var LastMeasuredTime;
 var timespanInMS;
@@ -202,7 +202,7 @@ function ConnectDisconnectScriptFunctions(Connect)
 function CleanupScript()
 {
 	KeyBoardCaptureObj.StopCaptureThread();
-	StimulGL.enableActiveDocument(true);
+	BrainStim.enableActiveDocument(true);
 	cleanupTimer();
 	ConnectDisconnectScriptFunctions(false);
 	
@@ -225,9 +225,9 @@ function CleanupScript()
 	CleanupScript=null;	
 	//Do Finalization
 	Log("CleanUpScript exited successfully!");
-	StimulGL.cleanupScript();
+	BrainStim.cleanupScript();
 }
 
 ConnectDisconnectScriptFunctions(true);
 KeyBoardCaptureObj.StartCaptureThread(0, false);
-StimulGL.enableActiveDocument(false);
+BrainStim.enableActiveDocument(false);

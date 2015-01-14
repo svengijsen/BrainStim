@@ -1,10 +1,10 @@
 //Includes
 Include("QtScript/BasicQMLExperiment.qs");//Do not use a backslash (\) in a string, use forward slashes for a directory definition!//../../include/
 //Prepare Output Window
-StimulGL.addOutputWindow("FingerTapping");
-StimulGL.clearOutputWindow("FingerTapping");
+BrainStim.addOutputWindow("FingerTapping");
+BrainStim.clearOutputWindow("FingerTapping");
 //Configuration
-BasicExperiment.sScriptRootPath = StimulGL.getActiveDocumentFileLocation();
+BasicExperiment.sScriptRootPath = BrainStim.getActiveDocumentFileLocation();
 BasicExperiment.sExmlFilePath = BasicExperiment.sScriptRootPath + "/" + "FingerTapping.exml";
 BasicExperiment.sQmlFilePath = BasicExperiment.sScriptRootPath + "/" + "FingerTapping.qml";
 BasicExperiment.nTestModeTriggerDuration = 2000;
@@ -88,7 +88,7 @@ BasicExperiment.__proto__.KeyBoardResponseRecieved = function(response)
 	{
 		BasicExperiment.QMLViewerObject.incrementExternalTrigger();
 	}
-	StimulGL.write2OutputWindow(nTimeStamp + ";" + "Keyboard pressed, code:" + ";" + response, "FingerTapping");		
+	BrainStim.write2OutputWindow(nTimeStamp + ";" + "Keyboard pressed, code:" + ";" + response, "FingerTapping");		
 }
 
 BasicExperiment.__proto__.ExperimentStateChanged = function(currentState, sDateTimeStamp)
@@ -96,13 +96,13 @@ BasicExperiment.__proto__.ExperimentStateChanged = function(currentState, sDateT
 	//LogFunctionSignature("FingerTapping","ExperimentStateChanged", arguments, false);
 	if(currentState == ExperimentManager.ExperimentState.ExperimentManager_Started)
 	{
-		StimulGL.write2OutputWindow(BasicExperiment.GetCurrentDateTimeStamp() + ";" + "Experiment Started(" + BasicExperiment.ExperimentManagerObj.getCurrentDateTimeStamp("yyyy-MM-dd, HH::mm::ss.zzz") + ")", "FingerTapping");	
+		BrainStim.write2OutputWindow(BasicExperiment.GetCurrentDateTimeStamp() + ";" + "Experiment Started(" + BasicExperiment.ExperimentManagerObj.getCurrentDateTimeStamp("yyyy-MM-dd, HH::mm::ss.zzz") + ")", "FingerTapping");	
 	}	
 	else if(currentState == ExperimentManager.ExperimentState.ExperimentManager_Stopped)
 	{
 		var bOverwrite = true;
-		StimulGL.write2OutputWindow(BasicExperiment.GetCurrentDateTimeStamp() + ";" + "Experiment Stopped(" + BasicExperiment.ExperimentManagerObj.getCurrentDateTimeStamp("yyyy-MM-dd, HH::mm::ss.zzz") + ")", "FingerTapping");	
-		StimulGL.saveOutputWindow(BasicExperiment.sScriptRootPath + "/" + BasicExperiment.ExperimentManagerObj.getCurrentDateTimeStamp() + "_FingerTapping.txt", bOverwrite , "FingerTapping");	
+		BrainStim.write2OutputWindow(BasicExperiment.GetCurrentDateTimeStamp() + ";" + "Experiment Stopped(" + BasicExperiment.ExperimentManagerObj.getCurrentDateTimeStamp("yyyy-MM-dd, HH::mm::ss.zzz") + ")", "FingerTapping");	
+		BrainStim.saveOutputWindow(BasicExperiment.sScriptRootPath + "/" + BasicExperiment.ExperimentManagerObj.getCurrentDateTimeStamp() + "_FingerTapping.txt", bOverwrite , "FingerTapping");	
 	}
 }
 //Log("XX: " + BasicExperiment.nStartDateTimeStamp.toLongDateString());//.toString("dd.MM.yyyy"));

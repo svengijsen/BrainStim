@@ -288,6 +288,7 @@ File ::1DF7F4CC-8875-48FB-AF15-38C603E71C82 -name E:/Projects/BrainStim/Install/
 File ::87E7881A-6F21-49C8-B805-6B8C5235C79F -name E:/Projects/BrainStim/Install/Plugins/x64/TBVExchangerplugin_x64_Release.dll -parent 21B9C60D-2802-481D-BF1F-F26B0588B66E
 File ::BE573B22-A4A9-4618-8135-8CD4EDBD2224 -name E:/Projects/BrainStim/Install/Plugins/x64/TCPNetworkServerplugin_x64_Release.dll -parent 21B9C60D-2802-481D-BF1F-F26B0588B66E
 File ::61DBE974-2401-4D29-BBDD-E18F4B7B8C3B -name E:/Projects/BrainStim/Install/Plugins/x64/FirebirdClientplugin_x64_Release.dll -parent 21B9C60D-2802-481D-BF1F-F26B0588B66E
+File ::0A70690F-B5A0-46C2-9652-0759AEE05506 -name E:/Projects/BrainStim/Install/Plugins/x64/TSIExchangerplugin_x64_Release.dll -parent 21B9C60D-2802-481D-BF1F-F26B0588B66E
 FileGroup ::FE7C119F-2B67-439E-A0DF-FA1E714F2630 -setup Install -active Yes -platforms {Solaris-x86 TarArchive Windows ZipArchive} -name {Example Scripts(plugins)} -parent FileGroups
 File ::042C3DF6-0B5C-4589-887B-72D893CD8D57 -directory <%InstallDir%>/Examples/Tutorials/99_PluginExamples/ParallelPortDevice/scripts -name E:/Projects/BrainStim/Source/Plugins/ParallelPortDevice/scripts/QScriptExample_ParallelPort.qs -parent FE7C119F-2B67-439E-A0DF-FA1E714F2630
 File ::42799612-F05F-490E-8107-10EA0EBB05A3 -directory <%InstallDir%>/Examples/Tutorials/99_PluginExamples/KeyBoardDevice/scripts -name E:/Projects/BrainStim/Source/Plugins/KeyBoardDevice/scripts/QScriptExample_KeyBoard.qs -parent FE7C119F-2B67-439E-A0DF-FA1E714F2630
@@ -649,8 +650,8 @@ File ::E4FB76C6-59C1-4C8E-9944-9A6A0DA94EF1 -name Qt3D_Light.qml -active 0 -pare
 File ::8E29EDD5-AE53-4BFD-828A-0A1BC2543524 -name Qt3D_Shaders.qml -active 0 -parent 72638136-2633-4255-98C6-54DB269A37FB
 File ::403370FF-BE2C-4FF6-9E19-EC441EB0FE35 -name tmp1.txt -active 0 -parent 72638136-2633-4255-98C6-54DB269A37FB
 File ::1DAD1D2E-4557-4937-B0AA-97483B2FC773 -type dir -name 8_Ogre3D -parent 23F6D351-6760-4CC8-9D58-C7A0D09D62FA
-File ::787E2166-8BD7-412F-866F-97E4AF345DF3 -name Ogre.log -parent 1DAD1D2E-4557-4937-B0AA-97483B2FC773
-File ::49CF9DDA-451F-40EA-8075-8CEBCB3AF2C5 -name Ogre3D_Example.qmlproject -parent 1DAD1D2E-4557-4937-B0AA-97483B2FC773
+File ::787E2166-8BD7-412F-866F-97E4AF345DF3 -name Ogre.log -active 0 -parent 1DAD1D2E-4557-4937-B0AA-97483B2FC773
+File ::49CF9DDA-451F-40EA-8075-8CEBCB3AF2C5 -name Ogre3D_Example.qmlproject -active 0 -parent 1DAD1D2E-4557-4937-B0AA-97483B2FC773
 File ::0872EC12-C8EE-4FE6-8B66-12BC4C919D71 -name Ogre3D_Example1.qml -parent 1DAD1D2E-4557-4937-B0AA-97483B2FC773
 File ::BE63BD9A-235E-494A-86D0-9C598B210BF2 -name Ogre3D_Example2.exml -parent 1DAD1D2E-4557-4937-B0AA-97483B2FC773
 File ::AD3629BA-02FE-427E-A9D2-21204989029D -name Ogre3D_Example2.qml -parent 1DAD1D2E-4557-4937-B0AA-97483B2FC773
@@ -659,9 +660,6 @@ File ::12C89641-36B6-4072-8794-9ED301D94BAC -type dir -name 9_RetinotopyMapper_C
 File ::EEEBE3FA-63F0-4687-9608-81A56336587C -type dir -name Plaids -parent 12C89641-36B6-4072-8794-9ED301D94BAC
 File ::9EC2C4CE-4DDC-4736-A05D-77AE2CC9EC45 -name Plaids_CustomPainting_Run2.exml -parent EEEBE3FA-63F0-4687-9608-81A56336587C
 File ::BF8130EF-3BEB-43AD-B5E2-79AB8EE048AC -name Plaids_EMCustomScriptHandler_Run2.qs -parent EEEBE3FA-63F0-4687-9608-81A56336587C
-File ::8EE03A4B-5691-4428-886B-8693D18417C8 -type dir -name SinusoidalGrating -parent 12C89641-36B6-4072-8794-9ED301D94BAC
-File ::9A485818-3CE7-4D36-9CFB-32A7861E4701 -name CustomPainting.exml -parent 8EE03A4B-5691-4428-886B-8693D18417C8
-File ::D731C5C0-ECF4-4AF4-B624-2C4231F72587 -name CustomPainting.qs -parent 8EE03A4B-5691-4428-886B-8693D18417C8
 File ::4CFA388F-ACA8-46FA-ABB6-FA47E02AE73D -type dir -name 13_Timers -parent 23F6D351-6760-4CC8-9D58-C7A0D09D62FA
 File ::2A6E848F-4226-48FF-B2BB-78497AA4DA37 -name Timer_Example1.qs -parent 4CFA388F-ACA8-46FA-ABB6-FA47E02AE73D
 File ::0CA63FD9-6527-4FCB-A421-D90339721B2B -type dir -name 15_NeuroFeedBack -parent 23F6D351-6760-4CC8-9D58-C7A0D09D62FA
@@ -1065,6 +1063,7 @@ File ::F7432218-4872-4217-98DB-A0830BD59876 -name E:/Projects/BrainStim/Install/
 File ::93E5211C-02D4-46A7-BE61-706EF3C3F6F7 -name E:/Projects/BrainStim/Install/Plugins/Win32/TBVExchangerplugin_Win32_Release.dll -parent 2C7E583A-607F-4311-9D36-84C482C13786
 File ::4B8DF184-AB98-4194-95E3-B2A9C7698E0F -name E:/Projects/BrainStim/Install/Plugins/Win32/TCPNetworkServerplugin_Win32_Release.dll -parent 2C7E583A-607F-4311-9D36-84C482C13786
 File ::B8ADD187-4F32-4DBB-A7F4-892C7B07F04E -name E:/Projects/BrainStim/Install/Plugins/Win32/FirebirdClientplugin_Win32_Release.dll -parent 2C7E583A-607F-4311-9D36-84C482C13786
+File ::1D888602-0D39-462A-8106-09BE8332D84A -name E:/Projects/BrainStim/Install/Plugins/Win32/TSIExchangerplugin_Win32_Release.dll -parent 2C7E583A-607F-4311-9D36-84C482C13786
 FileGroup ::A1E87F59-F33A-4028-AA97-952F67EB031A -setup Install -active Yes -platforms {TarArchive Windows ZipArchive} -name {QML Plugins(win32)} -parent FileGroups
 File ::EE4D3E75-809E-427B-903D-3218F41D69A6 -name E:/Projects/BrainStim/Install/Qml/plugins/Win32/DefaultQMLPlugin_Win32_Release.dll -parent A1E87F59-F33A-4028-AA97-952F67EB031A
 File ::93ECB49A-702C-437D-91E8-793AE840F571 -type dir -name E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/qml/Qt -parent A1E87F59-F33A-4028-AA97-952F67EB031A
@@ -1674,7 +1673,7 @@ FileGroup ::C2965824-E1F7-41F1-988B-2789A12B339E -setup Install -active Yes -pla
 File ::81E275D5-F8BD-4410-8874-6D55560F0A4C -name E:/Libraries/VC_Redist/VC_2013/x64/Microsoft.VC120.OpenMP/vcomp120.dll -parent C2965824-E1F7-41F1-988B-2789A12B339E
 File ::0D76D394-1F8F-4177-B009-2E9EA0A4BCD3 -name E:/Libraries/VC_Redist/VC_2013/x64/Microsoft.VC120.CRT/msvcp120.dll -parent C2965824-E1F7-41F1-988B-2789A12B339E
 File ::C661009A-3A7B-4AAD-ABEB-39337EF0ED3D -name E:/Libraries/VC_Redist/VC_2013/x64/Microsoft.VC120.CRT/msvcr120.dll -parent C2965824-E1F7-41F1-988B-2789A12B339E
-FileGroup ::7882E581-7AAD-49F1-BBDF-1CCEAD0F5288 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name Includes -parent FileGroups
+FileGroup ::7882E581-7AAD-49F1-BBDF-1CCEAD0F5288 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name Includes(Default) -parent FileGroups
 File ::4D9309A3-6D9F-4A0A-AB62-148285B477B9 -type dir -name E:/Projects/BrainStim/Install/Include/JavaScript -parent 7882E581-7AAD-49F1-BBDF-1CCEAD0F5288
 File ::B4F091BC-3EB2-4FE6-A95B-DBF363282916 -name underscore.js -parent 4D9309A3-6D9F-4A0A-AB62-148285B477B9
 File ::DEEC0F57-FC18-40F4-B6E4-E60273217916 -type dir -name E:/Projects/BrainStim/Install/Include/QML -parent 7882E581-7AAD-49F1-BBDF-1CCEAD0F5288
@@ -1691,6 +1690,9 @@ File ::DAE514BC-381A-441F-9DE6-59857CFC6AE6 -name qmldir -parent 05180E26-0F72-4
 FileGroup ::0C5436ED-FF9C-488B-9F61-AE01D34F8BAD -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugins Custom Menus} -parent FileGroups
 File ::15003DEE-D648-4DA4-96D4-1A205770B6D0 -type dir -name E:/Projects/BrainStim/Source/Plugins/ExperimentManager/menus/ExperimentManager -parent 0C5436ED-FF9C-488B-9F61-AE01D34F8BAD
 File ::9ED88436-F41C-48B4-9574-AC83E07ED193 -name CustomMenus.ini -parent 15003DEE-D648-4DA4-96D4-1A205770B6D0
+FileGroup ::2500E1F1-48F5-4CE8-BA6F-A6D851F9326D -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name Includes(Plugins) -parent FileGroups
+File ::41B30D81-3489-4407-9C19-CBA7E55AFC95 -type dir -name E:/Projects/BrainStim_Plugins/TBVExchanger/include/QtScript -parent 2500E1F1-48F5-4CE8-BA6F-A6D851F9326D
+File ::B37066E9-9428-4152-BB17-D1EEAF23CB9A -name RealTimeFeedback.qs -parent 41B30D81-3489-4407-9C19-CBA7E55AFC95
 Component ::3E0D911D-E0AF-47F2-898C-7CF2EDCE0A33 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows} -name {Default Files(x64)} -parent Components
 Component ::C511BCE0-5730-4B6A-B67A-9BFDC29D6A11 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows} -name {Default Files(win32)} -parent Components
 Component ::0C4197C0-9F10-4AD0-86B8-506675EEFCBC -setup Install -active Yes -platforms Windows -name Default -parent Components
@@ -1904,13 +1906,16 @@ array set Properties {
 {1}
 
 0C4197C0-9F10-4AD0-86B8-506675EEFCBC,FileGroups
-{FE7C119F-2B67-439E-A0DF-FA1E714F2630 E5DE8D2A-E046-4945-B382-97B2670A7E75 B9E5284F-8A18-4881-AC62-4276DF5666EC 6F707DE3-E5BF-4944-9F3F-B84552A89AA0 A2DAA637-8263-44CD-9683-9B4B3EEDCD93 7882E581-7AAD-49F1-BBDF-1CCEAD0F5288 0C5436ED-FF9C-488B-9F61-AE01D34F8BAD}
+{FE7C119F-2B67-439E-A0DF-FA1E714F2630 E5DE8D2A-E046-4945-B382-97B2670A7E75 B9E5284F-8A18-4881-AC62-4276DF5666EC 6F707DE3-E5BF-4944-9F3F-B84552A89AA0 A2DAA637-8263-44CD-9683-9B4B3EEDCD93 7882E581-7AAD-49F1-BBDF-1CCEAD0F5288 0C5436ED-FF9C-488B-9F61-AE01D34F8BAD 2500E1F1-48F5-4CE8-BA6F-A6D851F9326D}
 
 0C4197C0-9F10-4AD0-86B8-506675EEFCBC,Name
 {Default}
 
 0C5436ED-FF9C-488B-9F61-AE01D34F8BAD,Destination
 {<%InstallDir%>/Menus}
+
+0C5436ED-FF9C-488B-9F61-AE01D34F8BAD,FileSize
+{304}
 
 0C5436ED-FF9C-488B-9F61-AE01D34F8BAD,Name
 {Plugins Custom Menus}
@@ -2009,7 +2014,7 @@ array set Properties {
 {<%InstallDir%>/Plugins/x64}
 
 21B9C60D-2802-481D-BF1F-F26B0588B66E,FileSize
-{778752}
+{782848}
 
 21B9C60D-2802-481D-BF1F-F26B0588B66E,Name
 {BrainStim Plugins(x64)}
@@ -2032,6 +2037,15 @@ array set Properties {
 23EA39AB-E0A7-4451-8BBD-01D9ABBC739A,Name
 {QML ImageFormats(win32)}
 
+2500E1F1-48F5-4CE8-BA6F-A6D851F9326D,Destination
+{<%InstallDir%>/Include}
+
+2500E1F1-48F5-4CE8-BA6F-A6D851F9326D,FileSize
+{6067}
+
+2500E1F1-48F5-4CE8-BA6F-A6D851F9326D,Name
+{Includes(Plugins)}
+
 27F4102A-675C-4053-BE7B-B4829106F060,Conditions
 {0 conditions}
 
@@ -2045,7 +2059,7 @@ array set Properties {
 {<%InstallDir%>/Plugins/Win32}
 
 2C7E583A-607F-4311-9D36-84C482C13786,FileSize
-{636928}
+{640000}
 
 2C7E583A-607F-4311-9D36-84C482C13786,Name
 {BrainStim Plugins(win32)}
@@ -2474,7 +2488,7 @@ array set Properties {
 {95515}
 
 7882E581-7AAD-49F1-BBDF-1CCEAD0F5288,Name
-{Includes}
+{Includes(Default)}
 
 7A091D4B-ADD5-4762-BD8C-C5F8E1FF8228,Conditions
 {0 conditions}
@@ -2564,7 +2578,7 @@ array set Properties {
 {<%InstallDir%>}
 
 891CF076-368A-450C-890A-7E3FDCB8748B,FileSize
-{74781552}
+{75020144}
 
 891CF076-368A-450C-890A-7E3FDCB8748B,Name
 {Program Files(win32)}
@@ -2891,7 +2905,7 @@ B9E5284F-8A18-4881-AC62-4276DF5666EC,Destination
 {<%InstallDir%>/Examples}
 
 B9E5284F-8A18-4881-AC62-4276DF5666EC,FileSize
-{15160635}
+{15143883}
 
 B9E5284F-8A18-4881-AC62-4276DF5666EC,Name
 {Examples}
@@ -3119,7 +3133,7 @@ D562F7E3-157E-48ED-91CE-71FBA40B332D,Destination
 {<%InstallDir%>}
 
 D562F7E3-157E-48ED-91CE-71FBA40B332D,FileSize
-{89892049}
+{90174673}
 
 D562F7E3-157E-48ED-91CE-71FBA40B332D,Name
 {Program Files(x64)}
@@ -3365,7 +3379,7 @@ FE7C119F-2B67-439E-A0DF-FA1E714F2630,Destination
 {<%InstallDir%>/Examples/Tutorials/99_PluginExamples}
 
 FE7C119F-2B67-439E-A0DF-FA1E714F2630,FileSize
-{36962}
+{37040}
 
 FE7C119F-2B67-439E-A0DF-FA1E714F2630,Name
 {Example Scripts(plugins)}

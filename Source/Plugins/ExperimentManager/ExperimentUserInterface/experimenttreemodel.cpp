@@ -1,5 +1,5 @@
 //ExperimentManagerplugin
-//Copyright (C) 2014  Sven Gijsen
+//Copyright (C) 2015  Sven Gijsen
 //
 //This file is part of BrainStim.
 //BrainStim is free software: you can redistribute it and/or modify
@@ -81,7 +81,7 @@ bool ExperimentTreeModel::fillModel()
 	if(doc->isNull() || root->isNull() || rootItem == NULL)
 		return false;
 
-	for (int i = 0; i < root->attributes().size(); i++)//version --> <EXML version="2.1.0.0">
+	for (int i = 0; i < root->attributes().size(); i++)//version --> <EXML version="x.x.x.x">
 	{
 		//tmpString = root.attributes().item(i).nodeName();
 		//tmpString = root.attributes().item(i).nodeValue();
@@ -236,7 +236,7 @@ bool ExperimentTreeModel::saveNewData(const int &nBlockID, const int &nObjectID,
 	return false;
 }
 
-bool ExperimentTreeModel::addExperimentObject(const QString &sObjectName, const QString &sClassName)
+bool ExperimentTreeModel::addExperimentObject(const QString &sObjectName, const QString &sClassName, const int &nForcedObjectID)
 {
 	if((sObjectName.isEmpty()) || (sClassName.isEmpty()))
 		return false;
@@ -281,8 +281,15 @@ bool ExperimentTreeModel::addExperimentObject(const QString &sObjectName, const 
 	}
 	ExperimentTreeItem* tmpNewObjectItem = new ExperimentTreeItem(OBJECT_TAG);
 	int nNewID = 0;
-	while(lstUsedObjectIds.contains(nNewID))
-		nNewID++;
+	if (nForcedObjectID >= 0)
+	{
+		nNewID = nForcedObjectID;
+	}
+	else
+	{
+		while (lstUsedObjectIds.contains(nNewID))
+			nNewID++;
+	}
 	tmpNewObjectItem->addDefinition(ID_TAG,QString::number(nNewID),TreeItemType_Attribute);
 	tmpNewObjectItem->appendRow(new ExperimentTreeItem(NAME_TAG,sObjectName));
 	tmpNewObjectItem->appendRow(new ExperimentTreeItem(CLASS_TAG,sClassName));
@@ -291,7 +298,7 @@ bool ExperimentTreeModel::addExperimentObject(const QString &sObjectName, const 
 	return true;
 }
 
-bool ExperimentTreeModel::addExperimentObjectInitFinit(const ExperimentTreeModel::strcObjectInitFinitSpecifier &cObjectInitFinitSpecifier, const bool bIsInit)
+bool ExperimentTreeModel::addExperimentObjectInitFinit(const ExperimentTreeModel::strcObjectInitFinitSpecifier &cObjectInitFinitSpecifier, const bool bIsInit, const int nForcedInitFinitID)
 {
 	QStringList sFilterList;
 	int nTempInitFinitID;
@@ -347,8 +354,15 @@ bool ExperimentTreeModel::addExperimentObjectInitFinit(const ExperimentTreeModel
 	{
 		ExperimentTreeItem* tmpNewConnectionItem = new ExperimentTreeItem(sSubSectionTag);
 		int nNewId = cObjectInitFinitSpecifier.nInitFinitID;
-		while(lFoundInitFinitIds.contains(nNewId))
-			nNewId++;
+		if (nForcedInitFinitID >= 0)
+		{
+			nNewId = nForcedInitFinitID;
+		}
+		else
+		{
+			while (lFoundInitFinitIds.contains(nNewId))
+				nNewId++;
+		}
 		tmpNewConnectionItem->addDefinition(ID_TAG,QString::number(nNewId),TreeItemType_Attribute);
 		ExperimentTreeItem* pObjectItem = new ExperimentTreeItem(OBJECT_TAG);
 		pObjectItem->addDefinition(ID_TAG,QString::number(cObjectInitFinitSpecifier.nObjectID),TreeItemType_Attribute);
@@ -366,7 +380,10 @@ bool ExperimentTreeModel::addExperimentObjectInitFinit(const ExperimentTreeModel
 		}
 		pObjectItem->appendRow(pParametersItem);
 		ExperimentTreeItem* pOrderNumberItem = new ExperimentTreeItem(INIT_FINIT_NUMBER_TAG);
-		pOrderNumberItem->setValue(QString::number(nHighestFoundInitFinitOrderNumber+1));
+		if (cObjectInitFinitSpecifier.nOrderNumber>=0)
+			pOrderNumberItem->setValue(QString::number(cObjectInitFinitSpecifier.nOrderNumber));
+		else
+			pOrderNumberItem->setValue(QString::number(nHighestFoundInitFinitOrderNumber+1));
 		tmpNewConnectionItem->appendRow(pOrderNumberItem);
 		tmpNewConnectionItem->appendRow(pObjectItem);
 		list1.at(0)->insertRow(list1.at(0)->rowCount(),tmpNewConnectionItem);
@@ -377,7 +394,7 @@ bool ExperimentTreeModel::addExperimentObjectInitFinit(const ExperimentTreeModel
 	return false;
 }
 
-bool ExperimentTreeModel::addObjectConnection(const ExperimentTreeModel::strcObjectConnectionSpecifier &cConnectionSpecifier)
+bool ExperimentTreeModel::addObjectConnection(const ExperimentTreeModel::strcObjectConnectionSpecifier &cConnectionSpecifier, int nForcedConnectionID)
 {
 	QStringList sFilterList;
 	int nTempConnectionID;
@@ -418,8 +435,15 @@ bool ExperimentTreeModel::addObjectConnection(const ExperimentTreeModel::strcObj
 	{
 		ExperimentTreeItem* tmpNewConnectionItem = new ExperimentTreeItem(CONNECTION_TAG);
 		int nNewId = 0;
-		while(lFoundConnectionIds.contains(nNewId))
-			nNewId++;
+		if (nForcedConnectionID >= 0)
+		{
+			nNewId = nForcedConnectionID;
+		}
+		else
+		{
+			while (lFoundConnectionIds.contains(nNewId))
+				nNewId++;
+		}
 		tmpNewConnectionItem->addDefinition(ID_TAG,QString::number(nNewId),TreeItemType_Attribute);
 		ExperimentTreeItem* pSourceConnItem = new ExperimentTreeItem(CONNECTION_SOURCE_TAG);
 		pSourceConnItem->appendRow(new ExperimentTreeItem(OBJECT_TAG,QString::number(cConnectionSpecifier.nSourceObjectID)));

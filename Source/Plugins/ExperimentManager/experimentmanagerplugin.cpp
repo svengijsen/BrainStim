@@ -1,5 +1,5 @@
 //ExperimentManagerplugin
-//Copyright (C) 2014  Sven Gijsen
+//Copyright (C) 2015  Sven Gijsen
 //
 //This file is part of BrainStim.
 //BrainStim is free software: you can redistribute it and/or modify
@@ -43,6 +43,8 @@ ExperimentManagerPlugin::ExperimentManagerPlugin(QObject *parent)
 	cObjectStructureObject = NULL;
 	cLoopStructureObject = NULL;
 	cMethodConnectionStructureObject = NULL;
+	cMethodParameterStructureObject = NULL;
+	cBlockParameterStructureObject = NULL;
 	cMethodStructureObject = NULL;
 	Qml2ViewerObject = NULL;	
 	ExperimentManagerDiagObject = new ExperimentManager_Dialog();
@@ -104,6 +106,16 @@ ExperimentManagerPlugin::~ExperimentManagerPlugin()
 	{
 		delete cMethodConnectionStructureObject;
 		cMethodConnectionStructureObject = NULL;
+	}
+	if (cMethodParameterStructureObject)
+	{
+		delete cMethodParameterStructureObject;
+		cMethodParameterStructureObject = NULL;
+	}
+	if (cBlockParameterStructureObject)
+	{
+		delete cBlockParameterStructureObject;
+		cBlockParameterStructureObject = NULL;
 	}
 	if(cMethodStructureObject)
 	{
@@ -246,6 +258,22 @@ int ExperimentManagerPlugin::ConfigureScriptEngine(QScriptEngine &engine)
 	engine.globalObject().setProperty(CMETHODSTRUCTURE_NAME, cMethodStructureCtor);
 	qScriptRegisterMetaType(&engine, cMethodStructure::MethodStructureToScriptValue, cMethodStructure::MethodStructureFromScriptValue);
 
+	if (cMethodParameterStructureObject == NULL)
+		cMethodParameterStructureObject = new cMethodParameterStructure();
+	QScriptValue cMethodParameterStructureProto = engine.newQObject(cMethodParameterStructureObject);
+	engine.setDefaultPrototype(qMetaTypeId<cMethodParameterStructure*>(), cMethodParameterStructureProto);
+	QScriptValue cMethodParameterStructureCtor = engine.newFunction(cMethodParameterStructure::ctor__cMethodParameterStructure, cMethodParameterStructureProto);
+	engine.globalObject().setProperty(CMETHODPARAMETERSTRUCTURE_NAME, cMethodParameterStructureCtor);
+	qScriptRegisterMetaType(&engine, cMethodParameterStructure::MethodParameterStructureToScriptValue, cMethodParameterStructure::MethodParameterStructureFromScriptValue);
+
+	if (cBlockParameterStructureObject == NULL)
+		cBlockParameterStructureObject = new cBlockParameterStructure();
+	QScriptValue cBlockParameterStructureProto = engine.newQObject(cBlockParameterStructureObject);
+	engine.setDefaultPrototype(qMetaTypeId<cBlockParameterStructure*>(), cBlockParameterStructureProto);
+	QScriptValue cBlockParameterStructureCtor = engine.newFunction(cBlockParameterStructure::ctor__cBlockParameterStructure, cBlockParameterStructureProto);
+	engine.globalObject().setProperty(CBLOCKPARAMETERSTRUCTURE_NAME, cBlockParameterStructureCtor);
+	qScriptRegisterMetaType(&engine, cBlockParameterStructure::BlockParameterStructureToScriptValue, cBlockParameterStructure::BlockParameterStructureFromScriptValue);
+
 	if(cMethodConnectionStructureObject == NULL)
 		cMethodConnectionStructureObject = new cMethodConnectionStructure();
 	QScriptValue cMethodConnectionStructureProto = engine.newQObject(cMethodConnectionStructureObject);
@@ -361,6 +389,14 @@ QObject *ExperimentManagerPlugin::GetScriptMetaObject(int nIndex)
 			cMethodStructureObject = new cMethodStructure();
 		return (QObject *)cMethodStructureObject->metaObject();
 	case 14:
+		if (cMethodParameterStructureObject == NULL)
+			cMethodParameterStructureObject = new cMethodParameterStructure();
+		return (QObject *)cMethodParameterStructureObject->metaObject();
+	case 15:
+		if (cBlockParameterStructureObject == NULL)
+			cBlockParameterStructureObject = new cBlockParameterStructure();
+		return (QObject *)cBlockParameterStructureObject->metaObject();
+	case 16:
 		if (pExperimentTreeModelObject == NULL)
 			pExperimentTreeModelObject = new ExperimentTreeModel();
 		return (QObject *)pExperimentTreeModelObject->metaObject();

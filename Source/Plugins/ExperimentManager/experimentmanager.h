@@ -1,5 +1,5 @@
 //ExperimentManagerplugin
-//Copyright (C) 2014  Sven Gijsen
+//Copyright (C) 2015  Sven Gijsen
 //
 //This file is part of BrainStim.
 //BrainStim is free software: you can redistribute it and/or modify
@@ -85,7 +85,7 @@ public:
 		ExperimentManager_NoState		= 0, /*!< this state is only internally used by the object while it is constructing, thus not yet fully available and therefore cannot be detected/used in the script environment. */
 		ExperimentManager_Constructed	= 1, /*!< this state is used to determine whenever the object has been constructed, this state also cannot be detected/used in the script environment. */
 		ExperimentManager_Loaded		= 2, /*!< after the Experiment file (*.exml) is successfully loaded (and validated) the ExperimentManager state changes to this state.*/
-		ExperimentManager_PreParsed		= 3, /*!< when the Experiment could be successfully preparsed (after loading) then the ExperimentManager state changes to this state.*/
+		ExperimentManager_PreParsed		= 3, /*!< when the Experiment could be successfully pre-parsed (after loading) then the ExperimentManager state changes to this state.*/
 		ExperimentManager_Configured	= 4, /*!< after the function runExperiment() is called the ExperimentManager (validates if it has not been done before) and configures the experiment, it then changes to this state if the configuration was done.*/
 		ExperimentManager_Initialized	= 5, /*!< after the Experiment configuration the ExperimentManager tries to initialized and changes the state to this state if this step was successful.*/
 		ExperimentManager_IsStarting	= 6, /*!< after the Experiment initialization the ExperimentManager is ready to actually start the Experiment but first it changes the state to this state.*/
@@ -121,15 +121,17 @@ public:
 		}
 	};
 
+	enum ExperimentDataStructureConversionType
+	{
+		EDS_TreeItemList_To_ExperimentStructure = 0, 
+		EDS_ExperimentStructure_To_ExperimentTreeModel = 1
+	};
+
 	static QScriptValue ctor__experimentManager(QScriptContext* context, QScriptEngine* engine);
 	static QScriptValue ctor__experimentStateEnum(QScriptContext *context, QScriptEngine *engine);
-	//static QScriptValue toExperimentStateEnumScriptValue(QScriptEngine *engine, const ExperimentState &s);
-	//static void fromExperimentStateEnumScriptValue(const QScriptValue &obj, ExperimentState &s);
-	//static PropertySettingDefinition *getExperimentParameterDefinition(const QString &sCollectionName);
 
-	ExperimentState getCurrExperimentState() { return experimentCurrentState; }
 	void cleanupSingletons();
-	bool cleanupExperiment();
+	ExperimentState getCurrExperimentState() { return experimentCurrentState; }
 	bool fetchExperimentBlockParamsFromTreeItemList(const int &nBlockNumber, const int &nObjectID);
 	tParsedParameterList *getObjectBlockParamListById(int nID);
 	bool setExperimentObjectBlockParameterStructure(const int nObjectID, tParsedParameterList *expBlockTrialStruct);
@@ -138,6 +140,7 @@ public:
 	bool getExperimentObjectScriptValue(const int &nObjectID,const QString &sKeyName,QScriptValue &sScriptValue);
 	bool setExperimentObjectFromScriptValue(const int &nObjectID,const QString &sKeyName,const QScriptValue &sScriptValue);
 	QWidget *getVisualExperimentEditor();
+	ExperimentTreeModel *getCurrentExperimentTreeModel() { return currentExperimentTree; };
 
 	static bool createExperimentStructure(QList<ExperimentTreeItem*> &lExpTreeItems, ExperimentTreeModel *expTreeModel = NULL, cExperimentStructure* cExpStruct = NULL);
 
@@ -368,16 +371,16 @@ public slots:
 	/*! \brief Returns the current in-memory Experiment Structure
 	 *
 	 *  This function returns a pointer to the current in-memory Experiment Structure.
+	 *  @param bCreateIfEmpty a boolean value (default = false) that can be used to force a new cExperimentStructure structure to be created when the current cExperimentStructure structure is undefined.
 	 *  @return a pointer to a cExperimentStructure structure, if the function fails it returns NULL.
 	 */	
-	cExperimentStructure *getExperimentStructure();
-	/*! \brief Sets the in-memory Experiment Structure
-	 *
-	 *  This function sets the current in-memory Experiment Structure.
-	 *  @param expStruct a cExperimentStructure that should be set as the new in-memory Experiment Structure.
-	 *  @return a boolean value determining whether this function executed successfully.
-	 */	
-	bool setExperimentStructure(cExperimentStructure *expStruct);
+	cExperimentStructure *getExperimentStructure(const bool bCreateIfUndefined = false);
+	/*! \brief Forces a Parse of the current Internal Experiment Structure.
+	*
+	*  This function Forces the parsing of the current Internal Experiment Structure.
+	*  @return a boolean value determining whether this function executed successfully.
+	*/
+	bool parseCurrentExperimentStructure();
 	/*! \brief Shows the Experiment in a Visual Experiment Editor UI.
 	 *
 	 *  This function shows the Experiment in a Visual Experiment Editor UI, if the provided ExperimentTreeModel is NULL than the current in-memory Experiment is parsed by the editor.
@@ -406,8 +409,6 @@ public slots:
 	 */	
 	static QString getAvailableScreensInformation();
 
-
-
 #ifndef QT_NO_DEBUG
 	QString Test(const QString &sInput = "");
 #endif
@@ -426,9 +427,9 @@ private:
 	bool configureExperiment();
 	bool createExperimentObjects();
 	//bool createExperimentStructureFromDomNodeList(const QDomNodeList &ExpBlockTrialsDomNodeLst, cExperimentStructure *expStruct);
-	static bool createExperimentStructureFromTreeItemList(const QList<ExperimentTreeItem*> &ExpRootTreeItems, cExperimentStructure *expStruct);
+	static bool convertExperimentDataStructure(QList<ExperimentTreeItem*> *ExpRootTreeItems = NULL, cExperimentStructure *expStruct = NULL, ExperimentTreeModel *expTreeModel = NULL, const ExperimentManager::ExperimentDataStructureConversionType &conversionMethod = EDS_TreeItemList_To_ExperimentStructure);
 	//int createExperimentBlockParamsFromDomNodeList(const int &nBlockNumber, const int &nObjectID, QDomNodeList *pExpBlockTrialsDomNodeLst = NULL, tParsedParameterList *hParams = NULL);
-	int createExperimentBlockParamsFromTreeItemList(const int &nBlockNumber, const int &nObjectID, QList<ExperimentTreeItem*> *pExpBlockTrialsTreeItems = NULL, tParsedParameterList *hParams = NULL);
+	int createExperimentBlockParamsFromTreeItemList(const int &nBlockNumber, const int &nObjectID, const QList<ExperimentTreeItem*> *pExpBlockTrialsTreeItems = NULL, tParsedParameterList *hParams = NULL);
 	bool connectExperimentObjects(bool bDisconnect = false, int nObjectID = -1);
 	bool initializeExperiment(bool bFinalize = false);
 	bool finalizeExperimentObjects();
@@ -440,6 +441,8 @@ private:
 	void cleanupExperimentObjects();
 	void changeCurrentExperimentState(ExperimentState expCurrState);
 	QObject *getObjectElementById(int nID);
+	void createNewExperimentStructure();
+	bool cleanupExperiment();
 		
 	PropertySettingsWidgetContainer *expParamWidgets;
 	QList<ExperimentTreeItem*> ExperimentTreeBlockItemList;
@@ -448,10 +451,10 @@ private:
 	cExperimentStructure *cExperimentBlockTrialStructure;
 	QList<objectElement> lExperimentObjectList;
 	ExperimentTreeModel *currentExperimentTree;
-	ExperimentGraphicEditor *ExpGraphicEditor;
 	ExperimentState experimentCurrentState;
-	QHash<QString, int> experimentStateHash;
 	
+	ExperimentGraphicEditor *ExpGraphicEditor;
+	QHash<QString, int> experimentStateHash;
 	QByteArray currentExperimentFile;
 	QByteArray currentValidationFile;
 

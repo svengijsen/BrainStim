@@ -33,3 +33,4 @@ Install/*.ini
 /Source/BrainStim/brainstim.aps
 /Install/Examples/Tutorials/8_Ogre3D/*.log
 InstallJammer/build/*.*
+Install/Menus/*/*.ini

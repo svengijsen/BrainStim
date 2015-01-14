@@ -1,5 +1,5 @@
 //ExperimentManagerplugin
-//Copyright (C) 2014  Sven Gijsen
+//Copyright (C) 2015  Sven Gijsen
 //
 //This file is part of BrainStim.
 //BrainStim is free software: you can redistribute it and/or modify
@@ -561,7 +561,7 @@ void ObjectConnectionsDialog::addSelectedConnection()
 			tmpConnSpecifier.sTargetSignature = hashToComboMethodIndexToMetaMethod[nToMethodComboIndex].methodSignature();
 			tmpConnSpecifier.nSourceObjectID = hashComboObjectIndexToObjectStructure[nFromObjectComboIndex].nObjectID;
 			tmpConnSpecifier.nTargetObjectID = hashComboObjectIndexToObjectStructure[nToObjectComboIndex].nObjectID;
-			if(pExperimentTreeModel->addObjectConnection(tmpConnSpecifier) == false)
+			if(pExperimentTreeModel->addObjectConnection(tmpConnSpecifier,-1) == false)
 			{
 				qDebug() << __FUNCTION__ << "Could not add the new Object Connection";
 			}

@@ -1,5 +1,5 @@
 import QtQuick 2.0
-import StimulGL.Modules 1.0
+import BrainStim.Modules 1.0
 
 Rectangle
 {

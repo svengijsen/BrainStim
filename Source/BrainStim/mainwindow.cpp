@@ -1,5 +1,5 @@
 //BrainStim
-//Copyright (C) 2014  Sven Gijsen
+//Copyright (C) 2015  Sven Gijsen
 //
 //This file is part of BrainStim.
 //BrainStim is free software: you can redistribute it and/or modify
@@ -2107,7 +2107,8 @@ void MainWindow::setupDynamicPlugins()
 			{
 				iDevice->fetchGlobalAppInfo();
 				QString sTmpInternalPluginName = iDevice->GetPluginInternalName();
-				bool bCustomConfFoundAndAdded = getPluginCustomConfigurationOptions(sTmpInternalPluginName);
+				//bool bCustomConfFoundAndAdded = 
+					getPluginCustomConfigurationOptions(sTmpInternalPluginName);
 				bInterfaceResolved = true;
 			}
 			else 

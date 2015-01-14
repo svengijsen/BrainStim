@@ -1,5 +1,5 @@
 //ExperimentManagerplugin
-//Copyright (C) 2014  Sven Gijsen
+//Copyright (C) 2015  Sven Gijsen
 //
 //This file is part of BrainStim.
 //BrainStim is free software: you can redistribute it and/or modify
@@ -107,6 +107,10 @@ namespace ExperimentStructuresNameSpace
 		}
 	};
 }
+
+class cBlockParameterStructure;
+typedef QMap<QString, cBlockParameterStructure*> typeMapBlockParameterContainer;			//key is Parameter Name
+typedef QMap<int, typeMapBlockParameterContainer> typeMapObjectsBlockParameterContainer;	//key is objectID
 
 //!  The cLoopStructure class. 
 /*!
@@ -227,6 +231,80 @@ private:
 	int nLoopCounter;
 };
 
+//!  The cBlockParameterStructure class. 
+/*!
+The cBlockParameterStructure class is a container to store a Block Parameter structure that can be used by a Block structure definition for a specific Object Structure, see cBlockStructure, cObjectStructure.
+*/
+class cBlockParameterStructure : public QObject
+{
+	Q_OBJECT
+
+		//! \brief BlockParameterID property.
+		/*!  Use this property to set or retrieve the Block Parameter ID.
+		*/
+		Q_PROPERTY(int BlockParameterID WRITE setBlockParameterID READ getBlockParameterID)
+		//! \brief BlockParameterName property.
+		/*!  Use this property to set or retrieve the Block Parameter Name.
+		*/
+		Q_PROPERTY(QString BlockParameterName WRITE setBlockParameterName READ getBlockParameterName)
+		//! \brief BlockParameterValue property.
+		/*!  Use this property to set or retrieve the Block Parameter Value.
+		*/
+		Q_PROPERTY(QString BlockParameterValue WRITE setBlockParameterValue READ getBlockParameterValue)
+
+public:
+	cBlockParameterStructure();
+	cBlockParameterStructure(const int &nBlockParamId, const QString &sBlockParamName, const QString &sBlockParamValue);
+	cBlockParameterStructure(const cBlockParameterStructure& other);
+	~cBlockParameterStructure();
+
+	static QScriptValue ctor__cBlockParameterStructure(QScriptContext* context, QScriptEngine* engine);
+	static QScriptValue BlockParameterStructureToScriptValue(QScriptEngine *engine, cBlockParameterStructure* const &s);
+	static void BlockParameterStructureFromScriptValue(const QScriptValue &obj, cBlockParameterStructure* &s);
+
+	public slots:
+	bool makeThisAvailableInScript(QString strObjectScriptName = "", QObject *engine = NULL);//To make the objects (e.g. defined in a *.exml file) available in the script
+
+	//! \brief setBlockParameterID slot.
+	/*!  This function sets the Block Parameter ID to the new provided value.
+	* @param nValue a integer value (>0) holding the new Block Parameter ID.
+	*/
+	void setBlockParameterID(const int &nValue) { nBlockParameterID = nValue; };
+	//! \brief getBlockParameterID slot.
+	/*!  This function returns the Block Parameter ID.
+	* @return a integer value containing the requested Block Parameter ID.
+	*/
+	int getBlockParameterID() const { return nBlockParameterID; };
+	//! \brief setBlockParameterName slot.
+	/*!  This function sets the Block Parameter Name to the new provided value.
+	* @param sValue a string value holding the new Block Parameter Name.
+	*/
+	void setBlockParameterName(const QString &sValue) { sBlockParameterName = sValue; };
+	//! \brief getBlockParameterName slot.
+	/*!  This function returns the Block Parameter Name.
+	* @return a string value containing the requested Block Parameter Name.
+	*/
+	QString getBlockParameterName() const { return sBlockParameterName; };
+	//! \brief setBlockParameterValue slot.
+	/*!  This function sets the Block Parameter Value to the new provided value.
+	* @param sValue a string value holding the new Block Parameter Value.
+	*/
+	void setBlockParameterValue(const QString &sValue) { sBlockParameterValue = sValue; };
+	//! \brief getBlockParameterValue slot.
+	/*!  This function returns the Block Parameter Value.
+	* @return a string value containing the requested Block Parameter Value.
+	*/
+	QString getBlockParameterValue() const { return sBlockParameterValue; };
+
+private:
+	bool Initialize();
+
+	QScriptEngine* currentScriptEngine;
+	int nBlockParameterID;
+	QString sBlockParameterValue;
+	QString sBlockParameterName;
+};
+
 class cBlockStructure_SharedData : public QSharedData
 {
 public:
@@ -242,6 +320,8 @@ public:
 	int nNrOfInternalTriggers;
 	int nNrOfExternalTriggers;
 	QList<cLoopStructure*> lLoops;
+	typeMapObjectsBlockParameterContainer lDefinedBlockParams;	//key is objectID, second inner key is Parameter Name
+	typeMapObjectsBlockParameterContainer lCustomBlockParams;		//key is objectID, second inner key is Parameter Name
 };
 
 //!  The cBlockStructure class. 
@@ -378,6 +458,14 @@ public slots:
 	 * @return a boolean value determining whether the new cLoopStructure structure could be inserted.
 	 */	
 	bool insertLoop(cLoopStructure *cLoop);
+	//! \brief insertObjectParameter slot.
+	/*!  This function inserts a new cBlockParameterStructure in the block for a specified object by referring to it's object id.
+	* @param nObjectID a integer value holding the Object ID for the cBlockParameterStructure that should be inserted.
+	* @param cBlockParameter a pointer to a cBlockParameterStructure that should be inserted.
+	* @param bIsCustom a boolean value determining whether the parameter is a custom parameter (default=false).
+	* @return a boolean value determining whether the new cBlockParameterStructure structure could be inserted.
+	*/
+	bool insertObjectParameter(int nObjectID, cBlockParameterStructure *cBlockParameter, bool bIsCustom = false);
 	//! \brief getNextClosestLoopIDByFromID slot.
 	/*!  This function returns a pointer to the next first cLoopStructureloop where the loop ID value is bigger then the provided loop ID.
 	 * @param startLoopID a integer value determining the value for the requested cLoopStructureloop where the loop ID value is bigger then this value.
@@ -401,6 +489,9 @@ public slots:
 	 * @return a integer value holding the amount of defined cLoopStructure structures.
 	 */		
 	int getLoopCount() const {return pSharedData->lLoops.count();};
+
+public:
+	typeMapObjectsBlockParameterContainer *getParameterList(const bool &bIsCustom = false);
 
 private:
 	bool Initialize();
@@ -622,36 +713,6 @@ public slots:
 	 * @return a string value containing the requested Method Parameter Value.
 	 */	
 	QString getMethodParameterValue() const {return sMethodParameterValue;};
-	
-	////! \brief methodTypeStringToInteger slot.
-	///*!  This function returns from the provided Method Type String the corresponding Method Type Integer value, see ExperimentStructuresNameSpace::MethodType.
-	// * @param sValue a string value holding the new Method Type.
-	// * @return a integer value containing the requested Method Type.
-	// */	
-	//static int methodTypeStringToInteger(const QString &sValue)
-	//{
-	//	if(sValue.toLower() == METHOD_TYPE_SIGNAL_TAG)
-	//		return ExperimentStructuresNameSpace::MethodType::METHOD_TYPE_SIGNAL;
-	//	else if(sValue.toLower() == METHOD_TYPE_SLOT_TAG)
-	//		return ExperimentStructuresNameSpace::MethodType::METHOD_TYPE_SLOT;
-	//	else
-	//		return ExperimentStructuresNameSpace::MethodType::METHOD_TYPE_UNDEFINED;
-	//};
-
-	////! \brief methodTypeToString slot.
-	///*!  This function returns from the provided Method Type the corresponding Method Type String value, see ExperimentStructuresNameSpace::MethodType.
-	// * @param sValue a integer value holding the Method Type.
-	// * @return a string value containing the requested corresponding Method Type value as string.
-	// */	
-	//static QString methodTypeToString(const int &nValue)
-	//{
-	//	if(nValue == ExperimentStructuresNameSpace::MethodType::METHOD_TYPE_SIGNAL)
-	//		return METHOD_TYPE_SIGNAL_TAG;
-	//	else if(nValue == ExperimentStructuresNameSpace::MethodType::METHOD_TYPE_SLOT)
-	//		return METHOD_TYPE_SLOT_TAG;
-	//	else
-	//		return "Undefined";
-	//};
 
 private:
 	bool Initialize();
@@ -767,7 +828,6 @@ public slots:
 	 * @return a list containing the the inserted Method Parameters (see ExperimentStructuresNameSpace::cMethodParameterStructure).
 	 */	
 	QList<cMethodParameterStructure*> getMethodParameterList() const {return mapParamIDtoParamStruct.values();};
-
 	//! \brief methodTypeStringToInteger slot.
 	/*!  This function returns from the provided Method Type String the corresponding Method Type Integer value, see ExperimentStructuresNameSpace::MethodType.
 	 * @param sValue a string value holding the new Method Type.
@@ -902,6 +962,8 @@ public:
 	cExperimentStructure_SharedData(const cExperimentStructure_SharedData &other);
 	~cExperimentStructure_SharedData();
 
+	void clearInternalDataStructures();
+
 	ExperimentStructuresNameSpace::ExperimentRunState CurrentExperiment_RunState;			//Only for internal usage
 	ExperimentStructuresNameSpace::strcExperimentStructureState currentExperimentState;
 	QScriptEngine* currentScriptEngine;
@@ -969,6 +1031,7 @@ public:
 	static void experimentStructureStateFromScriptValue(const QScriptValue &obj, ExperimentStructuresNameSpace::strcExperimentStructureState &s);
 	cBlockStructure* getNextClosestBlockNumberByFromNumber(const int &startBlockNumber); 
 	QList<cObjectStructure*> &getObjectList();
+	QList<cBlockStructure*> &getBlockList();
 	cBlockStructure getCurrentBlock(bool &bHasCurrBlock) const;//This doesn't work within the script, see reference...
 
 public slots:
@@ -977,7 +1040,11 @@ public slots:
 	//! \brief resetExperiment slot.
 	/*!  This function resets the current Experiment Structure state, see ExperimentStructuresNameSpace::strcExperimentStructureState.
 	 */
-	void resetExperiment() {resetExperimentStateStruct(&pSharedData->currentExperimentState);};
+	void resetExperimentState() {resetExperimentStateStruct(&pSharedData->currentExperimentState);};
+	//! \brief clearExperiment slot.
+	/*!  This function removes all settings in the current Experiment Structure.
+	*/
+	void clearExperiment();
 	//! \brief getCurrentExperimentState slot.
 	/*!  This function returns a copy of the current Experiment Structure state, see ExperimentStructuresNameSpace::strcExperimentStructureState.
 	 * @return a strcExperimentStructureState structure .
@@ -1052,16 +1119,28 @@ public slots:
 	 * @return a pointer to a cMethodConnectionStructure Structure List.
 	 */	
 	QList<cMethodConnectionStructure*> *getObjectMethodConnectionList(const int &nObjectID);
-
+	//! \brief insertObjectInitialization slot.
+	/*!  This function inserts a new cMethodStructure structure initialization method in the current Experiment Structure.
+	* @param pObjectInitialization a pointer to a cMethodStructure that needs to be inserted.
+	* @return a boolean value determining whether the function executed successfully.
+	*/
 	bool insertObjectInitialization(cMethodStructure *pObjectInitialization);
-
+	//! \brief getObjectInitializationList slot.
+	/*!  This function returns a pointer to a cMethodStructure List containing all initialization methods for a specified object ID.
+	* @return a pointer to a cMethodStructure Structure List.
+	*/
 	QList<cMethodStructure*> *getObjectInitializationList(const int &nObjectID);
-
-	bool insertObjectFinalization(cMethodStructure *pObjectInitialization);
-
+	//! \brief insertObjectFinalization slot.
+	/*!  This function inserts a new cMethodStructure structure finalization method in the current Experiment Structure.
+	* @param pObjectFinalization a pointer to a cMethodStructure that needs to be inserted.
+	* @return a boolean value determining whether the function executed successfully.
+	*/
+	bool insertObjectFinalization(cMethodStructure *pObjectFinalization);
+	//! \brief getObjectFinalizationList slot.
+	/*!  This function returns a pointer to a cMethodStructure List containing all finalization methods for a specified object ID.
+	* @return a pointer to a cMethodStructure Structure List.
+	*/
 	QList<cMethodStructure*> *getObjectFinalizationList(const int &nObjectID);
-
-
 	//! \brief getBlockPointerByID slot.
 	/*!  This function returns a pointer to a cBlockStructure identified by a block ID.
 	 * @param nBlockID a integer value defining the block ID from the requested Block pointer.
@@ -1114,6 +1193,7 @@ Q_DECLARE_METATYPE(cObjectStructure*)
 Q_DECLARE_METATYPE(cLoopStructure*)
 Q_DECLARE_METATYPE(cMethodConnectionStructure*)
 Q_DECLARE_METATYPE(cMethodParameterStructure*)
+Q_DECLARE_METATYPE(cBlockParameterStructure*)
 Q_DECLARE_METATYPE(cMethodStructure*)
 
 #endif // EXPERIMENTSTRUCTURES_H

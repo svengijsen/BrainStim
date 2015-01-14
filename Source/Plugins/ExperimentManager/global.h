@@ -1,5 +1,5 @@
 //ExperimentManagerplugin
-//Copyright (C) 2014  Sven Gijsen
+//Copyright (C) 2015  Sven Gijsen
 //
 //This file is part of BrainStim.
 //BrainStim is free software: you can redistribute it and/or modify
@@ -123,9 +123,9 @@ namespace ExperimentManagerNameSpace
 			bIsCustom = false;
 		}	
 		QString sValue;		 //!< A String that stores the value of the parameter
-		bool bHasChanged;    //!< A Boolean value determing wheter the parameter has been changed since it's initialization
-		bool bIsInitialized; //!< A Boolean value determing wheter the parameter already has been initialized
-		bool bIsCustom;		 //!< A Boolean value determing wheter the parameter is defined by the is custom (defined by the user)
+		bool bHasChanged;    //!< A Boolean value determining whether the parameter has been changed since it's initialization
+		bool bIsInitialized; //!< A Boolean value determining whether the parameter already has been initialized
+		bool bIsCustom;		 //!< A Boolean value determining whether the parameter is defined by the is custom (defined by the user)
 	};
 
 	/*! Creates a type name for strcParsedParameterDefinition */ 
@@ -189,6 +189,8 @@ namespace ExperimentManagerNameSpace
 	#define CEXPERIMENTSTRUCTURESTATE_NAME			"cExperimentStructureState"
 	#define CMETHODCONNECTIONSTRUCTURE_NAME			"cMethodConnectionStructure"
 	#define CMETHODSTRUCTURE_NAME					"cMethodStructure"
+	#define CMETHODPARAMETERSTRUCTURE_NAME			"cMethodParameterStructure"
+	#define CBLOCKPARAMETERSTRUCTURE_NAME			"cBlockParameterStructure"
 	#define CBLOCKSTRUCTURE_NAME					"cBlockStructure"
 	#define COBJECTSTRUCTURE_NAME					"cObjectStructure"
 	#define CLOOPSTRUCTURE_NAME						"cLoopStructure"

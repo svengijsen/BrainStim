@@ -1,5 +1,5 @@
 //ExperimentManagerplugin
-//Copyright (C) 2014  Sven Gijsen
+//Copyright (C) 2015  Sven Gijsen
 //
 //This file is part of BrainStim.
 //BrainStim is free software: you can redistribute it and/or modify
@@ -49,6 +49,18 @@ cBlockStructure_SharedData::cBlockStructure_SharedData(const cBlockStructure_Sha
 			lLoops.append(other.lLoops[i]);
 		}
 	}
+
+	QMapIterator<int, typeMapBlockParameterContainer> iterDefined(other.lDefinedBlockParams);
+	while (iterDefined.hasNext()) {
+		iterDefined.next();
+		lDefinedBlockParams.insert(iterDefined.key(), iterDefined.value());
+	}
+
+	QMapIterator<int, typeMapBlockParameterContainer> iterCustom(other.lCustomBlockParams);
+	while (iterCustom.hasNext()) {
+		iterCustom.next();
+		lCustomBlockParams.insert(iterCustom.key(), iterCustom.value());
+	}
 }
 
 cBlockStructure_SharedData::~cBlockStructure_SharedData()
@@ -62,6 +74,28 @@ cBlockStructure_SharedData::~cBlockStructure_SharedData()
 		}
 		lLoops.clear();
 	}
+
+	QMapIterator<int, typeMapBlockParameterContainer> iterDefined(lDefinedBlockParams);
+	while (iterDefined.hasNext()) {
+		iterDefined.next();
+		QMapIterator<QString, cBlockParameterStructure*> iterDefinedInner(iterDefined.value());
+		while (iterDefinedInner.hasNext()) {
+			iterDefinedInner.next();
+			delete iterDefinedInner.value();
+		}
+	}
+	lDefinedBlockParams.clear();
+
+	QMapIterator<int, typeMapBlockParameterContainer> iterCustom(lCustomBlockParams);
+	while (iterCustom.hasNext()) {
+		iterCustom.next();
+		QMapIterator<QString, cBlockParameterStructure*> iterCustomInner(iterCustom.value());
+		while (iterCustomInner.hasNext()) {
+			iterCustomInner.next();
+			delete iterCustomInner.value();
+		}
+	}
+	lCustomBlockParams.clear();
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -162,6 +196,47 @@ bool cBlockStructure::insertLoop(cLoopStructure *cLoop)
 		return true;
 	}
 	return false;
+}
+
+bool cBlockStructure::insertObjectParameter(int nObjectID, cBlockParameterStructure *cBlockParameter, bool bIsCustom)
+{
+	if (bIsCustom)
+	{
+		if (pSharedData->lCustomBlockParams.contains(nObjectID))
+		{
+			typeMapObjectsBlockParameterContainer::iterator iterCustom;
+			for (iterCustom = pSharedData->lCustomBlockParams.begin(); iterCustom != pSharedData->lCustomBlockParams.end(); ++iterCustom)
+			{
+				if (iterCustom.key() == nObjectID)
+					iterCustom.value().insert(cBlockParameter->getBlockParameterName(), cBlockParameter);
+			}
+		}
+		else
+		{
+			typeMapBlockParameterContainer mapNewCustomParam;
+			mapNewCustomParam.insert(cBlockParameter->getBlockParameterName(), cBlockParameter);
+			pSharedData->lCustomBlockParams.insert(nObjectID, mapNewCustomParam);
+		}
+	}
+	else
+	{
+		if (pSharedData->lDefinedBlockParams.contains(nObjectID))
+		{
+			typeMapObjectsBlockParameterContainer::iterator iterDefined;
+			for (iterDefined = pSharedData->lDefinedBlockParams.begin(); iterDefined != pSharedData->lDefinedBlockParams.end(); ++iterDefined)
+			{
+				if (iterDefined.key() == nObjectID)
+					iterDefined.value().insert(cBlockParameter->getBlockParameterName(), cBlockParameter);
+			}
+		}
+		else
+		{
+			typeMapBlockParameterContainer mapNewDefinedParam;
+			mapNewDefinedParam.insert(cBlockParameter->getBlockParameterName(), cBlockParameter);
+			pSharedData->lDefinedBlockParams.insert(nObjectID, mapNewDefinedParam);
+		}
+	}
+	return true;
 }
 
 cLoopStructure *cBlockStructure::resetToFirstFreeLoopPointer()
@@ -327,6 +402,14 @@ cLoopStructure* cBlockStructure::getNextClosestLoopIDByFromLoopNumber(const int 
 		return pSharedData->lLoops[closestIndex];
 	else
 		return NULL;
+}
+
+typeMapObjectsBlockParameterContainer *cBlockStructure::getParameterList(const bool &bIsCustom)
+{
+	if (bIsCustom)
+		return &pSharedData->lCustomBlockParams;
+	else
+		return &pSharedData->lDefinedBlockParams;
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -727,6 +810,80 @@ bool cMethodParameterStructure::makeThisAvailableInScript(QString strObjectScrip
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+/*! \brief The cBlockParameterStructure constructor.
+*
+*   No parameter
+*/
+cBlockParameterStructure::cBlockParameterStructure()
+{
+	currentScriptEngine = NULL;
+	this->Initialize();
+}
+
+cBlockParameterStructure::cBlockParameterStructure(const cBlockParameterStructure& other)
+{
+	currentScriptEngine = other.currentScriptEngine;
+	nBlockParameterID = other.nBlockParameterID;
+	sBlockParameterValue = other.sBlockParameterValue;
+	sBlockParameterName = other.sBlockParameterName;
+}
+
+bool cBlockParameterStructure::Initialize()
+{
+	nBlockParameterID = -1;
+	sBlockParameterValue = "";
+	sBlockParameterName = "";
+	return true;
+}
+
+cBlockParameterStructure::cBlockParameterStructure(const int &nBlockParamId, const QString &sBlockParamName, const QString &sBlockParamValue)
+{
+	currentScriptEngine = NULL;
+	nBlockParameterID = nBlockParamId;
+	sBlockParameterName = sBlockParamName;
+	sBlockParameterValue = sBlockParamValue;
+};
+
+/*! \brief The cBlockParameterStructure destructor.
+*
+*   You do not need call the destructor.
+*	The BrainStim script engine automatically performs the garbage collection after you set the object to NULL and the script ends
+*/
+cBlockParameterStructure::~cBlockParameterStructure()
+{
+}
+
+QScriptValue cBlockParameterStructure::ctor__cBlockParameterStructure(QScriptContext* context, QScriptEngine* engine)
+{
+	Q_UNUSED(context);
+	return engine->newQObject(new cBlockParameterStructure(), QScriptEngine::ScriptOwnership);//Now call the below real Object constructor
+}
+
+QScriptValue cBlockParameterStructure::BlockParameterStructureToScriptValue(QScriptEngine *engine, cBlockParameterStructure* const &s)
+{
+	QScriptValue obj = engine->newQObject(s);
+	return obj;
+}
+
+void cBlockParameterStructure::BlockParameterStructureFromScriptValue(const QScriptValue &obj, cBlockParameterStructure* &s)
+{
+	s = qobject_cast<cBlockParameterStructure*>(obj.toQObject());
+}
+
+bool cBlockParameterStructure::makeThisAvailableInScript(QString strObjectScriptName, QObject *engine)
+{
+	if (engine)
+	{
+		currentScriptEngine = reinterpret_cast<QScriptEngine *>(engine);
+		QScriptValue objectValue = currentScriptEngine->newQObject(this);
+		currentScriptEngine->globalObject().setProperty(strObjectScriptName, objectValue);
+		return true;
+	}
+	return false;
+}
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 /*! \brief The cMethodStructure constructor.
 *
 *   No parameter
@@ -826,20 +983,7 @@ bool cMethodStructure::insertMethodParameter(cMethodParameterStructure *pMethodP
 
 cExperimentStructure_SharedData::cExperimentStructure_SharedData()
 {
-	currentScriptEngine = NULL;
-	currentBlockPointer = NULL;
-	currentLoopPointer = NULL;
-	firstBlockPointer = NULL;
-	nExperimentID = 0;
-	sExperimentName = "Experiment " + QString::number(nExperimentID);
-	bDebugMode = false;
-	CurrentExperiment_RunState = ExperimentStructuresNameSpace::ES_IDLE;
-	currentExperimentState.Experiment_ExternalTrigger = ExperimentStructuresNameSpace::RA_REINITIALIZE;
-	currentExperimentState.CurrentBlock_BlockID = ExperimentStructuresNameSpace::RA_REINITIALIZE;
-	currentExperimentState.CurrentBlock_ExternalTrigger = ExperimentStructuresNameSpace::RA_REINITIALIZE;
-	currentExperimentState.CurrentBlock_InternalTrigger = ExperimentStructuresNameSpace::RA_REINITIALIZE;
-	currentExperimentState.CurrentBlock_LoopID = ExperimentStructuresNameSpace::RA_REINITIALIZE;
-	currentExperimentState.CurrentBlock_TrialNumber = ExperimentStructuresNameSpace::RA_REINITIALIZE;
+	clearInternalDataStructures();
 }
 
 cExperimentStructure_SharedData::cExperimentStructure_SharedData(const cExperimentStructure_SharedData &other) : QSharedData(other)
@@ -923,29 +1067,48 @@ cExperimentStructure_SharedData::cExperimentStructure_SharedData(const cExperime
 
 cExperimentStructure_SharedData::~cExperimentStructure_SharedData()
 {	
-	if(lBlocks.isEmpty() == false)
+	clearInternalDataStructures();
+}
+
+void cExperimentStructure_SharedData::clearInternalDataStructures()
+{
+	currentBlockPointer = NULL;
+	currentLoopPointer = NULL;
+	firstBlockPointer = NULL;
+	nExperimentID = 0;
+	sExperimentName = "Experiment " + QString::number(nExperimentID);
+	bDebugMode = false;
+	CurrentExperiment_RunState = ExperimentStructuresNameSpace::ES_IDLE;
+	currentExperimentState.Experiment_ExternalTrigger = ExperimentStructuresNameSpace::RA_REINITIALIZE;
+	currentExperimentState.CurrentBlock_BlockID = ExperimentStructuresNameSpace::RA_REINITIALIZE;
+	currentExperimentState.CurrentBlock_ExternalTrigger = ExperimentStructuresNameSpace::RA_REINITIALIZE;
+	currentExperimentState.CurrentBlock_InternalTrigger = ExperimentStructuresNameSpace::RA_REINITIALIZE;
+	currentExperimentState.CurrentBlock_LoopID = ExperimentStructuresNameSpace::RA_REINITIALIZE;
+	currentExperimentState.CurrentBlock_TrialNumber = ExperimentStructuresNameSpace::RA_REINITIALIZE;
+
+	if (lBlocks.isEmpty() == false)
 	{
-		for (int i=0;i<lBlocks.count();i++)
+		for (int i = 0; i < lBlocks.count(); i++)
 		{
 			delete lBlocks[i];
 			lBlocks[i] = NULL;
 		}
 		lBlocks.clear();
 	}
-	if(lObjects.isEmpty() == false)
+	if (lObjects.isEmpty() == false)
 	{
-		for (int i=0;i<lObjects.count();i++)
+		for (int i = 0; i < lObjects.count(); i++)
 		{
 			delete lObjects[i];
 			lObjects[i] = NULL;
 		}
 		lObjects.clear();
 	}
-	if(mObjectIdToMethodConnections.isEmpty() == false)
+	if (mObjectIdToMethodConnections.isEmpty() == false)
 	{
-		for (int i=0;i<mObjectIdToMethodConnections.count();i++)
+		for (int i = 0; i < mObjectIdToMethodConnections.count(); i++)
 		{
-			for (int j=0;j<mObjectIdToMethodConnections[i].count();j++)
+			for (int j = 0; j < mObjectIdToMethodConnections[i].count(); j++)
 			{
 				delete mObjectIdToMethodConnections[i].at(j);
 			}
@@ -953,11 +1116,11 @@ cExperimentStructure_SharedData::~cExperimentStructure_SharedData()
 		}
 		mObjectIdToMethodConnections.clear();
 	}
-	if(mObjectIdToInitializations.isEmpty() == false)
+	if (mObjectIdToInitializations.isEmpty() == false)
 	{
-		for (int i=0;i<mObjectIdToInitializations.count();i++)
+		for (int i = 0; i < mObjectIdToInitializations.count(); i++)
 		{
-			for (int j=0;j<mObjectIdToInitializations[i].count();j++)
+			for (int j = 0; j < mObjectIdToInitializations[i].count(); j++)
 			{
 				delete mObjectIdToInitializations[i].at(j);
 			}
@@ -965,11 +1128,11 @@ cExperimentStructure_SharedData::~cExperimentStructure_SharedData()
 		}
 		mObjectIdToInitializations.clear();
 	}
-	if(mObjectIdToFinalizations.isEmpty() == false)
+	if (mObjectIdToFinalizations.isEmpty() == false)
 	{
-		for (int i=0;i<mObjectIdToFinalizations.count();i++)
+		for (int i = 0; i < mObjectIdToFinalizations.count(); i++)
 		{
-			for (int j=0;j<mObjectIdToFinalizations[i].count();j++)
+			for (int j = 0; j < mObjectIdToFinalizations[i].count(); j++)
 			{
 				delete mObjectIdToFinalizations[i].at(j);
 			}
@@ -1010,7 +1173,7 @@ bool cExperimentStructure::Initialize()
 	pSharedData->sExperimentName = "Experiment " + QString::number(pSharedData->nExperimentID);
 	pSharedData->bDebugMode = false;
 	pSharedData->CurrentExperiment_RunState = ExperimentStructuresNameSpace::ES_IDLE;
-	resetExperiment();
+	resetExperimentState();
 	return true;
 }
 
@@ -1029,6 +1192,13 @@ QScriptValue cExperimentStructure::experimentStructureToScriptValue(QScriptEngin
 void cExperimentStructure::experimentStructureFromScriptValue(const QScriptValue &obj, cExperimentStructure* &s)
 {
 	s = qobject_cast<cExperimentStructure*>(obj.toQObject());
+}
+
+void cExperimentStructure::clearExperiment()
+{
+	resetExperimentState();
+	if (pSharedData)
+		pSharedData->clearInternalDataStructures();
 }
 
 void cExperimentStructure::resetExperimentStateStruct(ExperimentStructuresNameSpace::strcExperimentStructureState *strcExpState)
@@ -1134,6 +1304,11 @@ bool cExperimentStructure::isUnusedObjectID(const int &nObjectID) const
 QList<cObjectStructure*> &cExperimentStructure::getObjectList()
 {
 	return pSharedData->lObjects;
+}
+
+QList<cBlockStructure*> &cExperimentStructure::getBlockList()
+{
+	return pSharedData->lBlocks;
 }
 
 cBlockStructure* cExperimentStructure::getNextClosestBlockNumberByFromNumber(const int &startBlockNumber)

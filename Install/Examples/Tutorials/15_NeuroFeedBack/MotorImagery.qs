@@ -1,11 +1,11 @@
 //Includes
 Include("QtScript/RealTimeFeedback.qs"); //Do not use a backslash (\) in a string, use forward slashes for a directory definition!//../../include/
 //Prepare Output Window
-StimulGL.addOutputWindow("MotorImagery");
-StimulGL.clearOutputWindow("MotorImagery");
+BrainStim.addOutputWindow("MotorImagery");
+BrainStim.clearOutputWindow("MotorImagery");
 //Configuration
 //Override existing variables to customize the experiment
-BasicExperiment.sScriptRootPath = StimulGL.getActiveDocumentFileLocation();
+BasicExperiment.sScriptRootPath = BrainStim.getActiveDocumentFileLocation();
 BasicExperiment.sExmlFilePath = BasicExperiment.sScriptRootPath + "/" + "MotorImagery.exml";
 BasicExperiment.sQmlFilePath = BasicExperiment.sScriptRootPath + "/" + "MotorImagery.qml";
 BasicExperiment.nTestModeTriggerDuration = 2000;
@@ -47,30 +47,30 @@ BasicExperiment.__proto__.ExperimentStateChanged = function(currentState, sDateT
 	BasicExperiment.LogFunctionSignature("MotorImagery","ExperimentStateChanged", arguments, false);
 	if(currentState == ExperimentManager.ExperimentState.ExperimentManager_Started)
 	{
-		StimulGL.write2OutputWindow(BasicExperiment.GetCurrentDateTimeStamp() + ";" + "Experiment Started(" + BasicExperiment.ExperimentManagerObj.getCurrentDateTimeStamp("yyyy-MM-dd, HH::mm::ss.zzz") + ")", "MotorImagery");	
+		BrainStim.write2OutputWindow(BasicExperiment.GetCurrentDateTimeStamp() + ";" + "Experiment Started(" + BasicExperiment.ExperimentManagerObj.getCurrentDateTimeStamp("yyyy-MM-dd, HH::mm::ss.zzz") + ")", "MotorImagery");	
 	}	
 	else if(currentState == ExperimentManager.ExperimentState.ExperimentManager_Stopped)
 	{
 		var bOverwrite = true;
-		StimulGL.write2OutputWindow(BasicExperiment.GetCurrentDateTimeStamp() + ";" + "Experiment Stopped(" + BasicExperiment.ExperimentManagerObj.getCurrentDateTimeStamp("yyyy-MM-dd, HH::mm::ss.zzz") + ")", "MotorImagery");	
-		StimulGL.saveOutputWindow(BasicExperiment.sScriptRootPath + "/" + BasicExperiment.ExperimentManagerObj.getCurrentDateTimeStamp() + "_MotorImagery.txt", bOverwrite , "MotorImagery");	
+		BrainStim.write2OutputWindow(BasicExperiment.GetCurrentDateTimeStamp() + ";" + "Experiment Stopped(" + BasicExperiment.ExperimentManagerObj.getCurrentDateTimeStamp("yyyy-MM-dd, HH::mm::ss.zzz") + ")", "MotorImagery");	
+		BrainStim.saveOutputWindow(BasicExperiment.sScriptRootPath + "/" + BasicExperiment.ExperimentManagerObj.getCurrentDateTimeStamp() + "_MotorImagery.txt", bOverwrite , "MotorImagery");	
 	}	
 }
 
 RealTimeFeedback.__proto__.executePostStep = function executePostStep(nTimePoint)
 {
 	Log("custom RealTimeFeedback.executePostStep");
-	StimulGL.write2OutputWindow("nTimePoint" + ";" + nTimePoint, "MotorImagery");	
+	BrainStim.write2OutputWindow("nTimePoint" + ";" + nTimePoint, "MotorImagery");	
 	if(CalculateAndStoreNewFeedBack(RealTimeFeedback.TBVExchangerObject.tGetMeanOfROI(0)))
 	{
 		var nTimeStamp = BasicExperiment.GetCurrentDateTimeStamp();
-		StimulGL.write2OutputWindow(nTimeStamp + ";" + "CalculateAndStoreNewFeedBack()" + ";" + _fMeanROI, "MotorImagery");	
+		BrainStim.write2OutputWindow(nTimeStamp + ";" + "CalculateAndStoreNewFeedBack()" + ";" + _fMeanROI, "MotorImagery");	
 	}
 }
 
 function CalculateAndStoreNewFeedBack(fRawValue)
 {
-	StimulGL.write2OutputWindow("CalculateAndStoreNewFeedBack(fRawValue) called" + ";" + fRawValue, "MotorImagery");
+	BrainStim.write2OutputWindow("CalculateAndStoreNewFeedBack(fRawValue) called" + ";" + fRawValue, "MotorImagery");
 	if(BasicExperiment.nCurrentExperimentStructureState.CurrentBlock_BlockID==0)
 	{
 		if (_baselineItemAmount == 2) 
@@ -113,7 +113,7 @@ if(_bTBVConnectResult)
 }
 else
 {
-	StimulGL.cleanupScript();
-	StimulGL.write2OutputWindow("TBV connectToServer() returned false, aborting!", "MotorImagery");	
+	BrainStim.cleanupScript();
+	BrainStim.write2OutputWindow("TBV connectToServer() returned false, aborting!", "MotorImagery");	
 }
 

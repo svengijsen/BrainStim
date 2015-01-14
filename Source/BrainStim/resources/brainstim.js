@@ -331,7 +331,7 @@ BrainStim_Information.prototype.GetComponentExtensionInterfaceVersionByIndexes =
 }
 
 BrainStim_Information.prototype.GetMainAppCopyrightString = function ()
-{ return 'Copyright (C) 2014'; }
+{ return 'Copyright (C) 2015'; }
 
 BrainStim_Information.prototype.GetMainAppCompanyName = function ()
 {	return 'MBIC, Maastricht Brain Imaging Center'; }

@@ -1,5 +1,5 @@
 //ExperimentManagerplugin
-//Copyright (C) 2014  Sven Gijsen
+//Copyright (C) 2015  Sven Gijsen
 //
 //This file is part of BrainStim.
 //BrainStim is free software: you can redistribute it and/or modify
@@ -312,7 +312,7 @@ void ExperimentEngine::incrementExternalTrigger()
 			unlockExperimentObject();
 			if(pExperimentManager)
 			{
-				pExperimentManager->getExperimentStructure()->resetExperiment();
+				pExperimentManager->getExperimentStructure()->resetExperimentState();
 				pExperimentManager->getExperimentStructure()->prepareExperiment();
 				pExperimentManager->getExperimentStructure()->incrementExternalTrigger();
 				emit ExperimentStructureChanged(0,0,0);
