@@ -188,6 +188,15 @@ bool cBlockStructure::isUnusedLoopID(const int &nLoopID) const
 	return true;
 }
 
+cLoopStructure *cBlockStructure::createLoop()
+{
+	cLoopStructure *tmpLoop = new cLoopStructure();
+	if (insertLoop(tmpLoop))
+		return tmpLoop;
+	else
+		return NULL;
+}
+
 bool cBlockStructure::insertLoop(cLoopStructure *cLoop)
 {
 	if(isUnusedLoopID(cLoop->getLoopID()))
@@ -1371,19 +1380,17 @@ int cExperimentStructure::getCurrentBlockIndex() const
 	return ExperimentStructuresNameSpace::OI_UNDEFINED;
 }
 
-cBlockStructure cExperimentStructure::getCurrentBlock(bool &bHasCurrBlock) const
+cBlockStructure *cExperimentStructure::getCurrentBlock() const
 {
 	if(pSharedData->lBlocks.isEmpty() == false)
 	{
 		int nFoundIndex = getCurrentBlockIndex();
 		if(nFoundIndex >= 0)
 		{
-			bHasCurrBlock = true;
-			return *pSharedData->lBlocks[nFoundIndex];
+			return pSharedData->lBlocks[nFoundIndex];
 		}
 	}
-	bHasCurrBlock = false;
-	return cBlockStructure();
+	return NULL;
 }
 
 bool cExperimentStructure::prepareStartBlock()
@@ -1419,6 +1426,19 @@ bool cExperimentStructure::isValidBlockPointer(cBlockStructure *cBlock) const
 			return true;
 	}
 	return false;
+}
+
+cBlockStructure *cExperimentStructure::createBlock()
+{
+	cBlockStructure *tmpBlock = new cBlockStructure();
+	int nTempBlockID = 0;
+	while (isUnusedBlockID(nTempBlockID) == false)
+		nTempBlockID++;
+	tmpBlock->setBlockID(nTempBlockID);
+	if (insertBlock(tmpBlock))
+		return tmpBlock;
+	else
+		return NULL;
 }
 
 bool cExperimentStructure::insertBlock(cBlockStructure *cBlock)
@@ -1470,6 +1490,15 @@ bool cExperimentStructure::isValidObjectPointer(cObjectStructure *cObject) const
 			return true;
 	}
 	return false;
+}
+
+cObjectStructure *cExperimentStructure::createObject()
+{
+	cObjectStructure *tmpObject = new cObjectStructure();
+	if (insertObject(tmpObject))
+		return tmpObject;
+	else
+		return NULL;
 }
 
 bool cExperimentStructure::insertObject(cObjectStructure *cObject)

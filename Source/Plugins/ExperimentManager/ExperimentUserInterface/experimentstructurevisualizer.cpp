@@ -241,6 +241,7 @@ void ExperimentStructureVisualizer::toggleViewState(const QString &sNewState)
 			{
 				gScene->setGraphViewState(EXPVIS_VIEWSTATE_BLOCKTRIALS);
 				drawGraph();
+				resizeStructureView(this->width(), this->height());
 			}
 		}
 		else if (sNewState == EXPGRAPH_VIEWSTATE_OBJECTS)
@@ -249,6 +250,7 @@ void ExperimentStructureVisualizer::toggleViewState(const QString &sNewState)
 			{
 				gScene->setGraphViewState(EXPVIS_VIEWSTATE_OBJECTS);
 				drawGraph();
+				resizeStructureView(this->width(), this->height());
 			}
 		}
 	}

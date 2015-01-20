@@ -973,10 +973,10 @@ void MainWindow::unregisterDockWidgets(CustomMDISubWindow* custSubWin)
 		foreach(QDockWidget* tmpDockWidget, lTmpDockWidgetList)
 		{
 			if (tmpDockWidget)
-				saveDockWidgetConfiguration(UI_SETTINGS_FILENAME, sTmpDocTypeString, tmpDockWidget);
+				saveDockWidgetConfiguration(sTmpDocTypeString, tmpDockWidget);
 		}
-		saveDockWidgetConfiguration(UI_SETTINGS_FILENAME, sTmpDocTypeString, debugLogDock);
-		saveWindowLayout(UI_SETTINGS_FILENAME, sTmpDocTypeString);
+		saveDockWidgetConfiguration(sTmpDocTypeString, debugLogDock);
+		saveWindowLayout(sTmpDocTypeString);
 	}
 }
 
@@ -1076,7 +1076,7 @@ bool MainWindow::registerDockWidget(QWidget *pMDIWindowSubWidget, QDockWidget *p
 				dArea = Qt::BottomDockWidgetArea;
 				//QString sTmpDocTypeString = DocManager->getDocTypeString(DocManager->getDocType(tmpMDISubWindow));
 				if (sTmpDocTypeString.isEmpty() == false)
-					loadSavedDockWidgetConfiguration(UI_SETTINGS_FILENAME, sTmpDocTypeString, pDockWidget, dArea);
+					loadSavedDockWidgetConfiguration(sTmpDocTypeString, pDockWidget, dArea);
 				addDockWidget(dArea, pDockWidget);
 				pDockWidget->show();
 				tabifyDockWidget(debugLogDock, pDockWidget);
@@ -1086,7 +1086,7 @@ bool MainWindow::registerDockWidget(QWidget *pMDIWindowSubWidget, QDockWidget *p
 				dArea = (Qt::DockWidgetArea)nDockWidgetAreaEnum;
 				if (sTmpDocTypeString.isEmpty() == false)
 				{
-					loadSavedDockWidgetConfiguration(UI_SETTINGS_FILENAME, sTmpDocTypeString, pDockWidget, dArea);
+					loadSavedDockWidgetConfiguration(sTmpDocTypeString, pDockWidget, dArea);
 					DocumentManager::strcDockLocation tmpDockLocation;
 					tmpDockLocation.dockArea = dArea;
 					tmpDockLocation.rGeometry = pDockWidget->geometry();
@@ -2053,7 +2053,7 @@ void MainWindow::createDockWindows()
 	//debugLogDock->setWidget(outputWindowList);
 	debugLogDock->setWidget(outputTabWidget);
 	Qt::DockWidgetArea dArea = Qt::BottomDockWidgetArea;
-	loadSavedDockWidgetConfiguration(UI_SETTINGS_FILENAME, MAINWINDOW_NAME, debugLogDock, dArea);
+	loadSavedDockWidgetConfiguration(MAINWINDOW_NAME, debugLogDock, dArea);
 	addDockWidget(dArea, debugLogDock);
 	//addDockWidget(Qt::BottomDockWidgetArea, testrr);//(Qt::RightDockWidgetArea, debugLogDock);
 	//viewMenu->addAction(debugLogDock->toggleViewAction());
@@ -2217,7 +2217,8 @@ void MainWindow::setupDynamicPlugins()
 				{
 					iDevice->fetchGlobalAppInfo();
 					QString sTmpInternalPluginName = iDevice->GetPluginInternalName();
-					bool bCustomConfFoundAndAdded = getPluginCustomConfigurationOptions(sTmpInternalPluginName);
+					//bool bCustomConfFoundAndAdded = 
+						getPluginCustomConfigurationOptions(sTmpInternalPluginName);
 					bInterfaceResolved = true;
 				}
 				else 
@@ -2227,7 +2228,8 @@ void MainWindow::setupDynamicPlugins()
 					{
 						iExtension->fetchGlobalAppInfo();
 						QString sTmpInternalPluginName = iExtension->GetPluginInternalName();
-						bool bCustomConfFoundAndAdded = getPluginCustomConfigurationOptions(sTmpInternalPluginName);
+						//bool bCustomConfFoundAndAdded = 
+							getPluginCustomConfigurationOptions(sTmpInternalPluginName);
 						bInterfaceResolved = true;
 					}				
 				}
@@ -2809,9 +2811,9 @@ void MainWindow::loadMainWindowLayout(const QString &sGroupSection)
 	Qt::DockWidgetArea tmpDockWidgetArea;
 	removeDockWidget(debugLogDock);
 	outputTabWidget->setGroupName(sGroupSection);
-	loadSavedDockWidgetConfiguration(UI_SETTINGS_FILENAME, sGroupSection, debugLogDock, tmpDockWidgetArea);
+	loadSavedDockWidgetConfiguration(sGroupSection, debugLogDock, tmpDockWidgetArea);
 	addRegisteredDockWidgets(tmpDockWidgetArea);
-	loadSavedWindowLayout(UI_SETTINGS_FILENAME, sGroupSection);
+	loadSavedWindowLayout(sGroupSection);
 }
 
 void MainWindow::onSubWindowDestroyed(CustomMDISubWindow* custSubWin)
@@ -3133,8 +3135,8 @@ void MainWindow::openFiles(const QString &fileToLoad, const QStringList &filesTo
 {
 	if (DocManager->count() == 0)
 	{
-		saveWindowLayout(UI_SETTINGS_FILENAME, MAINWINDOW_NAME);
-		saveDockWidgetConfiguration(UI_SETTINGS_FILENAME, MAINWINDOW_NAME, debugLogDock);
+		saveWindowLayout(MAINWINDOW_NAME);
+		saveDockWidgetConfiguration(MAINWINDOW_NAME, debugLogDock);
 	}
 	QStringList fileNames;
 	if ((fileToLoad.isNull()) && (filesToLoad.count() == 0))
@@ -3651,10 +3653,10 @@ void MainWindow::recoverLastScreenWindowSettings()
 {
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
-	loadSavedWindowLayout(UI_SETTINGS_FILENAME, MAINWINDOW_NAME);
+	loadSavedWindowLayout(MAINWINDOW_NAME);
 }
 
-void MainWindow::loadSavedDockWidgetConfiguration(const QString &sSettingsFileName, const QString &sGroupName, QDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea)
+void MainWindow::loadSavedDockWidgetConfiguration(const QString &sGroupName, QDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea)
 {
 	//QSettings *sUILayoutSettings = NULL;
 	QString tmpString;
@@ -3719,7 +3721,7 @@ void MainWindow::loadSavedDockWidgetConfiguration(const QString &sSettingsFileNa
 	//sUILayoutSettings->endGroup();
 }
 
-void MainWindow::saveDockWidgetConfiguration(const QString &sSettingsFileName, const QString &sGroupName, QDockWidget *dockWidget)
+void MainWindow::saveDockWidgetConfiguration(const QString &sGroupName, QDockWidget *dockWidget)
 {
 	//QSettings *sUILayoutSettings = NULL;
 	//if (hashUILayoutSettings.contains(sSettingsFileName))
@@ -3750,7 +3752,7 @@ void MainWindow::saveDockWidgetConfiguration(const QString &sSettingsFileName, c
 	}
 }
 
-void MainWindow::loadSavedWindowLayout(const QString &sSettingsFileName, const QString &sGroupName)
+void MainWindow::loadSavedWindowLayout(const QString &sGroupName)
 {
 	//QSettings *sUILayoutSettings = NULL;
 	//if (hashUILayoutSettings.contains(sSettingsFileName))
@@ -3790,7 +3792,7 @@ void MainWindow::loadSavedWindowLayout(const QString &sSettingsFileName, const Q
 	}
 }
 
-void MainWindow::saveWindowLayout(const QString &sSettingsFileName, const QString &sGroupName)
+void MainWindow::saveWindowLayout(const QString &sGroupName)
 {
 	//QSettings *sUILayoutSettings = NULL;
 	//if (hashUILayoutSettings.contains(sSettingsFileName))
@@ -3937,8 +3939,8 @@ void MainWindow::writeMainWindowSettings()
 {
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
-	saveWindowLayout(UI_SETTINGS_FILENAME, MAINWINDOW_NAME);
-	saveDockWidgetConfiguration(UI_SETTINGS_FILENAME, MAINWINDOW_NAME, debugLogDock);
+	saveWindowLayout(MAINWINDOW_NAME);
+	saveDockWidgetConfiguration(MAINWINDOW_NAME, debugLogDock);
 }
 
 bool MainWindow::closeSubWindow(bool bAutoSaveChanges)

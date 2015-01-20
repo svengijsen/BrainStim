@@ -452,6 +452,11 @@ public slots:
 	 * @param nCurrentLoopCounter a integer value that holds the first outer loop number that should not be reset by this function.
 	 */		
 	void resetAllInnerLoopCounters(const int &nCurrentLoopCounter);
+	//! \brief createLoop slot.
+	/*!  This function constructs a new cLoopStructure structure object and inserts it in the current Experiment Structure Block.
+	* @return a pointer to a cLoopStructure of the inserted object, if unsuccessful then it returns null.
+	*/
+	cLoopStructure *createLoop();
 	//! \brief insertLoop slot.
 	/*!  This function inserts a new cLoopStructure in the block.
 	 * @param cLoop a pointer to a cLoopStructure that should be inserted.
@@ -1032,7 +1037,8 @@ public:
 	cBlockStructure* getNextClosestBlockNumberByFromNumber(const int &startBlockNumber); 
 	QList<cObjectStructure*> &getObjectList();
 	QList<cBlockStructure*> &getBlockList();
-	cBlockStructure getCurrentBlock(bool &bHasCurrBlock) const;//This doesn't work within the script, see reference...
+	cBlockStructure *getCurrentBlock() const;//This doesn't work within the script, see reference...
+	bool insertBlock(cBlockStructure *cBlock);//Moved to here because auto script cleanup tries to delete the cBlockStructure object while its parent is the experiment structure.
 
 public slots:
 	bool makeThisAvailableInScript(QString strObjectScriptName = "", QObject *engine = NULL);//To make the objects (e.g. defined in a *.exml file) available in the script
@@ -1095,12 +1101,17 @@ public slots:
 	/*!  This function starts the current Experiment and will then wait for an external trigger, see cExperimentStructure::incrementExternalTrigger().
 	 */	
 	void startExperiment() {ExperimentStart();};
+	//! \brief createBlock slot.
+	/*!  This function constructs a new cBlockStructure structure object and inserts it in the current Experiment Structure.
+	* @return a pointer to a cBlockStructure of the inserted block, if unsuccessful then it returns null.
+	*/
+	cBlockStructure *createBlock();
 	//! \brief insertBlock slot.
 	/*!  This function inserts a new cBlockStructure structure in the current Experiment Structure.
-	 * @param cBlock a pointer to a cBlockStructure that needs to be inserted.
-	 * @return a boolean value determining whether the function executed successfully.
-	 */	
-	bool insertBlock(cBlockStructure *cBlock);
+	* @param cBlock a pointer to a cBlockStructure that needs to be inserted.
+	* @return a boolean value determining whether the function executed successfully.
+	*/
+	cObjectStructure *createObject();
 	//! \brief insertObject slot.
 	/*!  This function inserts a new cObjectStructure structure in the current Experiment Structure.
 	 * @param cObject a pointer to a cObjectStructure that needs to be inserted.

@@ -203,7 +203,6 @@ namespace ExperimentManagerNameSpace
 	//#define MIN_SCREEN_UPDATE_TIME				10
 	//#define MAX_SCREEN_UPDATE_TIME				16.6667f
 
-	#define UI_SETTINGS_FILENAME					"ui_settings.ini"
 	#define RETINOTOPYMAPPER_PARAMDEF_PATH			":/resources/" + QString(RETINOTOPYMAPPER_NAME).toLower() + ".xdef"
 	#define QML2VIEWER_PARAMDEF_PATH				":/resources/" + QString(QML2VIEWER_NAME).toLower() + ".xdef"
 	#define EXPERIMENT_PARAMDEF_PATH				":/resources/experimentnode.xdef"

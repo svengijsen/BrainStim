@@ -29,7 +29,6 @@ public:
 	Q_INVOKABLE QVariant invokeScriptEngine(const QString &sScriptCode);
 	Q_INVOKABLE QString getQMLFileName();
 	Q_INVOKABLE QString getCurrentDirectory();
-	//Q_INVOKABLE QString doSomething();
 	Q_INVOKABLE void writeToOutputWindow(const QString &sMessage);
 
 private:

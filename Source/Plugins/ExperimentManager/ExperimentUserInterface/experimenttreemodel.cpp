@@ -29,6 +29,7 @@ ExperimentTreeModel::ExperimentTreeModel(QObject *parent) : QStandardItemModel(p
 	doc = NULL;
 	root = NULL;
     rootItem = NULL;
+	semaSignalModified = new QSemaphore(0);
 
 	nXMLDocumentVersion.major = 1;
 	nXMLDocumentVersion.minor = 0;
@@ -42,7 +43,9 @@ ExperimentTreeModel::ExperimentTreeModel(QObject *parent) : QStandardItemModel(p
 
 ExperimentTreeModel::~ExperimentTreeModel()
 {
-	reset();
+	reset(true);
+	if (semaSignalModified)
+		delete semaSignalModified;
 }
 
 ExperimentTreeModel::ExperimentTreeModel(const ExperimentTreeModel& other)
@@ -75,6 +78,26 @@ void ExperimentTreeModel::experimentTreeModelFromScriptValue(const QScriptValue 
 //		return Qt::AlignRight;
 //	return QStandardItemModel::data(index, role);
 //}
+void ExperimentTreeModel::enableModifiedSignaling(const bool &bEnable)
+{
+	if (bEnable)
+	{
+		semaSignalModified->acquire(1);
+	}
+	else
+	{
+		semaSignalModified->release(1);
+	}
+}
+
+void ExperimentTreeModel::emitModifiedSignal(const bool &bForce)
+{
+	int nAvailable = semaSignalModified->available();
+	if (bForce || ((nAvailable <= 1)))
+	{
+		emit modelModified();
+	}
+}
 
 bool ExperimentTreeModel::fillModel()
 {
@@ -155,6 +178,7 @@ void ExperimentTreeModel::recursiveRead(QDomNode dNode, ExperimentTreeItem *item
 
 bool ExperimentTreeModel::saveNewData(const int &nBlockID, const int &nObjectID, const QString &sParamName, const QString &sParamValue, const bool &bIsCustomParameter)
 {
+	enableModifiedSignaling(false);
 	QStringList sFilterList;
 	TreeItemDefinition tmpTreeItemDef;
 	int nTempObjectID;
@@ -191,8 +215,10 @@ bool ExperimentTreeModel::saveNewData(const int &nBlockID, const int &nObjectID,
 						foreach (ExperimentTreeItem* tmpItem5 ,list5)
 						{
 							this->saveNewData(sParamName,sParamValue,QModelIndex(),tmpItem5);
+							enableModifiedSignaling(true);
 							return true;
 						}
+						enableModifiedSignaling(true);
 						return false;
 					}
 				}
@@ -209,8 +235,10 @@ bool ExperimentTreeModel::saveNewData(const int &nBlockID, const int &nObjectID,
 					tmpNewObjectItem->appendRow(tmpNewParametersSectionItem);
 					tmpItem3->appendRow(tmpNewObjectItem);
 					bool bRetryResult = saveNewData(nBlockID, nObjectID, sParamName, sParamValue, bIsCustomParameter);
+					enableModifiedSignaling(true);
 					return bRetryResult;
 			}
+			enableModifiedSignaling(true);
 			return false;
 		}
 	}
@@ -226,13 +254,15 @@ bool ExperimentTreeModel::saveNewData(const int &nBlockID, const int &nObjectID,
 					if(tmpItem1->child(i)->getName().toLower() == sParamName)
 					{
 						tmpItem1->child(i)->setValue(sParamValue);
-						emit modelModified();
+						emitModifiedSignal(false);
+						enableModifiedSignaling(true);
 						return true;
 					}
 				}
 			}
 		}
 	}	
+	enableModifiedSignaling(true);
 	return false;
 }
 
@@ -240,6 +270,7 @@ bool ExperimentTreeModel::addExperimentObject(const QString &sObjectName, const 
 {
 	if((sObjectName.isEmpty()) || (sClassName.isEmpty()))
 		return false;
+	enableModifiedSignaling(false);
 	ExperimentTreeItem *pTmpExpTreeItem = NULL;
 	QStringList sFilterList;
 	int nTempObjectID;
@@ -252,8 +283,11 @@ bool ExperimentTreeModel::addExperimentObject(const QString &sObjectName, const 
 
 	sFilterList << EXPERIMENTTREEMODEL_FILTER_TAGS;
 	lstDeclarations = getFilteredItemList(DECLARATIONS_TAG, sFilterList);
-	if(lstDeclarations.count()!=1)
+	if (lstDeclarations.count() != 1)
+	{
+		enableModifiedSignaling(true);
 		return false;
+	}
 	foreach (ExperimentTreeItem* tmpItem1 ,lstDeclarations)
 	{
 		lstObjects = getFilteredItemList(OBJECT_TAG, sFilterList, tmpItem1);
@@ -270,8 +304,11 @@ bool ExperimentTreeModel::addExperimentObject(const QString &sObjectName, const 
 						if(pTmpExpTreeItem)
 						{
 							sTempObjectName = pTmpExpTreeItem->getValue();
-							if(sTempObjectName == sObjectName)//Name already in use?
+							if (sTempObjectName == sObjectName)//Name already in use?
+							{
+								enableModifiedSignaling(true);
 								return false;
+							}
 						}
 					}
 					lstUsedObjectIds.append(nTempObjectID);
@@ -294,12 +331,14 @@ bool ExperimentTreeModel::addExperimentObject(const QString &sObjectName, const 
 	tmpNewObjectItem->appendRow(new ExperimentTreeItem(NAME_TAG,sObjectName));
 	tmpNewObjectItem->appendRow(new ExperimentTreeItem(CLASS_TAG,sClassName));
 	lstDeclarations[0]->insertRow(lstDeclarations[0]->rowCount(),tmpNewObjectItem);
-	emit modelModified();
+	emitModifiedSignal(false);
+	enableModifiedSignaling(true);
 	return true;
 }
 
 bool ExperimentTreeModel::addExperimentObjectInitFinit(const ExperimentTreeModel::strcObjectInitFinitSpecifier &cObjectInitFinitSpecifier, const bool bIsInit, const int nForcedInitFinitID)
 {
+	enableModifiedSignaling(false);
 	QStringList sFilterList;
 	int nTempInitFinitID;
 	QList<int> lFoundInitFinitIds;
@@ -320,10 +359,15 @@ bool ExperimentTreeModel::addExperimentObjectInitFinit(const ExperimentTreeModel
 		sSubSectionTag = FINALIZATION_TAG;
 	}
 	QList<ExperimentTreeItem*> list1 = getFilteredItemList(sMainSectionTag, sFilterList);
-	if(list1.count() != 1)
+	if (list1.count() != 1)
+	{
+		enableModifiedSignaling(true);
 		return false;
+	}
 	else
+	{
 		bAppendReady = true;
+	}
 	foreach (ExperimentTreeItem* tmpItem1 ,list1)
 	{
 		QList<ExperimentTreeItem*> list2 = getFilteredItemList(sSubSectionTag, sFilterList, tmpItem1);
@@ -388,14 +432,17 @@ bool ExperimentTreeModel::addExperimentObjectInitFinit(const ExperimentTreeModel
 		tmpNewConnectionItem->appendRow(pObjectItem);
 		list1.at(0)->insertRow(list1.at(0)->rowCount(),tmpNewConnectionItem);
 
-		emit modelModified();
+		emitModifiedSignal(false);
+		enableModifiedSignaling(true);
 		return true;
 	}
+	enableModifiedSignaling(true);
 	return false;
 }
 
 bool ExperimentTreeModel::addObjectConnection(const ExperimentTreeModel::strcObjectConnectionSpecifier &cConnectionSpecifier, int nForcedConnectionID)
 {
+	enableModifiedSignaling(false);
 	QStringList sFilterList;
 	int nTempConnectionID;
 	QList<int> lFoundConnectionIds;
@@ -405,6 +452,7 @@ bool ExperimentTreeModel::addObjectConnection(const ExperimentTreeModel::strcObj
 	QList<ExperimentTreeItem*> list1 = getFilteredItemList(CONNECTIONS_TAG, sFilterList);
 	if(list1.count() != 1)
 	{
+		enableModifiedSignaling(true);
 		return false;
 	}
 	else
@@ -457,14 +505,17 @@ bool ExperimentTreeModel::addObjectConnection(const ExperimentTreeModel::strcObj
 		tmpNewConnectionItem->appendRow(pTargetConnItem);
 		list1.at(0)->insertRow(list1.at(0)->rowCount(),tmpNewConnectionItem);
 
-		emit modelModified();
+		emitModifiedSignal(false);
+		enableModifiedSignaling(true);
 		return true;
 	}
+	enableModifiedSignaling(true);
 	return false;
 }
 
 bool ExperimentTreeModel::removeExperimentObjectInitFinit(const int &nInitFinitId, const bool bIsInit)
 {
+	enableModifiedSignaling(false);
 	ExperimentTreeItem* tmpExpTreeItem;
 	QModelIndex tmpModelIndex;
 	bool bResult = false;
@@ -474,19 +525,28 @@ bool ExperimentTreeModel::removeExperimentObjectInitFinit(const int &nInitFinitI
 		if(tmpExpTreeItem)
 		{
 			tmpModelIndex = indexFromItem(tmpExpTreeItem);
-			if(removeRow(tmpModelIndex.row(),tmpModelIndex.parent()))
+			if (removeRow(tmpModelIndex.row(), tmpModelIndex.parent()))
+			{
 				bResult = true;
+			}
 			else
+			{
+				enableModifiedSignaling(true);
 				return false;
+			}
 		}
 	}
-	if(bResult)
-		emit modelModified();
+	if (bResult)
+	{
+		emitModifiedSignal(false);
+	}
+	enableModifiedSignaling(true);
 	return bResult;
 }
 
 bool ExperimentTreeModel::removeObjectConnection(const int &nConnectionId)
 {
+	enableModifiedSignaling(false);
 	ExperimentTreeItem* tmpExpTreeItem;
 	QModelIndex tmpModelIndex;
 	bool bResult = false;
@@ -496,19 +556,28 @@ bool ExperimentTreeModel::removeObjectConnection(const int &nConnectionId)
 		if(tmpExpTreeItem)
 		{
 			tmpModelIndex = indexFromItem(tmpExpTreeItem);
-			if(removeRow(tmpModelIndex.row(),tmpModelIndex.parent()))
+			if (removeRow(tmpModelIndex.row(), tmpModelIndex.parent()))
+			{
 				bResult = true;
+			}
 			else
+			{
+				enableModifiedSignaling(true);
 				return false;
+			}
 		}
 	}
-	if(bResult)
-		emit modelModified();
+	if (bResult)
+	{
+		emitModifiedSignal(false);
+	}
+	enableModifiedSignaling(true);
 	return bResult;
 }
 
 bool ExperimentTreeModel::updateObjectConnection(const ExperimentTreeModel::strcObjectConnectionSpecifier &cConnectionSpecifier, const QString &sNewValue)
 {
+	enableModifiedSignaling(false);
 	ExperimentTreeItem* tmpParentExpTreeItem;
 	bool bResult = false;
 	if(cConnectionSpecifier.nConnectionID >= 0)
@@ -535,13 +604,17 @@ bool ExperimentTreeModel::updateObjectConnection(const ExperimentTreeModel::strc
 			saveNewData(cConnectionSpecifier.sConnectionDefinitionName,sNewValue,QModelIndex(),tmpParentExpTreeItem);
 		}
 	}
-	if(bResult)
-		emit modelModified();
+	if (bResult)
+	{
+		emitModifiedSignal(false);
+	}
+	enableModifiedSignaling(true);
 	return bResult;
 }
 
 bool ExperimentTreeModel::removeExperimentObject(const int &nObjectId)
 {
+	enableModifiedSignaling(false);
 	ExperimentTreeItem* tmpExpTreeItem;
 	QModelIndex tmpModelIndex;
 	bool bResult = false;
@@ -551,18 +624,24 @@ bool ExperimentTreeModel::removeExperimentObject(const int &nObjectId)
 		if(tmpExpTreeItem)
 		{
 			tmpModelIndex = indexFromItem(tmpExpTreeItem);
-			if(removeRow(tmpModelIndex.row(),tmpModelIndex.parent()))
+			if (removeRow(tmpModelIndex.row(), tmpModelIndex.parent()))
+			{
 				bResult = true;
+			}
 			else
+			{
+				enableModifiedSignaling(true);
 				return false;
+			}
 		}
 	}
 	if(bResult)
 	{
 		//int nNumberOfDepsRemoved = 
-			cleanupObjectDependencies(nObjectId);
-		emit modelModified();
+		cleanupObjectDependencies(nObjectId);
+		emitModifiedSignal(false);
 	}
+	enableModifiedSignaling(true);
 	return bResult;
 }
 
@@ -668,7 +747,7 @@ int ExperimentTreeModel::cleanupObjectDependencies(const int &nObjectId)
 			}
 		}
 	}
-	//emit modelModified(); --> should be performed in calling parent function!
+	//emitModifiedSignal(false); --> should be performed in calling parent function!
 	return nRemovedDependencies;
 }
 
@@ -743,7 +822,7 @@ int ExperimentTreeModel::cleanupBlockDependencies(const int &nBlockId)
 			}
 		}
 	}
-	//emit modelModified(); --> should be performed in calling parent function!
+	//emitModifiedSignal(false); --> should be performed in calling parent function!
 	return nRemovedDependencies;
 }
 
@@ -756,12 +835,18 @@ bool ExperimentTreeModel::initializeExperiment()
 
 bool ExperimentTreeModel::resetExperiment()
 {
+	enableModifiedSignaling(false);
 	QFile tmpFile(":/resources/emptyexperiment.exml");
 	if (!tmpFile.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		enableModifiedSignaling(true);
 		return false;
+	}
 	QByteArray tmpByteArray = tmpFile.readAll();
 	bool bReadResult = read(tmpByteArray);
 	tmpFile.close();
+	emitModifiedSignal(false);
+	enableModifiedSignaling(true);
 	return bReadResult;
 }
 
@@ -777,6 +862,7 @@ bool ExperimentTreeModel::addExperimentBlocks(const int &nAmount)
 
 bool ExperimentTreeModel::changeExperimentBlockLoopNumber(const ExperimentTreeModel::strcBlockLoopSpecifier &cBlockLoopSpecifier, const int &nLoopNumberCorrection)
 {
+	enableModifiedSignaling(false);
 	if((cBlockLoopSpecifier.nBlockID >= 0) && (cBlockLoopSpecifier.nLoopID >= 0))
 	{
 		QStringList sFilterList;
@@ -822,8 +908,11 @@ bool ExperimentTreeModel::changeExperimentBlockLoopNumber(const ExperimentTreeMo
 											nCurrentLoopNumber = nTempLoopNumber;
 											nCurrentLoopID = nTempLoopID;
 											nNewLoopNumber = nCurrentLoopNumber+nLoopNumberCorrection;
-											if((nNewLoopNumber) < 0)
+											if ((nNewLoopNumber) < 0)
+											{
+												enableModifiedSignaling(true);
 												return false;
+											}
 										}
 										nSuccesfullyParsedLoops++;
 									}
@@ -841,12 +930,14 @@ bool ExperimentTreeModel::changeExperimentBlockLoopNumber(const ExperimentTreeMo
 											if(mapLoopNumberToLoopExpTreeItem.value(nCurrentLoopNumber)->child(i)->getName().toLower() == LOOP_NUMBER_TAG)
 											{
 												mapLoopNumberToLoopExpTreeItem.value(nCurrentLoopNumber)->child(i)->setValue("0");
-												emit modelModified();
+												emitModifiedSignal(false);
+												enableModifiedSignaling(true);
 												return true;
 											}
 										}
 									}
 								}
+								enableModifiedSignaling(true);
 								return false;
 							}
 							else if(nSuccesfullyParsedLoops > 1)
@@ -859,13 +950,18 @@ bool ExperimentTreeModel::changeExperimentBlockLoopNumber(const ExperimentTreeMo
 									if(pLoopNewNumberItem)
 									{
 										pLoopOldNumberItem = mapLoopNumberToLoopExpTreeItem.value(nNewLoopNumber)->firstChild(LOOP_NUMBER_TAG);
-										if(pLoopOldNumberItem == NULL)
+										if (pLoopOldNumberItem == NULL)
+										{
+											enableModifiedSignaling(true);
 											return false;
+										}
 										pLoopNewNumberItem->setValue(QString::number(nNewLoopNumber));
 										pLoopOldNumberItem->setValue(QString::number(nCurrentLoopNumber));
-										emit modelModified();
+										emitModifiedSignal(false);
+										enableModifiedSignaling(true);
 										return true;
 									}
+									enableModifiedSignaling(true);
 									return false;
 								}
 							}
@@ -876,11 +972,13 @@ bool ExperimentTreeModel::changeExperimentBlockLoopNumber(const ExperimentTreeMo
 			}
 		}
 	}
+	enableModifiedSignaling(true);
 	return false;
 }
 
 bool ExperimentTreeModel::removeExperimentBlockLoop(const ExperimentTreeModel::strcBlockLoopSpecifier &cBlockLoopSpecifier)
 {
+	enableModifiedSignaling(false);
 	ExperimentTreeItem* tmpExpTreeItem;
 	QModelIndex tmpModelIndex;
 	bool bResult = false;
@@ -890,19 +988,28 @@ bool ExperimentTreeModel::removeExperimentBlockLoop(const ExperimentTreeModel::s
 		if(tmpExpTreeItem)
 		{
 			tmpModelIndex = indexFromItem(tmpExpTreeItem);
-			if(removeRow(tmpModelIndex.row(),tmpModelIndex.parent()))
+			if (removeRow(tmpModelIndex.row(), tmpModelIndex.parent()))
+			{
 				bResult = true;
+			}
 			else
+			{
+				enableModifiedSignaling(true);
 				return false;
+			}
 		}
 	}
-	if(bResult)
-		emit modelModified();
+	if (bResult)
+	{
+		emitModifiedSignal(false);
+	}
+	enableModifiedSignaling(true);
 	return bResult;
 }
 
 bool ExperimentTreeModel::removeExperimentParameters(const QList<ExperimentTreeModel::strcParameterSpecifier> lstParameterSpecifiers)
 {
+	enableModifiedSignaling(false);
 	ExperimentTreeItem* tmpExpTreeItem;
 	QModelIndex tmpModelIndex;
 	bool bResult = false;
@@ -914,22 +1021,34 @@ bool ExperimentTreeModel::removeExperimentParameters(const QList<ExperimentTreeM
 			if(tmpExpTreeItem)
 			{
 				tmpModelIndex = indexFromItem(tmpExpTreeItem);
-				if(removeRow(tmpModelIndex.row(),tmpModelIndex.parent()))
+				if (removeRow(tmpModelIndex.row(), tmpModelIndex.parent()))
+				{
 					bResult = true;
+				}
 				else
+				{
+					enableModifiedSignaling(true);
 					return false;
+				}
 			}
 		}
 	}
-	if(bResult)
-		emit modelModified();
+	if (bResult)
+	{
+		emitModifiedSignal(false);
+	}
+	enableModifiedSignaling(true);
 	return bResult;
 }
 
 bool ExperimentTreeModel::renameExperimentParameter(const ExperimentTreeModel::strcParameterSpecifier &cParameterSpecifier, const QString &sNewName)
 {
-	if(cParameterSpecifier.sParamName.toLower() == sNewName.toLower())
+	enableModifiedSignaling(false);
+	if (cParameterSpecifier.sParamName.toLower() == sNewName.toLower())
+	{
+		enableModifiedSignaling(true);
 		return false;
+	}
 
 	ExperimentTreeItem* tmpExpTreeItem;
 	bool bResult = false;
@@ -952,13 +1071,17 @@ bool ExperimentTreeModel::renameExperimentParameter(const ExperimentTreeModel::s
 			}
 		}
 	}
-	if(bResult)
-		emit modelModified();
+	if (bResult)
+	{
+		emitModifiedSignal(false);
+	}
+	enableModifiedSignaling(true);
 	return bResult;
 }
 
 bool ExperimentTreeModel::removeExperimentBlocks(const QList<int> &lBlockIDs)
 {
+	enableModifiedSignaling(false);
 	ExperimentTreeItem* tmpExpTreeItem;
 	QModelIndex tmpModelIndex;
 	bool bResult = false;
@@ -984,7 +1107,10 @@ bool ExperimentTreeModel::removeExperimentBlocks(const QList<int> &lBlockIDs)
 		}		
 	}
 	if(bResult)
-		emit modelModified();
+	{
+		emitModifiedSignal(false);
+	}
+	enableModifiedSignaling(true);
 	return bResult;
 }
 
@@ -1187,6 +1313,7 @@ ExperimentTreeItem* ExperimentTreeModel::getExperimentBlockTreeItem(const int &n
 
 bool ExperimentTreeModel::moveExperimentObjectInitFinit(const QList<int> &lInitFinitsToMove, const int &nInitFinitIDToSwitch, const int &nMoveDirection, const bool &bIsInit)
 {
+	enableModifiedSignaling(false);
 	QStringList sFilterList;
 	int nTempInitFinitID;
 	int nInitFinitNumberToSwitch = -1;
@@ -1232,7 +1359,10 @@ bool ExperimentTreeModel::moveExperimentObjectInitFinit(const QList<int> &lInitF
 		}
 	}
 	if (mapNewInitFinitNumbers.isEmpty())
+	{
+		enableModifiedSignaling(true);
 		return false;
+	}
 	bool bInitFinitIDsInjected = false;
 	foreach(nTempInitFinitID, mapNewInitFinitNumbers)
 	{
@@ -1260,7 +1390,10 @@ bool ExperimentTreeModel::moveExperimentObjectInitFinit(const QList<int> &lInitF
 		}
 	}
 	if (bInitFinitIDsInjected == false)
+	{
+		enableModifiedSignaling(true);
 		return false;
+	}
 
 	bool bRetVal = false;
 	int nNewInitFinitNumberCounter = 0;
@@ -1286,12 +1419,16 @@ bool ExperimentTreeModel::moveExperimentObjectInitFinit(const QList<int> &lInitF
 		}
 	}
 	if (bRetVal)
-		emit modelModified();
+	{
+		emitModifiedSignal(false);
+	}
+	enableModifiedSignaling(true);
 	return bRetVal;
 }
 
 bool ExperimentTreeModel::moveExperimentBlocks(const QList<int> &lBlockIDsToMove, const int &nBlockIDToSwitch, const int &nBlockNumberChangeDirection)
 {
+	enableModifiedSignaling(false);
 	QStringList sFilterList;
 	int nTempBlockID;
 	int nBlockNumberToSwitch = -1;
@@ -1335,8 +1472,11 @@ bool ExperimentTreeModel::moveExperimentBlocks(const QList<int> &lBlockIDsToMove
 			}
 		}
 	}
-	if(mapNewBlockNumbers.isEmpty())
+	if (mapNewBlockNumbers.isEmpty())
+	{
+		enableModifiedSignaling(true);
 		return false;
+	}
 	bool bBlockIDsInjected = false;
 	foreach(nTempBlockID, mapNewBlockNumbers)
 	{
@@ -1363,8 +1503,11 @@ bool ExperimentTreeModel::moveExperimentBlocks(const QList<int> &lBlockIDsToMove
 				lstNewOrderedBlockIDList.append(nTempBlockID);
 		}
 	}
-	if(bBlockIDsInjected == false)
+	if (bBlockIDsInjected == false)
+	{
+		enableModifiedSignaling(true);
 		return false;
+	}
 
 	bool bRetVal = false;
 	int nNewBlockNumberCounter = 0;
@@ -1387,14 +1530,18 @@ bool ExperimentTreeModel::moveExperimentBlocks(const QList<int> &lBlockIDsToMove
 		}
 	}
 	if(bRetVal)
-		emit modelModified();
+	{
+		emitModifiedSignal(false);
+	}
+	enableModifiedSignaling(true);
 	return bRetVal;
 }
 
 bool ExperimentTreeModel::addExperimentBlockLoop(const int &nSourceBlockId, const int &nTargetBlockId, const int &nLoopAmount, const QString &sLoopName)
 {
 	if((nSourceBlockId < 0) || (nTargetBlockId < 0) || (nLoopAmount < 0))
-		return false;
+		return false; 
+	enableModifiedSignaling(false);
 
 	QStringList sFilterList;
 	int nTempBlockID;
@@ -1463,6 +1610,7 @@ bool ExperimentTreeModel::addExperimentBlockLoop(const int &nSourceBlockId, cons
 	if(bTreeReadyForInsert==false)
 	{
 		qDebug() << __FUNCTION__ << "Experiment tree not ready for new loop insertion.";
+		enableModifiedSignaling(true);
 		return false;
 	}
 	ExperimentTreeItem* tmpItemLoopCollection = lstLoopCollections.at(0);
@@ -1477,12 +1625,14 @@ bool ExperimentTreeModel::addExperimentBlockLoop(const int &nSourceBlockId, cons
 	tmpNewLoopItem->appendRow(new ExperimentTreeItem(LOOP_AMOUNT_TAG,QString::number(nLoopAmount)));
 	tmpNewLoopItem->appendRow(new ExperimentTreeItem(LOOP_TARGETBLOCKID_TAG,QString::number(nTargetBlockId)));
 	tmpItemLoopCollection->insertRow(tmpItemLoopCollection->rowCount(),tmpNewLoopItem);
-	emit modelModified();
+	emitModifiedSignal(false);
+	enableModifiedSignaling(true);
 	return true;
 }
 
 bool ExperimentTreeModel::updateExperimentObjectInitFinitParameter(const ExperimentTreeModel::strcObjectInitFinitSpecifier &cObjectInitFinitSpecifier, const QString &sNewValue, const bool bIsInit)
 {
+	enableModifiedSignaling(false);
 	ExperimentTreeItem* tmpParentExpTreeItem;
 	bool bResult = false;
 	if(cObjectInitFinitSpecifier.nInitFinitID >= 0)
@@ -1534,12 +1684,16 @@ bool ExperimentTreeModel::updateExperimentObjectInitFinitParameter(const Experim
 		//}
 	}
 	if(bResult)
-		emit modelModified();
+	{
+		emitModifiedSignal(false);
+	}
+	enableModifiedSignaling(true);
 	return bResult;
 }
 
 bool ExperimentTreeModel::updateExperimentObject(const ExperimentTreeModel::strcObjectSpecifier &cObjectSpecifier, const QString &sNewValue)
 {
+	enableModifiedSignaling(false);
 	ExperimentTreeItem* tmpExpTreeItem;
 	ExperimentTreeItem* tmpParentExpTreeItem;
 	bool bResult = false;
@@ -1564,12 +1718,16 @@ bool ExperimentTreeModel::updateExperimentObject(const ExperimentTreeModel::strc
 		}
 	}
 	if(bResult)
-		emit modelModified();
+	{
+		emitModifiedSignal(false);
+	}
+	enableModifiedSignaling(true);
 	return bResult;
 }
 
 bool ExperimentTreeModel::updateExperimentBlockLoop(const ExperimentTreeModel::strcBlockLoopSpecifier &cBlockLoopSpecifier, const QString &sNewValue)
 {
+	enableModifiedSignaling(false);
 	ExperimentTreeItem* tmpExpTreeItem;
 	ExperimentTreeItem* tmpParentExpTreeItem;
 	bool bResult = false;
@@ -1591,12 +1749,16 @@ bool ExperimentTreeModel::updateExperimentBlockLoop(const ExperimentTreeModel::s
 		}
 	}
 	if(bResult)
-		emit modelModified();
+	{
+		emitModifiedSignal(false);
+	}
+	enableModifiedSignaling(true);
 	return bResult;
 }
 
 bool ExperimentTreeModel::addUpdateExperimentBlockParameter(const ExperimentTreeModel::strcParameterSpecifier &cParameterSpecifier, const QString &sNewValue, const bool &bIsCustom)
 {
+	enableModifiedSignaling(false);
 	ExperimentTreeItem* tmpExpTreeItem;
 	//QModelIndex tmpModelIndex;
 	bool bResult = false;
@@ -1626,7 +1788,10 @@ bool ExperimentTreeModel::addUpdateExperimentBlockParameter(const ExperimentTree
 		}
 	}
 	if(bResult)
-		emit modelModified();
+	{
+		emitModifiedSignal(false);
+	}
+	enableModifiedSignaling(true);
 	return bResult;
 }
 
@@ -1659,7 +1824,8 @@ ExperimentTreeItem* ExperimentTreeModel::addExperimentBlockTreeItems(const int &
 {
 	if(nAmount < 1)
 		return NULL;
-
+	
+	enableModifiedSignaling(false);
 	QStringList sFilterList;
 	int nTempBlockID;
 	int nLatestFoundBlockID = -1;
@@ -1706,8 +1872,11 @@ ExperimentTreeItem* ExperimentTreeModel::addExperimentBlockTreeItems(const int &
 		}
 	}
 
-	if(lstBlockTrials.count() != 1)
+	if (lstBlockTrials.count() != 1)
+	{
+		enableModifiedSignaling(true);
 		return NULL;
+	}
 	ExperimentTreeItem* tmpItemBlockTrials = lstBlockTrials.at(0);
 	ExperimentTreeItem* tmpNewBlockItem = NULL;
 
@@ -1722,12 +1891,14 @@ ExperimentTreeItem* ExperimentTreeModel::addExperimentBlockTreeItems(const int &
 		tmpNewBlockItem->appendRow(new ExperimentTreeItem(EXTERNALTRIGGERAMOUNT_TAG,"1"));
 		tmpItemBlockTrials->insertRow(tmpItemBlockTrials->rowCount(),tmpNewBlockItem);
 	}
-	emit modelModified();
+	emitModifiedSignal(false);
+	enableModifiedSignaling(true);
 	return tmpNewBlockItem;
 }
 
 void ExperimentTreeModel::saveNewData(const QString &sName, const QString &sValue, const QModelIndex &parentIndex, ExperimentTreeItem *pParametersSection)
 {
+	enableModifiedSignaling(false);
 	ExperimentTreeItem *m_parent;
 	if(pParametersSection == NULL)
 		m_parent = itemFromIndex(parentIndex);
@@ -1894,11 +2065,15 @@ void ExperimentTreeModel::saveNewData(const QString &sName, const QString &sValu
 		}
 	}
 	if(bModelChanged)
-		emit modelModified();
+	{
+		emitModifiedSignal(false);
+	}
+	enableModifiedSignaling(true);
 }
 
 void ExperimentTreeModel::saveNewData(QWidget *widgetContainer, const QModelIndex &parentIndex)
 {
+	enableModifiedSignaling(false);
     ExperimentTreeItem *m_parent = itemFromIndex(parentIndex);
 	//int nRow = parentIndex.row();
 	//int nCol = parentIndex.column();
@@ -1958,9 +2133,10 @@ void ExperimentTreeModel::saveNewData(QWidget *widgetContainer, const QModelInde
 		}
 		if (bModelChanged)
 		{
-			emit modelModified();
+			emitModifiedSignal(false);
 		}
 	}
+	enableModifiedSignaling(true);
 }
 
 bool ExperimentTreeModel::write(const QString &fileName)
@@ -2105,9 +2281,7 @@ int ExperimentTreeModel::getTreeElements(const QStringList &sElementTagName, QLi
 int ExperimentTreeModel::getStaticTreeElements(const QStringList &sElementTagName, QList<ExperimentTreeItem *> &lFoundTreeItems, ExperimentTreeItem *pSearchRootItem)
 {
 	if(pSearchRootItem == NULL)
-	{
 		return -1;
-	}
 	int nDepth = sElementTagName.count();
 	if(nDepth<=0)
 		return 0;
@@ -2233,8 +2407,9 @@ void ExperimentTreeModel::recursiveMultiSearch(const QString &textToFind, const 
 	}
 }
 
-bool ExperimentTreeModel::reset()
+bool ExperimentTreeModel::reset(const bool bSkipModifiedSignaling)
 {
+	enableModifiedSignaling(false);
 	if(rootItem)
 	{
 		delete rootItem;
@@ -2250,11 +2425,15 @@ bool ExperimentTreeModel::reset()
 		delete doc;
 		doc = NULL;
 	}
+	if (bSkipModifiedSignaling == false)
+		emitModifiedSignal(false);
+	enableModifiedSignaling(true);
 	return true;
 }
 
 bool ExperimentTreeModel::read(QByteArray &byteArrayContent)
 {
+	enableModifiedSignaling(false);
 	QString errorStr;
 	int errorLine;
 	int errorColumn;
@@ -2279,6 +2458,7 @@ bool ExperimentTreeModel::read(QByteArray &byteArrayContent)
 		//	.arg(errorColumn)
 		//	.arg(errorStr));
 		qDebug() << tr("Parse error at line %1, column %2:\n%3").arg(errorLine).arg(errorColumn).arg(errorStr);
+		enableModifiedSignaling(true);
 		return false;
 	}
 	//First we search for the Root Tag
@@ -2288,6 +2468,7 @@ bool ExperimentTreeModel::read(QByteArray &byteArrayContent)
 	{
 		//QMessageBox::information(window(), tr(MODULE_NAME), tr("The file is not an EXML file."));
 		qDebug() << tr("The file is not an EXML file.");
+		enableModifiedSignaling(true);
 		return false;
 	} 
 	else//Found!
@@ -2311,6 +2492,7 @@ bool ExperimentTreeModel::read(QByteArray &byteArrayContent)
 				//	.arg(nXMLCurrentClassVersion.version)
 				//	.arg(nXMLCurrentClassVersion.build));
 				qDebug() << tr("The defined EXML file is not compatible from EXML version %1.%2.%3.%4").arg(nXMLCurrentClassVersion.major).arg(nXMLCurrentClassVersion.minor).arg(nXMLCurrentClassVersion.version).arg(nXMLCurrentClassVersion.build);
+				enableModifiedSignaling(true);
 				return false;
 			}
 		}
@@ -2318,8 +2500,12 @@ bool ExperimentTreeModel::read(QByteArray &byteArrayContent)
 		{
 			//QMessageBox::information(window(), tr(MODULE_NAME), tr("The EXML file version could not be determined."));
 			qDebug() << tr("The EXML file version could not be determined.");
+			enableModifiedSignaling(true);
 			return false;
 		}
 	}
-	return fillModel();
+	bool bFillModelResult = fillModel();
+	emitModifiedSignal(false);
+	enableModifiedSignaling(true);
+	return bFillModelResult;
 }

@@ -83,18 +83,15 @@ void RetinotopyMapperWindow::postSwapBuffers()
 	//bool bObjectIsLocked = isLocked(); //buffer it..
 
 	//bool bExperimentStructureChanged = false;
-	bool bHasCurrentBlock = false;
-	cExperimentStructure tmpExpStr;
-	cBlockStructure tmpExpBlockStr;
+	cExperimentStructure *tmpExpStr;
 	ExperimentStructuresNameSpace::strcExperimentStructureState tmpExpStrState;
 	if(parentRetinotopyMapper->experimentManager)
 	{
 		if(parentRetinotopyMapper->isDebugMode())
 			parentRetinotopyMapper->experimentManager->logExperimentObjectData(parentRetinotopyMapper->getObjectID(),0,__FUNCTION__,"","Screen Buffer Swapped, locked=",QString::number(parentRetinotopyMapper->isLocked()));
 
-		cExperimentStructure tmpExpStr = cExperimentStructure(*parentRetinotopyMapper->experimentManager->getExperimentStructure());
-		cBlockStructure tmpExpBlockStr = tmpExpStr.getCurrentBlock(bHasCurrentBlock);
-		tmpExpStrState = tmpExpStr.getCurrentExperimentState();
+		tmpExpStr = parentRetinotopyMapper->experimentManager->getExperimentStructure();
+		tmpExpStrState = tmpExpStr->getCurrentExperimentState();
 	}
 	if (parentRetinotopyMapper->nRefreshRate > 0)
 	{
@@ -124,14 +121,13 @@ void RetinotopyMapperWindow::render(QPainter *stimuliPainter)
 	if(parentRetinotopyMapper->isDebugMode())
 		parentRetinotopyMapper->experimentManager->logExperimentObjectData(parentRetinotopyMapper->getObjectID(),0,__FUNCTION__,"","Starting to paint the object");
 
-	bool bHasABlock = false;
-	cExperimentStructure tmpExpStr = cExperimentStructure(*parentRetinotopyMapper->experimentManager->getExperimentStructure());
+	cExperimentStructure *tmpExpStr = parentRetinotopyMapper->experimentManager->getExperimentStructure();
 	int elapsedTrialTime = (int)parentRetinotopyMapper->getElapsedTrialTime();
 	int elapsedTrialTimeCopy = elapsedTrialTime;
 	int nExpBlockTrialFrame = parentRetinotopyMapper->getCurrentBlockTrialFrame();
-	ExperimentStructuresNameSpace::strcExperimentStructureState tmpExpStrState = tmpExpStr.getCurrentExperimentState();
-	cBlockStructure tmpBlockStrc = tmpExpStr.getCurrentBlock(bHasABlock);
-	if(bHasABlock == false)
+	ExperimentStructuresNameSpace::strcExperimentStructureState tmpExpStrState = tmpExpStr->getCurrentExperimentState();
+	cBlockStructure *tmpBlockStrc = tmpExpStr->getCurrentBlock();
+	if (tmpBlockStrc == NULL)
 	{
 		qDebug() << __FUNCTION__ << "::No (more) Block defined to process, exiting...!";
 		return;
@@ -216,7 +212,7 @@ void RetinotopyMapperWindow::render(QPainter *stimuliPainter)
 
 			if ((parentRetinotopyMapper->emptyTriggerSteps > 0))
 			{
-				parentRetinotopyMapper->experimentManager->logExperimentObjectData(parentRetinotopyMapper->getObjectID(),0,__FUNCTION__,"","EmptyRandomList Filled(BlockNumber:" + QString::number(tmpBlockStrc.getBlockNumber()) + ", TrialNumber:" + QString::number(tmpExpStrState.CurrentBlock_TrialNumber) + ")");
+				parentRetinotopyMapper->experimentManager->logExperimentObjectData(parentRetinotopyMapper->getObjectID(),0,__FUNCTION__,"","EmptyRandomList Filled(BlockNumber:" + QString::number(tmpBlockStrc->getBlockNumber()) + ", TrialNumber:" + QString::number(tmpExpStrState.CurrentBlock_TrialNumber) + ")");
 				tmpStr = "";
 				for (j=0;j<parentRetinotopyMapper->cycleTriggerAmount;j++)
 				{
@@ -368,7 +364,7 @@ void RetinotopyMapperWindow::render(QPainter *stimuliPainter)
 	if (bFistRenderCall)
 	{
 		if(parentRetinotopyMapper->experimentManager)
-			parentRetinotopyMapper->experimentManager->logExperimentObjectData(parentRetinotopyMapper->getObjectID(),0,__FUNCTION__,"","First rendering of experiment: ",tmpExpStr.getExperimentName());
+			parentRetinotopyMapper->experimentManager->logExperimentObjectData(parentRetinotopyMapper->getObjectID(),0,__FUNCTION__,"","First rendering of experiment: ",tmpExpStr->getExperimentName());
 		stimuliPainter->fillRect(parentRetinotopyMapper->rectScreenRes,QColor(Qt::black));
 	}
 	parentRetinotopyMapper->StimulusResultImageFrame.fill(parentRetinotopyMapper->colorBackground);
@@ -460,9 +456,9 @@ void RetinotopyMapperWindow::render(QPainter *stimuliPainter)
 	if (parentRetinotopyMapper->outputTriggerFrame)
 	{
 		if(parentRetinotopyMapper->retinoOutputType == RETINOMAPPER_OUTPUTTYPE_FRAME)
-			doOutputTriggerFrame(tmpExpStrState,tmpExpStr,tmpBlockStrc,parentRetinotopyMapper->StimulusResultImageFrame); 
+			doOutputTriggerFrame(tmpExpStrState,*tmpExpStr,*tmpBlockStrc,parentRetinotopyMapper->StimulusResultImageFrame); 
 		else if(parentRetinotopyMapper->retinoOutputType == RETINOMAPPER_OUTPUTTYPE_MASK)
-			doOutputTriggerFrame(tmpExpStrState,tmpExpStr,tmpBlockStrc,parentRetinotopyMapper->StimulusActivationMap); 
+			doOutputTriggerFrame(tmpExpStrState,*tmpExpStr,*tmpBlockStrc,parentRetinotopyMapper->StimulusActivationMap); 
 	}
 
 	stimuliPainter->fillRect(parentRetinotopyMapper->rStimuliScreenArea, parentRetinotopyMapper->brushBackground);
@@ -516,7 +512,7 @@ void RetinotopyMapperWindow::render(QPainter *stimuliPainter)
 		//float fAverageElapsed = debugTotalElapsedTime/debugUsedTestSamples;
 		//textContent = QString("Average elapsed time: %1").arg(fAverageElapsed); //+ ": " + debugString; //"Retinotopic Mapping";
 		//painter.drawText(QRect(10, 0, rectScreenRes.width(), 100), Qt::AlignLeft, textContent);//Takes about 5ms additional total drawing time!
-		parentRetinotopyMapper->textContent = "ExternalTriggerNr:" + QString::number(tmpExpStrState.CurrentBlock_ExternalTrigger) + ", InternalTriggerNr:" + QString::number(tmpExpStrState.CurrentBlock_InternalTrigger) + ", TrialNr:" + QString::number(tmpExpStrState.CurrentBlock_TrialNumber) + ", BlockNr:" + QString::number(tmpBlockStrc.getBlockNumber());
+		parentRetinotopyMapper->textContent = "ExternalTriggerNr:" + QString::number(tmpExpStrState.CurrentBlock_ExternalTrigger) + ", InternalTriggerNr:" + QString::number(tmpExpStrState.CurrentBlock_InternalTrigger) + ", TrialNr:" + QString::number(tmpExpStrState.CurrentBlock_TrialNumber) + ", BlockNr:" + QString::number(tmpBlockStrc->getBlockNumber());
 		//stimuliPainter->drawText(QRect(10, 50, parentRetinotopyMapper->rectScreenRes.width(), 100), Qt::AlignLeft, parentRetinotopyMapper->textContent);
 		stimuliPainter->drawText(parentRetinotopyMapper->rStimuliScreenArea, Qt::AlignLeft, parentRetinotopyMapper->textContent);
 		//debugUsedTestSamples++;

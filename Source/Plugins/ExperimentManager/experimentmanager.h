@@ -95,7 +95,7 @@ public:
 	};
 	Q_ENUMS(ExperimentState)
 
-	typedef struct
+	typedef struct strcObjectElement
 	{
 		int nObjectID;
 		int nMetaID;
@@ -104,6 +104,16 @@ public:
 		ExperimentSubObjectState nCurrentState;
 		tParsedParameterList *ExpBlockParams;
 		TypedPropertySettingContainer *typedExpParamCntnr;
+		strcObjectElement()
+		{
+			nObjectID = -1;
+			nMetaID = -1;
+			pObject = NULL;
+			sObjectName = "<undefined>";
+			nCurrentState = Experiment_SubObject_Constructing;
+			ExpBlockParams = NULL;
+			typedExpParamCntnr = NULL;
+		}
 	} objectElement;
 
 	struct strcInvokeObjectDefs
@@ -132,7 +142,7 @@ public:
 
 	void cleanupSingletons();
 	ExperimentState getCurrExperimentState() { return experimentCurrentState; }
-	bool fetchExperimentBlockParamsFromTreeItemList(const int &nBlockNumber, const int &nObjectID);
+	bool fetchExperimentBlockParameters(const int &nBlockNumber, const int &nObjectID);
 	tParsedParameterList *getObjectBlockParamListById(int nID);
 	bool setExperimentObjectBlockParameterStructure(const int nObjectID, tParsedParameterList *expBlockTrialStruct);
 	bool getScriptContextValue(const QString &sScriptContextStatement, QVariant &sScriptContextReturnValue);
@@ -142,33 +152,20 @@ public:
 	QWidget *getVisualExperimentEditor();
 	ExperimentTreeModel *getCurrentExperimentTreeModel() { return currentExperimentTree; };
 
-	static bool createExperimentStructure(QList<ExperimentTreeItem*> &lExpTreeItems, ExperimentTreeModel *expTreeModel = NULL, cExperimentStructure* cExpStruct = NULL);
+	static bool createExperimentStructure(QList<ExperimentTreeItem*> &lExpTreeItems, ExperimentTreeModel *expTreeModel = NULL, cExperimentStructure* cExpStruct = NULL, QMap<int, objectElement> *mObjectElements = NULL, ExperimentManager *pCurrentExpManager = NULL);
 
 	template< typename T > T* getExperimentObjectVariabelePointer(const int &nObjectID,const QString &sKeyName)
 	{
-		if (nObjectID >= 0)
+		if (mExperimentObjectList.contains(nObjectID))
 		{
-			if (!lExperimentObjectList.isEmpty())
+			if ((mExperimentObjectList.value(nObjectID).ExpBlockParams == NULL) || (mExperimentObjectList.value(nObjectID).ExpBlockParams->isEmpty()))
+				return NULL;
+			if (mExperimentObjectList.value(nObjectID).ExpBlockParams->contains(sKeyName.toLower()))
 			{
-				int nObjectCount = lExperimentObjectList.count();
-				if (nObjectCount>0)
-				{
-					for (int i=0;i<nObjectCount;i++)
-					{
-						if (lExperimentObjectList[i].nObjectID == nObjectID)
-						{
-							if ((lExperimentObjectList[i].ExpBlockParams == NULL) || (lExperimentObjectList[i].ExpBlockParams->isEmpty()))
-								return NULL;
-							if (lExperimentObjectList[i].ExpBlockParams->contains(sKeyName.toLower()))
-							{
-								if(lExperimentObjectList[i].typedExpParamCntnr)
-									return lExperimentObjectList[i].typedExpParamCntnr->getPropertySetting<T>(sKeyName);
-								else
-									return NULL;
-							}
-						}
-					}
-				}
+				if (mExperimentObjectList.value(nObjectID).typedExpParamCntnr)
+					return mExperimentObjectList.value(nObjectID).typedExpParamCntnr->getPropertySetting<T>(sKeyName);
+				else
+					return NULL;
 			}
 		}
 		return NULL;
@@ -176,35 +173,24 @@ public:
 
 	template< typename T > bool insertExperimentObjectVariabelePointer(const int &nObjectID,const QString &sKeyName,T &tVariabele, bool bCreateVariabeleInMemory = false)
 	{
-		if (nObjectID >= 0) 
+		if (mExperimentObjectList.contains(nObjectID))
 		{
-			if (!lExperimentObjectList.isEmpty())
+			objectElement *mTmpObjectElement;
+			mTmpObjectElement = &(mExperimentObjectList[nObjectID]);
+			if ((mTmpObjectElement->ExpBlockParams == NULL) || (mTmpObjectElement->ExpBlockParams->isEmpty()))
+				return false;
+			if (mTmpObjectElement->typedExpParamCntnr == NULL)
+				mTmpObjectElement->typedExpParamCntnr = new TypedPropertySettingContainer();
+			bool bRetVal;
+			if(bCreateVariabeleInMemory)
 			{
-				int nObjectCount = lExperimentObjectList.count();
-				if (nObjectCount>0)
-				{
-					for (int i=0;i<nObjectCount;i++)
-					{
-						if (lExperimentObjectList[i].nObjectID == nObjectID)
-						{
-							if ((lExperimentObjectList[i].ExpBlockParams == NULL) || (lExperimentObjectList[i].ExpBlockParams->isEmpty()))
-								return false;
-							if(lExperimentObjectList[i].typedExpParamCntnr == NULL)
-								lExperimentObjectList[i].typedExpParamCntnr = new TypedPropertySettingContainer();
-							bool bRetVal;
-							if(bCreateVariabeleInMemory)
-							{
-								bRetVal = lExperimentObjectList[i].typedExpParamCntnr->createPropertySetting<T>(sKeyName,tVariabele);
-							}
-							else
-							{
-								bRetVal = lExperimentObjectList[i].typedExpParamCntnr->insertPropertySetting<T>(sKeyName,&tVariabele);
-							}
-							return bRetVal;
-						}
-					}
-				}
+				bRetVal = mTmpObjectElement->typedExpParamCntnr->createPropertySetting<T>(sKeyName, tVariabele);
 			}
+			else
+			{
+				bRetVal = mTmpObjectElement->typedExpParamCntnr->insertPropertySetting<T>(sKeyName, &tVariabele);
+			}
+			return bRetVal;
 		}
 		return false;
 	}
@@ -381,14 +367,22 @@ public slots:
 	*  @return a boolean value determining whether this function executed successfully.
 	*/
 	bool parseCurrentExperimentStructure();
-	/*! \brief Shows the Experiment in a Visual Experiment Editor UI.
+	/*! \brief Shows the Experiment in a Visual Experiment Editor dialog.
 	 *
-	 *  This function shows the Experiment in a Visual Experiment Editor UI, if the provided ExperimentTreeModel is NULL than the current in-memory Experiment is parsed by the editor.
-	 *  @param expTreeModel a ExperimentTreeModel to be edited by the Visual Experiment Editor UI, make it NULL to automatically use the current in-memory Experiment.
+	 *  This function shows the Experiment in a Visual Experiment Editor dialog, if the provided ExperimentTreeModel is NULL than the current in-memory Experiment is parsed by the editor.
+	 *  @param expTreeModel a ExperimentTreeModel to be edited by the Visual Experiment Editor dialog, make it NULL to automatically use the current in-memory Experiment.
 	 *  @param sExpTreeModelCanonFilePath a string holding a canonical path referring to a file that should be used by default for saving changes to. 
 	 *  @return a boolean value determining whether this function executed successfully.
 	 */	
-	bool showVisualExperimentEditor(ExperimentTreeModel *expTreeModel = NULL, const QString &sExpTreeModelCanonFilePath = "");
+	bool showVisualExperimentDialog(ExperimentTreeModel *expTreeModel = NULL, const QString &sExpTreeModelCanonFilePath = "");
+	/*! \brief Shows the Experiment in a Tree-view Experiment Editor dialog.
+	*
+	*  This function shows the Experiment in a Tree-view Experiment Editor dialog, if the provided ExperimentTreeModel is NULL than the current in-memory Experiment is parsed by the editor.
+	*  @param expTreeModel a ExperimentTreeModel to be edited by the Tree-view Experiment Editor dialog, make it NULL to automatically use the current in-memory Experiment.
+	*  @param sExpTreeModelCanonFilePath a string holding a canonical path referring to a file that should be used by default for saving changes to.
+	*  @return a boolean value determining whether this function executed successfully.
+	*/
+	bool showTreeviewExperimentDialog(ExperimentTreeModel *expTreeModel = NULL, const QString &sExpTreeModelCanonFilePath = "");
 	/*! \brief Returns a QScreen object representing the active Stimuli Output Screen.
 	 *
 	 *  This function returns a pointer to an QScreen object representing the active configured Stimuli Output Screen.
@@ -418,18 +412,17 @@ private slots:
 	void visualExperimentEditorDestroyed(ExperimentGraphicEditor *pExpGraphEditor);
 
 private:
+	static bool convertExperimentDataStructure(QList<ExperimentTreeItem*> *ExpRootTreeItems = NULL, cExperimentStructure *expStruct = NULL, ExperimentTreeModel *expTreeModel = NULL, QMap<int, objectElement> *mObjectElements = NULL, ExperimentManager *currentExpManager = NULL, const ExperimentManager::ExperimentDataStructureConversionType &conversionMethod = EDS_TreeItemList_To_ExperimentStructure);
+	int createExperimentBlockParamsFromExperimentStructure(const int &nBlockNumber, const int &nObjectID, tParsedParameterList *hParams = NULL);
+
 	void DefaultConstruct();
 	bool WriteAndCloseExperimentOutputData(const QString &postFileName = "");
 	void initializeDataLogger();
 	void RegisterMetaTypes();
 	bool invokeExperimentObjectsSlots(const QString &sSlotName);
-	bool prePassiveParseExperiment();
+	bool prePassiveParseExperiment();// const bool bSkipXMLValidation = false);
 	bool configureExperiment();
 	bool createExperimentObjects();
-	//bool createExperimentStructureFromDomNodeList(const QDomNodeList &ExpBlockTrialsDomNodeLst, cExperimentStructure *expStruct);
-	static bool convertExperimentDataStructure(QList<ExperimentTreeItem*> *ExpRootTreeItems = NULL, cExperimentStructure *expStruct = NULL, ExperimentTreeModel *expTreeModel = NULL, const ExperimentManager::ExperimentDataStructureConversionType &conversionMethod = EDS_TreeItemList_To_ExperimentStructure);
-	//int createExperimentBlockParamsFromDomNodeList(const int &nBlockNumber, const int &nObjectID, QDomNodeList *pExpBlockTrialsDomNodeLst = NULL, tParsedParameterList *hParams = NULL);
-	int createExperimentBlockParamsFromTreeItemList(const int &nBlockNumber, const int &nObjectID, const QList<ExperimentTreeItem*> *pExpBlockTrialsTreeItems = NULL, tParsedParameterList *hParams = NULL);
 	bool connectExperimentObjects(bool bDisconnect = false, int nObjectID = -1);
 	bool initializeExperiment(bool bFinalize = false);
 	bool finalizeExperimentObjects();
@@ -445,19 +438,15 @@ private:
 	bool cleanupExperiment();
 		
 	PropertySettingsWidgetContainer *expParamWidgets;
-	QList<ExperimentTreeItem*> ExperimentTreeBlockItemList;
 	QList<ExperimentTreeItem*> ExperimentObjectTreeItemList;
-	QList<ExperimentTreeItem*> ExperimentTreeItemList;
 	cExperimentStructure *cExperimentBlockTrialStructure;
-	QList<objectElement> lExperimentObjectList;
+	QMap<int, objectElement> mExperimentObjectList;//key is object ID
 	ExperimentTreeModel *currentExperimentTree;
 	ExperimentState experimentCurrentState;
-	
 	ExperimentGraphicEditor *ExpGraphicEditor;
 	QHash<QString, int> experimentStateHash;
 	QByteArray currentExperimentFile;
 	QByteArray currentValidationFile;
-
 	QObject *parentObject;
 	QScreen *sConfiguredActiveScreen;
 	QScriptEngine *currentScriptEngine;

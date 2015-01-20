@@ -230,18 +230,10 @@ void RetinotopyMapper::parseExperimentObjectBlockParameters(bool bInit)
 		cycleTriggerAmount = 1;
 		if(experimentManager)
 		{
-			//cExperimentStructure tmpExpStructImplicitCopy = cExperimentStructure(*experimentManager->getExperimentStructure());//Creates an implicit shared safe copy
-			bool bHasCurrentBlock = false;
-			cBlockStructure tmpBlock = experimentManager->getExperimentStructure()->getCurrentBlock(bHasCurrentBlock);
-			//cBlockStructure tmpBlock = tmpExpStructImplicitCopy.getCurrentBlock(bHasCurrentBlock);
-			//tmpExpStructImplicitCopy.setExperimentName("Safe Copy");
-			//QString tmpString = tmpExpStructImplicitCopy.getExperimentName();
-			//tmpString = tmpBlock.getBlockName();
-			//tmpBlock.setBlockName("ff");
-			//tmpString = tmpBlock.getBlockName();
-			if(bHasCurrentBlock)
+			cBlockStructure *tmpBlock = experimentManager->getExperimentStructure()->getCurrentBlock();
+			if (tmpBlock)
 			{
-				tmpInteger = tmpBlock.getNumberOfInternalTriggers();
+				tmpInteger = tmpBlock->getNumberOfInternalTriggers();
 				if(tmpInteger > 0)
 					cycleTriggerAmount = tmpInteger;
 			}
@@ -330,10 +322,9 @@ void RetinotopyMapper::parseExperimentObjectBlockParameters(bool bInit)
 		{
 			if(experimentManager)//->getCurrExperimentState()
 			{
-				bool bHasCurrentBlock = false;
-				cBlockStructure tmpBlock = experimentManager->getExperimentStructure()->getCurrentBlock(bHasCurrentBlock);
-				if(bHasCurrentBlock)
-					cycleTriggerAmount = tmpBlock.getNumberOfInternalTriggers();
+				cBlockStructure *tmpBlock = experimentManager->getExperimentStructure()->getCurrentBlock();
+				if (tmpBlock)
+					cycleTriggerAmount = tmpBlock->getNumberOfInternalTriggers();
 			}
 		}
 

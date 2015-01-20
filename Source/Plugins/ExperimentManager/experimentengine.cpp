@@ -358,10 +358,9 @@ void ExperimentEngine::initBlockTrial()
 	expTrialTimer.restart();
 	if(pExperimentManager)
 	{
-		bool bHasCurrentBlock = false;
-		cBlockStructure tmpBlock = pExperimentManager->getExperimentStructure()->getCurrentBlock(bHasCurrentBlock);
-		if(bHasCurrentBlock)
-			pExperimentManager->fetchExperimentBlockParamsFromTreeItemList(tmpBlock.getBlockNumber(),nObjectID);
+		cBlockStructure *tmpBlock = pExperimentManager->getExperimentStructure()->getCurrentBlock();
+		if (tmpBlock)
+			pExperimentManager->fetchExperimentBlockParameters(tmpBlock->getBlockNumber(), nObjectID);
 		else
 			qDebug() << __FUNCTION__ << "::Could not create a Block Parameter List, no current block!";
 	}
@@ -400,10 +399,9 @@ int ExperimentEngine::checkForNextBlockTrial()
 	bool bFirstCheckAfterExperimentStarted = false;	
 	int nRetval = 0;
 	bool bExperimentStructureChanged = false;
-	bool bHasCurrentBlock = false;
-	cExperimentStructure tmpExpStr = cExperimentStructure(*pExperimentManager->getExperimentStructure());
-	cBlockStructure tmpExpBlockStr = tmpExpStr.getCurrentBlock(bHasCurrentBlock);
-	ExperimentStructuresNameSpace::strcExperimentStructureState tmpExpStrState = tmpExpStr.getCurrentExperimentState();
+	cExperimentStructure *tmpExpStr = pExperimentManager->getExperimentStructure();
+	cBlockStructure *tmpExpBlockStr = tmpExpStr->getCurrentBlock();
+	ExperimentStructuresNameSpace::strcExperimentStructureState tmpExpStrState = tmpExpStr->getCurrentExperimentState();
 
 	if((tmpExpStrState.Experiment_ExternalTrigger == ExperimentStructuresNameSpace::RA_REINITIALIZE) && (nCurrExpBlockTrialFrame == ExperimentStructuresNameSpace::CF_UNINITIALIZED))
 	{//First Experiment Trial? (Start/Init), occurs before the start of the Trigger(timer)
@@ -412,7 +410,7 @@ int ExperimentEngine::checkForNextBlockTrial()
 		bExperimentStructureChanged = true;
 		//if(pExperimentManager)
 		//	pExperimentManager->logExperimentObjectData(nObjectID,0,__FUNCTION__,"","First Check of experiment.", tmpExpStr.getExperimentName());
-		qDebug() << __FUNCTION__ << "::First Check of experiment: " << tmpExpStr.getExperimentName() << "!";
+		qDebug() << __FUNCTION__ << "::First Check of experiment: " << tmpExpStr->getExperimentName() << "!";
 	}
 	if ((tmpExpStrState.Experiment_ExternalTrigger >= 0) && (tmpExpStrState.Experiment_ExternalTrigger > nLastProcessedExternalTriggers))
 	{
@@ -421,8 +419,8 @@ int ExperimentEngine::checkForNextBlockTrial()
 	}
 	if(bFirstCheckAfterExperimentStarted == false)
 	{
-		if(tmpExpStr.getBlockCount() > 0)//Are there blocks defined? QML Viewers trough UI (without ExperimentManager) don't have any defined blocks here!
-			if(bHasCurrentBlock)
+		if(tmpExpStr->getBlockCount() > 0)//Are there blocks defined? QML Viewers trough UI (without ExperimentManager) don't have any defined blocks here!
+			if (tmpExpBlockStr)
 			{
 				goToNextBlockTrial = (tmpExpStrState.CurrentBlock_ExternalTrigger == 0) && (tmpExpStrState.CurrentBlock_InternalTrigger == 0);//Go to next Block Trial?
 			}
@@ -432,7 +430,7 @@ int ExperimentEngine::checkForNextBlockTrial()
 		bExperimentStructureChanged = true;
 		nCurrExpBlockTrialFrame = 0;
 		if(pExperimentManager)
-			pExperimentManager->logExperimentObjectData(nObjectID,0,__FUNCTION__,"",QString("Starting to Init new BlockTrial"),QString("BlockNumber=") + QString::number(tmpExpBlockStr.getBlockNumber()) + ", TrialNumber=" + QString::number(tmpExpStrState.CurrentBlock_TrialNumber) +  ", TrialExternalTrigger=" + QString::number(tmpExpStrState.CurrentBlock_ExternalTrigger) + ", TrialInternalTrigger=" + QString::number(tmpExpStrState.CurrentBlock_InternalTrigger) + ", Frame=" + QString::number(nCurrExpBlockTrialFrame) + ")");
+			pExperimentManager->logExperimentObjectData(nObjectID,0,__FUNCTION__,"",QString("Starting to Init new BlockTrial"),QString("BlockNumber=") + QString::number(tmpExpBlockStr->getBlockNumber()) + ", TrialNumber=" + QString::number(tmpExpStrState.CurrentBlock_TrialNumber) +  ", TrialExternalTrigger=" + QString::number(tmpExpStrState.CurrentBlock_ExternalTrigger) + ", TrialInternalTrigger=" + QString::number(tmpExpStrState.CurrentBlock_InternalTrigger) + ", Frame=" + QString::number(nCurrExpBlockTrialFrame) + ")");
 		initBlockTrial();
 		if (bFirstCheckAfterExperimentStarted)
 		{
@@ -446,8 +444,8 @@ int ExperimentEngine::checkForNextBlockTrial()
 		}
 		else
 		{
-			if(tmpExpStr.getBlockCount() > 0)//Are there blocks defined? QML Viewers trough UI (without ExperimentManager) don't have any defined blocks here!
-				if(bHasCurrentBlock)
+			if(tmpExpStr->getBlockCount() > 0)//Are there blocks defined? QML Viewers trough UI (without ExperimentManager) don't have any defined blocks here!
+				if (tmpExpBlockStr)
 					QMetaObject::invokeMethod( this, "animate",Qt::QueuedConnection,Q_ARG(bool, false));
 		}
 		expTrialTimer.restart();
@@ -460,14 +458,14 @@ int ExperimentEngine::checkForNextBlockTrial()
 	if ((bCurrentSubObjectIsLocked == false) && (bFirstTriggerAfterUnlock))//has the experiment just been unlocked for the first time?
 	{
 		bFirstTriggerAfterUnlock = false;
-		emit ExperimentStructureChanged(tmpExpBlockStr.getBlockNumber(),tmpExpStrState.CurrentBlock_TrialNumber,tmpExpStrState.CurrentBlock_InternalTrigger);
+		emit ExperimentStructureChanged(tmpExpBlockStr->getBlockNumber(),tmpExpStrState.CurrentBlock_TrialNumber,tmpExpStrState.CurrentBlock_InternalTrigger);
 	}
 	else
 	{
 		if ((bExperimentStructureChanged) && (bFirstCheckAfterExperimentStarted == false))
 		{
 			if(getSubObjectState() == Experiment_SubObject_Started)
-				emit ExperimentStructureChanged(tmpExpBlockStr.getBlockNumber(),tmpExpStrState.CurrentBlock_TrialNumber,tmpExpStrState.CurrentBlock_InternalTrigger);
+				emit ExperimentStructureChanged(tmpExpBlockStr->getBlockNumber(),tmpExpStrState.CurrentBlock_TrialNumber,tmpExpStrState.CurrentBlock_InternalTrigger);
 		}
 	}
 	return nRetval;

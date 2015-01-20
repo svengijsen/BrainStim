@@ -162,7 +162,7 @@ class ExperimentTreeModel : public QStandardItemModel
         ExperimentTreeItem *itemFromIndex(const QModelIndex &index) const;
 
 		bool read(QByteArray &byteArrayContent);
-		bool reset();
+		bool reset(const bool bSkipModifiedSignaling = false);
 		//int getDocumentElements(const QStringList &sElementTagName,QDomNodeList &ResultDomNodeList);
 		int getTreeElements(const QStringList &sElementTagName, QList<ExperimentTreeItem *> &lFoundTreeItems, ExperimentTreeItem *pSearchRootItem = NULL);
 		static int getStaticTreeElements(const QStringList &sElementTagName, QList<ExperimentTreeItem *> &lFoundTreeItems, ExperimentTreeItem *pSearchRootItem);
@@ -179,6 +179,9 @@ class ExperimentTreeModel : public QStandardItemModel
 		bool addExperimentBlocks(const int &nAmount = 1);
 
 	public:
+		void enableModifiedSignaling(const bool &bEnable);
+		void emitModifiedSignal(const bool &bForce);
+
 		bool removeExperimentParameters(const QList<ExperimentTreeModel::strcParameterSpecifier> lstParameterSpecifiers);
 		bool renameExperimentParameter(const ExperimentTreeModel::strcParameterSpecifier &cParameterSpecifier, const QString &sNewName);
 		bool addUpdateExperimentBlockParameter(const ExperimentTreeModel::strcParameterSpecifier &cParameterSpecifier, const QString &sNewValue, const bool &bIsCustom);
@@ -220,6 +223,7 @@ class ExperimentTreeModel : public QStandardItemModel
 		int cleanupObjectDependencies(const int &nObjectId);
 		int cleanupBlockDependencies(const int &nBlockId);
 
+		QSemaphore *semaSignalModified;
 		QDomDocument *doc;
 		QDomElement *root;
         ExperimentTreeItem *rootItem;

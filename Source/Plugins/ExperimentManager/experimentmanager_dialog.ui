@@ -18,15 +18,24 @@
     <rect>
      <x>340</x>
      <y>460</y>
-     <width>221</width>
-     <height>33</height>
+     <width>238</width>
+     <height>36</height>
     </rect>
    </property>
    <layout class="QHBoxLayout">
     <property name="spacing">
      <number>6</number>
     </property>
-    <property name="margin">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
      <number>0</number>
     </property>
     <item>
@@ -68,41 +77,12 @@
     </rect>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>2</number>
    </property>
    <widget class="QWidget" name="tab1">
     <attribute name="title">
      <string>Tab1</string>
     </attribute>
-    <widget class="QPushButton" name="btnExampleButton">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>30</y>
-       <width>161</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Run Experiment File (*.exml)</string>
-     </property>
-    </widget>
-    <widget class="QPushButton" name="btnExampleButton_2">
-     <property name="enabled">
-      <bool>true</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>80</y>
-       <width>161</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Run QtQuick2 File (*.qml)</string>
-     </property>
-    </widget>
    </widget>
    <widget class="QWidget" name="tab2">
     <attribute name="title">

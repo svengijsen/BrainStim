@@ -290,17 +290,20 @@ void ExperimentGraphicEditor::configureCustomParameterWidgets()
 		{
 			if(nSectionSelector == 0)
 			{
-				lExperimentObjects = pExpTreeModel->getDefinedExperimentObjectInfoList(NULL);
-				if(lExperimentObjects.isEmpty() == false)
+				if (pExpTreeModel)
 				{
-					int tmpCurrentObjectId;
-					foreach(ExperimentStructuresNameSpace::strcExperimentObject tmpExperimentObject, lExperimentObjects)
+					lExperimentObjects = pExpTreeModel->getDefinedExperimentObjectInfoList(NULL);
+					if (lExperimentObjects.isEmpty() == false)
 					{
-						tmpCurrentObjectId = tmpExperimentObject.nID;
-						if(lTranslatedObjectIds.contains(tmpCurrentObjectId) == false)
+						int tmpCurrentObjectId;
+						foreach(ExperimentStructuresNameSpace::strcExperimentObject tmpExperimentObject, lExperimentObjects)
 						{
-							lUsedObjectNames.append(tmpExperimentObject.sName);
-							lTranslatedObjectIds.append(tmpCurrentObjectId);
+							tmpCurrentObjectId = tmpExperimentObject.nID;
+							if (lTranslatedObjectIds.contains(tmpCurrentObjectId) == false)
+							{
+								lUsedObjectNames.append(tmpExperimentObject.sName);
+								lTranslatedObjectIds.append(tmpCurrentObjectId);
+							}
 						}
 					}
 				}
@@ -706,7 +709,8 @@ void ExperimentGraphicEditor::setNewModel()
 	{
 		filterModel = new TreeFilterProxyModel();
 	}	
-	filterModel->setSourceModel(pExpTreeModel);
+	if (pExpTreeModel)
+		filterModel->setSourceModel(pExpTreeModel);
 	filterModel->setTreeFilterSettings(currentViewSettings);
 	treeView->setModel(filterModel);
 	treeView->selectionModel()->setCurrentIndex(selectedIndex, QItemSelectionModel::ClearAndSelect);
@@ -1973,16 +1977,63 @@ void ExperimentGraphicEditor::setViewFilter(const TreeFilterSettings &newViewSet
 		filterModel->setTreeFilterSettings(currentViewSettings);
 }
 
+void ExperimentGraphicEditor::showTableviewExperimentDialog()
+{
+	if (pExpTreeModel == NULL)
+		return;
+	if (expBlockParamView == NULL)
+		expBlockParamView = new ExperimentBlockParameterView(NULL, pExpTreeModel);
+	if (expBlockParamView)
+	{
+		bool bConnectResult = connect(expBlockParamView, SIGNAL(destroyed(QWidget*)), this, SLOT(childWidgetDestroyed(QWidget*)), Qt::UniqueConnection);
+		expBlockParamView->resize(600, 400);
+		expBlockParamView->show();
+	}
+}
+
+void ExperimentGraphicEditor::showVisualExperimentDialog()
+{
+	if (pExpTreeModel == NULL)
+		return;
+	if (expStructVisualizer == NULL)
+	{
+		expStructVisualizer = new ExperimentStructureVisualizer();
+		nAdditionalMenuHeight = expStructVisualizer->getAdditionalMenuHeight();
+	}
+	if (expStructVisualizer)
+	{
+		bool bResult = connect(expStructVisualizer, SIGNAL(destroyed(QWidget*)), this, SLOT(childWidgetDestroyed(QWidget*)),Qt::UniqueConnection);
+		bResult = expStructVisualizer->setExperimentTreeModel(pExpTreeModel);
+		if (bResult)
+		{
+			mainLayout->addWidget(expStructVisualizer);
+			expStructVisualizer->showMaximized();
+			if (toolBar)
+				expStructVisualizer->setVisualMargin(0, toolBar->height() * 2);
+			//bResult = connect(expStructVisualizer, SIGNAL(GraphItemSelectionChanged(QList<ExperimentVisualizerGraphItemTypeEnum>, QList<int>)), this, SLOT(changeSelection(QList<ExperimentVisualizerGraphItemTypeEnum>, QList<int>)), Qt::UniqueConnection);
+			//bResult = connect(this, SIGNAL(OnResized(const int &, const int &)), expStructVisualizer, SLOT(resizeStructureView(const int &, const int &)));
+			//bResult = connect(expStructVisualizer, SIGNAL(GraphRedrawn()), this, SLOT(forceEmitResize()));
+			//expStructVisualizer->resizeStructureView(expStructVisualizer->width(), expStructVisualizer->height());
+			this->show();
+			this->resize(600, 600);
+			expStructVisualizer->resizeStructureView(expStructVisualizer->width(), expStructVisualizer->height());
+			return;
+		}
+	}
+}
+
 bool ExperimentGraphicEditor::setExperimentTreeModel(ExperimentTreeModel *expModel, const QString &sExpTreeModelCanonFilePath)
 {
 	if(expModel != pExpTreeModel)
 	{
-		loadedExpTreeModel.reset();
+		if (expModel==NULL)
+			loadedExpTreeModel.reset(false);
+		else
+			loadedExpTreeModel.reset(true);
 		if(pExpTreeModel)
-		{
 			disconnect(pExpTreeModel, SIGNAL(modelModified()), this, SLOT(treeModelChanged()));
-		}
-		connect(expModel, SIGNAL(modelModified()), this, SLOT(treeModelChanged()));
+		if (expModel)
+			connect(expModel, SIGNAL(modelModified()), this, SLOT(treeModelChanged()));
 		pExpTreeModel = expModel;
 		setNewModel();
 	}
@@ -2007,6 +2058,16 @@ void ExperimentGraphicEditor::childWidgetDestroyed(QWidget* pWidget)
 		expBlockParamView = NULL;
 	}
 }
+
+//void ExperimentGraphicEditor::showEvent(QShowEvent *event)
+//{
+//	forceEmitResize();
+//}
+
+//void ExperimentGraphicEditor::focusInEvent(QFocusEvent *event)
+//{
+//	forceEmitResize();
+//}
 
 void ExperimentGraphicEditor::resizeEvent(QResizeEvent *event)
 {

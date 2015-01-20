@@ -211,27 +211,17 @@ bool ExperimentManager::insertExperimentObjectBlockParameter(const int nObjectID
 {
 	if (nObjectID >= 0) 
 	{
-		if (!lExperimentObjectList.isEmpty())
+		if (mExperimentObjectList.contains(nObjectID))
 		{
-			int nObjectCount = lExperimentObjectList.count();
-			if (nObjectCount>0)
-			{
-				for (int i=0;i<nObjectCount;i++)
-				{
-					if (lExperimentObjectList[i].nObjectID == nObjectID)
-					{
-						ParsedParameterDefinition tmpParDef;
-						tmpParDef.bHasChanged = true;
-						tmpParDef.sValue = sValue;
-						tmpParDef.bIsInitialized = bIsInitializing;
-						tmpParDef.bIsCustom = bIsCustom;
-						lExperimentObjectList[i].ExpBlockParams->insert(sName,tmpParDef);
-						tmpParDef.sValue = "";
-						tmpParDef =  lExperimentObjectList[i].ExpBlockParams->value(sName);
-						return true;
-					}
-				}
-			}
+			ParsedParameterDefinition tmpParDef;
+			tmpParDef.bHasChanged = true;
+			tmpParDef.sValue = sValue;
+			tmpParDef.bIsInitialized = bIsInitializing;
+			tmpParDef.bIsCustom = bIsCustom;
+			mExperimentObjectList.value(nObjectID).ExpBlockParams->insert(sName, tmpParDef);
+			tmpParDef.sValue = "";
+			tmpParDef = mExperimentObjectList.value(nObjectID).ExpBlockParams->value(sName);
+			return true;
 		}
 	}
 	return false;
@@ -241,34 +231,24 @@ bool ExperimentManager::getExperimentObjectBlockParameter(const int nObjectID,co
 {
 	if (nObjectID >= 0)
 	{
-		if (!lExperimentObjectList.isEmpty())
+		if (mExperimentObjectList.contains(nObjectID))
 		{
-			int nObjectCount = lExperimentObjectList.count();
-			if (nObjectCount>0)
+			if ((mExperimentObjectList.value(nObjectID).ExpBlockParams == NULL) || (mExperimentObjectList.value(nObjectID).ExpBlockParams->isEmpty()))
+				return false;
+			if (mExperimentObjectList.value(nObjectID).ExpBlockParams->contains(sName))
 			{
-				for (int i=0;i<nObjectCount;i++)
+				strcParDef = mExperimentObjectList.value(nObjectID).ExpBlockParams->value(sName, strcParDef);
+				if (strcParDef.bIsInitialized == true)
 				{
-					if (lExperimentObjectList[i].nObjectID == nObjectID)
-					{
-						if ((lExperimentObjectList[i].ExpBlockParams == NULL) || (lExperimentObjectList[i].ExpBlockParams->isEmpty()))
-							return false;
-						if (lExperimentObjectList[i].ExpBlockParams->contains(sName))
-						{
-							strcParDef = lExperimentObjectList[i].ExpBlockParams->value(sName,strcParDef);
-							if (strcParDef.bIsInitialized == true)
-							{
-								//Important, here we need to set the bFirstRequire option to false for future requests, but return the parameter with true
-								ParsedParameterDefinition tmpPPD(strcParDef);
-								tmpPPD.bIsInitialized = false;
-								tmpPPD.bIsCustom = false;
-								lExperimentObjectList[i].ExpBlockParams->insert(sName,tmpPPD);
-							}
-							return true;
-						}
-						return false;
-					}
+					//Important, here we need to set the bFirstRequire option to false for future requests, but return the parameter with true
+					ParsedParameterDefinition tmpPPD(strcParDef);
+					tmpPPD.bIsInitialized = false;
+					tmpPPD.bIsCustom = false;
+					mExperimentObjectList.value(nObjectID).ExpBlockParams->insert(sName, tmpPPD);
 				}
+				return true;
 			}
+			return false;
 		}
 	}
 	return false;
@@ -278,20 +258,10 @@ bool ExperimentManager::setExperimentObjectBlockParameterStructure(const int nOb
 {
 	if (nObjectID >= 0)
 	{
-		if (!lExperimentObjectList.isEmpty())
+		if (mExperimentObjectList.contains(nObjectID))
 		{
-			int nObjectCount = lExperimentObjectList.count();
-			if (nObjectCount>0)
-			{
-				for (int i=0;i<nObjectCount;i++)
-				{
-					if (lExperimentObjectList[i].nObjectID == nObjectID)
-					{
-						lExperimentObjectList[i].ExpBlockParams = expBlockTrialStruct;
-						return true;
-					}
-				}
-			}
+			mExperimentObjectList[nObjectID].ExpBlockParams = expBlockTrialStruct;
+			return true;
 		}
 	}
 	return false;
@@ -301,26 +271,16 @@ bool ExperimentManager::getExperimentObjectScriptValue(const int &nObjectID,cons
 {
 	if (nObjectID >= 0)
 	{
-		if (!lExperimentObjectList.isEmpty())
+		if (mExperimentObjectList.contains(nObjectID))
 		{
-			int nObjectCount = lExperimentObjectList.count();
-			if (nObjectCount>0)
+			if ((mExperimentObjectList.value(nObjectID).ExpBlockParams == NULL) || (mExperimentObjectList.value(nObjectID).ExpBlockParams->isEmpty()))
+				return false;
+			if (mExperimentObjectList.value(nObjectID).ExpBlockParams->contains(sKeyName.toLower()))
 			{
-				for (int i=0;i<nObjectCount;i++)
-				{
-					if (lExperimentObjectList[i].nObjectID == nObjectID)
-					{
-						if ((lExperimentObjectList[i].ExpBlockParams == NULL) || (lExperimentObjectList[i].ExpBlockParams->isEmpty()))
-							return false;
-						if (lExperimentObjectList[i].ExpBlockParams->contains(sKeyName.toLower()))
-						{
-							if(lExperimentObjectList[i].typedExpParamCntnr)
-								return lExperimentObjectList[i].typedExpParamCntnr->getPropertySetting(sKeyName,sScriptValue,currentScriptEngine);
-							else
-								return false;
-						}
-					}
-				}
+				if (mExperimentObjectList.value(nObjectID).typedExpParamCntnr)
+					return mExperimentObjectList.value(nObjectID).typedExpParamCntnr->getPropertySetting(sKeyName, sScriptValue, currentScriptEngine);
+				else
+					return false;
 			}
 		}
 	}
@@ -331,31 +291,21 @@ bool ExperimentManager::setExperimentObjectFromScriptValue(const int &nObjectID,
 {
 	if (nObjectID >= 0)
 	{
-		if (!lExperimentObjectList.isEmpty())
+		if (mExperimentObjectList.contains(nObjectID))
 		{
-			int nObjectCount = lExperimentObjectList.count();
-			if (nObjectCount>0)
+			if ((mExperimentObjectList.value(nObjectID).ExpBlockParams == NULL) || (mExperimentObjectList.value(nObjectID).ExpBlockParams->isEmpty()))
+				return false;
+			//int nCount = mExperimentObjectList.value(nObjectID).ExpBlockParams->count();
+			if (mExperimentObjectList.value(nObjectID).ExpBlockParams->contains(sKeyName.toLower()))
 			{
-				for (int i=0;i<nObjectCount;i++)
+				if (mExperimentObjectList.value(nObjectID).typedExpParamCntnr)
 				{
-					if (lExperimentObjectList[i].nObjectID == nObjectID)
-					{
-						if ((lExperimentObjectList[i].ExpBlockParams == NULL) || (lExperimentObjectList[i].ExpBlockParams->isEmpty()))
-							return false;
-						//int nCount = lExperimentObjectList[i].ExpBlockParams->count();
-						if (lExperimentObjectList[i].ExpBlockParams->contains(sKeyName.toLower()))
-						{
-							if(lExperimentObjectList[i].typedExpParamCntnr)
-							{
-								QString tmpString = sScriptValue.toString();
-								if(expandExperimentBlockParameterValue(tmpString))
-									return lExperimentObjectList[i].typedExpParamCntnr->setPropertySetting(sKeyName,tmpString);
-								return lExperimentObjectList[i].typedExpParamCntnr->setPropertySetting(sKeyName,sScriptValue);
-							}
-							return false;
-						}
-					}
+					QString tmpString = sScriptValue.toString();
+					if (expandExperimentBlockParameterValue(tmpString))
+						return mExperimentObjectList.value(nObjectID).typedExpParamCntnr->setPropertySetting(sKeyName, tmpString);
+					return mExperimentObjectList.value(nObjectID).typedExpParamCntnr->setPropertySetting(sKeyName, sScriptValue);
 				}
+				return false;
 			}
 		}
 	}
@@ -554,6 +504,7 @@ bool ExperimentManager::validateExperiment()
 	{
 		changeCurrentExperimentState(ExperimentManager_Loaded);
 	}
+
 	if (currentExperimentFile.isEmpty())
 	{
 		qDebug() << __FUNCTION__ << "::No Experiment in memory to validate!";
@@ -627,13 +578,18 @@ bool ExperimentManager::runExperiment()
 	// QThread::TimeCriticalPriority);
 #endif
 
-	if(getCurrExperimentState() == ExperimentManager_Stopped)
+	ExperimentState expCurrentState = getCurrExperimentState();
+	if (expCurrentState == ExperimentManager_Stopped)
 		changeCurrentExperimentState(ExperimentManager_Constructed);
 
-	if(!prePassiveParseExperiment())
+	expCurrentState = getCurrExperimentState();
+	if (expCurrentState < ExperimentManager_PreParsed)
 	{
-		changeCurrentExperimentState(ExperimentManager_Loaded);
-		return false;
+		if (!prePassiveParseExperiment())
+		{
+			changeCurrentExperimentState(ExperimentManager_Loaded);
+			return false;
+		}
 	}
 
 	if(!createExperimentObjects())
@@ -734,10 +690,12 @@ bool ExperimentManager::WriteAndCloseExperimentOutputData(const QString &postFil
 
 bool ExperimentManager::cleanupExperiment()
 {
+	if (ExpGraphicEditor)
+		ExpGraphicEditor->setExperimentTreeModel(NULL, "");
 	cleanupExperimentObjects();
-	ExperimentTreeBlockItemList.clear();
+	//ExperimentTreeBlockItemList.clear();
 	ExperimentObjectTreeItemList.clear();
-	ExperimentTreeItemList.clear();
+	//ExperimentTreeItemList.clear();
 	currentExperimentFile.clear();
 	currentValidationFile.clear();
 	currentExperimentFile.clear();
@@ -746,11 +704,6 @@ bool ExperimentManager::cleanupExperiment()
 	{
 		delete currentExperimentTree;
 		currentExperimentTree = NULL;
-	}
-	if (ExpGraphicEditor)
-	{
-		delete ExpGraphicEditor;
-		ExpGraphicEditor = NULL;
 	}
 	if (currentExperimentTree)
 	{
@@ -768,99 +721,99 @@ bool ExperimentManager::cleanupExperiment()
 
 void ExperimentManager::cleanupExperimentObjects()
 {
-	if (lExperimentObjectList.isEmpty())
-		return;
-	int nCount = lExperimentObjectList.count();
-	if (nCount>0)
+	QMap<int, objectElement>::iterator i;
+	for (i = mExperimentObjectList.begin(); i != mExperimentObjectList.end(); ++i)
 	{
-		for (int i=0;i<nCount;i++)
+		if ((i.value().pObject))
 		{
-			if ((lExperimentObjectList[i].pObject))
-			{
-				//if (!(lExperimentObjectList[i].pObject->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("LogToOutputWindow(QString)")) == -1))//Is the signal present?
-				//{
-				//	//Disconnect the signal
-				//	disconnect(lExperimentObjectList[i].pObject, SIGNAL(LogToOutputWindow(QString)), this, SIGNAL(WriteToLogOutput(QString)));//Qt::QueuedConnection --> makes it asynchronyous
-				//}
-				//The same for "LogExpObjData(int,int,QString)"??
-				//logExperimentObjectData(const int nObjectID,const int nTimerID, const QString data2Log);
-				QMetaType::destroy(lExperimentObjectList[i].nMetaID, lExperimentObjectList[i].pObject);
-				lExperimentObjectList[i].pObject = NULL;
-			}
-			lExperimentObjectList[i].nMetaID = -1;
-			lExperimentObjectList[i].nObjectID = -1;
-			lExperimentObjectList[i].sObjectName = "";
-			if(lExperimentObjectList[i].typedExpParamCntnr)
-			{
-				delete lExperimentObjectList[i].typedExpParamCntnr;
-				lExperimentObjectList[i].typedExpParamCntnr = NULL;
-			}
+			//if (!(lExperimentObjectList[i].pObject->metaObject()->indexOfSignal(QMetaObject::normalizedSignature("LogToOutputWindow(QString)")) == -1))//Is the signal present?
+			//{
+			//	//Disconnect the signal
+			//	disconnect(lExperimentObjectList[i].pObject, SIGNAL(LogToOutputWindow(QString)), this, SIGNAL(WriteToLogOutput(QString)));//Qt::QueuedConnection --> makes it asynchronyous
+			//}
+			//The same for "LogExpObjData(int,int,QString)"??
+			//logExperimentObjectData(const int nObjectID,const int nTimerID, const QString data2Log);
+			QMetaType::destroy(i.value().nMetaID, i.value().pObject);
+			i.value().pObject = NULL;
 		}
-		lExperimentObjectList.clear();
+		i.value().nMetaID = -1;
+		i.value().nObjectID = -1;
+		i.value().sObjectName = "";
+		if (i.value().typedExpParamCntnr)
+		{
+			delete i.value().typedExpParamCntnr;
+			i.value().typedExpParamCntnr = NULL;
+		}
 	}
+	mExperimentObjectList.clear();
 }
 
-bool ExperimentManager::changeExperimentObjectsSignalSlots(bool bDisconnect, int nSpecificIndex)
+bool ExperimentManager::changeExperimentObjectsSignalSlots(bool bDisconnect, int nObjectID)
 {
 	if (!currentExperimentTree)
 	{
 		qDebug() << __FUNCTION__ << ":No Experiment loaded!";
 		return false;
 	}
-	if (lExperimentObjectList.isEmpty())
+	if (mExperimentObjectList.isEmpty())
 		return true;
-	int nCount = lExperimentObjectList.count();
-	if (nCount>0)
+
+	const objectElement *currentElement;
+	//Check if nObjectID is specified, or -1 meaning all
+	if (nObjectID >= 0)
 	{
-		for (int i=0;i<nCount;i++)
+		if (mExperimentObjectList.contains(nObjectID) == false)
+			return false;
+	}
+
+	QMap<int, objectElement>::iterator i;
+	for (i = mExperimentObjectList.begin(); i != mExperimentObjectList.end(); ++i)
+	{
+		if (nObjectID >= 0)
+			currentElement = &(mExperimentObjectList[nObjectID]);
+		else
+			currentElement = &i.value();
+		const QMetaObject* metaObject = currentElement->pObject->metaObject();
+
+		//QString sSlotFullName = "ObjectStateHasChanged";//FUNC_WIDGETSTATECHANGED_FULL;//FUNC_USERCLOSE_FULL;
+		if (metaObject->indexOfSignal(metaObject->normalizedSignature(SIGNAL_USERCLOSE_FULL)) != -1)//Is the signal present?
 		{
-			if ((nSpecificIndex != -1) && (nSpecificIndex < nCount))
-				i = nSpecificIndex;//set i to the index
-			
-			const QMetaObject* metaObject = lExperimentObjectList.at(i).pObject->metaObject();
-
-			//QString sSlotFullName = "ObjectStateHasChanged";//FUNC_WIDGETSTATECHANGED_FULL;//FUNC_USERCLOSE_FULL;
-			if (metaObject->indexOfSignal(metaObject->normalizedSignature(SIGNAL_USERCLOSE_FULL)) != -1)//Is the signal present?
+			if (bDisconnect)
 			{
-				if (bDisconnect)
-				{
-					disconnect(lExperimentObjectList[i].pObject, SIGNAL(UserWantsToClose(void)), this, SLOT(abortExperiment(void)));
-				}
-				else
-				{//For now the complete experiment including all object is aborted whenever the UserWantsToClose Signal gets activated
-					connect(lExperimentObjectList[i].pObject, SIGNAL(UserWantsToClose(void)), this, SLOT(abortExperiment(void)));
-				}
+				disconnect(currentElement->pObject, SIGNAL(UserWantsToClose(void)), this, SLOT(abortExperiment(void)));
 			}
-
-			if (metaObject->indexOfSignal(metaObject->normalizedSignature(SIGNAL_OBJECTSTOP_FULL)) != -1)//Is the signal present?
-			{
-				if (bDisconnect)
-				{
-					disconnect(lExperimentObjectList[i].pObject, SIGNAL(ObjectShouldStop(void)), this, SLOT(stopExperiment(void)));
-				}
-				else
-				{//For now the complete experiment including all object is aborted whenever the ObjectShouldStop Signal gets activated
-					connect(lExperimentObjectList[i].pObject, SIGNAL(ObjectShouldStop(void)), this, SLOT(stopExperiment(void)));
-				}
+			else
+			{//For now the complete experiment including all object is aborted whenever the UserWantsToClose Signal gets activated
+				connect(currentElement->pObject, SIGNAL(UserWantsToClose(void)), this, SLOT(abortExperiment(void)));
 			}
-
-			if (metaObject->indexOfSignal(metaObject->normalizedSignature(FUNC_OBJECTSTATECHANGED_FULL)) != -1)//Is the signal present?
-			{
-				if (bDisconnect)
-				{
-					disconnect(lExperimentObjectList[i].pObject, SIGNAL(ObjectStateHasChanged(ExperimentSubObjectState)), this, SLOT(changeExperimentSubObjectState(ExperimentSubObjectState)));
-				} 
-				else
-				{
-					connect(lExperimentObjectList[i].pObject, SIGNAL(ObjectStateHasChanged(ExperimentSubObjectState)), this, SLOT(changeExperimentSubObjectState(ExperimentSubObjectState)));
-				}
-					
-			}
-
-
-			if ((nSpecificIndex != -1) && (nSpecificIndex < nCount))
-				break;//Only one adjustment needed!
 		}
+
+		if (metaObject->indexOfSignal(metaObject->normalizedSignature(SIGNAL_OBJECTSTOP_FULL)) != -1)//Is the signal present?
+		{
+			if (bDisconnect)
+			{
+				disconnect(currentElement->pObject, SIGNAL(ObjectShouldStop(void)), this, SLOT(stopExperiment(void)));
+			}
+			else
+			{//For now the complete experiment including all object is aborted whenever the ObjectShouldStop Signal gets activated
+				connect(currentElement->pObject, SIGNAL(ObjectShouldStop(void)), this, SLOT(stopExperiment(void)));
+			}
+		}
+
+		if (metaObject->indexOfSignal(metaObject->normalizedSignature(FUNC_OBJECTSTATECHANGED_FULL)) != -1)//Is the signal present?
+		{
+			if (bDisconnect)
+			{
+				disconnect(currentElement->pObject, SIGNAL(ObjectStateHasChanged(ExperimentSubObjectState)), this, SLOT(changeExperimentSubObjectState(ExperimentSubObjectState)));
+			} 
+			else
+			{
+				connect(currentElement->pObject, SIGNAL(ObjectStateHasChanged(ExperimentSubObjectState)), this, SLOT(changeExperimentSubObjectState(ExperimentSubObjectState)));
+			}
+					
+		}
+		if (nObjectID >= 0)
+			break;//Only one adjustment needed!
 	}
 	return true;
 }
@@ -871,58 +824,55 @@ void ExperimentManager::changeExperimentSubObjectState(ExperimentSubObjectState 
 	{
 		qDebug() << __FUNCTION__ << ":No Experiment loaded!";
 	}
-	if (lExperimentObjectList.isEmpty())
+	if (mExperimentObjectList.isEmpty())
 		return;
-	int nCount = lExperimentObjectList.count();
 	int nActiveExperimentObjects = 0;
-	if (nCount>0)
-	{
-		for (int i=0;i<nCount;i++)
+	QMap<int, objectElement>::iterator i;
+	for (i = mExperimentObjectList.begin(); i != mExperimentObjectList.end(); ++i)
+	{ 
+	//QString sName = i.value().sObjectName;
+	if (QObject::sender() == i.value().pObject)
 		{
-			//QString sName = lExperimentObjectList.at(i).sObjectName;
-			if (QObject::sender() == lExperimentObjectList.at(i).pObject)
+			//We automatically close and delete the object after a "Abort" command...
+			if(nState == Experiment_SubObject_Abort)
 			{
-				//We automatically close and delete the object after a "Abort" command...
-				if(nState == Experiment_SubObject_Abort)
+				if (i.value().nCurrentState != Experiment_SubObject_IsAborting)//Multiple Abort events could occur, catch only first one
 				{
-					if (lExperimentObjectList[i].nCurrentState != Experiment_SubObject_IsAborting)//Multiple Abort events could occur, catch only first one
-					{
-						connectExperimentObjects(true,lExperimentObjectList[i].nObjectID);//disconnect!
-						lExperimentObjectList[i].pObject->deleteLater();
-						lExperimentObjectList[i].nCurrentState = Experiment_SubObject_IsAborting;
-					}
+					connectExperimentObjects(true, i.value().nObjectID);//disconnect!
+					i.value().pObject->deleteLater();
+					i.value().nCurrentState = Experiment_SubObject_IsAborting;
 				}
-				else if(nState == Experiment_SubObject_Stop)
-				{
-					if (lExperimentObjectList[i].nCurrentState != Experiment_SubObject_IsStopping)//Multiple Stop events could occur, catch only first one
-					{
-						connectExperimentObjects(true,lExperimentObjectList[i].nObjectID);//disconnect!
-						lExperimentObjectList[i].pObject->deleteLater();
-						lExperimentObjectList[i].nCurrentState = Experiment_SubObject_IsStopping;
-					}
-				}
-				else if((nState == Experiment_SubObject_Stopped) || (nState == Experiment_SubObject_Destructing))
-				{
-					changeExperimentObjectsSignalSlots(true,i);
-					lExperimentObjectList[i].pObject = NULL;
-					lExperimentObjectList[i].nCurrentState = nState;
-				}
-				else//All other cases
-				{
-					lExperimentObjectList[i].nCurrentState = nState;//Set the new object state
-				}
-				//lExperimentObjectList[i].sStateHistory.nState.append(lExperimentObjectList[i].nCurrentState);
-				//lExperimentObjectList[i].sStateHistory.sDateTimeStamp.append(getCurrentDateTimeStamp());
 			}
-			if (!((lExperimentObjectList[i].nCurrentState == Experiment_SubObject_Initialized)||(lExperimentObjectList[i].nCurrentState == Experiment_SubObject_Stopped) || 
-				  (lExperimentObjectList[i].nCurrentState == Experiment_SubObject_Constructing)||(lExperimentObjectList[i].nCurrentState == Experiment_SubObject_Destructing) ))
+			else if(nState == Experiment_SubObject_Stop)
 			{
-				nActiveExperimentObjects++;
-			}			
+				if (i.value().nCurrentState != Experiment_SubObject_IsStopping)//Multiple Stop events could occur, catch only first one
+				{
+					connectExperimentObjects(true, i.value().nObjectID);//disconnect!
+					i.value().pObject->deleteLater();
+					i.value().nCurrentState = Experiment_SubObject_IsStopping;
+				}
+			}
+			else if((nState == Experiment_SubObject_Stopped) || (nState == Experiment_SubObject_Destructing))
+			{
+				changeExperimentObjectsSignalSlots(true,i.value().nObjectID);
+				i.value().pObject = NULL;
+				i.value().nCurrentState = nState;
+			}
+			else//All other cases
+			{
+				i.value().nCurrentState = nState;//Set the new object state
+			}
+			//i.value().sStateHistory.nState.append(i.value().nCurrentState);
+			//i.value().sStateHistory.sDateTimeStamp.append(getCurrentDateTimeStamp());
 		}
-		if(nActiveExperimentObjects == 0)//No more active object? Then the experiment ended
-			changeCurrentExperimentState(ExperimentManager_Stopped);
+	if (!((i.value().nCurrentState == Experiment_SubObject_Initialized) || (i.value().nCurrentState == Experiment_SubObject_Stopped) ||
+		(i.value().nCurrentState == Experiment_SubObject_Constructing) || (i.value().nCurrentState == Experiment_SubObject_Destructing)))
+		{
+			nActiveExperimentObjects++;
+		}			
 	}
+	if(nActiveExperimentObjects == 0)//No more active object? Then the experiment ended
+		changeCurrentExperimentState(ExperimentManager_Stopped);
 }
 
 bool ExperimentManager::invokeExperimentObjectsSlots(const QString &sSlotName)
@@ -932,32 +882,27 @@ bool ExperimentManager::invokeExperimentObjectsSlots(const QString &sSlotName)
 		qDebug() << __FUNCTION__ << ":No Experiment loaded!";
 		return false;
 	}
-	if (lExperimentObjectList.isEmpty())
+	if (mExperimentObjectList.isEmpty())
 		return true;
-	
-	int nCount = lExperimentObjectList.count();
-	if (nCount>0)
+
+	QMap<int, objectElement>::iterator iter;
+	for (iter = mExperimentObjectList.begin(); iter != mExperimentObjectList.end(); ++iter)
 	{
-		for (int i=0;i<nCount;i++)
+		//Get the meta object
+		bool bRetVal;
+		QString sSlotFullName = sSlotName + "()";
+		QObject *tmpObject = iter.value().pObject;
+		const QMetaObject* metaObject = tmpObject->metaObject();
+
+		if (!(metaObject->indexOfMethod(sSlotFullName.toLatin1()) == -1))//Is the slot present?
 		{
-			//Get the meta object
-			bool bRetVal;
-			QString sSlotFullName = sSlotName + "()";
-			const QMetaObject* metaObject = lExperimentObjectList[i].pObject->metaObject();
-
-			if (!(metaObject->indexOfMethod(sSlotFullName.toLatin1()) == -1))//Is the slot present?
+			//Invoke the start() slot
+			if (!metaObject->invokeMethod(tmpObject, sSlotName.toLatin1(), Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal)))
 			{
-				//Invoke the start() slot
-				if(!metaObject->invokeMethod(lExperimentObjectList.at(i).pObject, sSlotName.toLatin1(), Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal)))//, Q_ARG(QString, "sqrt"), Q_ARG(int, 42), Q_ARG(double, 9.7));
-					//if(!QMetaObject::invokeMethod(lExperimentObjectList[i].pObject, sMethod.toLatin1(), Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal)))//, Q_ARG(QString, "sqrt"), Q_ARG(int, 42), Q_ARG(double, 9.7));
-				{
-					qDebug() << __FUNCTION__ << "::Could not invoke the slot(" << sSlotFullName << ")!";		
-					return false;
-				}
+				qDebug() << __FUNCTION__ << "::Could not invoke the slot(" << sSlotFullName << ")!";		
+				return false;
 			}
-
 		}
-		return true;
 	}
 	return true;
 }
@@ -990,7 +935,7 @@ bool ExperimentManager::startExperimentObjects(bool bRunFullScreen)
 	return bRetVal;
 }
 
-bool ExperimentManager::prePassiveParseExperiment()
+bool ExperimentManager::prePassiveParseExperiment()//const bool bSkipXMLValidation)
 {
 	if (!validateExperiment())
 		return false;
@@ -1000,27 +945,17 @@ bool ExperimentManager::prePassiveParseExperiment()
 		changeCurrentExperimentState(ExperimentManager_Loaded);
 		return false;
 	}
-	if (!createExperimentStructure(ExperimentTreeItemList,currentExperimentTree,cExperimentBlockTrialStructure))
+	QList<ExperimentTreeItem*> ExperimentTreeItemList;
+	if (!createExperimentStructure(ExperimentTreeItemList, currentExperimentTree, cExperimentBlockTrialStructure, &mExperimentObjectList, this))
 	{
 		changeCurrentExperimentState(ExperimentManager_Loaded);
 		return false;
-	}
-	else
-	{
-		QStringList strList;
-		strList.append(BLOCKTRIALS_TAG);
-		strList.append(BLOCK_TAG);
-		if(ExperimentTreeModel::getStaticTreeElements(strList, ExperimentTreeBlockItemList, currentExperimentTree->getRootItem()) < 1)
-		{
-			changeCurrentExperimentState(ExperimentManager_Loaded);
-			return false;
-		}
 	}
 	changeCurrentExperimentState(ExperimentManager_PreParsed);
 	return true;
 }
 
-bool ExperimentManager::createExperimentStructure(QList<ExperimentTreeItem*> &lExpTreeItems, ExperimentTreeModel *expTreeModel, cExperimentStructure* cExpStruct)
+bool ExperimentManager::createExperimentStructure(QList<ExperimentTreeItem*> &lExpTreeItems, ExperimentTreeModel *expTreeModel, cExperimentStructure* cExpStruct, QMap<int, objectElement> *mObjectElements, ExperimentManager *pCurrentExpManager)
 {
 	if ((expTreeModel == NULL) || (cExpStruct == NULL))
 	{
@@ -1033,7 +968,7 @@ bool ExperimentManager::createExperimentStructure(QList<ExperimentTreeItem*> &lE
 
 	if(ExperimentTreeModel::getStaticTreeElements(strList, lExpTreeItems,expTreeModel->getRootItem()) > 0)
 	{
-		if (convertExperimentDataStructure(&lExpTreeItems, cExpStruct, NULL, EDS_TreeItemList_To_ExperimentStructure))
+		if (convertExperimentDataStructure(&lExpTreeItems, cExpStruct, NULL, mObjectElements, pCurrentExpManager, EDS_TreeItemList_To_ExperimentStructure))
 		{
 			if (cExpStruct->prepareExperiment(true) == false)
 			{
@@ -1087,7 +1022,6 @@ bool ExperimentManager::configureExperiment()
 			ExperimentTreeItem* tmpTreeSubItem;
 			QMap<QString, TreeItemDefinition> tTmpTreeItemDefs;
 			QString tmpString = "";
-			//QVariant tmpVariant;
 
 			tmpTreeItem = lExpTreeItems.at(0);//We'll only use the first one by now and ignore the rest			
 			if (tmpTreeItem->hasChildren()) 
@@ -1096,11 +1030,11 @@ bool ExperimentManager::configureExperiment()
 				if(tTmpTreeItemDefs.contains(ID_TAG))
 				{
 					tmpString = tTmpTreeItemDefs[ID_TAG].value.toString();
-					if (!tmpString.isEmpty())//Correct ObjectID?
+					if (!tmpString.isEmpty())//Correct Experiment ID?
 						cExperimentBlockTrialStructure->setExperimentID(tmpString.toInt());
 				}
 
-				tmpTreeSubItem = tmpTreeItem->firstChild(NAME_TAG);//tmpNode.firstChildElement(NAME_TAG);
+				tmpTreeSubItem = tmpTreeItem->firstChild(NAME_TAG);
 				tmpString = tmpTreeSubItem->getValue();
 				if (!tmpString.isEmpty())
 					cExperimentBlockTrialStructure->setExperimentName(tmpString);
@@ -1242,7 +1176,34 @@ QString ExperimentManager::getAvailableScreensInformation()
 	return sGatheredInfo;
 }
 
-bool ExperimentManager::showVisualExperimentEditor(ExperimentTreeModel *expTreeModel, const QString &sExpTreeModelCanonFilePath)
+bool ExperimentManager::showTreeviewExperimentDialog(ExperimentTreeModel *expTreeModel, const QString &sExpTreeModelCanonFilePath)
+{
+	if (expTreeModel == NULL)
+	{
+		if (currentExperimentTree == NULL)
+		{
+			if (loadExperiment(sExpTreeModelCanonFilePath, true) == false)
+				return false;
+			if (!prePassiveParseExperiment())
+				return false;
+		}
+		expTreeModel = currentExperimentTree;
+	}
+	if (ExpGraphicEditor == NULL)
+	{
+		ExpGraphicEditor = new ExperimentGraphicEditor();
+		connect(ExpGraphicEditor, SIGNAL(IsDestructing(ExperimentGraphicEditor*)), this, SLOT(visualExperimentEditorDestroyed(ExperimentGraphicEditor*)));
+		ExpGraphicEditor->setExperimentManager(this);
+	}
+	bool bParseResult = ExpGraphicEditor->setExperimentTreeModel(expTreeModel, sExpTreeModelCanonFilePath);
+	if (bParseResult)
+	{
+		ExpGraphicEditor->showTableviewExperimentDialog();
+	}
+	return bParseResult;
+}
+
+bool ExperimentManager::showVisualExperimentDialog(ExperimentTreeModel *expTreeModel, const QString &sExpTreeModelCanonFilePath)
 {
 	if(expTreeModel == NULL)
 	{
@@ -1262,9 +1223,10 @@ bool ExperimentManager::showVisualExperimentEditor(ExperimentTreeModel *expTreeM
 		ExpGraphicEditor->setExperimentManager(this);
 	}
 	bool bParseResult = ExpGraphicEditor->setExperimentTreeModel(expTreeModel,sExpTreeModelCanonFilePath);
-
-	if(bParseResult)
-		ExpGraphicEditor->showMaximized();
+	if (bParseResult)
+	{
+		ExpGraphicEditor->showVisualExperimentDialog();
+	}
 	return bParseResult;
 }
 
@@ -1283,9 +1245,25 @@ bool ExperimentManager::parseCurrentExperimentStructure()
 		return false;
 	if (currentExperimentTree == NULL)
 		currentExperimentTree = new ExperimentTreeModel();
+	currentExperimentTree->enableModifiedSignaling(false);
 	if (currentExperimentTree->resetExperiment() == false)
+	{
+		currentExperimentTree->enableModifiedSignaling(true);
 		return false;
-	bool bResult = convertExperimentDataStructure(NULL, cExperimentBlockTrialStructure, currentExperimentTree, EDS_ExperimentStructure_To_ExperimentTreeModel);
+	}
+	bool bResult = convertExperimentDataStructure(NULL, cExperimentBlockTrialStructure, currentExperimentTree, NULL, NULL, EDS_ExperimentStructure_To_ExperimentTreeModel);
+	if (bResult)
+	{
+		if(cExperimentBlockTrialStructure->prepareExperiment(true))
+			changeCurrentExperimentState(ExperimentManager_PreParsed);
+	}
+	else
+	{
+		changeCurrentExperimentState(ExperimentManager_NoState);
+	}
+	if (bResult)
+		currentExperimentTree->emitModifiedSignal(false);
+	currentExperimentTree->enableModifiedSignaling(true);
 	return bResult;
 }
 
@@ -1296,359 +1274,111 @@ bool ExperimentManager::finalizeExperimentObjects()
 
 bool ExperimentManager::initializeExperiment(bool bFinalize)
 {
-	bool bRetVal = false;
-	if (!currentExperimentTree)
+	if (cExperimentBlockTrialStructure == NULL)
 	{
 		qDebug() << __FUNCTION__ << "(" << bFinalize << ")::No Experiment loaded!";
 		return false;
 	}
 	QMap<QString, strcInvokeObjectDefs> mapHexNumberToObjectInitializationsInvokeDefs;
-	QStringList strList;
-	strList.clear();
-	strList.append(ROOT_TAG);
-	if (bFinalize)
-		strList.append(FINALIZATION_TAG); 
-	else
-		strList.append(INITIALIZATION_TAG);
-	strList.append(OBJECT_TAG);
-
-	QList<ExperimentTreeItem*> lExpTreeItems;
-	int nNumberOfDefinedInitializations = currentExperimentTree->getTreeElements(strList, lExpTreeItems);
-	if(nNumberOfDefinedInitializations > 0)
+	QList<cObjectStructure*> lExpObjects = cExperimentBlockTrialStructure->getObjectList();
+	foreach(cObjectStructure *currentObject, lExpObjects)
 	{
-		int nNrOfObjects = ExperimentObjectTreeItemList.count();
-		if (nNrOfObjects>0)
+		if (currentObject)
 		{
 			QString tmpString;
-			int nObjectID = -1;
-			int nParameterID = -1;
 			QObject *pSourceObject = NULL;
-			QString sType = "";
-			QString sSignature = "";
-			QString tmpNameString = "";
-			QString tmpMemberString = "";
-			int nParameterCount;
-			QList<QString> sParameterNames;
-			QList<QString> sParameterValues;
-			QList<QString> sParameterTypes;
-			ExperimentTreeItem* pExpTreeItem;
-			QStringList lInitParametersSearchPath;
-			lInitParametersSearchPath << PARAMETER_TAG;
-			QMap<QString, TreeItemDefinition> tTmpTreeItemDefs;
-
-			for(int i=0;i<nNumberOfDefinedInitializations;i++)
+			pSourceObject = getObjectElementById(currentObject->getObjectID());
+			if (pSourceObject == NULL)
+				continue;
+			const QMetaObject* sourceMetaObject = pSourceObject->metaObject();
+			if (sourceMetaObject == NULL)
+				continue;
+			QList<cMethodStructure*> *currentMethodList = NULL;
+			if (bFinalize)
+				currentMethodList = cExperimentBlockTrialStructure->getObjectFinalizationList(currentObject->getObjectID());
+			else
+				currentMethodList = cExperimentBlockTrialStructure->getObjectInitializationList(currentObject->getObjectID());
+			if (currentMethodList)
 			{
-				sParameterNames.clear();
-				sParameterTypes.clear();
-				sParameterValues.clear();
-				pExpTreeItem = lExpTreeItems.at(i);
-				int nInitMethodOrderNumber = -1;
-				QString sInitMethodOrderHexNumber = "";
-
-				//Get the order number
-				ExperimentTreeItem *pExpTreeParentItem = pExpTreeItem->parent();
-				if (pExpTreeParentItem)
+				foreach(cMethodStructure *currentMethod, *currentMethodList)
 				{
-					ExperimentTreeItem *pExpTreeNumberItem = pExpTreeParentItem->firstChild(INIT_FINIT_NUMBER_TAG);
-					if (pExpTreeNumberItem)
+					QString sInitMethodOrderHexNumber = "0000";
+					QList<cMethodParameterStructure*> currentMethodParamList = currentMethod->getMethodParameterList();
+					if (currentMethodParamList.isEmpty() == false)
 					{
-						bool bSuccesConversion = false;
-						nInitMethodOrderNumber = pExpTreeNumberItem->getValue().toInt(&bSuccesConversion);
-						if (bSuccesConversion == false)
+						QStringList lParsedMethodParamValues;
+						QStringList lParsedMethodParamTypes;
+						foreach(cMethodParameterStructure *currentMethodParam, currentMethodParamList)
 						{
-							nInitMethodOrderNumber = -1;
+							tmpString = currentMethodParam->getMethodParameterValue();
+							expandExperimentBlockParameterValue(tmpString);
+							lParsedMethodParamValues.append(tmpString);
+							lParsedMethodParamTypes.append(currentMethodParam->getMethodParameterType());
 						}
-						else
+
+						int nArgCount = currentMethodParamList.count();
+						QByteArray normType;
+						int typeId;
+						QList<QGenericArgument> sArguments;
+						for (int nArgCntr = 0; nArgCntr < MAX_INVOKE_ARG_COUNT; nArgCntr++)
+							sArguments << QGenericArgument();
+
+						for (int k = 0; k < MAX_INVOKE_ARG_COUNT; k++)//max arguments
 						{
-							QString sInitMethodOrderHexNumber = "0000";
-							//bool bHexedResult = 
-								MainAppInfo::getHexedOrderNumber(nInitMethodOrderNumber, sInitMethodOrderHexNumber, 4);
-						}
-					}
-				}
-				//
-				if (pExpTreeItem && (nInitMethodOrderNumber>=0))
-				{
-					tTmpTreeItemDefs = pExpTreeItem->getDefinitions();
-					tmpString = "";
-					if(tTmpTreeItemDefs.contains(ID_TAG) == false)
-						break;
-					tmpString = tTmpTreeItemDefs[ID_TAG].value.toString();//Correct ObjectID?
-					if (tmpString.isEmpty())
-						break;
-					nObjectID = tmpString.toInt();
-					if (!(nObjectID >= 0))
-						break;
-					pSourceObject = getObjectElementById(nObjectID);
-					if (pSourceObject == NULL)
-						continue;
-
-					pExpTreeItem = lExpTreeItems.at(i)->firstChild(INIT_FINIT_TYPE_TAG);
-					if(pExpTreeItem==NULL)
-						break;
-					tmpString = pExpTreeItem->getValue();
-					if (tmpString.isEmpty())
-						break;
-					if (!(tmpString == INIT_FINIT_TYPE_SLOT_TAG))
-						break;
-					sType = tmpString;
-
-					pExpTreeItem = lExpTreeItems.at(i)->firstChild(INIT_FINIT_SIGNATURE_TAG);
-					if(pExpTreeItem==NULL)
-						break;
-					tmpString = pExpTreeItem->getValue();
-					if (tmpString.isEmpty())
-						break;
-					sSignature = tmpString;
-
-					const QMetaObject* sourceMetaObject = NULL;
-					sourceMetaObject = pSourceObject->metaObject();
-
-					pExpTreeItem = lExpTreeItems.at(i)->firstChild(PARAMETERS_TAG);
-					if(pExpTreeItem)
-					{
-						QList<ExperimentTreeItem*> tmpInitParameterTreeItemList;
-						nParameterCount = ExperimentTreeModel::getStaticTreeElements(lInitParametersSearchPath, tmpInitParameterTreeItemList, pExpTreeItem);
-						if(nParameterCount > 0)
-						{
-							for (int j=0;j<nParameterCount;j++)//For each parameter
+							if (k < nArgCount)
 							{
-								tmpString = "";
-								pExpTreeItem = tmpInitParameterTreeItemList.at(j);
-								tTmpTreeItemDefs = pExpTreeItem->getDefinitions();
-
-								if(!tTmpTreeItemDefs.contains(ID_TAG))
-									continue;
-								tmpString = tTmpTreeItemDefs[ID_TAG].value.toString();//Correct ParameterID?
-								if (tmpString.isEmpty())
-									continue;
-								nParameterID = tmpString.toInt();
-								if (!(nParameterID >= 0))
-									continue;
-
-								pExpTreeItem = tmpInitParameterTreeItemList.at(j)->firstChild(NAME_TAG);
-								tmpNameString = pExpTreeItem->getValue();
-								if (tmpNameString.isEmpty())
-									continue;
-
-								pExpTreeItem = tmpInitParameterTreeItemList.at(j)->firstChild(MEMBER_TYPE_TAG);
-								tmpMemberString = pExpTreeItem->getValue();
-								if (tmpMemberString.isEmpty())
-									continue;
-
-								pExpTreeItem = tmpInitParameterTreeItemList.at(j)->firstChild(VALUE_TAG);
-								tmpString = pExpTreeItem->getValue();
-								if (tmpString.isEmpty())
-									continue;
-								expandExperimentBlockParameterValue(tmpString);
-
-								sParameterValues.append(tmpString);
-								sParameterNames.append(tmpNameString);
-								sParameterTypes.append(tmpMemberString);
-							}// end of parameter loop
-							int nArgCount = sParameterNames.count();						
-							QByteArray normType;
-							//bool bSucceeded;
-							int typeId;
-							//QGenericArgument sArguments[MAX_INVOKE_ARG_COUNT];// this doesn't work! weird bug??
-							QGenericArgument sArguments0;
-							QGenericArgument sArguments1;
-							QGenericArgument sArguments2;
-							QGenericArgument sArguments3;
-							QGenericArgument sArguments4;
-							QGenericArgument sArguments5;
-							QGenericArgument sArguments6;
-							QGenericArgument sArguments7;
-							QGenericArgument sArguments8;
-							QGenericArgument sArguments9;
-
-							for(int k=0;k<MAX_INVOKE_ARG_COUNT;k++)//max arguments
-							{							
-								//sArguments.append(QGenericArgument());	
-								if (k<nArgCount)
+								normType = QMetaObject::normalizedType(lParsedMethodParamTypes[k].toLatin1());
+								typeId = QMetaType::type(normType);
+								if (typeId == QMetaType::Bool)
 								{
-									normType = QMetaObject::normalizedType(sParameterTypes[k].toLatin1());
-									typeId = QMetaType::type(normType);								
-
-									if(typeId==QMetaType::Bool)//QMetaType::Type
-									{
-										// below is dirty, but array doesn't work, passes wrong value to invoked function! weird bug??
-										if(k==0)
-											sArguments0 = Q_ARG(bool,sParameterValues[k].toInt());
-										else if(k==1)
-											sArguments1 = Q_ARG(bool,sParameterValues[k].toInt());
-										else if(k==2)
-											sArguments2 = Q_ARG(bool,sParameterValues[k].toInt());
-										else if(k==3)
-											sArguments3 = Q_ARG(bool,sParameterValues[k].toInt());
-										else if(k==4)
-											sArguments4 = Q_ARG(bool,sParameterValues[k].toInt());
-										else if(k==5)
-											sArguments5 = Q_ARG(bool,sParameterValues[k].toInt());
-										else if(k==6)
-											sArguments6 = Q_ARG(bool,sParameterValues[k].toInt());
-										else if(k==7)
-											sArguments7 = Q_ARG(bool,sParameterValues[k].toInt());
-										else if(k==8)
-											sArguments8 = Q_ARG(bool,sParameterValues[k].toInt());
-										else if(k==9)
-											sArguments9 = Q_ARG(bool,sParameterValues[k].toInt());
-									}
-									else if(typeId==QMetaType::Int)
-									{
-										// below is dirty, but array doesn't work, passes wrong value to invoked function! weird bug??
-										if(k==0)
-											sArguments0 = Q_ARG(int,sParameterValues[k].toInt());
-										else if(k==1)
-											sArguments1 = Q_ARG(int,sParameterValues[k].toInt());
-										else if(k==2)
-											sArguments2 = Q_ARG(int,sParameterValues[k].toInt());
-										else if(k==3)
-											sArguments3 = Q_ARG(int,sParameterValues[k].toInt());
-										else if(k==4)
-											sArguments4 = Q_ARG(int,sParameterValues[k].toInt());
-										else if(k==5)
-											sArguments5 = Q_ARG(int,sParameterValues[k].toInt());
-										else if(k==6)
-											sArguments6 = Q_ARG(int,sParameterValues[k].toInt());
-										else if(k==7)
-											sArguments7 = Q_ARG(int,sParameterValues[k].toInt());
-										else if(k==8)
-											sArguments8 = Q_ARG(int,sParameterValues[k].toInt());
-										else if(k==9)
-											sArguments9 = Q_ARG(int,sParameterValues[k].toInt());
-									}
-									else if(typeId==QMetaType::Short)
-									{ 
-										// below is dirty, but array doesn't work, passes wrong value to invoked function! weird bug??
-										if(k==0)
-											sArguments0 = Q_ARG(short,sParameterValues[k].toShort());
-										else if(k==1)
-											sArguments1 = Q_ARG(short,sParameterValues[k].toShort());
-										else if(k==2)
-											sArguments2 = Q_ARG(short,sParameterValues[k].toShort());
-										else if(k==3)
-											sArguments3 = Q_ARG(short,sParameterValues[k].toShort());
-										else if(k==4)
-											sArguments4 = Q_ARG(short,sParameterValues[k].toShort());
-										else if(k==5)
-											sArguments5 = Q_ARG(short,sParameterValues[k].toShort());
-										else if(k==6)
-											sArguments6 = Q_ARG(short,sParameterValues[k].toShort());
-										else if(k==7)
-											sArguments7 = Q_ARG(short,sParameterValues[k].toShort());
-										else if(k==8)
-											sArguments8 = Q_ARG(short,sParameterValues[k].toShort());
-										else if(k==9)
-											sArguments9 = Q_ARG(short,sParameterValues[k].toShort());
-									}
-									else if(typeId==QMetaType::Double)
-									{
-										// below is dirty, but array doesn't work, passes wrong value to invoked function! weird bug??
-										if(k==0)
-											sArguments0 = Q_ARG(double,sParameterValues[k].toDouble());
-										else if(k==1)
-											sArguments1 = Q_ARG(double,sParameterValues[k].toDouble());
-										else if(k==2)
-											sArguments2 = Q_ARG(double,sParameterValues[k].toDouble());
-										else if(k==3)
-											sArguments3 = Q_ARG(double,sParameterValues[k].toDouble());
-										else if(k==4)
-											sArguments4 = Q_ARG(double,sParameterValues[k].toDouble());
-										else if(k==5)
-											sArguments5 = Q_ARG(double,sParameterValues[k].toDouble());
-										else if(k==6)
-											sArguments6 = Q_ARG(double,sParameterValues[k].toDouble());
-										else if(k==7)
-											sArguments7 = Q_ARG(double,sParameterValues[k].toDouble());
-										else if(k==8)
-											sArguments8 = Q_ARG(double,sParameterValues[k].toDouble());
-										else if(k==9)
-											sArguments9 = Q_ARG(double,sParameterValues[k].toDouble());
-									}
-									else if(typeId==QMetaType::Long)
-									{
-										// below is dirty, but array doesn't work, passes wrong value to invoked function! weird bug??
-										if(k==0)
-											sArguments0 = Q_ARG(long,sParameterValues[k].toLong());
-										else if(k==1)
-											sArguments1 = Q_ARG(long,sParameterValues[k].toLong());
-										else if(k==2)
-											sArguments2 = Q_ARG(long,sParameterValues[k].toLong());
-										else if(k==3)
-											sArguments3 = Q_ARG(long,sParameterValues[k].toLong());
-										else if(k==4)
-											sArguments4 = Q_ARG(long,sParameterValues[k].toLong());
-										else if(k==5)
-											sArguments5 = Q_ARG(long,sParameterValues[k].toLong());
-										else if(k==6)
-											sArguments6 = Q_ARG(long,sParameterValues[k].toLong());
-										else if(k==7)
-											sArguments7 = Q_ARG(long,sParameterValues[k].toLong());
-										else if(k==8)
-											sArguments8 = Q_ARG(long,sParameterValues[k].toLong());
-										else if(k==9)
-											sArguments9 = Q_ARG(long,sParameterValues[k].toLong());
-									}
-									else//In all other cases we marshal to QString and give that a try... 
-									{
-										qWarning() << "initializeExperimentObjects(" << bFinalize << ")::Undefined argument (typeId=" << typeId << "), switching to QString to create a generic argument...";
-										// below is dirty, but array doesn't work, passes wrong value to invoked function! weird bug??
-										if(k==0)
-											sArguments0 = Q_ARG(QString,sParameterValues[k]);
-										else if(k==1)
-											sArguments1 = Q_ARG(QString,sParameterValues[k]);
-										else if(k==2)
-											sArguments2 = Q_ARG(QString,sParameterValues[k]);
-										else if(k==3)
-											sArguments3 = Q_ARG(QString,sParameterValues[k]);
-										else if(k==4)
-											sArguments4 = Q_ARG(QString,sParameterValues[k]);
-										else if(k==5)
-											sArguments5 = Q_ARG(QString,sParameterValues[k]);
-										else if(k==6)
-											sArguments6 = Q_ARG(QString,sParameterValues[k]);
-										else if(k==7)
-											sArguments7 = Q_ARG(QString,sParameterValues[k]);
-										else if(k==8)
-											sArguments8 = Q_ARG(QString,sParameterValues[k]);
-										else if(k==9)
-											sArguments9 = Q_ARG(QString,sParameterValues[k]);
-									}
+									sArguments[k] = Q_ARG(bool, lParsedMethodParamValues[k].toInt());
 								}
-								else
+								else if (typeId == QMetaType::Int)
 								{
-									break;
+									sArguments[k] = Q_ARG(int, lParsedMethodParamValues[k].toInt());
+								}
+								else if (typeId == QMetaType::Short)
+								{
+									sArguments[k] = Q_ARG(short, lParsedMethodParamValues[k].toShort());
+								}
+								else if (typeId == QMetaType::Double)
+								{
+									sArguments[k] = Q_ARG(double, lParsedMethodParamValues[k].toDouble());
+								}
+								else if (typeId == QMetaType::Long)
+								{
+									sArguments[k] = Q_ARG(long, lParsedMethodParamValues[k].toLong());
+								}
+								else//In all other cases we marshal to QString and give that a try... 
+								{
+									qWarning() << "initializeExperimentObjects(" << bFinalize << ")::Undefined argument (typeId=" << typeId << "), switching to QString to create a generic argument...";
+									// below is dirty, but array doesn't work, passes wrong value to invoked function! weird bug??
+									sArguments[k] = Q_ARG(QString, lParsedMethodParamValues[k]);
 								}
 							}
-							strcInvokeObjectDefs sObjInitInvokeDef;
-							sObjInitInvokeDef.pMetaObject = sourceMetaObject;
-							sObjInitInvokeDef.pObject = pSourceObject;
-							sObjInitInvokeDef.nOrderNumber = nInitMethodOrderNumber;
-							sObjInitInvokeDef.baSignature = sSignature.toLatin1();
-							sObjInitInvokeDef.lGenArgs << sArguments0 << sArguments1 << sArguments2 << sArguments3 << sArguments4 << sArguments5 << sArguments6 << sArguments7 << sArguments8 << sArguments9;
-							mapHexNumberToObjectInitializationsInvokeDefs.insert(sInitMethodOrderHexNumber, sObjInitInvokeDef);
-							continue;
+							else
+							{
+								break;
+							}
 						}
-						else//No parameters?
-						{
-							strcInvokeObjectDefs sObjInitInvokeDef;
-							sObjInitInvokeDef.pMetaObject = sourceMetaObject;
-							sObjInitInvokeDef.pObject = pSourceObject;
-							sObjInitInvokeDef.nOrderNumber = nInitMethodOrderNumber;
-							sObjInitInvokeDef.baSignature = sSignature.toLatin1();
-							//sObjInitInvokeDef.lGenArgs;
-							mapHexNumberToObjectInitializationsInvokeDefs.insert(sInitMethodOrderHexNumber, sObjInitInvokeDef);
-							continue;
-						}
+						sInitMethodOrderHexNumber = "0000";
+						MainAppInfo::getHexedOrderNumber(currentMethod->getMethodOrderNumber(), sInitMethodOrderHexNumber, 4);
+						strcInvokeObjectDefs sObjInitInvokeDef;
+						sObjInitInvokeDef.pMetaObject = sourceMetaObject;
+						sObjInitInvokeDef.pObject = pSourceObject;
+						sObjInitInvokeDef.nOrderNumber = currentMethod->getMethodOrderNumber();
+						sObjInitInvokeDef.baSignature = currentMethod->getMethodSignature().toLatin1();
+						sObjInitInvokeDef.lGenArgs = sArguments;//<< sArguments0 << sArguments1 << sArguments2 << sArguments3 << sArguments4 << sArguments5 << sArguments6 << sArguments7 << sArguments8 << sArguments9;
+						mapHexNumberToObjectInitializationsInvokeDefs.insert(sInitMethodOrderHexNumber, sObjInitInvokeDef);
+						continue;
 					}
-					else//No Parameters?
+					else//No parameters?
 					{
 						strcInvokeObjectDefs sObjInitInvokeDef;
 						sObjInitInvokeDef.pMetaObject = sourceMetaObject;
 						sObjInitInvokeDef.pObject = pSourceObject;
-						sObjInitInvokeDef.nOrderNumber = nInitMethodOrderNumber;
-						sObjInitInvokeDef.baSignature = sSignature.toLatin1();
+						sObjInitInvokeDef.nOrderNumber = currentMethod->getMethodOrderNumber();
+						sObjInitInvokeDef.baSignature = currentMethod->getMethodSignature().toLatin1();
 						//sObjInitInvokeDef.lGenArgs;
 						mapHexNumberToObjectInitializationsInvokeDefs.insert(sInitMethodOrderHexNumber, sObjInitInvokeDef);
 						continue;
@@ -1656,30 +1386,18 @@ bool ExperimentManager::initializeExperiment(bool bFinalize)
 				}
 			}
 		}
-		bRetVal = true;
 	}
-	else if(nNumberOfDefinedInitializations == 0)//this can be correct, there are no object initializations defined...
+	foreach(strcInvokeObjectDefs tmpObjInitInvokeDef, mapHexNumberToObjectInitializationsInvokeDefs)
 	{
-		bRetVal = true;
-	}
-	else
-	{
-		bRetVal = false;
-	}
-	if (bRetVal)
-	{
-		foreach(strcInvokeObjectDefs tmpObjInitInvokeDef, mapHexNumberToObjectInitializationsInvokeDefs)
+		if (!(tmpObjInitInvokeDef.pMetaObject->invokeMethod(tmpObjInitInvokeDef.pObject, tmpObjInitInvokeDef.baSignature, tmpObjInitInvokeDef.lGenArgs.value(0, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(1, QGenericArgument())
+			, tmpObjInitInvokeDef.lGenArgs.value(2, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(3, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(4, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(5, QGenericArgument())
+			, tmpObjInitInvokeDef.lGenArgs.value(6, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(7, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(8, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(9, QGenericArgument()))))
 		{
-			if (!(tmpObjInitInvokeDef.pMetaObject->invokeMethod(tmpObjInitInvokeDef.pObject, tmpObjInitInvokeDef.baSignature, tmpObjInitInvokeDef.lGenArgs.value(0, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(1, QGenericArgument())
-				, tmpObjInitInvokeDef.lGenArgs.value(2, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(3, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(4, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(5, QGenericArgument())
-				, tmpObjInitInvokeDef.lGenArgs.value(6, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(7, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(8, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(9, QGenericArgument()))))
-			{
-				qDebug() << __FUNCTION__ << "(isFinalize:" << bFinalize << ")::Could not invoke the Method(" << tmpObjInitInvokeDef.baSignature << ")!";
-				return false;
-			}
+			qDebug() << __FUNCTION__ << "(isFinalize:" << bFinalize << ")::Could not invoke the Method(" << tmpObjInitInvokeDef.baSignature << ")!";
+			return false;
 		}
 	}
-	return bRetVal;
+	return true;
 }
 
 bool ExperimentManager::expandExperimentBlockParameterValue(QString &sValue)
@@ -1726,189 +1444,100 @@ bool ExperimentManager::expandExperimentBlockParameterValue(QString &sValue)
 
 bool ExperimentManager::connectExperimentObjects(bool bDisconnect, int nObjectID)
 {//nObjectID only implemented when bDisconnect = true!
-	if (!currentExperimentTree)
+	if (cExperimentBlockTrialStructure)
 	{
-		qDebug() << __FUNCTION__ << "::No Experiment loaded!";
-		return false;
-	}
-	QStringList strList;
-	strList.clear();
-	strList.append(ROOT_TAG);
-	strList.append(CONNECTIONS_TAG);
-	strList.append(CONNECTION_TAG);
-	QList<ExperimentTreeItem*> ExperimentObjectConnectionsTreeItemList;
-	int nFoundMethodConnections = currentExperimentTree->getTreeElements(strList,ExperimentObjectConnectionsTreeItemList);
-	if (nFoundMethodConnections > 0)
-	{
-		int nNrOfConnections = ExperimentObjectConnectionsTreeItemList.count();
-		if (nNrOfConnections > 0)
+		QList<cObjectStructure*> lExpObjects = cExperimentBlockTrialStructure->getObjectList();
+		foreach(cObjectStructure *currentObject, lExpObjects)
 		{
-			ExperimentTreeItem* pExpTreeItem;
-			QMap<QString, TreeItemDefinition> tTmpTreeItemDefs;
-			QString tmpString;
-			int nMethodConnID = -1;
-			int nSourceObjectID = -1;
-			int nTargetObjectID = -1;
-			QString sSourceType = "";
-			QString sSourceSignature = "";
-			QString sTargetType = "";
-			QString sTargetSignature = "";
-			QObject *pSourceObject = NULL;
-			QObject *pTargetObject = NULL;
-			QStringList lConnectionSectionSearchPath;
-			int nSectionCount;
-
-			for(int i=0;i<nNrOfConnections;i++)
+			if (currentObject)
 			{
-				pExpTreeItem = ExperimentObjectConnectionsTreeItemList.at(i);
-				if (pExpTreeItem) 
+				QList<cMethodConnectionStructure*> *lMethodConns = cExperimentBlockTrialStructure->getObjectMethodConnectionList(currentObject->getObjectID());
 				{
-					tmpString = "";
-					tTmpTreeItemDefs = pExpTreeItem->getDefinitions();
-					if(tTmpTreeItemDefs.contains(ID_TAG) == false)
-						break;
-					tmpString = tTmpTreeItemDefs[ID_TAG].value.toString();
-					if (tmpString.isEmpty())
-						break;
-					nMethodConnID = tmpString.toInt();
-
-					QList<ExperimentTreeItem*> tmpConnectionTreeItemList;
-					for(int nSourceTargetCounter=0;nSourceTargetCounter<2;nSourceTargetCounter++)
+					if (lMethodConns)
 					{
-						lConnectionSectionSearchPath.clear();
-						if(nSourceTargetCounter == 0)//Source section...
-							lConnectionSectionSearchPath << CONNECTION_SOURCE_TAG;
-						else if(nSourceTargetCounter == 1)//Target section...
-							lConnectionSectionSearchPath << CONNECTION_TARGET_TAG;
-					
-						tmpConnectionTreeItemList.clear();;
-						nSectionCount = ExperimentTreeModel::getStaticTreeElements(lConnectionSectionSearchPath, tmpConnectionTreeItemList, ExperimentObjectConnectionsTreeItemList.at(i));
-						if(nSectionCount == 1)
+						QObject *pSourceObject = NULL;
+						QObject *pTargetObject = NULL;
+						foreach(cMethodConnectionStructure *currentMethodConn, *lMethodConns)
 						{
-							ExperimentTreeItem *pTmpExpTreeItem = NULL;
-							pTmpExpTreeItem = tmpConnectionTreeItemList[0]->firstChild(OBJECT_TAG);
-							if (pTmpExpTreeItem)
+							pTargetObject = getObjectElementById(currentMethodConn->getTargetObjectID());
+							if (pTargetObject == NULL)
+								continue;
+							pSourceObject = getObjectElementById(currentMethodConn->getSourceObjectID());
+							if (pSourceObject == NULL)
+								continue;
+
+							const QMetaObject* targetMetaObject = pTargetObject->metaObject();
+							const QMetaObject* sourceMetaObject = pSourceObject->metaObject();
+							int nSourceID = -1;
+							int nTargetID = -1;
+
+							if (bDisconnect == false)
 							{
-								tmpString = pTmpExpTreeItem->getValue();
-								if (tmpString.isEmpty())
-									continue;
-								if(nSourceTargetCounter == 0)//Source section...
+								QMetaObject::Connection bMetaConnection;
+								if (currentMethodConn->getTargetMethodType() == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL)
 								{
-									nSourceObjectID = tmpString.toInt();
-									if (nSourceObjectID < 0)
-										continue;
-									pSourceObject = getObjectElementById(nSourceObjectID);
-									if (pSourceObject == NULL)
-										continue;
-								}
-								else if(nSourceTargetCounter == 1)//Target section...
-								{
-									nTargetObjectID = tmpString.toInt();
-									if (!(nTargetObjectID >= 0))
-										continue;
-									pTargetObject = getObjectElementById(nTargetObjectID);
-									if (pTargetObject == NULL)
-										continue;
-								}
-
-								pTmpExpTreeItem = tmpConnectionTreeItemList[0]->firstChild(CONNECTION_TYPE_TAG);
-								tmpString = pTmpExpTreeItem->getValue();
-								if (tmpString.isEmpty())
-									continue;
-								if (!((tmpString == CONNECTION_TYPE_SIGNAL_TAG) || (tmpString == CONNECTION_TYPE_SLOT_TAG)))
-									continue;
-							
-								if(nSourceTargetCounter == 0)//Source section...
-									sSourceType = tmpString;
-								else if(nSourceTargetCounter == 1)//Target section...
-									sTargetType = tmpString;
-
-								pTmpExpTreeItem = tmpConnectionTreeItemList[0]->firstChild(CONNECTION_SIGNATURE_TAG);
-								tmpString = pTmpExpTreeItem->getValue();
-								if (tmpString.isEmpty())
-									continue;
-
-								if(nSourceTargetCounter == 0)//Source section...
-									sSourceSignature = tmpString;
-								else if(nSourceTargetCounter == 1)//Target section...
-									sTargetSignature = tmpString;
-
-								if((nSourceTargetCounter == 1) && (pTargetObject) && (pSourceObject))//Target section...
-								{
-									const QMetaObject* targetMetaObject = pTargetObject->metaObject();
-									const QMetaObject* sourceMetaObject = pSourceObject->metaObject();
-									int nSourceID = -1;
-									int nTargetID = -1;
-
-									if (bDisconnect == false)
+									if (currentMethodConn->getSourceMethodType() == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL)
 									{
-										QMetaObject::Connection bMetaConnection;
-										if (sTargetType == CONNECTION_TYPE_SIGNAL_TAG)
+										nSourceID = sourceMetaObject->indexOfSignal(QMetaObject::normalizedSignature(currentMethodConn->getSourceSignature().toLatin1()));
+										if (!(nSourceID == -1))//Is the signal present?
 										{
-											if (sSourceType == CONNECTION_TYPE_SIGNAL_TAG)
+											nTargetID = targetMetaObject->indexOfSignal(QMetaObject::normalizedSignature(currentMethodConn->getTargetSignature().toLatin1()));
+											if (!(nTargetID == -1))//Is the signal present?
 											{
-												nSourceID = sourceMetaObject->indexOfSignal(QMetaObject::normalizedSignature(sSourceSignature.toLatin1()));
-												if (!(nSourceID == -1))//Is the signal present?
-												{
-													nTargetID = targetMetaObject->indexOfSignal(QMetaObject::normalizedSignature(sTargetSignature.toLatin1()));
-													if (!(nTargetID == -1))//Is the signal present?
-													{
-														bMetaConnection = QMetaObject::connect(pSourceObject, nSourceID, pTargetObject, nTargetID);
-													}
-												}
-											} 
-										} 
-										else if(sTargetType == CONNECTION_TYPE_SLOT_TAG)
-										{
-											if (sSourceType == CONNECTION_TYPE_SIGNAL_TAG)
-											{
-												nSourceID = sourceMetaObject->indexOfSignal(QMetaObject::normalizedSignature(sSourceSignature.toLatin1()));
-												if (!(nSourceID == -1))//Is the signal present?
-												{
-													nTargetID = targetMetaObject->indexOfMethod(QMetaObject::normalizedSignature(sTargetSignature.toLatin1()));
-													if (!(nTargetID == -1))//Is the method present?
-													{
-														bMetaConnection = QMetaObject::connect(pSourceObject, nSourceID, pTargetObject, nTargetID);
-														if(bMetaConnection == false)
-															qDebug() << __FUNCTION__ << "Could not connect the objects (" << sSourceSignature << " ," << sTargetSignature << ")";
-													}
-												}
-											} 
-										}							
-									} 
-									else
+												bMetaConnection = QMetaObject::connect(pSourceObject, nSourceID, pTargetObject, nTargetID);
+											}
+										}
+									}
+								}
+								else if (currentMethodConn->getTargetMethodType() == ExperimentStructuresNameSpace::METHOD_TYPE_SLOT)
+								{
+									if (currentMethodConn->getSourceMethodType() == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL)
 									{
-										if ((nObjectID == -1) ||((nSourceObjectID == nObjectID) || (nTargetObjectID == nObjectID)))
+										nSourceID = sourceMetaObject->indexOfSignal(QMetaObject::normalizedSignature(currentMethodConn->getSourceSignature().toLatin1()));
+										if (!(nSourceID == -1))//Is the signal present?
 										{
-											if (sTargetType == CONNECTION_TYPE_SIGNAL_TAG)
+											nTargetID = targetMetaObject->indexOfMethod(QMetaObject::normalizedSignature(currentMethodConn->getTargetSignature().toLatin1()));
+											if (!(nTargetID == -1))//Is the method present?
 											{
-												if (sSourceType == CONNECTION_TYPE_SIGNAL_TAG)
-												{
-													nSourceID = sourceMetaObject->indexOfSignal(QMetaObject::normalizedSignature(sSourceSignature.toLatin1()));
-													if (!(nSourceID == -1))//Is the signal present?
-													{
-														nTargetID = targetMetaObject->indexOfSignal(QMetaObject::normalizedSignature(sTargetSignature.toLatin1()));
-														if (!(nTargetID == -1))//Is the signal present?
-														{
-															QMetaObject::disconnect(pSourceObject, nSourceID, pTargetObject, nTargetID);
-														}
-													}
-												} 
-											} 
-											else if(sTargetType == CONNECTION_TYPE_SLOT_TAG)
+												bMetaConnection = QMetaObject::connect(pSourceObject, nSourceID, pTargetObject, nTargetID);
+												if (bMetaConnection == false)
+													qDebug() << __FUNCTION__ << "Could not connect the objects (" << currentMethodConn->getSourceSignature() << " ," << currentMethodConn->getTargetSignature() << ")";
+											}
+										}
+									}
+								}
+							}
+							else
+							{
+								if ((nObjectID == -1) || ((currentMethodConn->getSourceObjectID() == nObjectID) || (currentMethodConn->getTargetObjectID() == nObjectID)))
+								{
+									if (currentMethodConn->getTargetMethodType() == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL)
+									{
+										if (currentMethodConn->getSourceMethodType() == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL)
+										{
+											nSourceID = sourceMetaObject->indexOfSignal(QMetaObject::normalizedSignature(currentMethodConn->getSourceSignature().toLatin1()));
+											if (!(nSourceID == -1))//Is the signal present?
 											{
-												if (sSourceType == CONNECTION_TYPE_SIGNAL_TAG)
+												nTargetID = targetMetaObject->indexOfSignal(QMetaObject::normalizedSignature(currentMethodConn->getTargetSignature().toLatin1()));
+												if (!(nTargetID == -1))//Is the signal present?
 												{
-													nSourceID = sourceMetaObject->indexOfSignal(QMetaObject::normalizedSignature(sSourceSignature.toLatin1()));
-													if (!(nSourceID == -1))//Is the signal present?
-													{
-														nTargetID = targetMetaObject->indexOfMethod(QMetaObject::normalizedSignature(sTargetSignature.toLatin1()));
-														if (!(nTargetID == -1))//Is the method present?
-														{
-															QMetaObject::disconnect(pSourceObject, nSourceID, pTargetObject, nTargetID);
-														}
-													}
-												} 
+													QMetaObject::disconnect(pSourceObject, nSourceID, pTargetObject, nTargetID);
+												}
+											}
+										}
+									}
+									else if (currentMethodConn->getTargetMethodType() == ExperimentStructuresNameSpace::METHOD_TYPE_SLOT)
+									{
+										if (currentMethodConn->getSourceMethodType() == ExperimentStructuresNameSpace::METHOD_TYPE_SIGNAL)
+										{
+											nSourceID = sourceMetaObject->indexOfSignal(QMetaObject::normalizedSignature(currentMethodConn->getSourceSignature().toLatin1()));
+											if (!(nSourceID == -1))//Is the signal present?
+											{
+												nTargetID = targetMetaObject->indexOfMethod(QMetaObject::normalizedSignature(currentMethodConn->getTargetSignature().toLatin1()));
+												if (!(nTargetID == -1))//Is the method present?
+												{
+													QMetaObject::disconnect(pSourceObject, nSourceID, pTargetObject, nTargetID);
+												}
 											}
 										}
 									}
@@ -1921,10 +1550,7 @@ bool ExperimentManager::connectExperimentObjects(bool bDisconnect, int nObjectID
 		}
 		return true;
 	}
-	else if (nFoundMethodConnections == 0)
-	{
-		return true;//Just no connections defined, but still valid
-	}
+	qDebug() << __FUNCTION__ << "::No Experiment loaded!";
 	return false;
 }
 
@@ -1932,18 +1558,11 @@ QObject *ExperimentManager::getObjectElementById(int nID)
 {
 	if (nID >= 0)
 	{
-		if (lExperimentObjectList.isEmpty())
+		if (mExperimentObjectList.isEmpty())
 			return NULL;
-		int nObjectCount = lExperimentObjectList.count();
-		if (nObjectCount>0)
+		if (mExperimentObjectList.contains(nID))
 		{
-			for (int i=0;i<nObjectCount;i++)
-			{
-				if (lExperimentObjectList.at(i).nObjectID == nID)
-				{
-					return(lExperimentObjectList.at(i).pObject);
-				}
-			}
+			return mExperimentObjectList.value(nID).pObject;
 		}
 	}
 	return NULL;
@@ -1953,67 +1572,52 @@ tParsedParameterList *ExperimentManager::getObjectBlockParamListById(int nID)
 {
 	if (nID >= 0)
 	{
-		if (lExperimentObjectList.isEmpty())
+		if (mExperimentObjectList.isEmpty())
 			return NULL;
-		int nObjectCount = lExperimentObjectList.count();
-		if (nObjectCount>0)
+		if (mExperimentObjectList.contains(nID))
 		{
-			for (int i=0;i<nObjectCount;i++)
-			{
-				if (lExperimentObjectList.at(i).nObjectID == nID)
-				{
-					return(lExperimentObjectList.at(i).ExpBlockParams);
-				}
-			}
+			return mExperimentObjectList.value(nID).ExpBlockParams;
 		}
 	}
 	return NULL;
 }
 
-bool ExperimentManager::fetchExperimentBlockParamsFromTreeItemList(const int &nBlockNumber, const int &nObjectID)
+bool ExperimentManager::fetchExperimentBlockParameters(const int &nBlockNumber, const int &nObjectID)
 {
-	//bool bHasCurrentBlock = false;
 	if (nObjectID >= 0)
 	{
-		if (!lExperimentObjectList.isEmpty())
+		if (mExperimentObjectList.isEmpty())
+			return NULL;
+		if (mExperimentObjectList.contains(nObjectID))
 		{
-			int nObjectCount = lExperimentObjectList.count();
-			for (int i=0;i<nObjectCount;i++)
+			if(createExperimentBlockParamsFromExperimentStructure(nBlockNumber,nObjectID,mExperimentObjectList.value(nObjectID).ExpBlockParams) < 0)
 			{
-				if (lExperimentObjectList[i].nObjectID == nObjectID)
-				{
-					if(createExperimentBlockParamsFromTreeItemList(nBlockNumber,nObjectID,&ExperimentTreeBlockItemList,lExperimentObjectList[i].ExpBlockParams) < 0)
-					{
-						qDebug() << __FUNCTION__ << "::Could not create a Block Parameter List!";
-						return false;
-					}
+				qDebug() << __FUNCTION__ << "::Could not create a Block Parameter List!";
+				return false;
+			}
 
-					QString sParamName;
-					QHashIterator<QString, ParsedParameterDefinition> hashIter(*lExperimentObjectList[i].ExpBlockParams);
-					while (hashIter.hasNext()) 
-					{
-						hashIter.next();
-						if(hashIter.value().bIsCustom)
-						{
-							sParamName = hashIter.key();
-							//bool bResult = 
-								insertExperimentObjectVariabelePointer(nObjectID,sParamName,hashIter.value().sValue,true);							
-						}
-					}
-					return true;
+			QString sParamName;
+			QHashIterator<QString, ParsedParameterDefinition> hashIter(*mExperimentObjectList.value(nObjectID).ExpBlockParams);
+			while (hashIter.hasNext()) 
+			{
+				hashIter.next();
+				if(hashIter.value().bIsCustom)
+				{
+					sParamName = hashIter.key();
+					//bool bResult = 
+						insertExperimentObjectVariabelePointer(nObjectID,sParamName,hashIter.value().sValue,true);							
 				}
 			}
+			return true;
 		}
 	}
 	qDebug() << __FUNCTION__ << "::Could not create a Block Parameter List, no current block or object is invalid!";
 	return false;
 }
 
-int ExperimentManager::createExperimentBlockParamsFromTreeItemList(const int &nBlockNumber, const int &nObjectID, const QList<ExperimentTreeItem*> *pExpBlockTrialsTreeItems, tParsedParameterList *hParams)
+int ExperimentManager::createExperimentBlockParamsFromExperimentStructure(const int &nBlockNumber, const int &nObjectID, tParsedParameterList *hParams)
 {
 	if (hParams == NULL)
-		return -1;
-	if(pExpBlockTrialsTreeItems == NULL)
 		return -1;
 	if(hParams->count() == 0)
 		return -1;
@@ -2021,169 +1625,75 @@ int ExperimentManager::createExperimentBlockParamsFromTreeItemList(const int &nB
 		return -1;
 	if(nBlockNumber < 0)
 		return -1;
-	if (pExpBlockTrialsTreeItems->isEmpty())
-		return -1;
 
 	//Set all the parameter bHasChanged attributes too false again
+	QString tmpString;
+	QString tmpValue;
 	QList<ParsedParameterDefinition> tmpStrValueList = hParams->values();//The order is guaranteed to be the same as that used by keys()!
 	QList<QString> tmpStrKeyList = hParams->keys();//The order is guaranteed to be the same as that used by values()!
-	for(int i=0;i<tmpStrKeyList.count();i++)
+	for (int i = 0; i < tmpStrKeyList.count(); i++)
 	{
 		tmpStrValueList[i].bHasChanged = false;
 		hParams->insert(tmpStrKeyList[i], tmpStrValueList[i]);
 	}
 
-	//The below code seems not to work due to the iterator...
-	//
-	//
-	////Set all the parameter bHasChanged attributes too false again
-	//tParsedParameterList::const_iterator iterPPL = hParams->constBegin();
-	//while (iterPPL != hParams->constEnd()) 
-	//{
-	//	tmpParDef = iterPPL.value();
-	//	tmpString = iterPPL.key();
-	//	tmpParDef.bHasChanged = false;
-	//	//cout << iterPPL.key() << ": " << iterPPL.value() << endl;
-	//	 hParams->insert(tmpString, tmpParDef);
-	//	++iterPPL;
-	//}
-
-	int nBlockCount = pExpBlockTrialsTreeItems->count();
-	if (nBlockCount <= nBlockNumber)
-		return -1;
-
-	ParsedParameterDefinition tmpParDef;
-	QString tmpString;
-	QString tmpValue;
-	QStringList lObjectSearchPath;
-	QStringList lParameterSearchPath;
-	QStringList lCustomParameterSearchPath;
-	lObjectSearchPath << OBJECT_TAG;
-	lParameterSearchPath << OBJECT_TAG << PARAMETERS_TAG << PARAMETER_TAG;
-	lCustomParameterSearchPath << OBJECT_TAG << CUSTOM_PARAMETERS_TAG << PARAMETER_TAG;
-
-	ExperimentTreeItem* tmpTreeItem;
-
-	for(int i=0;i<nBlockCount;i++)//Loop through the blocks
+	if (cExperimentBlockTrialStructure)
 	{
-		if(pExpBlockTrialsTreeItems->at(i)->hasChildren())
+		QList<cBlockStructure*> lBlockStruct = cExperimentBlockTrialStructure->getBlockList();
+		if (lBlockStruct.count() > 0)
 		{
-			QString sTes = pExpBlockTrialsTreeItems->at(i)->getName();
-			tmpTreeItem = pExpBlockTrialsTreeItems->at(i)->firstChild(BLOCKNUMBER_TAG);
-			if(tmpTreeItem)//Is there a block_number defined?
+			bool bIsCustom;
+			bIsCustom = false;
+			ParsedParameterDefinition tmpParDef;
+			int nResult = 0;
+			for (int nParamTypeCntr = 0; nParamTypeCntr < 2; nParamTypeCntr++)
 			{
-				if (nBlockNumber == tmpTreeItem->getValue().toInt())//Correct block number?
+				if (nParamTypeCntr == 1)
+					bIsCustom = true;
+				for (int i = 0; i < lBlockStruct.count(); i++)
 				{
-					QList<ExperimentTreeItem*> tmpBlockTreeItemList;
-					int nObjectListCount = ExperimentTreeModel::getStaticTreeElements(lObjectSearchPath, tmpBlockTreeItemList, pExpBlockTrialsTreeItems->at(i));
-					if(nObjectListCount > 0)
+					if (lBlockStruct[i]->getBlockNumber() == nBlockNumber)//Correct BlockNumber?
 					{
-						QMap<QString, TreeItemDefinition> tTmpTreeObjectItemDefs;
-						ExperimentTreeItem* pSubTreeItem;
-						for (int j=0;j<nObjectListCount;j++)//For each object
+						typeMapObjectsBlockParameterContainer *lObjectsParameterContainerStruct = lBlockStruct[i]->getParameterList(bIsCustom);
+						if (lObjectsParameterContainerStruct)
 						{
-							tTmpTreeObjectItemDefs = tmpBlockTreeItemList.at(j)->getDefinitions();
-							if(tTmpTreeObjectItemDefs.contains(ID_TAG))
+							if (lObjectsParameterContainerStruct->contains(nObjectID))//Do we have parameters for the Object(ID)?
 							{
-								if(nObjectID == tTmpTreeObjectItemDefs[ID_TAG].value.toInt())//Correct ObjectID?
+								//typeMapBlockParameterContainer *lParameterContainerStruct = &(*lObjectsParameterContainerStruct)[nObjectID];
+								QMapIterator<QString, cBlockParameterStructure*> iterParamInner((*lObjectsParameterContainerStruct)[nObjectID]);//Iterate through all Parameters
+								while (iterParamInner.hasNext())
 								{
-									int nResult = 0;
-									pSubTreeItem = tmpBlockTreeItemList.at(j)->firstChild(PARAMETERS_TAG);
-									if(pSubTreeItem)
-									{										
-										QList<ExperimentTreeItem*> tmpBlockParameterTreeItemList;
-										int nParameterListCount = ExperimentTreeModel::getStaticTreeElements(lParameterSearchPath, tmpBlockParameterTreeItemList, tmpBlockTreeItemList.at(j));
-										if(nParameterListCount > 0)
+									iterParamInner.next();
+									tmpString = iterParamInner.key().toLower();
+									if (hParams->contains(tmpString))//Is the Parameter available in the predefined plug-in list?
+									{
+										if (iterParamInner.value())
 										{
-											for (int k=0;k<nParameterListCount;k++)//For each parameter
-											{
-												pSubTreeItem = tmpBlockParameterTreeItemList.at(k)->firstChild(NAME_TAG);
-												if(pSubTreeItem)
-												{
-													tmpString = pSubTreeItem->getValue().toLower();
-													if (hParams->contains(tmpString))//Is the Parameter available in the predefined plug-in list?
-													{
-														pSubTreeItem = tmpBlockParameterTreeItemList.at(k)->firstChild(VALUE_TAG);
-														if(pSubTreeItem)
-														{
-															tmpValue = pSubTreeItem->getValue();
-															expandExperimentBlockParameterValue(tmpValue);
-															tmpParDef.sValue = tmpValue;
-															tmpParDef.bHasChanged = true;
-															hParams->insert(tmpString,tmpParDef);
-															nResult++;
-														}
-													}
-												}
-											}
+											tmpValue = iterParamInner.value()->getBlockParameterValue();//pSubTreeItem->getValue();
+											expandExperimentBlockParameterValue(tmpValue);
+											tmpParDef.sValue = tmpValue;
+											tmpParDef.bHasChanged = true;
+											hParams->insert(tmpString, tmpParDef);
+											nResult++;
 										}
 									}
-
-									//////////////////////////////////////////////////////////////////////////
-									//Let's parse the custom parameters
-									//////////////////////////////////////////////////////////////////////////
-
-									pSubTreeItem = tmpBlockTreeItemList.at(j)->firstChild(CUSTOM_PARAMETERS_TAG);
-									if(pSubTreeItem)
-									{
-										QList<ExperimentTreeItem*> tmpBlockCustomParameterTreeItemList;
-										int nCustomParameterListCount = ExperimentTreeModel::getStaticTreeElements(lCustomParameterSearchPath, tmpBlockCustomParameterTreeItemList, tmpBlockTreeItemList.at(j));
-										if (nCustomParameterListCount>0)
-										{
-											for (int k=0;k<nCustomParameterListCount;k++)//For each parameter
-											{
-												pSubTreeItem = tmpBlockCustomParameterTreeItemList.at(k)->firstChild(NAME_TAG);
-												if(pSubTreeItem)
-												{
-													tmpString = pSubTreeItem->getValue().toLower();
-													//if (hParams->contains(tmpString) == false)//Is the Parameter available in the predefined plugin list?
-													//{
-													//	qDebug() << __FUNCTION__ << "::creating a custom predefined EXML parameter: " << tmpString << "!";
-													//}
-													pSubTreeItem = tmpBlockCustomParameterTreeItemList.at(k)->firstChild(VALUE_TAG);
-													if(pSubTreeItem)
-													{
-														tmpValue = pSubTreeItem->getValue();
-														expandExperimentBlockParameterValue(tmpValue);
-														tmpParDef.sValue = tmpValue;
-														tmpParDef.bHasChanged = true;
-														tmpParDef.bIsCustom = true;
-														hParams->insert(tmpString,tmpParDef);
-														nResult++;
-													}
-												}
-											}
-										}											
-									}
-									return nResult;
 								}
 							}
-							else
-							{
-								return -1;//No ID tag
-							}
-						}//end object-for loop
-					}
-					else
-					{
-						return 0;//No Objects parameters defined		
+						}
 					}
 				}
-				else
-				{
-					continue;//Search next block
-				}
 			}
-			else
-			{
-				continue;//Search next block
-			}
+			return nResult;
 		}
-	}//end block-for loop
+		else
+		{
+			return 0;
+		}
+	}
 	return -1;
 }
 
-bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*> *ExpRootTreeItems, cExperimentStructure *expStruct, ExperimentTreeModel *expTreeModel, const ExperimentManager::ExperimentDataStructureConversionType &conversionMethod)
+bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*> *ExpRootTreeItems, cExperimentStructure *expStruct, ExperimentTreeModel *expTreeModel, QMap<int, objectElement> *mObjectElements, ExperimentManager *currentExpManager, const ExperimentManager::ExperimentDataStructureConversionType &conversionMethod)
 {
 	if (conversionMethod == EDS_TreeItemList_To_ExperimentStructure)
 	{
@@ -2193,7 +1703,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 			return false;
 
 		QStringList strSearchPathList;
-		QList<ExperimentTreeItem*> lFoundExpTreeItems;
+		QList<ExperimentTreeItem*> lFoundExpTreeItems; 
 		int nNrOfObjects;
 		int nNrOfBlockTrials;
 		int nNrOfMethodConnections;
@@ -2247,6 +1757,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 			return false;
 		}
 
+		//Experiment Blocks, Parameters, Loops//
 		lFoundExpTreeItems.clear();
 		strSearchPathList.clear();
 		strSearchPathList.append(ACTIONS_TAG);
@@ -2314,6 +1825,85 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 									tmpTreeItem = lFoundExpTreeItems.at(i)->firstChild(NAME_TAG);
 									if (tmpTreeItem)//Is there a Name defined?
 										tmpBlock->setBlockName(tmpTreeItem->getValue());//Copy the Name
+
+
+									if ((mObjectElements) && (currentExpManager))//only when provided we need to fill the object block parameters
+									{
+										//////////////////////////////////////////////////////////////////////////
+										//Let's parse the custom and non-custom block parameters for each object
+										//////////////////////////////////////////////////////////////////////////
+										for (int nParameterTypeCntr = 0; nParameterTypeCntr < 2; nParameterTypeCntr++)
+										{
+											bool bIsCustomParameter = false;
+											if (nParameterTypeCntr == 1)
+												bIsCustomParameter = true;
+
+											QList<ExperimentTreeItem*> tmpObjectBlockParameterTreeItemList;
+											int nObjectListCount = ExperimentTreeModel::getStaticTreeElements(QStringList() << OBJECT_TAG, tmpObjectBlockParameterTreeItemList, lFoundExpTreeItems.at(i));
+											if (nObjectListCount > 0)
+											{
+												QMap<QString, TreeItemDefinition> tTmpTreeObjectItemDefs;
+												int nCurrentObjectID;
+												for (int j = 0; j < nObjectListCount; j++)//For each object
+												{
+													nCurrentObjectID = -1;
+													tTmpTreeObjectItemDefs = tmpObjectBlockParameterTreeItemList.at(j)->getDefinitions();
+													if (tTmpTreeObjectItemDefs.contains(ID_TAG))
+													{
+														nCurrentObjectID = tTmpTreeObjectItemDefs[ID_TAG].value.toInt();//ObjectID
+														if (bIsCustomParameter)
+															tmpTreeItem = tmpObjectBlockParameterTreeItemList.at(j)->firstChild(CUSTOM_PARAMETERS_TAG);//j loops through available blocks
+														else
+															tmpTreeItem = tmpObjectBlockParameterTreeItemList.at(j)->firstChild(PARAMETERS_TAG);//j loops through available blocks
+														if (tmpTreeItem)
+														{
+															QString tmpString;
+															QStringList lParameterSearchPath;
+															if (bIsCustomParameter)
+																lParameterSearchPath << OBJECT_TAG << CUSTOM_PARAMETERS_TAG << PARAMETER_TAG;
+															else
+																lParameterSearchPath << OBJECT_TAG << PARAMETERS_TAG << PARAMETER_TAG;
+															QList<ExperimentTreeItem*> tmpBlockParameterTreeItemList;
+															int nParameterListCount = ExperimentTreeModel::getStaticTreeElements(lParameterSearchPath, tmpBlockParameterTreeItemList, tmpObjectBlockParameterTreeItemList.at(j));
+															tParsedParameterList *hParams = NULL;
+															if (nParameterListCount > 0)
+															{
+																for (int k = 0; k < nParameterListCount; k++)//For each parameter
+																{
+																	tmpTreeItem = tmpBlockParameterTreeItemList.at(k)->firstChild(NAME_TAG);
+																	if (tmpTreeItem)
+																	{
+																		tmpString = tmpTreeItem->getValue().toLower();
+																		if (mObjectElements->contains(nCurrentObjectID) == false)
+																		{
+																			objectElement tmpObjElement;
+																			tmpObjElement.nObjectID = nCurrentObjectID;
+																			mObjectElements->insert(nCurrentObjectID, tmpObjElement);
+																		}
+																		if (mObjectElements->value(nCurrentObjectID).ExpBlockParams == NULL)
+																			(*mObjectElements)[nCurrentObjectID].ExpBlockParams = new tParsedParameterList();
+																		hParams = mObjectElements->value(nCurrentObjectID).ExpBlockParams;
+																		tmpTreeItem = tmpBlockParameterTreeItemList.at(k)->firstChild(VALUE_TAG);
+																		if (tmpTreeItem)
+																		{
+																			ParsedParameterDefinition tmpParDef;
+																			QString tmpValue = tmpTreeItem->getValue();
+																			currentExpManager->expandExperimentBlockParameterValue(tmpValue);
+																			tmpParDef.sValue = tmpValue;
+																			tmpParDef.bHasChanged = true;
+																			tmpParDef.bIsCustom = bIsCustomParameter;
+																			hParams->insert(tmpString, tmpParDef);
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+									
 									//Are there any loops defined?
 									ExperimentTreeItem *tmpLoopItem = lFoundExpTreeItems.at(i)->firstChild(LOOPS_TAG);
 									if (tmpLoopItem)
@@ -2675,6 +2265,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 		if (expTreeModel == NULL)
 			return false;
 
+		expTreeModel->enableModifiedSignaling(false);
 		QList<ExperimentTreeItem*> tmpExpTreeItemList;
 		QMap<QString, TreeItemDefinition> tTmpTreeItemDefs;
 		TreeItemDefinition tmpExpTreeDef;
@@ -2718,6 +2309,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 			}
 			else
 			{
+				expTreeModel->enableModifiedSignaling(true);
 				return false;
 			}
 		}
@@ -2758,6 +2350,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 							}
 							if (expTreeModel->addExperimentObjectInitFinit(sObjectInitFinitSpecifier, true, sObjectInitFinitSpecifier.nInitFinitID) == false)
 							{
+								expTreeModel->enableModifiedSignaling(true);
 								expTreeModel->resetExperiment();
 								return false;
 							}
@@ -2792,6 +2385,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 							}
 							if (expTreeModel->addExperimentObjectInitFinit(sObjectInitFinitSpecifier, false, sObjectInitFinitSpecifier.nInitFinitID)==false)
 							{
+								expTreeModel->enableModifiedSignaling(true);
 								expTreeModel->resetExperiment();
 								return false;
 							}
@@ -2800,6 +2394,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 				}
 				else
 				{
+					expTreeModel->enableModifiedSignaling(true);
 					expTreeModel->resetExperiment();
 					return false;
 				}
@@ -2826,6 +2421,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 							sObjectConnSpec.sTargetSignature = lMethodConns->at(nLoopCounter_1)->getTargetSignature();
 							if (expTreeModel->addObjectConnection(sObjectConnSpec, sObjectConnSpec.nConnectionID) == false)
 							{
+								expTreeModel->enableModifiedSignaling(true);
 								expTreeModel->resetExperiment();
 								return false;
 							}
@@ -2876,30 +2472,6 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 						if (tmpExpTreeItem_1)
 							tmpExpTreeItem_1->setValue(QString::number(tmpBlockStructure->getNumberOfExternalTriggers()));
 
-						int nExpStruct_LoopCount = tmpBlockStructure->getLoopCount();
-						if (nExpStruct_LoopCount > 0)
-						{
-							for (nLoopCounter_1 = 0; nLoopCounter_1 < nExpStruct_LoopCount; nLoopCounter_1++)
-							{
-								int nNextCurrentLoopNumber = 0;
-								cLoopStructure *tmpLoopStructure = NULL;
-								tmpLoopStructure = tmpBlockStructure->getNextClosestLoopIDByFromLoopNumber(nNextCurrentLoopNumber);
-								if (tmpLoopStructure)
-								{
-									if (expTreeModel->addExperimentBlockLoop(tmpBlockStructure->getBlockID(), tmpLoopStructure->getTargetBlockID(), tmpLoopStructure->getNumberOfLoops(), tmpLoopStructure->getLoopName())==false)
-									{
-										expTreeModel->resetExperiment();
-										return false;
-									}
-								}
-								else
-								{
-									expTreeModel->resetExperiment();
-									return false;
-								}
-							}
-						}
-
 						//Experiment Block Parameters (non-custom and custom)
 						bool bIsCustom;
 						for (int nParamTypeSwitcher = 0; nParamTypeSwitcher < 2; nParamTypeSwitcher++)
@@ -2927,6 +2499,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 										cParameterSpecifier.sParamName = iterParamInner.value()->getBlockParameterName();
 										if (expTreeModel->addUpdateExperimentBlockParameter(cParameterSpecifier, iterParamInner.value()->getBlockParameterValue(), (cParameterSpecifier.cParamEditType == PSET_CUSTOM))==false)
 										{
+											expTreeModel->enableModifiedSignaling(true);
 											expTreeModel->resetExperiment();
 											return false;
 										}
@@ -2934,186 +2507,152 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 								}
 							}
 						}
+
+						int nExpStruct_LoopCount = tmpBlockStructure->getLoopCount();
+						if (nExpStruct_LoopCount > 0)
+						{
+							for (nLoopCounter_1 = 0; nLoopCounter_1 < nExpStruct_LoopCount; nLoopCounter_1++)
+							{
+								int nNextCurrentLoopNumber = 0;
+								cLoopStructure *tmpLoopStructure = NULL;
+								tmpLoopStructure = tmpBlockStructure->getNextClosestLoopIDByFromLoopNumber(nNextCurrentLoopNumber);
+								if (tmpLoopStructure)
+								{
+									if (expTreeModel->addExperimentBlockLoop(tmpBlockStructure->getBlockID(), tmpLoopStructure->getTargetBlockID(), tmpLoopStructure->getNumberOfLoops(), tmpLoopStructure->getLoopName()) == false)
+									{
+										expTreeModel->enableModifiedSignaling(true);
+										expTreeModel->resetExperiment();
+										return false;
+									}
+								}
+								else
+								{
+									expTreeModel->enableModifiedSignaling(true);
+									expTreeModel->resetExperiment();
+									return false;
+								}
+							}
+						}
 					}
 					else
 					{
+						expTreeModel->enableModifiedSignaling(true);
 						expTreeModel->resetExperiment();
 						return false;
 					}
 				}
 				else
 				{
+					expTreeModel->enableModifiedSignaling(true);
 					expTreeModel->resetExperiment();
 					return false;
 				}
 			}
 		}
+		expTreeModel->emitModifiedSignal(false);
+		expTreeModel->enableModifiedSignaling(true);
 		return true;
 	}
+	expTreeModel->emitModifiedSignal(false);
+	expTreeModel->enableModifiedSignaling(true);
 	return false;
 }
 
 bool ExperimentManager::createExperimentObjects()
 {
-	if (!currentExperimentTree)
-	{
-		qDebug() << __FUNCTION__ << "::No Experiment loaded!";
-		return false;
-	}
 	QStringList strList;
 	cleanupExperimentObjects();
-	strList.clear();
-	strList.append(ROOT_TAG);
-	strList.append(DECLARATIONS_TAG);
-	strList.append(OBJECT_TAG);
-	if (currentExperimentTree->getTreeElements(strList,ExperimentObjectTreeItemList)>=0)
+	if (cExperimentBlockTrialStructure)
 	{
-		int nNrOfObjects = ExperimentObjectTreeItemList.count();
-		if (nNrOfObjects > 0)
+		QList<cObjectStructure*> lExpObjects = cExperimentBlockTrialStructure->getObjectList();
+		foreach(cObjectStructure *currentObject, lExpObjects)
 		{
-			ExperimentTreeItem *pExpTreeItem;
-			QMap<QString, TreeItemDefinition> tTmpTreeItemDefs;
-			//QString tmpString;
-			for(int i=0;i<nNrOfObjects;i++)
+			if (currentObject)
 			{
-				pExpTreeItem = ExperimentObjectTreeItemList.at(i);
-				if (pExpTreeItem) 
+				int metaID = QMetaType::type(currentObject->getObjectClass().toLatin1());
+				if (metaID > 0) 
 				{
-					QString tmpString1 = "";
-					tTmpTreeItemDefs = pExpTreeItem->getDefinitions();
-					if(!tTmpTreeItemDefs.contains(ID_TAG))
-						break;
-					tmpString1 = tTmpTreeItemDefs[ID_TAG].value.toString();//Correct ObjectID?
-					if (tmpString1.isEmpty())
-						break;
-					//tmpElement = tmpNode.firstChildElement(tmpString);
-					int nID = tmpString1.toInt();//tmpElement.text().toInt();
-					if (!(nID >= 0))
-						break;
-					pExpTreeItem = ExperimentObjectTreeItemList.at(i)->firstChild(CLASS_TAG);
-					if(pExpTreeItem == NULL)
-						break;
-					QString sClass = pExpTreeItem->getValue();
-					if (sClass.isEmpty())
-						break;
-					pExpTreeItem = ExperimentObjectTreeItemList.at(i)->firstChild(NAME_TAG);
-					QString sName = "";
-					if(pExpTreeItem)
-						sName = pExpTreeItem->getValue();
-					//if (sName.isEmpty())
-					//	break;
-	
-					int metaID = QMetaType::type(sClass.toLatin1());
-					if (metaID > 0)//(id != -1) 
+					bool bRetVal = true;
+					QObject *tmpObjectPointer = static_cast< QObject* > (QMetaType::create(metaID));
+					const QMetaObject* metaObject = tmpObjectPointer->metaObject();
+
+					//QStringList properties;
+					//for(int i = metaObject->methodOffset(); i < metaObject->methodCount(); ++i)
+					//	properties << QString::fromLatin1(metaObject->method(i).signature());
+
+					if (currentScriptEngine)
 					{
-						bool bRetVal = true;
-						objectElement tmpElement;
-						tmpElement.nObjectID = nID;
-						tmpElement.nMetaID = metaID;
-						tmpElement.sObjectName = sName;
-						tmpElement.pObject = static_cast< QObject* > ( QMetaType::create(metaID) );//( QMetaType::construct(metaID) );
-						tmpElement.typedExpParamCntnr = NULL;
-						tmpElement.ExpBlockParams = NULL;
-					
-						const QMetaObject* metaObject = tmpElement.pObject->metaObject();
-
-						//QStringList properties;
-						//for(int i = metaObject->methodOffset(); i < metaObject->methodCount(); ++i)
-						//	properties << QString::fromLatin1(metaObject->method(i).signature());
-
-						if (currentScriptEngine)
-						{
-							if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(FUNC_MAKETHISAVAILABLEINSCRIPT_FULL)) == -1))//Is the slot present?
-							{
-								//Invoke the slot
-								bRetVal = true;
-								if(!(metaObject->invokeMethod(tmpElement.pObject, FUNC_MAKETHISAVAILABLEINSCRIPT, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal),Q_ARG(QString, tmpElement.sObjectName),Q_ARG(QObject*, (QObject*)currentScriptEngine))))
-								{
-									qDebug() << "invokeExperimentObjectsSlots::Could not invoke the slot(" << FUNC_MAKETHISAVAILABLEINSCRIPT << "()" << ")!";		
-									return false;
-								}		
-							}
-						}
-
-						//bool bResult = false;
-						//if (!(metaObject->indexOfSignal(QMetaObject::normalizedSignature("LogToOutputWindow(QString)")) == -1))//Is the signal present?
-						//{
-						//	//Connect the signal
-						//	bResult = connect(tmpElement.pObject, SIGNAL(LogToOutputWindow(QString)), this, SIGNAL(WriteToLogOutput(QString)));//Qt::QueuedConnection --> makes it asynchronyous
-							//bResult = true;
-						//}
-
-						//if (!(metaObject->indexOfSignal(QMetaObject::normalizedSignature("LogExpObjData(int,int,QString)")) == -1))//Is the signal present?
-						//{
-						//	//Connect the signal
-						//	bResult = connect(tmpElement.pObject, SIGNAL(LogExpObjData(int,int,QString)), this, SLOT(logExperimentObjectData(int,int,QString)));//Qt::QueuedConnection --> makes it asynchronyous
-						//}
-
-						if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(FUNC_SETMETAOBJECT_FULL)) == -1))//Is the slot present?
+						if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(FUNC_MAKETHISAVAILABLEINSCRIPT_FULL)) == -1))//Is the slot present?
 						{
 							//Invoke the slot
 							bRetVal = true;
-							if(!(metaObject->invokeMethod(tmpElement.pObject, FUNC_SETMETAOBJECT, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal))))
+							if (!(metaObject->invokeMethod(tmpObjectPointer, FUNC_MAKETHISAVAILABLEINSCRIPT, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QString, currentObject->getObjectName()), Q_ARG(QObject*, (QObject*)currentScriptEngine))))
 							{
-								qDebug() << __FUNCTION__ << "::Could not invoke the slot(" << FUNC_SETMETAOBJECT << "()" << ")!";		
+								qDebug() << "invokeExperimentObjectsSlots::Could not invoke the slot(" << FUNC_MAKETHISAVAILABLEINSCRIPT << "()" << ")!";		
 								return false;
 							}		
 						}
+					}
 
-						if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(FUNC_SETEXPERIMENTOBJECTID_FULL)) == -1))//Is the slot present?
+					if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(FUNC_SETMETAOBJECT_FULL)) == -1))//Is the slot present?
+					{
+						//Invoke the slot
+						bRetVal = true;
+						if (!(metaObject->invokeMethod(tmpObjectPointer, FUNC_SETMETAOBJECT, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal))))
 						{
-							//Invoke the slot
-							bRetVal = true;
-							if(!(metaObject->invokeMethod(tmpElement.pObject, FUNC_SETEXPERIMENTOBJECTID, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal),Q_ARG(int, tmpElement.nObjectID))))
-							{
-								qDebug() << __FUNCTION__ << "::Could not invoke the slot(" << FUNC_SETEXPERIMENTOBJECTID << "()" << ")!";		
-								return false;
-							}		
-						}
+							qDebug() << __FUNCTION__ << "::Could not invoke the slot(" << FUNC_SETMETAOBJECT << "()" << ")!";		
+							return false;
+						}		
+					}
 
-						if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(FUNC_SETEXPERIMENTMANAGER_FULL)) == -1))//Is the slot present?
+					if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(FUNC_SETEXPERIMENTOBJECTID_FULL)) == -1))//Is the slot present?
+					{
+						//Invoke the slot
+						bRetVal = true;
+						if (!(metaObject->invokeMethod(tmpObjectPointer, FUNC_SETEXPERIMENTOBJECTID, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(int, currentObject->getObjectID()))))
 						{
-							//Invoke the slot
-							bRetVal = true;
-							if(!(metaObject->invokeMethod(tmpElement.pObject, FUNC_SETEXPERIMENTMANAGER, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal),Q_ARG(ExperimentManager*, this))))
-							{
-								qDebug() << "invokeExperimentObjectsSlots::Could not invoke the slot(" << FUNC_SETEXPERIMENTMANAGER << "()" << ")!";		
-								return false;
-							}		
-						}	
+							qDebug() << __FUNCTION__ << "::Could not invoke the slot(" << FUNC_SETEXPERIMENTOBJECTID << "()" << ")!";		
+							return false;
+						}		
+					}
 
-						//if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(FUNC_SETEXPERIMENTCONFIGURATION_FULL)) == -1))//Is the slot present?
-						//{
-						//	//Invoke the slot
-						//	bRetVal = true;
-						//	if(!(metaObject->invokeMethod(tmpElement.pObject, FUNC_SETEXPERIMENTCONFIGURATION, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal),Q_ARG(ExperimentConfiguration*, &strcExperimentConfiguration))))
-						//	{
-						//		qDebug() << "invokeExperimentObjectsSlots::Could not invoke the slot(" << FUNC_SETEXPERIMENTCONFIGURATION << "()" << ")!";		
-						//		return false;
-						//	}		
-						//}	
+					if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(FUNC_SETEXPERIMENTMANAGER_FULL)) == -1))//Is the slot present?
+					{
+						//Invoke the slot
+						bRetVal = true;
+						if (!(metaObject->invokeMethod(tmpObjectPointer, FUNC_SETEXPERIMENTMANAGER, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(ExperimentManager*, this))))
+						{
+							qDebug() << "invokeExperimentObjectsSlots::Could not invoke the slot(" << FUNC_SETEXPERIMENTMANAGER << "()" << ")!";		
+							return false;
+						}		
+					}
 
-						//if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(FUNC_SETBLOCKTRIALDOMNODELIST_FULL)) == -1))//Is the slot present?
-						//{
-						//	//Invoke the slot
-						//	bRetVal = true;
-						//	if(!(metaObject->invokeMethod(tmpElement.pObject, FUNC_SETBLOCKTRIALDOMNODELIST, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal),Q_ARG(QDomNodeList*, &ExperimentBlockTrialsDomNodeList))))
-						//	{
-						//		qDebug() << __FUNCTION__ << "::Could not invoke the slot(" << FUNC_SETBLOCKTRIALDOMNODELIST << "()" << ")!";		
-						//		return false;
-						//	}		
-						//}
-
-						tmpElement.nCurrentState = Experiment_SubObject_Initialized;//This is still an inactive state!
-						//tmpElement.sStateHistory.nState.append(tmpElement.nCurrentState);
-						//tmpElement.sStateHistory.sDateTimeStamp.append(getCurrentDateTimeStamp());
-						lExperimentObjectList.append(tmpElement);					
+					objectElement tmpElement;
+					objectElement *tmpElementPointer = NULL;
+					if (mExperimentObjectList.contains(currentObject->getObjectID()))
+						tmpElementPointer = &(mExperimentObjectList[currentObject->getObjectID()]);
+					else
+						tmpElementPointer = &tmpElement;
+									
+					if (tmpElementPointer)
+					{
+						tmpElementPointer->nObjectID = currentObject->getObjectID();
+						tmpElementPointer->nMetaID = metaID;
+						tmpElementPointer->sObjectName = currentObject->getObjectName();
+						tmpElementPointer->pObject = tmpObjectPointer;
+						tmpElementPointer->typedExpParamCntnr = NULL;
+						tmpElementPointer->ExpBlockParams = NULL;
+						tmpElementPointer->nCurrentState = Experiment_SubObject_Initialized;//This is still an inactive state!
+						//tmpElementPointer->sStateHistory.nState.append(tmpElementPointer->nCurrentState);
+						//tmpElementPointer->sStateHistory.sDateTimeStamp.append(getCurrentDateTimeStamp());
+						mExperimentObjectList.insert(tmpElementPointer->nObjectID, tmpElement);
 					}
 				}
 			}
 		}
 		return true;
 	}
+	qDebug() << __FUNCTION__ << "::No Experiment loaded!";
 	return false;
 }
 

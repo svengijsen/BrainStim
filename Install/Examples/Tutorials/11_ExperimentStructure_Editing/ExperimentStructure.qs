@@ -1,18 +1,6 @@
 var dialog;
 var cExperimentStructure_Object;
-var cBlockStructure_Object0;
-var cBlockStructure_Object1;
-var cBlockStructure_Object2;
-var cBlockStructure_Object3;
-var cBlockStructure_Object4;
-var cLoopStructure_Object0;
-var cLoopStructure_Object1;
-var cLoopStructure_Object2;
-var cLoopStructure_Object3;
-var cLoopStructure_Object4;
-var cLoopStructure_Object;
 var cExperimentStructureState_Object;
-var sTimer = new TriggerTimer();
 var ExperimentManagerObj = new ExperimentManager(); 						//Here we create the Experiment Manager object that can run experiments.
 var sCurrentScriptLocation = BrainStim.getActiveDocumentFileLocation();			//Here we store the directory-path from this script file for further usage.
 var sExperimentFilePath = sCurrentScriptLocation + "/ExperimentStructure.exml";
@@ -48,21 +36,21 @@ function Dialog(parent)
 	/////////////////////////////////////////////////////
 	this.showNodeLabel = new QLabel;
 	this.showNodeLabel.setFrameStyle(frameStyle);
-	this.showNodeButton = new QPushButton(tr("Show Experiment(node editor)"));	
-	layout.addWidget(this.showNodeButton, 3, 0);
+	this.showGraphEditorButton = new QPushButton(tr("Show Experiment(graph editor)"));	
+	layout.addWidget(this.showGraphEditorButton, 3, 0);
 	layout.addWidget(this.showNodeLabel, 3, 1);
 	/////////////////////////////////////////////////////
 	this.showTreeLabel = new QLabel;
 	this.showTreeLabel.setFrameStyle(frameStyle);
-	this.showTreeButton = new QPushButton(tr("Show Experiment(tree editor)"));	
-	layout.addWidget(this.showTreeButton, 4, 0);
+	this.showTreeEditorButton = new QPushButton(tr("Show Experiment(table editor)"));	
+	layout.addWidget(this.showTreeEditorButton, 4, 0);
 	layout.addWidget(this.showTreeLabel, 4, 1);
 	/////////////////////////////////////////////////////	
-	this.executeLabel = new QLabel;
-	this.executeLabel.setFrameStyle(frameStyle);
-	this.executeButton = new QPushButton(tr("Execute Experiment"));	
-	layout.addWidget(this.executeButton, 5, 0);
-	layout.addWidget(this.executeLabel, 5, 1);
+	this.runLabel = new QLabel;
+	this.runLabel.setFrameStyle(frameStyle);
+	this.runButton = new QPushButton(tr("Run Experiment"));	
+	layout.addWidget(this.runButton, 5, 0);
+	layout.addWidget(this.runLabel, 5, 1);
 	/////////////////////////////////////////////////////
 	this.saveLabel = new QLabel;
 	this.saveLabel.setFrameStyle(frameStyle);
@@ -86,56 +74,47 @@ function tr(s) { return s; }
 
 Dialog.prototype.loadExperiment = function()
 {
+	ChangeDialogState("Load");
 	if(!ExperimentManagerObj.loadExperiment(sExperimentFilePath,true))
 	{
 		Log("~~Failed to load the Experiment file");
 	}
 	else
 	{
-		cExperimentStructure_Object = ExperimentManagerObj.getExperimentStructure();//new cExperimentStructure(ExperimentManagerObj.getExperimentStructure());//ExperimentManagerObj.getExperimentStructure();
+		cExperimentStructure_Object = ExperimentManagerObj.getExperimentStructure();
 		dialog.loadLabel.text = sExperimentFilePath;
 	}	
+	ChangeDialogState("Idle");
 }
 
 Dialog.prototype.createExperiment = function()
 {
+	ChangeDialogState("Create");
 	cExperimentStructure_Object = ExperimentManagerObj.getExperimentStructure(true);
-	if(cExperimentStructure_Object)
+	if(cExperimentStructure_Object != null)
 	{
-		//cExperimentStructure_Object.resetExperimentState();
 		cExperimentStructure_Object.clearExperiment();
-		Log(cExperimentStructure_Object.getBlockCount());
-		Log(cExperimentStructure_Object.getObjectCount());
-		
 		cExperimentStructure_Object.setExperimentName("Script Created Experiment");
-		cExperimentStructure_Object.setExperimentDebugMode(false);
+		cExperimentStructure_Object.setExperimentDebugMode(true);
 		cExperimentStructure_Object.setExperimentID(0);
 		
-		var tmpBlock0 = new cBlockStructure();//although created here in the script, do not delete this object, this is automatically done by the Experiment Structure!
+		var tmpBlock0 = cExperimentStructure_Object.createBlock();//returns a new cBlockStructure()
 		tmpBlock0.setBlockID(0);
 		tmpBlock0.setBlockNumber(0);
 		tmpBlock0.setBlockName("first block");
 		tmpBlock0.setNumberOfTrials(2);
 		tmpBlock0.setNumberOfInternalTriggers(3);
 		tmpBlock0.setNumberOfExternalTriggers(4);
-		Log("> Insert block: " + cExperimentStructure_Object.insertBlock(tmpBlock0));
-		
-		var tmpBlock1 = new cBlockStructure();//although created here in the script, do not delete this object, this is automatically done by the Experiment Structure!
+		Log("> Block inserted: " + tmpBlock0.getBlockName());
+
+		var tmpBlock1 = cExperimentStructure_Object.createBlock();//returns a new cBlockStructure()
 		tmpBlock1.setBlockID(1);
 		tmpBlock1.setBlockNumber(1);
 		tmpBlock1.setBlockName("second block");
 		tmpBlock1.setNumberOfTrials(5);
 		tmpBlock1.setNumberOfInternalTriggers(5);
 		tmpBlock1.setNumberOfExternalTriggers(5);
-		Log("> Insert block: " + cExperimentStructure_Object.insertBlock(tmpBlock1));
-		
-		var tmpLoop0 = new cLoopStructure();
-		tmpLoop0.setLoopID(0);
-		tmpLoop0.setLoopNumber(0);
-		tmpLoop0.setLoopName("LoopName_1");
-		tmpLoop0.setNumberOfLoops(99);
-		tmpLoop0.setTargetBlockID(0);
-		Log("> Insert loop: " + tmpBlock0.insertLoop(tmpLoop0));
+		Log("> Block inserted: " + tmpBlock1.getBlockName());
 		
 		var tmpObject1 = new cObjectStructure();//although created here in the script, do not delete this object, this is automatically done by the Experiment Structure!
 		tmpObject1.setObjectID(1);
@@ -153,7 +132,7 @@ Dialog.prototype.createExperiment = function()
 		tmpObjInit0.setMethodID(0);
 		tmpObjInit0.setMethodObjectID(0);
 		tmpObjInit0.setMethodOrderNumber(0);//do not specify or set to -1 for auto append
-		tmpObjInit0.setMethodType(2);//2=slot
+		tmpObjInit0.setMethodType(2);//0=undefined, 1=signal, 2=slot
 		tmpObjInit0.setMethodSignature("startTimer");
 		var tmpMethodParam0 = new cMethodParameterStructure();//although created here in the script, do not delete this object, this is automatically done by the Experiment Structure!
 		tmpMethodParam0.setMethodParameterID(0);
@@ -187,59 +166,73 @@ Dialog.prototype.createExperiment = function()
 		tmpBlockParam0.setBlockParameterValue("fixation");
 		var bIsCustom = false;
 		Log("> Insert block parameter: " + tmpBlock0.insertObjectParameter(tmpObject1.getObjectID(), tmpBlockParam0, bIsCustom));
+		
+		var tmpLoop0 = new cLoopStructure();
+		tmpLoop0.setLoopID(0);
+		tmpLoop0.setLoopNumber(0);
+		tmpLoop0.setLoopName("LoopName_1");
+		tmpLoop0.setNumberOfLoops(99);
+		tmpLoop0.setTargetBlockID(0);
+		Log("> Insert loop: " + tmpBlock0.insertLoop(tmpLoop0));
 	}
 	//Now we only need to force the parsing of the changed or newly created experiment to apply the new settings.
 	Log(">> Parse Current ExperimentStructure: " + ExperimentManagerObj.parseCurrentExperimentStructure());
+	ChangeDialogState("Idle");
 }
 
 Dialog.prototype.changeExperiment = function()
 {
+	ChangeDialogState("Change");
 	if(cExperimentStructure_Object != null)
 	{
-		if(cBlockStructure_Object0 == null)
+		var tmpBlock0 = cExperimentStructure_Object.getBlockPointerByID(0);
+		tmpBlock0.setBlockName("new block name");
+		if(tmpBlock0)
 		{
-			cBlockStructure_Object0 = cExperimentStructure_Object.getBlockPointerByID(0);
+			var tmpBlockParam0 = new cBlockParameterStructure();//although created here in the script, do not delete this object, this is automatically done by the Experiment Structure!
+			//tmpBlockParam0.setBlockParameterID(-1); //We don't need to specify this value
+			tmpBlockParam0.setBlockParameterName("RetinoPattern");
+			tmpBlockParam0.setBlockParameterValue("polarangle");
+			var bIsCustom = false;
+			var nObjectID = 1;
+			Log("> Insert block parameter: " + tmpBlock0.insertObjectParameter(nObjectID, tmpBlockParam0, bIsCustom));
+			//Now we only need to force the parsing of the changed or newly created experiment to apply the new settings.
+			Log(">> Parse Current ExperimentStructure: " + ExperimentManagerObj.parseCurrentExperimentStructure());
 		}
-		Log("Current block name: " + cBlockStructure_Object0.BlockName);
-		cBlockStructure_Object0.BlockName = "Custom Block Name";
-		//cLoopStructure_Object2 = new cLoopStructure();
-		//CreateLoop(cLoopStructure_Object2,2,1,cBlockStructure_Object0.getBlockID());
-		//Log(">> Add a defined Loop result: " + cBlockStructure_Object0.insertLoop(cLoopStructure_Object2));
-		Log("SetExperiment: " + ExperimentManagerObj.setExperimentStructure(cExperimentStructure_Object));
 	}
 	else
 	{
-		Log("No Experiment configured...")
+		Log("No Experiment configured...");
 	}	
+	ChangeDialogState("Idle");
 }
 
-Dialog.prototype.showExperimentTree = function()
+Dialog.prototype.showTreeViewEditor = function()
 {
-	Log("showExperimentTree()");
-	//Log(ExperimentManagerObj.Test("abc"));
-	//bool ExperimentManager::loadExperiment(QString strSource, bool bViewEditTree, bool bIsFile)
-	//ExperimentManagerObj.runExperiment(); //Try to run the experiment
-	if(!ExperimentManagerObj.showVisualExperimentEditor(cExperimentStructure_Object)) //cExperimentStructure_Object1
+	Log("showTreeViewEditor()");
+	if(!ExperimentManagerObj.showTreeviewExperimentDialog(cExperimentStructure_Object))
 	{
 		Log("~~Failed to show the Experiment Structure");
 	}	
 //	LogState(cExperimentStructure_Object.getCurrentExperimentState());	
 }
 
-Dialog.prototype.showExperiment = function()
+Dialog.prototype.showGraphEditor = function()
 {
-	if(!ExperimentManagerObj.showVisualExperimentEditor(cExperimentStructure_Object)) //cExperimentStructure_Object1
+	if(!ExperimentManagerObj.showVisualExperimentDialog(cExperimentStructure_Object)) //cExperimentStructure_Object1
 	{
 		Log("~~Failed to show the Experiment Structure");
 	}	
 //	LogState(cExperimentStructure_Object.getCurrentExperimentState());	
 }
 
-Dialog.prototype.executeExperiment = function()
+Dialog.prototype.runExperiment = function()
 {
+	ChangeDialogState("Run");
 	if(!ExperimentManagerObj.runExperiment()) //Try to run the experiment
 	{
-		Log("~~Failed to execute the Experiment");
+		Log("~~Failed to run the Experiment");
+		ChangeDialogState("Idle");
 	}
 	else
 	{
@@ -249,6 +242,7 @@ Dialog.prototype.executeExperiment = function()
 
 Dialog.prototype.saveExperiment = function()
 {
+	ChangeDialogState("Save");
 	if(!ExperimentManagerObj.saveExperiment(sExperimentFilePathSaved)) //Try to run the experiment
 	{
 		Log("~~Failed to save the Experiment");
@@ -257,6 +251,7 @@ Dialog.prototype.saveExperiment = function()
 	{
 		Log("Experiment Saved!");
 	}	
+	ChangeDialogState("Idle");
 }
 
 Dialog.prototype.keyPressEvent = function(e /*QKeyEvent e*/)
@@ -286,7 +281,6 @@ function ConnectDisconnectExperimentStructure(Connect)
 		{
 			try 
 			{	
-				sTimer.timeout.connect(cExperimentStructure_Object, cExperimentStructure_Object.incrementExternalTrigger);
 				cExperimentStructure_Object.experimentStarted.connect(this, ExperimentStarted);
 				cExperimentStructure_Object.experimentStopped.connect(this, ExperimentStopped);
 				cExperimentStructure_Object.externalTriggerRecieved.connect(this, ExperimentStateChanged);
@@ -300,7 +294,6 @@ function ConnectDisconnectExperimentStructure(Connect)
 		{
 			try 
 			{	
-				sTimer.timeout.disconnect(cExperimentStructure_Object, cExperimentStructure_Object.incrementExternalTrigger);
 				cExperimentStructure_Object.experimentStarted.disconnect(this, ExperimentStarted);
 				cExperimentStructure_Object.experimentStopped.disconnect(this, ExperimentStopped);
 				cExperimentStructure_Object.externalTriggerRecieved.disconnect(this, ExperimentStateChanged);
@@ -327,9 +320,9 @@ function ConnectDisconnectScriptFunctions(Connect)
 			dialog.loadButton["clicked()"].connect(dialog, dialog.loadExperiment);
 			dialog.createButton["clicked()"].connect(dialog, dialog.createExperiment);
 			dialog.changeButton["clicked()"].connect(dialog, dialog.changeExperiment);
-			dialog.showNodeButton["clicked()"].connect(dialog, dialog.showExperiment);
-			dialog.showTreeButton["clicked()"].connect(dialog, dialog.showExperimentTree);			
-			dialog.executeButton["clicked()"].connect(dialog, dialog.executeExperiment);
+			dialog.showGraphEditorButton["clicked()"].connect(dialog, dialog.showGraphEditor);
+			dialog.showTreeEditorButton["clicked()"].connect(dialog, dialog.showTreeViewEditor);			
+			dialog.runButton["clicked()"].connect(dialog, dialog.runExperiment);
 			dialog.saveButton["clicked()"].connect(dialog, dialog.saveExperiment);
 			dialog.exitButton["clicked()"].connect(this, this.CleanupScript);			
 		} 
@@ -349,9 +342,9 @@ function ConnectDisconnectScriptFunctions(Connect)
 			dialog.loadButton["clicked()"].disconnect(dialog, dialog.loadExperiment);
 			dialog.createButton["clicked()"].disconnect(dialog, dialog.createExperiment);
 			dialog.changeButton["clicked()"].disconnect(dialog, dialog.changeExperiment);
-			dialog.showNodeButton["clicked()"].disconnect(dialog, dialog.showExperiment);
-			dialog.showTreeButton["clicked()"].disconnect(dialog, dialog.showExperimentTree);				
-			dialog.executeButton["clicked()"].disconnect(dialog, dialog.executeExperiment);
+			dialog.showGraphEditorButton["clicked()"].disconnect(dialog, dialog.showGraphEditor);
+			dialog.showTreeEditorButton["clicked()"].disconnect(dialog, dialog.showTreeViewEditor);				
+			dialog.runButton["clicked()"].disconnect(dialog, dialog.runExperiment);
 			dialog.saveButton["clicked()"].disconnect(dialog, dialog.saveExperiment);
 			dialog.exitButton["clicked()"].disconnect(this, this.CleanupScript);			
 		} 
@@ -374,35 +367,36 @@ function EM_ExperimentStateChanged(currentEMState,timestamp)
 	if(currentEMState == ExperimentManager.ExperimentState.ExperimentManager_Stopped)	//ExperimentManager_Stopped
 	{
 		ConnectDisconnectExperimentStructure(false);
+		ChangeDialogState("Idle");
 	}		
 }
 
 function LogState(currentExperimentState)
 {
-	Log("-----");
-	var tmpLoopID = currentExperimentState.CurrentBlock_LoopID;
-	if (tmpLoopID == -4)
-		Log("CurrentBlock_LoopID: RA_UNDEFINED");
-	else
-		Log("CurrentBlock_LoopID:" + currentExperimentState.CurrentBlock_LoopID);
-	if(cLoopStructure_Object0)
-		Log("CurrentBlock_LoopCounter0:" + cLoopStructure_Object0.getLoopCounter());
-	if(cLoopStructure_Object1)
-		Log("CurrentBlock_LoopCounter1:" + cLoopStructure_Object1.getLoopCounter());
-	if(cLoopStructure_Object2)
-		Log("CurrentBlock_LoopCounter2:" + cLoopStructure_Object2.getLoopCounter());
-	Log("CurrentBlock_BlockID:" + currentExperimentState.CurrentBlock_BlockID);
-	Log("CurrentBlock_TrialNumber:" + currentExperimentState.CurrentBlock_TrialNumber);
-	Log("CurrentBlock_InternalTrigger:" + currentExperimentState.CurrentBlock_InternalTrigger);
-	Log("CurrentBlock_ExternalTrigger:" + currentExperimentState.CurrentBlock_ExternalTrigger);
-	Log("Experiment_ExternalTrigger:" + currentExperimentState.Experiment_ExternalTrigger);
-	Log("-----");
+//	Log("-----");
+//	var tmpLoopID = currentExperimentState.CurrentBlock_LoopID;
+//	if (tmpLoopID == -4)
+//		Log("CurrentBlock_LoopID: RA_UNDEFINED");
+//	else
+//		Log("CurrentBlock_LoopID:" + currentExperimentState.CurrentBlock_LoopID);
+//	if(cLoopStructure_Object0)
+//		Log("CurrentBlock_LoopCounter0:" + cLoopStructure_Object0.getLoopCounter());
+//	if(cLoopStructure_Object1)
+//		Log("CurrentBlock_LoopCounter1:" + cLoopStructure_Object1.getLoopCounter());
+//	if(cLoopStructure_Object2)
+//		Log("CurrentBlock_LoopCounter2:" + cLoopStructure_Object2.getLoopCounter());
+//	Log("CurrentBlock_BlockID:" + currentExperimentState.CurrentBlock_BlockID);
+//	Log("CurrentBlock_TrialNumber:" + currentExperimentState.CurrentBlock_TrialNumber);
+//	Log("CurrentBlock_InternalTrigger:" + currentExperimentState.CurrentBlock_InternalTrigger);
+//	Log("CurrentBlock_ExternalTrigger:" + currentExperimentState.CurrentBlock_ExternalTrigger);
+//	Log("Experiment_ExternalTrigger:" + currentExperimentState.Experiment_ExternalTrigger);
+//	Log("-----");
 }
 
 function ExperimentStateChanged()
 {
 	Log("-O- Experiment State Changed -O-");
-	//LogState(cExperimentStructure_Object.getCurrentExperimentState());
+	LogState(cExperimentStructure_Object.getCurrentExperimentState());
 }
 
 function ExperimentStarted()
@@ -415,110 +409,25 @@ function ExperimentStopped()
 	Log("-*- Experiment Stopped");
 }
 
-function CreateBlock(BlockObject,ID,Trials,IntTriggers,ExtTriggers)
-{	
-	//BlockObject = new cBlockStructure();	
-	BlockObject.BlockName = "Block " + ID;
-	//Log("Block Name: " + BlockObject.BlockName);
-	BlockObject.BlockID = ID;
-	//Log("Block ID: " + BlockObject.BlockID);
-	BlockObject.BlockNumber = ID;
-	//Log("Block Number: " + BlockObject.BlockNumber);
-	BlockObject.NumberOfTrials = Trials;
-	//Log("Block Number Of Trials: " + BlockObject.NumberOfTrials);
-	BlockObject.NumberOfInternalTriggers = IntTriggers;
-	//Log("Block Number Of Internal Triggers: " + BlockObject.NumberOfInternalTriggers);
-	BlockObject.NumberOfExternalTriggers = ExtTriggers;
-	//Log("Block Number Of External Triggers: " + BlockObject.NumberOfExternalTriggers);
-	//return BlockObject;
-	Log("\t-*- new Block Created");
-}
-
-function CreateLoop(LoopObject,ID,NumberOfLoops,TargetBlockID)
-{
-	//LoopObject = new cLoopStructure();	
-	LoopObject.LoopName = "Loop " + ID;
-	//Log("Loop Name: " + LoopObject.LoopName);
-	LoopObject.LoopID = ID;
-	//Log("Loop ID: " + LoopObject.LoopID);
-	LoopObject.LoopNumber = ID;
-	//Log("Loop Number: " + LoopObject.LoopNumber);
-	LoopObject.NumberOfLoops = NumberOfLoops;
-	//Log("Loop Number Of Loops: " + LoopObject.NumberOfLoops);
-	LoopObject.TargetBlockID = TargetBlockID;
-	//Log("Loop Target Block ID: " + LoopObject.TargetBlockID);
-	Log("\t-*- new Loop Created");
-}
-
-//function CreateExperimentFromScript()
-//{
-//	cExperimentStructure_Object = new cExperimentStructure();
-//	Log("-*- Going to create a new experiment from script code");
-//	cExperimentStructure_Object.ExperimentName = "Test Experiment";
-//	Log("Experiment Name: " + cExperimentStructure_Object.ExperimentName);
-//	cExperimentStructure_Object.ExperimentID = 99;
-//	Log("Experiment ID: " + cExperimentStructure_Object.ExperimentID);
-//	cExperimentStructure_Object.ExperimentDebugMode = true;
-//	Log("Experiment Debug Mode: " + cExperimentStructure_Object.ExperimentDebugMode);
-//
-//	cBlockStructure_Object0 = new cBlockStructure();
-//	CreateBlock(cBlockStructure_Object0,0,2,5,2);//(BlockObject,ID,Trials,IntTriggers,ExtTriggers)
-//	var bResult = cExperimentStructure_Object.insertBlock(cBlockStructure_Object0);
-	//Log("Add a defined Block result: " + bResult);
-//
-//	cBlockStructure_Object1 = new cBlockStructure();
-//	CreateBlock(cBlockStructure_Object1,1,1,1,1);//(BlockObject,ID,Trials,IntTriggers,ExtTriggers)
-//	bResult = cExperimentStructure_Object.insertBlock(cBlockStructure_Object1);
-	//Log("Add a defined Block result: " + bResult);
-//	cBlockStructure_Object2 = new cBlockStructure();
-//	CreateBlock(cBlockStructure_Object2,2,1,1,1);//(BlockObject,ID,Trials,IntTriggers,ExtTriggers)
-//	bResult = cExperimentStructure_Object.insertBlock(cBlockStructure_Object2);
-	//Log("Add a defined Block result: " + bResult);
-//	
-//	cLoopStructure_Object0 = new cLoopStructure();
-//	CreateLoop(cLoopStructure_Object0,0,2,cBlockStructure_Object0.getBlockID());//(LoopObject,ID,NumberOfLoops,TargetBlockID)
-//	bResult = cBlockStructure_Object1.insertLoop(cLoopStructure_Object0);
-	//Log("Add a defined Loop result: " + bResult);
-	//Log("\tLoop Count: " + cBlockStructure_Object1.getLoopCount());	
-//
-//	Log("-*- Experiment Created");
-//}
-
 function CleanupScript()
 {
 	//Pre
-	sTimer.stopTimer();
 	dialog.close();
 	ConnectDisconnectExperimentStructure(false);
 	ConnectDisconnectScriptFunctions(false);
 	//Functions
-	//CreateExperimentFromScript = null;
+	ChangeDialogState = null;
 	LogState = null;	
 	ExperimentStarted = null;
 	ExperimentStopped = null;
 	ExperimentStateChanged = null;
-	CreateBlock = null;
-	CreateLoop = null;
 	EM_ExperimentStateChanged = null;
 	EM_ExternalTriggerIncremented = null;	
 	ConnectDisconnectScriptFunctions = null;
 	ConnectDisconnectExperimentStructure = null;
 	CleanupScript = null;	
 	//Objects
-	//cLoopStructure_Object0 = null;
-	//cLoopStructure_Object1 = null;
-	//cLoopStructure_Object2 = null;
-	//cLoopStructure_Object3 = null;
-	//cLoopStructure_Object4 = null;	
-	//cBlockStructure_Object0 = null;
-	//cBlockStructure_Object1 = null;
-	//cBlockStructure_Object2 = null;
-	//cBlockStructure_Object3 = null;
-	//cBlockStructure_Object4 = null;
-	//cExperimentStructure_Object = null;	
 	cExperimentStructureState_Object = null;
-	ExperimentManagerObj = null;
-	sTimer = null;	
 	ExperimentManagerObj = null;
 	dialog = null;
 	//Dialog
@@ -527,9 +436,9 @@ function CleanupScript()
 	Dialog.prototype.loadExperiment = null;
 	Dialog.prototype.createExperiment = null;
 	Dialog.prototype.changeExperiment = null;
-	Dialog.prototype.showExperiment = null;
-	Dialog.prototype.showExperimentTree = null;
-	Dialog.prototype.executeExperiment = null;
+	Dialog.prototype.showGraphEditor = null;
+	Dialog.prototype.showTreeViewEditor = null;
+	Dialog.prototype.runExperiment = null;
 	Dialog.prototype.saveExperiment = null;
 	Dialog.prototype = null;
 	Dialog = null;
@@ -540,11 +449,43 @@ function CleanupScript()
 	BrainStim.cleanupScript();	
 }
 
-sTimer.startTimer(1000);
+function ChangeDialogState(sType)
+{
+	//sType corresponds to a button:
+	//"Load", "Create", "Change", "Run", "Save", "Idle"
+	if(sType == "Load")
+	{
+		dialog.setWindowTitle("BrainStim - Loading...");
+		dialog.setEnabled(false);
+	}
+	else if(sType == "Create")
+	{
+		dialog.setWindowTitle("BrainStim - Creating...");
+		dialog.setEnabled(false);
+	}
+	else if(sType == "Change")
+	{
+		dialog.setWindowTitle("BrainStim - Applying changes...");
+		dialog.setEnabled(false);
+	}
+	else if(sType == "Run")
+	{
+		dialog.setWindowTitle("BrainStim - Running...");
+		dialog.setEnabled(false);
+	}
+	else if(sType == "Save")
+	{
+		dialog.setWindowTitle("BrainStim - Saving...");
+		dialog.setEnabled(false);
+	}
+	else if(sType == "Idle")
+	{
+		dialog.setWindowTitle("BrainStim - Idle...");
+		dialog.setEnabled(true);
+	}
+}
+
 dialog = new Dialog();
 dialog.show();
 ConnectDisconnectScriptFunctions(true);
-//
-//dialog.loadExperiment();
-//dialog.showExperimentTree();
 

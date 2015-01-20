@@ -1,4 +1,4 @@
-//ExperimentManagerplugin
+﻿//ExperimentManagerplugin
 //Copyright (C) 2015  Sven Gijsen
 //
 //This file is part of BrainStim.
@@ -83,6 +83,8 @@ public:
 public slots:
 	void setExperimentManager(ExperimentManager *pExpManager);
 	bool setExperimentTreeModel(ExperimentTreeModel *expModel = NULL, const QString &sExpTreeModelCanonFilePath = "");
+	void showVisualExperimentDialog();
+	void showTableviewExperimentDialog();
 	QString saveFile(const QString &sFilePath = "");
 	void createDockWindows();
 	bool selectTreeItem(const QStringList &lTextToFind, const QList<QStringList> &lFilterLists, const QList<int> &lItemIds = QList<int>());
@@ -91,6 +93,8 @@ public slots:
 
 protected slots:
 	void resizeEvent(QResizeEvent *event);
+	//void focusInEvent(QFocusEvent *event);
+	//void showEvent(QShowEvent *event);
 
 private slots:	
     void newFile();

@@ -681,10 +681,10 @@ public slots:
 public:
 	Q_INVOKABLE QAction *registerMainMenuAction(const QStringList &lmenuItemSpecifier, QIcon *iMenuIcon = NULL, const bool &bSkipSubWindowRegistration = false);
 	Q_INVOKABLE bool getSavedDockWidgetSizeHint(const QString &sDockWidgetGroupName, const QString &sDockWidgetAccessName, QRect &rSizeHint);
-	void loadSavedDockWidgetConfiguration(const QString &sSettingsFileName, const QString &sGroupName, QDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea);
-	void loadSavedWindowLayout(const QString &sSettingsFileName, const QString &sGroupName);
-	void saveDockWidgetConfiguration(const QString &sSettingsFileName, const QString &sGroupName, QDockWidget *dockWidget);
-	void saveWindowLayout(const QString &sSettingsFileName, const QString &sGroupName);
+	void loadSavedDockWidgetConfiguration(const QString &sGroupName, QDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea);
+	void loadSavedWindowLayout(const QString &sGroupName);
+	void saveDockWidgetConfiguration(const QString &sGroupName, QDockWidget *dockWidget);
+	void saveWindowLayout(const QString &sGroupName);
 	bool extendAPICallTips(const QMetaObject* metaScriptObject = NULL);
 	void setGlobalApplicationInformationObject(GlobalApplicationInformation *globAppInformation);
 	void recoverLastScreenWindowSettings();

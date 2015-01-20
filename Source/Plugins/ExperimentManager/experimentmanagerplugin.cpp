@@ -449,7 +449,6 @@ bool ExperimentManagerPlugin::ExecuteContent(const GlobalApplicationInformation:
 			return ExperimentManagerDiagObject->executeActiveDocument();
 		}
 	}
-
 	return false;
 }
 
@@ -551,7 +550,7 @@ QWidget *ExperimentManagerPlugin::GetAdditionalFileTypeEditor(QString strExtensi
 //					{
 //						disconnect(tmpWidget, SIGNAL(ContentHasChanged(QString,bool)), this, SIGNAL(DocumentHasChanged(QString,bool)));
 //						disconnect(tmpWidget, SIGNAL(IsClosing(QString,bool)), this, SIGNAL(DocumentIsClosing(QString,bool)));			
-//						//return tmpManager->showVisualExperimentEditor(NULL,tmpString);
+//						//return tmpManager->showVisualExperirrrmentEditor(NULL,tmpString);
 //					}
 //					delete tmpManager;
 //				}
@@ -594,8 +593,9 @@ bool ExperimentManagerPlugin::LoadAdditionalFile(QString strFilePath)
 		if(tmpWidget)
 		{
 			connect(tmpWidget, SIGNAL(ContentHasChanged(QString,bool)), this, SIGNAL(DocumentHasChanged(QString,bool)));
-			connect(tmpWidget, SIGNAL(IsClosing(QString,bool)), this, SIGNAL(DocumentIsClosing(QString,bool)));			
-			return tmpManager->showVisualExperimentEditor(NULL,tmpString);
+			connect(tmpWidget, SIGNAL(IsClosing(QString,bool)), this, SIGNAL(DocumentIsClosing(QString,bool)));	
+			bool bResult = tmpManager->showVisualExperimentDialog(NULL, tmpString);
+			return bResult;
 		}
 	}
 	else
