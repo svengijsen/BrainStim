@@ -297,7 +297,7 @@ File ::734163BB-2D66-4AB3-8E7C-A39732165602 -directory <%InstallDir%>/Examples/T
 File ::B35EE0A2-15AE-4950-915A-2005EF67EE4E -directory <%InstallDir%>/Examples/Tutorials/99_PluginExamples/TBVExchanger/scripts -name E:/Projects/BrainStim_Plugins/TBVExchanger/scripts/QScriptExample_TBVExchangerPlugin.qs -parent FE7C119F-2B67-439E-A0DF-FA1E714F2630
 File ::B51DA7DD-911A-4644-9EF3-C31B59A3EF23 -directory <%InstallDir%>/Examples/Tutorials/99_PluginExamples/SerialPortDevice/scripts -name E:/Projects/BrainStim_Plugins/SerialPortDevice/scripts/QScriptExample_SerialPortDevice.qs -parent FE7C119F-2B67-439E-A0DF-FA1E714F2630
 File ::9AF92E48-2781-4CF4-86DF-2C61F8171153 -directory <%InstallDir%>/Examples/Tutorials/99_PluginExamples/USBHIDDevice/scripts -name E:/Projects/BrainStim_Plugins/USBHIDDevice/scripts/QScriptExample_USBHIDDevice.qs -parent FE7C119F-2B67-439E-A0DF-FA1E714F2630
-File ::D347FA81-B6DB-42A0-AE1A-09D6BFE02D50 -type dir -directory <%InstallDir%>/Examples/Tutorials/99_PluginExamples/ExperimentManager/scripts -name E:/Projects/BrainStim/Source/Plugins/ExperimentManager/scripts -active 0 -parent FE7C119F-2B67-439E-A0DF-FA1E714F2630
+File ::D347FA81-B6DB-42A0-AE1A-09D6BFE02D50 -type dir -directory <%InstallDir%>/Examples/Tutorials/99_PluginExamples/ExperimentManager/scripts -name E:/Projects/BrainStim/Source/Plugins/ExperimentManager/scripts -parent FE7C119F-2B67-439E-A0DF-FA1E714F2630
 File ::3E7AF30B-74F3-4364-90DC-7EEDC9E29C9D -name cExperimentStructureObject.qs -parent D347FA81-B6DB-42A0-AE1A-09D6BFE02D50
 File ::EDD14EFF-6344-47AD-AAB7-E1A415E430F9 -name DatFileConcatination.qs -parent D347FA81-B6DB-42A0-AE1A-09D6BFE02D50
 File ::EA270538-B799-429A-8BCE-46D8B952F8AA -name DatFileViewer.qs -parent D347FA81-B6DB-42A0-AE1A-09D6BFE02D50
@@ -636,9 +636,7 @@ File ::6DEADDB2-1C35-4AE6-9650-A35A3D79D6CB -name Example2.exml -parent 1728B32C
 File ::563B1BF0-B6F1-4E6A-B335-F82847DF7AB7 -type dir -name 11_ExperimentStructure_Editing -parent 23F6D351-6760-4CC8-9D58-C7A0D09D62FA
 File ::64765D77-FD5C-47A2-AE7F-F30D957C073E -name ExperimentStructure.exml -parent 563B1BF0-B6F1-4E6A-B335-F82847DF7AB7
 File ::3080BF14-6DA3-49F0-9B34-88A44557681A -name ExperimentStructure.qs -parent 563B1BF0-B6F1-4E6A-B335-F82847DF7AB7
-File ::1980DD8A-4018-47AD-BE71-3E2778EE81EE -name ExperimentStructure2.exml -parent 563B1BF0-B6F1-4E6A-B335-F82847DF7AB7
-File ::671263C2-85F2-42E3-863A-24BE01ACE65D -name tempDoc.exml -parent 563B1BF0-B6F1-4E6A-B335-F82847DF7AB7
-File ::3BC46472-351A-4B0F-AA87-9CD955271433 -name test1.exml -parent 563B1BF0-B6F1-4E6A-B335-F82847DF7AB7
+File ::300E2B1B-C823-4340-ADDA-7283C757351C -name ExperimentStructure_saved.exml -parent 563B1BF0-B6F1-4E6A-B335-F82847DF7AB7
 File ::E8CFDA72-D020-4B22-9444-9CDCFA01DAC6 -type dir -name 12_CustomParameters -parent 23F6D351-6760-4CC8-9D58-C7A0D09D62FA
 File ::87C65E72-996D-45B9-B578-D0E0AFC4B6B3 -name Example1.exml -parent E8CFDA72-D020-4B22-9444-9CDCFA01DAC6
 File ::E9C01298-E77A-46F3-8116-68A1992288E3 -name Example1.qml -parent E8CFDA72-D020-4B22-9444-9CDCFA01DAC6

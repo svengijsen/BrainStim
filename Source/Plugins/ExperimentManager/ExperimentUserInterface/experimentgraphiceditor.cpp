@@ -1985,7 +1985,8 @@ void ExperimentGraphicEditor::showTableviewExperimentDialog()
 		expBlockParamView = new ExperimentBlockParameterView(NULL, pExpTreeModel);
 	if (expBlockParamView)
 	{
-		bool bConnectResult = connect(expBlockParamView, SIGNAL(destroyed(QWidget*)), this, SLOT(childWidgetDestroyed(QWidget*)), Qt::UniqueConnection);
+		//bool bConnectResult = 
+		connect(expBlockParamView, SIGNAL(destroyed(QWidget*)), this, SLOT(childWidgetDestroyed(QWidget*)), Qt::UniqueConnection);
 		expBlockParamView->resize(600, 400);
 		expBlockParamView->show();
 	}

@@ -92,27 +92,81 @@ public:
 	*/
 	~ExperimentEngine();
 
-	template< typename T1 > bool insertExpObjectParameter(const int &nObjectID,const QString &sKeyName,const T1 &tVariabele,bool bIsInitializing = true)
+	template< typename T1 > bool insertExpObjectParameter(const int &nObjectID,const QString &sKeyName,T1 &tVariabele,bool bIsInitializing = true)
 	{
 		bool bRetVal = false;
 		QString tVarName = typeid(tVariabele).name();
 		QString sValue = templateVariabeleToString(tVariabele);
-		if(insertExpObjectBlockParameter(nObjectID,sKeyName,sValue,bIsInitializing))
-			bRetVal = pExperimentManager->insertExperimentObjectVariabelePointer(nObjectID,sKeyName,tVariabele);
+		if (insertExpObjectBlockParameter(nObjectID, sKeyName, sValue, bIsInitializing))
+		{
+			if (bIsInitializing)
+			{
+				QString sNewValue = getExpObjectBlockParameter(nObjectID, sKeyName, sValue).sValue;//used for retrieving already set initialized values
+				if (sNewValue != sValue)
+				{
+					sValue = sNewValue;
+					tVariabele = stringToTemplateVariabele<T1>(sNewValue).value<T1>();
+				}
+			}
+			bRetVal = pExperimentManager->insertExperimentObjectVariabelePointer(nObjectID, sKeyName, tVariabele);
+		}
 		return bRetVal;
 	}
-	QString templateVariabeleToString(const QString &Var) {return Var;}
-	QString templateVariabeleToString(const QStringList &Var) {return Var.join(",");}
-	QString templateVariabeleToString(const QColor &Var) {return Var.name();}
-	QString templateVariabeleToString(const int &Var) {return QString::number(Var);}
-	QString templateVariabeleToString(const float &Var) {return QString::number(Var);}
-	QString templateVariabeleToString(const double &Var) {return QString::number(Var);}
-	QString templateVariabeleToString(const bool &Var) 
+	QString templateVariabeleToString(const QString &Var) { return Var; }
+	QString templateVariabeleToString(const QStringList &Var) { return Var.join(","); }
+	QString templateVariabeleToString(const QColor &Var) { return Var.name(); }
+	QString templateVariabeleToString(const int &Var) { return QString::number(Var); }
+	QString templateVariabeleToString(const float &Var) { return QString::number(Var); }
+	QString templateVariabeleToString(const double &Var) { return QString::number(Var); }
+	QString templateVariabeleToString(const bool &Var)
 	{
 		if (Var)
-			return TYPE_BOOL_TRUE; 
+			return TYPE_BOOL_TRUE;
 		else
 			return TYPE_BOOL_FALSE;
+	}
+	template< typename T1 > QVariant stringToTemplateVariabele(const QString &sVar)
+	{ 
+		bool bResult = false;
+		if (typeid(T1) == typeid(QString))
+		{
+			return sVar;
+		}
+		else if (typeid(T1) == typeid(QStringList))
+		{
+			return sVar.split(",");
+		}
+		else if (typeid(T1) == typeid(QColor))
+		{
+			return QColor(sVar);
+		}
+		else if (typeid(T1) == typeid(int))
+		{
+			int tmpInt = sVar.toInt(&bResult);
+			if (bResult)
+				return tmpInt;
+		}
+		else if (typeid(T1) == typeid(float))
+		{
+			float tmpFloat = sVar.toFloat(&bResult);
+			if (bResult)
+				return tmpFloat;
+		}
+		else if (typeid(T1) == typeid(double))
+		{
+			double tmpDouble = sVar.toDouble(&bResult);
+			if (bResult)
+				return tmpDouble;
+		}
+		else if (typeid(T1) == typeid(bool))
+		{
+			if (TYPE_BOOL_TRUE)
+				{return true;}
+			else if (TYPE_BOOL_FALSE)
+				{return true;}
+		}
+		qDebug() << __FUNCTION__ << "Could not parse the template variable(" << sVar << ")";
+		return T1();
 	}
 	template< typename T2 > T2* getExpObjectVariabelePointer(const int &nObjectID,const QString &sKeyName)
 	{

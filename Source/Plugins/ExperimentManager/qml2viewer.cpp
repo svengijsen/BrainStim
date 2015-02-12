@@ -489,7 +489,7 @@ void QML2Viewer::parseExperimentObjectBlockParameters(bool bInit, bool bSetOnlyT
 		colorBackground = QColor(87,87,87);//gives "#575757";
 		if(!bSetOnlyToDefault)
 			insertExpObjectParameter(nQML2ViewerID,QML2VIEWER_BACKGROUNDCOLOR,colorBackground);
-		QString qmlMainFilePath = "";
+		qmlMainFilePath = "";
 		if(!bSetOnlyToDefault)
 			insertExpObjectParameter(nQML2ViewerID,QML2VIEWER_MAINFILEPATH,qmlMainFilePath);
 		stimHeightPixelAmount = 480;

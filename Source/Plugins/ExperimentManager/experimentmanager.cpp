@@ -213,14 +213,27 @@ bool ExperimentManager::insertExperimentObjectBlockParameter(const int nObjectID
 	{
 		if (mExperimentObjectList.contains(nObjectID))
 		{
+			//Already set while initializing?
+			if (bIsInitializing)
+			{
+				if (mExperimentObjectList.value(nObjectID).ExpBlockParams)
+				{
+					if (mExperimentObjectList.value(nObjectID).ExpBlockParams->contains(sName))
+					{
+						(*mExperimentObjectList[nObjectID].ExpBlockParams)[sName].bHasChanged = true;
+						//(*mExperimentObjectList[nObjectID].ExpBlockParams)[sName].sValue = sValue;
+						(*mExperimentObjectList[nObjectID].ExpBlockParams)[sName].bIsInitialized = bIsInitializing;
+						(*mExperimentObjectList[nObjectID].ExpBlockParams)[sName].bIsCustom = bIsCustom;
+						return true;
+					}
+				}
+			}
 			ParsedParameterDefinition tmpParDef;
 			tmpParDef.bHasChanged = true;
 			tmpParDef.sValue = sValue;
 			tmpParDef.bIsInitialized = bIsInitializing;
 			tmpParDef.bIsCustom = bIsCustom;
 			mExperimentObjectList.value(nObjectID).ExpBlockParams->insert(sName, tmpParDef);
-			tmpParDef.sValue = "";
-			tmpParDef = mExperimentObjectList.value(nObjectID).ExpBlockParams->value(sName);
 			return true;
 		}
 	}
@@ -254,17 +267,21 @@ bool ExperimentManager::getExperimentObjectBlockParameter(const int nObjectID,co
 	return false;
 }
 
-bool ExperimentManager::setExperimentObjectBlockParameterStructure(const int nObjectID,tParsedParameterList *expBlockTrialStruct)
+tParsedParameterList *ExperimentManager::constructOrRetrieveExperimentObjectBlockParameterStructure(const int nObjectID)
 {
 	if (nObjectID >= 0)
 	{
-		if (mExperimentObjectList.contains(nObjectID))
+		if (mExperimentObjectList.isEmpty() == false)
 		{
-			mExperimentObjectList[nObjectID].ExpBlockParams = expBlockTrialStruct;
-			return true;
+			if (mExperimentObjectList.contains(nObjectID))
+			{
+				if (mExperimentObjectList[nObjectID].ExpBlockParams == NULL)
+					mExperimentObjectList[nObjectID].ExpBlockParams = new tParsedParameterList();
+				return mExperimentObjectList[nObjectID].ExpBlockParams;
+			}
 		}
 	}
-	return false;
+	return NULL;
 }
 
 bool ExperimentManager::getExperimentObjectScriptValue(const int &nObjectID,const QString &sKeyName,QScriptValue &sScriptValue)
@@ -416,7 +433,7 @@ bool ExperimentManager::saveExperiment(QString strFile)
 	return false;
 }
 
-bool ExperimentManager::loadExperiment(QString strSource, bool bIsFile)
+bool ExperimentManager::loadExperiment(QString strSource, bool bIsFile, const bool bSkipXMLValidation)
 {
 	cleanupExperiment();
 	if (currentExperimentTree)
@@ -467,7 +484,7 @@ bool ExperimentManager::loadExperiment(QString strSource, bool bIsFile)
 	{
 		setExperimentFileName(fileName);
 		changeCurrentExperimentState(ExperimentManager_Loaded);
-		return prePassiveParseExperiment();
+		return prePassiveParseExperiment(bSkipXMLValidation);
 	}
 	currentExperimentFile.clear();
 	currentValidationFile.clear();
@@ -490,11 +507,11 @@ void ExperimentManager::changeCurrentExperimentState(ExperimentState expCurrStat
 	}
 }
 
-bool ExperimentManager::validateExperiment()
+bool ExperimentManager::validateExperiment(const bool bSkipXMLValidation)
 {
 	if (currentExperimentTree == NULL)
 	{
-		if((loadExperiment("") == false) || (currentExperimentTree == NULL))
+		if ((loadExperiment("", true, bSkipXMLValidation) == false) || (currentExperimentTree == NULL))
 		{
 			qDebug() << __FUNCTION__ << "::No Experiment loaded!";
 			return false;
@@ -521,54 +538,55 @@ bool ExperimentManager::validateExperiment()
 		return false;
 	}
 
-	////const QByteArray schemaData = schemaView->toPlainText().toUtf8();
-	////const QByteArray instanceData = instanceEdit->toPlainText().toUtf8();
-	XmlMessageHandler messageHandler;
-	QXmlSchema schema;
-	schema.setMessageHandler(&messageHandler);
-	schema.load(currentValidationFile);
-
-	bool bDoValidate = true;
-	bool bSettingFound = false;
-	QString sMenuActionPath = QString(MAIN_PROGRAM_PLUGINS_REGISTRY_DIRNAME) + "/" + QString(PLUGIN_INTERNAL_NAME).toLower() + "/" + QString(SETTING_ENABLEAUTOEXMLVALIDATION);
-	QString sTmpResult = "";
-	if (QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_GETSTOREDSETTINGVALUE_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bSettingFound), Q_ARG(QString, sMenuActionPath), Q_ARG(QString*, &sTmpResult)))
+	if (bSkipXMLValidation == false)
 	{
-		if (bSettingFound)
+		XmlMessageHandler messageHandler;
+		QXmlSchema schema;
+		schema.setMessageHandler(&messageHandler);
+		schema.load(currentValidationFile);
+
+		bool bDoValidate = true;
+		bool bSettingFound = false;
+		QString sMenuActionPath = QString(MAIN_PROGRAM_PLUGINS_REGISTRY_DIRNAME) + "/" + QString(PLUGIN_INTERNAL_NAME).toLower() + "/" + QString(SETTING_ENABLEAUTOEXMLVALIDATION);
+		QString sTmpResult = "";
+		if (QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_GETSTOREDSETTINGVALUE_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bSettingFound), Q_ARG(QString, sMenuActionPath), Q_ARG(QString*, &sTmpResult)))
 		{
-			if (sTmpResult.toLower() == "false")
+			if (bSettingFound)
 			{
-				bDoValidate = false;
+				if (sTmpResult.toLower() == "false")
+				{
+					bDoValidate = false;
+				}
 			}
 		}
-	} 
-	if (bDoValidate)
-	{
-		bool errorOccurred = false;
-		if (!schema.isValid())
+		if (bDoValidate)
 		{
-			errorOccurred = true;
-		}
-		else
-		{
-			QXmlSchemaValidator validator(schema);
-			if (!validator.validate(currentExperimentFile))
+			bool errorOccurred = false;
+			if (!schema.isValid())
+			{
 				errorOccurred = true;
-		}
-		if (errorOccurred)
-		{
-			errorOccurred = errorOccurred;
-			QString strMessage = messageHandler.statusMessage();
-			int nColumn = messageHandler.column();
-			int nLine = messageHandler.line();
-			qDebug() << __FUNCTION__ << QString("Invalid schema, " + strMessage + "(line:" + QString::number(nLine) + ", col:" + QString::number(nColumn) + ")");
-			return true;
+			}
+			else
+			{
+				QXmlSchemaValidator validator(schema);
+				if (!validator.validate(currentExperimentFile))
+					errorOccurred = true;
+			}
+			if (errorOccurred)
+			{
+				errorOccurred = errorOccurred;
+				QString strMessage = messageHandler.statusMessage();
+				int nColumn = messageHandler.column();
+				int nLine = messageHandler.line();
+				qDebug() << __FUNCTION__ << QString("Invalid schema, " + strMessage + "(line:" + QString::number(nLine) + ", col:" + QString::number(nColumn) + ")");
+				return true;
+			}
 		}
 	}
 	return true;
 }
 
-bool ExperimentManager::runExperiment()
+bool ExperimentManager::runExperiment(const bool bSkipXMLValidation)
 {
 #ifdef Q_OS_WIN32 //Are we on Windows?
 	//bool ret = 
@@ -585,13 +603,13 @@ bool ExperimentManager::runExperiment()
 	expCurrentState = getCurrExperimentState();
 	if (expCurrentState < ExperimentManager_PreParsed)
 	{
-		if (!prePassiveParseExperiment())
+		if (!loadExperiment("","",bSkipXMLValidation))//(!prePassiveParseExperiment(bSkipXMLValidation))
 		{
 			changeCurrentExperimentState(ExperimentManager_Loaded);
 			return false;
 		}
 	}
-
+	
 	if(!createExperimentObjects())
 	{
 		changeCurrentExperimentState(ExperimentManager_PreParsed);
@@ -743,6 +761,11 @@ void ExperimentManager::cleanupExperimentObjects()
 		{
 			delete i.value().typedExpParamCntnr;
 			i.value().typedExpParamCntnr = NULL;
+		}
+		if (i.value().ExpBlockParams)
+		{
+			delete i.value().ExpBlockParams;
+			i.value().ExpBlockParams = NULL;
 		}
 	}
 	mExperimentObjectList.clear();
@@ -935,9 +958,9 @@ bool ExperimentManager::startExperimentObjects(bool bRunFullScreen)
 	return bRetVal;
 }
 
-bool ExperimentManager::prePassiveParseExperiment()//const bool bSkipXMLValidation)
+bool ExperimentManager::prePassiveParseExperiment(const bool bSkipXMLValidation)
 {
-	if (!validateExperiment())
+	if (!validateExperiment(bSkipXMLValidation))
 		return false;
 
 	if (!configureExperiment())
@@ -1868,31 +1891,46 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 															tParsedParameterList *hParams = NULL;
 															if (nParameterListCount > 0)
 															{
+																int nCurrentParamID;
 																for (int k = 0; k < nParameterListCount; k++)//For each parameter
 																{
-																	tmpTreeItem = tmpBlockParameterTreeItemList.at(k)->firstChild(NAME_TAG);
-																	if (tmpTreeItem)
+																	nCurrentParamID = -1;
+																	tTmpTreeObjectItemDefs = tmpBlockParameterTreeItemList.at(k)->getDefinitions();
+																	if (tTmpTreeObjectItemDefs.contains(ID_TAG))
 																	{
-																		tmpString = tmpTreeItem->getValue().toLower();
-																		if (mObjectElements->contains(nCurrentObjectID) == false)
-																		{
-																			objectElement tmpObjElement;
-																			tmpObjElement.nObjectID = nCurrentObjectID;
-																			mObjectElements->insert(nCurrentObjectID, tmpObjElement);
-																		}
-																		if (mObjectElements->value(nCurrentObjectID).ExpBlockParams == NULL)
-																			(*mObjectElements)[nCurrentObjectID].ExpBlockParams = new tParsedParameterList();
-																		hParams = mObjectElements->value(nCurrentObjectID).ExpBlockParams;
-																		tmpTreeItem = tmpBlockParameterTreeItemList.at(k)->firstChild(VALUE_TAG);
+																		nCurrentParamID = tTmpTreeObjectItemDefs[ID_TAG].value.toInt();//ParamID
+																		tmpTreeItem = tmpBlockParameterTreeItemList.at(k)->firstChild(NAME_TAG);
 																		if (tmpTreeItem)
 																		{
-																			ParsedParameterDefinition tmpParDef;
-																			QString tmpValue = tmpTreeItem->getValue();
-																			currentExpManager->expandExperimentBlockParameterValue(tmpValue);
-																			tmpParDef.sValue = tmpValue;
-																			tmpParDef.bHasChanged = true;
-																			tmpParDef.bIsCustom = bIsCustomParameter;
-																			hParams->insert(tmpString, tmpParDef);
+																			tmpString = tmpTreeItem->getValue().toLower();
+																			if (mObjectElements->contains(nCurrentObjectID) == false)
+																			{
+																				objectElement tmpObjElement;
+																				tmpObjElement.nObjectID = nCurrentObjectID;
+																				mObjectElements->insert(nCurrentObjectID, tmpObjElement);
+																			}
+																			if (mObjectElements->value(nCurrentObjectID).ExpBlockParams == NULL)
+																				(*mObjectElements)[nCurrentObjectID].ExpBlockParams = new tParsedParameterList();
+																			hParams = mObjectElements->value(nCurrentObjectID).ExpBlockParams;
+																			tmpTreeItem = tmpBlockParameterTreeItemList.at(k)->firstChild(VALUE_TAG);
+																			if (tmpTreeItem)
+																			{
+																				ParsedParameterDefinition tmpParDef;
+																				QString tmpValue = tmpTreeItem->getValue();
+
+																				cBlockParameterStructure *tmpBlockParameter = new cBlockParameterStructure();
+																				tmpBlockParameter->setBlockParameterID(nCurrentParamID);
+																				tmpBlockParameter->setBlockParameterName(tmpString);
+																				tmpBlockParameter->setBlockParameterValue(tmpValue);
+																				if (tmpBlock->insertObjectParameter(nCurrentObjectID, tmpBlockParameter, bIsCustomParameter))
+																				{
+																					currentExpManager->expandExperimentBlockParameterValue(tmpValue);
+																					tmpParDef.sValue = tmpValue;
+																					tmpParDef.bHasChanged = true;
+																					tmpParDef.bIsCustom = bIsCustomParameter;
+																					hParams->insert(tmpString, tmpParDef);
+																				}
+																			}
 																		}
 																	}
 																}
@@ -2561,7 +2599,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 bool ExperimentManager::createExperimentObjects()
 {
 	QStringList strList;
-	cleanupExperimentObjects();
+	//cleanupExperimentObjects();
 	if (cExperimentBlockTrialStructure)
 	{
 		QList<cObjectStructure*> lExpObjects = cExperimentBlockTrialStructure->getObjectList();
@@ -2640,12 +2678,13 @@ bool ExperimentManager::createExperimentObjects()
 						tmpElementPointer->nMetaID = metaID;
 						tmpElementPointer->sObjectName = currentObject->getObjectName();
 						tmpElementPointer->pObject = tmpObjectPointer;
-						tmpElementPointer->typedExpParamCntnr = NULL;
-						tmpElementPointer->ExpBlockParams = NULL;
+						//tmpElementPointer->typedExpParamCntnr = NULL;
+						//tmpElementPointer->ExpBlockParams = NULL;
 						tmpElementPointer->nCurrentState = Experiment_SubObject_Initialized;//This is still an inactive state!
 						//tmpElementPointer->sStateHistory.nState.append(tmpElementPointer->nCurrentState);
 						//tmpElementPointer->sStateHistory.sDateTimeStamp.append(getCurrentDateTimeStamp());
-						mExperimentObjectList.insert(tmpElementPointer->nObjectID, tmpElement);
+						if (mExperimentObjectList.contains(currentObject->getObjectID()) == false)
+							mExperimentObjectList.insert(tmpElementPointer->nObjectID, tmpElement);
 					}
 				}
 			}
@@ -2672,7 +2711,7 @@ bool ExperimentManager::getScriptContextValue(const QString &sScriptContextState
 	{
 		QString tmpString = "... Could not expand the script object (" + sScriptContextStatement + "), the script engine is not ready!";
 		emit WriteToLogOutput(tmpString);
-		qDebug() << tmpString;
+		//qDebug() << tmpString;
 		return false;
 	}
 	else

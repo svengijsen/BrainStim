@@ -58,8 +58,10 @@ BrainStim.clearOutputWindow("BasicExperiment");
 /////////////////////////
 //Public Property Functions//
 /////////////////////////
-	BasicExperiment.__proto__.RunExperiment = function()
+	BasicExperiment.__proto__.RunExperiment = function(bSkipXMLValidation)
 	{		
+		bSkipXMLValidation = typeof bSkipXMLValidation !== 'undefined' ? bSkipXMLValidation : false;
+		
 		BasicExperiment.nStartDateTimeStamp = 0;
 		//BasicExperiment.LogFunctionSignature(arguments.callee.name, arguments, true);
 		BasicExperiment.LogFunctionSignature("BasicExperiment","RunExperiment", arguments, true);
@@ -77,7 +79,7 @@ BrainStim.clearOutputWindow("BasicExperiment");
 			BasicExperiment.ExperimentManagerObj.ExperimentStateHasChanged.connect(BasicExperiment, BasicExperiment.preExperimentStateChanged);
 			if(BasicExperiment.ExperimentManagerObj.setExperimentFileName(BasicExperiment.sExmlFilePath))
 			{
-				BasicExperiment.ExperimentManagerObj.runExperiment();
+				BasicExperiment.ExperimentManagerObj.runExperiment(bSkipXMLValidation);
 			}
 			else
 			{

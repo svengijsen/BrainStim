@@ -144,7 +144,7 @@ public:
 	ExperimentState getCurrExperimentState() { return experimentCurrentState; }
 	bool fetchExperimentBlockParameters(const int &nBlockNumber, const int &nObjectID);
 	tParsedParameterList *getObjectBlockParamListById(int nID);
-	bool setExperimentObjectBlockParameterStructure(const int nObjectID, tParsedParameterList *expBlockTrialStruct);
+	tParsedParameterList *constructOrRetrieveExperimentObjectBlockParameterStructure(const int nObjectID);
 	bool getScriptContextValue(const QString &sScriptContextStatement, QVariant &sScriptContextReturnValue);
 	bool expandExperimentBlockParameterValue(QString &sValue);
 	bool getExperimentObjectScriptValue(const int &nObjectID,const QString &sKeyName,QScriptValue &sScriptValue);
@@ -222,9 +222,10 @@ public slots:
 	 *  The Experiment file (*.EXML) is loaded into memory.
 	 *  @param strSource a string containing the file path to the experiment file (*.EXML), if this value is "" then the last configured experiment file path is automatically loaded in memory, see ExperimentManager.setExperimentFileName(). A second configurable option (see @param bIsFile) is that this variabele can also hold the script content to load.
 	 *  @param bIsFile a boolean determining whether the @param strSource parameter should be threated as a string containing a path to a experiment file. If false then the parameter is threated threated as a string containing the script content itself.
+	 *  @param bSkipXMLValidation a boolean determining whether the content should be fully validated first (default = false), this can causes the loading process to take more time when enabled.
 	 *  @return a boolean value determining whether the function executed successfully.
 	 */	
-	bool loadExperiment(QString strSource = "", bool bIsFile = true);
+	bool loadExperiment(QString strSource = "", const bool bIsFile = true, const bool bSkipXMLValidation = false);
 	/*! \brief Saves the current experiment file from memory to a file.
 	 *
 	 *  The current experiment file in memory is saved to a file.
@@ -235,15 +236,17 @@ public slots:
 	/*! \brief Validates the current experiment available in memory.
 	 *
 	 *  The current experiment available in memory is validated.
+	 *  @param bSkipXMLValidation a boolean determining whether the content should be fully validated (default = false), this process takes more time when enabled.
 	 *  @return a boolean value determining whether the current experiment could be validated successfully.
 	 */	
-	bool validateExperiment();
+	bool validateExperiment(const bool bSkipXMLValidation = false);
 	/*! \brief Runs the current Experiment available in memory.
 	 *
 	 *  The current available experiment in memory is started if/after it has been successfully loaded and validated.
+	 *  @param bSkipXMLValidation a boolean determining whether the content should be fully validated (default = false), this process takes more time when enabled.
 	 *  @return a boolean value determining whether the function executed successfully.
 	 */	
-	bool runExperiment();
+	bool runExperiment(const bool bSkipXMLValidation = false);
 	/*! \brief Aborts the current Experiment that is running.
 	 *
 	 *  Tries to abort the current Experiment that is running, see ExperimentManager.runExperiment().
@@ -420,7 +423,7 @@ private:
 	void initializeDataLogger();
 	void RegisterMetaTypes();
 	bool invokeExperimentObjectsSlots(const QString &sSlotName);
-	bool prePassiveParseExperiment();// const bool bSkipXMLValidation = false);
+	bool prePassiveParseExperiment(const bool bSkipXMLValidation = false);
 	bool configureExperiment();
 	bool createExperimentObjects();
 	bool connectExperimentObjects(bool bDisconnect = false, int nObjectID = -1);

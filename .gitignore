@@ -34,3 +34,4 @@ Install/*.ini
 /Install/Examples/Tutorials/8_Ogre3D/*.log
 InstallJammer/build/*.*
 Install/Menus/*/*.ini
+Source/Plugins/ExperimentManager/experimentmanagerplugin.aps

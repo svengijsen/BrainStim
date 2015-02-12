@@ -40,11 +40,11 @@ ExperimentEngine::ExperimentEngine(QObject *parent)	: QObject(parent)
 ExperimentEngine::~ExperimentEngine()
 {
 	changeSubObjectState(Experiment_SubObject_Destructing);
-	if (ExpBlockParams)
-	{
-		delete ExpBlockParams;
-		ExpBlockParams = NULL;
-	}
+	//if (ExpBlockParams)
+	//{
+	//	delete ExpBlockParams;
+	//	ExpBlockParams = NULL;
+	//}
 	if (currentScriptEngine)
 	{
 		currentScriptEngine = NULL;//not owned by this class
@@ -55,10 +55,7 @@ ExperimentEngine::~ExperimentEngine()
 bool ExperimentEngine::insertExpObjectBlockParameter(const int nObjectID,const QString sName,const QString sValue,bool bIsInitializing, bool bIsCustom)
 {
 	if (ExpBlockParams == NULL)
-	{
-		ExpBlockParams = new tParsedParameterList();
-		pExperimentManager->setExperimentObjectBlockParameterStructure(nObjectID,ExpBlockParams);
-	}
+		ExpBlockParams = pExperimentManager->constructOrRetrieveExperimentObjectBlockParameterStructure(nObjectID);
 	bool bRetVal = pExperimentManager->insertExperimentObjectBlockParameter(nObjectID,sName.toLower(),sValue,bIsInitializing,bIsCustom);
 	return bRetVal;
 }
