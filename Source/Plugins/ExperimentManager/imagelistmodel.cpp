@@ -114,13 +114,13 @@ bool ImageListModel::setData(const QModelIndex &mIndex, const QVariant &value, i
 	switch (role)
 	{
 	case ROLE_PATH:
-		bRetVal = createLstModelItem(tmpImageListModelItem,QString(""),value.toString(),role, NULL);
+		bRetVal = createLstModelItem(tmpImageListModelItem,QString(""),value.toString(),role);
 		break;
 	case ROLE_PIXMAP:
-		bRetVal = createLstModelItem(tmpImageListModelItem,QString(""),QString(""),role,&value.value<QPixmap>());
+		bRetVal = createLstModelItem(tmpImageListModelItem,QString(""),QString(""),role, value.value<QPixmap>());
 		break;
 	case ROLE_ID:
-		bRetVal = createLstModelItem(tmpImageListModelItem,value.toString(),QString(""),role, NULL);
+		bRetVal = createLstModelItem(tmpImageListModelItem,value.toString(),QString(""),role);
 		break;
 	default:
 		return false;
@@ -140,7 +140,7 @@ bool ImageListModel::setData(const QModelIndex &mIndex, const QVariant &value, i
 QString ImageListModel::addPixmap(const QString &path)
 {
 	int row = ImageMap.count();
-	if(createLstModelItem(tmpImageListModelItem,QString(""),path,ROLE_PATH,NULL))
+	if(createLstModelItem(tmpImageListModelItem,QString(""),path,ROLE_PATH))
 	{
 		beginInsertRows(QModelIndex(), row, row);
 		ImageMap.insert(row, tmpImageListModelItem);
@@ -221,7 +221,7 @@ bool ImageListModel::removePixmap(const QString &ID)
 	return false;
 }
 
-bool ImageListModel::createLstModelItem(strcImageListModelItem &item, const QString strID, const QString path, const int role, const QPixmap *pixmap)
+bool ImageListModel::createLstModelItem(strcImageListModelItem &item, const QString strID, const QString path, const int role, const QPixmap &pixmap)
 {
 	resetLstModelItem(item);
 	switch (role)
@@ -235,10 +235,10 @@ bool ImageListModel::createLstModelItem(strcImageListModelItem &item, const QStr
 		else
 			strStrippedPath = path;
 
-		QFile fileSource(strStrippedPath);	
+		QFile fileSource(strStrippedPath);
 		if (!fileSource.exists())
 			return false;
-		if(!item.pixMap.load(strStrippedPath))
+		if (!item.pixMap.load(strStrippedPath))
 			return false;
 		item.strPath = strStrippedPath;
 		if (strID == "")						//If no name is defined then use the path as the Unique ID
@@ -248,8 +248,7 @@ bool ImageListModel::createLstModelItem(strcImageListModelItem &item, const QStr
 		break;
 	}
 	case ROLE_PIXMAP:
-		if (pixmap)
-			item.pixMap = pixmap->copy();
+		item.pixMap = pixmap.copy();
 		if (strID == "")						//If no name is defined then generate a new Unique ID
 			item.strID = getNewID();
 		else

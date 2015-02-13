@@ -73,7 +73,7 @@ private:
 	QString getNewID();
 	bool isUniqueID(const QString &ID);
 	void resetLstModelItem(strcImageListModelItem &item);
-	bool createLstModelItem(strcImageListModelItem &item, const QString strID, const QString path, const int role = ROLE_PATH, const QPixmap *pixmap = NULL);
+	bool createLstModelItem(strcImageListModelItem &item, const QString strID, const QString path, const int role = ROLE_PATH, const QPixmap &pixmap = QPixmap());
 };
 
 #endif // IMAGELISTMODEL_H

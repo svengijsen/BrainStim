@@ -41,11 +41,11 @@ QML2Viewer::QML2Viewer(QObject *parent) : ExperimentEngine(parent)
 */
 QML2Viewer::~QML2Viewer()
 {
-	//if (imgLstModel)
-	//{
-	//	delete imgLstModel;
-	//	imgLstModel = NULL;
-	//}	
+	if (imgLstModel)
+	{
+		delete imgLstModel;
+		imgLstModel = NULL;
+	}	
 	deleteQML2ViewerWindow();
 	if (rootObject)
 	{		
