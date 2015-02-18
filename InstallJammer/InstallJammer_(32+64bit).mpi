@@ -281,6 +281,9 @@ File ::6DBFB491-B6AC-4FEA-98DC-F82E40330545 -name E:/Libraries/Qt5.3.2_64bit/5.3
 File ::69FD9E61-DB39-4EB3-BAD9-1CC6E694C836 -name E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl/bin/Qt5Test.dll -parent D562F7E3-157E-48ED-91CE-71FBA40B332D
 File ::FA0958F2-ED1C-47C9-AF74-57966541B700 -targetfilename qt.conf -name E:/Projects/BrainStim/Install/qt_64.conf -parent D562F7E3-157E-48ED-91CE-71FBA40B332D
 File ::3C576268-73F0-446F-A971-8048D032378F -name E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl/bin/Qt5Positioning.dll -parent D562F7E3-157E-48ED-91CE-71FBA40B332D
+File ::CF55F259-CDE4-4EA3-9B22-6F3E6FD85271 -name E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl/bin/Qt5QuickParticles.dll -parent D562F7E3-157E-48ED-91CE-71FBA40B332D
+File ::0AA02078-0AB7-4B24-A17A-A0B5E9751212 -name E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl/bin/Qt5QuickTest.dll -parent D562F7E3-157E-48ED-91CE-71FBA40B332D
+File ::DA870406-130E-4100-B8B2-6B1BD624678E -name E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl/bin/Qt5QuickWidgets.dll -parent D562F7E3-157E-48ED-91CE-71FBA40B332D
 FileGroup ::21B9C60D-2802-481D-BF1F-F26B0588B66E -setup Install -active Yes -platforms {TarArchive Windows ZipArchive} -name {BrainStim Plugins(x64)} -parent FileGroups
 File ::66FCBDDC-C900-40BF-87EE-D17EFF84FA30 -name E:/Projects/BrainStim/Install/Plugins/x64/SerialPortDeviceplugin_x64_Release.dll -parent 21B9C60D-2802-481D-BF1F-F26B0588B66E
 File ::4FD768CE-15F8-4FAE-B7A5-288F0AD9D469 -name E:/Projects/BrainStim/Install/Plugins/x64/USBHIDDeviceplugin_x64_Release.dll -parent 21B9C60D-2802-481D-BF1F-F26B0588B66E
@@ -1054,6 +1057,9 @@ File ::15AB591D-B6ED-4FD4-9379-42397269E8DA -name E:/Libraries/Qt5.3.2_32bit/5.3
 File ::2FFBC540-58C8-4F91-9862-B6E115752D08 -name E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/bin/Qt5Sensors.dll -parent 891CF076-368A-450C-890A-7E3FDCB8748B
 File ::AA415E9C-C21C-4144-B1D4-5D718AD17D12 -targetfilename qt.conf -name E:/Projects/BrainStim/Install/qt_32.conf -parent 891CF076-368A-450C-890A-7E3FDCB8748B
 File ::DFADC2B6-D90C-415C-9CFC-B55BEF2ED423 -name E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/bin/Qt5Positioning.dll -parent 891CF076-368A-450C-890A-7E3FDCB8748B
+File ::0667C6BB-94B6-44BC-BE0B-1D978690F66E -name E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/bin/Qt5QuickParticles.dll -parent 891CF076-368A-450C-890A-7E3FDCB8748B
+File ::35714E1A-D0C2-4B96-99E2-82D37726D344 -name E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/bin/Qt5QuickTest.dll -parent 891CF076-368A-450C-890A-7E3FDCB8748B
+File ::A78F5550-23AD-45A5-8F04-76DC7BA51559 -name E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/bin/Qt5QuickWidgets.dll -parent 891CF076-368A-450C-890A-7E3FDCB8748B
 FileGroup ::2C7E583A-607F-4311-9D36-84C482C13786 -setup Install -active Yes -platforms {Solaris-x86 TarArchive Windows ZipArchive} -name {BrainStim Plugins(win32)} -parent FileGroups
 File ::1766C14E-F605-4218-A893-A16D41E077C0 -name E:/Projects/BrainStim/Install/Plugins/Win32/SerialPortDeviceplugin_Win32_Release.dll -parent 2C7E583A-607F-4311-9D36-84C482C13786
 File ::D01D06B4-441B-4822-ABA2-4A2CDEABF814 -name E:/Projects/BrainStim/Install/Plugins/Win32/USBHIDDeviceplugin_Win32_Release.dll -parent 2C7E583A-607F-4311-9D36-84C482C13786
