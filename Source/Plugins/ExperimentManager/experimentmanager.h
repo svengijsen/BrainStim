@@ -29,6 +29,8 @@
 #include <QDesktopWidget>
 #include <QApplication>
 #include <QScreen>
+#include <QtXmlPatterns/QXmlSchema>
+#include <QtXmlPatterns/QXmlSchemaValidator>
 #include "global.h"
 #include "defines.h"
 #include "./../../BrainStim/mainappinfo.h"
@@ -140,6 +142,7 @@ public:
 	static QScriptValue ctor__experimentManager(QScriptContext* context, QScriptEngine* engine);
 	static QScriptValue ctor__experimentStateEnum(QScriptContext *context, QScriptEngine *engine);
 
+	bool createExperiment();
 	void cleanupSingletons();
 	ExperimentState getCurrExperimentState() { return experimentCurrentState; }
 	bool fetchExperimentBlockParameters(const int &nBlockNumber, const int &nObjectID);
@@ -270,7 +273,8 @@ public slots:
 	 *  @param nObjectID a integer value that holds the object ID.
 	 *  @param sName a string value that contains the parameter name.
 	 *  @param sValue a string value that contains the parameter value.
-	 *  @param bIsInitializing a boolean value, if true then then the new parameter is marked as Initializing, see #ParsedParameterDefinition.bIsInitialized. This property marks the parameter as unused which can be helpful for further setting the default value.
+	 *  @param bIsInitializing a boolean value, if true then then the new parameter is marked as Initializing, see #ParsedParameterDefinition.bIsInitialized. 
+	 *  This property marks the parameter as unused which can be helpful for further setting the default value.
 	 *  @param bIsCustom a boolean value that determines whether the parameter should be treated as a custom parameter (default = false).
 	 *  @return a boolean value determining whether the function executed successfully.
 	 */	
@@ -419,6 +423,7 @@ private:
 	int createExperimentBlockParamsFromExperimentStructure(const int &nBlockNumber, const int &nObjectID, tParsedParameterList *hParams = NULL);
 
 	void DefaultConstruct();
+	bool registerExperimentParameterDefinition(const QString &sDefPath, const QString &sDefName);
 	bool WriteAndCloseExperimentOutputData(const QString &postFileName = "");
 	void initializeDataLogger();
 	void RegisterMetaTypes();
@@ -440,6 +445,9 @@ private:
 	void createNewExperimentStructure();
 	bool cleanupExperiment();
 		
+	QXmlSchemaValidator *xmlValidator;
+	XmlMessageHandler *xmlMessageHandler;
+	QXmlSchema *xmlSchema;
 	PropertySettingsWidgetContainer *expParamWidgets;
 	QList<ExperimentTreeItem*> ExperimentObjectTreeItemList;
 	cExperimentStructure *cExperimentBlockTrialStructure;
@@ -459,6 +467,7 @@ private:
 	ExperimentLogger *expDataLogger;
 	int nExperimentTimerIndex;
 	QString sExperimentOutputDataPostString;
+
 };
 
 #endif // ExperimentManager_H

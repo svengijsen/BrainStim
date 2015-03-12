@@ -942,7 +942,8 @@ bool VariantExtensionPropertySettingFactory::setPropertyValue(QtVariantPropertyM
 		QSet<QtProperty*>::const_iterator it;
 		for (it = setProperties.cbegin(); it != setProperties.cend(); ++it)
 		{				
-			if((*it)->propertyId() == sUniquePropertyIdentifier)
+			QString sCurrentPropID = (*it)->propertyId();
+			if (sCurrentPropID == sUniquePropertyIdentifier)
 			{
 				manager->setValue((*it),sValue);
 				(*it)->setModified(bSetModified);

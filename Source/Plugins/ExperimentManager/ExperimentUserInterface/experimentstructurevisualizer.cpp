@@ -16,12 +16,6 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-#include "experimentstructurevisualizer.h"
-#include "ui_ExperimentStructureVisualizer.h"
-#include "qgraphicsviewec.h"
-#include "../experimentstructures.h"
-#include "experimenttreemodel.h"
-#include "experimentmanager.h"
 #include <QMessageBox>
 #include <QToolBar>
 #include <QToolButton>
@@ -31,6 +25,13 @@
 #include <QGraphicsTextItem>
 #include <QComboBox>
 #include <QLabel>
+#include "experimentstructurevisualizer.h"
+#include "ui_ExperimentStructureVisualizer.h"
+#include "qgraphicsviewec.h"
+#include "../experimentstructures.h"
+#include "experimenttreemodel.h"
+#include "experimentmanager.h"
+#include "propertySettingsWidgetContainer.h"
 
 ExperimentStructureVisualizer::ExperimentStructureVisualizer(QWidget *parent) : QWidget(parent)
 {
@@ -170,7 +171,7 @@ void ExperimentStructureVisualizer::setupMenuAndActions()
 	QAction *tmpAction = toolBar->insertWidget(NULL, cmbViewSelection);
 	QLabel *labViewSelection = new QLabel("Show: ", this);
 	toolBar->insertWidget(tmpAction, labViewSelection);
-	connect(cmbViewSelection, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(toggleViewState(const QString &)));
+	connect(cmbViewSelection, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(toggleViewState(const QString &)), Qt::ConnectionType(Qt::UniqueConnection));
 
 	QStringList mainMenuItemSpecifier;
 	QString sActionText = "Switch to plain text view";
@@ -289,7 +290,7 @@ void ExperimentStructureVisualizer::createScene()
 {
 	gScene = new ExperimentStructureScene(this);
 	ui->graphicsView->setScene(gScene);
-	connect(gScene, SIGNAL(selectionChanged()), this, SLOT(itemSelectionChanged()),Qt::DirectConnection);
+	connect(gScene, SIGNAL(selectionChanged()), this, SLOT(itemSelectionChanged()), Qt::ConnectionType(Qt::UniqueConnection|Qt::DirectConnection));
 }
 
 void ExperimentStructureVisualizer::itemSelectionChanged()
@@ -844,6 +845,8 @@ bool ExperimentStructureVisualizer::drawGraph()
 				sTmpTooltip = "";
 				expSceneItems.lObjects[i].gGraphObjectItem = new ExperimentGraphObjectItem();
 				expSceneItems.lObjects[i].gGraphObjectItem->setCaption(expSceneItems.lObjects[i].sName);// + " (" + expSceneItems.lObjects[i].sClass + ")");
+				if (expSceneItems.lObjects[i].bHasParametersDefined)
+					expSceneItems.lObjects[i].gGraphObjectItem->setIcon(QIcon(":/resources/parameters.png"));
 
 				if(hashObjectIDToInitializations.contains(expSceneItems.lObjects[i].nId))
 					hashObjectIDToUsedMethods[expSceneItems.lObjects[i].nId].append(hashObjectIDToInitializations[expSceneItems.lObjects[i].nId].values());
@@ -1303,6 +1306,12 @@ bool ExperimentStructureVisualizer::parseExperimentStructure()
 				tmpObjectItem.nId = tmpObjectStrc->getObjectID();
 				tmpObjectItem.sName = tmpObjectStrc->getObjectName();
 				tmpObjectItem.sClass = tmpObjectStrc->getObjectClass();
+				if (tmpObjectItem.sClass.isEmpty() == false)
+				{
+					PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
+					tmpObjectItem.bHasParametersDefined = expParamWidgets->hasExperimentParameterDefinition(tmpObjectItem.sClass);
+				}
+
 				//CONNECTIONS//
 				QList<cMethodConnectionStructure*> *lTmpMethodConnStrc = parsedExpStruct->getObjectMethodConnectionList(tmpObjectStrc->getObjectID());
 				if(lTmpMethodConnStrc)

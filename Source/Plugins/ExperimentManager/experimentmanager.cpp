@@ -18,8 +18,6 @@
 
 #include <QFileDialog>
 #include <QWaitCondition>
-#include <QXmlSchema>
-#include <QXmlSchemaValidator>
 #include <QGridLayout>
 #include "experimentmanager.h"
 #include "imageprocessor.h"
@@ -53,6 +51,9 @@ QScriptValue ExperimentManager::ctor__experimentManager(QScriptContext* context,
 */
 ExperimentManager::ExperimentManager(QObject *parent, QScriptEngine* engine) : QObject(parent), parentObject(parent)
 {	
+	xmlMessageHandler = NULL;
+	xmlSchema = NULL;
+	xmlValidator = NULL;
 	currentScriptEngine = engine;
 	DefaultConstruct();
 }
@@ -109,21 +110,26 @@ void ExperimentManager::DefaultConstruct()
 		MainAppInfo::registerCustomPropertySettingObject((QObject*)tmpMethodTypePropertyType, nNewTypeIdentifier);
 	}
 
-	bool bResult = expParamWidgets->loadExperimentParameterDefinition(BLOCK_OBJECT_PARAMDEF_PATH, BLOCK_TAG, true);
-	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(RETINOTOPYMAPPER_PARAMDEF_PATH, RETINOTOPYMAPPER_NAME, true);
-	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(EXPERIMENT_PARAMDEF_PATH, EXPERIMENT_TAG, true);
-	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(DECLARATIONS_OBJECT_PARAMDEF_PATH, DECLARATIONS_OBJECT_TAG, true);
-	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(INITIALIZATION_OBJECT_PARAMDEF_PATH, INITIALIZATION_OBJECT_TAG, true);
-	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(FINALIZATION_OBJECT_PARAMDEF_PATH, FINALIZATION_OBJECT_TAG, true);
-	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(CONNECTION_OBJECT_PARAMDEF_PATH, CONNECTION_OBJECT_TAG, true);
-	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(BLOCK_OBJECT_PARAMDEF_PATH, BLOCK_TAG, true);
-	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(LOOP_OBJECT_PARAMDEF_PATH, LOOP_TAG, true);
-	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(INITIALIZATIONS_PARAMETER_PARAMDEF_PATH, INITIALIZATIONS_PARAMETER_TAG, true);
-	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(FINALIZATIONS_PARAMETER_PARAMDEF_PATH, FINALIZATIONS_PARAMETER_TAG, true);
-	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(BLOCK_PARAMETER_PARAMDEF_PATH, BLOCK_PARAMETER_TAG, true);
-	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(QML2VIEWER_PARAMDEF_PATH, QML2VIEWER_NAME, true);
-	bResult = bResult & expParamWidgets->loadExperimentParameterDefinition(OBJECT_DEFINITION_PARAMDEF_PATH, OBJECT_DEFINITION_TAG, true);
+	bool bResult = registerExperimentParameterDefinition(BLOCK_OBJECT_PARAMDEF_PATH, BLOCK_TAG);
+	bResult = bResult & registerExperimentParameterDefinition(RETINOTOPYMAPPER_PARAMDEF_PATH, RETINOTOPYMAPPER_NAME);
+	bResult = bResult & registerExperimentParameterDefinition(EXPERIMENT_PARAMDEF_PATH, EXPERIMENT_TAG);
+	bResult = bResult & registerExperimentParameterDefinition(DECLARATIONS_OBJECT_PARAMDEF_PATH, DECLARATIONS_OBJECT_TAG);
+	bResult = bResult & registerExperimentParameterDefinition(INITIALIZATION_OBJECT_PARAMDEF_PATH, INITIALIZATION_OBJECT_TAG);
+	bResult = bResult & registerExperimentParameterDefinition(FINALIZATION_OBJECT_PARAMDEF_PATH, FINALIZATION_OBJECT_TAG);
+	bResult = bResult & registerExperimentParameterDefinition(CONNECTION_OBJECT_PARAMDEF_PATH, CONNECTION_OBJECT_TAG);
+	bResult = bResult & registerExperimentParameterDefinition(BLOCK_OBJECT_PARAMDEF_PATH, BLOCK_TAG);
+	bResult = bResult & registerExperimentParameterDefinition(LOOP_OBJECT_PARAMDEF_PATH, LOOP_TAG);
+	bResult = bResult & registerExperimentParameterDefinition(INITIALIZATIONS_PARAMETER_PARAMDEF_PATH, INITIALIZATIONS_PARAMETER_TAG);
+	bResult = bResult & registerExperimentParameterDefinition(FINALIZATIONS_PARAMETER_PARAMDEF_PATH, FINALIZATIONS_PARAMETER_TAG);
+	bResult = bResult & registerExperimentParameterDefinition(BLOCK_PARAMETER_PARAMDEF_PATH, BLOCK_PARAMETER_TAG);
+	bResult = bResult & registerExperimentParameterDefinition(QML2VIEWER_PARAMDEF_PATH, QML2VIEWER_NAME);
+	bResult = bResult & registerExperimentParameterDefinition(OBJECT_DEFINITION_PARAMDEF_PATH, OBJECT_DEFINITION_TAG);
 	changeCurrentExperimentState(ExperimentManager_Constructed);
+}
+
+bool ExperimentManager::registerExperimentParameterDefinition(const QString &sDefPath, const QString &sDefName)
+{
+	return expParamWidgets->loadExperimentParameterDefinition(sDefPath, sDefName, true);
 }
 
 /*! \brief The ExperimentManager destructor.
@@ -150,6 +156,21 @@ ExperimentManager::~ExperimentManager()
 	{
 		delete cExperimentBlockTrialStructure;
 		cExperimentBlockTrialStructure = NULL;
+	}
+	if (xmlMessageHandler)
+	{
+		delete xmlMessageHandler;
+		xmlMessageHandler = NULL;
+	}
+	if (xmlSchema)
+	{
+		delete xmlSchema;
+		xmlSchema = NULL;
+	}
+	if (xmlValidator)
+	{
+		delete xmlValidator;
+		xmlValidator = NULL;
 	}
 }
 
@@ -221,7 +242,7 @@ bool ExperimentManager::insertExperimentObjectBlockParameter(const int nObjectID
 					if (mExperimentObjectList.value(nObjectID).ExpBlockParams->contains(sName))
 					{
 						(*mExperimentObjectList[nObjectID].ExpBlockParams)[sName].bHasChanged = true;
-						//(*mExperimentObjectList[nObjectID].ExpBlockParams)[sName].sValue = sValue;
+						(*mExperimentObjectList[nObjectID].ExpBlockParams)[sName].sValue = sValue;
 						(*mExperimentObjectList[nObjectID].ExpBlockParams)[sName].bIsInitialized = bIsInitializing;
 						(*mExperimentObjectList[nObjectID].ExpBlockParams)[sName].bIsCustom = bIsCustom;
 						return true;
@@ -433,15 +454,27 @@ bool ExperimentManager::saveExperiment(QString strFile)
 	return false;
 }
 
-bool ExperimentManager::loadExperiment(QString strSource, bool bIsFile, const bool bSkipXMLValidation)
+bool ExperimentManager::createExperiment()
 {
-	cleanupExperiment();
 	if (currentExperimentTree)
 		delete currentExperimentTree;
 	currentExperimentTree = new ExperimentTreeModel();
+	currentExperimentTree->resetExperiment();
+	ExpGraphicEditor->setExperimentTreeModel(currentExperimentTree, "");// strSource);
+	return true;
+}
+
+bool ExperimentManager::loadExperiment(QString strSource, bool bIsFile, const bool bSkipXMLValidation)
+{
+	QString sLatestFilePath = getExperimentFileName();
+	cleanupExperiment();
+
+	currentExperimentTree = new ExperimentTreeModel();
+	if (bIsFile && strSource.isEmpty() && (sLatestFilePath.isEmpty()==false))
+		setExperimentFileName(sLatestFilePath);
+
 	QFile file;
 	QString fileName = "";
-
 	if (bIsFile)
 	{
 		fileName = getExperimentFileName();
@@ -484,7 +517,13 @@ bool ExperimentManager::loadExperiment(QString strSource, bool bIsFile, const bo
 	{
 		setExperimentFileName(fileName);
 		changeCurrentExperimentState(ExperimentManager_Loaded);
-		return prePassiveParseExperiment(bSkipXMLValidation);
+		if (prePassiveParseExperiment(bSkipXMLValidation))
+		{
+			if (ExpGraphicEditor)
+				ExpGraphicEditor->setExperimentTreeModel(currentExperimentTree, fileName);
+			return true;
+		}
+		return false;
 	}
 	currentExperimentFile.clear();
 	currentValidationFile.clear();
@@ -540,10 +579,14 @@ bool ExperimentManager::validateExperiment(const bool bSkipXMLValidation)
 
 	if (bSkipXMLValidation == false)
 	{
-		XmlMessageHandler messageHandler;
-		QXmlSchema schema;
-		schema.setMessageHandler(&messageHandler);
-		schema.load(currentValidationFile);
+		if (xmlMessageHandler == NULL)
+			xmlMessageHandler = new XmlMessageHandler();
+		if (xmlSchema == NULL)
+		{
+			xmlSchema = new QXmlSchema();
+			xmlSchema->setMessageHandler(xmlMessageHandler);
+			xmlSchema->load(currentValidationFile);
+		}
 
 		bool bDoValidate = true;
 		bool bSettingFound = false;
@@ -562,22 +605,26 @@ bool ExperimentManager::validateExperiment(const bool bSkipXMLValidation)
 		if (bDoValidate)
 		{
 			bool errorOccurred = false;
-			if (!schema.isValid())
+			if (!xmlSchema->isValid())
 			{
 				errorOccurred = true;
 			}
 			else
 			{
-				QXmlSchemaValidator validator(schema);
-				if (!validator.validate(currentExperimentFile))
+				if (xmlValidator == NULL)
+				{
+					xmlValidator = new QXmlSchemaValidator();
+					xmlValidator->setSchema(*xmlSchema);
+				}
+				if (xmlValidator->validate(currentExperimentFile) == false)
 					errorOccurred = true;
 			}
 			if (errorOccurred)
 			{
 				errorOccurred = errorOccurred;
-				QString strMessage = messageHandler.statusMessage();
-				int nColumn = messageHandler.column();
-				int nLine = messageHandler.line();
+				QString strMessage = xmlMessageHandler->statusMessage();
+				int nColumn = xmlMessageHandler->column();
+				int nLine = xmlMessageHandler->line();
 				qDebug() << __FUNCTION__ << QString("Invalid schema, " + strMessage + "(line:" + QString::number(nLine) + ", col:" + QString::number(nColumn) + ")");
 				return true;
 			}
@@ -603,7 +650,7 @@ bool ExperimentManager::runExperiment(const bool bSkipXMLValidation)
 	expCurrentState = getCurrExperimentState();
 	if (expCurrentState < ExperimentManager_PreParsed)
 	{
-		if (!loadExperiment("","",bSkipXMLValidation))//(!prePassiveParseExperiment(bSkipXMLValidation))
+		if (!loadExperiment(getExperimentFileName(), true, bSkipXMLValidation))//(!prePassiveParseExperiment(bSkipXMLValidation))
 		{
 			changeCurrentExperimentState(ExperimentManager_Loaded);
 			return false;
@@ -723,11 +770,6 @@ bool ExperimentManager::cleanupExperiment()
 		delete currentExperimentTree;
 		currentExperimentTree = NULL;
 	}
-	if (currentExperimentTree)
-	{
-		delete currentExperimentTree;
-		currentExperimentTree = NULL;
-	}
 	if (cExperimentBlockTrialStructure)
 	{
 		delete cExperimentBlockTrialStructure;
@@ -807,7 +849,7 @@ bool ExperimentManager::changeExperimentObjectsSignalSlots(bool bDisconnect, int
 			}
 			else
 			{//For now the complete experiment including all object is aborted whenever the UserWantsToClose Signal gets activated
-				connect(currentElement->pObject, SIGNAL(UserWantsToClose(void)), this, SLOT(abortExperiment(void)));
+				connect(currentElement->pObject, SIGNAL(UserWantsToClose(void)), this, SLOT(abortExperiment(void)), Qt::ConnectionType(Qt::UniqueConnection));
 			}
 		}
 
@@ -819,7 +861,7 @@ bool ExperimentManager::changeExperimentObjectsSignalSlots(bool bDisconnect, int
 			}
 			else
 			{//For now the complete experiment including all object is aborted whenever the ObjectShouldStop Signal gets activated
-				connect(currentElement->pObject, SIGNAL(ObjectShouldStop(void)), this, SLOT(stopExperiment(void)));
+				connect(currentElement->pObject, SIGNAL(ObjectShouldStop(void)), this, SLOT(stopExperiment(void)), Qt::ConnectionType(Qt::UniqueConnection));
 			}
 		}
 
@@ -831,7 +873,7 @@ bool ExperimentManager::changeExperimentObjectsSignalSlots(bool bDisconnect, int
 			} 
 			else
 			{
-				connect(currentElement->pObject, SIGNAL(ObjectStateHasChanged(ExperimentSubObjectState)), this, SLOT(changeExperimentSubObjectState(ExperimentSubObjectState)));
+				connect(currentElement->pObject, SIGNAL(ObjectStateHasChanged(ExperimentSubObjectState)), this, SLOT(changeExperimentSubObjectState(ExperimentSubObjectState)), Qt::ConnectionType(Qt::UniqueConnection));
 			}
 					
 		}
@@ -1112,15 +1154,13 @@ QWidget *ExperimentManager::getVisualExperimentEditor()
 	if(ExpGraphicEditor == NULL)
 	{
 		ExpGraphicEditor = new ExperimentGraphicEditor();
-		connect(ExpGraphicEditor, SIGNAL(IsDestructing(ExperimentGraphicEditor*)), this, SLOT(visualExperimentEditorDestroyed(ExperimentGraphicEditor*))); 
+		connect(ExpGraphicEditor, SIGNAL(IsDestructing(ExperimentGraphicEditor*)), this, SLOT(visualExperimentEditorDestroyed(ExperimentGraphicEditor*)), Qt::ConnectionType(Qt::UniqueConnection));
 		ExpGraphicEditor->setExperimentManager(this);		
 	}
 	if (currentExperimentTree == NULL)
 	{
-		currentExperimentTree = new ExperimentTreeModel();
-		currentExperimentTree->resetExperiment();
+		return ExpGraphicEditor;//make sure to call ExperimentManager::createExperiment() after calling this function from the caller
 	}
-	ExpGraphicEditor->setExperimentTreeModel(currentExperimentTree, "");
 	return ExpGraphicEditor;
 }
 
@@ -1215,7 +1255,7 @@ bool ExperimentManager::showTreeviewExperimentDialog(ExperimentTreeModel *expTre
 	if (ExpGraphicEditor == NULL)
 	{
 		ExpGraphicEditor = new ExperimentGraphicEditor();
-		connect(ExpGraphicEditor, SIGNAL(IsDestructing(ExperimentGraphicEditor*)), this, SLOT(visualExperimentEditorDestroyed(ExperimentGraphicEditor*)));
+		connect(ExpGraphicEditor, SIGNAL(IsDestructing(ExperimentGraphicEditor*)), this, SLOT(visualExperimentEditorDestroyed(ExperimentGraphicEditor*)), Qt::ConnectionType(Qt::UniqueConnection));
 		ExpGraphicEditor->setExperimentManager(this);
 	}
 	bool bParseResult = ExpGraphicEditor->setExperimentTreeModel(expTreeModel, sExpTreeModelCanonFilePath);
@@ -1242,7 +1282,7 @@ bool ExperimentManager::showVisualExperimentDialog(ExperimentTreeModel *expTreeM
 	if(ExpGraphicEditor == NULL)
 	{
 		ExpGraphicEditor = new ExperimentGraphicEditor();
-		connect(ExpGraphicEditor, SIGNAL(IsDestructing(ExperimentGraphicEditor*)), this, SLOT(visualExperimentEditorDestroyed(ExperimentGraphicEditor*))); 
+		connect(ExpGraphicEditor, SIGNAL(IsDestructing(ExperimentGraphicEditor*)), this, SLOT(visualExperimentEditorDestroyed(ExperimentGraphicEditor*)), Qt::ConnectionType(Qt::UniqueConnection));
 		ExpGraphicEditor->setExperimentManager(this);
 	}
 	bool bParseResult = ExpGraphicEditor->setExperimentTreeModel(expTreeModel,sExpTreeModelCanonFilePath);
@@ -1507,7 +1547,7 @@ bool ExperimentManager::connectExperimentObjects(bool bDisconnect, int nObjectID
 											nTargetID = targetMetaObject->indexOfSignal(QMetaObject::normalizedSignature(currentMethodConn->getTargetSignature().toLatin1()));
 											if (!(nTargetID == -1))//Is the signal present?
 											{
-												bMetaConnection = QMetaObject::connect(pSourceObject, nSourceID, pTargetObject, nTargetID);
+												bMetaConnection = QMetaObject::connect(pSourceObject, nSourceID, pTargetObject, nTargetID, Qt::ConnectionType(Qt::UniqueConnection));
 											}
 										}
 									}
@@ -1522,7 +1562,7 @@ bool ExperimentManager::connectExperimentObjects(bool bDisconnect, int nObjectID
 											nTargetID = targetMetaObject->indexOfMethod(QMetaObject::normalizedSignature(currentMethodConn->getTargetSignature().toLatin1()));
 											if (!(nTargetID == -1))//Is the method present?
 											{
-												bMetaConnection = QMetaObject::connect(pSourceObject, nSourceID, pTargetObject, nTargetID);
+												bMetaConnection = QMetaObject::connect(pSourceObject, nSourceID, pTargetObject, nTargetID, Qt::ConnectionType(Qt::UniqueConnection));
 												if (bMetaConnection == false)
 													qDebug() << __FUNCTION__ << "Could not connect the objects (" << currentMethodConn->getSourceSignature() << " ," << currentMethodConn->getTargetSignature() << ")";
 											}

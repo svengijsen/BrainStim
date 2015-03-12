@@ -142,11 +142,13 @@ class ExperimentGraphObjectItem : public QGraphicsItem
 {
 	public:
         ExperimentGraphObjectItem(QGraphicsItem *parent = NULL);
+		~ExperimentGraphObjectItem();
 
 		QRectF boundingRect() const;
 		QPainterPath shape() const;
 		void paint(QPainter *painter, const QStyleOptionGraphicsItem *option, QWidget *widget);
 		void setCaption(const QString &sName);
+		void setIcon(const QIcon &constIcon);
 		int type() const;
 		void setMethods(const QList<strcMethodInfo> &lMethodSignatureList);
 		int getMethodLocationIndex(const QString &sSignature, const ExperimentManagerNameSpace::ExperimentStructureItemType &graphItemType);
@@ -171,6 +173,7 @@ class ExperimentGraphObjectItem : public QGraphicsItem
 		qreal rAdditionalFinalizationsHeight;
 		qreal rTotalHeight;
 		QString sCurrentText;
+		QIcon *pIcon;
 		QFont fCurrent;
 		QPen pHeaderPen;
 		QPen pObjectOutlinePen;

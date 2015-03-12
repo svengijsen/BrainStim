@@ -37,7 +37,6 @@ protected:
 	void closeEvent(QCloseEvent *closeEvent);
 
 private:
-	//bool bIsClosing;
 	
 };
 

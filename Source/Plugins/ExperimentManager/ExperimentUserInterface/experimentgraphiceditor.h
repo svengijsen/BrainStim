@@ -78,11 +78,12 @@ public:
     explicit ExperimentGraphicEditor(QWidget *parent = 0);
     ~ExperimentGraphicEditor();
 
-	void setNewFileName(const QString &sExpTreeModelCanonFilePath = "") {sCurrentCanonFilePath = sExpTreeModelCanonFilePath;};
+	void setNewFileName(const QString &sExpTreeModelCanonFilePath = "");
+	QString getCurrentFileName();
         
 public slots:
 	void setExperimentManager(ExperimentManager *pExpManager);
-	bool setExperimentTreeModel(ExperimentTreeModel *expModel = NULL, const QString &sExpTreeModelCanonFilePath = "");
+	bool setExperimentTreeModel(ExperimentTreeModel *expNewModel = NULL, const QString &sExpTreeModelCanonFilePath = "");
 	void showVisualExperimentDialog();
 	void showTableviewExperimentDialog();
 	QString saveFile(const QString &sFilePath = "");
@@ -141,7 +142,7 @@ private:
 
 	QTableWidget *tblWidgetView;
 	TreeFilterProxyModel *filterModel;
-	ExperimentTreeModel *pExpTreeModel;		//used for setExperimentTreeModel() -> Pointer
+	ExperimentTreeModel *pCurrentExpTreeModel;		//used for setExperimentTreeModel() -> Pointer
 	ExperimentTreeModel loadedExpTreeModel; //used for openFile();
 	FindDialog *findDlg;
 	AttributeWidget *attWidget;	
@@ -174,7 +175,6 @@ private:
 	customDockWidget *pCustomExperimentTreeDockWidget;
 	TreeFilterSettings currentViewSettings;
 	QModelIndex selectedIndex;
-
 	ExperimentManager *expManager;
 	QString sCurrentCanonFilePath;
 	ExperimentStructureVisualizer *expStructVisualizer;

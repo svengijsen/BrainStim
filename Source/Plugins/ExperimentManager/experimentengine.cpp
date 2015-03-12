@@ -242,7 +242,7 @@ bool ExperimentEngine::initExperimentObject()
     qDebug() << __FUNCTION__ << "::" << iCPU << "processors available.";//The omp_get_num_threads() call returns 1 in the serial section of the code!!
 	omp_set_num_threads(iCPU); // Set the number of threads
 	//bool bResult = 
-		connect(pExperimentManager->getExperimentStructure(),SIGNAL(experimentStopped()),this,SLOT(ExperimentShouldFinish()));
+	connect(pExperimentManager->getExperimentStructure(), SIGNAL(experimentStopped()), this, SLOT(ExperimentShouldFinish()), Qt::ConnectionType(Qt::UniqueConnection));
 	return true;
 }
 
@@ -353,6 +353,7 @@ void ExperimentEngine::initBlockTrial()
 	//emit NewInitBlockTrial(); moved 28 october by sven
 	bExperimentShouldStop = false;
 	expTrialTimer.restart();
+	emit PrepareNewInitBlockTrial();
 	if(pExperimentManager)
 	{
 		cBlockStructure *tmpBlock = pExperimentManager->getExperimentStructure()->getCurrentBlock();

@@ -97,6 +97,7 @@ BasicExperiment.__proto__.ConnectDisconnectScriptFunctions = _.compose(BasicExpe
 				if(BasicExperiment.RetinotopyMapperObj)
 				{
 					BasicExperiment.RetinotopyMapperObj.NewInitBlockTrial.connect(BasicExperiment,BasicExperiment.preNewInitBlockTrial);
+					BasicExperiment.RetinotopyMapperObj.PrepareNewInitBlockTrial.connect(BasicExperiment,BasicExperiment.prePrepareNewInitBlockTrial);
 				}
 			}
 		} 
@@ -114,6 +115,7 @@ BasicExperiment.__proto__.ConnectDisconnectScriptFunctions = _.compose(BasicExpe
 				if(BasicExperiment.RetinotopyMapperObj)
 				{
 					BasicExperiment.RetinotopyMapperObj.NewInitBlockTrial.disconnect(BasicExperiment,BasicExperiment.preNewInitBlockTrial);
+					BasicExperiment.RetinotopyMapperObj.PrepareNewInitBlockTrial.disconnect(BasicExperiment,BasicExperiment.prePrepareNewInitBlockTrial);
 				}
 			}
 		} 

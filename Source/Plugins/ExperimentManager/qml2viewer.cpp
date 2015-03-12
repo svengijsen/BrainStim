@@ -156,12 +156,12 @@ bool QML2Viewer::initObject()
 	//parentWindow->setFlags(Qt::FramelessWindowHint);
 	quick2ViewerWindow = new QtQuick2ApplicationViewer(this);//parentWindow);
 	quick2ViewerWindow->installEventFilter(this);
-	bool bResult = connect(quick2ViewerWindow, SIGNAL(statusChanged(QQuickView::Status)), this, SLOT(onStatusChanged(QQuickView::Status)));
-	bResult = connect(quick2ViewerWindow, &QtQuick2ApplicationViewer::QtQuickEngineQuit, this, &QML2Viewer::onQuick2ViewWindowClosed);
+	bool bResult = connect(quick2ViewerWindow, SIGNAL(statusChanged(QQuickView::Status)), this, SLOT(onStatusChanged(QQuickView::Status)), Qt::ConnectionType(Qt::UniqueConnection));
+	bResult = connect(quick2ViewerWindow, &QtQuick2ApplicationViewer::QtQuickEngineQuit, this, &QML2Viewer::onQuick2ViewWindowClosed, Qt::ConnectionType(Qt::UniqueConnection));
 	if(experimentManager)
 	{
 		currentExperimentStructure = experimentManager->getExperimentStructure();
-		bResult = connect(currentExperimentStructure,&cExperimentStructure::experimentStarted,this, &QML2Viewer::onStartTriggerRecieved);
+		bResult = connect(currentExperimentStructure, &cExperimentStructure::experimentStarted, this, &QML2Viewer::onStartTriggerRecieved, Qt::ConnectionType(Qt::UniqueConnection));
 	}
 	else
 	{

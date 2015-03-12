@@ -25,10 +25,10 @@ FastThreadedTriggerTimer::FastThreadedTriggerTimer(QObject *parent) : QObject(pa
 
 	ExperimentTimer *privateTimer = new ExperimentTimer();
 	privateTimer->moveToThread(&workerThread);
-	connect(&workerThread, &QThread::finished, privateTimer, &QObject::deleteLater);
-	connect(this, &FastThreadedTriggerTimer::startTimerSignal, privateTimer, &ExperimentTimer::startTriggeredTimerLoop);
-	connect(privateTimer, &ExperimentTimer::triggeredTimerLoopInvoked, this, &FastThreadedTriggerTimer::timerInvoked);
-	connect(this, &FastThreadedTriggerTimer::stopTimerSignal, privateTimer, &ExperimentTimer::stopTriggeredTimerLoop);
+	connect(&workerThread, &QThread::finished, privateTimer, &QObject::deleteLater, Qt::ConnectionType(Qt::UniqueConnection));
+	connect(this, &FastThreadedTriggerTimer::startTimerSignal, privateTimer, &ExperimentTimer::startTriggeredTimerLoop, Qt::ConnectionType(Qt::UniqueConnection));
+	connect(privateTimer, &ExperimentTimer::triggeredTimerLoopInvoked, this, &FastThreadedTriggerTimer::timerInvoked, Qt::ConnectionType(Qt::UniqueConnection));
+	connect(this, &FastThreadedTriggerTimer::stopTimerSignal, privateTimer, &ExperimentTimer::stopTriggeredTimerLoop, Qt::ConnectionType(Qt::UniqueConnection));
 	workerThread.start();
 }
 

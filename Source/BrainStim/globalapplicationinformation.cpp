@@ -16,6 +16,7 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+#include "mainappinfo.h"
 #include "globalapplicationinformation.h"
 #include "maindefines.h"
 #include <QtWebKitWidgets/QWebView>
@@ -29,6 +30,7 @@
 GlobalApplicationInformation::GlobalApplicationInformation(QObject *parent) : webView(NULL), AppRegistrySettings(NULL)
 {
 	Q_UNUSED(parent);
+	sCurrentSettingsFilePath = MainAppInfo::appDirPath() + "/" + MAIN_PROGRAM_INTERNAL_NAME + ".ini";
 	initialize();
 };
 
@@ -52,7 +54,7 @@ void GlobalApplicationInformation::initialize()
 {
 	resetInternalStructure(true);
 	composeJavaScriptConfigurationFile();
-	initAndParseRegistrySettings();
+	initAndParseRegistrySettings(sCurrentSettingsFilePath);
 	copyMainAppInformationStructureToSharedMemory(mainAppInformation);
 }
 
@@ -221,10 +223,17 @@ bool GlobalApplicationInformation::switchRootSettingsGroup(const QString &sNewGr
 	return false;
 }
 
-void GlobalApplicationInformation::initAndParseRegistrySettings()
+bool GlobalApplicationInformation::initAndParseRegistrySettings(const QString &sSettingsFilePath)
 {
 	if (AppRegistrySettings == NULL)
-		AppRegistrySettings = new QSettings(QSettings::NativeFormat, QSettings::UserScope, getCompanyName(), getTitle());
+	{
+		//AppRegistrySettings = new QSettings(QSettings::NativeFormat, QSettings::UserScope, getCompanyName(), getTitle());
+		if (sSettingsFilePath.isEmpty())
+			return false;
+		//if (QFile(sSettingsFilePath).exists() == false)
+		AppRegistrySettings = new QSettings(sSettingsFilePath, QSettings::IniFormat);
+	}
+
 	QString sMainAppInstallRootPath = QDir(QCoreApplication::applicationDirPath()).absolutePath();
 	bool bUserSpecified = (mainAppInformation.sCurrentUserName.isEmpty() == false);
 
@@ -482,7 +491,7 @@ bool GlobalApplicationInformation::setCurrentUserCredentials(const QString &sUse
 	{
 		resetInternalStructure(false);
 		mainAppInformation.sCurrentUserName = sUserName;
-		initAndParseRegistrySettings();
+		initAndParseRegistrySettings(sCurrentSettingsFilePath);
 		if (sUserName.isEmpty()==false)
 		{
 			AppRegistrySettings->setValue(REGISTRY_USER_PASSWORDHASH, baPasswordHash);

@@ -22,8 +22,8 @@
 
 QmlErrorHandler::QmlErrorHandler(QQuickView &view, QObject *parent) : QObject(parent), mView(view), mErrorOccured(false)
 {
-	connect(&view, SIGNAL(statusChanged(QQuickView::Status)), this, SLOT(handleQmlStatusChange(QQuickView::Status)));
-	connect((QObject*)view.engine(), SIGNAL(warnings(QList<QQmlError>)), this, SLOT(handleQmlErrors(QList<QQmlError>)));
+	connect(&view, SIGNAL(statusChanged(QQuickView::Status)), this, SLOT(handleQmlStatusChange(QQuickView::Status)), Qt::ConnectionType(Qt::UniqueConnection));
+	connect((QObject*)view.engine(), SIGNAL(warnings(QList<QQmlError>)), this, SLOT(handleQmlErrors(QList<QQmlError>)), Qt::ConnectionType(Qt::UniqueConnection));
 }
 
 QmlErrorHandler::~QmlErrorHandler()

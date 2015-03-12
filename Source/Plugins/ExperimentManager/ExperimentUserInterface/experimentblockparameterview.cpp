@@ -29,7 +29,7 @@
 #include <QHeaderView>
 #include <QInputDialog>
 
-ExperimentBlockParameterView::ExperimentBlockParameterView(QWidget *parent, ExperimentTreeModel *pExperimentTreeModel) : CustomChildDockTableWidget(parent), pExpTreeModel(pExperimentTreeModel)
+ExperimentBlockParameterView::ExperimentBlockParameterView(QWidget *parent, ExperimentGraphicEditor *graphEditor, ExperimentTreeModel *pExperimentTreeModel) : CustomChildDockTableWidget(parent), pParentGraphEditor(graphEditor), pExpTreeModel(pExperimentTreeModel)
 {
 	CustomChildDockTableWidget::setGroupName(PLUGIN_EXMLDOC_EXTENSION);
 	parsedExpStruct = NULL;
@@ -39,6 +39,7 @@ ExperimentBlockParameterView::ExperimentBlockParameterView(QWidget *parent, Expe
 	bDoReparseModel = true;
 	bVerticalViewEnabled = false;
 	bCellOpenedForEdit = false;
+	bFinishingCellEdit = false;
 	cChangedParameter = QColor(Qt::red);
 	cChangedCustomParameter = QColor(Qt::darkMagenta);
 	cInheritedParameter = QColor(Qt::darkGray);
@@ -47,12 +48,42 @@ ExperimentBlockParameterView::ExperimentBlockParameterView(QWidget *parent, Expe
 	setContextMenuPolicy(Qt::CustomContextMenu);
 	this->horizontalHeader()->setDefaultAlignment(Qt::AlignTop | Qt::AlignLeft);
 	this->verticalHeader()->setDefaultAlignment(Qt::AlignTop | Qt::AlignLeft);
-	connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showContextMenu(const QPoint&)));
-	connect(this, SIGNAL(cellDoubleClicked(int,int)), this, SLOT(cellOpenedForEdit(int,int)), Qt::DirectConnection);
+	connect(this, SIGNAL(customContextMenuRequested(const QPoint&)), this, SLOT(showContextMenu(const QPoint&)), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(this, SIGNAL(cellDoubleClicked(int, int)), this, SLOT(cellOpenedForEdit(int, int)), Qt::ConnectionType(Qt::UniqueConnection |Qt::DirectConnection));
+	connect(this, SIGNAL(cellChanged(int, int)), this, SLOT(onCellChanged(int, int)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 	if(pExpTreeModel)
 	{
-		connect(pExpTreeModel, SIGNAL(modelModified()), this, SLOT(checkReparseModel()));
+		connect(pExpTreeModel, SIGNAL(modelModified()), this, SLOT(checkReparseModel()), Qt::ConnectionType(Qt::UniqueConnection));
 		reparseModel();
+	}
+}
+
+void ExperimentBlockParameterView::onCellChanged(const int &nRow, const int &nColumn)
+{
+	if ((bFinishingCellEdit == false) && (bIsParsing == false))
+	{
+		QString sParamName = "";
+		bool bIsCustomParameter;//
+		if (bVerticalViewEnabled)
+			sParamName = hashRowOrColumnIndexObjectIDParamName.value(nRow);
+		else
+			sParamName = hashRowOrColumnIndexObjectIDParamName.value(nColumn);
+		strcRowOrColumnInfo tmpRowColInf = hashObjectParameterRowOrColumnIndex.value(sParamName);
+		bIsCustomParameter = (tmpRowColInf.eParamEditType == PSET_CUSTOM);
+		QString sNewText = this->item(nRow, nColumn)->text();
+		if (bIsCustomParameter)
+		{
+			customCellItemEditFinished(sNewText);
+		}
+		else
+		{
+			QStringList lSplittedParamName = sParamName.split(PROPSETTWIDGETS_UNIQUEPARAM_SPLITTER, QString::SkipEmptyParts);
+			if (lSplittedParamName.count() > 2)
+			{
+				sParamName = lSplittedParamName.at(PROPSETTWIDGETS_UNIQUEPARAM_PARAMNAME_INDEX);
+				cellItemEditFinished(sParamName, sNewText);
+			}
+		}
 	}
 }
 
@@ -65,6 +96,7 @@ void ExperimentBlockParameterView::checkReparseModel()
 
 void ExperimentBlockParameterView::reparseModel()
 {
+	bIsParsing = true;
 	cExperimentStructure *tmpExpStructure = new cExperimentStructure();
 	QList<ExperimentTreeItem*> tmpFoundExpTreeItemList;
 	bool bResult = ExperimentManager::createExperimentStructure(tmpFoundExpTreeItemList,pExpTreeModel,tmpExpStructure);
@@ -103,6 +135,7 @@ void ExperimentBlockParameterView::reparseModel()
 			this->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 		}
 	}
+	bIsParsing = false;
 }
 
 void ExperimentBlockParameterView::showContextMenu(const QPoint& pos)
@@ -903,6 +936,59 @@ void ExperimentBlockParameterView::currentChanged(const QModelIndex &current, co
 	bCellOpenedForEdit = false;
 	this->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
 	this->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+	if (current != previous)
+		handleSelection(current);
+}
+
+void ExperimentBlockParameterView::handleSelection(const QModelIndex &current)
+{
+	int nRow = current.row();
+	int nColumn = current.column();
+
+	if ((nRow < 0) || (nColumn < 0))
+		return;
+
+	if (pParentGraphEditor)
+	{
+		QList<QStringList> lTmpStringListList;
+
+		int nBlockID = -1;
+		int nObjectID = -1;
+		QString sBlockParamName = "";
+		//PropertySettingDefinitionStrc *tmpDef = NULL;
+		bool bIsParameter = false;
+
+		if (bVerticalViewEnabled)
+		{
+			nBlockID = hashRowOrColumnIndexBlockId[nColumn];
+			sBlockParamName = hashRowOrColumnIndexObjectIDParamName[nRow];
+			if (nColumn >= BLOCKPARAMVIEW_DEFAULTBLOCKHEADER_COUNT)
+				bIsParameter = true;
+		}
+		else
+		{
+			nBlockID = hashRowOrColumnIndexBlockId[nRow];
+			sBlockParamName = hashRowOrColumnIndexObjectIDParamName[nColumn];
+			if (nColumn >= BLOCKPARAMVIEW_DEFAULTBLOCKHEADER_COUNT)
+				bIsParameter = true;
+		}
+		nObjectID = hashObjectParameterRowOrColumnIndex[sBlockParamName].nObjectID;
+		//tmpDef = hashObjectParameterRowOrColumnIndex[sBlockParamName].strcParamDef;
+		lTmpStringListList.append(QStringList() << "TAGS");
+
+		bool bSelectResult = false;
+		if (bIsParameter)
+		{
+			lTmpStringListList.append(QStringList() << "TAGS");
+			lTmpStringListList.append(QStringList() << "TAGS");
+			bSelectResult = pParentGraphEditor->selectTreeItem(QStringList() << BLOCK_TAG << OBJECT_TAG << PARAMETERS_TAG, lTmpStringListList, QList<int>() << nBlockID << nObjectID);
+		}
+		else
+		{
+			bSelectResult = pParentGraphEditor->selectTreeItem(QStringList() << BLOCK_TAG, lTmpStringListList, QList<int>() << nBlockID);
+		}
+		bSelectResult = bSelectResult;
+	}
 }
 
 void ExperimentBlockParameterView::focusInEvent(QFocusEvent* event)
@@ -1006,7 +1092,7 @@ void ExperimentBlockParameterView::cellOpenedForEdit(const int &nRow, const int 
 							}						
 						}					
 						PropertySettingsWidget* tmpVisualizer = expParamWidgets->getExperimentParameterWidget(hashObjectIdExperimentObjectInfo[tmpInt].ObjectGlobalInfo.sClass);
-						connect((QObject*)tmpVisualizer, SIGNAL(derivedItemEditFinished(const QString&, const QString&)), this, SLOT(cellItemEditFinished(const QString&, const QString&)),Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));					
+						connect((QObject*)tmpVisualizer, SIGNAL(derivedItemEditFinished(const QString&, const QString&)), this, SLOT(cellItemEditFinished(const QString&, const QString&)),Qt::ConnectionType(Qt::DirectConnection));
 					}
 					if(bTempPropertyEditSignaling)
 						tmpParamVis->configurePropertyEditSignaling(true);
@@ -1022,8 +1108,7 @@ void ExperimentBlockParameterView::cellOpenedForEdit(const int &nRow, const int 
 					else
 						setCellWidget(nIndex1, nIndex2, leCustomParamEdit);
 					leCustomParamEdit->setText(VariantExtensionPropertySettingManager::resolveParameterValueType(tmpItem->text(),PropertySetting_Type_String,false).toString());
-					bool bResult = connect((QObject*)leCustomParamEdit, SIGNAL(textEdited(const QString&)), this, SLOT(customCellItemEditFinished(const QString&)),Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
-					bResult = bResult;
+					connect((QObject*)leCustomParamEdit, SIGNAL(textEdited(const QString&)), this, SLOT(customCellItemEditFinished(const QString&)),Qt::ConnectionType(Qt::DirectConnection));
 				}
 				configureEditHandling(true);
 			}
@@ -1033,6 +1118,7 @@ void ExperimentBlockParameterView::cellOpenedForEdit(const int &nRow, const int 
 
 void ExperimentBlockParameterView::customCellItemEditFinished(const QString& sNewValue)
 {
+	bFinishingCellEdit = true;
 	if(bEditHandlingEnabled)
 	{
 		int nRow = currentRow();
@@ -1115,10 +1201,12 @@ void ExperimentBlockParameterView::customCellItemEditFinished(const QString& sNe
 			}
 		}
 	}
+	bFinishingCellEdit = false;
 }
 
 void ExperimentBlockParameterView::cellItemEditFinished(const QString& sParamName, const QString& sNewValue)
 {
+	bFinishingCellEdit = true;
 	if(bEditHandlingEnabled)
 	{
 		int nRow = currentRow();
@@ -1196,4 +1284,5 @@ void ExperimentBlockParameterView::cellItemEditFinished(const QString& sParamNam
 			}
 		}
 	}
+	bFinishingCellEdit = false;
 }

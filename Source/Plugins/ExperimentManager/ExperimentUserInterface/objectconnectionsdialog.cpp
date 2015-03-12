@@ -30,14 +30,14 @@ ObjectConnectionsDialog::ObjectConnectionsDialog(QWidget *parent) : QDialog(pare
 	setWindowTitle("Configure Object Connection(s)");
 	twCurrentConnections = new QTreeWidget(ui->groupBox_2);
 	ui->layCurrentConnections->addWidget(twCurrentConnections);
-	connect(twCurrentConnections,SIGNAL(itemSelectionChanged()), this, SLOT(onTreeWidgetSelectionChanged()));
-	connect(ui->pbAdd, SIGNAL(clicked()), this, SLOT(addSelectedConnection()));
-	connect(ui->pbRemove, SIGNAL(clicked()), this, SLOT(removeSelectedConnection()));
-	connect(ui->pbClose, SIGNAL(clicked()), this, SLOT(close()));
-	connect(ui->cmbFromMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(validatePossibleConnection()));
-	connect(ui->cmbToMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(validatePossibleConnection()));
-	connect(ui->cmbFromObject, SIGNAL(currentIndexChanged(int)), this, SLOT(fromObjectChanged(int)));
-	connect(ui->cmbToObject, SIGNAL(currentIndexChanged(int)), this, SLOT(toObjectChanged(int)));
+	connect(twCurrentConnections, SIGNAL(itemSelectionChanged()), this, SLOT(onTreeWidgetSelectionChanged()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui->pbAdd, SIGNAL(clicked()), this, SLOT(addSelectedConnection()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui->pbRemove, SIGNAL(clicked()), this, SLOT(removeSelectedConnection()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui->pbClose, SIGNAL(clicked()), this, SLOT(close()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui->cmbFromMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(validatePossibleConnection()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui->cmbToMethod, SIGNAL(currentIndexChanged(int)), this, SLOT(validatePossibleConnection()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui->cmbFromObject, SIGNAL(currentIndexChanged(int)), this, SLOT(fromObjectChanged(int)), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui->cmbToObject, SIGNAL(currentIndexChanged(int)), this, SLOT(toObjectChanged(int)), Qt::ConnectionType(Qt::UniqueConnection));
 }
 
 ObjectConnectionsDialog::~ObjectConnectionsDialog()

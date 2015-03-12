@@ -19,6 +19,7 @@
 #include "propertysettingswidget.h"
 #include <QDebug>
 #include "ui_PropertySettingsWidget.h"
+#include "propertySettingsWidgetContainer.h"
 
 PropertySettingsWidget::PropertySettingsWidget(QWidget *parent) : QWidget(parent)
 {
@@ -282,15 +283,25 @@ bool PropertySettingsWidget::getEnumeratedParameterPropertyValue(const QString &
 	return false;
 }
 
-bool PropertySettingsWidget::resetParameterModifiedFlags(const bool &bOnlyNonDerivedParameters)
+bool PropertySettingsWidget::resetParameterModifiedFlagsAndValues(const bool &bOnlyNonDerivedParameters)
 {	
+	bool bPropertySignaling = hasPropertyEditSignaling();
+	if (bPropertySignaling)
+		configurePropertyEditSignaling(false);
 	foreach (propertyParameterValueDef tmpPropParamValDef,lParameterPropertyNamedHash)
 	{
 		if((bOnlyNonDerivedParameters && (tmpPropParamValDef.bIsDerived == false)) || (bOnlyNonDerivedParameters==false))
 		{
-			tmpPropParamValDef.vProperty->setModified(false);
+			if (tmpPropParamValDef.vProperty->isModified())
+			{
+				if (lVariantPropertyDefinitionHash.contains(tmpPropParamValDef.vProperty))
+					tmpPropParamValDef.vProperty->setValue(lVariantPropertyDefinitionHash[tmpPropParamValDef.vProperty]->sDefaultValue);
+				tmpPropParamValDef.vProperty->setModified(false);
+			}
 		}		
 	}
+	if (bPropertySignaling)
+		configurePropertyEditSignaling(true);
 	return true;
 }
 
@@ -556,6 +567,44 @@ bool PropertySettingsWidget::removeParameterProperty(const QString &sUniquePrope
 		return true;
 	}
 	return false;
+}
+
+bool PropertySettingsWidget::resetParameterProperties()
+{
+	//also with custom!!
+	if (lParameterPropertyNamedHash.isEmpty())
+		return false;
+
+	QHashIterator<QtProperty *, PropertySettingDefinitionStrc*> hashIter(lVariantPropertyDefinitionHash);
+	while (hashIter.hasNext())
+	{
+		hashIter.next();
+		if (hashIter.value())
+		{
+			QString sDefvalue = hashIter.value()->sDefaultValue;
+			//sParamName = hashIter.key();
+			//manager->setValue((*it), sValue);
+			//(*it)->setModified(bSetModified);
+			
+			if (variantExtensionFactory)
+			{
+				if (hashIter.key()->isModified())
+				{
+					QString sUniqueObjParamIdentifier = PropertySettingsWidgetContainer::getUniqueParameterIndentifier(PSET_DEFINED, 0, hashIter.value()->nId, hashIter.value()->sName);
+					//bool bResult = setWidgetParameter(QString::number(hashIter.value()->nId), sDefvalue, false);
+					//lVariantPropertyManager->setValue(hashIter.key(), sDefvalue);
+					//hashIter.key()->setModified(false);
+				}
+			//	bool bResult = variantExtensionFactory->setPropertyValue(lVariantPropertyManager, sUniquePropertyIdentifier, sValue, bSetModified);
+			//	bResult = bResult;
+			}
+		}
+	}
+
+	//QList<propertyParameterValueDef> tmpParamValueDefs;
+	//tmpParamValueDefs = lParameterPropertyNamedHash.values(sName.toLower());
+
+	return true;
 }
 
 bool PropertySettingsWidget::addParameterProperty(const PropertySettingDefinitionStrc *expParamDef, const QVariant &vValue)

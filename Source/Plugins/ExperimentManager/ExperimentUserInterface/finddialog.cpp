@@ -24,9 +24,9 @@ FindDialog::FindDialog(QWidget *parent) : QWidget(parent), ui(new Ui::FindDialog
 {
     setAttribute(Qt::WA_DeleteOnClose);
     ui->setupUi(this);
-    connect(ui->findButton, SIGNAL(clicked()), this, SLOT(findSlot()));
-    connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(close()));
-    connect(ui->cancelButton, SIGNAL(clicked()), this, SLOT(close()));
+	connect(ui->findButton, SIGNAL(clicked()), this, SLOT(findSlot()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui->actionClose, SIGNAL(triggered()), this, SLOT(close()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui->cancelButton, SIGNAL(clicked()), this, SLOT(close()), Qt::ConnectionType(Qt::UniqueConnection));
 }
 
 FindDialog::~FindDialog()

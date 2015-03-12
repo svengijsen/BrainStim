@@ -27,9 +27,9 @@ ModelIndexProvider::ModelIndexProvider(QAbstractItemModel& model, QObject* paren
 		QString path = mModel.data(index, ROLE_PATH).value<QString>();
 		mPixmapNames[path] = index;
 	}
-	connect(&mModel, SIGNAL(dataChanged(QModelIndex,QModelIndex)), this, SLOT(dataUpdated(QModelIndex,QModelIndex)));
-	connect(&mModel, SIGNAL(rowsRemoved(QModelIndex,int,int)), this, SLOT(dataDeleted(QModelIndex,int,int)));
-	connect(&mModel, SIGNAL(modelReset()), this, SLOT(dataReset()));
+	connect(&mModel, SIGNAL(dataChanged(QModelIndex, QModelIndex)), this, SLOT(dataUpdated(QModelIndex, QModelIndex)), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(&mModel, SIGNAL(rowsRemoved(QModelIndex, int, int)), this, SLOT(dataDeleted(QModelIndex, int, int)), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(&mModel, SIGNAL(modelReset()), this, SLOT(dataReset()), Qt::ConnectionType(Qt::UniqueConnection));
 }
 
 ModelIndexProvider::~ModelIndexProvider()

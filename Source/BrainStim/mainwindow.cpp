@@ -56,6 +56,7 @@ MainWindow::MainWindow() : DocumentWindow(), SVGPreviewer(new SvgView)
 	bExtensionPluginsFound = false;
 	helpAssistant = new Assistant;
 	bMainWindowIsInitialized = false;
+	bUsesUISettings = true;
 	resetContextState();
 
 #ifndef QT_NO_DEBUG_OUTPUT	
@@ -1109,22 +1110,27 @@ void MainWindow::dockWidgetDestroyed(QObject *destoyedDockWidget)
 {
 	if(destoyedDockWidget == NULL)
 		return;
-	for(int i=0;i<mapMDISubWindowToDockWidget.count();i++)
+	QMap<QMdiSubWindow*, QDockWidget*>::iterator iter;
+	for (iter = mapMDISubWindowToDockWidget.begin(); iter != mapMDISubWindowToDockWidget.end(); iter++)
 	{
-		if(mapMDISubWindowToDockWidget.values()[i] = (QDockWidget *)destoyedDockWidget)
+		if(iter.value() = (QDockWidget *)destoyedDockWidget)
 		{
-			mapMDISubWindowToDockWidget.remove(mapMDISubWindowToDockWidget.keys()[i],(QDockWidget *)destoyedDockWidget);
+			mapMDISubWindowToDockWidget.remove(iter.key(),(QDockWidget *)destoyedDockWidget);//it's a multi-map!
+			dockWidgetDestroyed(destoyedDockWidget);
+			return;
 		}
 	}
 }
 
 void MainWindow::subDocumentWindowActivated(QMdiSubWindow *subWindow)
 {
+	if (DocManager == NULL)
+		return;
 	DocManager->removeAllMenuActionRegistrations();
-	if(subWindow)
+	if (subWindow)
 	{
 		QList<DocumentManager::strcPluginChildDocCustomMenuDef> lPluginChildDocCustomMenuDefs = DocManager->getMenuActionRegistrations(subWindow);
-		for (int j = 0; j<lPluginChildDocCustomMenuDefs.count(); j++)
+		for (int j = 0; j < lPluginChildDocCustomMenuDefs.count(); j++)
 		{
 			if (lPluginChildDocCustomMenuDefs[j].customRootMenu)
 			{
@@ -1143,29 +1149,30 @@ void MainWindow::subDocumentWindowActivated(QMdiSubWindow *subWindow)
 			DocManager->appendAllMenuActionRegistration(lPluginChildDocCustomMenuDefs[j]);
 		}
 
-		for(int i=0;i<mapMDISubWindowToDockWidget.count();i++)
+		QMap<QMdiSubWindow*, QDockWidget*>::iterator iter;
+		for (iter = mapMDISubWindowToDockWidget.begin(); iter != mapMDISubWindowToDockWidget.end(); iter++)
 		{
-			if(mapMDISubWindowToDockWidget.keys().at(i) == subWindow)
+			if (iter.key() == subWindow)
 			{
-				if (dockWidgetArea(mapMDISubWindowToDockWidget.values()[i]) == Qt::NoDockWidgetArea)
+				if (dockWidgetArea(iter.value()) == Qt::NoDockWidgetArea)
 				{
 					QMap<QDockWidget*, DocumentManager::strcDockLocation> mapRegisteredDockWidgetToLocationStruct = DocManager->getDockWidgetRegistrations(subWindow);
-					if (mapRegisteredDockWidgetToLocationStruct.contains(mapMDISubWindowToDockWidget.values()[i]))
+					if (mapRegisteredDockWidgetToLocationStruct.contains(iter.value()))
 					{
-						DocumentManager::strcDockLocation tmpLocationStructure = mapRegisteredDockWidgetToLocationStruct.value(mapMDISubWindowToDockWidget.values()[i]);
-						addDockWidget(tmpLocationStructure.dockArea, mapMDISubWindowToDockWidget.values()[i]);
+						DocumentManager::strcDockLocation tmpLocationStructure = mapRegisteredDockWidgetToLocationStruct.value(iter.value());
+						addDockWidget(tmpLocationStructure.dockArea, iter.value());
 					}
 					else
 					{
-						addDockWidget(Qt::BottomDockWidgetArea, mapMDISubWindowToDockWidget.values()[i]);
+						addDockWidget(Qt::BottomDockWidgetArea, iter.value());
 					}
-					mapMDISubWindowToDockWidget.values()[i]->show();
+					iter.value()->show();
 				}
 			}
 			else
 			{
-				if (dockWidgetArea(mapMDISubWindowToDockWidget.values()[i]) != Qt::NoDockWidgetArea)
-					removeDockWidget(mapMDISubWindowToDockWidget.values()[i]);
+				if (dockWidgetArea(iter.value()) != Qt::NoDockWidgetArea)
+					removeDockWidget(iter.value());
 			}
 		}
 	}
@@ -3658,6 +3665,8 @@ void MainWindow::recoverLastScreenWindowSettings()
 
 void MainWindow::loadSavedDockWidgetConfiguration(const QString &sGroupName, QDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea)
 {
+	//if (bUsesUISettings == false)
+	//	return;
 	//QSettings *sUILayoutSettings = NULL;
 	QString tmpString;
 	//if (hashUILayoutSettings.contains(sSettingsFileName))
@@ -3723,6 +3732,8 @@ void MainWindow::loadSavedDockWidgetConfiguration(const QString &sGroupName, QDo
 
 void MainWindow::saveDockWidgetConfiguration(const QString &sGroupName, QDockWidget *dockWidget)
 {
+	if (bUsesUISettings == false)
+		return;
 	//QSettings *sUILayoutSettings = NULL;
 	//if (hashUILayoutSettings.contains(sSettingsFileName))
 	//{
@@ -3754,6 +3765,8 @@ void MainWindow::saveDockWidgetConfiguration(const QString &sGroupName, QDockWid
 
 void MainWindow::loadSavedWindowLayout(const QString &sGroupName)
 {
+	//if (bUsesUISettings == false)
+	//	return;
 	//QSettings *sUILayoutSettings = NULL;
 	//if (hashUILayoutSettings.contains(sSettingsFileName))
 	//{
@@ -3781,12 +3794,13 @@ void MainWindow::loadSavedWindowLayout(const QString &sGroupName)
 	QMdiSubWindow *subWindow = activeMdiChild();
 	if (subWindow)
 	{
-		for (int i = 0; i < mapMDISubWindowToDockWidget.count(); i++)
+		QMap<QMdiSubWindow*, QDockWidget*>::iterator iter;
+		for (iter = mapMDISubWindowToDockWidget.begin(); iter != mapMDISubWindowToDockWidget.end(); iter++)
 		{
-			if (mapMDISubWindowToDockWidget.keys().at(i) != subWindow)
+			if (iter.key() != subWindow)
 			{
-				if (dockWidgetArea(mapMDISubWindowToDockWidget.values()[i]) != Qt::NoDockWidgetArea)
-					removeDockWidget(mapMDISubWindowToDockWidget.values()[i]);
+				if (dockWidgetArea(iter.value()) != Qt::NoDockWidgetArea)
+					removeDockWidget(iter.value());
 			}
 		}
 	}
@@ -3794,6 +3808,8 @@ void MainWindow::loadSavedWindowLayout(const QString &sGroupName)
 
 void MainWindow::saveWindowLayout(const QString &sGroupName)
 {
+	if (bUsesUISettings == false)
+		return;
 	//QSettings *sUILayoutSettings = NULL;
 	//if (hashUILayoutSettings.contains(sSettingsFileName))
 	//{

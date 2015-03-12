@@ -35,9 +35,15 @@ DocumentManager::DocumentManager(QObject *parent) : QObject(parent)
 DocumentManager::~DocumentManager()
 {
 	if (DocModifiedMapper)
+	{
+		//DocModifiedMapper->removeMappings();
 		delete DocModifiedMapper;
+	}
 	if (NrOfLinesChangedMapper)
+	{
+		//NrOfLinesChangedMapper->removeMappings();
 		delete NrOfLinesChangedMapper;
+	}
 	for (int i = 0; i < lChildDocuments.count(); i++)
 	{
 		lChildDocuments.at(i).pWidget->close();
@@ -1041,7 +1047,8 @@ bool DocumentManager::saveFile(int DocIndex, QString fileName, bool *bReparseDoc
 	{
 		if (!(lChildDocuments.at(DocIndex).pWidget->metaObject()->indexOfMethod(QMetaObject::normalizedSignature(FUNC_PLUGIN_WIDGET_SAVEFILE_FULL)) == -1))//Is the slot present?
 		{
-			QMetaObject::invokeMethod(lChildDocuments.at(DocIndex).pWidget, QMetaObject::normalizedSignature(FUNC_PLUGIN_WIDGET_SAVEFILE), Qt::DirectConnection, Q_RETURN_ARG(QString, sSavedFilenNamePath), Q_ARG(QString, fileName));
+			//bool bInvokeResult = 
+				QMetaObject::invokeMethod(lChildDocuments.at(DocIndex).pWidget, QMetaObject::normalizedSignature(FUNC_PLUGIN_WIDGET_SAVEFILE), Qt::DirectConnection, Q_RETURN_ARG(QString, sSavedFilenNamePath), Q_ARG(QString, fileName));
 			if (sSavedFilenNamePath != fileName)
 				lChildDocuments[DocIndex].sFileName = sSavedFilenNamePath;
 		}

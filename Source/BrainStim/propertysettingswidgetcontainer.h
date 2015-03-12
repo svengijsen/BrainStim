@@ -90,8 +90,10 @@ public:
 	bool createCustomExperimentParameterWidgetCollection(const QString &sCollectionName, const bool &bClearExisting = false);
 	PropertySettingsWidget *insertCustomExperimentParameterWidget(const QString &sCollectionName, QList<PropertySettingDefinitionStrc> *lExpParDefs);
 	PropertySettingsWidget *getExperimentParameterWidget(const QString &sCollectionName);
+	PropertySettingsWidget *cloneExperimentParameterWidget(const QString &sCollectionName, const QString &sCloneCollectionName);
 	//QWidget *getPropertySettingsWidgetContainerubControl(const QString &sCollectionName, const QString &sParameterName, const QString &sDerivedPrefixName, QString &sReturnUniquePropertyIdentifier, const QVariant &vValue, const bool &bDoInitWithValue);
 	bool setWidgetParameter(const QString &sUniquePropertyIdentifier, const QString &sCollectionName, const QString &sParameterValue, const bool &bSetModified);
+	bool hasExperimentParameterDefinition(const QString &sCollectionName);
 	PropertySettingDefinition *getExperimentParameterDefinition(const QString &sCollectionName);
 	static QString getUniqueParameterIndentifier(const PropertySettingEditingType &cParamEditType, const int &nObjectID, const int &nParamDefinitionID, const QString &sParamName);
 
@@ -112,6 +114,8 @@ private:
 
 	QList<ExperimentParameterDefinitionCollection> *lExperimentParameterDefinitions;
 	QHash<int, strcCustomVariantMetaTypeDescription> hashRegisteredCustomVariabeleTypeToCustomMetaTypeDescription;
+	QMap<QString, QString> mapDefaultCollectionNameToFilePath;
+
 };
 
 #endif // PROPERTYSETTINGSWIDGETCONTAINER_H

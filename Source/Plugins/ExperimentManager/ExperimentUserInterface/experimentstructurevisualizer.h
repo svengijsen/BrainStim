@@ -163,6 +163,7 @@ private:
 		QString sName;
 		QString sClass;
 		int nId;
+		bool bHasParametersDefined;
 		QList<expObjectMethodConnectionItemStrc*> lObjectMethodConnections;
 		QList<expObjectMethodItemStrc*> lObjectInitializations;
 		QList<expObjectMethodItemStrc*> lObjectFinalizations;
@@ -172,6 +173,7 @@ private:
 			sName = "";
 			sClass = "";
 			nId = -1;
+			bHasParametersDefined = false;
 			gGraphObjectItem = NULL;
 		}
 	};

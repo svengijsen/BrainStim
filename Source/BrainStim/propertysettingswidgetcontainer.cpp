@@ -85,7 +85,7 @@ bool PropertySettingsWidgetContainer::loadExperimentParameterDefinition(const QS
 	{
 		for(int i=0;i<lExperimentParameterDefinitions->count();i++)
 		{
-			if(lExperimentParameterDefinitions->at(i).sCollectionName == sCollectionName)//Already Present
+			if((*lExperimentParameterDefinitions)[i].sCollectionName == sCollectionName)//Already Present
 			{
 				if(bOnlyIfNotPresent)
 					return true;
@@ -118,82 +118,11 @@ bool PropertySettingsWidgetContainer::loadExperimentParameterDefinition(const QS
 	{
 		lExperimentParameterDefinitions->append(*tmpParDefCollection);
 		createPropertySettingsWidgetContainer();
+		mapDefaultCollectionNameToFilePath.insert(tmpExpContrDefLoc.sName, tmpExpContrDefLoc.sPathToDefFile);
 		return true;
 	}
 	return false;
 }
-
-//void PropertySettingsWidgetContainer::fetchExperimentParameterDefinitions()
-//{
-//	if(lExperimentParameterDefinitions)
-//		return;
-//	else
-//		lExperimentParameterDefinitions = new QList<ExperimentParameterDefinitionCollection>;
-//	
-//	QList<ExperimentControlDefinitionLocationInfo> sExpContrDefLocLst;
-//	ExperimentControlDefinitionLocationInfo tmpExpContrDefLoc;
-//
-//	//tmpExpContrDefLoc.sName = RETINOTOPYMAPPER_NAME;
-//	//tmpExpContrDefLoc.sPathToDefFile = RETINOTOPYMAPPER_PARAMDEF_PATH;
-//	//sExpContrDefLocLst.append(tmpExpContrDefLoc);
-//
-//	//tmpExpContrDefLoc.sName = EXPERIMENT_TAG;
-//	//tmpExpContrDefLoc.sPathToDefFile = EXPERIMENT_PARAMDEF_PATH;
-//	//sExpContrDefLocLst.append(tmpExpContrDefLoc);
-//
-//	//tmpExpContrDefLoc.sName = DECLARATIONS_OBJECT_TAG;
-//	//tmpExpContrDefLoc.sPathToDefFile = DECLARATIONS_OBJECT_PARAMDEF_PATH;
-//	//sExpContrDefLocLst.append(tmpExpContrDefLoc);
-//
-//	//tmpExpContrDefLoc.sName = INITIALIZATION_OBJECT_TAG;
-//	//tmpExpContrDefLoc.sPathToDefFile = INITIALIZATION_OBJECT_PARAMDEF_PATH;
-//	//sExpContrDefLocLst.append(tmpExpContrDefLoc);
-//
-//	//tmpExpContrDefLoc.sName = FINALIZATION_OBJECT_TAG;
-//	//tmpExpContrDefLoc.sPathToDefFile = FINALIZATION_OBJECT_PARAMDEF_PATH;
-//	//sExpContrDefLocLst.append(tmpExpContrDefLoc);
-//
-//	//tmpExpContrDefLoc.sName = CONNECTION_OBJECT_TAG;
-//	//tmpExpContrDefLoc.sPathToDefFile = CONNECTION_OBJECT_PARAMDEF_PATH;
-//	//sExpContrDefLocLst.append(tmpExpContrDefLoc);
-//
-//	//tmpExpContrDefLoc.sName = BLOCK_TAG;
-//	//tmpExpContrDefLoc.sPathToDefFile = BLOCK_OBJECT_PARAMDEF_PATH;
-//	//sExpContrDefLocLst.append(tmpExpContrDefLoc);
-//
-//	//tmpExpContrDefLoc.sName = LOOP_TAG;
-//	//tmpExpContrDefLoc.sPathToDefFile = LOOP_OBJECT_PARAMDEF_PATH;
-//	//sExpContrDefLocLst.append(tmpExpContrDefLoc);
-//
-//	//tmpExpContrDefLoc.sName = INITIALIZATIONS_PARAMETER_TAG;
-//	//tmpExpContrDefLoc.sPathToDefFile = INITIALIZATIONS_PARAMETER_PARAMDEF_PATH;
-//	//sExpContrDefLocLst.append(tmpExpContrDefLoc);
-//
-//	//tmpExpContrDefLoc.sName = FINALIZATIONS_PARAMETER_TAG;
-//	//tmpExpContrDefLoc.sPathToDefFile = FINALIZATIONS_PARAMETER_PARAMDEF_PATH;
-//	//sExpContrDefLocLst.append(tmpExpContrDefLoc);
-//
-//	//tmpExpContrDefLoc.sName = BLOCK_PARAMETER_TAG;
-//	//tmpExpContrDefLoc.sPathToDefFile = BLOCK_PARAMETER_PARAMDEF_PATH;
-//	//sExpContrDefLocLst.append(tmpExpContrDefLoc);
-//
-//	//tmpExpContrDefLoc.sName = QML2VIEWER_NAME;
-//	//tmpExpContrDefLoc.sPathToDefFile = QML2VIEWER_PARAMDEF_PATH;
-//	//sExpContrDefLocLst.append(tmpExpContrDefLoc);
-//
-//	//tmpExpContrDefLoc.sName = OBJECT_DEFINITION_TAG;
-//	//tmpExpContrDefLoc.sPathToDefFile = OBJECT_DEFINITION_PARAMDEF_PATH;
-//	//sExpContrDefLocLst.append(tmpExpContrDefLoc);
-//
-//	foreach(tmpExpContrDefLoc, sExpContrDefLocLst)
-//	{
-//		ExperimentParameterDefinitionCollection tmpParDefCollection;
-//		tmpParDefCollection.sCollectionName = tmpExpContrDefLoc.sName;
-//		tmpParDefCollection.cExperimentParameterDefinition = new PropertySettinhhgDefinition();
-//		tmpParDefCollection.cExperimentParameterDefinition->loadFromFile(tmpExpContrDefLoc.sPathToDefFile);
-//		lExperimentParameterDefinitions->append(tmpParDefCollection);
-//	}
-//}
 
 bool PropertySettingsWidgetContainer::createCustomExperimentParameterWidgetCollection(const QString &sCollectionName, const bool &bClearExisting)
 {
@@ -277,18 +206,49 @@ void PropertySettingsWidgetContainer::createPropertySettingsWidgetContainer()
 			{
 				for (QList<PropertySettingDefinitionStrc>::const_iterator itParamDef=tmpExpParamDefList->cbegin();itParamDef!=tmpExpParamDefList->cend();++itParamDef)
 				{
-					if(itParamDefs->wWidget->addParameterProperty(&(*itParamDef),itParamDef->sDefaultValue) == false)
+					QString sDefaultValue = itParamDef->sDefaultValue;
+					if(itParamDefs->wWidget->addParameterProperty(&(*itParamDef), sDefaultValue) == false)
 					{
 						QMessageLogger::qDebug() << __FUNCTION__ << "Could not add parameter property: " << itParamDef->sName;
 					}
 				}
 			}
-
 			itParamDefs->wWidget->configurePropertyEditSignaling(true);
-
 			//bResult = connect(itParamDefs->wWidget->getVariantPropertyFactory(), SIGNAL(PropertyWidgetChanged(QWidget*, const QString&)), this, SIGNAL(ParameterWidgetChanged(QWidget*, const QString&)),Qt::UniqueConnection);
 		}
 	}
+}
+
+PropertySettingsWidget *PropertySettingsWidgetContainer::cloneExperimentParameterWidget(const QString &sCollectionName, const QString &sCloneCollectionName)
+{
+	if ((lExperimentParameterDefinitions == NULL) || (sCollectionName.isEmpty()))
+		return NULL;
+
+	for (QList<ExperimentParameterDefinitionCollection>::iterator itParamDefs = lExperimentParameterDefinitions->begin(); itParamDefs != lExperimentParameterDefinitions->end(); ++itParamDefs)
+	{
+		if (itParamDefs->sCollectionName.compare(sCollectionName, Qt::CaseInsensitive) == 0)
+		{
+			if (mapDefaultCollectionNameToFilePath.contains(sCollectionName))
+			{
+				//ExperimentControlDefinitionLocationInfo tmpExpContrDefLoc;
+				//tmpExpContrDefLoc.sName = itParamDefs->sCloneCollectionName;
+				//tmpExpContrDefLoc.sPathToDefFile = "";// itParamDefs->sFixedPath;
+				ExperimentParameterDefinitionCollection *tmpParDefCollection = new ExperimentParameterDefinitionCollection();
+				tmpParDefCollection->wWidget = NULL;
+				tmpParDefCollection->sCollectionName = sCloneCollectionName;
+				tmpParDefCollection->cExperimentParameterDefinition = new PropertySettingDefinition();
+				tmpParDefCollection->cExperimentParameterDefinition->registerCustomPropertySettingDefinitionsTypes(hashRegisteredCustomVariabeleTypeToCustomMetaTypeDescription);
+				if (tmpParDefCollection->cExperimentParameterDefinition->loadFromFile(mapDefaultCollectionNameToFilePath.value(sCollectionName)))
+				{
+					lExperimentParameterDefinitions->append(*tmpParDefCollection);
+					createPropertySettingsWidgetContainer();
+					return lExperimentParameterDefinitions->last().wWidget;
+				}
+				return NULL;
+			}
+		}
+	}
+	return NULL;
 }
 
 PropertySettingsWidget *PropertySettingsWidgetContainer::getExperimentParameterWidget(const QString &sCollectionName)
@@ -318,6 +278,20 @@ bool PropertySettingsWidgetContainer::setWidgetParameter(const QString &sUniqueP
 		return tmpParamVis->setWidgetParameter(sUniquePropertyIdentifier, sParameterValue, bSetModified);
 	}
 	return NULL;
+}
+
+bool PropertySettingsWidgetContainer::hasExperimentParameterDefinition(const QString &sCollectionName)
+{
+	if (lExperimentParameterDefinitions == NULL)
+		return false;
+	if (lExperimentParameterDefinitions->isEmpty())
+		return false;
+	for (int i = 0; i < lExperimentParameterDefinitions->count(); i++)
+	{
+		if (lExperimentParameterDefinitions->at(i).sCollectionName == sCollectionName)
+			return true;
+	}
+	return false;
 }
 
 PropertySettingDefinition *PropertySettingsWidgetContainer::getExperimentParameterDefinition(const QString &sCollectionName)

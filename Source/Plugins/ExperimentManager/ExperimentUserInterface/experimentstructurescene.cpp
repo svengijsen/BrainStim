@@ -29,6 +29,7 @@
 #include "blockloopsdialog.h"
 #include "experimentobjectsdialog.h"
 #include "objectconnectionsdialog.h"
+//#include "PropertySettingsWidgetContainer.h"
 
 ExperimentStructureScene::ExperimentStructureScene(ExperimentStructureVisualizer *parent) : QGraphicsScene((QObject*)parent), pBlockLoopsDialog(NULL), pExperimentObjectsDialog(NULL), pObjectConnectionsDialog(NULL), pExpStruct(NULL), pExperimentTreeModel(NULL), parentExpStructVis(parent)
 {
@@ -76,6 +77,7 @@ bool ExperimentStructureScene::event(QEvent *event)
 void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
 {
 	QMenu mContexMenu;
+	QAction* initialParametersAction = mContexMenu.addAction(QIcon(":/resources/parameters.png"), "Initialized Parameters");
 	//QMenu* mViewMenu = mContexMenu.addMenu(QIcon(":/resources/view.png"), "View");
 	QMenu* mBlocksMenu = mContexMenu.addMenu(QIcon(":/resources/blocks.png"), "Blocks");
 	QMenu* mLoopsMenu = mContexMenu.addMenu(QIcon(":/resources/loops.png"), "Loops");
@@ -102,10 +104,14 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 	//QGraphicsItem *gItem = itemAt(contextMenuEvent->scenePos(),QTransform());//item at mouse
 	QList<ExperimentGraphBlockItem*> gSelectedBlockItems;
 	QList<int> lSelectedBlockIds;
+	QList<int> lSelectedObjectIds;
 	QList<ExperimentGraphLoopItem*> gSelectedAutoConnectionItems;
 	QList<ExperimentGraphLoopItem*> gSelectedLoopConnectionItems;
 	QList<ExperimentGraphObjectItem*> gSelectedObjectItems;
 	QList<ExperimentGraphMethodConnectionItem*> gSelectedMethodConnectionItems;
+	
+	PropertySettingsWidgetContainer *expParamWidgets = NULL;
+	QString sSelectedObjectClassName = "";
 
 	//if(gItem)
 	//if(gItemList.isEmpty() == false)
@@ -129,6 +135,11 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 		{
 			if (tmpExpGraphBlockItem)
 				lSelectedBlockIds.append(parentExpStructVis->getGraphBlockItemStruct(tmpExpGraphBlockItem)->nId);
+		}
+		foreach(ExperimentGraphObjectItem *tmpExpGraphObjectItem, gSelectedObjectItems)
+		{
+			if (tmpExpGraphObjectItem)
+				lSelectedObjectIds.append(parentExpStructVis->getGraphObjectItemStruct(tmpExpGraphObjectItem)->nId);
 		}
 	}
 
@@ -168,9 +179,23 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 	else if(getGraphViewState() == EXPVIS_VIEWSTATE_OBJECTS)
 	{
 		mObjectsMenu->setEnabled(true);
+
+		initialParametersAction->setEnabled(false);
 		if(gSelectedObjectItems.isEmpty() == false)//Objects selected?
 		{
-
+			if (gSelectedObjectItems.count() == 1)//Single Object selected
+			{
+				if (parentExpStructVis)
+				{
+					if (gSelectedObjectItems[0])
+					{
+						expParamWidgets = PropertySettingsWidgetContainer::instance();
+						sSelectedObjectClassName = parentExpStructVis->getGraphObjectItemStruct(gSelectedObjectItems[0])->sClass;
+						if (expParamWidgets->hasExperimentParameterDefinition(sSelectedObjectClassName))
+							initialParametersAction->setEnabled(true);
+					}
+				}
+			}
 		}
 		//addObjectAction = mObjectsMenu->addAction(QIcon(":/resources/add.png"), "Add New");
 		configureObjectsAction = mObjectsMenu->addAction(QIcon(":/resources/configure.png"), "Configure Object(s)");
@@ -243,6 +268,52 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 			pObjectConnectionsDialog = new ObjectConnectionsDialog();
 			if(pObjectConnectionsDialog->setExperimentTreeModel(pExperimentTreeModel))
 				pObjectConnectionsDialog->exec();
+		}
+		else if (selectedItemAction == initialParametersAction)
+		{
+			if (parentExpStructVis && pExpStruct)
+			{
+				cBlockStructure *tmpBlockStrcPointer = pExpStruct->getNextClosestBlockNumberByFromNumber(0);
+				if (tmpBlockStrcPointer)
+				{
+					int nFirstBlockID = tmpBlockStrcPointer->getBlockID();
+					emit parentExpStructVis->GraphItemSelectionChanged(QList<ExperimentVisualizerGraphItemTypeEnum>() << ExperimentVisualizerGraphItemTypeEnum::EXPVIS_TYPE_BLOCK << ExperimentVisualizerGraphItemTypeEnum::EXPVIS_TYPE_OBJECT << ExperimentVisualizerGraphItemTypeEnum::EXPVIS_TYPE_PARAMETERS, QList<int>() << nFirstBlockID << lSelectedObjectIds[0]);
+				}
+			}
+			/*
+			PropertySettingsWidget *tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sSelectedObjectClassName);
+			tmpParametersWidget->resetParameterModifiedFlagsAndValues();
+			if (tmpParametersWidget)
+			{
+				tmpParametersWidget->setWindowModality(Qt::WindowModal);
+				tmpParametersWidget->parseDependencies();
+				tmpParametersWidget->setAutoDepencyParsing(true);
+				//tmpParametersWidget->resizeParameterView(200,1000);
+				tmpParametersWidget->show();
+				//if (child->hasChildren())
+				//{
+				//	//Set the values
+				//	int nChildCount = child->childCount();
+				//	QString sName = "";
+				//	QString sValue = "";
+				//	for (int j = 0; j < nChildCount; j++)
+				//	{
+				//		if (item->child(i)->child(j)->getName().toLower() == NAME_TAG)
+				//		{
+				//			sName = item->child(i)->child(j)->getValue();
+				//		}
+				//		else if (item->child(i)->child(j)->getName().toLower() == VALUE_TAG)
+				//		{
+				//			sValue = item->child(i)->child(j)->getValue();
+				//		}
+				//		if ((sName.isEmpty() || sValue.isEmpty()) == false)
+				//		{
+				//			//bool bResult = 
+				//			tmpParametersWidget->setParameter(sName, sValue, true, true);
+				//		}
+				//	}
+				//}
+			}*/
 		}
 	}
 }

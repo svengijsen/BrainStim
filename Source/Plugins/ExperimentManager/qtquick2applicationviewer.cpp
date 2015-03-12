@@ -54,7 +54,7 @@ QtQuick2ApplicationViewer::QtQuick2ApplicationViewer(QObject *parent) : QQuickVi
 	//configureEventFilter(parent);
     //bool bResult = connect(engine(), &QQmlEngine::quit, this, &QWindow::close);
 	//bool bResult = 
-		connect(engine(), &QQmlEngine::quit, this, &QtQuick2ApplicationViewer::qtQuick2EngineQuit);
+	connect(engine(), &QQmlEngine::quit, this, &QtQuick2ApplicationViewer::qtQuick2EngineQuit, Qt::ConnectionType(Qt::UniqueConnection));
     setResizeMode(QQuickView::SizeRootObjectToView);
 	this->setFlags(Qt::FramelessWindowHint);
 	qml2InterfaceObject = new Qml2Interface(this);

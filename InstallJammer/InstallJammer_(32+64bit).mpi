@@ -1531,6 +1531,10 @@ File ::9E7E6F80-6BCC-4D9E-ABA4-B3B671362D75 -name qoffscreend.pdb -active 0 -par
 File ::41D4815E-4475-4A2E-AD9C-AFBF90448E86 -name qwindows.dll -parent FCC41228-76F0-4B2A-A386-3C64E523E9A5
 File ::328D1E12-E442-4243-8A89-4E34DCD312C6 -name qwindowsd.dll -active 0 -parent FCC41228-76F0-4B2A-A386-3C64E523E9A5
 File ::D119AF5E-02B0-4DE6-A62D-765F59796B8C -name qwindowsd.pdb -active 0 -parent FCC41228-76F0-4B2A-A386-3C64E523E9A5
+File ::D74FDFEF-D77F-47B9-BA5B-0391A78F7497 -type dir -name E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl/plugins/audio -parent D66CC3C4-3C82-4A89-8A30-8695B7ADEAF2
+File ::55D1FACE-4E38-40AC-A842-FAEC1130216F -name qtaudio_windows.dll -parent D74FDFEF-D77F-47B9-BA5B-0391A78F7497
+File ::CDB70625-D066-43DC-8022-F1BBB895167E -name qtaudio_windowsd.dll -active 0 -parent D74FDFEF-D77F-47B9-BA5B-0391A78F7497
+File ::3C3B9C58-A226-4293-9F2E-CAAFAE228AE8 -name qtaudio_windowsd.pdb -active 0 -parent D74FDFEF-D77F-47B9-BA5B-0391A78F7497
 FileGroup ::FD2052F2-F691-4680-9D69-F50CA6E8F047 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Standard QT Plugins(win32)} -parent FileGroups
 File ::B0E6F013-D4A4-4FCF-B5DE-EC5677B19253 -type dir -name E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/plugins/accessible -parent FD2052F2-F691-4680-9D69-F50CA6E8F047
 File ::9C24C60A-3BD3-490E-BA40-933CB2B56F62 -name qtaccessiblequick.dll -parent B0E6F013-D4A4-4FCF-B5DE-EC5677B19253
@@ -1643,6 +1647,10 @@ File ::8BB2C316-1C67-4D8C-9C12-5A84F8DF3555 -name qoffscreend.pdb -active 0 -par
 File ::383C95CA-096C-4D73-8AC3-0345A493EF68 -name qwindows.dll -parent 6D24F954-92BD-4065-85B5-F473BDCF0A1B
 File ::BC27EE8C-AC2B-43C2-80D6-2064ED48272E -name qwindowsd.dll -active 0 -parent 6D24F954-92BD-4065-85B5-F473BDCF0A1B
 File ::5C5B14C2-A90A-4BE0-87B4-3554413EF4DF -name qwindowsd.pdb -active 0 -parent 6D24F954-92BD-4065-85B5-F473BDCF0A1B
+File ::7DCC2951-B708-42D0-A221-161B329D2FB8 -type dir -name E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/plugins/audio -parent FD2052F2-F691-4680-9D69-F50CA6E8F047
+File ::365FE37C-0C27-4282-85DA-F8C4AC001668 -name qtaudio_windows.dll -parent 7DCC2951-B708-42D0-A221-161B329D2FB8
+File ::67D7A157-4623-469C-8652-41EFC2C9D672 -name qtaudio_windowsd.dll -active 0 -parent 7DCC2951-B708-42D0-A221-161B329D2FB8
+File ::82EC5EDA-8E12-400E-B1A6-081E83DF9387 -name qtaudio_windowsd.pdb -active 0 -parent 7DCC2951-B708-42D0-A221-161B329D2FB8
 FileGroup ::B8B5252C-BA02-416E-A353-667E13968192 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Additional Binaries(win32)} -parent FileGroups
 File ::045CB47B-94F8-4EA4-A2AA-CCF5C556C063 -name E:/Libraries/Firebird/Firebird-2.5.3.26778-0/Win32/Release/fbclient.dll -parent B8B5252C-BA02-416E-A353-667E13968192
 File ::FEEA78EC-6C5D-48CD-9641-405490E13952 -name E:/Libraries/Firebird/Firebird-2.5.3.26778-0/Win32/Release/firebird.msg -parent B8B5252C-BA02-416E-A353-667E13968192
@@ -1669,14 +1677,20 @@ File ::E9A45831-39E6-4F77-8C3F-9F17BD2FF2D1 -name E:/Libraries/Ogre/OGRE-SDK-1.8
 File ::D6C1C85A-C180-46C0-BCE3-59DCE6B60BCB -name E:/Libraries/HIDAPI/x64/bin/hidapi_x64.dll -parent C6C42CD1-B9D2-4DCB-B599-C7236551A39A
 File ::B9D0CE93-CAF8-4C3B-919F-238B647E91CD -name E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl/plugins/sqldrivers/qsqlibase.dll -parent C6C42CD1-B9D2-4DCB-B599-C7236551A39A
 File ::97582F15-4FF8-4426-8566-76C60AD3809C -name E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl/bin/Qt5SerialPort.dll -parent C6C42CD1-B9D2-4DCB-B599-C7236551A39A
-FileGroup ::4DF71FAD-80BD-4091-929A-2A4F157EA0C5 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {VC2012 Redistributables(win32)} -parent FileGroups
+FileGroup ::4DF71FAD-80BD-4091-929A-2A4F157EA0C5 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {VC(2012 & 2013) Redistributables(win32)} -parent FileGroups
 File ::B3E1AC79-CE0B-41F4-8A6F-49F75D1A905A -name E:/Libraries/VC_Redist/VC_2013/x86/Microsoft.VC120.CRT/msvcp120.dll -parent 4DF71FAD-80BD-4091-929A-2A4F157EA0C5
 File ::58AD1B13-5EF4-4ED8-8773-D14DD3ED0661 -name E:/Libraries/VC_Redist/VC_2013/x86/Microsoft.VC120.CRT/msvcr120.dll -parent 4DF71FAD-80BD-4091-929A-2A4F157EA0C5
 File ::8EF5B114-C6BA-4192-98C3-2FD7565B2686 -name E:/Libraries/VC_Redist/VC_2013/x86/Microsoft.VC120.OPENMP/vcomp120.dll -parent 4DF71FAD-80BD-4091-929A-2A4F157EA0C5
-FileGroup ::C2965824-E1F7-41F1-988B-2789A12B339E -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {VC2012 Redistributables(x64)} -parent FileGroups
+File ::304F38AA-081D-44CC-85EE-E1120D80ACCB -name E:/Libraries/VC_Redist/VC_2012/x86/Microsoft.VC110.CRT/msvcp110.dll -parent 4DF71FAD-80BD-4091-929A-2A4F157EA0C5
+File ::0168F5C5-40DD-43E5-93BD-B2480211274F -name E:/Libraries/VC_Redist/VC_2012/x86/Microsoft.VC110.CRT/msvcr110.dll -parent 4DF71FAD-80BD-4091-929A-2A4F157EA0C5
+File ::1252085D-F2FF-43B5-B4A0-1BA5D8D711EE -name E:/Libraries/VC_Redist/VC_2012/x86/Microsoft.VC110.OPENMP/vcomp110.dll -parent 4DF71FAD-80BD-4091-929A-2A4F157EA0C5
+FileGroup ::C2965824-E1F7-41F1-988B-2789A12B339E -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {VC(2012 & 2013) Redistributables(x64)} -parent FileGroups
 File ::81E275D5-F8BD-4410-8874-6D55560F0A4C -name E:/Libraries/VC_Redist/VC_2013/x64/Microsoft.VC120.OpenMP/vcomp120.dll -parent C2965824-E1F7-41F1-988B-2789A12B339E
 File ::0D76D394-1F8F-4177-B009-2E9EA0A4BCD3 -name E:/Libraries/VC_Redist/VC_2013/x64/Microsoft.VC120.CRT/msvcp120.dll -parent C2965824-E1F7-41F1-988B-2789A12B339E
 File ::C661009A-3A7B-4AAD-ABEB-39337EF0ED3D -name E:/Libraries/VC_Redist/VC_2013/x64/Microsoft.VC120.CRT/msvcr120.dll -parent C2965824-E1F7-41F1-988B-2789A12B339E
+File ::B2628AAF-F326-4A92-A3F8-D3CA54D107BA -name E:/Libraries/VC_Redist/VC_2012/x64/Microsoft.VC110.CRT/msvcp110.dll -parent C2965824-E1F7-41F1-988B-2789A12B339E
+File ::C146EAC5-DBE9-4F7F-BB3E-0285839CE409 -name E:/Libraries/VC_Redist/VC_2012/x64/Microsoft.VC110.CRT/msvcr110.dll -parent C2965824-E1F7-41F1-988B-2789A12B339E
+File ::D91D84DB-3577-4C14-A336-8B8F60990C65 -name E:/Libraries/VC_Redist/VC_2012/x64/Microsoft.VC110.OpenMP/vcomp110.dll -parent C2965824-E1F7-41F1-988B-2789A12B339E
 FileGroup ::7882E581-7AAD-49F1-BBDF-1CCEAD0F5288 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name Includes(Default) -parent FileGroups
 File ::4D9309A3-6D9F-4A0A-AB62-148285B477B9 -type dir -name E:/Projects/BrainStim/Install/Include/JavaScript -parent 7882E581-7AAD-49F1-BBDF-1CCEAD0F5288
 File ::B4F091BC-3EB2-4FE6-A95B-DBF363282916 -name underscore.js -parent 4D9309A3-6D9F-4A0A-AB62-148285B477B9
@@ -2210,7 +2224,7 @@ array set Properties {
 {1545696}
 
 4DF71FAD-80BD-4091-929A-2A4F157EA0C5,Name
-{VC2012 Redistributables(win32)}
+{VC(2012 & 2013) Redistributables(win32)}
 
 4F159A54-F4BA-4ED8-A263-C5FAE900A663,CheckCondition
 {Before Action is Executed}
@@ -2993,7 +3007,7 @@ C2965824-E1F7-41F1-988B-2789A12B339E,FileSize
 {1760736}
 
 C2965824-E1F7-41F1-988B-2789A12B339E,Name
-{VC2012 Redistributables(x64)}
+{VC(2012 & 2013) Redistributables(x64)}
 
 C2FE8A41-240D-431A-B80F-FF44E9B327FC,CheckCondition
 {Before Action is Executed}

@@ -33,4 +33,5 @@ void CustomMDISubWindow::closeEvent(QCloseEvent *closeEvent)
 {
 	closeEvent->accept();
 	emit SubWindowClosed(this);
+	//this->deleteLater();
 }

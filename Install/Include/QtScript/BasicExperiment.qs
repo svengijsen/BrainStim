@@ -121,6 +121,11 @@ BrainStim.clearOutputWindow("BasicExperiment");
 		BasicExperiment.LogFunctionSignature("BasicExperiment","ExternalTriggerRecieved", arguments, true);
 	}
 
+	BasicExperiment.__proto__.PrepareNewInitBlockTrial = function()
+	{
+		BasicExperiment.LogFunctionSignature("BasicExperiment","PrepareNewInitBlockTrial", arguments, true);		
+	}
+	
 	BasicExperiment.__proto__.NewInitBlockTrial = function()
 	{
 		BasicExperiment.LogFunctionSignature("BasicExperiment","NewInitBlockTrial", arguments, true);		
@@ -192,12 +197,14 @@ BrainStim.clearOutputWindow("BasicExperiment");
 		BasicExperiment.__proto__.GetCurrentDateTimeStamp = null;
 		BasicExperiment.__proto__.KeyBoardResponseRecieved = null;
 		BasicExperiment.__proto__.ExternalTriggerRecieved = null;
+		BasicExperiment.__proto__.PrepareNewInitBlockTrial = null;
 		BasicExperiment.__proto__.NewInitBlockTrial = null;
 		BasicExperiment.__proto__.ExperimentStateChanged = null;
 		BasicExperiment.__proto__.CleanupScript = null;
 		BasicExperiment.__proto__.preExperimentStateChanged = null;
 		BasicExperiment.__proto__.LogFunctionSignature = null;
 		BasicExperiment.__proto__.preExternalTriggerRecieved = null;
+		BasicExperiment.__proto__.prePrepareNewInitBlockTrial = null;
 		BasicExperiment.__proto__.preNewInitBlockTrial = null;
 		BasicExperiment.__proto__.LogExperimentState = null;
 		BasicExperiment.__proto__.InitExperimentObjects = null;
@@ -344,6 +351,16 @@ BrainStim.clearOutputWindow("BasicExperiment");
 			BrainStim.write2OutputWindow("* " + BasicExperiment.nStartDateTimeStamp + ";" + "Experiment Started(First External Trigger)", "BasicExperiment");
 		}
 		BrainStim.write2OutputWindow("* " + (__nCurrentDateTimeStamp - BasicExperiment.nStartDateTimeStamp) + ";" + "External Trigger Received", "BasicExperiment");
+	}
+	
+	BasicExperiment.__proto__.prePrepareNewInitBlockTrial = function()
+	{
+		BasicExperiment.LogFunctionSignature("BasicExperiment","prePrepareNewInitBlockTrial", arguments, true);
+		if(BasicExperiment.nCurrentExperimentState == ExperimentManager.ExperimentState.ExperimentManager_Started)
+		{
+			BasicExperiment.PrepareNewInitBlockTrial();
+			//BrainStim.write2OutputWindow(BasicExperiment.GetCurrentDateTimeStamp() + ";" + "PrepareNewInitBlockTrial() executed", "BasicExperiment");
+		}
 	}
 	
 	BasicExperiment.__proto__.preNewInitBlockTrial = function()

@@ -30,7 +30,7 @@ BlockLoopsDialog::BlockLoopsDialog(QWidget *parent) : QDialog(parent), bIsParsin
 	setWindowTitle("Configure block loop(s)");
 	twCurrentLoops = new QTreeWidget(ui->groupBox_2);
 	ui->layCurrentLoops->addWidget(twCurrentLoops);
-	connect(twCurrentLoops,SIGNAL(itemSelectionChanged()), this, SLOT(onTreeWidgetSelectionChanged()));
+	connect(twCurrentLoops, SIGNAL(itemSelectionChanged()), this, SLOT(onTreeWidgetSelectionChanged()), Qt::ConnectionType(Qt::UniqueConnection));
 	connect(ui->pbDecreaseLoopNumber, SIGNAL(clicked()), this, SLOT(decreaseSelectedLoopNumber()));
 	connect(ui->pbIncreaseLoopNumber, SIGNAL(clicked()), this, SLOT(increaseSelectedLoopNumber()));
 	connect(ui->pbAdd, SIGNAL(clicked()), this, SLOT(addSelectedLoop()));

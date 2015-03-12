@@ -146,6 +146,7 @@ BasicExperiment.__proto__.ConnectDisconnectScriptFunctions = _.compose(BasicExpe
 			{
 				if(BasicExperiment.QMLViewerObject)
 				{
+					BasicExperiment.QMLViewerObject.PrepareNewInitBlockTrial.connect(BasicExperiment,BasicExperiment.prePrepareNewInitBlockTrial);
 					BasicExperiment.QMLViewerObject.NewInitBlockTrial.connect(BasicExperiment,BasicExperiment.preNewInitBlockTrial);
 					BasicExperiment.QMLViewerObject.NewSourceLoaded.connect(BasicExperiment,BasicExperiment.preNewQMLSourceLoaded);
 				}
@@ -164,6 +165,7 @@ BasicExperiment.__proto__.ConnectDisconnectScriptFunctions = _.compose(BasicExpe
 			{
 				if(BasicExperiment.QMLViewerObject)
 				{
+					BasicExperiment.QMLViewerObject.PrepareNewInitBlockTrial.disconnect(BasicExperiment,BasicExperiment.prePrepareNewInitBlockTrial);
 					BasicExperiment.QMLViewerObject.NewInitBlockTrial.disconnect(BasicExperiment,BasicExperiment.preNewInitBlockTrial);
 					BasicExperiment.QMLViewerObject.NewSourceLoaded.disconnect(BasicExperiment,BasicExperiment.preNewQMLSourceLoaded);
 				}

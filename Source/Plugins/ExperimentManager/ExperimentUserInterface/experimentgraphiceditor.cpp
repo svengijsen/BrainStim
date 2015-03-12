@@ -58,7 +58,7 @@ ExperimentGraphicEditor::ExperimentGraphicEditor(QWidget *parent) : QWidget(pare
 	toolBar = NULL;
 	findDlg = NULL;
 	dynamicGraphicWidget = NULL;
-	pExpTreeModel = NULL;
+	pCurrentExpTreeModel = NULL;
 	filterModel = NULL;
 	mainLayout = NULL;
 	actionNew_File = NULL;
@@ -102,7 +102,7 @@ ExperimentGraphicEditor::ExperimentGraphicEditor(QWidget *parent) : QWidget(pare
 
 ExperimentGraphicEditor::~ExperimentGraphicEditor()
 {
-	emit IsClosing(sCurrentCanonFilePath, false);
+	emit IsClosing(getCurrentFileName(), false);
 	emit IsDestructing(this);
 	configureActions(false);
 	staticGraphicWidgetsHashTable.clear();
@@ -166,8 +166,8 @@ ExperimentGraphicEditor::~ExperimentGraphicEditor()
 		delete toolBar;
 		toolBar = NULL;
 	}
-	if(pExpTreeModel)
-		pExpTreeModel = NULL;
+	if(pCurrentExpTreeModel)
+		pCurrentExpTreeModel = NULL;
 	if(findDlg)
 		findDlg = NULL;//Attribute Qt::WA_DeleteOnClose is activated!
 	if(filterModel)
@@ -290,9 +290,9 @@ void ExperimentGraphicEditor::configureCustomParameterWidgets()
 		{
 			if(nSectionSelector == 0)
 			{
-				if (pExpTreeModel)
+				if (pCurrentExpTreeModel)
 				{
-					lExperimentObjects = pExpTreeModel->getDefinedExperimentObjectInfoList(NULL);
+					lExperimentObjects = pCurrentExpTreeModel->getDefinedExperimentObjectInfoList(NULL);
 					if (lExperimentObjects.isEmpty() == false)
 					{
 						int tmpCurrentObjectId;
@@ -345,7 +345,7 @@ void ExperimentGraphicEditor::createDockWindows()
 		if(actionToggle_ListViewDockVisibility == NULL)
 		{
 			actionToggle_ListViewDockVisibility = new QAction(TOGGLE_DOCKWIDGET_LIST_VIEW_TEXT,this);
-			connect(actionToggle_ListViewDockVisibility, SIGNAL(triggered()), pCustomPropertiesDockWidget, SLOT(toggleConfiguredVisibility()));
+			connect(actionToggle_ListViewDockVisibility, SIGNAL(triggered()), pCustomPropertiesDockWidget, SLOT(toggleConfiguredVisibility()), Qt::ConnectionType(Qt::UniqueConnection));
 			//menuView->addAction(actionToggle_ListViewDockVisibility);
 		}
 		bool bRetVal = false;
@@ -361,7 +361,7 @@ void ExperimentGraphicEditor::createDockWindows()
 		if(actionToggle_TableViewDockVisibility == NULL)
 		{
 			actionToggle_TableViewDockVisibility = new QAction(TOGGLE_DOCKWIDGET_TABLE_VIEW_TEXT,this);
-			connect(actionToggle_TableViewDockVisibility, SIGNAL(triggered()), pCustomParamTableDockWidget, SLOT(toggleConfiguredVisibility()));
+			connect(actionToggle_TableViewDockVisibility, SIGNAL(triggered()), pCustomParamTableDockWidget, SLOT(toggleConfiguredVisibility()), Qt::ConnectionType(Qt::UniqueConnection));
 			//menuView->addAction(actionToggle_TableViewDockVisibility);
 		}
 		bool bRetVal = false;
@@ -377,7 +377,7 @@ void ExperimentGraphicEditor::createDockWindows()
 		if (actionToggle_TableViewDockVisibility == NULL)
 		{
 			actionToggle_TableViewDockVisibility = new QAction(TOGGLE_DOCKWIDGET_TREE_VIEW_TEXT, this);
-			connect(actionToggle_TableViewDockVisibility, SIGNAL(triggered()), pCustomExperimentTreeDockWidget, SLOT(toggleConfiguredVisibility()));
+			connect(actionToggle_TableViewDockVisibility, SIGNAL(triggered()), pCustomExperimentTreeDockWidget, SLOT(toggleConfiguredVisibility()), Qt::ConnectionType(Qt::UniqueConnection));
 			//menuView->addAction(actionToggle_TableViewDockVisibility);
 		}
 		bool bRetVal = false;
@@ -502,7 +502,7 @@ void ExperimentGraphicEditor::setupExperimentTreeView()
 	tblWidgetView->verticalHeader()->setHidden(true);
 
 	//connect(tblWidgetView, SIGNAL(doubleClicked(QModelIndex)), this, SLOT(selectTreeItem()));
-	connect(treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(showTreeItemInfo(QModelIndex)));
+	connect(treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(showTreeItemInfo(QModelIndex)), Qt::ConnectionType(Qt::UniqueConnection));
 }
 
 void ExperimentGraphicEditor::setupMenuAndActions()
@@ -577,8 +577,8 @@ void ExperimentGraphicEditor::setupFilterModel()
 	if(filterModel)
 		delete filterModel;
 	filterModel = new TreeFilterProxyModel();
-	if(pExpTreeModel)
-		filterModel->setSourceModel(pExpTreeModel);
+	if(pCurrentExpTreeModel)
+		filterModel->setSourceModel(pCurrentExpTreeModel);
 	filterModel->setTreeFilterSettings(currentViewSettings);
 	treeView->setModel(filterModel);
 }
@@ -586,7 +586,7 @@ void ExperimentGraphicEditor::setupFilterModel()
 void ExperimentGraphicEditor::newFile()
 {
 	bool createNew = true;
-	if (pExpTreeModel)
+	if (pCurrentExpTreeModel)
 	{
 		int confirm = QMessageBox::question(this, tr("Close current file"), tr("Are you sure to close the current file?"), QMessageBox::Ok | QMessageBox::Cancel);
 		if (confirm == QMessageBox::Cancel)
@@ -604,8 +604,8 @@ void ExperimentGraphicEditor::newFile()
 		actionFind->setEnabled(true);
 		actionToggleBlocksView->setEnabled(true);
 		//actionSwitchToDefaultView->setEnabled(true);
-		pExpTreeModel = &loadedExpTreeModel;
-		connect(pExpTreeModel, SIGNAL(modelModified()), this, SLOT(setNewModel()));
+		pCurrentExpTreeModel = &loadedExpTreeModel; 
+		connect(pCurrentExpTreeModel, SIGNAL(modelModified()), this, SLOT(setNewModel()), Qt::ConnectionType(Qt::UniqueConnection));
 		//rootItem = new ExperimentTreeItem("[Root node]");
 		//pExpTreeModel->setItem(0, rootItem);
 		setupFilterModel();
@@ -637,8 +637,8 @@ void ExperimentGraphicEditor::openFile()
 			expFile.close();
 
 			loadedExpTreeModel.read(tmpString.toLatin1());
-			pExpTreeModel = &loadedExpTreeModel;
-			connect(pExpTreeModel, SIGNAL(modelModified()), this, SLOT(setNewModel()));
+			pCurrentExpTreeModel = &loadedExpTreeModel;
+			connect(pCurrentExpTreeModel, SIGNAL(modelModified()), this, SLOT(setNewModel()), Qt::ConnectionType(Qt::UniqueConnection));
 			setupFilterModel();
 		}
 		else
@@ -658,9 +658,9 @@ void ExperimentGraphicEditor::closeFile()
 	//Deleting model && cleaning QTreeView
 	treeView->setModel(0);
 	loadedExpTreeModel.reset();
-	if (pExpTreeModel)
+	if (pCurrentExpTreeModel)
 	{
-		pExpTreeModel = NULL;
+		pCurrentExpTreeModel = NULL;
 	}
 	//Deleting scroll widget && cleaning QSrollArea
 	if (dynamicGraphicWidget != NULL)
@@ -692,7 +692,7 @@ QString ExperimentGraphicEditor::saveFile(const QString &sFilePath)
 	{
 		QFileInfo saveFileInfo(fileName);
 		fileName = saveFileInfo.absolutePath() + "/" + saveFileInfo.fileName();
-		pExpTreeModel->write(fileName);
+		pCurrentExpTreeModel->write(fileName);
 		setNewFileName(fileName);
 		emit ContentHasChanged(fileName,false);
 		return fileName;
@@ -703,19 +703,21 @@ QString ExperimentGraphicEditor::saveFile(const QString &sFilePath)
 void ExperimentGraphicEditor::setNewModel()
 {
 	treeView->reset();
-	treeView->activateWindow();
-	treeView->setFocus(Qt::OtherFocusReason);
-	if(filterModel == NULL)
+	if (pCurrentExpTreeModel)
 	{
-		filterModel = new TreeFilterProxyModel();
-	}	
-	if (pExpTreeModel)
-		filterModel->setSourceModel(pExpTreeModel);
-	filterModel->setTreeFilterSettings(currentViewSettings);
-	treeView->setModel(filterModel);
-	treeView->selectionModel()->setCurrentIndex(selectedIndex, QItemSelectionModel::ClearAndSelect);
-	treeView->expandAll();
-
+		treeView->activateWindow();
+		treeView->setFocus(Qt::OtherFocusReason);
+		if (filterModel == NULL)
+			filterModel = new TreeFilterProxyModel();
+		filterModel->setSourceModel(pCurrentExpTreeModel);
+		filterModel->setTreeFilterSettings(currentViewSettings);
+		treeView->setModel(filterModel);
+		if (selectedIndex.isValid())
+			treeView->selectionModel()->setCurrentIndex(selectedIndex, QItemSelectionModel::ClearAndSelect);
+		else
+			treeView->clearSelection();
+		treeView->expandAll();
+	}
 	configureCustomParameterWidgets();
 }
 
@@ -766,8 +768,23 @@ void ExperimentGraphicEditor::changeSelection(QList<ExperimentVisualizerGraphIte
 			lTmpStringListList.append(QStringList()<<"TAGS");
 		}
 	}
+	//Now select it
 	if (selectTreeItem(lTmpList, lTmpStringListList, lItemIds) == false)
 	{
+		//Something went wrong....
+		//Maybe we need to add some optional sections first, like an empty Parameters section...
+		if (pCurrentExpTreeModel)
+		{
+			if ((lTmpList.count() == 3) && (lItemIds.count() == 2))
+			{
+				if ((lTmpList[0] == BLOCK_TAG) && (lTmpList[1] == OBJECT_TAG) && (lTmpList[2] == PARAMETERS_TAG))
+				{
+					if(pCurrentExpTreeModel->saveNewData(lItemIds[0], lItemIds[1], "", "", false))
+						if (selectTreeItem(lTmpList, lTmpStringListList, lItemIds))
+							return;
+				}
+			}
+		}
 		lTmpList.clear();
 		lTmpList.append(EXPERIMENT_TAG);
 		lTmpStringListList.clear();
@@ -796,7 +813,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 	QVariant tmpVarValue;
 	QList<int> nIDList;
 	QModelIndex originalIndex = dynamic_cast<TreeFilterProxyModel*>(treeView->model())->mapToSource(index);
-	ExperimentTreeItem *item = pExpTreeModel->itemFromIndex(originalIndex);
+	ExperimentTreeItem *item = pCurrentExpTreeModel->itemFromIndex(originalIndex);
 
 	if (dynamicGraphicWidget)
 	{
@@ -808,16 +825,19 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 
 	if (item->parent() == NULL)
 		return;
-	
-	if(item->parent()->getName().toLower() == DEFINES_TAG)
+
+	QString sSelectedItemLowerName = item->getName().toLower();
+	QString sSelectedParentItemLowerName = item->parent()->getName().toLower();
+
+	if (sSelectedParentItemLowerName == DEFINES_TAG)
 	{
-		if(item->getName().toLower() == EXPERIMENT_TAG)
+		if (sSelectedItemLowerName == EXPERIMENT_TAG)
 		{
 			QString sParamCollName = EXPERIMENT_TAG;
 			if(staticGraphicWidgetsHashTable.contains(sParamCollName))
 			{
 				tmpParametersWidget = staticGraphicWidgetsHashTable.value(sParamCollName);
-				tmpParametersWidget->resetParameterModifiedFlags();
+				tmpParametersWidget->resetParameterModifiedFlagsAndValues();
 			}
 			else
 			{
@@ -849,16 +869,16 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 		}
 	}
-	else if(item->parent()->getName().toLower() == DECLARATIONS_TAG)
+	else if (sSelectedParentItemLowerName == DECLARATIONS_TAG)
 	{
-		if (item->getName().toLower() == OBJECT_TAG)
+		if (sSelectedItemLowerName == OBJECT_TAG)
 		{
 			QString sParamCollName = DECLARATIONS_OBJECT_TAG;//OBJECT_TAG;
 			QStringList lDefinedObjectClasses;
 			if(staticGraphicWidgetsHashTable.contains(sParamCollName))
 			{
 				tmpParametersWidget = staticGraphicWidgetsHashTable.value(sParamCollName);
-				tmpParametersWidget->resetParameterModifiedFlags();
+				tmpParametersWidget->resetParameterModifiedFlagsAndValues();
 			}
 			else
 			{
@@ -895,13 +915,13 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 		}
 	}
-	if (item->getName().toLower() == DEFINITION_TAG)
+	if (sSelectedItemLowerName == DEFINITION_TAG)
 	{
 		QString sParamCollName = OBJECT_DEFINITION_TAG;
 		if(staticGraphicWidgetsHashTable.contains(sParamCollName))
 		{
 			tmpParametersWidget = staticGraphicWidgetsHashTable.value(sParamCollName);
-			tmpParametersWidget->resetParameterModifiedFlags();
+			tmpParametersWidget->resetParameterModifiedFlagsAndValues();
 		}
 		else
 		{
@@ -926,7 +946,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 		}
 	}
-	else if(item->getName().toLower() == CONNECTION_TAG)
+	else if (sSelectedItemLowerName == CONNECTION_TAG)
 	{
 		if (item->childCount() == 2)//For Source and Target section, 3 needed for now...
 		{
@@ -934,7 +954,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			if(staticGraphicWidgetsHashTable.contains(sParamCollName))
 			{
 				tmpParametersWidget = staticGraphicWidgetsHashTable.value(sParamCollName);
-				tmpParametersWidget->resetParameterModifiedFlags();
+				tmpParametersWidget->resetParameterModifiedFlagsAndValues();
 			}
 			else
 			{
@@ -1005,7 +1025,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 		}
 	}
-	else if ((item->getName().toLower() == INITIALIZATION_TAG) || (item->getName().toLower() == FINALIZATION_TAG))
+	else if ((sSelectedItemLowerName == INITIALIZATION_TAG) || (sSelectedItemLowerName == FINALIZATION_TAG))
 	{
 		int nInitFinitOrderNumber = -1;
 		ExperimentTreeItem *pTmpExpTreeItem = item->firstChild(INIT_FINIT_NUMBER_TAG);
@@ -1022,14 +1042,14 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			if (pTmpExpTreeItem)
 			{
 				QString sParamCollName;
-				if (item->getName().toLower() == INITIALIZATION_TAG)
+				if (sSelectedItemLowerName == INITIALIZATION_TAG)
 					sParamCollName = INITIALIZATION_OBJECT_TAG;
-				else if (item->getName().toLower() == FINALIZATION_TAG)
+				else if (sSelectedItemLowerName == FINALIZATION_TAG)
 					sParamCollName = FINALIZATION_OBJECT_TAG;
 				if (staticGraphicWidgetsHashTable.contains(sParamCollName))
 				{
 					tmpParametersWidget = staticGraphicWidgetsHashTable.value(sParamCollName);
-					tmpParametersWidget->resetParameterModifiedFlags();
+					tmpParametersWidget->resetParameterModifiedFlagsAndValues();
 				}
 				else
 				{
@@ -1140,11 +1160,11 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 		}
 	}
-	else if (item->getName().toLower() == BLOCKTRIALS_TAG)
+	else if (sSelectedItemLowerName == BLOCKTRIALS_TAG)
 	{			
 		if(item->hasChildren() || true)
 		{						
-			if(pExpTreeModel)
+			if(pCurrentExpTreeModel)
 			{
 				if(tmpExpStruct)
 					delete tmpExpStruct;
@@ -1160,11 +1180,11 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 					}
 					if(expStructVisualizer)
 					{
-						bool bResult = connect(expStructVisualizer, SIGNAL(destroyed(QWidget*)), this, SLOT(childWidgetDestroyed(QWidget*)));
-						bResult = expManager->createExperimentStructure(tmpExpTreeItemList, pExpTreeModel,tmpExpStruct);
+						bool bResult = connect(expStructVisualizer, SIGNAL(destroyed(QWidget*)), this, SLOT(childWidgetDestroyed(QWidget*)), Qt::ConnectionType(Qt::UniqueConnection));
+						bResult = expManager->createExperimentStructure(tmpExpTreeItemList, pCurrentExpTreeModel,tmpExpStruct);
 						if(bResult)
 						{
-							bResult = expStructVisualizer->setExperimentTreeModel(pExpTreeModel);
+							bResult = expStructVisualizer->setExperimentTreeModel(pCurrentExpTreeModel);
 							if(bResult)
 							{
 								mainLayout->addWidget(expStructVisualizer);
@@ -1172,8 +1192,8 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 								if (toolBar)
 									expStructVisualizer->setVisualMargin(0, toolBar->height() * 2);
 								bResult = connect(expStructVisualizer, SIGNAL(GraphItemSelectionChanged(QList<ExperimentVisualizerGraphItemTypeEnum>, QList<int>)), this, SLOT(changeSelection(QList<ExperimentVisualizerGraphItemTypeEnum>, QList<int>)), Qt::UniqueConnection);
-								bResult = connect(this, SIGNAL(OnResized(const int &, const int &)), expStructVisualizer, SLOT(resizeStructureView(const int &, const int &)));
-								bResult = connect(expStructVisualizer, SIGNAL(GraphRedrawn()), this, SLOT(forceEmitResize()));
+								bResult = connect(this, SIGNAL(OnResized(const int &, const int &)), expStructVisualizer, SLOT(resizeStructureView(const int &, const int &)), Qt::ConnectionType(Qt::UniqueConnection));
+								bResult = connect(expStructVisualizer, SIGNAL(GraphRedrawn()), this, SLOT(forceEmitResize()), Qt::ConnectionType(Qt::UniqueConnection));
 								return;
 							}
 						}
@@ -1183,12 +1203,12 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 				{
 					if(expBlockParamView == NULL)
 					{
-						expBlockParamView = new ExperimentBlockParameterView(NULL, pExpTreeModel);
+						expBlockParamView = new ExperimentBlockParameterView(NULL, this, pCurrentExpTreeModel);
 					}
 					if(expBlockParamView)
 					{
-						bool bConnectResult = connect(expBlockParamView, SIGNAL(destroyed(QWidget*)), this, SLOT(childWidgetDestroyed(QWidget*)));
-						bConnectResult = connect(expBlockParamView, SIGNAL(onFocusTable()), this, SLOT(clearSelection()));
+						bool bConnectResult = connect(expBlockParamView, SIGNAL(destroyed(QWidget*)), this, SLOT(childWidgetDestroyed(QWidget*)), Qt::ConnectionType(Qt::UniqueConnection));
+						bConnectResult = connect(expBlockParamView, SIGNAL(onFocusTable()), this, SLOT(clearSelection()), Qt::ConnectionType(Qt::UniqueConnection));
 						if (pCustomParamTableDockWidget)
 						{
 							pCustomParamTableDockWidget->setWidget(expBlockParamView);
@@ -1200,15 +1220,15 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 		}				
 	}
-	else if (item->getName().toLower() == BLOCK_TAG)
+	else if (sSelectedItemLowerName == BLOCK_TAG)
 	{
-		if(item->parent()->getName().toLower() == BLOCKTRIALS_TAG)
+		if (sSelectedParentItemLowerName == BLOCKTRIALS_TAG)
 		{
 			QString sParamCollName = BLOCK_TAG;
 			if(staticGraphicWidgetsHashTable.contains(sParamCollName))
 			{
 				tmpParametersWidget = staticGraphicWidgetsHashTable.value(sParamCollName);
-				tmpParametersWidget->resetParameterModifiedFlags();
+				tmpParametersWidget->resetParameterModifiedFlagsAndValues();
 			}
 			else
 			{
@@ -1262,7 +1282,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 		}
 	}
-	else if(item->getName().toLower() == PARAMETERS_TAG)
+	else if (sSelectedItemLowerName == PARAMETERS_TAG)
 	{	
 		ExperimentTreeItem *child = NULL;
 		int nParameterRepeats = 1;
@@ -1272,44 +1292,51 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 		{
 			if (item->hasChildren())
 				child = item->child(i);
-			if(pExpTreeModel)
+			if(pCurrentExpTreeModel)
 			{
 				if((item->parent() != NULL) && (item->parent()->parent() != NULL))
 				{
 					if(i==0)
 					{
-						if(item->parent()->getName().toLower() == OBJECT_TAG)
+						if (sSelectedParentItemLowerName == OBJECT_TAG)
 						{
 							QList<ExperimentStructuresNameSpace::strcExperimentObject> tmpExperimentObjectList;
-							tmpExperimentObjectList = pExpTreeModel->getDefinedExperimentObjectInfoList(item->parent());
+							tmpExperimentObjectList = pCurrentExpTreeModel->getDefinedExperimentObjectInfoList(item->parent());
 							if(tmpExperimentObjectList.isEmpty() == false)
 							{
 								if(tmpExperimentObjectList.at(0).nID >= 0)
 								{
 									QString sParamCollName = "";
+									QString sCloneParameterCollectionName = "";
+									int nCurrentBlockId = -1;
 									if(item->parent()->parent()->getName().toLower() == BLOCK_TAG)
 									{
 										sParamCollName = tmpExperimentObjectList.at(0).sClass;//Case sensitive!!;
+										QMap<QString, TreeItemDefinition> mBlockItemDefs = item->parent()->parent()->getDefinitions();
+										if (mBlockItemDefs.contains(ID_TAG))
+											nCurrentBlockId = mBlockItemDefs[ID_TAG].value.toInt();
+										if (nCurrentBlockId >= 0)
+											sCloneParameterCollectionName = sParamCollName + "_" + BLOCK_TAG + QString::number(nCurrentBlockId);
 									}
 									else if(item->parent()->parent()->getName().toLower() == INITIALIZATION_TAG)
 									{
 										sParamCollName = ""; 
 									}
-									if(sParamCollName.isEmpty() == false)
+									if (sCloneParameterCollectionName.isEmpty() == false)
 									{
-										if(staticGraphicWidgetsHashTable.contains(sParamCollName))
+										if (staticGraphicWidgetsHashTable.contains(sCloneParameterCollectionName))
 										{
-											tmpParametersWidget = staticGraphicWidgetsHashTable.value(sParamCollName);
-											tmpParametersWidget->resetParameterModifiedFlags();
+											tmpParametersWidget = staticGraphicWidgetsHashTable.value(sCloneParameterCollectionName);
+											tmpParametersWidget->resetParameterModifiedFlagsAndValues();
 										}
 										else
 										{
 											PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
-											tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sParamCollName);
+											tmpParametersWidget = expParamWidgets->cloneExperimentParameterWidget(sParamCollName, sCloneParameterCollectionName);
 											if(tmpParametersWidget == NULL)
-												qDebug() << __FUNCTION__ << "Could not fetch parameter collection widget named " << sParamCollName;
+												qDebug() << __FUNCTION__ << "Could not fetch parameter collection widget named " << sCloneParameterCollectionName;
 											else
-												staticGraphicWidgetsHashTable.insert(sParamCollName,tmpParametersWidget);
+												staticGraphicWidgetsHashTable.insert(sCloneParameterCollectionName, tmpParametersWidget);
 										}
 									}
 								}
@@ -1328,6 +1355,8 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 									int nChildCount = child->childCount();
 									QString sName = "";
 									QString sValue = "";
+									
+									//tmpParametersWidget->resetParameterProperties();
 									for (int j=0;j<nChildCount;j++)
 									{							
 										if(item->child(i)->child(j)->getName().toLower() == NAME_TAG)
@@ -1352,13 +1381,15 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 		}
 	}
-	else if(item->getName().toLower() == CUSTOM_PARAMETERS_TAG)
+	else if (sSelectedItemLowerName == CUSTOM_PARAMETERS_TAG)
 	{	
 		ExperimentTreeItem *child = NULL;
 		int nParameterRepeats = 1;
 		int nCustomParamsObjectID = -1;
 		bool bParamCollectionPresent = false;
 		QString sParamCollName = "";
+		QString sCloneParameterCollectionName = "";
+		int nCurrentBlockId = -1;
 		QList<ExperimentStructuresNameSpace::strcExperimentObject> tmpExperimentObjectList;
 		if (item->hasChildren())
 			nParameterRepeats = item->rowCount();
@@ -1366,15 +1397,15 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 		{
 			if (item->hasChildren())
 				child = item->child(i);
-			if(pExpTreeModel)
+			if(pCurrentExpTreeModel)
 			{
 				if((item->parent() != NULL) && (item->parent()->parent() != NULL))
 				{
 					if(i==0)
 					{
-						if(item->parent()->getName().toLower() == OBJECT_TAG)
+						if (sSelectedParentItemLowerName == OBJECT_TAG)
 						{
-							tmpExperimentObjectList = pExpTreeModel->getDefinedExperimentObjectInfoList(item->parent());
+							tmpExperimentObjectList = pCurrentExpTreeModel->getDefinedExperimentObjectInfoList(item->parent());
 							if(tmpExperimentObjectList.isEmpty() == false)
 							{
 								if(tmpExperimentObjectList.at(0).nID >= 0)
@@ -1383,6 +1414,11 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 									{
 										sParamCollName = tmpExperimentObjectList.at(0).sClass;//Case sensitive!!;
 										nCustomParamsObjectID = tmpExperimentObjectList.at(0).nID;
+										QMap<QString, TreeItemDefinition> mBlockItemDefs = item->parent()->parent()->getDefinitions();
+										if (mBlockItemDefs.contains(ID_TAG))
+											nCurrentBlockId = mBlockItemDefs[ID_TAG].value.toInt();
+										if (nCurrentBlockId >= 0)
+											sCloneParameterCollectionName = sParamCollName + "_" + BLOCK_TAG + QString::number(nCurrentBlockId);
 									}
 									else if(item->parent()->parent()->getName().toLower() == INITIALIZATION_TAG)
 									{
@@ -1392,15 +1428,15 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 							}
 						}
 					}
-					if(sParamCollName.isEmpty() == false)
+					if (sCloneParameterCollectionName.isEmpty() == false)
 					{
 						PropertySettingsWidgetContainer *expParamWidgets = PropertySettingsWidgetContainer::instance();
 						if(bParamCollectionPresent == false)
 						{
-							if(staticGraphicWidgetsHashTable.contains(sParamCollName + CUSTOMOBJECTPARAMS_POSTSTRING))
+							if (staticGraphicWidgetsHashTable.contains(sCloneParameterCollectionName + CUSTOMOBJECTPARAMS_POSTSTRING))
 							{
-								tmpParametersWidget = staticGraphicWidgetsHashTable.value(sParamCollName + CUSTOMOBJECTPARAMS_POSTSTRING);
-								tmpParametersWidget->resetParameterModifiedFlags();
+								tmpParametersWidget = staticGraphicWidgetsHashTable.value(sCloneParameterCollectionName + CUSTOMOBJECTPARAMS_POSTSTRING);
+								tmpParametersWidget->resetParameterModifiedFlagsAndValues();
 								bParamCollectionPresent = true;
 							}
 							else
@@ -1415,9 +1451,9 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 										for(int nObjectDefCntr=0;nObjectDefCntr<tmpExperimentObjectList.at(0).lObjectDefinitions.count();nObjectDefCntr++)
 										{
 											QString sCurrentParamDefDirectory = "";
-											if(sCurrentCanonFilePath.isEmpty() == false)
-												sCurrentParamDefDirectory = QFileInfo(sCurrentCanonFilePath).absoluteDir().canonicalPath();
-											if(expParamWidgets->loadExperimentParameterDefinition(tmpExperimentObjectList.at(0).lObjectDefinitions.at(nObjectDefCntr).sDefinitionFile, sParamCollName + CUSTOMOBJECTPARAMS_POSTSTRING, true, sCurrentParamDefDirectory))
+											if (getCurrentFileName().isEmpty() == false)
+												sCurrentParamDefDirectory = QFileInfo(getCurrentFileName()).absoluteDir().canonicalPath();
+											if (expParamWidgets->loadExperimentParameterDefinition(tmpExperimentObjectList.at(0).lObjectDefinitions.at(nObjectDefCntr).sDefinitionFile, sCloneParameterCollectionName + CUSTOMOBJECTPARAMS_POSTSTRING, true, sCurrentParamDefDirectory))
 											{
 												bLoadResult = true;
 												break;
@@ -1426,14 +1462,14 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 									}
 									if(bLoadResult)
 									{
-										tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sParamCollName + CUSTOMOBJECTPARAMS_POSTSTRING);
+										tmpParametersWidget = expParamWidgets->getExperimentParameterWidget(sCloneParameterCollectionName + CUSTOMOBJECTPARAMS_POSTSTRING);
 										if(tmpParametersWidget == NULL)
 										{
-											qDebug() << __FUNCTION__ << "Could not fetch parameter collection widget named " << sParamCollName + CUSTOMOBJECTPARAMS_POSTSTRING;
+											qDebug() << __FUNCTION__ << "Could not fetch parameter collection widget named " << sCloneParameterCollectionName + CUSTOMOBJECTPARAMS_POSTSTRING;
 										}
 										else
 										{
-											staticGraphicWidgetsHashTable.insert(sParamCollName + CUSTOMOBJECTPARAMS_POSTSTRING,tmpParametersWidget);
+											staticGraphicWidgetsHashTable.insert(sCloneParameterCollectionName + CUSTOMOBJECTPARAMS_POSTSTRING, tmpParametersWidget);
 											bParamCollectionPresent = true;
 										}								
 									}
@@ -1503,7 +1539,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 		}
 	}
-	else if(item->getName().toLower() == PARAMETER_TAG)
+	else if (sSelectedItemLowerName == PARAMETER_TAG)
 	{
 		if((item->parent()) && (item->parent()->parent()) && (item->parent()->parent()->parent())) 
 		{
@@ -1525,7 +1561,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 				if(staticGraphicWidgetsHashTable.contains(sParamCollName))
 				{
 					tmpParametersWidget = staticGraphicWidgetsHashTable.value(sParamCollName);
-					tmpParametersWidget->resetParameterModifiedFlags();
+					tmpParametersWidget->resetParameterModifiedFlagsAndValues();
 				}
 				else
 				{
@@ -1555,15 +1591,15 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 			}
 		}
 	}
-	else if(item->parent()->getName().toLower() == LOOPS_TAG)
+	else if (sSelectedParentItemLowerName == LOOPS_TAG)
 	{
-		if (item->getName().toLower() == LOOP_TAG)
+		if (sSelectedItemLowerName == LOOP_TAG)
 		{
 			QString sParamCollName = LOOP_TAG;
 			if(staticGraphicWidgetsHashTable.contains(sParamCollName))
 			{
 				tmpParametersWidget = staticGraphicWidgetsHashTable.value(sParamCollName);
-				tmpParametersWidget->resetParameterModifiedFlags();
+				tmpParametersWidget->resetParameterModifiedFlagsAndValues();
 			}
 			else
 			{
@@ -1635,7 +1671,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 					cbList->setCurrentIndex(cbList->findText(value));
 					cbList->setToolTip(child->getDescription().toString());
 					gridLayout->addWidget(cbList,i,1);
-					connect(cbList, SIGNAL(currentIndexChanged(int)), this, SLOT(saveNewData()));
+					connect(cbList, SIGNAL(currentIndexChanged(int)), this, SLOT(saveNewData()), Qt::ConnectionType(Qt::UniqueConnection));
 				}
 				else if (child->getType().toString().toLower() == "bool" || child->getType().toString().toLower() == "boolean")
 				{
@@ -1663,7 +1699,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 					cbBool->setCurrentIndex(cbBool->findText(strValue));
 					cbBool->setToolTip(child->getDescription().toString());
 					gridLayout->addWidget(cbBool,i,1);
-					connect(cbBool, SIGNAL(currentIndexChanged(int)), this, SLOT(saveNewData()));
+					connect(cbBool, SIGNAL(currentIndexChanged(int)), this, SLOT(saveNewData()), Qt::ConnectionType(Qt::UniqueConnection));
 				}
 				else
 				{
@@ -1673,7 +1709,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 					if (value != "")
 						lineEdit->setText(value);
 					defValue = child->getDefaultValue().toString();
-					connect(lineEdit, SIGNAL(editingFinished()), this, SLOT(saveNewData()));
+					connect(lineEdit, SIGNAL(editingFinished()), this, SLOT(saveNewData()), Qt::ConnectionType(Qt::UniqueConnection));
 					gridLayout->addWidget(lineEdit,i,1);
 				}
 				if (defValue.size() > 0)
@@ -1691,7 +1727,7 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 
 	if (expStructVisualizer)
 	{
-		if (item->getName().toLower() == EXPERIMENT_TAG)//BLOCKTRIALS_TAG)
+		if (sSelectedItemLowerName == EXPERIMENT_TAG)//BLOCKTRIALS_TAG)
 		{
 			expStructVisualizer->clearSelection();
 		}
@@ -1713,21 +1749,21 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 				connect(pCustomParamListTabWidget, SIGNAL(currentChanged(int)), this, SLOT(customParamListTabWidgetIndexChanged(int)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 			}
 			QString sTabName;
-			if(item->getName().toLower() == EXPERIMENT_TAG)
+			if (sSelectedItemLowerName == EXPERIMENT_TAG)
 				sTabName = "Experiment";
-			else if(item->getName().toLower() == OBJECT_TAG)
+			else if (sSelectedItemLowerName == OBJECT_TAG)
 				sTabName = TAB_SELECTION_NAME;//"Selected Object";
-			else if(item->getName().toLower() == BLOCK_TAG)
+			else if (sSelectedItemLowerName == BLOCK_TAG)
 				sTabName = TAB_SELECTION_NAME;//"Selected Block";
-			else if(item->getName().toLower() == LOOP_TAG)
+			else if (sSelectedItemLowerName == LOOP_TAG)
 				sTabName = TAB_SELECTION_NAME;//"Selected Loop";
-			else if(item->getName().toLower() == PARAMETERS_TAG)
+			else if (sSelectedItemLowerName == PARAMETERS_TAG)
 				sTabName = TAB_SELECTION_NAME;//"Selected Parameters";
-			else if(item->getName().toLower() == CUSTOM_PARAMETERS_TAG)
+			else if (sSelectedItemLowerName == CUSTOM_PARAMETERS_TAG)
 				sTabName = TAB_SELECTION_NAME;//"Selected Custom Parameters";
-			else if(item->getName().toLower() == PARAMETER_TAG)
+			else if (sSelectedItemLowerName == PARAMETER_TAG)
 				sTabName = TAB_SELECTION_NAME;//"Selected Parameter";
-			else if(item->getName().toLower() == CONNECTION_TAG)
+			else if (sSelectedItemLowerName == CONNECTION_TAG)
 				sTabName = TAB_SELECTION_NAME;//"Selected Connection";
 			else
 				sTabName = item->getName();
@@ -1763,13 +1799,13 @@ void ExperimentGraphicEditor::showTreeItemInfo(const QModelIndex &index)
 
 void ExperimentGraphicEditor::fillTableView(const QString &textToFind, const QStringList &filters)
 {
-	if (pExpTreeModel)
+	if (pCurrentExpTreeModel)
 	{
 		tblWidgetView->clear();
 		tblWidgetView->setRowCount(0);
 		tblWidgetView->setColumnCount(4);
 		tblWidgetView->setColumnHidden(3, true);
-		QList<ExperimentTreeItem*> list = pExpTreeModel->getFilteredItemList(textToFind, filters);
+		QList<ExperimentTreeItem*> list = pCurrentExpTreeModel->getFilteredItemList(textToFind, filters);
 		for (int i = 0; i < list.size(); i++)
 		{
 			tblWidgetView->insertRow(i);
@@ -1784,7 +1820,7 @@ void ExperimentGraphicEditor::fillTableView(const QString &textToFind, const QSt
 
 bool ExperimentGraphicEditor::selectTreeItem(const QStringList &lTextToFind, const QList<QStringList> &lFilterLists, const QList<int> &lItemIds)
 {
-	if (pExpTreeModel)
+	if (pCurrentExpTreeModel)
 	{
 		ExperimentTreeItem *pTmpRecursiveExpTreeItem = NULL;
 		QString sTextToFind;
@@ -1794,7 +1830,7 @@ bool ExperimentGraphicEditor::selectTreeItem(const QStringList &lTextToFind, con
 			QStringList lTmpStringList;
 			if(lFilterLists.count() > nRecCounter)
 				lTmpStringList = lFilterLists.at(nRecCounter);
-			QList<ExperimentTreeItem*> LExpTreeItems = pExpTreeModel->getFilteredItemList(sTextToFind, lTmpStringList,pTmpRecursiveExpTreeItem);
+			QList<ExperimentTreeItem*> LExpTreeItems = pCurrentExpTreeModel->getFilteredItemList(sTextToFind, lTmpStringList,pTmpRecursiveExpTreeItem);
 			int nItemCount = LExpTreeItems.count();
 			if(nItemCount>0)//(nItemCount == 1) || (nItemId >= 0))
 			{
@@ -1843,7 +1879,7 @@ bool ExperimentGraphicEditor::selectTreeItem(const QStringList &lTextToFind, con
 						if(nRecCounter < lTextToFind.count()-1)
 							break;
 					}
-					QModelIndex index = pExpTreeModel->indexFromItem(tmpTreeItem);
+					QModelIndex index = pCurrentExpTreeModel->indexFromItem(tmpTreeItem);
 					QModelIndex modelIndex = filterModel->mapFromSource(index);
 					QModelIndex currentIndex = treeView->selectionModel()->currentIndex();
 					if (modelIndex.isValid())
@@ -1880,24 +1916,24 @@ bool ExperimentGraphicEditor::selectTreeItem(const QStringList &lTextToFind, con
 
 void ExperimentGraphicEditor::showFindDialog()
 {
-	if (pExpTreeModel)
+	if (pCurrentExpTreeModel)
 	{
 		findDlg = new FindDialog();
-		connect(findDlg, SIGNAL(findSignal(QString,QStringList)), this, SLOT(fillTableView(QString,QStringList)));
+		connect(findDlg, SIGNAL(findSignal(QString, QStringList)), this, SLOT(fillTableView(QString, QStringList)), Qt::ConnectionType(Qt::UniqueConnection));
 		findDlg->show();
 	}
 }
 
 void ExperimentGraphicEditor::insertNode()
 {
-	if (pExpTreeModel)
+	if (pCurrentExpTreeModel)
 	{
 		QModelIndex currentIndex = treeView->selectionModel()->currentIndex();
 		QModelIndex originalIndex = dynamic_cast<TreeFilterProxyModel*>(treeView->model())->mapToSource(currentIndex);
 		if (originalIndex.isValid())
 		{
 			ExperimentTreeItem *item = new ExperimentTreeItem("Node", "");
-			ExperimentTreeItem *brother = pExpTreeModel->itemFromIndex(originalIndex);
+			ExperimentTreeItem *brother = pCurrentExpTreeModel->itemFromIndex(originalIndex);
 			if (brother->parent() != NULL)
 				brother->parent()->appendRow(item);
 		}
@@ -1906,14 +1942,14 @@ void ExperimentGraphicEditor::insertNode()
 
 void ExperimentGraphicEditor::insertSubnode()
 {
-	if (pExpTreeModel)
+	if (pCurrentExpTreeModel)
 	{
 		QModelIndex currentIndex = treeView->selectionModel()->currentIndex();
 		QModelIndex originalIndex = dynamic_cast<TreeFilterProxyModel*>(treeView->model())->mapToSource(currentIndex);
 		if (originalIndex.isValid())
 		{
 			ExperimentTreeItem *item = new ExperimentTreeItem("Subnode", "");
-			ExperimentTreeItem *parent = pExpTreeModel->itemFromIndex(originalIndex);
+			ExperimentTreeItem *parent = pCurrentExpTreeModel->itemFromIndex(originalIndex);
 			parent->appendRow(item);
 		}
 	}
@@ -1921,12 +1957,12 @@ void ExperimentGraphicEditor::insertSubnode()
 
 void ExperimentGraphicEditor::removeNode()
 {
-	if (pExpTreeModel)
+	if (pCurrentExpTreeModel)
 	{
 		QModelIndex currentIndex = treeView->selectionModel()->currentIndex();
 		QModelIndex originalIndex = dynamic_cast<TreeFilterProxyModel*>(treeView->model())->mapToSource(currentIndex);
 		if (originalIndex.isValid())
-			pExpTreeModel->removeRow(originalIndex.row(), originalIndex.parent());
+			pCurrentExpTreeModel->removeRow(originalIndex.row(), originalIndex.parent());
 	}
 }
 
@@ -1939,19 +1975,19 @@ void ExperimentGraphicEditor::toggleBlocksView()
 //void ExperimentGraphicEditor::switchToDefaultView()
 //{
 //	bool bNativeTextualView = true;
-//	QString sFilePath = sCurrentCanonFilePath;
+//	QString sFilePath = getCurrentFileName();
 //	QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MainAppInfo::getMainWindowReOpenSlotName().toLatin1(), Qt::DirectConnection, Q_ARG(QString, sFilePath), Q_ARG(bool, bNativeTextualView));
 //}
 
 void ExperimentGraphicEditor::addDefinition()
 {
-	if (pExpTreeModel)
+	if (pCurrentExpTreeModel)
 	{
 		QModelIndex currentIndex = treeView->selectionModel()->currentIndex();
 		QModelIndex originalIndex = dynamic_cast<TreeFilterProxyModel*>(treeView->model())->mapToSource(currentIndex);
 		if (originalIndex.isValid())
 		{
-			ExperimentTreeItem *item = pExpTreeModel->itemFromIndex(originalIndex);
+			ExperimentTreeItem *item = pCurrentExpTreeModel->itemFromIndex(originalIndex);
 			attWidget = new AttributeWidget(item);
 			attWidget->show();
 		}
@@ -1961,13 +1997,13 @@ void ExperimentGraphicEditor::addDefinition()
 void ExperimentGraphicEditor::saveNewData()
 {
 	QModelIndex sourceIndex = filterModel->mapToSource(treeView->selectionModel()->currentIndex());
-	pExpTreeModel->saveNewData(dynamicGraphicWidget, sourceIndex);
+	pCurrentExpTreeModel->saveNewData(dynamicGraphicWidget, sourceIndex);
 }
 
 void ExperimentGraphicEditor::saveNewData(const QString &sName, const QString &sValue)
 {
 	QModelIndex sourceIndex = filterModel->mapToSource(treeView->selectionModel()->currentIndex());
-	pExpTreeModel->saveNewData(sName, sValue, sourceIndex);	
+	pCurrentExpTreeModel->saveNewData(sName, sValue, sourceIndex);	
 }
 
 void ExperimentGraphicEditor::setViewFilter(const TreeFilterSettings &newViewSettings)
@@ -1979,10 +2015,10 @@ void ExperimentGraphicEditor::setViewFilter(const TreeFilterSettings &newViewSet
 
 void ExperimentGraphicEditor::showTableviewExperimentDialog()
 {
-	if (pExpTreeModel == NULL)
+	if (pCurrentExpTreeModel == NULL)
 		return;
 	if (expBlockParamView == NULL)
-		expBlockParamView = new ExperimentBlockParameterView(NULL, pExpTreeModel);
+		expBlockParamView = new ExperimentBlockParameterView(NULL, this, pCurrentExpTreeModel);
 	if (expBlockParamView)
 	{
 		//bool bConnectResult = 
@@ -1994,7 +2030,7 @@ void ExperimentGraphicEditor::showTableviewExperimentDialog()
 
 void ExperimentGraphicEditor::showVisualExperimentDialog()
 {
-	if (pExpTreeModel == NULL)
+	if (pCurrentExpTreeModel == NULL)
 		return;
 	if (expStructVisualizer == NULL)
 	{
@@ -2004,7 +2040,7 @@ void ExperimentGraphicEditor::showVisualExperimentDialog()
 	if (expStructVisualizer)
 	{
 		bool bResult = connect(expStructVisualizer, SIGNAL(destroyed(QWidget*)), this, SLOT(childWidgetDestroyed(QWidget*)),Qt::UniqueConnection);
-		bResult = expStructVisualizer->setExperimentTreeModel(pExpTreeModel);
+		bResult = expStructVisualizer->setExperimentTreeModel(pCurrentExpTreeModel);
 		if (bResult)
 		{
 			mainLayout->addWidget(expStructVisualizer);
@@ -2023,22 +2059,36 @@ void ExperimentGraphicEditor::showVisualExperimentDialog()
 	}
 }
 
-bool ExperimentGraphicEditor::setExperimentTreeModel(ExperimentTreeModel *expModel, const QString &sExpTreeModelCanonFilePath)
+void ExperimentGraphicEditor::setNewFileName(const QString &sExpTreeModelCanonFilePath)
+{ 
+	sCurrentCanonFilePath = sExpTreeModelCanonFilePath; 
+	if (expManager)
+		expManager->setExperimentFileName(sExpTreeModelCanonFilePath);
+}
+
+QString ExperimentGraphicEditor::getCurrentFileName()
 {
-	if(expModel != pExpTreeModel)
+	return sCurrentCanonFilePath;
+}
+
+bool ExperimentGraphicEditor::setExperimentTreeModel(ExperimentTreeModel *expNewModel, const QString &sExpTreeModelCanonFilePath)
+{
+	if (pCurrentExpTreeModel != expNewModel)
 	{
-		if (expModel==NULL)
+		if (expNewModel == NULL)//is the new model NULL?
 			loadedExpTreeModel.reset(false);
 		else
 			loadedExpTreeModel.reset(true);
-		if(pExpTreeModel)
-			disconnect(pExpTreeModel, SIGNAL(modelModified()), this, SLOT(treeModelChanged()));
-		if (expModel)
-			connect(expModel, SIGNAL(modelModified()), this, SLOT(treeModelChanged()));
-		pExpTreeModel = expModel;
+		if(pCurrentExpTreeModel)
+			disconnect(pCurrentExpTreeModel, SIGNAL(modelModified()), this, SLOT(treeModelChanged()));
+		if (expNewModel)
+			connect(expNewModel, SIGNAL(modelModified()), this, SLOT(treeModelChanged()), Qt::ConnectionType(Qt::UniqueConnection));
+		pCurrentExpTreeModel = expNewModel;
+		selectedIndex = QModelIndex();
 		setNewModel();
 	}
-	setNewFileName(sExpTreeModelCanonFilePath);
+	if (getCurrentFileName() != sExpTreeModelCanonFilePath)
+		setNewFileName(sExpTreeModelCanonFilePath);
 	return true;
 }
 

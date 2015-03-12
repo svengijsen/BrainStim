@@ -51,7 +51,7 @@ void RotationDirectionPropertySetting::createEditorComponents()
 	cmbSelection->addItem(QIcon(":/resources/counterclockwise.png"),rotationDirectionString(ROTATION_DIR_COUNTERCLOCKWISE), ROTATION_DIR_COUNTERCLOCKWISE);
 	indexToEnumHash[nIndex] = ROTATION_DIR_COUNTERCLOCKWISE;
 	nIndex++;
-	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));
+	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)), Qt::ConnectionType(Qt::UniqueConnection));
 
 	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
 	strcCustomFixedWidget sTmpCustomFixedWidget;
@@ -131,7 +131,7 @@ void MovementDirectionPropertySetting::createEditorComponents()
 	cmbSelection->addItem(QIcon(":/resources/downwards.png"),movementDirectionString(MOVEMENT_DIR_UPDOWN), MOVEMENT_DIR_UPDOWN);
 	indexToEnumHash[nIndex] = MOVEMENT_DIR_UPDOWN;
 	nIndex++;
-	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));
+	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)), Qt::ConnectionType(Qt::UniqueConnection));
 
 	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
 	strcCustomFixedWidget sTmpCustomFixedWidget;
@@ -211,7 +211,7 @@ void MethodTypePropertyWidget::createEditorComponents()
 	cmbSelection->addItem(QIcon(":/resources/slot.png"),cMethodStructure::methodTypeToString((int)ExperimentStructuresNameSpace::METHOD_TYPE_SLOT), ExperimentStructuresNameSpace::METHOD_TYPE_SLOT);
 	indexToEnumMap[nIndex] = ExperimentStructuresNameSpace::METHOD_TYPE_SLOT;
 	nIndex++;
-	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));
+	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)), Qt::ConnectionType(Qt::UniqueConnection));
 
 	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
 	strcCustomFixedWidget sTmpCustomFixedWidget;
@@ -264,7 +264,7 @@ void EccentricityDirectionPropertyWidget::createEditorComponents()
 	cmbSelection->addItem(QIcon(":/resources/increase.png"),eccentricityDirectionString(ECCENTRICITY_DIR_INCREASE), ECCENTRICITY_DIR_INCREASE);
 	indexToEnumHash[nIndex] = ECCENTRICITY_DIR_INCREASE;
 	nIndex++;
-	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)));	
+	connect(cmbSelection, SIGNAL(currentIndexChanged(int)), this, SLOT(currentIndexChangedSlot(int)), Qt::ConnectionType(Qt::UniqueConnection));
 
 	QList<strcCustomFixedWidget> lTmpCustomFixedWidgetList;
 	strcCustomFixedWidget sTmpCustomFixedWidget;

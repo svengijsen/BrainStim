@@ -131,13 +131,13 @@ void ExperimentManager_Dialog::connectSignalSlots(bool bDisconnect)
 	{
 		if(Qml2ViewerObject)
 		{
-			connect(Qml2ViewerObject, &QML2Viewer::UserWantsToClose, Qml2ViewerObject, &QML2Viewer::abortExperimentObject);
-			connect(Qml2ViewerObject, &QML2Viewer::ObjectStateHasChanged, this, &ExperimentManager_Dialog::changeExperimentSubObjectState);
+			connect(Qml2ViewerObject, &QML2Viewer::UserWantsToClose, Qml2ViewerObject, &QML2Viewer::abortExperimentObject, Qt::ConnectionType(Qt::UniqueConnection));
+			connect(Qml2ViewerObject, &QML2Viewer::ObjectStateHasChanged, this, &ExperimentManager_Dialog::changeExperimentSubObjectState, Qt::ConnectionType(Qt::UniqueConnection));
 		}
 		if(ExperimentManagerObj)
 		{
-			connect(ExperimentManagerObj, &ExperimentManager::ExperimentStateHasChanged, this, &ExperimentManager_Dialog::ExperimentStateHasChanged);
-			connect(ExperimentManagerObj, &ExperimentManager::WriteToLogOutput, this, &ExperimentManager_Dialog::LogMessage);
+			connect(ExperimentManagerObj, &ExperimentManager::ExperimentStateHasChanged, this, &ExperimentManager_Dialog::ExperimentStateHasChanged, Qt::ConnectionType(Qt::UniqueConnection));
+			connect(ExperimentManagerObj, &ExperimentManager::WriteToLogOutput, this, &ExperimentManager_Dialog::LogMessage, Qt::ConnectionType(Qt::UniqueConnection));
 		}
 	}	
 }
@@ -225,6 +225,7 @@ bool ExperimentManager_Dialog::executeActiveDocument()
 			}
 			QFileInfo fi(file);
 			QDir::setCurrent(fi.canonicalPath());	
+			docContentStructToRun.bIsFile = false;
 		}
 		else
 		{

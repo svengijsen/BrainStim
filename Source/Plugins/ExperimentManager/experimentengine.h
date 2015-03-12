@@ -56,9 +56,15 @@ signals:
 		Parameter expSubObjectState is type of the enum ExperimentManagerNameSpace::ExperimentSubObjectState.
 	*/
 	void ObjectStateHasChanged(ExperimentSubObjectState expSubObjectState);
+	//! The PrepareNewInitBlockTrial Signal.
+	/*!
+		You can use this Signal to keep track of whenever the Experiment Manager tries to Initialize a new BlockTrial for this object, this is executed before the parameters are fetched.
+		No Parameter.
+	*/
+	void PrepareNewInitBlockTrial(void);
 	//! The NewInitBlockTrial Signal.
 	/*!
-		You can use this Signal to keep track of whenever the Experiment Manager tries to Initialize a new BlockTrial for this object.
+		You can use this Signal to keep track of whenever the Experiment Manager tries to Initialize a new BlockTrial for this object, this is executed after the parameters are fetched.
 		No Parameter.
 	*/
 	void NewInitBlockTrial(void);

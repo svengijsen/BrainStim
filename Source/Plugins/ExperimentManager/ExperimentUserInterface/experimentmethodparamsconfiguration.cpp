@@ -28,9 +28,9 @@ ExperimentMethodParamsConfigurationDialog::ExperimentMethodParamsConfigurationDi
 	ui.leParamName->setEnabled(false);
 	ui.leParamType->setEnabled(false);
 	setWindowTitle("Configure Method Argument(s)");
-	connect(ui.pbUpdate, SIGNAL(clicked()), this, SLOT(updateSelectedParameter()));
-	connect(ui.pbClose, SIGNAL(clicked()), this, SLOT(close()));
-	connect(ui.twParameters, SIGNAL(currentItemChanged(QTableWidgetItem *, QTableWidgetItem *)), this, SLOT(tableItemSelectionChanged(QTableWidgetItem *, QTableWidgetItem *)));
+	connect(ui.pbUpdate, SIGNAL(clicked()), this, SLOT(updateSelectedParameter()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui.pbClose, SIGNAL(clicked()), this, SLOT(close()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui.twParameters, SIGNAL(currentItemChanged(QTableWidgetItem *, QTableWidgetItem *)), this, SLOT(tableItemSelectionChanged(QTableWidgetItem *, QTableWidgetItem *)), Qt::ConnectionType(Qt::UniqueConnection));
 	clearAllParsedStructures();
 }
 

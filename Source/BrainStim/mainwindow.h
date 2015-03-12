@@ -577,6 +577,7 @@ private:
 	QGraphicsView *GraphView;
 	SvgView *SVGPreviewer;
 
+	bool bUsesUISettings;
 	bool bDevicePluginsFound;
 	bool bExtensionPluginsFound;
 	bool PluginsFound;

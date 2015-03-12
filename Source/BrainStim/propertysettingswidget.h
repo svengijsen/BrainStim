@@ -41,10 +41,8 @@ class PropertySettingsWidget : public QWidget
 
 signals:
 	void destroyed(QWidget*);
-	//void editFinished(const QString&, const QString&);
 	void rootItemEditFinished(const QString&, const QString&);
 	void derivedItemEditFinished(const QString&, const QString&);
-	//void outOfFocus();
 
 private:
 	struct propertyContainerItem
@@ -103,6 +101,7 @@ public:
 	~PropertySettingsWidget();
 
 	bool checkIfParameterExists(const QString &sName);
+	bool resetParameterProperties();
 	bool addParameterProperty(const PropertySettingDefinitionStrc *expParamDef, const QVariant &vValue);
 	bool removeParameterProperty(const QString &sUniquePropertyIdentifier);
 	bool configurePropertyEditSignaling(const bool &bEnable);
@@ -112,7 +111,7 @@ public:
 	bool parseDependencies(QtVariantProperty *variantProperty = NULL);
 	bool addDependency(QtVariantProperty *variantProperty, const PropertySettingDefinitionDependencyStrc &dependencyParamDef);
 	void setAutoDepencyParsing(bool bEnable);
-	bool resetParameterModifiedFlags(const bool &bOnlyNonDerivedParameters = true);
+	bool resetParameterModifiedFlagsAndValues(const bool &bOnlyNonDerivedParameters = true);
 	bool setAllowedParameterValues(const QString &sName, const QStringList &lAllowedValues, const QVariantList &vTranslatedValues = QVariantList());
 
 	QWidget *getParameterEditWidget(const QString &sName, const QString &sDerivedPrefixName, QString &sReturnUniquePropertyIdentifier, const QVariant &vValue, const bool &bDoInitWithValue, const bool &bIsScriptable);
@@ -153,7 +152,6 @@ private:
 
 	bool addPropertyToSubGroup(const QString &sPropertyGroupNames, QtVariantProperty *item1, QList<propertyContainerItem> *pRootGroupPropertyItemList, QString &sSandPath = QString(""));
 	void deleteSubGroupProperties(QList<propertyContainerItem> *pRootGroupPropertyItemList);
-
 	bool registerDerivedParameterProperty(const propertyParameterValueDef &baseVPropertyDef, QtVariantProperty *derivedProperty, QString &sUniqueDerivedPropertyIdentifier);
 };
 

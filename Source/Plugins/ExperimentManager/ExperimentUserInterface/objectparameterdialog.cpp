@@ -31,20 +31,20 @@ ObjectParameterDialog::ObjectParameterDialog(QWidget *parent) : QDialog(parent),
 	ui->setupUi(this);
 	setWindowTitle("Configure object/block parameter(s)");
 
-	connect(ui->pbUpdate, SIGNAL(clicked()), this, SLOT(updateSetParameter()));
-	connect(ui->pbReset, SIGNAL(clicked()), this, SLOT(resetDeleteParameter()));
-	connect(ui->pbRename, SIGNAL(clicked()), this, SLOT(renameParameter()));
-	connect(ui->pbClose, SIGNAL(clicked()), this, SLOT(close()));
+	connect(ui->pbUpdate, SIGNAL(clicked()), this, SLOT(updateSetParameter()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui->pbReset, SIGNAL(clicked()), this, SLOT(resetDeleteParameter()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui->pbRename, SIGNAL(clicked()), this, SLOT(renameParameter()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui->pbClose, SIGNAL(clicked()), this, SLOT(close()), Qt::ConnectionType(Qt::UniqueConnection));
 	//connect(ui->cmbBlock, SIGNAL(currentIndexChanged(int)), this, SLOT(selectedBlockChanged(int)));
-	connect(ui->cmbBlock, SIGNAL(activated(int)), this, SLOT(selectedBlockChanged(int)));
+	connect(ui->cmbBlock, SIGNAL(activated(int)), this, SLOT(selectedBlockChanged(int)), Qt::ConnectionType(Qt::UniqueConnection));
 	//connect(ui->cmbObject, SIGNAL(currentIndexChanged(int)), this, SLOT(selectedObjectChanged(int)));
-	connect(ui->cmbObject, SIGNAL(activated(int)), this, SLOT(selectedObjectChanged(int)));
+	connect(ui->cmbObject, SIGNAL(activated(int)), this, SLOT(selectedObjectChanged(int)), Qt::ConnectionType(Qt::UniqueConnection));
 	//connect(ui->cmbParameter, SIGNAL(currentIndexChanged(int)), this, SLOT(selectedParameterChanged(int)));
-	connect(ui->cmbParameter, SIGNAL(activated(int)), this, SLOT(selectedParameterChanged(int)));
+	connect(ui->cmbParameter, SIGNAL(activated(int)), this, SLOT(selectedParameterChanged(int)), Qt::ConnectionType(Qt::UniqueConnection));
 
-	connect(ui->rdbParamType_1, SIGNAL(clicked()), this, SLOT(parameterTypeChanged()));
-	connect(ui->rdbParamType_2, SIGNAL(clicked()), this, SLOT(parameterTypeChanged()));
-	connect(ui->leName, SIGNAL(textEdited(QString)), this, SLOT(parameterNameChanged(QString)));
+	connect(ui->rdbParamType_1, SIGNAL(clicked()), this, SLOT(parameterTypeChanged()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui->rdbParamType_2, SIGNAL(clicked()), this, SLOT(parameterTypeChanged()), Qt::ConnectionType(Qt::UniqueConnection));
+	connect(ui->leName, SIGNAL(textEdited(QString)), this, SLOT(parameterNameChanged(QString)), Qt::ConnectionType(Qt::UniqueConnection));
 	
 	leCustomParamValue = NULL;
 	
@@ -219,6 +219,7 @@ void ObjectParameterDialog::updateSetParameter()
 			{
 				if(pCurrentExpTree->saveNewData(cParameterSpecifier.nBlockID, cParameterSpecifier.nObjectID, cParameterSpecifier.sParamName, cLastUserChange.sParamNewValue))
 				{
+					pCurrentExpTree->emitModifiedSignal(true);
 					parseParameters(cParameterSpecifier.nObjectID, cParameterSpecifier.nBlockID, eCurrentParameterEditingMode);
 					int nParamControlIndex = hashParamControlIndexToUniqueHexParamID.key(cParameterSpecifier.sParamHexID,-1);
 					if(nParamControlIndex>=0)

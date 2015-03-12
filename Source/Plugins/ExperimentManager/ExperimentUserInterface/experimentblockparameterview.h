@@ -23,7 +23,7 @@
 #include "mainappinfo.h"
 #include "experimentstructures.h"
 #include "propertysettingdefinition.h" 
-
+#include "experimentGraphicEditor.h"
 
 #define BLOCKPARAMVIEW_DEFAULTBLOCKHEADER_COUNT			4
 //#define BLOCKPARAMVIEW_BLOCKNUMBER_ROWORCOLUMNINDEX	0
@@ -48,7 +48,7 @@ signals:
 	void onFocusTable();
 
 public:
-	ExperimentBlockParameterView(QWidget *parent = NULL, ExperimentTreeModel *pExperimentTreeModel = NULL);
+	ExperimentBlockParameterView(QWidget *parent = NULL, ExperimentGraphicEditor *graphEditor = NULL, ExperimentTreeModel *pExperimentTreeModel = NULL);
 	~ExperimentBlockParameterView();
 
 	bool parseExperimentStructure(cExperimentStructure *ExpStruct);
@@ -56,6 +56,7 @@ public:
 	bool setExperimentObjects(const QList<ExperimentStructuresNameSpace::strcExperimentObject> &lExperimentObjects);
 
 private slots:
+	void onCellChanged(const int &nRow, const int &nColumn);
 	void cellItemEditFinished(const QString&sParamName, const QString&sNewValue);
 	void customCellItemEditFinished(const QString& sNewValue);
 	void showContextMenu(const QPoint& pos);
@@ -71,6 +72,7 @@ private:
 	void configureEditHandling(const bool &bEnable);
 	bool appendExperimentBlockParameterChanges();
 	void initTableSetup();
+	void handleSelection(const QModelIndex &current);
 
 	struct strcParameterBlockChanges
 	{
@@ -122,6 +124,8 @@ private:
 	QMutex mutexEditHandlingEnabled;
 	bool bDoReparseModel;	
 	bool bCellOpenedForEdit;
+	bool bFinishingCellEdit;
+	bool bIsParsing;
 
 	QHash<int, strcExperimentObjectInfo> hashObjectIdExperimentObjectInfo;
 	QMap<QString, QList<strcParameterBlockChanges>> mapUniqueParamIDExpParamBlockChanges;
@@ -133,6 +137,7 @@ private:
 	QColor cChangedCustomParameter;
 	QColor cInheritedParameter;
 	QLineEdit *leCustomParamEdit;
+	ExperimentGraphicEditor *pParentGraphEditor;
 };
 
 #endif // EXPERIMENTBLOCKPARAMETERVIEW_H

@@ -31,7 +31,7 @@ TriggerTimer::TriggerTimer() : QObject(NULL)
 	fastExperimentThreadedTimer = NULL;
 	nThreadIdealCount = QThread::idealThreadCount();
 	//bool bResult = 
-		connect(this,SIGNAL(stopTimerSignal()),&ThreadActivationTriggerQTimer,SLOT(stop()));//ThreadActivationTrigger = QTimer
+	connect(this, SIGNAL(stopTimerSignal()), &ThreadActivationTriggerQTimer, SLOT(stop()), Qt::ConnectionType(Qt::UniqueConnection));//ThreadActivationTrigger = QTimer
 	//bool bResult = connect(&_thread, SIGNAL(finished()), this, SLOT(handleThreadFinished()), Qt::DirectConnection);//QueuedConnection);
 	this->moveToThread(&_thread);
 	_thread.start();
@@ -180,7 +180,7 @@ void TriggerTimer::startTimer(double dMSec)//Do not change the function name wit
 			resetIntervalTestResults();
 			eTimer.start();
 			emit started();				
-			connect(&ThreadActivationTriggerQTimer, SIGNAL(timeout()), this, SLOT(runThreadedTimerFunction()));
+			connect(&ThreadActivationTriggerQTimer, SIGNAL(timeout()), this, SLOT(runThreadedTimerFunction()), Qt::ConnectionType(Qt::UniqueConnection));
 			//emit timeout();
 			bDoStopTimer = false;
 			dTriggerInterval = dMSec;
@@ -202,7 +202,7 @@ void TriggerTimer::startTimer(double dMSec)//Do not change the function name wit
 			eTimer.start();
 			dStartTime = WTF::currentTimeMS();
 			emit started();
-			connect(&ThreadActivationTriggerQTimer, SIGNAL(timeout()), this, SLOT(runThreadedTimerFunction()));
+			connect(&ThreadActivationTriggerQTimer, SIGNAL(timeout()), this, SLOT(runThreadedTimerFunction()), Qt::ConnectionType(Qt::UniqueConnection));
 			//emit timeout();
 			bDoStopTimer = false;
 			dTriggerInterval = dMSec;
@@ -213,13 +213,13 @@ void TriggerTimer::startTimer(double dMSec)//Do not change the function name wit
 		{
 			qtTimer.start(dMSec);
 			emit started();
-			connect(&qtTimer, SIGNAL(timeout()), this, SIGNAL(timeout()));
+			connect(&qtTimer, SIGNAL(timeout()), this, SIGNAL(timeout()), Qt::ConnectionType(Qt::UniqueConnection));
 			bDoStopTimer = false;
 		}
 		else if (currentTimerType == ExperimentManagerNameSpace::Fast_TriggerTimerType)
 		{
 			fastExperimentThreadedTimer = new FastThreadedTriggerTimer();
-			connect(fastExperimentThreadedTimer, &FastThreadedTriggerTimer::timeout, this, &TriggerTimer::timeout);
+			connect(fastExperimentThreadedTimer, &FastThreadedTriggerTimer::timeout, this, &TriggerTimer::timeout, Qt::ConnectionType(Qt::UniqueConnection));
 			bDoStopTimer = false;
 			fastExperimentThreadedTimer->startTimer(dMSec);				
 		}

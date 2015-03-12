@@ -85,7 +85,7 @@ public:
 	QString getHostAddress();
 	quint16 getHostPort();
 
-	void initAndParseRegistrySettings();
+	bool initAndParseRegistrySettings(const QString &sSettingsFilePath);
 
 	bool getRegistryInformation(const QString &sName, QVariant &vCurrentValue);
 	bool setRegistryInformation(const QString &sName, const QVariant &vValue, const QString &sType);
@@ -107,6 +107,7 @@ private:
 	MainAppInformationStructure mainAppInformation;
 	QSettings *AppRegistrySettings;
 	QObject *webView;
+	QString sCurrentSettingsFilePath;
 
 public:
 	enum ActiveScriptMode

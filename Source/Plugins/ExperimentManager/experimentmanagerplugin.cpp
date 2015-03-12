@@ -502,13 +502,13 @@ QWidget *ExperimentManagerPlugin::GetAdditionalFileTypeEditor(QString strExtensi
 {
 	if (strExtension.toLower() == PLUGIN_EXMLDOC_EXTENSION)
 	{
-		ExperimentManager *tmpManager;
 		if(strCanonicalFilePath.isEmpty())
 		{
 			return ExperimentManagerObject->getVisualExperimentEditor();
 		}
 		else
 		{			
+			ExperimentManager *tmpManager = NULL;
 			if(mapCanPathtoControlObjStrc.contains(strCanonicalFilePath))
 			{
 				tmpManager = mapCanPathtoControlObjStrc[strCanonicalFilePath].pExpManager;
@@ -520,6 +520,7 @@ QWidget *ExperimentManagerPlugin::GetAdditionalFileTypeEditor(QString strExtensi
 				tmpManager = new ExperimentManager(this);
 				tmpStrcControlObjects.pExpManager = tmpManager;
 				tmpStrcControlObjects.pVisualEditor = tmpManager->getVisualExperimentEditor();
+				tmpManager->createExperiment();
 				mapCanPathtoControlObjStrc.insert(strCanonicalFilePath,tmpStrcControlObjects);
 			}			
 		}
@@ -592,8 +593,8 @@ bool ExperimentManagerPlugin::LoadAdditionalFile(QString strFilePath)
 		QWidget* tmpWidget = tmpManager->getVisualExperimentEditor();
 		if(tmpWidget)
 		{
-			connect(tmpWidget, SIGNAL(ContentHasChanged(QString,bool)), this, SIGNAL(DocumentHasChanged(QString,bool)));
-			connect(tmpWidget, SIGNAL(IsClosing(QString,bool)), this, SIGNAL(DocumentIsClosing(QString,bool)));	
+			connect(tmpWidget, SIGNAL(ContentHasChanged(QString, bool)), this, SIGNAL(DocumentHasChanged(QString, bool)), Qt::ConnectionType(Qt::UniqueConnection));
+			connect(tmpWidget, SIGNAL(IsClosing(QString, bool)), this, SIGNAL(DocumentIsClosing(QString, bool)), Qt::ConnectionType(Qt::UniqueConnection));
 			bool bResult = tmpManager->showVisualExperimentDialog(NULL, tmpString);
 			return bResult;
 		}

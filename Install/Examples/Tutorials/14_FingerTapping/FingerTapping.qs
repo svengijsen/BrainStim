@@ -47,36 +47,34 @@ BasicExperiment.__proto__.NewInitBlockTrial = function()
 		//Beep();
 	//}
 	var BID = BasicExperiment.nCurrentExperimentStructureState.CurrentBlock_BlockID;
-	if(BID == 0)
-	{
-		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetFingerFlickrAnimationFunctionName, "");
-		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetImageFunctionName, _sLeftHandRestImagePath);
-	}
-	else 	if(BID == 3 || BID == 7 || BID == 9 || BID == 11 || BID == 13 || BID == 17 || BID == 21)
-	{
-		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetFingerFlickrAnimationFunctionName, "right");
-		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetImageFunctionName, _sRightHandBlockImagePath);
-	}
-	else 	if(BID == 2 || BID == 6 || BID == 8 || BID == 10 || BID == 12 || BID == 16 || BID == 20)
-	{
-		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetFingerFlickrAnimationFunctionName, "");
-		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetImageFunctionName, _sRightHandRestImagePath);
-	}
-	else 	if(BID == 4 || BID == 14 || BID == 18 || BID == 22 || BID == 24 || BID == 26 )
-	{
-		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetFingerFlickrAnimationFunctionName, "");
-		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetImageFunctionName, _sLeftHandRestImagePath);
-	}
-	else 	if(BID == 1 || BID == 5 || BID == 15 || BID == 19 || BID == 23 || BID == 25 || BID == 27)
-	{
-		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetFingerFlickrAnimationFunctionName, "left");
-		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetImageFunctionName, _sLeftHandBlockImagePath);
-	}
-	else 	if(BID == 28)
+	var BNr = BasicExperiment.cExperimentStructure_Object.getBlockPointerByID(BID).getBlockNumber();
+	var TNr = BasicExperiment.nCurrentExperimentStructureState.CurrentBlock_TrialNumber;
+	
+	if((BNr == 0) || (BNr == 5))
 	{
 		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetFingerFlickrAnimationFunctionName, "");
 		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetImageFunctionName, "");
 	} 
+	if(BNr == 1)
+	{
+		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetFingerFlickrAnimationFunctionName, "");
+		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetImageFunctionName, _sLeftHandRestImagePath);
+	}
+	else 	if(BNr == 2)
+	{
+		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetFingerFlickrAnimationFunctionName, "left");
+		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetImageFunctionName, _sLeftHandBlockImagePath);
+	}
+	else 	if(BNr == 3)
+	{
+		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetFingerFlickrAnimationFunctionName, "");
+		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetImageFunctionName, _sRightHandRestImagePath);
+	}
+	else 	if(BNr == 4)
+	{
+		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetFingerFlickrAnimationFunctionName, "right");
+		BasicExperiment.InvokeQMLFunction(_sMainItemName, _sSetImageFunctionName, _sRightHandBlockImagePath);
+	}
 }
 
 BasicExperiment.__proto__.KeyBoardResponseRecieved = function(response)

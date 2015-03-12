@@ -441,6 +441,24 @@ ExperimentGraphObjectItem::ExperimentGraphObjectItem(QGraphicsItem *parent) : QG
 	subGraphItemInitializations = NULL;
 	subGraphItemFinalizations = NULL;
 	subGraphItemSignalSlots = NULL;
+	pIcon = NULL;
+}
+
+ExperimentGraphObjectItem::~ExperimentGraphObjectItem()
+{
+	if (pIcon)
+	{
+		delete pIcon;
+		pIcon = NULL;
+	}
+}
+
+void ExperimentGraphObjectItem::setIcon(const QIcon &constIcon)
+{
+	if (pIcon)
+		delete pIcon;
+	pIcon = new QIcon(constIcon);
+	update();
 }
 
 void ExperimentGraphObjectItem::setCaption(const QString &sName)
@@ -523,7 +541,11 @@ void ExperimentGraphObjectItem::paint(QPainter *painter, const QStyleOptionGraph
 	pHeaderPen.setColor(cHeaderCaption);
 	painter->setPen(pHeaderPen);
 	painter->drawText(rectInnerObject,Qt::AlignLeft | Qt::AlignVCenter, " " + sCurrentText);
-
+	if (pIcon)
+	{
+		int nSize = rectInnerObject.height() / 2;
+		painter->drawPixmap(QRect(rectInnerObject.right() - (1.5 * nSize), rectInnerObject.top() + (0.5 * nSize), nSize, nSize), pIcon->pixmap(nSize, nSize));
+	}
 	painter->setBrush(Qt::NoBrush);
 	painter->setFont(fCurrent);
 
@@ -538,7 +560,8 @@ void ExperimentGraphObjectItem::paint(QPainter *painter, const QStyleOptionGraph
 			subGraphItemInitializations->setGeometry(rInitializationBox);
 			subGraphItemInitializations->setHeaderText("INITIALIZATIONS:");
 			subGraphItemInitializations->setGraphItemType(ExperimentManagerNameSpace::TypeGroupInitializationsItem);
-			subGraphItemInitializations->setSubItems(mapInitializationsIDToSignatureList);
+			//if (mapInitializationsIDToSignatureList.isEmpty() == false)
+				subGraphItemInitializations->setSubItems(mapInitializationsIDToSignatureList);
 		}
 	}
 
@@ -631,9 +654,9 @@ void ExperimentGraphObjectItem::setMethods(const QList<strcMethodInfo> &lMethodS
 	rInitializationBox.setCoords(rectInnerObject.left() + (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE / 2), rectInnerObject.bottom() + (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE / 2), rectInnerObject.right() - (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE / 2), rectInnerObject.bottom());
 	int nInitCounter = 0;
 
-	rAdditionalInitializationsHeight = rInitializationBox.bottom() + EXPGRAPHOBJECTITEM_HEADER_HEIGHT + (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE / 2) + (nInitCounter*(EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE + EXPGRAPHOBJECTITEM_METHOD_HEIGHT));
-	mapInitializationsIDToSignatureList.insert(-1, "<PARAMETERS>");
-	nInitCounter++;
+	//rAdditionalInitializationsHeight = rInitializationBox.bottom() + EXPGRAPHOBJECTITEM_HEADER_HEIGHT + (EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE / 2) + (nInitCounter*(EXPGRAPHOBJECTITEM_METHOD_SEPDISTANCE + EXPGRAPHOBJECTITEM_METHOD_HEIGHT));
+	//mapInitializationsIDToSignatureList.insert(-1, "<PARAMETERS>");
+	//nInitCounter++;
 
 	if(lMethodSignatureList.isEmpty() == false)
 	{
