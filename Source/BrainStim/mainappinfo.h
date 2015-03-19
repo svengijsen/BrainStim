@@ -32,6 +32,8 @@
 #include <QTreeView>
 #include <QSettings>
 #include <QTableWidget>
+#include <QResizeEvent>
+#include <QTimer>
 
 #include "maindefines.h"
 
@@ -80,8 +82,6 @@ public:
 	static bool registerCustomPropertySettingObject(QObject* objCustomPropSettObj, const int &nVariantType);
 	static QObject *getCustomPropertySettingObject(const int &nVariantType);
 	static QWidget *retrieveCustomPropertySettingEditorWidget(const int &nVariantType);// , const QString &sValue);
-	//static bool loadDockWidgetLayout(QDockWidget *dockWidget);
-	//static bool saveDockWidgetLayout(QDockWidget *dockWidget);
 	static bool getHexedOrderNumber(const int &nNumber, QString &sResult, const int &nDecimals);
 	static bool addRegisteredMetaTypeID(const int &nMetaTypeID);
 	static bool setMainWindow(QWidget *mainWin);
@@ -174,6 +174,62 @@ private:
 #endif
 		return appDebugDir.absolutePath();
 	};
+};
+
+class MainWindowDockWidget : public QDockWidget
+{
+	Q_OBJECT
+
+signals :
+	void resizingFinished(MainWindowDockWidget *);
+
+public:
+	MainWindowDockWidget(const QString &sTitle, QWidget *parent = NULL, Qt::WindowFlags flags = 0) : QDockWidget(sTitle, parent, flags) 
+	{
+		bEnableResizingSignaling = true;
+		bResizeStarted = false;
+		m_resizeTimer.setSingleShot(true);
+		connect(&m_resizeTimer, SIGNAL(timeout()), SLOT(resizeDone()));
+	};
+	bool enableResizingSignaling(const bool &bEnable = true)
+	{
+		bool bTemp = bEnableResizingSignaling;
+		bEnableResizingSignaling = bEnable;
+		return bTemp;//returns original setting
+	};
+
+protected:
+	void resizeEvent(QResizeEvent * event) 
+	{
+		Q_UNUSED(event);
+		m_resizeTimer.start(200);
+		QDockWidget::resizeEvent(event);
+	};
+
+	/*void mouseReleaseEvent(QMouseEvent* event)
+	{
+		Q_UNUSED(event);
+		if (bResizeStarted)
+		{
+			bResizeStarted = false;
+			if (bEnableResizingSignaling)
+				emit resizingFinished(this);
+		}
+	};*/
+
+private slots:
+	void resizeDone()
+	{
+		bResizeStarted = true;
+		//add test
+		emit resizingFinished(this);
+		bResizeStarted = false;
+	}
+
+private:
+	QTimer m_resizeTimer;
+	bool bResizeStarted;
+	bool bEnableResizingSignaling;
 };
 
 class CustomChildDockTabWidget : public QTabWidget

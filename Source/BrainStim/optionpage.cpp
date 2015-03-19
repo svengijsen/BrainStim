@@ -81,7 +81,7 @@ bool OptionPage::setPluginTabControlWidgets(QMap<QString, PropertySettingsWidget
 					{
 						sTmpRegistryValue = tmpPropSettDefStrc.sDefaultValue;
 						sTmpRegPath = QString(MAIN_PROGRAM_PLUGINS_REGISTRY_DIRNAME) + "/" + sPluginLowerName + "/" + tmpPropSettDefStrc.sName;
-						if (glob_AppInfo->getRegistryInformation(sTmpRegPath, tmpVariant))
+						if (glob_AppInfo->getSettingsInformation(sTmpRegPath, tmpVariant))
 						{
 							sTmpRegistryValue = tmpVariant.toString();
 							if (tmpPropSettWidget->checkIfParameterExists(tmpPropSettDefStrc.sName))
@@ -91,7 +91,7 @@ bool OptionPage::setPluginTabControlWidgets(QMap<QString, PropertySettingsWidget
 						}
 						else
 						{
-							glob_AppInfo->setRegistryInformation(sTmpRegPath, sTmpRegistryValue, "string");
+							glob_AppInfo->setSettingsInformation(sTmpRegPath, sTmpRegistryValue, "string");
 						}
 
 					}
@@ -179,43 +179,43 @@ bool OptionPage::validateIPAddressString(QString &input) const
 
 void OptionPage::applySettings()
 {
-	glob_AppInfo->setRegistryInformation(REGISTRY_DONOTLOADSCRIPTEXTENSION,(bool)(ui.chkDoNotLoadQTBindings->checkState() && Qt::Checked),"bool");
-	glob_AppInfo->setRegistryInformation(REGISTRY_OPENINEXTERNALDEBUGGER,(bool)(ui.chk_OpenDebOnError->checkState() && Qt::Checked),"bool");
-	glob_AppInfo->setRegistryInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE,(bool)(ui.chkAllowMultipleInstances->checkState() && Qt::Checked),"bool");
-	glob_AppInfo->setRegistryInformation(REGISTRY_ENABLECUSTOMUSERLOGINS, (bool)(ui.chkAllowCustomUserLogins->checkState() && Qt::Checked), "bool");
-	glob_AppInfo->setRegistryInformation(REGISTRY_ENABLENETWORKSERVER,(bool)(ui.chkEnableNetworkServer->checkState() && Qt::Checked),"bool");
-	glob_AppInfo->setRegistryInformation(REGISTRY_SERVERHOSTADDRESS,(QString)(ui.edtNetworkServerAddress->text()),"string");
-	glob_AppInfo->setRegistryInformation(REGISTRY_SERVERHOSTPORT,ui.edtNetworkServerPort->text().toInt(),"int");
-	glob_AppInfo->setRegistryInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY,(QString)(ui.lneUserDocumentsRootDirectory->text()),"string");
+	glob_AppInfo->setSettingsInformation(REGISTRY_DONOTLOADSCRIPTEXTENSION,(bool)(ui.chkDoNotLoadQTBindings->checkState() && Qt::Checked),"bool");
+	glob_AppInfo->setSettingsInformation(REGISTRY_OPENINEXTERNALDEBUGGER,(bool)(ui.chk_OpenDebOnError->checkState() && Qt::Checked),"bool");
+	glob_AppInfo->setSettingsInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE,(bool)(ui.chkAllowMultipleInstances->checkState() && Qt::Checked),"bool");
+	glob_AppInfo->setSettingsInformation(REGISTRY_ENABLECUSTOMUSERLOGINS, (bool)(ui.chkAllowCustomUserLogins->checkState() && Qt::Checked), "bool");
+	glob_AppInfo->setSettingsInformation(REGISTRY_ENABLENETWORKSERVER,(bool)(ui.chkEnableNetworkServer->checkState() && Qt::Checked),"bool");
+	glob_AppInfo->setSettingsInformation(REGISTRY_SERVERHOSTADDRESS,(QString)(ui.edtNetworkServerAddress->text()),"string");
+	glob_AppInfo->setSettingsInformation(REGISTRY_SERVERHOSTPORT,ui.edtNetworkServerPort->text().toInt(),"int");
+	glob_AppInfo->setSettingsInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY,(QString)(ui.lneUserDocumentsRootDirectory->text()),"string");
 
 	if (ui.rdb_3DRenderer->isChecked())	
 	{		
-		glob_AppInfo->setRegistryInformation(REGISTRY_RENDERTYPE, 0, "int");//SvgView::Native);	
-		glob_AppInfo->setRegistryInformation(REGISTRY_HQANTIALIAS, false, "bool");
+		glob_AppInfo->setSettingsInformation(REGISTRY_RENDERTYPE, 0, "int");//SvgView::Native);	
+		glob_AppInfo->setSettingsInformation(REGISTRY_HQANTIALIAS, false, "bool");
 	}
 	else if (ui.rdb_3DRenderer_2->isChecked()) 
 	{
-		glob_AppInfo->setRegistryInformation(REGISTRY_RENDERTYPE, 1, "int");//SvgView::OpenGL);	
-		glob_AppInfo->setRegistryInformation(REGISTRY_HQANTIALIAS, (bool)(ui.chk_HighAntiAFilter->checkState() && Qt::Checked), "bool");
+		glob_AppInfo->setSettingsInformation(REGISTRY_RENDERTYPE, 1, "int");//SvgView::OpenGL);	
+		glob_AppInfo->setSettingsInformation(REGISTRY_HQANTIALIAS, (bool)(ui.chk_HighAntiAFilter->checkState() && Qt::Checked), "bool");
 	}
 	else if (ui.rdb_3DRenderer_3->isChecked()) 
 	{
-		glob_AppInfo->setRegistryInformation(REGISTRY_RENDERTYPE, 2, "int");//SvgView::Image);	
-		glob_AppInfo->setRegistryInformation(REGISTRY_HQANTIALIAS, false, "bool");
+		glob_AppInfo->setSettingsInformation(REGISTRY_RENDERTYPE, 2, "int");//SvgView::Image);	
+		glob_AppInfo->setSettingsInformation(REGISTRY_HQANTIALIAS, false, "bool");
 	}
 	QStringList lNewIncludePaths;
 	for(int i=0;i<ui.lwScriptIncludeDirs->count();i++)
 	{
 		lNewIncludePaths.append(ui.lwScriptIncludeDirs->item(i)->text());
 	}
-	glob_AppInfo->setRegistryInformation(REGISTRY_SCRIPTING_INCLUDEPATHS,lNewIncludePaths,"stringlist");
+	glob_AppInfo->setSettingsInformation(REGISTRY_SCRIPTING_INCLUDEPATHS,lNewIncludePaths,"stringlist");
 
 	//Pending Plugin changes settings...
 	QMapIterator<QString, QString> iter(mapSettingsApplyPending);
 	while (iter.hasNext())
 	{
 		iter.next();
-		glob_AppInfo->setRegistryInformation(iter.key(), iter.value(), "string");
+		glob_AppInfo->setSettingsInformation(iter.key(), iter.value(), "string");
 	}
 	mapSettingsApplyPending.clear();
 }
@@ -228,37 +228,37 @@ void OptionPage::readSettings()
 	int nTemp;
 
 	QVariant tmpVariant;
-	if (glob_AppInfo->getRegistryInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY, tmpVariant))
+	if (glob_AppInfo->getSettingsInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY, tmpVariant))
 	{
 		sTemp = tmpVariant.toString();
 		ui.lneUserDocumentsRootDirectory->setText(sTemp);
 	}
-	if (glob_AppInfo->getRegistryInformation(REGISTRY_DONOTLOADSCRIPTEXTENSION, tmpVariant))
+	if (glob_AppInfo->getSettingsInformation(REGISTRY_DONOTLOADSCRIPTEXTENSION, tmpVariant))
 	{
 		bTemp = tmpVariant.toBool();
 		ui.chkDoNotLoadQTBindings->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
 	}
-	if (glob_AppInfo->getRegistryInformation(REGISTRY_OPENINEXTERNALDEBUGGER, tmpVariant))
+	if (glob_AppInfo->getSettingsInformation(REGISTRY_OPENINEXTERNALDEBUGGER, tmpVariant))
 	{
 		bTemp = tmpVariant.toBool();
 		ui.chk_OpenDebOnError->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
 	}
-	if (glob_AppInfo->getRegistryInformation(REGISTRY_ENABLENETWORKSERVER, tmpVariant))
+	if (glob_AppInfo->getSettingsInformation(REGISTRY_ENABLENETWORKSERVER, tmpVariant))
 	{
 		bTemp = tmpVariant.toBool();
 		ui.chkEnableNetworkServer->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
 	}
-	if (glob_AppInfo->getRegistryInformation(REGISTRY_SERVERHOSTADDRESS, tmpVariant))
+	if (glob_AppInfo->getSettingsInformation(REGISTRY_SERVERHOSTADDRESS, tmpVariant))
 	{
 		sTemp = tmpVariant.toString();
 		ui.edtNetworkServerAddress->setText(sTemp);
 	}
-	if (glob_AppInfo->getRegistryInformation(REGISTRY_SERVERHOSTPORT, tmpVariant))
+	if (glob_AppInfo->getSettingsInformation(REGISTRY_SERVERHOSTPORT, tmpVariant))
 	{
 		nTemp = tmpVariant.toInt();
 		ui.edtNetworkServerPort->setValue(nTemp);
 	}
-	if (glob_AppInfo->getRegistryInformation(REGISTRY_RENDERTYPE, tmpVariant))
+	if (glob_AppInfo->getSettingsInformation(REGISTRY_RENDERTYPE, tmpVariant))
 	{
 		int nValue = tmpVariant.toInt();//(SvgView::RendererType)
 		switch (nValue)
@@ -271,7 +271,7 @@ void OptionPage::readSettings()
 			}
 		case 1://SvgView::OpenGL://OpenGL
 			{
-			if (glob_AppInfo->getRegistryInformation(REGISTRY_HQANTIALIAS, tmpVariant))
+			if (glob_AppInfo->getSettingsInformation(REGISTRY_HQANTIALIAS, tmpVariant))
 				{
 					bTemp = tmpVariant.toBool();
 					ui.chk_HighAntiAFilter->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
@@ -291,17 +291,17 @@ void OptionPage::readSettings()
 			}
 		}
 	}
-	if (glob_AppInfo->getRegistryInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE, tmpVariant))
+	if (glob_AppInfo->getSettingsInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE, tmpVariant))
 	{
 		bTemp = tmpVariant.toBool();
 		ui.chkAllowMultipleInstances->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
 	}
-	if (glob_AppInfo->getRegistryInformation(REGISTRY_ENABLECUSTOMUSERLOGINS, tmpVariant))
+	if (glob_AppInfo->getSettingsInformation(REGISTRY_ENABLECUSTOMUSERLOGINS, tmpVariant))
 	{
 		bTemp = tmpVariant.toBool();
 		ui.chkAllowCustomUserLogins->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
 	}
-	if (glob_AppInfo->getRegistryInformation(REGISTRY_SCRIPTING_INCLUDEPATHS, tmpVariant))
+	if (glob_AppInfo->getSettingsInformation(REGISTRY_SCRIPTING_INCLUDEPATHS, tmpVariant))
 	{
 		lTemp = tmpVariant.toStringList();
 		foreach(QString sTmpString, lTemp)

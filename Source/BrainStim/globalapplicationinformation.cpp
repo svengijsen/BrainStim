@@ -352,7 +352,7 @@ bool GlobalApplicationInformation::initAndParseRegistrySettings(const QString &s
 	AppRegistrySettings->sync();
 }
 
-bool GlobalApplicationInformation::setRegistryInformation(const QString &sName, const QVariant &vValue, const QString &sType)
+bool GlobalApplicationInformation::setSettingsInformation(const QString &sName, const QVariant &vValue, const QString &sType)
 {
 	bool bUserSpecified = (mainAppInformation.sCurrentUserName.isEmpty() == false);
 	bool bRetval = false;
@@ -411,7 +411,7 @@ bool GlobalApplicationInformation::getRegisteredUserCredentials(QStringList &lUs
 	return (lUserNames.isEmpty() == false);
 }
 
-bool GlobalApplicationInformation::getRegistryInformation(const QString &sName, QVariant &vCurrentValue)
+bool GlobalApplicationInformation::getSettingsInformation(const QString &sName, QVariant &vCurrentValue)
 {
 	bool bUserSpecified = (mainAppInformation.sCurrentUserName.isEmpty() == false);
 	bool bRetval = false;

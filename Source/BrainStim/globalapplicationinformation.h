@@ -87,8 +87,8 @@ public:
 
 	bool initAndParseRegistrySettings(const QString &sSettingsFilePath);
 
-	bool getRegistryInformation(const QString &sName, QVariant &vCurrentValue);
-	bool setRegistryInformation(const QString &sName, const QVariant &vValue, const QString &sType);
+	bool getSettingsInformation(const QString &sName, QVariant &vCurrentValue);
+	bool setSettingsInformation(const QString &sName, const QVariant &vValue, const QString &sType);
 
 	QVariant invokeJavaScriptConfigurationFile(const QString &sCode);
 	QString getJavaScriptConfigurationFileContents();

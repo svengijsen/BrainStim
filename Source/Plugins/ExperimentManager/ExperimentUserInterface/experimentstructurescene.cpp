@@ -99,6 +99,7 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 	mLoopsMenu->setEnabled(false);
 	mObjectsMenu->setEnabled(false);
 	mConnectionsMenu->setEnabled(false);
+	initialParametersAction->setEnabled(false);
 
 	QList<QGraphicsItem *> gItemList = selectedItems();
 	//QGraphicsItem *gItem = itemAt(contextMenuEvent->scenePos(),QTransform());//item at mouse
@@ -179,8 +180,6 @@ void ExperimentStructureScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *
 	else if(getGraphViewState() == EXPVIS_VIEWSTATE_OBJECTS)
 	{
 		mObjectsMenu->setEnabled(true);
-
-		initialParametersAction->setEnabled(false);
 		if(gSelectedObjectItems.isEmpty() == false)//Objects selected?
 		{
 			if (gSelectedObjectItems.count() == 1)//Single Object selected

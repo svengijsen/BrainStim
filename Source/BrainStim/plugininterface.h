@@ -23,6 +23,7 @@
 #include <QString>
 #include <QtScript>
 #include <QMessageBox>
+#include <QDockWidget>
 #include "globalapplicationinformation.h"
 
 class PluginInterface

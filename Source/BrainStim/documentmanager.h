@@ -115,8 +115,9 @@ public:
 		QMdiSubWindow *pMDISubWin;
 		strcPluginHandlerInterface *pPluginHandlerInterface;
 		bool bIsModified;
+		bool bIsNewUnsaved;
 		QList<strcPluginChildDocCustomMenuDef> lRegisteredMenuActions;
-		QMap<QDockWidget*, strcDockLocation> mapRegisteredDockWidgetToLocationStruct;
+		QMap<MainWindowDockWidget*, strcDockLocation> mapRegisteredDockWidgetToLocationStruct;
 		strDocManagerDocument()
 		{
 			sFileName = "";
@@ -125,6 +126,7 @@ public:
 			pMDISubWin = NULL;
 			pPluginHandlerInterface = NULL;
 			bIsModified = false;
+			bIsNewUnsaved = false;
 		}
 	};
 
@@ -133,7 +135,7 @@ public:
 	bool isModified(QMdiSubWindow *subWindow);
 	QMdiSubWindow *getDocSubWindow(QWidget *pDocumentSubWidget);
 	int count(void);
-	QWidget *add(GlobalApplicationInformation::DocType docType,int &DocIndex, const QString &strExtension, const QString &strCanonicalFilePath = "", const bool &bNativeMainAppView = false);
+	QWidget *add(GlobalApplicationInformation::DocType docType,int &DocIndex, const QString &strExtension, const bool &bIsNewUnsaved, const QString &strCanonicalFilePath = "", const bool &bNativeMainAppView = false);
 	bool remove(QMdiSubWindow *subWindow);
 	bool setSubWindow(int DocIndex, QMdiSubWindow *subWindow);
 	bool initFile(int DocIndex);
@@ -143,6 +145,8 @@ public:
 	QString getDocTypeString(const GlobalApplicationInformation::DocType &docType);
 	QString getFileName(QMdiSubWindow *subWindow, bool bFileNameOnly = false);
 	QString getFileName(int DocIndex, bool bFileNameOnly = false);
+	QString getFileExtension(QMdiSubWindow *subWindow);
+	bool isUnsavedNewFile(QMdiSubWindow *subWindow);
 	void setFileName(int DocIndex, QString fileName, bool bIsNewNotSavedFile = false);
 	QString getFilePath(QMdiSubWindow *subWindow);
 	int getDocIndex(QMdiSubWindow *subWindow);
@@ -163,8 +167,8 @@ public:
 	int addAdditionalApiEntry(const QString &entry);
 	bool addMenuActionRegistration(QMdiSubWindow *subWindow, QMenu *firstMenu, QAction *menuAction);
 	QList<DocumentManager::strcPluginChildDocCustomMenuDef> getMenuActionRegistrations(QMdiSubWindow *subWindow);
-	bool addDockWidgetRegistration(QMdiSubWindow *subWindow, QDockWidget* dockWidget, const DocumentManager::strcDockLocation &dockWidgetLocation);
-	QMap<QDockWidget*, DocumentManager::strcDockLocation> getDockWidgetRegistrations(QMdiSubWindow *subWindow);
+	bool addDockWidgetRegistration(QMdiSubWindow *subWindow, MainWindowDockWidget* dockWidget, const DocumentManager::strcDockLocation &dockWidgetLocation);
+	QMap<MainWindowDockWidget*, DocumentManager::strcDockLocation> getDockWidgetRegistrations(QMdiSubWindow *subWindow);
 	void removeAllMenuActionRegistrations();
 	void appendAllMenuActionRegistration(const DocumentManager::strcPluginChildDocCustomMenuDef &customMenuDef);
 

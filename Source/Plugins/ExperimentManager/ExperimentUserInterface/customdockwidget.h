@@ -19,9 +19,9 @@
 #ifndef CUSTOMDOCKWIDGET_H
 #define CUSTOMDOCKWIDGET_H
 
-#include <QDockWidget>
+#include "mainappinfo.h"
 
-class customDockWidget : public QDockWidget
+class customDockWidget : public MainWindowDockWidget
 {
 	Q_OBJECT
 

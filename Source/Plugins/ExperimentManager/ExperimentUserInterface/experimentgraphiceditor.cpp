@@ -349,7 +349,7 @@ void ExperimentGraphicEditor::createDockWindows()
 			//menuView->addAction(actionToggle_ListViewDockVisibility);
 		}
 		bool bRetVal = false;
-		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(QDockWidget *, pCustomPropertiesDockWidget), Q_ARG(int, Qt::DockWidgetArea::RightDockWidgetArea));
+		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(MainWindowDockWidget*, pCustomPropertiesDockWidget), Q_ARG(int, Qt::DockWidgetArea::RightDockWidgetArea));
 		//bConnectRes = connect(pCustomPropertiesDockWidget, SIGNAL(CustomDockWidgetIsDestroying(QDockWidget *)), MainAppInfo::getMainWindow(), SLOT(unregisterDockWidget(QDockWidget *)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 	}
 	if(pCustomParamTableDockWidget == NULL)
@@ -365,7 +365,7 @@ void ExperimentGraphicEditor::createDockWindows()
 			//menuView->addAction(actionToggle_TableViewDockVisibility);
 		}
 		bool bRetVal = false;
-		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(QDockWidget *, pCustomParamTableDockWidget), Q_ARG(int, Qt::DockWidgetArea::BottomDockWidgetArea));// +Qt::DockWidgetArea::LeftDockWidgetArea));
+		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(MainWindowDockWidget *, pCustomParamTableDockWidget), Q_ARG(int, Qt::DockWidgetArea::BottomDockWidgetArea));// +Qt::DockWidgetArea::LeftDockWidgetArea));
 		//bConnectRes = connect(pCustomParamTableDockWidget, SIGNAL(CustomDockWidgetIsDestroying(QDockWidget *)), MainAppInfo::getMainWindow(), SLOT(unregisterDockWidget(QDockWidget *)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 	}
 	if (pCustomExperimentTreeDockWidget == NULL)
@@ -381,7 +381,7 @@ void ExperimentGraphicEditor::createDockWindows()
 			//menuView->addAction(actionToggle_TableViewDockVisibility);
 		}
 		bool bRetVal = false;
-		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(QDockWidget *, pCustomExperimentTreeDockWidget), Q_ARG(int, Qt::DockWidgetArea::LeftDockWidgetArea));//Qt::DockWidgetArea::BottomDockWidgetArea));
+		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(MainWindowDockWidget *, pCustomExperimentTreeDockWidget), Q_ARG(int, Qt::DockWidgetArea::LeftDockWidgetArea));//Qt::DockWidgetArea::BottomDockWidgetArea));
 		//bConnectRes = connect(pCustomExperimentTreeDockWidget, SIGNAL(CustomDockWidgetIsDestroying(QDockWidget *)), MainAppInfo::getMainWindow(), SLOT(unregisterDockWidget(QDockWidget *)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 		if (treeView)
 		{

@@ -97,7 +97,7 @@ int main(int argc, char **argv)
 	MainAppExchange appExchange(argc, argv, MAIN_PROGRAM_SHARED_MEM_KEY);
 	GlobalApplicationInformation *globAppInformation = appExchange.getGlobalAppInformationObjectPointer();
 	QVariant tmpVariant;
-	if (globAppInformation->getRegistryInformation(REGISTRY_ENABLECUSTOMUSERLOGINS, tmpVariant) == true)
+	if (globAppInformation->getSettingsInformation(REGISTRY_ENABLECUSTOMUSERLOGINS, tmpVariant) == true)
 	{
 		if(tmpVariant.toBool() == true)
 		{
@@ -128,7 +128,7 @@ int main(int argc, char **argv)
 		appExchange.sendMessage("Log(\"New BrainStim Instance Initializing...\");");
 		//if (appExchange.getSharedDataSegment("AllowMultipleInstance") == "false")
 		QVariant tmpVariant;
-		if (globAppInformation->getRegistryInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE, tmpVariant) == false)
+		if (globAppInformation->getSettingsInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE, tmpVariant) == false)
 			bProceed = false;
 		if (tmpVariant == false)
 		{

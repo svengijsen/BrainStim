@@ -486,19 +486,13 @@ private slots:
 	void scriptUnloaded(qint64 id);
 	void outputTabCloseRequest(int nIndex);
 	void dockWidgetDestroyed(QObject *obj);
+	void dockWidgetResizingFinished(MainWindowDockWidget *dock);
 
 private:
-	//void registerFileTypeByDefinition(const QString &DocTypeName, const QString &DocTypeDesc, const QString &DocTypeExtension);
-	//typedef struct DockLocationStructure
-	//{
-	//	QRect rGeometry;
-	//	Qt::DockWidgetArea dockArea;
-	//};
-	//QMap<QDockWidget*, DockLocationStructure> mapRegisteredDockWidgetToLocationStruct;
 	QMap<QString, PropertySettingsWidget *> mapPluginOptionWidgetsByPluginName;
 	OptionPage *pMainOptionPage;
 	QMap<QString, QRect> mapLoadedDockWindowRects;
-	QMultiMap<QMdiSubWindow*, QDockWidget*> mapMDISubWindowToDockWidget;
+	QMultiMap<QMdiSubWindow*, MainWindowDockWidget*> mapMDISubWindowToDockWidget;
 	QPair<QString,quint64> pCurrentSetContextState;
 	QList<QScriptContextStrc> currentScriptEngineContexes;
 	QSize oldDockMaxSize, oldDockMinSize;
@@ -608,7 +602,7 @@ private:
 	QMenu *windowMenu;
 	QMenu *documentMenu;
 
-	QDockWidget *debugLogDock;
+	MainWindowDockWidget *debugLogDock;
 
 	CustomChildDockTabWidget *outputTabWidget;
 	QMap<QString, QTextEdit *> mTabNameToOutputWindowList;
@@ -617,11 +611,11 @@ private:
 	
 	DocumentManager *DocManager;
     QMdiArea *mdiArea;
+	QMdiSubWindow *lastActiveSubWindow;
 	QSignalMapper *windowMapper;
 	QSignalMapper *signalMapperClearDebugger;
 	QSignalMapper *signalMapperCopyDebugger;
 	QSignalMapper *signalMapperSaveDebugger;
-	//QSignalMapper *signalMapperRemoveDebugger;
 	QToolBar *fileToolBar;
 	QToolBar *editToolBar;
 	QToolBar *toolsToolBar;
@@ -630,7 +624,6 @@ private:
     QStringList pluginFileNames;
 	PluginCollection *Plugins;
 	GlobalApplicationInformation::MainAppInformationStructure *mainAppInfoStruct;
-	//QHash<QString, QSettings *> hashUILayoutSettings;
 
 	enum { MaxRecentFiles = 10 };
 	QList<QAction *> recentFileActs;
@@ -651,7 +644,7 @@ private:
 	void setRenderer();
 	bool implementPluginCustomActionMenus();
 	bool implementCustomActionMenu(const QString &sMenuIniFilePath);
-	void newDocument(const GlobalApplicationInformation::DocType &docType, int &DocIndex, const QString &strExtension = "", const QString &strCanonicalFilePath = "", const bool &bNativeMainAppView = false, const bool &bTryToInitialize = false);
+	void newDocument(const GlobalApplicationInformation::DocType &docType, int &DocIndex, const bool &bIsNewUnsaved, const QString &strExtension = "", const QString &strCanonicalFilePath = "", const bool &bNativeMainAppView = false, const bool &bTryToInitialize = false);
 	//void setupSyntaxHighlighting(MdiChild *childWindow,MDIDocumentType tempFileType);
 	void parseRemainingGlobalSettings();
 	bool configureDebugger();
@@ -672,25 +665,23 @@ private:
 	void updateMenuControls();
 	void loadMainWindowLayout(const QString &sGroupSection);
 	bool addRegisteredDockWidgets(const Qt::DockWidgetArea debugDockArea);
-	//void setDockSize(QDockWidget* dock, int setWidth, int setHeight);
 	bool getPluginCustomConfigurationOptions(const QString &sInternalPluginName);
 
 public slots:
 	void updateMenuControls(QMdiSubWindow *mdiSubWin);
-	//void returnToOldDockMaxMinSizes(QDockWidget* dock = NULL);//
 
 public:
 	Q_INVOKABLE QAction *registerMainMenuAction(const QStringList &lmenuItemSpecifier, QIcon *iMenuIcon = NULL, const bool &bSkipSubWindowRegistration = false);
 	Q_INVOKABLE bool getSavedDockWidgetSizeHint(const QString &sDockWidgetGroupName, const QString &sDockWidgetAccessName, QRect &rSizeHint);
-	void loadSavedDockWidgetConfiguration(const QString &sGroupName, QDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea);
+	void loadSavedDockWidgetConfiguration(const QString &sGroupName, MainWindowDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea);
 	void loadSavedWindowLayout(const QString &sGroupName);
-	void saveDockWidgetConfiguration(const QString &sGroupName, QDockWidget *dockWidget);
+	void saveDockWidgetConfiguration(const QString &sGroupName, MainWindowDockWidget *dockWidget);
 	void saveWindowLayout(const QString &sGroupName);
 	bool extendAPICallTips(const QMetaObject* metaScriptObject = NULL);
 	void setGlobalApplicationInformationObject(GlobalApplicationInformation *globAppInformation);
 	void recoverLastScreenWindowSettings();
 	void setStartupFiles(const QString &path = QString());
-	Q_INVOKABLE bool registerDockWidget(QWidget *pMDIWindowSubWidget, QDockWidget *pDockWidget, int nDockWidgetAreaEnum);
+	Q_INVOKABLE bool registerDockWidget(QWidget *pMDIWindowSubWidget, MainWindowDockWidget *pDockWidget, int nDockWidgetAreaEnum);
 	void unregisterDockWidgets(CustomMDISubWindow* custSubWin);
 
 	static GlobalApplicationInformation::MainProgramModeFlags BrainStimFlags;

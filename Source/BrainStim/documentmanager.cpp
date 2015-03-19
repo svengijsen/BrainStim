@@ -123,6 +123,21 @@ GlobalApplicationInformation::DocType DocumentManager::getDocType(QMdiSubWindow 
 	return GlobalApplicationInformation::DOCTYPE_UNDEFINED;
 }
 
+QString DocumentManager::getFileExtension(QMdiSubWindow *subWindow)
+{
+	if (lChildDocuments.isEmpty() == false)
+	{
+		for (int i = 0; i<lChildDocuments.count(); i++)
+		{
+			if (lChildDocuments.at(i).pMDISubWin == subWindow)
+			{
+				return QFileInfo(lChildDocuments.at(i).sFileName).completeSuffix();
+			}
+		}
+	}
+	return "";
+}
+
 QString DocumentManager::getFileName(int DocIndex, bool bFileNameOnly)
 {
 	if(lChildDocuments.count() > DocIndex)
@@ -134,7 +149,7 @@ QString DocumentManager::getFileName(int DocIndex, bool bFileNameOnly)
 	return "";	 
 }
 
-bool DocumentManager::addDockWidgetRegistration(QMdiSubWindow *subWindow, QDockWidget* dockWidget, const DocumentManager::strcDockLocation &dockWidgetLocation)
+bool DocumentManager::addDockWidgetRegistration(QMdiSubWindow *subWindow, MainWindowDockWidget* dockWidget, const DocumentManager::strcDockLocation &dockWidgetLocation)
 {
 	if (lChildDocuments.isEmpty() == false)
 	{
@@ -181,7 +196,7 @@ bool DocumentManager::addMenuActionRegistration(QMdiSubWindow *subWindow, QMenu 
 	return false;
 }
 
-QMap<QDockWidget*, DocumentManager::strcDockLocation> DocumentManager::getDockWidgetRegistrations(QMdiSubWindow *subWindow)
+QMap<MainWindowDockWidget*, DocumentManager::strcDockLocation> DocumentManager::getDockWidgetRegistrations(QMdiSubWindow *subWindow)
 {
 	if (lChildDocuments.isEmpty() == false)
 	{
@@ -195,7 +210,7 @@ QMap<QDockWidget*, DocumentManager::strcDockLocation> DocumentManager::getDockWi
 			}
 		}
 	}
-	return QMap<QDockWidget*, DocumentManager::strcDockLocation>();
+	return QMap<MainWindowDockWidget*, DocumentManager::strcDockLocation>();
 }
 
 QList<DocumentManager::strcPluginChildDocCustomMenuDef> DocumentManager::getMenuActionRegistrations(QMdiSubWindow *subWindow)
@@ -281,6 +296,19 @@ QString DocumentManager::getFilePath(QMdiSubWindow *subWindow)
 		}
 	}
 	return "";
+}
+
+bool DocumentManager::isUnsavedNewFile(QMdiSubWindow *subWindow)
+{
+	if (lChildDocuments.isEmpty() == false)
+	{
+		for (int i = 0; i < lChildDocuments.count(); i++)
+		{
+			if (lChildDocuments.at(i).pMDISubWin == subWindow)
+				return lChildDocuments.at(i).bIsNewUnsaved;
+		}
+	}
+	return true;
 }
 
 QString DocumentManager::getFileName(QMdiSubWindow *subWindow, bool bFileNameOnly)
@@ -528,7 +556,7 @@ bool DocumentManager::customizeDocumentStyle(CustomQsciScintilla *custQsci, Glob
 	return false;
 }
 
-QWidget *DocumentManager::add(GlobalApplicationInformation::DocType docType,int &DocIndex, const QString &strExtension, const QString &strCanonicalFilePath, const bool &bNativeMainAppView)
+QWidget *DocumentManager::add(GlobalApplicationInformation::DocType docType, int &DocIndex, const QString &strExtension, const bool &bIsNewUnsaved, const QString &strCanonicalFilePath, const bool &bNativeMainAppView)
 {
 	GlobalApplicationInformation::DocTypeStyle sDocStyle = GlobalApplicationInformation::DOCTYPE_STYLE_UNDEFINED;
 	strcPluginHandlerInterface *pParsedPluginHandlerInterface = NULL;
@@ -671,6 +699,7 @@ QWidget *DocumentManager::add(GlobalApplicationInformation::DocType docType,int 
 	tmpChildDoc.sFileName = "";
 	tmpChildDoc.bIsModified = false;
 	tmpChildDoc.pPluginHandlerInterface = pParsedPluginHandlerInterface;
+	tmpChildDoc.bIsNewUnsaved = bIsNewUnsaved;
 	DocIndex = lChildDocuments.count();
 	lChildDocuments.append(tmpChildDoc);
 	return editorObject;

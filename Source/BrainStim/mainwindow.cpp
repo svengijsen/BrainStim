@@ -51,6 +51,10 @@ MainWindow::MainWindow() : DocumentWindow(), SVGPreviewer(new SvgView)
 	AppScriptEngine = NULL;
 	globAppInfo = NULL;
 	mainAppInfoStruct = NULL;
+	lastActiveSubWindow = NULL;
+	//sLastActiveSubWindowFileExt = "";
+	//sLastLoadedLayoutGroup = "";
+	//bDisableDockWidgetSaving = true;
 	PluginsFound = false;
 	bDevicePluginsFound = false;
 	bExtensionPluginsFound = false;
@@ -304,18 +308,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
 		delete mainAppInfoStruct;
 		mainAppInfoStruct = NULL;
 	}
-	//if (hashUILayoutSettings.isEmpty() == false)
-	//{
-	//	foreach(QSettings *sTmpSetting, hashUILayoutSettings)
-	//	{
-	//		if (sTmpSetting)
-	//		{
-	//			sTmpSetting->sync();
-	//			delete sTmpSetting;
-	//			sTmpSetting = NULL;
-	//		}
-	//	}
-	//}
 	if (pMainOptionPage)
 	{
 		delete pMainOptionPage;
@@ -323,6 +315,12 @@ void MainWindow::closeEvent(QCloseEvent *event)
 	}
 	MainAppInfo::destructCustomPropertySettingObjects();
 	shutdownNetworkServer();
+	if (debugLogDock)
+	{
+		disconnect(debugLogDock, SIGNAL(resizingFinished(MainWindowDockWidget *)), this, SLOT(dockWidgetResizingFinished(MainWindowDockWidget *)));
+		delete debugLogDock;
+		debugLogDock = NULL;
+	}
 }
 
 bool MainWindow::setContextState(const QString &sContextName)
@@ -970,27 +968,28 @@ void MainWindow::unregisterDockWidgets(CustomMDISubWindow* custSubWin)
 	}
 	if (sTmpDocTypeString.isEmpty() == false)
 	{
-		QList<QDockWidget*> lTmpDockWidgetList = mapMDISubWindowToDockWidget.values(custSubWin);
-		foreach(QDockWidget* tmpDockWidget, lTmpDockWidgetList)
+		QList<MainWindowDockWidget*> lTmpDockWidgetList = mapMDISubWindowToDockWidget.values(custSubWin);
+		foreach(MainWindowDockWidget* tmpDockWidget, lTmpDockWidgetList)
 		{
 			if (tmpDockWidget)
-				saveDockWidgetConfiguration(sTmpDocTypeString, tmpDockWidget);
+			{
+				disconnect(tmpDockWidget, SIGNAL(destroyed(QObject *)), this, SLOT(dockWidgetDestroyed(QObject *)));
+				disconnect(tmpDockWidget, SIGNAL(resizingFinished(MainWindowDockWidget *)), this, SLOT(dockWidgetResizingFinished(MainWindowDockWidget *)));
+			}
 		}
-		saveDockWidgetConfiguration(sTmpDocTypeString, debugLogDock);
-		saveWindowLayout(sTmpDocTypeString);
 	}
 }
 
 bool MainWindow::addRegisteredDockWidgets(const Qt::DockWidgetArea debugDockArea)
 {
 	bool bOutputDockAdded = false;
-	QMap<QDockWidget*, DocumentManager::strcDockLocation> mapRegisteredDockWidgetToLocationStruct = DocManager->getDockWidgetRegistrations(activeMdiChild());
+	QMap<MainWindowDockWidget*, DocumentManager::strcDockLocation> mapRegisteredDockWidgetToLocationStruct = DocManager->getDockWidgetRegistrations(activeMdiChild());
 	while (mapRegisteredDockWidgetToLocationStruct.isEmpty() == false)
 	{
 		bool bIsFirst = true;
-		QMap<QDockWidget*, DocumentManager::strcDockLocation>::iterator iter;
+		QMap<MainWindowDockWidget*, DocumentManager::strcDockLocation>::iterator iter;
 		DocumentManager::strcDockLocation tmpLocation;
-		QDockWidget* tmpDockWidget = NULL;
+		MainWindowDockWidget* tmpDockWidget = NULL;
 		for (iter = mapRegisteredDockWidgetToLocationStruct.begin(); iter != mapRegisteredDockWidgetToLocationStruct.end(); ++iter)
 		{
 			if (bIsFirst)
@@ -1045,6 +1044,7 @@ bool MainWindow::addRegisteredDockWidgets(const Qt::DockWidgetArea debugDockArea
 				bOutputDockAdded = true;
 			}
 		}
+		QString sAccesName = tmpDockWidget->accessibleName();
 		addDockWidget(tmpLocation.dockArea, tmpDockWidget);
 		mapRegisteredDockWidgetToLocationStruct.remove(tmpDockWidget);
 	}
@@ -1056,7 +1056,7 @@ bool MainWindow::addRegisteredDockWidgets(const Qt::DockWidgetArea debugDockArea
 	return true;
 }
 
-bool MainWindow::registerDockWidget(QWidget *pMDIWindowSubWidget, QDockWidget *pDockWidget, int nDockWidgetAreaEnum)
+bool MainWindow::registerDockWidget(QWidget *pMDIWindowSubWidget, MainWindowDockWidget *pDockWidget, int nDockWidgetAreaEnum)
 {
 	if(pMDIWindowSubWidget && pDockWidget && DocManager)
 	{
@@ -1100,22 +1100,60 @@ bool MainWindow::registerDockWidget(QWidget *pMDIWindowSubWidget, QDockWidget *p
 				}
 			}
 			connect(pDockWidget, SIGNAL(destroyed(QObject *)), this, SLOT(dockWidgetDestroyed(QObject *)));
+			connect(pDockWidget, SIGNAL(resizingFinished(MainWindowDockWidget *)), this, SLOT(dockWidgetResizingFinished(MainWindowDockWidget *)));
 			return true;
 		}
 	}
 	return false;
 }
 
+void MainWindow::dockWidgetResizingFinished(MainWindowDockWidget *dock)
+{
+	if (dock == NULL)
+		return;
+
+	bool bOldResizeSetting = dock->enableResizingSignaling(false);
+	QMdiSubWindow *pMDISubWin = activeMdiChild();
+	if (pMDISubWin)
+	{
+		QString sTmpDocTypeString = DocManager->getDocTypeString(DocManager->getDocType(pMDISubWin));
+		if (sTmpDocTypeString.isEmpty())
+		{
+			QStringList lFileNameItems = DocManager->getFileName(pMDISubWin, false).split(".", QString::SkipEmptyParts);
+			if (lFileNameItems.count() > 1)
+				sTmpDocTypeString = lFileNameItems.at(lFileNameItems.count() - 1);
+		}
+		if (sTmpDocTypeString.isEmpty() == false)
+		{
+			if (dock == debugLogDock)
+			{
+				saveDockWidgetConfiguration(sTmpDocTypeString, debugLogDock);
+			}
+			else
+			{
+				QList<MainWindowDockWidget*> lTmpDockWidgetList = mapMDISubWindowToDockWidget.values(pMDISubWin);
+				foreach(MainWindowDockWidget* tmpDockWidget, lTmpDockWidgetList)
+				{
+					if (tmpDockWidget)
+						saveDockWidgetConfiguration(sTmpDocTypeString, tmpDockWidget);
+				}
+			}
+			saveWindowLayout(sTmpDocTypeString);
+		}
+	}
+	dock->enableResizingSignaling(bOldResizeSetting);
+}
+
 void MainWindow::dockWidgetDestroyed(QObject *destoyedDockWidget)
 {
 	if(destoyedDockWidget == NULL)
 		return;
-	QMap<QMdiSubWindow*, QDockWidget*>::iterator iter;
+	QMap<QMdiSubWindow*, MainWindowDockWidget*>::iterator iter;
 	for (iter = mapMDISubWindowToDockWidget.begin(); iter != mapMDISubWindowToDockWidget.end(); iter++)
 	{
-		if(iter.value() = (QDockWidget *)destoyedDockWidget)
+		if (iter.value() = (MainWindowDockWidget *)destoyedDockWidget)
 		{
-			mapMDISubWindowToDockWidget.remove(iter.key(),(QDockWidget *)destoyedDockWidget);//it's a multi-map!
+			mapMDISubWindowToDockWidget.remove(iter.key(), (MainWindowDockWidget *)destoyedDockWidget);//it's a multi-map!
 			dockWidgetDestroyed(destoyedDockWidget);
 			return;
 		}
@@ -1149,31 +1187,10 @@ void MainWindow::subDocumentWindowActivated(QMdiSubWindow *subWindow)
 			DocManager->appendAllMenuActionRegistration(lPluginChildDocCustomMenuDefs[j]);
 		}
 
-		QMap<QMdiSubWindow*, QDockWidget*>::iterator iter;
-		for (iter = mapMDISubWindowToDockWidget.begin(); iter != mapMDISubWindowToDockWidget.end(); iter++)
+		if (lastActiveSubWindow != subWindow)
 		{
-			if (iter.key() == subWindow)
-			{
-				if (dockWidgetArea(iter.value()) == Qt::NoDockWidgetArea)
-				{
-					QMap<QDockWidget*, DocumentManager::strcDockLocation> mapRegisteredDockWidgetToLocationStruct = DocManager->getDockWidgetRegistrations(subWindow);
-					if (mapRegisteredDockWidgetToLocationStruct.contains(iter.value()))
-					{
-						DocumentManager::strcDockLocation tmpLocationStructure = mapRegisteredDockWidgetToLocationStruct.value(iter.value());
-						addDockWidget(tmpLocationStructure.dockArea, iter.value());
-					}
-					else
-					{
-						addDockWidget(Qt::BottomDockWidgetArea, iter.value());
-					}
-					iter.value()->show();
-				}
-			}
-			else
-			{
-				if (dockWidgetArea(iter.value()) != Qt::NoDockWidgetArea)
-					removeDockWidget(iter.value());
-			}
+			lastActiveSubWindow = subWindow;
+			loadMainWindowLayout(DocManager->getFileExtension(subWindow));
 		}
 	}
 	updateMenuControls();
@@ -2040,7 +2057,7 @@ void MainWindow::createDockWindows()
 {
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
-	debugLogDock = new QDockWidget(MAINWINDOW_DOCK_OUTPUTWINDOW_NAME, this);
+	debugLogDock = new MainWindowDockWidget(MAINWINDOW_DOCK_OUTPUTWINDOW_NAME, this);
 	debugLogDock->setAccessibleName(MAINWINDOW_DOCK_OUTPUTWINDOW_NAME);
 	debugLogDock->setObjectName(MAINWINDOW_DOCK_OUTPUTWINDOW_NAME);
 	debugLogDock->setAllowedAreas(Qt::AllDockWidgetAreas);// Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -2062,12 +2079,13 @@ void MainWindow::createDockWindows()
 	Qt::DockWidgetArea dArea = Qt::BottomDockWidgetArea;
 	loadSavedDockWidgetConfiguration(MAINWINDOW_NAME, debugLogDock, dArea);
 	addDockWidget(dArea, debugLogDock);
-	//addDockWidget(Qt::BottomDockWidgetArea, testrr);//(Qt::RightDockWidgetArea, debugLogDock);
+	connect(debugLogDock, SIGNAL(resizingFinished(MainWindowDockWidget *)), this, SLOT(dockWidgetResizingFinished(MainWindowDockWidget *)));
+	//a1ddDockWidget(Qt::BottomDockWidgetArea, testrr);//(Qt::RightDockWidgetArea, debugLogDock);
 	//viewMenu->addAction(debugLogDock->toggleViewAction());
 	//connect(debugList, SIGNAL(currentTextChanged(const QString &)),
 	//	this, SLOT(insertCustomer(const QString &)));
 	//////////////////////////////////////////////////////////////////////////
-	//debuggerDock = new QDockWidget(tr("Debugger"), this);
+	//debuggerDock = new MainWindowDockWidget(tr("Debugger"), this);
 	//debuggerDock->setAllowedAreas(Qt::TopDockWidgetArea | Qt::RightDockWidgetArea | Qt::LeftDockWidgetArea | Qt::BottomDockWidgetArea);
 	//stackWidget = AppScriptEngine->debugger->widget(QScriptEngineDebugger::StackWidget);
 	//debuggerMainWindow = AppScriptEngine->DebuggerStandardWindow();//debugger->standardWindow();
@@ -2082,7 +2100,7 @@ void MainWindow::createDockWindows()
 	//stackWidget->setParent(debuggerDock);
 	//debuggerMainWindow->setParent(debuggerDock);
 	//debuggerDock->setLayout(layout);
-	//addDockWidget(Qt::BottomDockWidgetArea, debuggerDock);
+	//a1ddDockWidget(Qt::BottomDockWidgetArea, debuggerDock);
 	//tabifyDockWidget(
 }
 
@@ -2553,7 +2571,7 @@ bool MainWindow::checkUserDirectories(QStringList &lPathsToCheck, bool bShowWarn
 	QString sUserPath = "";
 	bool bNoRegistrySetting = false;
 	QVariant tmpVariant;
-	if (globAppInfo->getRegistryInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY, tmpVariant))
+	if (globAppInfo->getSettingsInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY, tmpVariant))
 	{
 		sUserPath = QDir::fromNativeSeparators(tmpVariant.toString());
 	}
@@ -2570,7 +2588,7 @@ bool MainWindow::checkUserDirectories(QStringList &lPathsToCheck, bool bShowWarn
 		if (bNoRegistrySetting == false)
 			qDebug() << __FUNCTION__ << "User Document Path (" << sUserPath << ") doesn't exist. Switching to default path";
 		sUserPath = QDir::homePath() + "/" + globAppInfo->getTitle();//MainAppInfo::MainProgramTitle());;//QDir::toNativeSeparators(MainAppInfo::appDirPath());//Use the default BrainStim installation root path
-		if (globAppInfo->setRegistryInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY, sUserPath, "string") == false)
+		if (globAppInfo->setSettingsInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY, sUserPath, "string") == false)
 		{
 			qDebug() << __FUNCTION__ << "Could not set the default User Document Path (" << sUserPath << ") in the registry.";
 			MainAppInfo::setAppUserPath(sUserPath);
@@ -2815,12 +2833,14 @@ void MainWindow::onSubWindowClosed(CustomMDISubWindow* custSubWin)
 
 void MainWindow::loadMainWindowLayout(const QString &sGroupSection)
 {
-	Qt::DockWidgetArea tmpDockWidgetArea;
+	bool bOldResizeSetting = debugLogDock->enableResizingSignaling(false);
+	Qt::DockWidgetArea tmpDockWidgetArea = Qt::DockWidgetArea::BottomDockWidgetArea;
 	removeDockWidget(debugLogDock);
 	outputTabWidget->setGroupName(sGroupSection);
 	loadSavedDockWidgetConfiguration(sGroupSection, debugLogDock, tmpDockWidgetArea);
 	addRegisteredDockWidgets(tmpDockWidgetArea);
 	loadSavedWindowLayout(sGroupSection);
+	debugLogDock->enableResizingSignaling(bOldResizeSetting);
 }
 
 void MainWindow::onSubWindowDestroyed(CustomMDISubWindow* custSubWin)
@@ -3196,7 +3216,7 @@ bool MainWindow::parseFile(const QFile &file, const bool &bParseAsText)
 	fileExtension = fileInfo.suffix();
 	GlobalApplicationInformation::DocType tempDocType = DocManager->getDocType(fileExtension);
 	int DocIndex;
-	newDocument(tempDocType,DocIndex,fileExtension, fileInfo.canonicalFilePath(), bParseAsText);
+	newDocument(tempDocType,DocIndex,false,fileExtension,fileInfo.canonicalFilePath(),bParseAsText);
 
 	QApplication::setOverrideCursor(Qt::WaitCursor);
 	if (DocManager->loadFile(DocIndex,file.fileName()))
@@ -3220,7 +3240,7 @@ bool MainWindow::parseFile(const QFile &file, const bool &bParseAsText)
 void MainWindow::setRenderer()
 {
 	QVariant tmpVariant;
-	if (globAppInfo->getRegistryInformation(REGISTRY_RENDERTYPE, tmpVariant))
+	if (globAppInfo->getSettingsInformation(REGISTRY_RENDERTYPE, tmpVariant))
 	{
 		SvgView::RendererType type;
 		type = (SvgView::RendererType)tmpVariant.toInt();
@@ -3234,7 +3254,7 @@ void MainWindow::setRenderer()
 			}
 		case SvgView::OpenGL://OpenGL
 			{
-				if (globAppInfo->getRegistryInformation(REGISTRY_HQANTIALIAS,tmpVariant))
+				if (globAppInfo->getSettingsInformation(REGISTRY_HQANTIALIAS,tmpVariant))
 				{
 					SVGPreviewer->setHighQualityAntialiasing(tmpVariant.toInt());
 				}
@@ -3282,14 +3302,14 @@ void MainWindow::updateRecentFileList(const QString &fileName)
 {
 	QStringList files;
 	QVariant tmpVariant;
-	if (globAppInfo->getRegistryInformation(REGISTRY_RECENTFILELIST, tmpVariant))
+	if (globAppInfo->getSettingsInformation(REGISTRY_RECENTFILELIST, tmpVariant))
 		files = tmpVariant.toStringList();
 	files.removeAll(fileName);
 	files.prepend(fileName);
 	while (files.size() > MaxRecentFiles)
 		files.removeLast();
 
-	globAppInfo->setRegistryInformation(REGISTRY_RECENTFILELIST,files,"stringlist");
+	globAppInfo->setSettingsInformation(REGISTRY_RECENTFILELIST,files,"stringlist");
 
 	foreach (QWidget *widget, QApplication::topLevelWidgets()) {
 		MainWindow *mainWin = qobject_cast<MainWindow *>(widget);
@@ -3309,7 +3329,7 @@ void MainWindow::updateRecentFileActions()
 {
 	QStringList files;
 	QVariant tmpVariant;
-	if (globAppInfo->getRegistryInformation(REGISTRY_RECENTFILELIST, tmpVariant))
+	if (globAppInfo->getSettingsInformation(REGISTRY_RECENTFILELIST, tmpVariant))
 		files = tmpVariant.toStringList();
 
 	int numRecentFiles = qMin(files.size(), (int)MaxRecentFiles);
@@ -3366,22 +3386,21 @@ void MainWindow::newFile()
 		sCanoFilePath = sCanoFileDir + MainAppInfo::UntitledDocName() + "_" + QString::number(nUniqueUntitledCounter) + "." + sExtension;
 		nUniqueUntitledCounter++;
 	}
-	newDocument(docType, DocIndex, sExtension, sCanoFilePath, false, true);
+	newDocument(docType, DocIndex,true,sExtension,sCanoFilePath,false,true);
 	setCurrentFile(sCanoFilePath, true);// MainAppInfo::UntitledDocName());
 	loadMainWindowLayout(sExtension);
 	statusBar()->showMessage(tr("New File created"), 2000);
 }
 
-void MainWindow::newDocument(const GlobalApplicationInformation::DocType &docType, int &DocIndex, const QString &strExtension, const QString &strCanonicalFilePath, const bool &bNativeMainAppView, const bool &bTryToInitialize)
+void MainWindow::newDocument(const GlobalApplicationInformation::DocType &docType, int &DocIndex, const bool &bIsNewUnsaved, const QString &strExtension, const QString &strCanonicalFilePath, const bool &bNativeMainAppView, const bool &bTryToInitialize)
 {
 	DocIndex = 0;
-	QWidget *newChild = DocManager->add(docType,DocIndex,strExtension,strCanonicalFilePath, bNativeMainAppView);
+	QWidget *newChild = DocManager->add(docType, DocIndex, strExtension, bIsNewUnsaved, strCanonicalFilePath, bNativeMainAppView);
 	CustomMDISubWindow *subWindow = new CustomMDISubWindow(this);
 	subWindow->setWidget(newChild);
 	mdiArea->addSubWindow(subWindow);
 	subWindow->setAttribute(Qt::WA_DeleteOnClose);
 	newChild->setAttribute(Qt::WA_DeleteOnClose);
-	//subWindow->setToolTip(strCanonicalFilePath);
 	DocManager->setSubWindow(DocIndex,subWindow);
 	bool bResult = connect(subWindow, SIGNAL(SubWindowClosed(CustomMDISubWindow*)), this, SLOT(onSubWindowClosed(CustomMDISubWindow*)), Qt::DirectConnection);
 	bResult = connect(subWindow, SIGNAL(SubWindowDestroyed(CustomMDISubWindow*)), this, SLOT(onSubWindowDestroyed(CustomMDISubWindow*)), Qt::DirectConnection);
@@ -3429,7 +3448,7 @@ void MainWindow::save()
 	QString tmpFileName = DocManager->getFileName(tmpMdiChildPointer);
 	if (tmpMdiChildPointer)
 	{
-		if (tmpFileName == "")
+		if ((tmpFileName == "") || (DocManager->isUnsavedNewFile(tmpMdiChildPointer)))
 		{
 			return saveAs();
 		}
@@ -3459,8 +3478,28 @@ void MainWindow::saveAs()
 	QMdiSubWindow *tmpMdiChildPointer = activeMdiChild();
 	if (tmpMdiChildPointer)
 	{
-		//QString selExt = "SVG files (*.svg *.svgz *.svg.gz)";
-		QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"),DocManager->getFileName(tmpMdiChildPointer));//,DocManager->getKnownFileExtensionList(),&selExt);
+		QString sOriginalFilePath = DocManager->getFileName(tmpMdiChildPointer);
+		QString sOriginalFileExt = "";
+		QString sKnownExtensionList = DocManager->getKnownFileExtensionList();
+		QString *pCurrentKnowExtension = NULL;
+		QStringList lKnownExtensions;
+
+		if (sOriginalFilePath.isEmpty() == false)
+		{
+			QFileInfo fiOrgFile;
+			fiOrgFile.setFile(sOriginalFilePath);
+			sOriginalFileExt = fiOrgFile.completeSuffix();
+			if (sOriginalFileExt.isEmpty() == false)
+			{
+				lKnownExtensions = sKnownExtensionList.split(";;",QString::SkipEmptyParts);
+				for (int i = 0; i < lKnownExtensions.count(); i++)
+				{
+					if (lKnownExtensions.at(i).contains("*." + sOriginalFileExt, Qt::CaseInsensitive))
+						pCurrentKnowExtension = &lKnownExtensions[i];//take the last occurrence, no break!
+				}
+			}
+		}
+		QString fileName = QFileDialog::getSaveFileName(this, tr("Save As"), sOriginalFilePath, sKnownExtensionList, pCurrentKnowExtension);// sOriginalFileExt);//,DocManager->getKnownFileExtensionList(),&selExt);
 		if (fileName.isEmpty())
 		{
 			return;
@@ -3663,144 +3702,83 @@ void MainWindow::recoverLastScreenWindowSettings()
 	loadSavedWindowLayout(MAINWINDOW_NAME);
 }
 
-void MainWindow::loadSavedDockWidgetConfiguration(const QString &sGroupName, QDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea)
+void MainWindow::loadSavedDockWidgetConfiguration(const QString &sGroupName, MainWindowDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea)
 {
-	//if (bUsesUISettings == false)
-	//	return;
-	//QSettings *sUILayoutSettings = NULL;
-	QString tmpString;
-	//if (hashUILayoutSettings.contains(sSettingsFileName))
-	//{
-	//	sUILayoutSettings = hashUILayoutSettings.value(sSettingsFileName);
-	//}
-	//else
-	//{
-	//	sUILayoutSettings = new QSettings(sSettingsFileName, QSettings::IniFormat);
-	//	hashUILayoutSettings.insert(sSettingsFileName, sUILayoutSettings);
-	//}
+	bool bOldResizeSetting = dockWidget->enableResizingSignaling(false);
 	QString sAccesName = dockWidget->accessibleName();
-	//sUILayoutSettings->beginGroup(sGroupName);
-
-	tmpString = sAccesName + EXPERIMENT_DOCKWIDGET_PROPSEP_CHAR + DOCKITEM_SETTINGNAME_ISFLOATING;
+	QString tmpString = sAccesName + EXPERIMENT_DOCKWIDGET_PROPSEP_CHAR + DOCKITEM_SETTINGNAME_ISFLOATING;
 	bool bIsFloating = false;
-	//if (sUILayoutSettings->contains(tmpString))
-	//{
-	//	bIsFloating = sUILayoutSettings->value(tmpString).toBool();
-	//	dockWidget->setFloating(bIsFloating);
-	//}
 	QVariant tmpVariantValue;
-	bool bResult = globAppInfo->getRegistryInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_ISFLOATING), tmpVariantValue);
+	bool bResult = globAppInfo->getSettingsInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_ISFLOATING), tmpVariantValue);
 	if (bResult)
 		dockWidget->setFloating(tmpVariantValue.toBool());
+	else
+		dockWidget->setFloating(false);
 
 	tmpString = sAccesName + EXPERIMENT_DOCKWIDGET_PROPSEP_CHAR + DOCKITEM_SETTINGNAME_ISVISIBLE;
-//	if (sUILayoutSettings->contains(tmpString))
-//		dockWidget->setVisible(sUILayoutSettings->value(tmpString).toBool());
-	bResult = globAppInfo->getRegistryInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_ISVISIBLE), tmpVariantValue);
+	bResult = globAppInfo->getSettingsInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_ISVISIBLE), tmpVariantValue);
 	if (bResult)
 		dockWidget->setVisible(tmpVariantValue.toBool());
 	
 	if (bIsFloating==false)
 	{
 		tmpString = sAccesName + EXPERIMENT_DOCKWIDGET_PROPSEP_CHAR + DOCKITEM_SETTINGNAME_DOCKWIDGETAREA;
-//		if (sUILayoutSettings->contains(tmpString))
-//			defaultArea = (Qt::DockWidgetArea)sUILayoutSettings->value(tmpString).toInt();
-		bResult = globAppInfo->getRegistryInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_DOCKWIDGETAREA), tmpVariantValue);
+		bResult = globAppInfo->getSettingsInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_DOCKWIDGETAREA), tmpVariantValue);
 		if (bResult)
 			defaultArea = (Qt::DockWidgetArea)tmpVariantValue.toInt();
 	}
 	tmpString = sAccesName + EXPERIMENT_DOCKWIDGET_PROPSEP_CHAR + DOCKITEM_SETTINGNAME_GEOMETRY;
-	//if (sUILayoutSettings->contains(tmpString))
-	//{
-		//QRect tmpGeometry = sUILayoutSettings->value(tmpString).toRect();
-		//dockWidget->setGeometry(tmpRect);
-		//mapLoadedDockWindowRects.insert(sGroupName + EXPERIMENT_DOCKWIDGET_GROUPSEP_CHAR + sAccesName, tmpGeometry);
-		//if (bIsFloating)
-		//	dockWidget->setGeometry(tmpGeometry);
-	//}
-	bResult = globAppInfo->getRegistryInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_GEOMETRY), tmpVariantValue);
+	bResult = globAppInfo->getSettingsInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_GEOMETRY), tmpVariantValue);
 	if (bResult)
 	{
 		QRect tmpGeometry = tmpVariantValue.toRect();
-		//dockWidget->setGeometry(tmpRect);
 		mapLoadedDockWindowRects.insert(sGroupName + EXPERIMENT_DOCKWIDGET_GROUPSEP_CHAR + sAccesName, tmpGeometry);
-		//if (bIsFloating)
-			dockWidget->setGeometry(tmpGeometry);
+		dockWidget->setGeometry(tmpGeometry);
 	}
-	//sUILayoutSettings->endGroup();
+	dockWidget->enableResizingSignaling(bOldResizeSetting);
 }
 
-void MainWindow::saveDockWidgetConfiguration(const QString &sGroupName, QDockWidget *dockWidget)
+void MainWindow::saveDockWidgetConfiguration(const QString &sGroupName, MainWindowDockWidget *dockWidget)
 {
 	if (bUsesUISettings == false)
 		return;
-	//QSettings *sUILayoutSettings = NULL;
-	//if (hashUILayoutSettings.contains(sSettingsFileName))
-	//{
-	//	sUILayoutSettings = hashUILayoutSettings.value(sSettingsFileName);
-	//}
-	//else
-	//{
-	//	sUILayoutSettings = new QSettings(sSettingsFileName, QSettings::IniFormat);
-	//	hashUILayoutSettings.insert(sSettingsFileName, sUILayoutSettings);
-	//}
 	if (dockWidget)
 	{
 		QString sAccesName = dockWidget->accessibleName();
-		//sUILayoutSettings->beginGroup(sGroupName);
 		int nNewDockWidgetArea = (int)dockWidgetArea(dockWidget);
-		//sUILayoutSettings->setValue(sAccesName + EXPERIMENT_DOCKWIDGET_PROPSEP_CHAR + DOCKITEM_SETTINGNAME_DOCKWIDGETAREA, nNewDockWidgetArea);
 		bool bIsFloating = dockWidget->isFloating();
-		//sUILayoutSettings->setValue(sAccesName + EXPERIMENT_DOCKWIDGET_PROPSEP_CHAR + DOCKITEM_SETTINGNAME_ISFLOATING, bIsFloating);
-		//sUILayoutSettings->setValue(sAccesName + EXPERIMENT_DOCKWIDGET_PROPSEP_CHAR + DOCKITEM_SETTINGNAME_GEOMETRY, dockWidget->geometry());
-		//sUILayoutSettings->setValue(sAccesName + EXPERIMENT_DOCKWIDGET_PROPSEP_CHAR + DOCKITEM_SETTINGNAME_ISVISIBLE, dockWidget->isVisible());
-		//sUILayoutSettings->endGroup();
-
-		bool bResult = globAppInfo->setRegistryInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_DOCKWIDGETAREA), nNewDockWidgetArea, "int");
-		bResult = globAppInfo->setRegistryInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_ISFLOATING), bIsFloating, "bool");
-		bResult = globAppInfo->setRegistryInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_GEOMETRY), dockWidget->geometry(), "rect");
-		bResult = globAppInfo->setRegistryInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_ISVISIBLE), dockWidget->isVisible(), "bool");
+		bool bResult = globAppInfo->setSettingsInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_DOCKWIDGETAREA), nNewDockWidgetArea, "int");
+		bResult = globAppInfo->setSettingsInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_ISFLOATING), bIsFloating, "bool");
+		bResult = globAppInfo->setSettingsInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_GEOMETRY), dockWidget->geometry(), "rect");
+		bResult = globAppInfo->setSettingsInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_ISVISIBLE), dockWidget->isVisible(), "bool");
 	}
 }
 
 void MainWindow::loadSavedWindowLayout(const QString &sGroupName)
 {
-	//if (bUsesUISettings == false)
-	//	return;
-	//QSettings *sUILayoutSettings = NULL;
-	//if (hashUILayoutSettings.contains(sSettingsFileName))
-	//{
-	//	sUILayoutSettings = hashUILayoutSettings.value(sSettingsFileName);
-	//}
-	//else
-	//{
-	//	sUILayoutSettings = new QSettings(sSettingsFileName, QSettings::IniFormat);
-	//	hashUILayoutSettings.insert(sSettingsFileName, sUILayoutSettings);
-	//}
-	//sUILayoutSettings->beginGroup(sGroupName);
-	//restoreState(sUILayoutSettings->value("state").toByteArray());
-	//if (sGroupName == MAINWINDOW_NAME)
-		//restoreGeometry(sUILayoutSettings->value("geometry").toByteArray());
-	//sUILayoutSettings->endGroup();
-
 	QVariant tmpVariantValue;
-	bool bResult = globAppInfo->getRegistryInformation(QString("%1/%2/%3").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(DOCKITEM_SETTINGNAME_GEOMETRY), tmpVariantValue);
+	bool bResult = globAppInfo->getSettingsInformation(QString("%1/%2/%3").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(DOCKITEM_SETTINGNAME_GEOMETRY), tmpVariantValue);
 	if (bResult)
 		restoreGeometry(tmpVariantValue.toByteArray());
-	bResult = globAppInfo->getRegistryInformation(QString("%1/%2/%3").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(DOCKITEM_SETTINGNAME_STATE), tmpVariantValue);
+	bResult = globAppInfo->getSettingsInformation(QString("%1/%2/%3").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(DOCKITEM_SETTINGNAME_STATE), tmpVariantValue);
 	if (bResult)
 		restoreState(tmpVariantValue.toByteArray());
 
 	QMdiSubWindow *subWindow = activeMdiChild();
 	if (subWindow)
 	{
-		QMap<QMdiSubWindow*, QDockWidget*>::iterator iter;
+		QMap<QMdiSubWindow*, MainWindowDockWidget*>::iterator iter;
 		for (iter = mapMDISubWindowToDockWidget.begin(); iter != mapMDISubWindowToDockWidget.end(); iter++)
 		{
 			if (iter.key() != subWindow)
 			{
 				if (dockWidgetArea(iter.value()) != Qt::NoDockWidgetArea)
+				{
+					bool bOldResizeSetting = iter.value()->enableResizingSignaling(false);
+					QString sAccessName = iter.value()->accessibleName();
 					removeDockWidget(iter.value());
+					iter.value()->enableResizingSignaling(bOldResizeSetting);
+				}
 			}
 		}
 	}
@@ -3810,25 +3788,8 @@ void MainWindow::saveWindowLayout(const QString &sGroupName)
 {
 	if (bUsesUISettings == false)
 		return;
-	//QSettings *sUILayoutSettings = NULL;
-	//if (hashUILayoutSettings.contains(sSettingsFileName))
-	//{
-	//	sUILayoutSettings = hashUILayoutSettings.value(sSettingsFileName);
-	//}
-	//else
-	//{
-	//	sUILayoutSettings = new QSettings(sSettingsFileName, QSettings::IniFormat);
-	//	hashUILayoutSettings.insert(sSettingsFileName, sUILayoutSettings);
-	//}
-	//sUILayoutSettings->beginGroup(sGroupName);
-	//if (sGroupName == MAINWINDOW_NAME)
-	//	sUILayoutSettings->setValue("geometry", saveGeometry());
-	//sUILayoutSettings->setValue("state", saveState());
-	//sUILayoutSettings->endGroup();
-
-	bool bResult = globAppInfo->setRegistryInformation(QString("%1/%2/%3").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(DOCKITEM_SETTINGNAME_GEOMETRY), saveGeometry(), "bytearray");
-	bResult = globAppInfo->setRegistryInformation(QString("%1/%2/%3").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(DOCKITEM_SETTINGNAME_STATE), saveState(), "bytearray");
-
+	bool bResult = globAppInfo->setSettingsInformation(QString("%1/%2/%3").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(DOCKITEM_SETTINGNAME_GEOMETRY), saveGeometry(), "bytearray");
+	bResult = globAppInfo->setSettingsInformation(QString("%1/%2/%3").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(DOCKITEM_SETTINGNAME_STATE), saveState(), "bytearray");
 }
 
 QAction *MainWindow::registerMainMenuAction(const QStringList &lmenuItemSpecifier, QIcon *iMenuIcon, const bool &bSkipSubWindowRegistration)
@@ -3944,7 +3905,7 @@ bool MainWindow::configureDebugger()
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
 	QVariant tmpVariant;
-	if (globAppInfo->getRegistryInformation(REGISTRY_OPENINEXTERNALDEBUGGER, tmpVariant))
+	if (globAppInfo->getSettingsInformation(REGISTRY_OPENINEXTERNALDEBUGGER, tmpVariant))
 		AppScriptEngine->ConfigureDebugger((bool)tmpVariant.toInt());
 	else//default
 		AppScriptEngine->ConfigureDebugger(false);
@@ -4276,7 +4237,7 @@ QString MainWindow::getCurrentDateTimeStamp(const QString &sFormat)
 bool MainWindow::getStoredSettingValue(const QString &sSettingPath, QString *sResult)
 {
 	QVariant varTmpValue;
-	if (globAppInfo->getRegistryInformation(sSettingPath, varTmpValue))
+	if (globAppInfo->getSettingsInformation(sSettingPath, varTmpValue))
 	{
 		*sResult = varTmpValue.toString();
 		return true;
