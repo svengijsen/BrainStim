@@ -176,6 +176,7 @@ namespace ExperimentManagerNameSpace
 	#define FUNC_OBJECT_START						"startExperimentObject"
 	#define FUNC_OBJECT_STOP						"stopExperimentObject"
 	#define FUNC_OBJECT_ABORT						"abortExperimentObject"
+	#define ARCHIVER_NAME							"Archiver"
 	//#define RETINOMAP_WIDGET_NAME					"RetinoMap_glwidget"
 	//#define QML_WIDGET_NAME						"qmlWidget"
 	#define QML2VIEWER_NAME							"QML2Viewer"

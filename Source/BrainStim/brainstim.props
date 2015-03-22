@@ -2,16 +2,23 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ImportGroup Label="PropertySheets">
   	<Import Project="brainstim_plugins.props" />
-    <Import Project="..\Plugins\ParallelPortDevice\parallelportplugin.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
     <!-- some comments... -->
     <QTPROPERTYBROWSER>E:\Libraries\CTK\QtPropertyBrowser</QTPROPERTYBROWSER>
+    <QUAZIP>E:\Libraries\quazip-0.7.1</QUAZIP>
+    <ZLIB>E:\Libraries\zlib\zlib-1.2.8</ZLIB>
   </PropertyGroup>
   <ItemDefinitionGroup/>
   <ItemGroup>
     <BuildMacro Include="QTPROPERTYBROWSER">
       <Value>$(QTPROPERTYBROWSER)</Value>
+    </BuildMacro>
+    <BuildMacro Include="QUAZIP">
+      <Value>$(QUAZIP)</Value>
+    </BuildMacro>
+    <BuildMacro Include="ZLIB">
+      <Value>$(ZLIB)</Value>
     </BuildMacro>
   </ItemGroup>
 </Project>

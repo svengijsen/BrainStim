@@ -56,9 +56,6 @@ function BrainStim_Information()
 	this.ExtInterface_Index = PropCounter++;
 	
 	var ExperimentManagerPlugin_Comp_Index = ComponentCounter++;
-	var ParallelPortPlugin_Comp_Index = ComponentCounter++;
-	var KeyBoardPlugin_Comp_Index = ComponentCounter++;
-	var _extensionname_plugin_Comp_Index = ComponentCounter++;
 	var BrainStim_QMLExtensions_Comp_Index = ComponentCounter++;
 	
 	this.componentVersioning = BrainStim_CreateArray(1,ComponentCounter,PropCounter);//Default constructor!
@@ -71,22 +68,6 @@ function BrainStim_Information()
 	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.EXML_Index] = '1.0.0.1';
 	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.DevInterface_Index] = '1.0';
 	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.ExtInterface_Index] = '1.0';
-	///////////////////////////////////////////////////////////////
-	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this.Name_Index] = 'ParallelPortPlugin';
-	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this.Version_Index] = '1.0.0.1';
-	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this.ProductVersion_Index] = '1.0.0.1';
-	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this._BrainStimVersion_Index] = 0; 
-	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this.EXML_Index] = 'x';
-	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this.DevInterface_Index] = '1.0';
-	this.componentVersioning[0][ParallelPortPlugin_Comp_Index][this.ExtInterface_Index] = '1.0';
-	///////////////////////////////////////////////////////////////
-	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this.Name_Index] = 'KeyBoardPlugin';
-	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this.Version_Index] = '1.0.0.1';
-	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this.ProductVersion_Index] = '1.0.0.1';
-	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this._BrainStimVersion_Index] = 0;
-	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this.EXML_Index] = 'x';
-	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this.DevInterface_Index] = '1.0';
-	this.componentVersioning[0][KeyBoardPlugin_Comp_Index][this.ExtInterface_Index] = '1.0';
 	///////////////////////////////////////////////////////////////
 	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this.Name_Index] = 'BrainStim_QMLExtensions';
 	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this.Version_Index] = '1.0';
@@ -106,13 +87,9 @@ function BrainStim_Information()
 	
 	this.DocumentAuditing[1] = ['PreBuildDevelopmentSetup.html','Pre Build Development Setup','1.0.1.0','Oktober 2014','Sven Gijsen'];
 	this.DocumentAuditing[2] = ['ExperimentManagerPlugin.html','Experiment Manager Plug-in Documentation','1.0.1.0','Oktober 2014','Sven Gijsen'];
-	this.DocumentAuditing[3] = ['ParallelPortDevicePlugin.html','Parallel Port Plug-in Documentation','2.0.0.2','Oktober 2014','Sven Gijsen'];	
-	this.DocumentAuditing[4] = ['ExtensionPluginTemplate.html','Extension Plug-in Template Documentation','2.0.0.2','Oktober 2014','Sven Gijsen'];	
-	this.DocumentAuditing[5] = ['KeyBoardDevicePlugin.html','Keyboard Device Plug-in Documentation','1.0.0.1','Oktober 2014','Sven Gijsen'];		
-	this.DocumentAuditing[6] = ['BrainStim_QMLExtensions.html','BrainStim QML Extensions Plug-in Documentation','1.0.0.1','Oktober 2014','Sven Gijsen'];					
-	this.DocumentAuditing[7] = ['6_RetinoTopicMappingOutput.html','Retinotopic Mapping output files Tutorial','1.0.0.1','Oktober 2014','Sven Gijsen'];	
-	
-	
+	this.DocumentAuditing[3] = ['ExtensionPluginTemplate.html','Extension Plug-in Template Documentation','2.0.0.2','Oktober 2014','Sven Gijsen'];	
+	this.DocumentAuditing[4] = ['BrainStim_QMLExtensions.html','BrainStim QML Extensions Plug-in Documentation','1.0.0.1','Oktober 2014','Sven Gijsen'];					
+	this.DocumentAuditing[5] = ['6_RetinoTopicMappingOutput.html','Retinotopic Mapping output files Tutorial','1.0.0.1','Oktober 2014','Sven Gijsen'];	
 	
 	
 	//BrainStim version (?.?.?.?)

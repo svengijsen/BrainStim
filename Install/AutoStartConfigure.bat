@@ -34,6 +34,7 @@ GOTO END
 	SET OGRE_PATH=E:\Libraries\Ogre\OGRE-SDK-1.8.2-vc110-x86-28.05.2013\bin
 	SET INPOUT_PATH=E:\Libraries\InpOut_1500\Win32
 	SET QT_SCRIPT_BINDINGS_PATH=E:\Libraries\Qt5.3.2_ScriptBindings\Win32\bindings\script
+	SET QUAZIP_PATH=E:\Libraries\quazip-0.7.1\Win32
 	
 	ECHO START COPYING...
 	COPY qt_32.conf qt.conf /y
@@ -140,12 +141,14 @@ GOTO END
 	IF /I '%DEBUGRELEASE%'=='d' SET Path=%QSCINTILLA_PATH%\Win32\Debug;%Path%
 	IF /I '%DEBUGRELEASE%'=='d' COPY %OGRE_PATH%\Debug\OgreMain_d.dll OgreMain_d.dll /y
 	IF /I '%DEBUGRELEASE%'=='d' COPY %OGRE_PATH%\Debug\RenderSystem_GL_d.dll RenderSystem_GL_d.dll /y
+	IF /I '%DEBUGRELEASE%'=='d' COPY %QUAZIP_PATH%\Debug\quazip.dll quazip.dll /y
 	IF /I '%DEBUGRELEASE%'=='d' COPY "..\Source\QmlExtensions\Plugins\DefaultPlugin\qmldir_debug_win32" "Qml\plugins\Win32\BrainStim_QMLExtensions\qmldir" /y
 	
 	IF /I '%DEBUGRELEASE%'=='r' ECHO Release Mode was choosen
 	IF /I '%DEBUGRELEASE%'=='r' SET Path=%QSCINTILLA_PATH%\Win32\Release;%Path%
 	IF /I '%DEBUGRELEASE%'=='r' COPY %OGRE_PATH%\Release\OgreMain.dll OgreMain.dll /y
 	IF /I '%DEBUGRELEASE%'=='r' COPY %OGRE_PATH%\Release\RenderSystem_GL.dll RenderSystem_GL.dll /y
+	IF /I '%DEBUGRELEASE%'=='r' COPY %QUAZIP_PATH%\Release\quazip.dll quazip.dll /y
 	IF /I '%DEBUGRELEASE%'=='r' COPY "..\Source\QmlExtensions\Plugins\DefaultPlugin\qmldir_release_win32" "Qml\plugins\Win32\BrainStim_QMLExtensions\qmldir" /y
 	IF /I '%DEBUGRELEASE%'=='r' CALL "..\Source\QmlExtensions\Plugins\DefaultPlugin\createqmltypes.bat"
 	CD /d %ROOTDIR%
@@ -160,6 +163,7 @@ GOTO END
 	SET OGRE_PATH=E:\Libraries\Ogre\OGRE-SDK-1.8.2-vc110-x64-28.05.2013\bin
 	SET INPOUT_PATH=E:\Libraries\InpOut_1500\x64
 	SET QT_SCRIPT_BINDINGS_PATH=E:\Libraries\Qt5.3.2_ScriptBindings\x64\bindings\script
+	SET QUAZIP_PATH=E:\Libraries\quazip-0.7.1\x64
 	
 	ECHO START COPYING...
 	COPY qt_64.conf qt.conf /y
@@ -266,12 +270,14 @@ GOTO END
 	IF /I '%DEBUGRELEASE%'=='d' SET Path=%QSCINTILLA_PATH%\x64\Debug;%Path%
 	IF /I '%DEBUGRELEASE%'=='d' COPY %OGRE_PATH%\Debug\OgreMain_d.dll OgreMain_d.dll /y
 	IF /I '%DEBUGRELEASE%'=='d' COPY %OGRE_PATH%\Debug\RenderSystem_GL_d.dll RenderSystem_GL_d.dll /y
+	IF /I '%DEBUGRELEASE%'=='d' COPY %QUAZIP_PATH%\Debug\quazip.dll quazip.dll /y
 	IF /I '%DEBUGRELEASE%'=='d' COPY "..\Source\QmlExtensions\Plugins\DefaultPlugin\qmldir_debug_x64" "Qml\plugins\x64\BrainStim_QMLExtensions\qmldir" /y
 
 	IF /I '%DEBUGRELEASE%'=='r' ECHO Release Mode was choosen
 	IF /I '%DEBUGRELEASE%'=='r' SET Path=%QSCINTILLA_PATH%\x64\Release;%Path%
 	IF /I '%DEBUGRELEASE%'=='r' COPY %OGRE_PATH%\Release\OgreMain.dll OgreMain.dll /y
 	IF /I '%DEBUGRELEASE%'=='r' COPY %OGRE_PATH%\Release\RenderSystem_GL.dll RenderSystem_GL.dll /y
+	IF /I '%DEBUGRELEASE%'=='r' COPY %QUAZIP_PATH%\Release\quazip.dll quazip.dll /y
 	IF /I '%DEBUGRELEASE%'=='r' COPY "..\Source\QmlExtensions\Plugins\DefaultPlugin\qmldir_release_x64" "Qml\plugins\x64\BrainStim_QMLExtensions\qmldir" /y	
 	IF /I '%DEBUGRELEASE%'=='r' CALL "..\Source\QmlExtensions\Plugins\DefaultPlugin\createqmltypes.bat"
 	CD /d %ROOTDIR%

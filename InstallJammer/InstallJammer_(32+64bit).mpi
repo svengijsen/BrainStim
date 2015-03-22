@@ -1664,6 +1664,7 @@ File ::6B762487-4C7C-4D36-BA4F-FE614371AAF2 -name E:/Libraries/Ogre/OGRE-SDK-1.8
 File ::C81F3A7F-EDF8-4BD9-97DD-57924670A869 -name E:/Libraries/HIDAPI/Win32/bin/hidapi_win32.dll -parent B8B5252C-BA02-416E-A353-667E13968192
 File ::636BC778-AD15-4769-8458-899778660BAF -name E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/plugins/sqldrivers/qsqlibase.dll -parent B8B5252C-BA02-416E-A353-667E13968192
 File ::6741F034-45BF-45CC-9158-36D1D37BAAD7 -name E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/bin/Qt5SerialPort.dll -parent B8B5252C-BA02-416E-A353-667E13968192
+File ::CB5C76A1-5009-46F7-901D-B76AEF016011 -name E:/Libraries/quazip-0.7.1/Win32/Release/quazip.dll -parent B8B5252C-BA02-416E-A353-667E13968192
 FileGroup ::C6C42CD1-B9D2-4DCB-B599-C7236551A39A -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Additional Binaries(x64)} -parent FileGroups
 File ::BF673CDF-AEDB-465B-98CA-A3C3C7364CBB -name E:/Libraries/Firebird/Firebird-2.5.3.26778-0/x64/Release/fbclient.dll -parent C6C42CD1-B9D2-4DCB-B599-C7236551A39A
 File ::21D9C1E8-8DDD-4E5B-9AA1-65A5289D2B42 -name E:/Libraries/Firebird/Firebird-2.5.3.26778-0/x64/Release/firebird.msg -parent C6C42CD1-B9D2-4DCB-B599-C7236551A39A
@@ -1677,6 +1678,7 @@ File ::E9A45831-39E6-4F77-8C3F-9F17BD2FF2D1 -name E:/Libraries/Ogre/OGRE-SDK-1.8
 File ::D6C1C85A-C180-46C0-BCE3-59DCE6B60BCB -name E:/Libraries/HIDAPI/x64/bin/hidapi_x64.dll -parent C6C42CD1-B9D2-4DCB-B599-C7236551A39A
 File ::B9D0CE93-CAF8-4C3B-919F-238B647E91CD -name E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl/plugins/sqldrivers/qsqlibase.dll -parent C6C42CD1-B9D2-4DCB-B599-C7236551A39A
 File ::97582F15-4FF8-4426-8566-76C60AD3809C -name E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl/bin/Qt5SerialPort.dll -parent C6C42CD1-B9D2-4DCB-B599-C7236551A39A
+File ::9CA347F5-92C3-4D6D-AC21-583AE7FC1D12 -name E:/Libraries/quazip-0.7.1/x64/Release/quazip.dll -parent C6C42CD1-B9D2-4DCB-B599-C7236551A39A
 FileGroup ::4DF71FAD-80BD-4091-929A-2A4F157EA0C5 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {VC(2012 & 2013) Redistributables(win32)} -parent FileGroups
 File ::B3E1AC79-CE0B-41F4-8A6F-49F75D1A905A -name E:/Libraries/VC_Redist/VC_2013/x86/Microsoft.VC120.CRT/msvcp120.dll -parent 4DF71FAD-80BD-4091-929A-2A4F157EA0C5
 File ::58AD1B13-5EF4-4ED8-8773-D14DD3ED0661 -name E:/Libraries/VC_Redist/VC_2013/x86/Microsoft.VC120.CRT/msvcr120.dll -parent 4DF71FAD-80BD-4091-929A-2A4F157EA0C5

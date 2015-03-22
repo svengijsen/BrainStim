@@ -1105,6 +1105,14 @@ bool DocumentManager::saveFile(QMdiSubWindow *subWindow, QString fileName, bool 
 {
 	int nDocIndex = getDocIndex(subWindow);
 	bool bResult = saveFile(nDocIndex, fileName, bReparseDocumentContentNeeded, sSavedFilenNamePath);
+	if (bResult)
+	{
+		if (lChildDocuments.count() > nDocIndex)
+		{
+			if (lChildDocuments[nDocIndex].pMDISubWin == subWindow)
+				lChildDocuments[nDocIndex].bIsNewUnsaved = false;
+		}
+	}
 	return bResult;
 }
 

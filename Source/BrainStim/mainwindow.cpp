@@ -35,9 +35,7 @@
 #include "custommdisubwindow.h"
 #include "propertysettingswidgetcontainer.h"
 
-#include "../Plugins/ParallelPortDevice/parallelport.h"
 #include "../Plugins/ExperimentManager/experimentmanager.h"
-#include "../Plugins/KeyBoardDevice/keyboardcapture.h"
 
 GlobalApplicationInformation::MainProgramModeFlags MainWindow::BrainStimFlags = GlobalApplicationInformation::Default;
 GlobalApplicationInformation *MainWindow::globAppInfo = NULL;
@@ -52,6 +50,7 @@ MainWindow::MainWindow() : DocumentWindow(), SVGPreviewer(new SvgView)
 	globAppInfo = NULL;
 	mainAppInfoStruct = NULL;
 	lastActiveSubWindow = NULL;
+	archiverObject = NULL;
 	//sLastActiveSubWindowFileExt = "";
 	//sLastLoadedLayoutGroup = "";
 	//bDisableDockWidgetSaving = true;
@@ -280,6 +279,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
 	{
 		writeMainWindowSettings();
 		event->accept();
+	}
+	if (archiverObject)
+	{
+		delete archiverObject;
+		archiverObject = NULL;
 	}
 	delete helpAssistant;
 #ifndef QT_NO_DEBUG_OUTPUT
@@ -833,6 +837,13 @@ void MainWindow::setupScriptEngine()
 
 	QScriptValue AppScriptThisObject = AppScriptEngine->eng->newQObject(this);
 	AppScriptEngine->eng->globalObject().setProperty(MAIN_PROGRAM_INTERNAL_NAME, AppScriptThisObject);
+
+	if (archiverObject == NULL)
+		archiverObject = new Archiver();
+	QScriptValue ArchiverProto = AppScriptEngine->eng->newQObject(archiverObject);
+	AppScriptEngine->eng->setDefaultPrototype(qMetaTypeId<Archiver*>(), ArchiverProto);
+	QScriptValue ArchiverCtor = AppScriptEngine->eng->newFunction(Archiver::ctor__archiver, ArchiverProto);
+	AppScriptEngine->eng->globalObject().setProperty(ARCHIVER_NAME, ArchiverCtor);
 
 #ifdef DEBUG
 	QScriptValue TestFunctionVal = AppScriptEngine->eng->newFunction(myScriptTestFunction);
@@ -2112,13 +2123,8 @@ void MainWindow::setupDynamicPlugins()
 	{
 		extendAPICallTips(this->metaObject());
 		showSplashMessage("Loading Static Plugins...");
-        Q_IMPORT_PLUGIN(ParallelPortPlugin)// see below
         Q_IMPORT_PLUGIN(ExperimentManagerPlugin)// see below
-		Q_IMPORT_PLUGIN(KeyBoardPlugin)// see below
-
 		Q_UNUSED(qt_static_plugin_ExperimentManagerPlugin());
-		Q_UNUSED(qt_static_plugin_KeyBoardPlugin());
-		Q_UNUSED(qt_static_plugin_ParallelPortPlugin());
 
 		bool bRetVal = false;
 		QString strRetVal = "";
@@ -2352,8 +2358,8 @@ void MainWindow::setupDynamicPlugins()
 	}
 	DocManager->appendKnownFileExtensionList(MAIN_PROGRAM_POST_FILESEXTENSION_LIST);
 	////example 1(static plugin):
-	//see line Q_IMPORT_PLUGIN(parallelportplugin)
-	//ParallelPort *a = new ParallelPort(888,NULL); //see Q_DECLARE_METATYPE(ParallelPort*), must include header etc
+	//see line Q_IMPORT_PLUGIN(p1arallelportplugin)
+	//P1arallelPort *a = new P1arallelPort(888,NULL); //see Q_DECLARE_METATYPE(P1arallelPort*), must include header etc
 	//a->IsPortEcp();
 	//delete a;
 	//ExperimentManager *b = new ExperimentManager(this);

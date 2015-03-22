@@ -55,6 +55,7 @@
 #include "networkserver.h"
 #include "custommdisubwindow.h"
 #include "propertysettingswidget.h"
+#include "archiver.h"
 
 class SvgView;
 class DeviceControl;
@@ -489,6 +490,7 @@ private slots:
 	void dockWidgetResizingFinished(MainWindowDockWidget *dock);
 
 private:
+	Archiver *archiverObject;
 	QMap<QString, PropertySettingsWidget *> mapPluginOptionWidgetsByPluginName;
 	OptionPage *pMainOptionPage;
 	QMap<QString, QRect> mapLoadedDockWindowRects;
