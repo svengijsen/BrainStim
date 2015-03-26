@@ -36,16 +36,16 @@ class aboutQTDialog : public QDialog
 	Q_OBJECT
 
 public:
-	aboutQTDialog(const QString &title,const QStringList &pluginFileNames,const QString &path, const QStringList &fileNames, QWidget *parent = 0);
+	aboutQTDialog(const QString &title, QWidget *parent = 0);
 
 private:
-	void findPlugins(const QString &title, const QString &path, const QStringList &fileNames);
-	void populateTreeWidget(QObject *plugin, const QString &text);
-	void addItems(QTreeWidgetItem *pluginItem, const char *interfaceName,const QStringList &features);
+	//void findPlugins(const QString &title, const QString &path, const QStringList &fileNames);
+	//void populateTreeWidget(QObject *plugin, const QString &text);
+	//void addItems(QTreeWidgetItem *pluginItem, const char *interfaceName,const QStringList &features);
 
 	QLabel *label;
 	QLabel *labWebsite;
-	QTreeWidget *treeWidget;
+	//QTreeWidget *treeWidget;
 	QPushButton *okButton;
 	QIcon interfaceIcon;
 	QIcon featureIcon;

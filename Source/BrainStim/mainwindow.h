@@ -47,7 +47,6 @@
 #include "documentwindow.h"
 #include "documentmanager.h"
 #include "plugininterface.h"
-#include "plugincollection.h"
 #include "qtscriptengine.h"
 #include "mainappinfo.h"
 #include "sciFindDialog.h"
@@ -56,6 +55,7 @@
 #include "custommdisubwindow.h"
 #include "propertysettingswidget.h"
 #include "archiver.h"
+#include "pluginmanagerdialog.h"
 
 class SvgView;
 class DeviceControl;
@@ -449,6 +449,7 @@ private slots:
 	void setScriptRunningStatus(GlobalApplicationInformation::ActiveScriptMode state);
 	void showPluginGUI();
 	void openOptionsDialog();
+	void openPluginManagerDialog();
 	void aboutBrainStim();
 	void showDocumentation();
 	void openRecentFile();
@@ -493,6 +494,7 @@ private:
 	Archiver *archiverObject;
 	QMap<QString, PropertySettingsWidget *> mapPluginOptionWidgetsByPluginName;
 	OptionPage *pMainOptionPage;
+	PluginManagerDialog *pPluginMngrDialog;
 	QMap<QString, QRect> mapLoadedDockWindowRects;
 	QMultiMap<QMdiSubWindow*, MainWindowDockWidget*> mapMDISubWindowToDockWidget;
 	QPair<QString,quint64> pCurrentSetContextState;
@@ -514,6 +516,7 @@ private:
 	QAction *quitAction;
 	QAction *saveAction;
 	QAction *optionsAction;
+	QAction *configurePluginsAction;
 	QAction *saveAsAction;
 	QAction *printAction;
 	QAction *runDocumentAction;
@@ -584,6 +587,7 @@ private:
 	GlobalApplicationInformation::ActiveScriptMode AppScriptStatus;
 	qint64 currentMainRunningScriptID;	
 	QList<qint64> lCurrentRunningScriptIDList;
+	installationManager *installMngr;
 
 	QPushButton button;
     QMenu *pluginsMenu;
@@ -623,8 +627,6 @@ private:
 	QToolBar *toolsToolBar;
 
     QString m_currentPath;
-    QStringList pluginFileNames;
-	PluginCollection *Plugins;
 	GlobalApplicationInformation::MainAppInformationStructure *mainAppInfoStruct;
 
 	enum { MaxRecentFiles = 10 };
@@ -641,7 +643,8 @@ private:
     void createDefaultMenus();
 	void setupHelpMenu();
     void setupDynamicPlugins();
-	QAction* integratePlugin(QObject *plugin, PluginCollection *collection);
+	void setupInstallationManagerMenu();
+	QAction* integratePlugin(const QString &sRegisteredPluginName);
 	void setupToolBars();
 	void setRenderer();
 	bool implementPluginCustomActionMenus();
@@ -650,11 +653,11 @@ private:
 	//void setupSyntaxHighlighting(MdiChild *childWindow,MDIDocumentType tempFileType);
 	void parseRemainingGlobalSettings();
 	bool configureDebugger();
-	int configurePluginScriptEngine(const int nIndex);
+	int configurePluginScriptEngine(const QString &sRegisteredPluginName);
 	void writeMainWindowSettings();
-	bool checkPluginCompatibility(QObject *plugin);
-	void parsePluginDefinedFileExtensions(QObject *plugin);
-    bool popPluginIntoMenu(QObject *plugin);
+	bool checkPluginCompatibility(const QString &sRegisteredPluginName);
+	void parsePluginDefinedFileExtensions(const QString &sRegisteredPluginName);
+	bool popPluginIntoMenu(const QString &sRegisteredPluginName);
 	bool parseFile(const QFile &file, const bool &bParseAsText = false);
 	void setCurrentFile(const QString &fileName, bool bIsNotSaved = false);
 	void updateRecentFileActions();

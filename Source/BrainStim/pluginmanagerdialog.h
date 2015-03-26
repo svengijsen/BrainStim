@@ -16,47 +16,36 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+#ifndef PLUGINMANAGERDIALOG_H
+#define PLUGINMANAGERDIALOG_H
 
-#ifndef PLUGINCOLLECTION_H
-#define PLUGINCOLLECTION_H
+#include <QDialog>
+#include <QStandardItemModel>
+#include "ui_pluginmanagerdialog.h"
+#include "installationmanager.h"
 
-#include <QObject>
-#include <QStringList>
-#include <QRegExp>
-#include "plugininterface.h"
-
-class PluginCollection : public QObject
+class PluginManagerDialog : public QDialog
 {
 	Q_OBJECT
 
 public:
+	PluginManagerDialog(installationManager *installMngr, QWidget *parent = NULL);
+	~PluginManagerDialog();
 
-	enum PluginType
-	{
-		DevicePlugin		    = 0,
-		ExtensionPlugin			= 1
-	};
-	Q_DECLARE_FLAGS(PluginTypes, PluginType)
-
-	PluginCollection(QObject *parent);
-	~PluginCollection();
-
-	int Add(QObject *plugin);
-	bool IsEmpty();
-	int Count();
-	QString GetLoaderName(int index);
-	int GetIndex(QString name);
-	PluginInterface *GetInterface(int index);
+private slots:
+	void onSelectTableRow(QModelIndex index);
+	void uninstallSelectedPlugin();
+	void installSelectedPlugin();
 
 private:
-	bool Cleanup();
+	void initialize();
+	void fillTable();
+	int getSelectedRowIndex(const QModelIndex &index);
 
-	int MaxPlugins;
-	int NrofPlugins;
-	QList<QObject *> PlgInterfaces;
-	QList<int> PlgTypes;
-	QStringList PlgNames;
+	Ui::PluginManagerDialog ui;
+	installationManager *pInstallMngr;
+	QStandardItemModel *pluginCollectionModel;
+	QStringList lPluginNames;
 };
-Q_DECLARE_OPERATORS_FOR_FLAGS(PluginCollection::PluginTypes)
 
-#endif // PLUGINCOLLECTION_H
+#endif // PLUGINMANAGERDIALOG_H

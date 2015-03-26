@@ -37,18 +37,18 @@
 #include "maindefines.h"
 #include "BrainStim.h"
 
-aboutQTDialog::aboutQTDialog(const QString &title,const QStringList &pluginFileNames,const QString &path, const QStringList &fileNames, QWidget *parent) : 
+aboutQTDialog::aboutQTDialog(const QString &title, QWidget *parent) : 
 	QDialog(parent),
 	label(new QLabel),
-	treeWidget(new QTreeWidget),
+	//treeWidget(new QTreeWidget),
 	okButton(new QPushButton(tr("OK")))
 {
-	Q_UNUSED(fileNames);
+	//Q_UNUSED(fileNames);
 	labWebsite = new QLabel;
-	treeWidget->setAlternatingRowColors(false);
-	treeWidget->setSelectionMode(QAbstractItemView::NoSelection);
-	treeWidget->setColumnCount(1);
-	treeWidget->header()->hide();
+	//treeWidget->setAlternatingRowColors(false);
+	//treeWidget->setSelectionMode(QAbstractItemView::NoSelection);
+	//treeWidget->setColumnCount(1);
+	//treeWidget->header()->hide();
 
 	okButton->setDefault(true);
 
@@ -59,7 +59,7 @@ aboutQTDialog::aboutQTDialog(const QString &title,const QStringList &pluginFileN
 	mainLayout->setColumnStretch(2, 1);
 	mainLayout->addWidget(labWebsite, 0, 0, 1, 3);
 	mainLayout->addWidget(label, 1, 0, 1, 3);
-	mainLayout->addWidget(treeWidget, 2, 0, 1, 3);
+	//mainLayout->addWidget(treeWidget, 2, 0, 1, 3);
 	mainLayout->addWidget(okButton, 3, 1);
 	setLayout(mainLayout);
 
@@ -72,32 +72,32 @@ aboutQTDialog::aboutQTDialog(const QString &title,const QStringList &pluginFileN
 	setWindowTitle("About " + title);
 	//findPlugins(title,path, fileNames);
 
-	bool bRetVal = false;
-	const QMetaObject* metaObject = NULL;
-	QString strSlot(FUNC_PLUGIN_ISCOMPATIBLE_FULL);
-	foreach (QObject *plugin, QPluginLoader::staticInstances())
-	{
-		metaObject = plugin->metaObject();
-		//QStringList methods;
-		//for(int i = metaObject->methodOffset(); i < metaObject->methodCount(); ++i)
-		//	methods << QString::fromLatin1(metaObject->method(i).signature());
-		if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(strSlot.toLatin1())) == -1))//Is the slot present?
-		{
-			//Invoke the slot
-			metaObject->invokeMethod(plugin, FUNC_PLUGIN_ISCOMPATIBLE,Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal));//if(!metaObject->invokeMethod(plugin, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal)))				
-				//qDebug() << "aboutQTDialog(), Could not invoke the slot(" << strSlot << ")!";		
-		}
-		if (bRetVal)
-			populateTreeWidget(plugin, tr("%1 (Static Plugin)").arg(plugin->metaObject()->className()));
-		else
-			populateTreeWidget(plugin, tr("%1 (Static Plugin --> NOT COMPATIBLE)").arg(plugin->metaObject()->className()));
-		metaObject = NULL;
-		bRetVal = false;
-	}
+	//bool bRetVal = false;
+	//const QMetaObject* metaObject = NULL;
+	//QString strSlot(FUNC_PLUGIN_ISCOMPATIBLE_FULL);
+	//foreach (QObject *plugin, QPluginLoader::staticInstances())
+	//{
+	//	metaObject = plugin->metaObject();
+	//	//QStringList methods;
+	//	//for(int i = metaObject->methodOffset(); i < metaObject->methodCount(); ++i)
+	//	//	methods << QString::fromLatin1(metaObject->method(i).signature());
+	//	if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(strSlot.toLatin1())) == -1))//Is the slot present?
+	//	{
+	//		//Invoke the slot
+	//		metaObject->invokeMethod(plugin, FUNC_PLUGIN_ISCOMPATIBLE,Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal));//if(!metaObject->invokeMethod(plugin, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal)))				
+	//			//qDebug() << "aboutQTDialog(), Could not invoke the slot(" << strSlot << ")!";		
+	//	}
+	//	if (bRetVal)
+	//		populateTreeWidget(plugin, tr("%1 (Static Plugin)").arg(plugin->metaObject()->className()));
+	//	else
+	//		populateTreeWidget(plugin, tr("%1 (Static Plugin --> NOT COMPATIBLE)").arg(plugin->metaObject()->className()));
+	//	metaObject = NULL;
+	//	bRetVal = false;
+	//}
 
-	label->setText(title + tr(" found the following plugins\n"
-		"(Dynamic plugins looked for in %1):")
-		.arg(QDir::toNativeSeparators(path)));
+	//label->setText(title + tr(" found the following plugins\n"
+	//	"(Dynamic plugins looked for in %1):")
+	//	.arg(QDir::toNativeSeparators(path)));
 	QString tmpStr = "<html>"
 		"<body>"
 		"<h1 style=""font-family:verdana;font-size:16px;"">" MAIN_PROGRAM_FULL_NAME "</h1>"
@@ -124,12 +124,12 @@ aboutQTDialog::aboutQTDialog(const QString &title,const QStringList &pluginFileN
 	labWebsite->setTextFormat(Qt::RichText);
 	labWebsite->setText(tmpStr);
 
-	foreach (QString pluginName,pluginFileNames)
-		populateTreeWidget(0, tr("%1 (Device Plugin)").arg(pluginName));
+	//foreach (QString pluginName,pluginFileNames)
+	//	populateTreeWidget(0, tr("%1 (Device Plugin)").arg(pluginName));
 
 }
 
-//! [0]
+/*
 void aboutQTDialog::findPlugins(const QString &title,const QString &path, const QStringList &fileNames)
 {
 	Q_UNUSED(title);
@@ -186,3 +186,4 @@ void aboutQTDialog::addItems(QTreeWidgetItem *pluginItem, const char *interfaceN
 		featureItem->setIcon(0, featureIcon);
 	}
 }
+*/

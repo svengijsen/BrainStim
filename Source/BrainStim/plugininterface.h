@@ -29,6 +29,22 @@
 class PluginInterface
 {
 public:
+
+	enum PluginType
+	{
+		UnknownPlugin = -1,
+		DevicePlugin = 0,
+		ExtensionPlugin = 1
+	};
+	Q_DECLARE_FLAGS(PluginTypes, PluginType)
+
+	static QString pluginTypeToString(const PluginType &pluginType)
+	{
+		if (pluginType == DevicePlugin) return "Device";
+		else if (pluginType == ExtensionPlugin) return "Extension";
+		else return "Unknown";
+	};
+
 	virtual ~PluginInterface() {}
 	virtual int ConfigureScriptEngine(QScriptEngine &eng) = 0;
 	virtual QString GetPluginInformation(void) {return strPluginInformation;}
@@ -81,7 +97,7 @@ protected:
 private:
 	GlobalApplicationInformation::MainAppInformationStructure *m_MainAppInfo;
 };
-
+Q_DECLARE_OPERATORS_FOR_FLAGS(PluginInterface::PluginTypes)
 
 	//////////////////////////////////////////////////////////////////////////
 

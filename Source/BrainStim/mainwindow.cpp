@@ -42,8 +42,9 @@ GlobalApplicationInformation *MainWindow::globAppInfo = NULL;
 
 MainWindow::MainWindow() : DocumentWindow(), SVGPreviewer(new SvgView)
 {
-	Plugins = NULL;
+	//Plugins = NULL;
 	pMainOptionPage = NULL;
+	pPluginMngrDialog = NULL;
 	tcpServer = NULL;
 	DocManager = NULL;
 	AppScriptEngine = NULL;
@@ -51,6 +52,7 @@ MainWindow::MainWindow() : DocumentWindow(), SVGPreviewer(new SvgView)
 	mainAppInfoStruct = NULL;
 	lastActiveSubWindow = NULL;
 	archiverObject = NULL;
+	installMngr = new installationManager(this);
 	//sLastActiveSubWindowFileExt = "";
 	//sLastLoadedLayoutGroup = "";
 	//bDisableDockWidgetSaving = true;
@@ -108,6 +110,7 @@ bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags m
 	setupStatusBar();
 	createDefaultMenus();
 	setupDynamicPlugins();
+	setupInstallationManagerMenu();
 	setupHelpMenu();
 	setupToolBars();
 	updateMenuControls();
@@ -289,16 +292,21 @@ void MainWindow::closeEvent(QCloseEvent *event)
 #ifndef QT_NO_DEBUG_OUTPUT
 	MainAppInfo::CloseMainLogFile();	
 #endif
-	if(Plugins)
-		delete Plugins;
+//	if(Plugins)
+//		delete Plugins;
 #ifdef Q_OS_WIN32 //Are we on Windows?
 	timeEndPeriod(1);
 #endif
 	MainAppInfo::setMainWindow(NULL);
-	if(DocManager)
+	if (installMngr)
+	{
+		delete installMngr;
+		installMngr = NULL;
+	}
+	if (DocManager)
 	{
 		disconnect(DocManager, SIGNAL(DocumentManagerOutput(QString)), this, SLOT(write2OutputWindow(QString)));
-		disconnect(DocManager, SIGNAL(NrOfLinesChanged(int)), this, SLOT(NumberOfLinesChangedHandler(int)));	
+		disconnect(DocManager, SIGNAL(NrOfLinesChanged(int)), this, SLOT(NumberOfLinesChangedHandler(int)));
 		delete DocManager;
 		DocManager = NULL;
 	}
@@ -316,6 +324,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
 	{
 		delete pMainOptionPage;
 		pMainOptionPage = NULL;
+	}
+	if (pPluginMngrDialog)
+	{
+		delete pPluginMngrDialog;
+		pPluginMngrDialog = NULL;
 	}
 	MainAppInfo::destructCustomPropertySettingObjects();
 	shutdownNetworkServer();
@@ -889,9 +902,10 @@ bool MainWindow::restartScriptEngine()
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
 	setupScriptEngine();
-	for (int i=0;i<Plugins->Count()-1;i++)
+	QStringList lPluginNames = installMngr->getRegisteredPluginNames();
+	foreach(QString sPluginName, lPluginNames)
 	{
-		configurePluginScriptEngine(i);
+		configurePluginScriptEngine(sPluginName);
 	}
 	configureDebugger();
 	updateMenuControls();
@@ -2115,6 +2129,20 @@ void MainWindow::createDockWindows()
 	//tabifyDockWidget(
 }
 
+void MainWindow::setupInstallationManagerMenu()
+{
+	if (pluginsMenu)
+	{
+		pluginsMenu->addSeparator();
+		configurePluginsAction = pluginsMenu->addAction(QIcon(":/resources/configure.png"), tr("&Plugin Manager"));
+		configurePluginsAction->setShortcut(QKeySequence(tr("Ctrl+Alt+P")));
+		configurePluginsAction->setStatusTip(tr("Open the Plugin Manager dialog"));
+		//configurePluginsAction->setEnabled(true);
+		connect(configurePluginsAction, SIGNAL(triggered()), this, SLOT(openPluginManagerDialog()));
+	}
+	return;
+}
+
 void MainWindow::setupDynamicPlugins()
 {
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
@@ -2197,7 +2225,8 @@ void MainWindow::setupDynamicPlugins()
 						}
 					}
 
-					popPluginIntoMenu(plugin);
+					QString sPluginInternalName = installMngr->registerPlugin(plugin, "");
+					popPluginIntoMenu(sPluginInternalName);
 					//Additional File Extensions defined?
 					if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_GETADDFILEEXT_FULL).toLatin1())) == -1))//Is the slot present?
 					{
@@ -2307,9 +2336,10 @@ void MainWindow::setupDynamicPlugins()
 							}
 						
 							//qWarning() << __FUNCTION__ << ", Plugin is compatibility(" << fileName << ")";
-							if (popPluginIntoMenu(plugin))
+							QString sPluginInternalName = installMngr->registerPlugin(plugin, QDir(MainAppInfo::pluginsDirPath()).absoluteFilePath(fileName));
+							if (popPluginIntoMenu(sPluginInternalName))
 							{
-								pluginFileNames += fileName;
+								//pluginFileNames += fileName;
 								//Additional File Extensions defined?
 								if (!(metaObject->indexOfMethod(QMetaObject::normalizedSignature(QString(FUNC_PLUGIN_GETADDFILEEXT_FULL).toLatin1())) == -1))//Is the slot present?
 								{
@@ -2435,17 +2465,25 @@ bool MainWindow::extendAPICallTips(const QMetaObject* metaScriptObject)
 	return false;
 };
 
-bool MainWindow::checkPluginCompatibility(QObject *plugin)
+bool MainWindow::checkPluginCompatibility(const QString &sRegisteredPluginName)
 {
 	bool bRetval = false;
 
-	DeviceInterface *iDevice = qobject_cast<DeviceInterface *>(plugin);
+	PluginInterface *plugin = NULL;
+	if (installMngr)
+		plugin = installMngr->getRegisteredPluginInterface(sRegisteredPluginName);
+	if (plugin == NULL)
+		return false;
+
+	//DeviceInterface *iDevice = qobject_cast<DeviceInterface *>(plugin);
+	DeviceInterface *iDevice = dynamic_cast<DeviceInterface *>(plugin);
 	if (iDevice) 
 	{
 		bRetval = iDevice->IsCompatible();
 	}
 
-	ExtensionInterface *iExtension = qobject_cast<ExtensionInterface *>(plugin);
+	//ExtensionInterface *iExtension = qobject_cast<ExtensionInterface *>(plugin);
+	ExtensionInterface *iExtension = dynamic_cast<ExtensionInterface *>(plugin);
 	if (iExtension) 
 	{
 		bRetval = iExtension->IsCompatible();
@@ -2460,20 +2498,28 @@ bool MainWindow::checkPluginCompatibility(QObject *plugin)
 	return bRetval;
 }
 
-void MainWindow::parsePluginDefinedFileExtensions(QObject *plugin)
+void MainWindow::parsePluginDefinedFileExtensions(const QString &sRegisteredPluginName)
 {
 	QStringList lstExtensions;
 	QStringList tmpList;
 	bool bRetval = false;
 	int i;
 
-	DeviceInterface *iDevice = qobject_cast<DeviceInterface *>(plugin);
+	PluginInterface *plugin = NULL;
+	if (installMngr)
+		plugin = installMngr->getRegisteredPluginInterface(sRegisteredPluginName);
+	if (plugin == NULL)
+		return;
+
+	//DeviceInterface *iDevice = qobject_cast<DeviceInterface *>(plugin);
+	DeviceInterface *iDevice = dynamic_cast<DeviceInterface *>(plugin);
 	if (iDevice) 
 	{
 		lstExtensions = iDevice->GetAdditionalFileSlotHandlers();
 	}
 
-	ExtensionInterface *iExtension = qobject_cast<ExtensionInterface *>(plugin);
+	//ExtensionInterface *iExtension = qobject_cast<ExtensionInterface *>(plugin);
+	ExtensionInterface *iExtension = dynamic_cast<ExtensionInterface *>(plugin);
 	if (iExtension) 
 	{
 		lstExtensions = iExtension->GetAdditionalFileSlotHandlers();
@@ -2496,51 +2542,55 @@ void MainWindow::parsePluginDefinedFileExtensions(QObject *plugin)
 	}	
 }
 
-bool MainWindow::popPluginIntoMenu(QObject *plugin)
+bool MainWindow::popPluginIntoMenu(const QString &sRegisteredPluginName)
 {
 	QAction *pluginAction;
-
 	if (!PluginsFound)
 	{
 		pluginsMenu  = menuBar()->addMenu(tr("&Plugins"));
-		Plugins = new PluginCollection(this);
 		menuBar()->addMenu(pluginsMenu);//the Plugins menu..........................................................
 		PluginsFound = true;
 	}
+	PluginInterface *plugin = NULL;
+	if (installMngr)
+		plugin = installMngr->getRegisteredPluginInterface(sRegisteredPluginName);
+	if (plugin==NULL)
+		return false;
 
-	DeviceInterface *iDevice = qobject_cast<DeviceInterface *>(plugin);//For each plugin (static or dynamic), we check which interfaces it implements using qobject_cast()
+	//DeviceInterface *iDevice = qobject_cast<DeviceInterface *>(plugin);//For each plugin (static or dynamic), we check which interfaces it implements using qobject_cast()
+	DeviceInterface *iDevice = dynamic_cast<DeviceInterface *>(plugin);//For each plugin (static or dynamic), we check which interfaces it implements using qobject_cast()
 	if (iDevice) 
 	{
-		if(checkPluginCompatibility(plugin))
+		if (checkPluginCompatibility(sRegisteredPluginName))
 		{
 			if (!bDevicePluginsFound)
 			{
 				devicePluginMenu = pluginsMenu->addMenu(QIcon(":/resources/pluginDevice.png"), tr("&Device Plugins"));
 				bDevicePluginsFound = true;
 			}
-			pluginAction = integratePlugin(plugin,Plugins);
+			pluginAction = integratePlugin(sRegisteredPluginName);
 			devicePluginMenu->addAction(pluginAction);
 			pluginsMenu->addMenu(devicePluginMenu);//the devices menu..........................................................
-			parsePluginDefinedFileExtensions(plugin);
+			parsePluginDefinedFileExtensions(sRegisteredPluginName);
 			return true;
 		}
 		return false;
 	}
-
-	ExtensionInterface *iExtension = qobject_cast<ExtensionInterface *>(plugin);//For each plugin (static or dynamic), we check which interfaces it implements using qobject_cast()
+	//ExtensionInterface *iExtension = qobject_cast<ExtensionInterface *>(plugin);//For each plugin (static or dynamic), we check which interfaces it implements using qobject_cast()
+	ExtensionInterface *iExtension = dynamic_cast<ExtensionInterface *>(plugin);//For each plugin (static or dynamic), we check which interfaces it implements using qobject_cast()
 	if (iExtension) 
 	{
-		if(checkPluginCompatibility(plugin))
+		if (checkPluginCompatibility(sRegisteredPluginName))
 		{
 			if (!bExtensionPluginsFound)
 			{
 				extensionPluginMenu = pluginsMenu->addMenu(QIcon(":/resources/pluginExtension.png"), tr("&Extension Plugins"));
 				bExtensionPluginsFound = true;
 			}
-			pluginAction = integratePlugin(plugin,Plugins);
+			pluginAction = integratePlugin(sRegisteredPluginName);
 			extensionPluginMenu->addAction(pluginAction);
 			pluginsMenu->addMenu(extensionPluginMenu);//the extension menu..........................................................
-			parsePluginDefinedFileExtensions(plugin);
+			parsePluginDefinedFileExtensions(sRegisteredPluginName);
 			return true;
 		}
 		return false;
@@ -2548,27 +2598,26 @@ bool MainWindow::popPluginIntoMenu(QObject *plugin)
 	return false;
 }
 
-QAction* MainWindow::integratePlugin(QObject *plugin, PluginCollection *collection)
+QAction* MainWindow::integratePlugin(const QString &sRegisteredPluginName)
 {
-	int tmpIndex;
-	tmpIndex = Plugins->Add(plugin);
-	if (tmpIndex >=0)//if Add succeeded...
+	if ((sRegisteredPluginName.isEmpty() == false) && (installMngr->getRegisteredPluginInterface(sRegisteredPluginName)))//if successfully registered
 	{
-		QAction *action1 = new QAction(collection->GetInterface(tmpIndex)->GetPluginInformation(), plugin);
-		action1->setData(collection->GetLoaderName(tmpIndex));
+		QAction *action1 = new QAction(installMngr->getRegisteredPluginInterface(sRegisteredPluginName)->GetPluginInformation(),this);
+		action1->setData(sRegisteredPluginName);
 		connect(action1, SIGNAL(triggered()), this, SLOT(showPluginGUI()));
-		action1->setStatusTip(tr("Show the Plugins UI(") + collection->GetLoaderName(tmpIndex) +")");
+		action1->setStatusTip(tr("Show the Plugins UI(") + sRegisteredPluginName + ")");
 		//collection->GetInterface(tmpIndex)->ConfigureScriptEngine(* AppScriptEngine->eng);
-		int nNewRegisteredMetaID = configurePluginScriptEngine(tmpIndex);
+		int nNewRegisteredMetaID = configurePluginScriptEngine(sRegisteredPluginName);
 		MainAppInfo::addRegisteredMetaTypeID(nNewRegisteredMetaID);
 		return action1;
 	}
-	return 0;
+	return NULL;
 }
 
-int MainWindow::configurePluginScriptEngine(const int nIndex)
+int MainWindow::configurePluginScriptEngine(const QString &sRegisteredPluginName)
 {
-	return Plugins->GetInterface(nIndex)->ConfigureScriptEngine(* AppScriptEngine->eng);
+	int nMetaScriptID = installMngr->configureRegisteredPluginScriptEngine(sRegisteredPluginName, AppScriptEngine->eng);
+	return nMetaScriptID;
 }
 
 bool MainWindow::checkUserDirectories(QStringList &lPathsToCheck, bool bShowWarning)
@@ -2739,7 +2788,7 @@ void MainWindow::setAppDirectories()
 void MainWindow::showPluginGUI()
 {
 	QAction *action = qobject_cast<QAction *>(sender());
-	Plugins->GetInterface(Plugins->GetIndex(action->data().toString()))->ShowGUI();	
+	installMngr->getRegisteredPluginInterface(action->data().toString())->ShowGUI();
 }
 
 void MainWindow::setScriptRunningStatus(GlobalApplicationInformation::ActiveScriptMode state)
@@ -3121,6 +3170,33 @@ void MainWindow::abortScript()
 	}
 }
 
+void MainWindow::openPluginManagerDialog()
+{
+	if (BrainStimFlags & GlobalApplicationInformation::VerboseMode)
+		qDebug() << "Verbose Mode: " << __FUNCTION__;
+	int returnVal;
+	if (pPluginMngrDialog)
+		delete pPluginMngrDialog;
+	pPluginMngrDialog = new PluginManagerDialog(installMngr, this);
+	returnVal = pPluginMngrDialog->exec();
+
+	switch (returnVal)
+	{
+	case QDialog::Accepted:
+		// Ok was clicked
+		//parseRemainingGlobalSettings();
+		//checkUserDirectories(MainAppInfo::getUserFolderList(), true);
+		break;
+	case QDialog::Rejected:
+		// Cancel was clicked
+		break;
+	default:
+		// should never be reached
+		break;
+	}
+	return;
+}
+
 void MainWindow::openOptionsDialog()
 {
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
@@ -3153,7 +3229,7 @@ void MainWindow::openOptionsDialog()
 
 void MainWindow::aboutBrainStim()
 {
-	aboutQTDialog aboutQTDlg(globAppInfo->getTitle(),pluginFileNames,MainAppInfo::pluginsDirPath(), pluginFileNames, this);
+	aboutQTDialog aboutQTDlg(globAppInfo->getTitle(), this);
 	aboutQTDlg.exec();
 }
 

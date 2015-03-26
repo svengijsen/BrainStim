@@ -65,9 +65,6 @@
     <ClCompile Include="optionpage.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="plugincollection.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="qtscriptengine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -165,18 +162,6 @@
       <Filter>Generated Files\Release_Win32</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Build_MSVC\Qt\x64\Release\Moc\moc_qtscriptengine.cpp">
-      <Filter>Generated Files\Release_x64</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_plugincollection.cpp">
-      <Filter>Generated Files\Debug_Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_plugincollection.cpp">
-      <Filter>Generated Files\Debug_x64</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_plugincollection.cpp">
-      <Filter>Generated Files\Release_Win32</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Release\Moc\moc_plugincollection.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_OutputListDelegate.cpp">
@@ -416,6 +401,36 @@
     <ClCompile Include="..\..\Build_MSVC\Qt\x64\Release\Moc\moc_archiver.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
+    <ClCompile Include="installationmanager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_installationmanager.cpp">
+      <Filter>Generated Files\Debug_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_installationmanager.cpp">
+      <Filter>Generated Files\Debug_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_installationmanager.cpp">
+      <Filter>Generated Files\Release_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Release\Moc\moc_installationmanager.cpp">
+      <Filter>Generated Files\Release_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="pluginmanagerdialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_pluginmanagerdialog.cpp">
+      <Filter>Generated Files\Debug_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_pluginmanagerdialog.cpp">
+      <Filter>Generated Files\Debug_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_pluginmanagerdialog.cpp">
+      <Filter>Generated Files\Release_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Release\Moc\moc_pluginmanagerdialog.cpp">
+      <Filter>Generated Files\Release_x64</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -443,6 +458,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_propertysettingswidget.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_pluginmanagerdialog.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -507,9 +525,6 @@
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="optionpage.h">
-      <Filter>Header Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="plugincollection.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="plugininterface.h">
@@ -580,6 +595,15 @@
     </CustomBuild>
     <CustomBuild Include="archiver.h">
       <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="installationmanager.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="pluginmanagerdialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="pluginmanagerdialog.ui">
+      <Filter>Form Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

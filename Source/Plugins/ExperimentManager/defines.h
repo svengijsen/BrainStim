@@ -40,7 +40,7 @@
 #define PLUGIN_ORIGINAL_FILENAME					PLUGIN_INTERNAL_NAME "." PLUGIN_INTERNAL_EXTENSION
 #define PLUGIN_FULL_NAME							PLUGIN_INTERNAL_NAME "(v" PLUGIN_FILE_VERSION_STRING ")"
 #define PLUGIN_FILE_DESCRIPTION						"Library that implements the Experiment Manager"
-#define PLUGIN_INFORMATION							PLUGIN_INTERNAL_NAME " Plugin(v" PLUGIN_FILE_VERSION_STRING ") by " PLUGIN_AUTHOR_NAME
+#define PLUGIN_INFORMATION							PLUGIN_INTERNAL_NAME " Plugin(v" PLUGIN_FILE_VERSION_STRING ")"
 #define PLUGIN_MAIN_PROGRAM_MINIMAL_VERSION	"1.0.0.1"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 #define PLUGIN_EXMLDOC_MINIMAL_VERSION_MAJOR	1   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 #define PLUGIN_EXMLDOC_MINIMAL_VERSION_MINOR	0   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).

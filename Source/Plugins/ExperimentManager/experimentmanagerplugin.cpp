@@ -516,6 +516,15 @@ QWidget *ExperimentManagerPlugin::GetAdditionalFileTypeEditor(QString strExtensi
 			}
 			else
 			{
+				QFile fileCheck;
+				fileCheck.setFileName(strCanonicalFilePath);
+				if (fileCheck.exists())
+				{
+					int nFileSize = fileCheck.size();
+					if(nFileSize == 0)
+						return NULL;
+				}
+
 				strcControlObjects tmpStrcControlObjects;
 				tmpManager = new ExperimentManager(this);
 				tmpStrcControlObjects.pExpManager = tmpManager;
@@ -602,6 +611,8 @@ bool ExperimentManagerPlugin::LoadAdditionalFile(QString strFilePath)
 	else
 	{
 		qDebug() << __FUNCTION__ << "::Error: Could not load the document (" << tmpString << ")!";
+		//RemoveAdditionalFile(strFilePath);
+		return false;
 	}
 	return false;
 }
