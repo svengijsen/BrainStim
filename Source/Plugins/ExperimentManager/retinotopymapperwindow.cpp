@@ -26,6 +26,8 @@ RetinotopyMapperWindow::RetinotopyMapperWindow(RetinotopyMapper *parent) : paren
 	outputFile = NULL;
 	bCDATFileReadyToWrite = false;
 	bFistRenderCall = true;
+	sCustomOutputDirectoryPath = "";
+	nOutputFileFrameCounter = 0;
 	nLastOutputTriggerFrameNumber = ExperimentStructuresNameSpace::RA_REINITIALIZE;
 }
 
@@ -536,6 +538,11 @@ void RetinotopyMapperWindow::render(QPainter *stimuliPainter)
 		parentRetinotopyMapper->experimentManager->logExperimentObjectData(parentRetinotopyMapper->getObjectID(),0,__FUNCTION__,"","Finished painting the object");
 }
 
+void RetinotopyMapperWindow::setCustomOutputPath(const QString &sOutputDirectory)
+{
+	sCustomOutputDirectoryPath = sOutputDirectory;//Directory should be checked in calling function
+}
+
 bool RetinotopyMapperWindow::doOutputTriggerFrame(const ExperimentStructuresNameSpace::ExperimentStructureState &tmpExpStrState, const cExperimentStructure &tmpExpStr, const cBlockStructure &tmpBlockStrc, const QPixmap &pix2Output)
 {
 	if (tmpExpStrState.CurrentBlock_InternalTrigger < nLastOutputTriggerFrameNumber)
@@ -544,7 +551,11 @@ bool RetinotopyMapperWindow::doOutputTriggerFrame(const ExperimentStructuresName
 	}
 	if (tmpExpStrState.CurrentBlock_InternalTrigger > nLastOutputTriggerFrameNumber)
 	{
-		QString outputDir = MainAppInfo::outputsDirPath();
+		QString outputDir;
+		if (sCustomOutputDirectoryPath.isEmpty())
+			outputDir = MainAppInfo::outputsDirPath();
+		else
+			outputDir = sCustomOutputDirectoryPath;
 		outputDir = outputDir + RETINOMAPPER_OUTPUT_SUBFOLDER;
 		if(QDir(outputDir).exists()==false)
 		{
@@ -555,7 +566,8 @@ bool RetinotopyMapperWindow::doOutputTriggerFrame(const ExperimentStructuresName
 		{
 			QDir().mkdir(outputDir);
 		}
-		QString fileName = outputDir + QString::number(parentRetinotopyMapper->getObjectID()) + "_" + QString::number(tmpBlockStrc.getBlockNumber()) + QString("_") + QString::number(tmpExpStrState.CurrentBlock_TrialNumber) + QString("_") + QString::number(tmpExpStrState.CurrentBlock_InternalTrigger);
+		QString fileName = outputDir + QString::number(parentRetinotopyMapper->getObjectID()) + "_" + QString::number(tmpBlockStrc.getBlockNumber()) + QString("_") + QString::number(tmpExpStrState.CurrentBlock_TrialNumber) + QString("_") + QString::number(tmpExpStrState.CurrentBlock_InternalTrigger) + QString("_" + QString::number(nOutputFileFrameCounter));
+		nOutputFileFrameCounter++;
 
 		if (parentRetinotopyMapper->retinoOutputFormat == RETINOMAPPER_OUTPUTFORMAT_PNG)
 		{
@@ -1131,23 +1143,19 @@ bool RetinotopyMapperWindow::drawMovingDots()
 bool RetinotopyMapperWindow::drawMovingBar()
 {
 	qreal qrYOffset = 0.0;
-	//QPointF qOffset(0.0,0.0);
-
-
-
 	if (bRenderStimuli)
 	{
-		//parentRetinotopyMapper->fStimulusDiameter = qSqrt(qPow(nStimFrameWidth,2) + qPow(nStimFrameHeight,2));//qSqrt(qPow(nStimFrameWidth,2) + qPow(nStimFrameHeight,2));
 		parentRetinotopyMapper->dStimulusDiameter = qSqrt(qPow(nStimFrameWidth,2) + qPow(nStimFrameHeight,2));
+		imgPainter.save();//ADDED
 		imgPainter.translate(nStimFrameWidth/2, nStimFrameHeight/2);
 		imgPainter.rotate(parentRetinotopyMapper->movingBarAngle);
 		if(parentRetinotopyMapper->bCreateActivationMap)
 		{
+			activationPainter.save();//ADDED
 			activationPainter.translate(nStimFrameWidth/2, nStimFrameHeight/2);
 			activationPainter.rotate(parentRetinotopyMapper->movingBarAngle);
 		}
 		double movingBarAreaLength = parentRetinotopyMapper->movingBarCoverage * parentRetinotopyMapper->dStimulusDiameter;
-		//parentRetinotopyMapper->dCurrentSize = (movingBarAreaLength)/(parentRetinotopyMapper->movingBarHeight*parentRetinotopyMapper->movingBarHeightCheckAmount);
 		parentRetinotopyMapper->dCurrentSize = (movingBarAreaLength)/(parentRetinotopyMapper->movingBarHeight*parentRetinotopyMapper->movingBarHeightCheckAmount);
 		if(parentRetinotopyMapper->movingBarDirection == -1)//Down->Up (When 0 <= movingBarAngle >= 180 degrees)
 		{				
@@ -1203,18 +1211,29 @@ bool RetinotopyMapperWindow::drawMovingBar()
 	//	experimentManager->logExperimentObjectData(nRetinoID,0,__FUNCTION__,"",QString("SubPainting the object"),QString("3d"));
 	if(parentRetinotopyMapper->showFixationPoint) // show fix cross
 	{
+		imgPainter.restore();//ADDED
 		imgPainter.setPen(QPen(parentRetinotopyMapper->fixationColor, parentRetinotopyMapper->fixationSize, parentRetinotopyMapper->style, parentRetinotopyMapper->roundCap));
 		if (bRenderStimuli)
-			imgPainter.drawPoint(0.0,-qrYOffset);//-qOffset);//0.0f,-qrYOffset);
+		{
+			imgPainter.drawPoint(nStimFrameWidth / 2, nStimFrameHeight / 2);//CHANGED imgPainter.drawPoint(0.0, -qrYOffset);
+		}
 		else
-			imgPainter.drawPoint(nStimFrameWidth/2, nStimFrameHeight/2);
+		{
+			imgPainter.drawPoint(nStimFrameWidth / 2, nStimFrameHeight / 2);
+		}
 		if(parentRetinotopyMapper->bCreateActivationMap)
-		{				
+		{		
+			activationPainter.restore();//ADDED
 			activationPainter.setPen(QPen(parentRetinotopyMapper->whiteColor, parentRetinotopyMapper->fixationSize, parentRetinotopyMapper->style, parentRetinotopyMapper->roundCap));
 			if (bRenderStimuli)
-				activationPainter.drawPoint(0.0,-qrYOffset);//(-qOffset);//0.0f,-qrYOffset);
+			{
+				activationPainter.drawPoint(nStimFrameWidth / 2, nStimFrameHeight / 2);//CHANGED activationPainter.drawPoint(0.0, -qrYOffset);
+				//activationPainter.translate(0.0, -qrYOffset);//ADDED
+			}
 			else
-				activationPainter.drawPoint(nStimFrameWidth/2, nStimFrameHeight/2);
+			{
+				activationPainter.drawPoint(nStimFrameWidth / 2, nStimFrameHeight / 2);
+			}
 		}
 	}
 	return true;

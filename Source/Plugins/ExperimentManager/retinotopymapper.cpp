@@ -22,6 +22,7 @@
 RetinotopyMapper::RetinotopyMapper(QObject *parent)	: ExperimentEngine(parent)
 {
 	retinoMapperWindow = NULL;
+	sCustomOutputDirectoryPath = "";
 	customScriptHandlerFunction = NULL;
 	initialize();	
 }
@@ -452,6 +453,20 @@ void RetinotopyMapper::adjustStimScreenArea()
 	rStimuliScreenArea = QRect((int)(rectScreenRes.width()-stimWidthPixelAmount)/2,(int)(rectScreenRes.height()-stimHeightPixelAmount)/2,stimWidthPixelAmount,stimHeightPixelAmount);
 }
 
+bool RetinotopyMapper::setCustomOutputDirectoryPath(const QString &sOutputDirectory)
+{
+	if (QDir(sOutputDirectory).exists())
+	{
+		QFileInfo fi(sOutputDirectory);
+		if (fi.permission(QFile::WriteUser))
+		{
+			sCustomOutputDirectoryPath = sOutputDirectory;
+			return true;
+		}
+	}
+	return false;
+}
+
 bool RetinotopyMapper::startObject()
 {
 	//lastTriggerNumber = -1;
@@ -490,6 +505,8 @@ bool RetinotopyMapper::startObject()
 		qWarning() << __FUNCTION__ << "Chosen Stimuli size exceeds active Screen resolution!"; 
 		emit ExperimentEngine::UserWantsToClose();
 	}
+	if (sCustomOutputDirectoryPath.isEmpty() == false)
+		retinoMapperWindow->setCustomOutputPath(sCustomOutputDirectoryPath);
 
 	retinoMapperWindow->showFullScreen();
 	QRect tmpRect = retinoMapperWindow->geometry();

@@ -148,6 +148,7 @@ public slots:
 	bool setExperimentObjectReadyToUnlock();
 	QScreen* getActiveStimuliOutputScreen();
 	bool setActiveStimuliOutputScreen(int nScreenNumber);
+	bool setCustomOutputDirectoryPath(const QString &sOutputDirectory);
 
 protected:
 	bool eventFilter(QObject *target, QEvent *event);
@@ -194,6 +195,7 @@ private:
 	QStringList randomizeTriggerStepsArray;
 	bool bNoChangesSinceLastFrame;
 	ExperimentManager *experimentManager;
+	QString sCustomOutputDirectoryPath;
 
 	QColor movingDotsColor;
 	QColor cCheckerColor1;

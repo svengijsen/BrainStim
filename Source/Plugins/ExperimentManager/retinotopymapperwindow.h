@@ -32,6 +32,7 @@ public:
 	~RetinotopyMapperWindow();
 
 	QScreen *grabScreenUnderMouseCursor();
+	void setCustomOutputPath(const QString &sOutputDirectory);
 
 	void initialize();
 	//void render();
@@ -51,6 +52,8 @@ private:
 	bool doOutputTriggerFrame(const ExperimentStructuresNameSpace::ExperimentStructureState &tmpExpStrState,const cExperimentStructure &tmpExpStr, const cBlockStructure &tmpBlockStrc, const QPixmap &pix2Output);
 
 	RetinotopyMapper *parentRetinotopyMapper;
+	QString sCustomOutputDirectoryPath;
+	int nOutputFileFrameCounter;
 
 	QImage mirrorImage;
 	QPainter activationPainter;
