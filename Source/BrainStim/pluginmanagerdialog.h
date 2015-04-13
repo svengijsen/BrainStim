@@ -24,6 +24,20 @@
 #include "ui_pluginmanagerdialog.h"
 #include "installationmanager.h"
 
+#define PLUGIN_DISABLE_TEXT		"Disabled: "
+#define PLUGIN_STATIC_TEXT		" (Static)"
+
+class customStandardItemModel : public QStandardItemModel
+{
+	Q_OBJECT
+
+public:
+	customStandardItemModel(int nRows, int nColumns, QObject *parent = NULL);
+	~customStandardItemModel();
+
+	QVariant data(const QModelIndex &index, int role = Qt::DisplayRole) const;
+};
+
 class PluginManagerDialog : public QDialog
 {
 	Q_OBJECT
@@ -35,17 +49,22 @@ public:
 private slots:
 	void onSelectTableRow(QModelIndex index);
 	void uninstallSelectedPlugin();
-	void installSelectedPlugin();
+	void installPlugin();
+	void enablePlugin();
+	void disablePlugin();
+	void configurePlugin();
+	void backupAllPlugins();
 
 private:
 	void initialize();
 	void fillTable();
+	void enableDisablePlugin(const bool &bEnable);
 	int getSelectedRowIndex(const QModelIndex &index);
 
 	Ui::PluginManagerDialog ui;
 	installationManager *pInstallMngr;
 	QStandardItemModel *pluginCollectionModel;
-	QStringList lPluginNames;
+	QMap<QString, bool> mapRegisteredPluginNamesToEnabledState;
 };
 
 #endif // PLUGINMANAGERDIALOG_H

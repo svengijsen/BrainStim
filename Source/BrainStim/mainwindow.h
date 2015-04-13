@@ -420,10 +420,22 @@ public slots:
 	*  @return a boolean value determining whether the directory path copy succeeded.
 	*/
 	bool copyDirectoryRecursively(const QString &srcFilePath, const QString &tgtFilePath);
+	/*! \brief loads the available enabled plugins.
+	*
+	*  This function loads the available enabled plugins.
+	*  @return a boolean value determining whether the whole process completed succeeded.
+	*/
+	bool loadDynamicPlugins();
+	/*! \brief unloads the previously loaded plugins.
+	*
+	*  This function unloads the previously loaded plugins.
+	*  @return a boolean value determining whether the whole process completed succeeded.
+	*/
+	bool unloadDynamicPlugins();
 	/*! \brief Closes the BrainStim application.
-	 *
-	 * This function closes the BrainStim application.
-	 */		
+	*
+	* This function closes the BrainStim application.
+	*/
 	void quit(){qApp->closeAllWindows();};
 
 #ifdef DEBUG
@@ -577,9 +589,6 @@ private:
 	SvgView *SVGPreviewer;
 
 	bool bUsesUISettings;
-	bool bDevicePluginsFound;
-	bool bExtensionPluginsFound;
-	bool PluginsFound;
 	bool bMainWindowIsInitialized;
 	bool bExecuteActiveDocument;
 
@@ -629,6 +638,9 @@ private:
     QString m_currentPath;
 	GlobalApplicationInformation::MainAppInformationStructure *mainAppInfoStruct;
 
+	QMap<QString, QPluginLoader*> mapPluginLoaders;
+	QMap<QString, QAction*> mapPluginMenuActions;
+
 	enum { MaxRecentFiles = 10 };
 	QList<QAction *> recentFileActs;
 
@@ -642,7 +654,8 @@ private:
 	bool setDefaultGLFormat();
     void createDefaultMenus();
 	void setupHelpMenu();
-    void setupDynamicPlugins();
+    void setupPlugins();
+	void loadStaticPlugins();
 	void setupInstallationManagerMenu();
 	QAction* integratePlugin(const QString &sRegisteredPluginName);
 	void setupToolBars();
@@ -657,7 +670,8 @@ private:
 	void writeMainWindowSettings();
 	bool checkPluginCompatibility(const QString &sRegisteredPluginName);
 	void parsePluginDefinedFileExtensions(const QString &sRegisteredPluginName);
-	bool popPluginIntoMenu(const QString &sRegisteredPluginName);
+	bool insertPluginIntoMenu(const QString &sRegisteredPluginName);
+	bool removePluginFromMenu(const QString &sRegisteredPluginName);
 	bool parseFile(const QFile &file, const bool &bParseAsText = false);
 	void setCurrentFile(const QString &fileName, bool bIsNotSaved = false);
 	void updateRecentFileActions();

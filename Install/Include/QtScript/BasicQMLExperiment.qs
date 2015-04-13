@@ -15,6 +15,7 @@ BrainStim.clearOutputWindow("BasicQMLExperiment");
 BasicExperiment.sQmlFilePath = BasicExperiment.sScriptRootPath + "/" + "FileName.qml";
 //QML Experiment Objects
 BasicExperiment.QMLViewerObject = null;
+var tmpQMLViewerObj = null;
 	
 ///////////////////////////
 //Private Property Variabeles//
@@ -79,14 +80,78 @@ BasicExperiment.__proto__.preExperimentStateChanged = _.wrap(BasicExperiment.__p
 	
 	//*!Call the below BasicExperiment.LogFunctionSignature method with the args variabele
 	BasicExperiment.LogFunctionSignature("BasicQMLExperiment","preExperimentStateChanged", args, true);
-	if(currentState == ExperimentManager.ExperimentState.ExperimentManager_Initialized)
+	if((currentState == ExperimentManager.ExperimentState.ExperimentManager_Initialized) || (currentState == ExperimentManager.ExperimentState.ExperimentManager_PreParsed))
 	{
-		//Now all defined objects in the experiment file are constructed and therefore available in this script, so now we can make the connections between constructed the objects.
-		BasicExperiment.QMLViewerObject = QML2Viewer_Object_1;	
+		if(BasicExperiment.QMLViewerObj==null)
+		{
+			if(BasicExperiment.cExperimentStructure_Object == null)
+				BasicExperiment.cExperimentStructure_Object = BasicExperiment.ExperimentManagerObj.getExperimentStructure();
+			if(BasicExperiment.cExperimentStructure_Object != null)
+			{
+				var _bQMLViewerObjFound = false;
+				var _arrObjIDList = [];
+				var _nTmpObjectID;
+				var _nTmpNewObjectID = 0;
+				var _sQML2ViewerObjectName;
+				BrainStim.write2OutputWindow("Searching for a declared available QML2Viewer Object..." ,"BasicQMLExperiment");
+				var _nObjectCount = BasicExperiment.cExperimentStructure_Object.getObjectCount();
+				BrainStim.write2OutputWindow("\t" + _nObjectCount + " Object(s) declared." ,"BasicQMLExperiment");
+				if(_nObjectCount>0)
+				{
+					_arrObjIDList = BasicExperiment.cExperimentStructure_Object.getObjectIDList();
+					for(var k=0;k<_nObjectCount;k++)
+					{
+						if(typeof _arrObjIDList[k] !== 'undefined')
+						{
+							if(_arrObjIDList[k] >= _nTmpNewObjectID)
+								_nTmpNewObjectID = _arrObjIDList[k]+1;
+							var _tmpObject = BasicExperiment.cExperimentStructure_Object.getObjectPointerByID(_arrObjIDList[k]);
+							if(_tmpObject)
+							{
+								if(_tmpObject.getObjectClass() === 'QML2Viewer')
+								{
+									_bQMLViewerObjFound = true;
+									_sQML2ViewerObjectName = _tmpObject.getObjectName();
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+				if(_bQMLViewerObjFound)
+				{
+					if(currentState == ExperimentManager.ExperimentState.ExperimentManager_Initialized)
+					{
+						BrainStim.write2OutputWindow("\tFound and using QML2Viewer Object[" + k + "]: " + _sQML2ViewerObjectName ,"BasicQMLExperiment");
+						BasicExperiment.QMLViewerObject = eval(_sQML2ViewerObjectName);
+						BrainStim.write2OutputWindow(BasicExperiment.QMLViewerObj ,"BasicQMLExperiment");
+					}
+				}
+				else
+				{
+					if(currentState == ExperimentManager.ExperimentState.ExperimentManager_PreParsed)
+					{
+						_sQML2ViewerObjectName = "objScriptCreatedQML2Viewer";
+						BrainStim.write2OutputWindow("\tCreating a QML2Viewer Object: " + _sQML2ViewerObjectName,"BasicQMLExperiment");
+						tmpQMLViewerObj = new cObjectStructure();//although created here in the script, do not delete this object, this is automatically done by the Experiment Structure!
+						tmpQMLViewerObj.setObjectID(_nTmpNewObjectID);
+						tmpQMLViewerObj.setObjectName(_sQML2ViewerObjectName);
+						tmpQMLViewerObj.setObjectClass("QML2Viewer");
+						if(BasicExperiment.cExperimentStructure_Object.insertObject(tmpQMLViewerObj))
+						{
+							if(BasicExperiment.ExperimentManagerObj.parseCurrentExperimentStructure())
+								BrainStim.write2OutputWindow("\tSuccessfully created and inserted a QML2Viewer Object: " + _sQML2ViewerObjectName,"BasicQMLExperiment");
+						}
+					}
+				}
+			}
+		}
 	}
 	else if(currentState == ExperimentManager.ExperimentState.ExperimentManager_Stopped)
 	{
 		BasicExperiment.QMLViewerObject = null;
+		tmpQMLViewerObj = null;
 	}
 	
 	//*!Call the original function (wrap method, with more that one arguments) and return

@@ -839,6 +839,11 @@ bool DocumentManager::loadFile(int DocIndex, const QString &fileName)
 					if ((nSignalIndex >= 0) && (nSlotIndex >= 0))//Is the signal&slot present?
 						QMetaObject::connect(pluginObject,nSignalIndex,this,nSlotIndex,Qt::ConnectionType(Qt::DirectConnection | Qt::UniqueConnection));
 				}
+				else
+				{
+					remove(lChildDocuments.at(DocIndex).pMDISubWin);
+					return false;
+				}
 			}
 		}
 	}
@@ -975,7 +980,13 @@ void DocumentManager::setFileName(int DocIndex, QString fileName, bool bIsNewNot
 
 bool DocumentManager::appendKnownFileExtensionList(QString strFileExtLst)
 {
-	strFileExtensionList = strFileExtensionList + strFileExtLst;
+	if (strFileExtLst.isEmpty())
+		return false;
+	if (strFileExtensionList.contains(strFileExtLst, Qt::CaseInsensitive) == false)
+	{
+		strFileExtensionList = strFileExtensionList + strFileExtLst;
+		return true;
+	}
 	return true;
 }
 
@@ -991,15 +1002,16 @@ bool DocumentManager::appendKnownDocumentFileHandlerList(const QString &strDocHa
 				
 		for (int x=0;x<nSlotCount;x++)
 		{
-			if((x==0)&&(lPluginDefinedPreLoadedHandlerInterfaces.hDocHandlerList.contains(sKey) == false))
+			if((x==0))
 			{
+				if (lPluginDefinedPreLoadedHandlerInterfaces.hDocHandlerList.contains(sKey))
+					int dosomethinghere = 9;
 				strcPluginHandlerInterface tmpPluginHandlerInterface;
 				lPluginDefinedPreLoadedHandlerInterfaces.hDocHandlerList.insert(sKey,tmpPluginHandlerInterface);
 				lPluginDefinedPreLoadedHandlerInterfaces.hDocHandlerList[sKey].pPluginObject = pluginObject;
 			}
 			if(x==PLUGINHANDLER_SLOT_EXECUTE)
 			{
-
 				lPluginDefinedPreLoadedHandlerInterfaces.hDocHandlerList[sKey].sExecuteHandlerSlotSignature = tmpList.at(1);
 				lPluginDefinedPreLoadedHandlerInterfaces.hDocHandlerList[sKey].pPluginHandlerExecuteObject = pluginObject;
 			}

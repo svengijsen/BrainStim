@@ -17,7 +17,34 @@
 //
 
 #include "pluginmanagerdialog.h"
+#include "MainAppInfo.h"
+#include "Archiver.h"
 #include <QStandardItem>
+#include <QFileDialog>
+
+customStandardItemModel::customStandardItemModel(int nRows, int nColumns, QObject *parent) : QStandardItemModel(nRows, nColumns, parent){}
+customStandardItemModel::~customStandardItemModel(){}
+
+QVariant customStandardItemModel::data(const QModelIndex &index, int role) const
+{
+	if (!index.isValid())
+		return QVariant();
+
+	if (role == Qt::TextColorRole)
+	{
+		if ((this->item(index.row(), index.column())) && (index.parent() == QModelIndex()))
+		{
+			if (this->item(index.row(), index.column())->text().endsWith(PLUGIN_STATIC_TEXT))
+				return QColor(Qt::blue);
+			else if (this->item(index.row(), index.column())->text().startsWith(PLUGIN_DISABLE_TEXT))
+				return QColor(Qt::red);
+		}
+	}
+	return QStandardItemModel::data(index, role);
+}
+
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 PluginManagerDialog::PluginManagerDialog(installationManager *installMngr, QWidget *parent) : QDialog(parent), pInstallMngr(installMngr), pluginCollectionModel(NULL)
 {
@@ -27,7 +54,11 @@ PluginManagerDialog::PluginManagerDialog(installationManager *installMngr, QWidg
 	connect(ui.buttonBox_2, SIGNAL(rejected()), this, SLOT(reject()));
 	connect(ui.treeView, SIGNAL(clicked(QModelIndex)), this, SLOT(onSelectTableRow(QModelIndex)));
 	connect(ui.pbUninstall, SIGNAL(clicked()), this, SLOT(uninstallSelectedPlugin()));
-	connect(ui.pbInstall, SIGNAL(clicked()), this, SLOT(installSelectedPlugin()));
+	connect(ui.pbInstall, SIGNAL(clicked()), this, SLOT(installPlugin()));
+	connect(ui.pbEnable, SIGNAL(clicked()), this, SLOT(enablePlugin()));
+	connect(ui.pbDisable, SIGNAL(clicked()), this, SLOT(disablePlugin()));
+	connect(ui.pbConfigure, SIGNAL(clicked()), this, SLOT(configurePlugin()));
+	connect(ui.pbBackup, SIGNAL(clicked()), this, SLOT(backupAllPlugins()));
 	initialize();
 }
 
@@ -40,14 +71,19 @@ PluginManagerDialog::~PluginManagerDialog()
 
 void PluginManagerDialog::initialize()
 {
+	ui.pbConfigure->setEnabled(false);
+	ui.pbUninstall->setEnabled(false);
+	ui.pbEnable->setEnabled(false);
+	ui.pbDisable->setEnabled(false);
 	fillTable();
 }
 
 void PluginManagerDialog::fillTable()
 {
-	lPluginNames = pInstallMngr->getRegisteredPluginNames();
-
-	pluginCollectionModel = new QStandardItemModel(lPluginNames.count(), 2, this);
+	mapRegisteredPluginNamesToEnabledState = pInstallMngr->getRegisteredPluginNamesAndStates();
+	if (pluginCollectionModel)
+		pluginCollectionModel->clear();
+	pluginCollectionModel = new customStandardItemModel(mapRegisteredPluginNamesToEnabledState.count(), 2, this);
 	pluginCollectionModel->setHorizontalHeaderItem(0, new QStandardItem(QString("Name")));
 	pluginCollectionModel->setHorizontalHeaderItem(1, new QStandardItem(QString("Value")));
 
@@ -64,27 +100,40 @@ void PluginManagerDialog::fillTable()
 	QStandardItem *parentItem;
 	QStandardItem *childPathItem;
 	QStandardItem *childTypeItem;
+	QStandardItem *childInternalNameItem;
 	QStandardItem *childMinVersionItem;
 	QList<QStandardItem *> lAdditionalChildColumns;
+	QString sCurrentKey;
+	bool bIsEnabled;
 
-	for (int nRow = 0; nRow < lPluginNames.count(); nRow++)
+	for (int nRow = 0; nRow < mapRegisteredPluginNamesToEnabledState.count(); nRow++)
 	{ 
-		//pInstallMngr->getRegisteredPluginInterface(lPluginNames.at(nRow))->
-		sPluginInfo = pInstallMngr->getRegisteredPluginInterface(lPluginNames.at(nRow))->GetPluginInformation();
-		sMinMainAppVersion = pInstallMngr->getRegisteredPluginInterface(lPluginNames.at(nRow))->GetMinimalMainProgramVersion();
-		pluginType = pInstallMngr->getPluginType(lPluginNames.at(nRow));
-		sAbsFilePath = pInstallMngr->getPluginAbsFilePath(lPluginNames.at(nRow));
+		sCurrentKey = mapRegisteredPluginNamesToEnabledState.keys().at(nRow);
+		sPluginInfo = pInstallMngr->getRegisteredPluginInterface(sCurrentKey)->GetPluginInformation();
+		sMinMainAppVersion = pInstallMngr->getRegisteredPluginInterface(sCurrentKey)->GetMinimalMainProgramVersion();
+		pluginType = pInstallMngr->getPluginType(sCurrentKey);
+		sAbsFilePath = pInstallMngr->getPluginAbsFilePath(sCurrentKey);
+		bIsEnabled = mapRegisteredPluginNamesToEnabledState.value(sCurrentKey);
 
 		parentItem = new QStandardItem(sPluginInfo);
+		if (pInstallMngr->isStaticPlugin(sCurrentKey))
+			parentItem->setText(sPluginInfo + PLUGIN_STATIC_TEXT);
+		if (bIsEnabled == false)
+			parentItem->setText(PLUGIN_DISABLE_TEXT + sPluginInfo);
+
 		pluginCollectionModel->setItem(nRow, parentItem);
 		lAdditionalChildColumns.clear();
 		
-		childTypeItem = new QStandardItem("Type");
+		childInternalNameItem = new QStandardItem("Internal Name");//Should stay the first child element!
+		parentItem->appendRow(childInternalNameItem);
+		lAdditionalChildColumns.append(new QStandardItem(sCurrentKey));
+
+		childTypeItem = new QStandardItem("Type");//Should stay the second child element!
 		parentItem->appendRow(childTypeItem);
 		lAdditionalChildColumns.append(new QStandardItem(PluginInterface::pluginTypeToString(pluginType)));
 		if (sAbsFilePath.isEmpty()==false)
 		{
-			childPathItem = new QStandardItem("Path");
+			childPathItem = new QStandardItem("Path");//Should stay the optional third child element!
 			parentItem->appendRow(childPathItem);
 			lAdditionalChildColumns.append(new QStandardItem(sAbsFilePath));
 		}
@@ -96,6 +145,7 @@ void PluginManagerDialog::fillTable()
 		for (int i = 0; i < 2; i++)
 			ui.treeView->resizeColumnToContents(i);
 	}
+	ui.treeView->selectionModel()->clearSelection();
 }
 
 int PluginManagerDialog::getSelectedRowIndex(const QModelIndex &index)
@@ -103,12 +153,12 @@ int PluginManagerDialog::getSelectedRowIndex(const QModelIndex &index)
 	//QString selectedText = index.data(Qt::DisplayRole).toString();
 	if (index.parent() == QModelIndex())
 	{
-		qDebug() << "row:" << index.row() << ", col:" << index.column();
+		//qDebug() << "row:" << index.row() << ", col:" << index.column();
 		return index.row();
 	}
 	else
 	{
-		qDebug() << "row:" << index.parent().row() << ", col:" << index.parent().column();
+		//qDebug() << "row:" << index.parent().row() << ", col:" << index.parent().column();
 		return index.parent().row();
 	}
 	return -1;
@@ -116,35 +166,214 @@ int PluginManagerDialog::getSelectedRowIndex(const QModelIndex &index)
 
 void PluginManagerDialog::onSelectTableRow(QModelIndex index)
 {
+	ui.pbConfigure->setEnabled(false);
+	ui.pbUninstall->setEnabled(false);
+	ui.pbEnable->setEnabled(false);
+	ui.pbDisable->setEnabled(false);
+
+	if (!index.isValid())
+		return;
 	int nCurrentSelectedRow = getSelectedRowIndex(index);
+	if (nCurrentSelectedRow >= 0)
+	{
+		ui.pbConfigure->setEnabled(true);
+		ui.pbUninstall->setEnabled(true);
+	}
+	QString selectedText = index.data(Qt::DisplayRole).toString();
+	if (selectedText.endsWith(PLUGIN_STATIC_TEXT))
+	{
+		ui.pbConfigure->setEnabled(false);
+		ui.pbUninstall->setEnabled(false);
+	}
+	else if (selectedText.startsWith(PLUGIN_DISABLE_TEXT))
+	{
+		ui.pbEnable->setEnabled(true);
+	}
+	else
+	{
+		ui.pbDisable->setEnabled(true);
+	}
 }
 
 void PluginManagerDialog::uninstallSelectedPlugin()
 {
 	if (pInstallMngr == NULL)
 		return;
+	this->setEnabled(false);
 	QModelIndexList list = ui.treeView->selectionModel()->selectedIndexes();
 	if (list.isEmpty() == false)
 	{
 		int nCurrentSelectedRow = getSelectedRowIndex(list.at(0));
-		if (lPluginNames.count() > nCurrentSelectedRow)
-		{
-			pInstallMngr->unistallRegisteredPlugin(lPluginNames.at(nCurrentSelectedRow));
+		if (mapRegisteredPluginNamesToEnabledState.count() > nCurrentSelectedRow)
+		{	
+			QString sPluginInternalName = mapRegisteredPluginNamesToEnabledState.keys().at(nCurrentSelectedRow);
+			if (pInstallMngr->isStaticPlugin(sPluginInternalName) == false)
+			{
+				int confirm = QMessageBox::question(this, tr("Uninstall selected plugin?"), tr("Are you sure to uninstall the selected plugin?\nThis action will delete all the installed plugin file(s)."), QMessageBox::Ok | QMessageBox::Cancel);
+				if (confirm == QMessageBox::Ok)
+				{
+					bool bResult = pInstallMngr->unistallRegisteredPlugin(sPluginInternalName);
+					fillTable();
+				}
+			}
 		}
-		//QString selectedText = index.data(Qt::DisplayRole).toString();
-
 	}
-	//bool unistallRegisteredPlugin(const QString &sRegisteredPluginName);
-	//bool installRegisteredPlugin(const QString &sRegisteredPluginName);
+	this->setEnabled(true);
 }
 
-void PluginManagerDialog::installSelectedPlugin()
+void PluginManagerDialog::installPlugin()
 {
+	this->setEnabled(false);
+	QString sInstallFilePath = QFileDialog::getOpenFileName(NULL, tr("Open Plugin installation file"), MainAppInfo::pluginsDirPath(), tr("Configuration Files (*.ini);;Compressed Install Package (*.zip)"));
+	if (sInstallFilePath.isEmpty() == false)
+	{
+		if (pInstallMngr->installPlugin(sInstallFilePath))
+			fillTable();
+	}
+	this->setEnabled(true);
+}
+
+void PluginManagerDialog::enablePlugin()
+{
+	enableDisablePlugin(true);
+}
+
+void PluginManagerDialog::disablePlugin()
+{
+	enableDisablePlugin(false);
+}
+
+void PluginManagerDialog::enableDisablePlugin(const bool &bEnable)
+{
+	if (pInstallMngr == NULL)
+		return;
+	this->setEnabled(false);
 	QModelIndexList list = ui.treeView->selectionModel()->selectedIndexes();
 	if (list.isEmpty() == false)
 	{
 		int nCurrentSelectedRow = getSelectedRowIndex(list.at(0));
-		//QString selectedText = index.data(Qt::DisplayRole).toString();
-
+		bool bResult = pInstallMngr->changeRegisteredPlugin(mapRegisteredPluginNamesToEnabledState.keys().at(nCurrentSelectedRow), bEnable);
 	}
+	fillTable();
+	this->setEnabled(true);
+}
+
+void PluginManagerDialog::configurePlugin()
+{
+	if (pInstallMngr == NULL)
+		return;
+	this->setEnabled(false);
+	QModelIndexList list = ui.treeView->selectionModel()->selectedIndexes();
+	if (list.isEmpty() == false)
+	{
+		int nCurrentSelectedRow = getSelectedRowIndex(list.at(0));
+		QString sPluginAbsFilePath = pInstallMngr->getPluginAbsFilePath(mapRegisteredPluginNamesToEnabledState.keys().at(nCurrentSelectedRow));
+		QString sPluginSettingsFilePath = pInstallMngr->getPluginIniFilePath(sPluginAbsFilePath);
+		if (sPluginSettingsFilePath.isEmpty() == false)
+		{
+			bool bRetval = QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_OPENFILES_SLOT_NAME, Qt::QueuedConnection, Q_ARG(QString, sPluginSettingsFilePath), Q_ARG(QStringList, QStringList()), Q_ARG(bool, false));
+		}
+		else
+		{
+			this->setEnabled(true);
+			return;
+		}
+	}
+	this->setEnabled(true);
+	this->close();
+}
+
+void PluginManagerDialog::backupAllPlugins()
+{
+	if (pInstallMngr == NULL)
+		return;
+	int nAvailablePluginCount = pluginCollectionModel->rowCount();
+	if (nAvailablePluginCount<=0)
+		return;
+
+	QString sPluginInternalName;
+	QString sTempText;
+	PluginInterface::PluginType tTempPluginType;
+	bool bIsEnabled;
+	QString sAbsPluginFilePath;
+	QString sPluginFileBaseName;
+	QTemporaryDir tempDir;
+	QDir dIniFileDirectory;
+	QString sIniFileDirectoryPath;
+	bool bCreatePackageDirectory = false;
+	for (int i = 0; i < nAvailablePluginCount; i++)
+	{
+		if (pluginCollectionModel->item(i)->text().endsWith(PLUGIN_STATIC_TEXT))
+			continue;
+		bIsEnabled = true;
+		if (pluginCollectionModel->item(i)->text().startsWith(PLUGIN_DISABLE_TEXT))
+			bIsEnabled = false;
+		if (pluginCollectionModel->item(i)->hasChildren())
+		{
+			if (pluginCollectionModel->item(i)->child(0, 1))//InternalName
+			{
+				sPluginInternalName = pluginCollectionModel->item(i)->child(0, 1)->text();
+				if (sPluginInternalName.isEmpty() == false)
+				{
+					if (pInstallMngr->isStaticPlugin(sPluginInternalName))
+						continue;
+					sAbsPluginFilePath = pInstallMngr->getPluginAbsFilePath(sPluginInternalName);
+					sPluginFileBaseName = QFileInfo(sAbsPluginFilePath).completeBaseName();
+					if (pInstallMngr->isRegisteredPlugin(sPluginFileBaseName))
+					{
+						if (pluginCollectionModel->item(i)->child(1, 1))//Type
+						{
+							sTempText = pluginCollectionModel->item(i)->child(1, 1)->text();
+							tTempPluginType = PluginInterface::pluginStringToType(sTempText);
+							if (tempDir.isValid() == false)
+							{
+								qDebug() << __FUNCTION__ << "Could not create a temporarily directory for the creation of the of the backup installer package, please perform this action with more credentials!";
+								return;
+							}
+							QString sIniFileDirectoryPath = tempDir.path() + "/" + sPluginInternalName + "/" + sPluginFileBaseName;
+							QString sIniFileName = sPluginFileBaseName + ".ini";
+							QString sIniFilePath = sIniFileDirectoryPath + "/" + sIniFileName;
+							if (dIniFileDirectory.mkpath(sIniFileDirectoryPath))
+							{
+								QStringList lInstallFiles = pInstallMngr->getPluginInstallFiles(sPluginInternalName);
+								if (i == 0)//init
+									bCreatePackageDirectory = true;
+								if (pInstallMngr->createPluginConfigurationSetting(sIniFilePath, sPluginInternalName, true, lInstallFiles) == false)
+									bCreatePackageDirectory = false;
+								for (int j = 0; j < lInstallFiles.count(); j++)
+								{
+									QString sFileName = QFileInfo(lInstallFiles[j]).fileName();
+									if (sFileName == sIniFileName)
+										continue;
+									QString sSourceFilePath = MainAppInfo::pluginsDirPath() + "/" + lInstallFiles[j];
+									QString sInstallationFilePath = sIniFileDirectoryPath + "/" + sFileName;
+									if (QFile::copy(sSourceFilePath, sInstallationFilePath) == false)
+									{
+										bCreatePackageDirectory = false;
+										qDebug() << __FUNCTION__ << "Could not copy a registered plugin installation file: " << sSourceFilePath;
+										return;
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	if (bCreatePackageDirectory == false)
+	{
+		qDebug() << __FUNCTION__ << "Could not create the backup installer package directory.";
+	}
+	else
+	{
+		QString sSaveFileName = QFileDialog::getSaveFileName(this, tr("Save File"), MainAppInfo::pluginsDirPath(), tr("Compressed Install Package (*.zip)"));
+		if (sSaveFileName.isEmpty() == false)
+		{
+			Archiver tmpArchiver;
+			if (tmpArchiver.compressDir(sSaveFileName, tempDir.path(), true))
+				QMessageBox::information(this,tr("Compressed Installer Backup Package Created"), "The Compressed Installer Backup Package was successfully Created.");
+		}
+	}
+	return;
 }

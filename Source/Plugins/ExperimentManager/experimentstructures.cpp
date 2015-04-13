@@ -1099,8 +1099,11 @@ void cExperimentStructure_SharedData::clearInternalDataStructures()
 	{
 		for (int i = 0; i < lBlocks.count(); i++)
 		{
-			delete lBlocks[i];
-			lBlocks[i] = NULL;
+			if (lBlocks[i])
+			{
+				delete lBlocks[i];
+				lBlocks[i] = NULL;
+			}
 		}
 		lBlocks.clear();
 	}
@@ -1108,8 +1111,11 @@ void cExperimentStructure_SharedData::clearInternalDataStructures()
 	{
 		for (int i = 0; i < lObjects.count(); i++)
 		{
-			delete lObjects[i];
-			lObjects[i] = NULL;
+			if (lObjects[i])
+			{
+				delete lObjects[i];
+				lObjects[i] = NULL;
+			}
 		}
 		lObjects.clear();
 	}
@@ -1119,7 +1125,8 @@ void cExperimentStructure_SharedData::clearInternalDataStructures()
 		{
 			for (int j = 0; j < mObjectIdToMethodConnections[i].count(); j++)
 			{
-				delete mObjectIdToMethodConnections[i].at(j);
+				if (mObjectIdToMethodConnections[i].at(j))
+					delete mObjectIdToMethodConnections[i].at(j);
 			}
 			mObjectIdToMethodConnections[i].clear();
 		}
@@ -1131,7 +1138,8 @@ void cExperimentStructure_SharedData::clearInternalDataStructures()
 		{
 			for (int j = 0; j < mObjectIdToInitializations[i].count(); j++)
 			{
-				delete mObjectIdToInitializations[i].at(j);
+				if (mObjectIdToInitializations[i].at(j))
+					delete mObjectIdToInitializations[i].at(j);
 			}
 			mObjectIdToInitializations[i].clear();
 		}
@@ -1143,7 +1151,8 @@ void cExperimentStructure_SharedData::clearInternalDataStructures()
 		{
 			for (int j = 0; j < mObjectIdToFinalizations[i].count(); j++)
 			{
-				delete mObjectIdToFinalizations[i].at(j);
+				if (mObjectIdToFinalizations[i].at(j))
+					delete mObjectIdToFinalizations[i].at(j);
 			}
 			mObjectIdToFinalizations[i].clear();
 		}
@@ -1615,6 +1624,16 @@ QList<cMethodStructure*> *cExperimentStructure::getObjectFinalizationList(const 
 	return NULL;
 }
 
+QList<int> cExperimentStructure::getBlockIDList()
+{
+	QList<int> returnList;
+	if (pSharedData->lBlocks.isEmpty())//Are there any Blocks defined?
+		return returnList;
+	for (int i = 0; i < pSharedData->lBlocks.size(); i++)
+		returnList.append(pSharedData->lBlocks.at(i)->getBlockID());
+	return returnList;
+}
+
 int cExperimentStructure::getObjectIndexByID(const int &nObjectID) const
 {
 	if(pSharedData->lObjects.isEmpty())//Are there any Objects defined?
@@ -1625,6 +1644,16 @@ int cExperimentStructure::getObjectIndexByID(const int &nObjectID) const
 			return i;
 	}
 	return -1;
+}
+
+QList<int> cExperimentStructure::getObjectIDList()
+{
+	QList<int> returnList;
+	if (pSharedData->lObjects.isEmpty())//Are there any Objects defined?
+		return returnList;
+	for (int i = 0; i < pSharedData->lObjects.size(); i++)
+		returnList.append(pSharedData->lObjects.at(i)->getObjectID());
+	return returnList;
 }
 
 cObjectStructure* cExperimentStructure::getObjectPointerByID(const int &nObjectID)

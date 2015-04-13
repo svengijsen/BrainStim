@@ -1152,16 +1152,26 @@ public slots:
 	* @return a pointer to a cMethodStructure Structure List.
 	*/
 	QList<cMethodStructure*> *getObjectFinalizationList(const int &nObjectID);
+	//! \brief getBlockIDList slot.
+	/*!  This function returns an array containing all declared Block ID's.
+	* @return an array containing all declared Block ID's.
+	*/
+	QList<int> getBlockIDList();
 	//! \brief getBlockPointerByID slot.
 	/*!  This function returns a pointer to a cBlockStructure identified by a block ID.
 	 * @param nBlockID a integer value defining the block ID from the requested Block pointer.
-	 * @return a pointer to a cBlockStructure structure .
+	 * @return a pointer to a cBlockStructure structure.
 	 */	
 	cBlockStructure* getBlockPointerByID(const int &nBlockID);
+	//! \brief getObjectIDList slot.
+	/*!  This function returns an array containing all declared Object ID's.
+	 * @return an array containing all declared Object ID's.
+	 */	
+	QList<int> getObjectIDList();
 	//! \brief getObjectPointerByID slot.
 	/*!  This function returns a pointer to a cObjectStructure identified by a Object ID.
 	 * @param nObjectID a integer value defining the Object ID from the requested Object pointer.
-	 * @return a pointer to a cObjectStructure structure .
+	 * @return a pointer to a cObjectStructure structure.
 	 */	
 	cObjectStructure* getObjectPointerByID(const int &nObjectID);
 	//! \brief getBlockCount slot.

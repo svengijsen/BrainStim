@@ -38,11 +38,22 @@ public:
 	};
 	Q_DECLARE_FLAGS(PluginTypes, PluginType)
 
-	static QString pluginTypeToString(const PluginType &pluginType)
+	#define PLUGIN_TYPE_DEVICE_STRING		"Device"
+	#define PLUGIN_TYPE_EXTENSION_STRING	"Extension"
+	#define PLUGIN_TYPE_UNKNOWN_STRING		"Unknown"
+
+	static QString pluginTypeToString(const PluginType &tPluginType)
 	{
-		if (pluginType == DevicePlugin) return "Device";
-		else if (pluginType == ExtensionPlugin) return "Extension";
-		else return "Unknown";
+		if (tPluginType == DevicePlugin) return PLUGIN_TYPE_DEVICE_STRING;
+		else if (tPluginType == ExtensionPlugin) return PLUGIN_TYPE_EXTENSION_STRING;
+		else return PLUGIN_TYPE_UNKNOWN_STRING;
+	};
+
+	static PluginType pluginStringToType(const QString &sPluginType)
+	{
+		if (sPluginType == PLUGIN_TYPE_DEVICE_STRING) return DevicePlugin;
+		else if (sPluginType == PLUGIN_TYPE_EXTENSION_STRING) return ExtensionPlugin;
+		else return UnknownPlugin;
 	};
 
 	virtual ~PluginInterface() {}

@@ -88,6 +88,7 @@
 
 //Only edit until here!
 #define SCRIPT_API_CLASS_NAME_TAG						"ScriptAPIClassName"
+#define MAIN_PROGRAM_OPENFILES_SLOT_NAME				"openFiles"
 #define MAIN_PROGRAM_LOG_SLOT_NAME						"write2OutputWindow"
 #define MAIN_PROGRAM_REOPEN_SLOT_NAME					"reOpenCurrentFile"
 #define MAIN_PROGRAM_SCRIPTINCLUDES_NAME				"getScriptIncludePaths"
@@ -95,6 +96,8 @@
 #define MAIN_PROGRAM_GETSAVEDDOCKWIDGETSIZEHINT_NAME	"getSavedDockWidgetSizeHint"
 #define MAIN_PROGRAM_REGISTERMAINMENUACTION_NAME		"registerMainMenuAction"
 #define MAIN_PROGRAM_GETSTOREDSETTINGVALUE_NAME			"getStoredSettingValue"
+#define MAIN_PROGRAM_LOADDYNAMICPLUGINS_NAME			"loadDynamicPlugins"
+#define MAIN_PROGRAM_UNLOADDYNAMICPLUGINS_NAME			"unloadDynamicPlugins"
 #define METHOD_TYPE_SIGNAL_TAG							"signal"
 #define METHOD_TYPE_SLOT_TAG							"slot"
 #define METHOD_TYPE_MEMBER_TAG							"member"

@@ -26,7 +26,12 @@
 #include "archiver.h"
 
 #define INSTALLMNGR_SETTING_SECTION_CONFIGURATION	"Configuration"
+#define INSTALLMNGR_SETTING_SECTION_INSTALLATION	"Installation"
+
 #define INSTALLMNGR_SETTING_SETTING_ENABLED			"Enabled"
+#define INSTALLMNGR_SETTING_SETTING_NAME			"Name"
+//#define INSTALLMNGR_SETTING_SETTING_ROOT			"RootDirectory"
+#define INSTALLMNGR_SETTING_SETTING_FILES			"Files"
 
 class installationManager : public QObject
 {
@@ -37,17 +42,30 @@ public:
 	installationManager(QObject *parent);
 	~installationManager();
 
-	QString registerPlugin(QObject *plugin, const QString &sAbsoluteFilePath);
-	QStringList getRegisteredPluginNames();
+	QString registerPlugin(QObject *plugin, const QString &sRootDirectory, const QString &sFileName, const bool &bIsEnabled, const bool &bIsStatic);
+	bool unregisterPlugin(const QString &sFileName);
+	bool isRegisteredPlugin(const QString &sFileBaseName);
+	QStringList getRegisteredAndEnabledPluginNames();
+	QMap<QString, bool> getRegisteredPluginNamesAndStates();
+	QString getRegisteredPluginName(const QString &sPluginFileName);
 	PluginInterface *getRegisteredPluginInterface(const QString &sRegisteredPluginName);
 	int configureRegisteredPluginScriptEngine(const QString &sRegisteredPluginName, QScriptEngine *pEngine);
 	PluginInterface::PluginType getPluginType(const QString &sRegisteredPluginName);
 	QString getPluginAbsFilePath(const QString &sRegisteredPluginName);
-
+	bool isEnabledPlugin(const QString &sPluginFilePath);
+	bool isStaticPlugin(const QString &sRegisteredPluginName);
 	bool unistallRegisteredPlugin(const QString &sRegisteredPluginName);
-	bool installRegisteredPlugin(const QString &sRegisteredPluginName);
+	bool installPlugin(const QString &sPluginInstallFilePath);
+	bool changeRegisteredPlugin(const QString &sRegisteredPluginName, const bool &bEnable);
+	QString getPluginIniFilePath(const QString &sPluginFilePath);
+	bool createPluginConfigurationSetting(const QString &sPluginInstallFilePath, const QString &sInternalName, const bool &bIsEnabled, const QStringList lInstallationFiles);
+	QStringList getPluginInstallFiles(const QString &sRegisteredPluginName);
 
 private:
+	bool changePluginEnabledSetting(const QString &sPluginIniFilePath, const bool &bEnable);
+	QString getPluginFileName(const QString &sRegisteredPluginName);
+	bool createRegisteredPluginIniFile(const QString &sRegisteredPluginName);
+
 	struct strcPluginDefinition
 	{
 		QString sName;
@@ -55,11 +73,18 @@ private:
 		PluginInterface *pInterface;
 		int nScriptMetaID;
 		QScriptEngine *pScriptEngine;
-		QString sAbsoluteFilePath;
+		QString sFileBaseName;
+		QString sFileName;
+		QStringList lInstallFileList;
+		bool bIsEnabled;
+		bool bIsStatic;
 		strcPluginDefinition()
 		{
+			bIsStatic = false;
+			bIsEnabled = false;
 			sName = "";
-			sAbsoluteFilePath = "";
+			sFileBaseName = "";
+			sFileName = "";
 			pInterface = NULL;
 			pScriptEngine = NULL;
 			nScriptMetaID = -1;

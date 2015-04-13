@@ -37,6 +37,25 @@ using namespace std;
 
 class MainWindow;
 
+void centerWidget(QWidget *w, bool useSizeHint)
+{
+	if (w->isFullScreen())
+		return;
+	QSize size;
+	if (useSizeHint)
+		size = w->sizeHint();
+	else
+		size = w->size();
+	QDesktopWidget *d = QApplication::desktop();
+	int ws = d->width();   // returns screen width
+	int h = d->height();  // returns screen height
+	int mw = size.width();
+	int mh = size.height();
+	int cw = (ws / 2) - (mw / 2);
+	int ch = (h / 2) - (mh / 2);
+	w->move(cw, ch);
+}
+
 int main(int argc, char **argv)
 {
 // Check windows
@@ -245,6 +264,7 @@ int main(int argc, char **argv)
 		// connect message queue to the main window.
 		QObject::connect(&appExchange, SIGNAL(messageAvailable(QString)), appWindow, SLOT(receiveExchangeMessage(QString)));
 		appWindow->show();//showMaximized() creates weird behaviour!;
+		centerWidget(appWindow, false);
 		appWindow->recoverLastScreenWindowSettings();
 		int nRetVal = appExchange.exec();
 		delete appWindow;

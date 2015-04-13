@@ -66,6 +66,11 @@ BrainStim.clearOutputWindow("BasicExperiment");
 		//BasicExperiment.LogFunctionSignature(arguments.callee.name, arguments, true);
 		BasicExperiment.LogFunctionSignature("BasicExperiment","RunExperiment", arguments, true);
 		
+		if(BasicExperiment.checkRequiredScriptPlugins()==false)
+		{
+			BasicExperiment.CleanupScript();
+			return;
+		}
 		BasicExperiment.sChoosenExperimenMode = BasicExperiment.arrExperimentModes[1];
 		BasicExperiment.sChoosenExperimenMode = BasicExperiment.DialogGetComboBoxItem("Choose the Experiment mode","Experiment mode:",BasicExperiment.arrExperimentModes,0);
 		if(BasicExperiment.sChoosenExperimenMode === null)
@@ -74,7 +79,7 @@ BrainStim.clearOutputWindow("BasicExperiment");
 		}
 		else
 		{			
-			BrainStim.write2OutputWindow("Choosen experiment mode = " + BasicExperiment.sChoosenExperimenMode, "BasicExperiment");
+			BrainStim.write2OutputWindow("Choosen experiment mode = " + BasicExperiment.sChoosenExperimenMode, "BasicExperiment");	
 			BasicExperiment.ExperimentManagerObj = new ExperimentManager();
 			BasicExperiment.ExperimentManagerObj.ExperimentStateHasChanged.connect(BasicExperiment, BasicExperiment.preExperimentStateChanged);
 			if(BasicExperiment.ExperimentManagerObj.setExperimentFileName(BasicExperiment.sExmlFilePath))
@@ -232,6 +237,31 @@ BrainStim.clearOutputWindow("BasicExperiment");
 		BrainStim.write2OutputWindow("CleanupScript(finalized)", "BasicExperiment");
 	}
 	
+	BasicExperiment.__proto__.checkRequiredScriptPlugins = function()	
+	{
+		BasicExperiment.LogFunctionSignature("BasicExperiment","checkRequiredScriptPlugins", arguments, true);
+		//if(BasicExperiment.sChoosenExperimenMode == "Testing_Mode")
+		if(BasicExperiment.KeyBoardCapture_Enabled)
+		{
+			if (typeof KeyBoardCapture === 'undefined')
+			{
+				BasicExperiment.KeyBoardCapture_Enabled = false;
+				BrainStim.write2OutputWindow("***ERROR***: The script plugin class named 'KeyBoardCapture' is not available, probably due to a missing plugin?", "BasicExperiment");
+				return false;
+			}
+		}
+		if(BasicExperiment.ParallelPortCapture_Enabled)
+		{
+			if (typeof ParallelPortDevice === 'undefined')
+			{
+				BasicExperiment.ParallelPortCapture_Enabled = false;
+				BrainStim.write2OutputWindow("***ERROR***: The script plugin class named 'ParallelPortDevice' is not available, probably due to a missing plugin?", "BasicExperiment");
+				return false;
+			}
+		}
+		return true;
+	}
+	
 	BasicExperiment.__proto__.preExperimentStateChanged = function(currentState,sDateTimeStamp)
 	{			
 		//ExperimentManager_NoState			= 0, /*!< this state is only internally used by the object while it is constructing, thus not yet fully available and therefore cannot be detected/used in the script environment. */
@@ -275,8 +305,10 @@ BrainStim.clearOutputWindow("BasicExperiment");
 		}	
 		else if(currentState == ExperimentManager.ExperimentState.ExperimentManager_IsStarting)
 		{	
-			BasicExperiment.InitExperimentObjects();
-			BasicExperiment.StartExperimentObjects();
+			if(BasicExperiment.InitExperimentObjects())
+				BasicExperiment.StartExperimentObjects();
+			else
+				return;
 		}
 		else if(currentState == ExperimentManager.ExperimentState.ExperimentManager_Started)
 		{	
@@ -408,14 +440,17 @@ BrainStim.clearOutputWindow("BasicExperiment");
 		{	
 			BasicExperiment.TriggerTimerObj = new TriggerTimer();
 		}
+		if(BasicExperiment.checkRequiredScriptPlugins()==false)
+			return false;
 		if(BasicExperiment.KeyBoardCapture_Enabled)
 		{
-			BasicExperiment.KeyBoardCaptureObj = new KeyBoardCapture(); 
+			BasicExperiment.KeyBoardCaptureObj = new KeyBoardCapture();
 		}
 		if(BasicExperiment.ParallelPortCapture_Enabled)
 		{
 			BasicExperiment.ParallelPortObj = new ParallelPortDevice();
 		}
+		return true;
 	}	
 
 	BasicExperiment.__proto__.StartExperimentObjects = function()
@@ -423,23 +458,27 @@ BrainStim.clearOutputWindow("BasicExperiment");
 		BasicExperiment.LogFunctionSignature("BasicExperiment","StartExperimentObjects", arguments, true);
 		if(BasicExperiment.KeyBoardCapture_Enabled)
 		{
-			BasicExperiment.KeyBoardCaptureObj.StartCaptureThread(0, true, BasicExperiment.KeyBoardCapture_lAllowedKeyCodeList);
-			//StartCaptureThread(const short method, bool keyForwarding, const QList<int> &lKeyList)
-			//0: KeyBoardNameSpace::KeyPressed;
-			//1: KeyBoardNameSpace::KeyReleased;
-			//2: KeyBoardNameSpace::KeyPressedReleased;	
-			try 
-			{	
-				BasicExperiment.KeyBoardCaptureObj.CaptureThreadKeyPressed.connect(BasicExperiment, BasicExperiment.KeyBoardResponseRecieved);
-			} 
-			catch (e) 
+			if (BasicExperiment.KeyBoardCaptureObj)
 			{
-				BrainStim.write2OutputWindow(".*. Something went wrong connecting the Keyboard Capture Signal/Slots:" + e,"Default");
+				BasicExperiment.KeyBoardCaptureObj.StartCaptureThread(0, true, BasicExperiment.KeyBoardCapture_lAllowedKeyCodeList);
+				//StartCaptureThread(const short method, bool keyForwarding, const QList<int> &lKeyList)
+				//0: KeyBoardNameSpace::KeyPressed;
+				//1: KeyBoardNameSpace::KeyReleased;
+				//2: KeyBoardNameSpace::KeyPressedReleased;	
+				try 
+				{	
+					BasicExperiment.KeyBoardCaptureObj.CaptureThreadKeyPressed.connect(BasicExperiment, BasicExperiment.KeyBoardResponseRecieved);
+				} 
+				catch (e) 
+				{
+					BrainStim.write2OutputWindow(".*. Something went wrong connecting the Keyboard Capture Signal/Slots:" + e,"Default");
+				}
 			}
 		}
 		if(BasicExperiment.ParallelPortCapture_Enabled)
 		{
-			BasicExperiment.ParallelPortObj.StartCaptureThread(BasicExperiment.ParallelPortCapture_Address,BasicExperiment.ParallelPortCapture_Mask,BasicExperiment.ParallelPortCapture_Method,BasicExperiment.ParallelPortCapture_PostLHDelay,BasicExperiment.ParallelPortCapture_PostHLDelay);
+			if (BasicExperiment.ParallelPortObj)
+				BasicExperiment.ParallelPortObj.StartCaptureThread(BasicExperiment.ParallelPortCapture_Address,BasicExperiment.ParallelPortCapture_Mask,BasicExperiment.ParallelPortCapture_Method,BasicExperiment.ParallelPortCapture_PostLHDelay,BasicExperiment.ParallelPortCapture_PostHLDelay);
 		}
 		if(BasicExperiment.MainWindow_AutoDeactivate)
 			BrainStim.enableActiveDocument(false);
@@ -454,12 +493,16 @@ BrainStim.clearOutputWindow("BasicExperiment");
 		}
 		if(BasicExperiment.KeyBoardCapture_Enabled)
 		{
-			BasicExperiment.KeyBoardCaptureObj.StopCaptureThread();
-			BasicExperiment.KeyBoardCaptureObj.CaptureThreadKeyPressed.disconnect(BasicExperiment, BasicExperiment.KeyBoardResponseRecieved);
+			if(BasicExperiment.KeyBoardCaptureObj)
+			{
+				BasicExperiment.KeyBoardCaptureObj.StopCaptureThread();
+				BasicExperiment.KeyBoardCaptureObj.CaptureThreadKeyPressed.disconnect(BasicExperiment, BasicExperiment.KeyBoardResponseRecieved);
+			}
 		}		
 		if(BasicExperiment.ParallelPortCapture_Enabled)
 		{
-			BasicExperiment.ParallelPortObj.StopCaptureThread();
+			if(BasicExperiment.ParallelPortObj)
+				BasicExperiment.ParallelPortObj.StopCaptureThread();
 		}
 		if(BasicExperiment.MainWindow_AutoDeactivate)
 			BrainStim.enableActiveDocument(true);		
@@ -503,11 +546,27 @@ BrainStim.clearOutputWindow("BasicExperiment");
 	BasicExperiment.__proto__.DialogGetComboBoxItem = function(title,text,items,current)
 	{
 		BasicExperiment.LogFunctionSignature("BasicExperiment","DialogGetComboBoxItem", arguments, true);
-		
 		var tstDialog = new QInputDialog();
 		tstDialog.setWindowTitle(title);
 		tstDialog.setComboBoxItems (items);
 		tstDialog.setTextValue(items[current]);
+		tstDialog.setLabelText(text);
+		var bResult = tstDialog.exec();
+		var sResult = tstDialog.textValue();
+		tstDialog = null;
+		if(bResult == QDialog.Accepted)
+		{
+			return sResult;
+		}
+		return null;
+	}
+	
+	BasicExperiment.__proto__.DialogGetStringItem = function(title,text,current)
+	{
+		BasicExperiment.LogFunctionSignature("BasicExperiment","DialogGetStringItem", arguments, true);
+		var tstDialog = new QInputDialog();
+		tstDialog.setWindowTitle(title);
+		tstDialog.setTextValue(current);
 		tstDialog.setLabelText(text);
 		var bResult = tstDialog.exec();
 		var sResult = tstDialog.textValue();

@@ -13,6 +13,7 @@ BrainStim.clearOutputWindow("BasicRetinotopyExperiment");
 //////////////////////////
 //Retinotopy Experiment Objects
 BasicExperiment.RetinotopyMapperObj = null;
+var tmpRetinotopyMapperObj = null;
 	
 ///////////////////////////
 //Private Property Variabeles//
@@ -42,14 +43,78 @@ BasicExperiment.__proto__.preExperimentStateChanged = _.wrap(BasicExperiment.__p
 	
 	//*!Call the below BasicExperiment.LogFunctionSignature method with the args variabele
 	BasicExperiment.LogFunctionSignature("BasicRetinotopyExperiment","preExperimentStateChanged", args, true);
-	if(currentState == ExperimentManager.ExperimentState.ExperimentManager_Initialized)
+	if((currentState == ExperimentManager.ExperimentState.ExperimentManager_Initialized) || (currentState == ExperimentManager.ExperimentState.ExperimentManager_PreParsed))
 	{
-		//Now all defined objects in the experiment file are constructed and therefore available in this script, so now we can make the connections between constructed the objects.
-		BasicExperiment.RetinotopyMapperObj = RetinoMap_Object_1;
+		if(BasicExperiment.RetinotopyMapperObj==null)
+		{
+			if(BasicExperiment.cExperimentStructure_Object == null)
+				BasicExperiment.cExperimentStructure_Object = BasicExperiment.ExperimentManagerObj.getExperimentStructure();
+			if(BasicExperiment.cExperimentStructure_Object != null)
+			{
+				var _bRetinoMapperObjFound = false;
+				var _arrObjIDList = [];
+				var _nTmpObjectID;
+				var _nTmpNewObjectID = 0;
+				var _sRetinoMapperObjectName;
+				BrainStim.write2OutputWindow("Searching for a declared available RetinotopyMapper Object..." ,"BasicRetinotopyExperiment");
+				var _nObjectCount = BasicExperiment.cExperimentStructure_Object.getObjectCount();
+				BrainStim.write2OutputWindow("\t" + _nObjectCount + " Object(s) declared." ,"BasicRetinotopyExperiment");
+				if(_nObjectCount>0)
+				{
+					_arrObjIDList = BasicExperiment.cExperimentStructure_Object.getObjectIDList();
+					for(var k=0;k<_nObjectCount;k++)
+					{
+						if(typeof _arrObjIDList[k] !== 'undefined')
+						{
+							if(_arrObjIDList[k] >= _nTmpNewObjectID)
+								_nTmpNewObjectID = _arrObjIDList[k]+1;
+							var _tmpObject = BasicExperiment.cExperimentStructure_Object.getObjectPointerByID(_arrObjIDList[k]);
+							if(_tmpObject)
+							{
+								if(_tmpObject.getObjectClass() === 'RetinotopyMapper')
+								{
+									_bRetinoMapperObjFound = true;
+									_sRetinoMapperObjectName = _tmpObject.getObjectName();
+									break;
+								}
+							}
+						}
+					}
+				}
+				
+				if(_bRetinoMapperObjFound)
+				{
+					if(currentState == ExperimentManager.ExperimentState.ExperimentManager_Initialized)
+					{
+						BrainStim.write2OutputWindow("\tFound and using RetinotopyMapper Object[" + k + "]: " + _sRetinoMapperObjectName ,"BasicRetinotopyExperiment");
+						BasicExperiment.RetinotopyMapperObj = eval(_sRetinoMapperObjectName);
+						BrainStim.write2OutputWindow(BasicExperiment.RetinotopyMapperObj ,"BasicRetinotopyExperiment");
+					}
+				}
+				else
+				{
+					if(currentState == ExperimentManager.ExperimentState.ExperimentManager_PreParsed)
+					{
+						_sRetinoMapperObjectName = "objScriptCreatedRetinoMapper";
+						BrainStim.write2OutputWindow("\tCreating a RetinotopyMapper Object: " + _sRetinoMapperObjectName,"BasicRetinotopyExperiment");
+						tmpRetinotopyMapperObj = new cObjectStructure();//although created here in the script, do not delete this object, this is automatically done by the Experiment Structure!
+						tmpRetinotopyMapperObj.setObjectID(_nTmpNewObjectID);
+						tmpRetinotopyMapperObj.setObjectName(_sRetinoMapperObjectName);
+						tmpRetinotopyMapperObj.setObjectClass("RetinotopyMapper");
+						if(BasicExperiment.cExperimentStructure_Object.insertObject(tmpRetinotopyMapperObj))
+						{
+							if(BasicExperiment.ExperimentManagerObj.parseCurrentExperimentStructure())
+								BrainStim.write2OutputWindow("\tSuccessfully created and inserted a RetinotopyMapper Object: " + _sRetinoMapperObjectName,"BasicRetinotopyExperiment");
+						}
+					}
+				}
+			}
+		}
 	}
 	else if(currentState == ExperimentManager.ExperimentState.ExperimentManager_Stopped)
 	{
 		BasicExperiment.RetinotopyMapperObj = null;
+		tmpRetinotopyMapperObj = null;
 	}
 	
 	//*!Call the original function (wrap method, with more that one arguments) and return
