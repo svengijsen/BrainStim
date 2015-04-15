@@ -102,7 +102,7 @@ private:
 	QTreeWidget *twCurrentObjects;
 	ExperimentTreeModel *pExperimentTreeModel;
 	cExperimentStructure *pCurrentExpStructure;
-	QMap<int, QTreeWidgetItem *> mapBlockIdToBlockTreeWidgetItems;
+	QMap<int, QTreeWidgetItem *> mapObjectIdToObjectTreeWidgetItems;
 	QHash<int, strcExperimentObjectInfo> hashIntToExperimentObjectInfo;
 	QHBoxLayout *layoutObjectDeclarationTreeWidgetParent;
 	QHBoxLayout *layoutObjectInitTreeWidgetParent;

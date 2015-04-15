@@ -635,9 +635,8 @@ bool ExperimentTreeModel::removeExperimentObject(const int &nObjectId)
 			}
 		}
 	}
-	if(bResult)
+	if (bResult)
 	{
-		//int nNumberOfDepsRemoved = 
 		cleanupObjectDependencies(nObjectId);
 		emitModifiedSignal(false);
 	}

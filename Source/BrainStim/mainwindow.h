@@ -693,9 +693,9 @@ public:
 	Q_INVOKABLE QAction *registerMainMenuAction(const QStringList &lmenuItemSpecifier, QIcon *iMenuIcon = NULL, const bool &bSkipSubWindowRegistration = false);
 	Q_INVOKABLE bool getSavedDockWidgetSizeHint(const QString &sDockWidgetGroupName, const QString &sDockWidgetAccessName, QRect &rSizeHint);
 	void loadSavedDockWidgetConfiguration(const QString &sGroupName, MainWindowDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea);
-	void loadSavedWindowLayout(const QString &sGroupName);
+	void loadSavedWindowLayout(const QString &sGroupName, const bool &bSkipMainWindowSettings = true);
 	void saveDockWidgetConfiguration(const QString &sGroupName, MainWindowDockWidget *dockWidget);
-	void saveWindowLayout(const QString &sGroupName);
+	void saveWindowLayout(const QString &sGroupName, const bool &bSkipMainWindowSettings = true);
 	bool extendAPICallTips(const QMetaObject* metaScriptObject = NULL);
 	void setGlobalApplicationInformationObject(GlobalApplicationInformation *globAppInformation);
 	void recoverLastScreenWindowSettings();

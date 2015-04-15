@@ -70,7 +70,7 @@ void ObjectConnectionsDialog::clearAllParsedStructures()
 		pCurrentExpStructure = NULL;
 	}
 	twCurrentConnections->clear();
-	mapBlockIdToBlockTreeWidgetItems.clear();
+	mapConnIdToConnTreeWidgetItems.clear();
 	hashIntToObjectConnectionInfo.clear();
 	hashFromComboMethodIndexToMetaMethod.clear();
 	hashToComboMethodIndexToMetaMethod.clear();
@@ -449,9 +449,9 @@ bool ObjectConnectionsDialog::parseExperimentStructure()
 									hashIntToObjectConnectionInfo.insert(nUniqueSelectedObjectConnectionIdentifier,*pObjectConnectionInfo);
 									if(pTmpBlockTreeWidgetItem == NULL)
 									{
-										if(mapBlockIdToBlockTreeWidgetItems.contains(pSourceObjectStructure->getObjectID()))
+										if(mapConnIdToConnTreeWidgetItems.contains(pSourceObjectStructure->getObjectID()))
 										{
-											pTmpBlockTreeWidgetItem = mapBlockIdToBlockTreeWidgetItems.value(pSourceObjectStructure->getObjectID());
+											pTmpBlockTreeWidgetItem = mapConnIdToConnTreeWidgetItems.value(pSourceObjectStructure->getObjectID());
 										}
 										else
 										{
@@ -473,7 +473,7 @@ bool ObjectConnectionsDialog::parseExperimentStructure()
 						}
 						if(pTmpBlockTreeWidgetItem)
 						{
-							mapBlockIdToBlockTreeWidgetItems.insert(pSourceObjectStructure->getObjectID(), pTmpBlockTreeWidgetItem);
+							mapConnIdToConnTreeWidgetItems.insert(pSourceObjectStructure->getObjectID(), pTmpBlockTreeWidgetItem);
 						}
 					}
 				}
@@ -482,7 +482,7 @@ bool ObjectConnectionsDialog::parseExperimentStructure()
 		//Update the hash/map(s) in case of removal
 		if(lProcessedObjectConnectionTreeWidgetItems.count() < hashIntToObjectConnectionInfo.count())
 		{
-			foreach(QTreeWidgetItem *pTmpTreeWidgetItem,mapBlockIdToBlockTreeWidgetItems.values())
+			foreach(QTreeWidgetItem *pTmpTreeWidgetItem,mapConnIdToConnTreeWidgetItems.values())
 			{
 				for(int nChildId=0;nChildId<pTmpTreeWidgetItem->childCount();nChildId++)
 				{
@@ -514,7 +514,7 @@ bool ObjectConnectionsDialog::parseExperimentStructure()
 		//}
 
 		twCurrentConnections->headerItem()->setText(0, "Object Connections");
-		twCurrentConnections->insertTopLevelItems(0, mapBlockIdToBlockTreeWidgetItems.values());
+		twCurrentConnections->insertTopLevelItems(0, mapConnIdToConnTreeWidgetItems.values());
 		fromObjectChanged(0);
 		toObjectChanged(0);
 	}

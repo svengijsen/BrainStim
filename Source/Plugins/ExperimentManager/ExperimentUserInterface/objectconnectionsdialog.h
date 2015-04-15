@@ -89,7 +89,7 @@ private:
 	QTreeWidget *twCurrentConnections;
 	ExperimentTreeModel *pExperimentTreeModel;
 	cExperimentStructure *pCurrentExpStructure;
-	QMap<int, QTreeWidgetItem *> mapBlockIdToBlockTreeWidgetItems;
+	QMap<int, QTreeWidgetItem *> mapConnIdToConnTreeWidgetItems;
 	QHash<int, strcObjectConnectionInfo> hashIntToObjectConnectionInfo;
 	QHash<int, strcObjectInfoStruct> hashComboObjectIndexToObjectStructure;
 	QHash<int, QMetaMethod> hashFromComboMethodIndexToMetaMethod;

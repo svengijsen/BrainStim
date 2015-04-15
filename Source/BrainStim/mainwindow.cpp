@@ -3841,7 +3841,7 @@ void MainWindow::recoverLastScreenWindowSettings()
 {
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
-	loadSavedWindowLayout(MAINWINDOW_NAME);
+	loadSavedWindowLayout(MAINWINDOW_NAME, false);
 }
 
 void MainWindow::loadSavedDockWidgetConfiguration(const QString &sGroupName, MainWindowDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea)
@@ -3896,14 +3896,14 @@ void MainWindow::saveDockWidgetConfiguration(const QString &sGroupName, MainWind
 	}
 }
 
-void MainWindow::loadSavedWindowLayout(const QString &sGroupName)
+void MainWindow::loadSavedWindowLayout(const QString &sGroupName, const bool &bSkipMainWindowSettings)
 {
 	QVariant tmpVariantValue;
 	bool bResult = globAppInfo->getSettingsInformation(QString("%1/%2/%3").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(DOCKITEM_SETTINGNAME_GEOMETRY), tmpVariantValue);
-	if (bResult)
+	if (bResult && (bSkipMainWindowSettings==false))
 		restoreGeometry(tmpVariantValue.toByteArray());
 	bResult = globAppInfo->getSettingsInformation(QString("%1/%2/%3").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(DOCKITEM_SETTINGNAME_STATE), tmpVariantValue);
-	if (bResult)
+	if (bResult && (bSkipMainWindowSettings==false))
 		restoreState(tmpVariantValue.toByteArray());
 
 	QMdiSubWindow *subWindow = activeMdiChild();
@@ -3926,12 +3926,16 @@ void MainWindow::loadSavedWindowLayout(const QString &sGroupName)
 	}
 }
 
-void MainWindow::saveWindowLayout(const QString &sGroupName)
+void MainWindow::saveWindowLayout(const QString &sGroupName, const bool &bSkipMainWindowSettings)
 {
 	if (bUsesUISettings == false)
 		return;
-	bool bResult = globAppInfo->setSettingsInformation(QString("%1/%2/%3").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(DOCKITEM_SETTINGNAME_GEOMETRY), saveGeometry(), "bytearray");
-	bResult = globAppInfo->setSettingsInformation(QString("%1/%2/%3").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(DOCKITEM_SETTINGNAME_STATE), saveState(), "bytearray");
+	bool bResult = false;
+	if (bSkipMainWindowSettings == false)
+	{
+		bResult = globAppInfo->setSettingsInformation(QString("%1/%2/%3").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(DOCKITEM_SETTINGNAME_GEOMETRY), saveGeometry(), "bytearray");
+		bResult = globAppInfo->setSettingsInformation(QString("%1/%2/%3").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(DOCKITEM_SETTINGNAME_STATE), saveState(), "bytearray");
+	}
 }
 
 QAction *MainWindow::registerMainMenuAction(const QStringList &lmenuItemSpecifier, QIcon *iMenuIcon, const bool &bSkipSubWindowRegistration)
@@ -4058,7 +4062,7 @@ void MainWindow::writeMainWindowSettings()
 {
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
-	saveWindowLayout(MAINWINDOW_NAME);
+	saveWindowLayout(MAINWINDOW_NAME, false);
 	saveDockWidgetConfiguration(MAINWINDOW_NAME, debugLogDock);
 }
 

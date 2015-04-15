@@ -91,7 +91,7 @@ private:
 	QTreeWidget *twCurrentLoops;
 	ExperimentTreeModel *pExperimentTreeModel;
 	cExperimentStructure *pCurrentExpStructure;
-	QMap<int, QTreeWidgetItem *> mapBlockIdToBlockTreeWidgetItems;
+	QMap<int, QTreeWidgetItem *> mapLoopIdToLoopTreeWidgetItems;
 	QHash<int, strcBlockLoopInfo> hashIntToBlockLoopInfo;
 	QHash<int, strcBlockInfo> hashComboBlockIndexToBlockStructure;
 	QHBoxLayout *layoutTreeWidgetParent;

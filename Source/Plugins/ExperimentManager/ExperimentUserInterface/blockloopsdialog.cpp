@@ -72,7 +72,7 @@ void BlockLoopsDialog::clearAllParsedStructures()
 		pCurrentExpStructure = NULL;
 	}
 	twCurrentLoops->clear();
-	mapBlockIdToBlockTreeWidgetItems.clear();
+	mapLoopIdToLoopTreeWidgetItems.clear();
 	hashIntToBlockLoopInfo.clear();
 	nCurrentBlockLoopSelectionIdentifier = -1;
 }
@@ -375,9 +375,9 @@ bool BlockLoopsDialog::parseExperimentStructure()
 								hashIntToBlockLoopInfo.insert(nUniqueSelectedBlockLoopIdentifier,*pBlockLoopInfo);
 								if(pTmpBlockTreeWidgetItem == NULL)
 								{
-									if(mapBlockIdToBlockTreeWidgetItems.contains(pSourceBlockStructure->getBlockID()))
+									if(mapLoopIdToLoopTreeWidgetItems.contains(pSourceBlockStructure->getBlockID()))
 									{
-										pTmpBlockTreeWidgetItem = mapBlockIdToBlockTreeWidgetItems.value(pSourceBlockStructure->getBlockID());
+										pTmpBlockTreeWidgetItem = mapLoopIdToLoopTreeWidgetItems.value(pSourceBlockStructure->getBlockID());
 									}
 									else
 									{
@@ -399,7 +399,7 @@ bool BlockLoopsDialog::parseExperimentStructure()
 					}
 					if(pTmpBlockTreeWidgetItem)
 					{
-						mapBlockIdToBlockTreeWidgetItems.insert(pSourceBlockStructure->getBlockID(), pTmpBlockTreeWidgetItem);
+						mapLoopIdToLoopTreeWidgetItems.insert(pSourceBlockStructure->getBlockID(), pTmpBlockTreeWidgetItem);
 					}
 				}
 			}
@@ -407,7 +407,7 @@ bool BlockLoopsDialog::parseExperimentStructure()
 		//Update the hash/map(s) in case of removal
 		if(lProcessedBlockLoopTreeWidgetItems.count() < hashIntToBlockLoopInfo.count())
 		{
-			foreach(QTreeWidgetItem *pTmpTreeWidgetItem,mapBlockIdToBlockTreeWidgetItems.values())
+			foreach(QTreeWidgetItem *pTmpTreeWidgetItem,mapLoopIdToLoopTreeWidgetItems.values())
 			{
 				for(int nChildId=0;nChildId<pTmpTreeWidgetItem->childCount();nChildId++)
 				{
@@ -432,14 +432,14 @@ bool BlockLoopsDialog::parseExperimentStructure()
 		}
 		else if(lProcessedBlockLoopTreeWidgetItems.count() == hashIntToBlockLoopInfo.count())
 		{//Maybe a block number change? Do we perhaps need to sort the items again?
-			foreach(QTreeWidgetItem *pTmpTreeWidgetItem,mapBlockIdToBlockTreeWidgetItems.values())
+			foreach(QTreeWidgetItem *pTmpTreeWidgetItem,mapLoopIdToLoopTreeWidgetItems.values())
 			{
 				pTmpTreeWidgetItem->sortChildren(0,Qt::AscendingOrder);
 			}
 		}
 
 		twCurrentLoops->headerItem()->setText(0, "Block Loops");
-		twCurrentLoops->insertTopLevelItems(0, mapBlockIdToBlockTreeWidgetItems.values());
+		twCurrentLoops->insertTopLevelItems(0, mapLoopIdToLoopTreeWidgetItems.values());
 	}
 	ui->pbAdd->setEnabled(bBlocksAvailable);
 	if(pNextCurrentTreeWidgetItem)

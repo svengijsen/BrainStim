@@ -135,7 +135,7 @@ void ExperimentObjectsDialog::clearAllParsedStructures()
 		pCurrentExpStructure = NULL;
 	}
 	twCurrentObjects->clear();
-	mapBlockIdToBlockTreeWidgetItems.clear();
+	mapObjectIdToObjectTreeWidgetItems.clear();
 	hashIntToExperimentObjectInfo.clear();
 	nCurrentObjectSelectionIdentifier = -1;
 	nCurrentObjectInitSelectionIdentifier = -1;
@@ -534,10 +534,8 @@ void ExperimentObjectsDialog::removeSelectedObject()
 	{
 		if(pExperimentTreeModel)
 		{
-			if(pExperimentTreeModel->removeExperimentObject(hashIntToExperimentObjectInfo.value(nCurrentObjectSelectionIdentifier).nObjectID) == false)
-			{
+			if (pExperimentTreeModel->removeExperimentObject(hashIntToExperimentObjectInfo.value(nCurrentObjectSelectionIdentifier).nObjectID)==false)
 				qDebug() << __FUNCTION__ << "Could not remove the selected object";
-			}
 		}
 	}
 	bIsObjectDeleting = false;
@@ -555,7 +553,10 @@ void ExperimentObjectsDialog::checkReparseModel()
 	int nLastSelectedInitMethodRow = ui->lwObjectInitUsed->currentRow();
 	int nLastSelectedFinitMethodRow = ui->lwObjectFinitUsed->currentRow();
 	reCreateAndParseExperimentStructure();
-	onObjectSelectionChanged();
+	if(pCurrentExpStructure->getObjectCount() <= 0)
+		twCurrentObjects->clear();//invokes onObjectSelectionChanged();
+	else
+		onObjectSelectionChanged();
 	if ((bIsInit) && (nLastSelectedInitMethodRow < ui->lwObjectInitUsed->count()))
 		ui->lwObjectInitUsed->setCurrentItem(ui->lwObjectInitUsed->item(nLastSelectedInitMethodRow));
 	if ((bIsFinit) && (nLastSelectedFinitMethodRow < ui->lwObjectFinitUsed->count()))
@@ -608,7 +609,7 @@ bool ExperimentObjectsDialog::parseExperimentStructure()
 		{
 			if(pObjectStructureList.at(nObjectCounter)) 
 			{
-				sMainItemString = "Object: (Class: " + pObjectStructureList.at(nObjectCounter)->getObjectClass() + "), " + pObjectStructureList.at(nObjectCounter)->getObjectName() + ")";
+				sMainItemString = "Object: " + pObjectStructureList.at(nObjectCounter)->getObjectName();//(Class: " + pObjectStructureList.at(nObjectCounter)->getObjectClass() + "), " + 
 				//do not change the below, because it's used for the view sorting
 				sSubItemString = pObjectStructureList.at(nObjectCounter)->getObjectName() + ": " + pObjectStructureList.at(nObjectCounter)->getObjectClass() + ": " + QString::number(pObjectStructureList.at(nObjectCounter)->getObjectID());		
 				bool bTreeItemAlreadyPresent = false;
@@ -652,15 +653,15 @@ bool ExperimentObjectsDialog::parseExperimentStructure()
 				lProcessedObjectTreeWidgetItems.append(pObjectInfo->pObjectTreeWidgetItem);
 				if(pObjectInfo->pObjectTreeWidgetItem)
 				{
-					mapBlockIdToBlockTreeWidgetItems.insert(pObjectInfo->nObjectID, pObjectInfo->pObjectTreeWidgetItem);
+					mapObjectIdToObjectTreeWidgetItems.insert(pObjectInfo->nObjectID, pObjectInfo->pObjectTreeWidgetItem);
 				}
 			}
 		}
 		//Update the hash/map(s) in case of removal
 		if(lProcessedObjectTreeWidgetItems.count() < hashIntToExperimentObjectInfo.count())
 		{
-			QMap<int, QTreeWidgetItem *>::iterator iterTreeItem = mapBlockIdToBlockTreeWidgetItems.begin();
-			while (iterTreeItem != mapBlockIdToBlockTreeWidgetItems.end()) 
+			QMap<int, QTreeWidgetItem *>::iterator iterTreeItem = mapObjectIdToObjectTreeWidgetItems.begin();
+			while (iterTreeItem != mapObjectIdToObjectTreeWidgetItems.end()) 
 			{
 				if(lProcessedObjectTreeWidgetItems.contains(iterTreeItem.value()) == false)
 				{
@@ -682,14 +683,19 @@ bool ExperimentObjectsDialog::parseExperimentStructure()
 						}
 						++iterBlockLoop;
 					}
-					mapBlockIdToBlockTreeWidgetItems.remove(iterTreeItem.key());
+					mapObjectIdToObjectTreeWidgetItems.remove(iterTreeItem.key());
 					break;
 				}
 				++iterTreeItem;
 			}
 		}
 		twCurrentObjects->headerItem()->setText(0, "Declared Objects");
-		twCurrentObjects->insertTopLevelItems(0, mapBlockIdToBlockTreeWidgetItems.values());
+		twCurrentObjects->insertTopLevelItems(0, mapObjectIdToObjectTreeWidgetItems.values());
+	}
+	else
+	{
+		hashIntToExperimentObjectInfo.clear();
+		mapObjectIdToObjectTreeWidgetItems.clear();
 	}
 	bRetval = true;
 	return bRetval;
