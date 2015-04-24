@@ -9,6 +9,7 @@ SET ARCHITECTURE=%1
 SET DEBUGRELEASE=%2
 SET QT_VERSION=%3
 SET QSCINTILLA_PATH=E:\Libraries\QScintilla-gpl-2.7.2\lib
+SET MATLAB_PATH=C:\Program Files\MATLAB\R2011b\bin\win64
 
 IF [%1] EQU [] SET /p ARCHITECTURE= Start the win32(1)[=default] or the x64(2) version? 
 IF [%2] EQU [] SET /p DEBUGRELEASE= Start the (d)ebug[=default] or (r)elease version? 
@@ -20,6 +21,7 @@ IF /I '%ARCHITECTURE%'=='' SET ARCHITECTURE=1
 ECHO Your input was: Architecture(%ARCHITECTURE%) on %QT_VERSION%
 ECHO Additional to use library paths:
 ECHO %QSCINTILLA_PATH%
+ECHO %MATLAB_PATH%
 MD Xsd
 COPY ..\Source\Plugins\ExperimentManager\xsd Xsd
 IF /I '%ARCHITECTURE%'=='1' GOTO WIN32
@@ -151,13 +153,16 @@ GOTO END
 	IF /I '%DEBUGRELEASE%'=='r' COPY %QUAZIP_PATH%\Release\quazip.dll quazip.dll /y
 	IF /I '%DEBUGRELEASE%'=='r' COPY "..\Source\QmlExtensions\Plugins\DefaultPlugin\qmldir_release_win32" "Qml\plugins\Win32\BrainStim_QMLExtensions\qmldir" /y
 	IF /I '%DEBUGRELEASE%'=='r' CALL "..\Source\QmlExtensions\Plugins\DefaultPlugin\createqmltypes.bat"
+	
+	SET Path=%MATLAB_PATH%;%Path%
+	
 	CD /d %ROOTDIR%
 
 	GOTO END
 	
 :X64
 	ECHO X64 was choosen
-	SET QT_ROOT_DIR=E:\Libraries\Qt%QT_VERSION%_64bit\5.3\msvc2013_opengl
+	SET QT_ROOT_DIR=E:\Libraries\Qt%QT_VERSION%_64bit\5.3\msvc2013_64_opengl
 	QT_QPA_PLATFORM_PLUGIN_PATH=%QT_ROOT_DIR%\plugins\platforms
 	SET Path=%QT_ROOT_DIR%\bin;%Path%
 	SET OGRE_PATH=E:\Libraries\Ogre\OGRE-SDK-1.8.2-vc110-x64-28.05.2013\bin
@@ -280,6 +285,9 @@ GOTO END
 	IF /I '%DEBUGRELEASE%'=='r' COPY %QUAZIP_PATH%\Release\quazip.dll quazip.dll /y
 	IF /I '%DEBUGRELEASE%'=='r' COPY "..\Source\QmlExtensions\Plugins\DefaultPlugin\qmldir_release_x64" "Qml\plugins\x64\BrainStim_QMLExtensions\qmldir" /y	
 	IF /I '%DEBUGRELEASE%'=='r' CALL "..\Source\QmlExtensions\Plugins\DefaultPlugin\createqmltypes.bat"
+	
+	SET Path=%MATLAB_PATH%;%Path%
+	
 	CD /d %ROOTDIR%
 
 	GOTO END
