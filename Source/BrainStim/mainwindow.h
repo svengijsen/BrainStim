@@ -56,6 +56,7 @@
 #include "propertysettingswidget.h"
 #include "archiver.h"
 #include "pluginmanagerdialog.h"
+#include "helphandler.h"
 
 class SvgView;
 class DeviceControl;
@@ -503,6 +504,7 @@ private slots:
 	void dockWidgetResizingFinished(MainWindowDockWidget *dock);
 
 private:
+	helpHandler *helpHandlerInstance;
 	Archiver *archiverObject;
 	QMap<QString, PropertySettingsWidget *> mapPluginOptionWidgetsByPluginName;
 	OptionPage *pMainOptionPage;

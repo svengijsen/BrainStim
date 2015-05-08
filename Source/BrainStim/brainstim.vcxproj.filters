@@ -446,6 +446,21 @@
     <ClCompile Include="..\..\Build_MSVC\Qt\x64\Release\Moc\moc_customquestiondialog.cpp">
       <Filter>Generated Files\Release_x64</Filter>
     </ClCompile>
+    <ClCompile Include="helphandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Debug\Moc\moc_helphandler.cpp">
+      <Filter>Generated Files\Debug_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Debug\Moc\moc_helphandler.cpp">
+      <Filter>Generated Files\Debug_x64</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\Win32\Release\Moc\moc_helphandler.cpp">
+      <Filter>Generated Files\Release_Win32</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Build_MSVC\Qt\x64\Release\Moc\moc_helphandler.cpp">
+      <Filter>Generated Files\Release_x64</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -621,6 +636,12 @@
       <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="customquestiondialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\Build_MSVC\Qt\x64\Debug\Moc\mainwindow.moc">
+      <Filter>Generated Files\Debug_Win32</Filter>
+    </CustomBuild>
+    <CustomBuild Include="helphandler.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
   </ItemGroup>

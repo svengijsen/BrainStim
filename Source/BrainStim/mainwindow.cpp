@@ -59,6 +59,12 @@ MainWindow::MainWindow() : DocumentWindow(), SVGPreviewer(new SvgView)
 	helpAssistant = new Assistant;
 	bMainWindowIsInitialized = false;
 	bUsesUISettings = true;
+
+	helpHandlerInstance = new helpHandler(this);
+	QDesktopServices::setUrlHandler("help", helpHandlerInstance, "showHelp");
+	//use like: 
+	//QDesktopServices::openUrl(QUrl("help:///C:/Users/sven.gijsen/Desktop/filename.png", QUrl::TolerantMode));
+
 	resetContextState();
 
 #ifndef QT_NO_DEBUG_OUTPUT	
@@ -326,6 +332,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
 	{
 		delete pPluginMngrDialog;
 		pPluginMngrDialog = NULL;
+	}
+	if (helpHandlerInstance)
+	{
+		delete helpHandlerInstance;
+		helpHandlerInstance = NULL;
 	}
 	MainAppInfo::destructCustomPropertySettingObjects();
 	shutdownNetworkServer();
