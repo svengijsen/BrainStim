@@ -9,7 +9,7 @@ SET ARCHITECTURE=%1
 SET DEBUGRELEASE=%2
 SET QT_VERSION=%3
 SET QSCINTILLA_PATH=E:\Libraries\QScintilla-gpl-2.7.2\lib
-SET MATLAB_PATH=C:\Program Files\MATLAB\R2011b\bin\win64
+SET MATLAB_PATH=C:\Program Files\MATLAB\R2014a\bin\win64
 
 IF [%1] EQU [] SET /p ARCHITECTURE= Start the win32(1)[=default] or the x64(2) version? 
 IF [%2] EQU [] SET /p DEBUGRELEASE= Start the (d)ebug[=default] or (r)elease version? 
@@ -145,6 +145,8 @@ GOTO END
 	IF /I '%DEBUGRELEASE%'=='d' COPY %OGRE_PATH%\Debug\RenderSystem_GL_d.dll RenderSystem_GL_d.dll /y
 	IF /I '%DEBUGRELEASE%'=='d' COPY %QUAZIP_PATH%\Debug\quazip.dll quazip.dll /y
 	IF /I '%DEBUGRELEASE%'=='d' COPY "..\Source\QmlExtensions\Plugins\DefaultPlugin\qmldir_debug_win32" "Qml\plugins\Win32\BrainStim_QMLExtensions\qmldir" /y
+	IF /I '%DEBUGRELEASE%'=='d' COPY %QT_ROOT_DIR%\bin\Qt5SerialPortd.dll Qt5SerialPortd.dll /y
+	
 	
 	IF /I '%DEBUGRELEASE%'=='r' ECHO Release Mode was choosen
 	IF /I '%DEBUGRELEASE%'=='r' SET Path=%QSCINTILLA_PATH%\Win32\Release;%Path%
@@ -152,6 +154,7 @@ GOTO END
 	IF /I '%DEBUGRELEASE%'=='r' COPY %OGRE_PATH%\Release\RenderSystem_GL.dll RenderSystem_GL.dll /y
 	IF /I '%DEBUGRELEASE%'=='r' COPY %QUAZIP_PATH%\Release\quazip.dll quazip.dll /y
 	IF /I '%DEBUGRELEASE%'=='r' COPY "..\Source\QmlExtensions\Plugins\DefaultPlugin\qmldir_release_win32" "Qml\plugins\Win32\BrainStim_QMLExtensions\qmldir" /y
+	IF /I '%DEBUGRELEASE%'=='r' COPY %QT_ROOT_DIR%\bin\Qt5SerialPort.dll Qt5SerialPort.dll /y
 	IF /I '%DEBUGRELEASE%'=='r' CALL "..\Source\QmlExtensions\Plugins\DefaultPlugin\createqmltypes.bat"
 	
 	SET Path=%MATLAB_PATH%;%Path%
@@ -277,6 +280,7 @@ GOTO END
 	IF /I '%DEBUGRELEASE%'=='d' COPY %OGRE_PATH%\Debug\RenderSystem_GL_d.dll RenderSystem_GL_d.dll /y
 	IF /I '%DEBUGRELEASE%'=='d' COPY %QUAZIP_PATH%\Debug\quazip.dll quazip.dll /y
 	IF /I '%DEBUGRELEASE%'=='d' COPY "..\Source\QmlExtensions\Plugins\DefaultPlugin\qmldir_debug_x64" "Qml\plugins\x64\BrainStim_QMLExtensions\qmldir" /y
+	IF /I '%DEBUGRELEASE%'=='d' COPY %QT_ROOT_DIR%\bin\Qt5SerialPortd.dll Qt5SerialPortd.dll /y
 
 	IF /I '%DEBUGRELEASE%'=='r' ECHO Release Mode was choosen
 	IF /I '%DEBUGRELEASE%'=='r' SET Path=%QSCINTILLA_PATH%\x64\Release;%Path%
@@ -284,6 +288,7 @@ GOTO END
 	IF /I '%DEBUGRELEASE%'=='r' COPY %OGRE_PATH%\Release\RenderSystem_GL.dll RenderSystem_GL.dll /y
 	IF /I '%DEBUGRELEASE%'=='r' COPY %QUAZIP_PATH%\Release\quazip.dll quazip.dll /y
 	IF /I '%DEBUGRELEASE%'=='r' COPY "..\Source\QmlExtensions\Plugins\DefaultPlugin\qmldir_release_x64" "Qml\plugins\x64\BrainStim_QMLExtensions\qmldir" /y	
+	IF /I '%DEBUGRELEASE%'=='r' COPY %QT_ROOT_DIR%\bin\Qt5SerialPort.dll Qt5SerialPort.dll /y
 	IF /I '%DEBUGRELEASE%'=='r' CALL "..\Source\QmlExtensions\Plugins\DefaultPlugin\createqmltypes.bat"
 	
 	SET Path=%MATLAB_PATH%;%Path%

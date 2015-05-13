@@ -212,7 +212,8 @@ void PluginManagerDialog::uninstallSelectedPlugin()
 				int confirm = QMessageBox::question(this, tr("Uninstall selected plugin?"), tr("Are you sure to uninstall the selected plugin?\nThis action will delete all the installed plugin file(s)."), QMessageBox::Ok | QMessageBox::Cancel);
 				if (confirm == QMessageBox::Ok)
 				{
-					bool bResult = pInstallMngr->unistallRegisteredPlugin(sPluginInternalName);
+					//bool bResult = 
+						pInstallMngr->unistallRegisteredPlugin(sPluginInternalName);
 					fillTable();
 				}
 			}
@@ -252,7 +253,8 @@ void PluginManagerDialog::enableDisablePlugin(const bool &bEnable)
 	if (list.isEmpty() == false)
 	{
 		int nCurrentSelectedRow = getSelectedRowIndex(list.at(0));
-		bool bResult = pInstallMngr->changeRegisteredPlugin(mapRegisteredPluginNamesToEnabledState.keys().at(nCurrentSelectedRow), bEnable);
+		//bool bResult = 
+			pInstallMngr->changeRegisteredPlugin(mapRegisteredPluginNamesToEnabledState.keys().at(nCurrentSelectedRow), bEnable);
 	}
 	fillTable();
 	this->setEnabled(true);
@@ -271,7 +273,8 @@ void PluginManagerDialog::configurePlugin()
 		QString sPluginSettingsFilePath = pInstallMngr->getPluginIniFilePath(sPluginAbsFilePath);
 		if (sPluginSettingsFilePath.isEmpty() == false)
 		{
-			bool bRetval = QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_OPENFILES_SLOT_NAME, Qt::QueuedConnection, Q_ARG(QString, sPluginSettingsFilePath), Q_ARG(QStringList, QStringList()), Q_ARG(bool, false));
+			//bool bRetval = 
+				QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_OPENFILES_SLOT_NAME, Qt::QueuedConnection, Q_ARG(QString, sPluginSettingsFilePath), Q_ARG(QStringList, QStringList()), Q_ARG(bool, false));
 		}
 		else
 		{
@@ -300,9 +303,10 @@ void PluginManagerDialog::backupAllPlugins()
 	QTemporaryDir tempDir;
 	QDir dIniFileDirectory;
 	QString sIniFileDirectoryPath;
-	bool bCreatePackageDirectory = false;
+	bool bDidCreatePackageDirectory = false;
 	for (int i = 0; i < nAvailablePluginCount; i++)
 	{
+		bDidCreatePackageDirectory = false;
 		if (pluginCollectionModel->item(i)->text().endsWith(PLUGIN_STATIC_TEXT))
 			continue;
 		bIsEnabled = true;
@@ -336,10 +340,9 @@ void PluginManagerDialog::backupAllPlugins()
 							if (dIniFileDirectory.mkpath(sIniFileDirectoryPath))
 							{
 								QStringList lInstallFiles = pInstallMngr->getPluginInstallFiles(sPluginInternalName);
-								if (i == 0)//init
-									bCreatePackageDirectory = true;
+								bDidCreatePackageDirectory = true;
 								if (pInstallMngr->createPluginConfigurationSetting(sIniFilePath, sPluginInternalName, true, lInstallFiles) == false)
-									bCreatePackageDirectory = false;
+									bDidCreatePackageDirectory = false;
 								for (int j = 0; j < lInstallFiles.count(); j++)
 								{
 									QString sFileName = QFileInfo(lInstallFiles[j]).fileName();
@@ -349,7 +352,7 @@ void PluginManagerDialog::backupAllPlugins()
 									QString sInstallationFilePath = sIniFileDirectoryPath + "/" + sFileName;
 									if (QFile::copy(sSourceFilePath, sInstallationFilePath) == false)
 									{
-										bCreatePackageDirectory = false;
+										bDidCreatePackageDirectory = false;
 										qDebug() << __FUNCTION__ << "Could not copy a registered plugin installation file: " << sSourceFilePath;
 										return;
 									}
@@ -361,7 +364,7 @@ void PluginManagerDialog::backupAllPlugins()
 			}
 		}
 	}
-	if (bCreatePackageDirectory == false)
+	if (bDidCreatePackageDirectory == false)
 	{
 		qDebug() << __FUNCTION__ << "Could not create the backup installer package directory.";
 	}

@@ -2936,6 +2936,8 @@ QString MainWindow::getActiveDocumentFileName()
 void MainWindow::enableActiveDocument(bool bEnable)
 {
 	activeMdiChild()->setEnabled(bEnable);
+	if (activeMdiChild())
+		activeMdiChild()->setEnabled(bEnable);
 }
 
 QString MainWindow::getEnvironmentVariabele(QString strName) 
