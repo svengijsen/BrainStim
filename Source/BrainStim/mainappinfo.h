@@ -37,6 +37,33 @@
 
 #include "maindefines.h"
 
+class MainAppInfoData
+{
+	QString sPluginPath;
+
+	static MainAppInfoData *s_instance;
+	MainAppInfoData()
+	{
+		sPluginPath = "";
+	}
+
+public:
+	QString getPluginPath()
+	{
+		return sPluginPath;
+	}
+	void setPluginPath(const QString &sNewPluginPath)
+	{
+		sPluginPath = sNewPluginPath;
+	}
+	static MainAppInfoData *instance()
+	{
+		if (!s_instance)
+			s_instance = new MainAppInfoData;
+		return s_instance;
+	}
+};
+
 class MainAppInfo 
 {
 private:
@@ -45,6 +72,7 @@ private:
 	static QString sAppUserPath;
 	static QList<int> lRegisteredMetaTypeIds;
 	static QHash<int, QObject *> hashRegisteredCustomPropertySettingObjects;
+	static QString sPluginsDirPath;
 
 public:
 	struct QPairFirstComparer
@@ -94,19 +122,8 @@ public:
 	static QString appExampleDirPath()				{return (MainAppInfo::appUserPath() + QDir::separator() + MAIN_PROGRAM_EXAMPLES_DIRNAME + QDir::separator());}//appDirPath() + QDir::separator() + MAIN_PROGRAM_EXAMPLES_DIRNAME + QDir::separator());}
 	static QString appLogFilePath()					{return (appDirPath() + QDir::separator() + MAIN_PROGRAM_LOGFILE_NAME);}
 	static QString appXsdFilePath()					{return (appDirPath() + QDir::separator() + MAIN_PROGRAM_XSD_DIRNAME + QDir::separator());}
-	static QString pluginsDirPath()
-	{
-		QDir pluginsDir = appDebugDirPath();
-		pluginsDir.cd(MAIN_PROGRAM_PLUGINS_DIRNAME);
-		if(!pluginsDir.exists())
-			return appDebugDirPath().absolutePath();
-#ifdef WIN64
-		pluginsDir.cd("x64");
-#else
-		pluginsDir.cd("Win32");
-#endif
-		return pluginsDir.absolutePath();
-	};
+	static void setPluginsDirPath(const QString &sNewPath);
+	static QString pluginsDirPath();
 	static QString outputsDirPath();
 	static QString qmlExtensionsPluginDirPath()
 	{
@@ -116,11 +133,11 @@ public:
 #else
 		strExtPluginDirPath = strExtPluginDirPath + QString("Win32");
 #endif
-		if(QDir(strExtPluginDirPath).exists()==false)
+		if (QDir(strExtPluginDirPath).exists() == false)
 		{
 			QDir().mkdir(strExtPluginDirPath);
 		}
-		else if(QDir(strExtPluginDirPath).exists())
+		else if (QDir(strExtPluginDirPath).exists())
 		{
 			strExtPluginDirPath = strExtPluginDirPath;
 		}
@@ -150,6 +167,7 @@ public:
 	static void destructCustomPropertySettingObjects();
 
 private:
+
 	static QDir appDebugDirPath()
 	{
 		QDir appDebugDir = QDir(appDirPath());

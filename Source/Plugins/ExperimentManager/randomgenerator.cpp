@@ -214,24 +214,29 @@ bool RandomGenerator::randomizeList(RandomGenerator_RandomizeMethod rMethod, QSt
 	int i,j;
 	int nIndexFound;
 	int nRandom;
+	QStringList lTmpRandomizedResult;
 
 	switch (rMethod)
 	{
 	case RandomGenerator_RandomizeStandard:
 		////just randomize
-		for(i=(nListCount-1);i>0;--i)
+		lTmpRandomizedResult = *this;
+		this->clear();
+		for (i = (nListCount - 1); i>=0; i--)
 		{
-			nRandom = tCombinedRandGen->IRandom(0,nListCount-1);
-			QList::swap(i,nRandom);
+			nRandom = tCombinedRandGen->IRandom(0,i);
+			this->append(lTmpRandomizedResult.takeAt(nRandom));
 		}
 		bRetVal = true;
 		break;
 	case RandomGenerator_RandomizePreservedValues:
 		//sList[] contains the values of the indexes that should be preserved(should not be randomized)!
-		for(i=(nListCount-1);i>0;--i)
-		{//first start with an randomize
-			nRandom = tCombinedRandGen->IRandom(0,nListCount-1);
-			QList::swap(i,nRandom);
+		lTmpRandomizedResult = *this;
+		this->clear();
+		for (i = (nListCount - 1); i >= 0; i--)
+		{
+			nRandom = tCombinedRandGen->IRandom(0, i);
+			this->append(lTmpRandomizedResult.takeAt(nRandom));
 		}
 		if (sList == NULL)
 		{
@@ -261,20 +266,24 @@ bool RandomGenerator::randomizeList(RandomGenerator_RandomizeMethod rMethod, QSt
 		//sList[] contains the indexes that should be preserved(should not be randomized)!
 		if (sList == NULL)
 		{//just randomize
-			for(i=(nListCount-1);i>0;--i)
+			lTmpRandomizedResult = *this;
+			this->clear();
+			for (i = (nListCount - 1); i >= 0; i--)
 			{
-				nRandom = tCombinedRandGen->IRandom(0,nListCount-1);
-				QList::swap(i,nRandom);
+				nRandom = tCombinedRandGen->IRandom(0, i);
+				this->append(lTmpRandomizedResult.takeAt(nRandom));
 			}
 			bRetVal = true;
 			break;
 		}
 		else if (sList->count() < 1)
 		{//just randomize
-			for(i=(nListCount-1);i>0;--i)
+			lTmpRandomizedResult = *this;
+			this->clear();
+			for (i = (nListCount - 1); i >= 0; i--)
 			{
-				nRandom = tCombinedRandGen->IRandom(0,nListCount-1);
-				QList::swap(i,nRandom);
+				nRandom = tCombinedRandGen->IRandom(0, i);
+				this->append(lTmpRandomizedResult.takeAt(nRandom));
 			}
 			bRetVal = true;
 			break;
@@ -289,10 +298,12 @@ bool RandomGenerator::randomizeList(RandomGenerator_RandomizeMethod rMethod, QSt
 			QStringList tmpCopyLst;
 			tmpCopyLst = QStringList::mid(0);//copy the current list
 			//first start with an randomize
-			for(i=(nListCount-1);i>0;--i)
+			lTmpRandomizedResult = *this;
+			this->clear();
+			for (i = (nListCount - 1); i >= 0; i--)
 			{
-				nRandom = tCombinedRandGen->IRandom(0,nListCount-1);
-				QList::swap(i,nRandom);
+				nRandom = tCombinedRandGen->IRandom(0, i);
+				this->append(lTmpRandomizedResult.takeAt(nRandom));
 			}
 
 			int nRecoverCount = sList->count();
@@ -321,20 +332,24 @@ bool RandomGenerator::randomizeList(RandomGenerator_RandomizeMethod rMethod, QSt
 		//sList[] contains the indexes that should be preserved(should not be randomized)!
 		if (sList == NULL)
 		{//just randomize
-			for(i=(nListCount-1);i>0;--i)
+			lTmpRandomizedResult = *this;
+			this->clear();
+			for (i = (nListCount - 1); i >= 0; i--)
 			{
-				nRandom = tCombinedRandGen->IRandom(0,nListCount-1);
-				QList::swap(i,nRandom);
+				nRandom = tCombinedRandGen->IRandom(0, i);
+				this->append(lTmpRandomizedResult.takeAt(nRandom));
 			}
 			bRetVal = true;
 			break;
 		}
 		else if (sList->count() < 1)
 		{//just randomize
-			for(i=(nListCount-1);i>0;--i)
+			lTmpRandomizedResult = *this;
+			this->clear();
+			for (i = (nListCount - 1); i >= 0; i--)
 			{
-				nRandom = tCombinedRandGen->IRandom(0,nListCount-1);
-				QList::swap(i,nRandom);
+				nRandom = tCombinedRandGen->IRandom(0, i);
+				this->append(lTmpRandomizedResult.takeAt(nRandom));
 			}
 			bRetVal = true;
 			break;
@@ -349,11 +364,14 @@ bool RandomGenerator::randomizeList(RandomGenerator_RandomizeMethod rMethod, QSt
 			QStringList tmpCopyLst;
 			tmpCopyLst = QStringList::mid(0);//copy the current list
 			//first start with an randomize
-			for(i=(nListCount-1);i>0;--i)
+			lTmpRandomizedResult = *this;
+			this->clear();
+			for (i = (nListCount - 1); i >= 0; i--)
 			{
-				nRandom = tCombinedRandGen->IRandom(0,nListCount-1);
-				QList::swap(i,nRandom);
+				nRandom = tCombinedRandGen->IRandom(0, i);
+				this->append(lTmpRandomizedResult.takeAt(nRandom));
 			}
+
 			int nRecoverCount = sList->count();
 			if (nRecoverCount > 0)
 			{

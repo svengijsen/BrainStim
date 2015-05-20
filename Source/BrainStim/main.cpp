@@ -202,8 +202,33 @@ int main(int argc, char **argv)
 	if(bProceed)
 	{
 		Q_INIT_RESOURCE(brainstim);
-		QString PluginDir = MainAppInfo::pluginsDirPath();
-		appExchange.addLibraryPath(PluginDir);
+		QString sTemp = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/" + globAppInformation->getTitle() + "/" + MAIN_PROGRAM_PLUGINS_DIRNAME;
+		#ifdef WIN64
+		sTemp = sTemp + "/x64";
+		#else
+			sTemp = sTemp + "/Win32";
+		#endif
+
+		QDir userPluginsDir(sTemp);
+		bool bPluginUserDirExists = false;
+		QString finalPluginDir = "";
+
+		if (userPluginsDir.exists() == false)
+		{
+			userPluginsDir.mkpath(sTemp);
+			if (userPluginsDir.exists())
+				bPluginUserDirExists = true;
+		}
+		else
+		{
+			bPluginUserDirExists = true;
+		}
+		if (bPluginUserDirExists)
+			finalPluginDir = sTemp;
+		else
+			finalPluginDir = MainAppInfo::pluginsDirPath();
+		MainAppInfo::setPluginsDirPath(finalPluginDir);
+		appExchange.addLibraryPath(finalPluginDir);
 		MainWindow *appWindow = new MainWindow();
 		appWindow->setGlobalApplicationInformationObject(globAppInformation);
 		MainAppInfo::setMainWindow(appWindow);

@@ -21,6 +21,7 @@
 #include "Archiver.h"
 #include <QStandardItem>
 #include <QFileDialog>
+#include <QDesktopServices>
 
 customStandardItemModel::customStandardItemModel(int nRows, int nColumns, QObject *parent) : QStandardItemModel(nRows, nColumns, parent){}
 customStandardItemModel::~customStandardItemModel(){}
@@ -59,6 +60,7 @@ PluginManagerDialog::PluginManagerDialog(installationManager *installMngr, QWidg
 	connect(ui.pbDisable, SIGNAL(clicked()), this, SLOT(disablePlugin()));
 	connect(ui.pbConfigure, SIGNAL(clicked()), this, SLOT(configurePlugin()));
 	connect(ui.pbBackup, SIGNAL(clicked()), this, SLOT(backupAllPlugins()));
+	connect(ui.pbBrowse, SIGNAL(clicked()), this, SLOT(browsePluginDirectory()));
 	initialize();
 }
 
@@ -284,6 +286,11 @@ void PluginManagerDialog::configurePlugin()
 	}
 	this->setEnabled(true);
 	this->close();
+}
+
+void PluginManagerDialog::browsePluginDirectory()
+{
+	QDesktopServices::openUrl(QUrl("file:///" + MainAppInfo::pluginsDirPath(), QUrl::TolerantMode));
 }
 
 void PluginManagerDialog::backupAllPlugins()

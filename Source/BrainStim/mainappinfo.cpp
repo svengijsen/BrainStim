@@ -28,6 +28,37 @@ QWidget *MainAppInfo::mainWindow = NULL;//Needed to initialize the static variab
 QString MainAppInfo::sAppUserPath = "";//Needed to initialize the static variable!
 QList<int> MainAppInfo::lRegisteredMetaTypeIds = QList<int>();//Needed to initialize the static variable!
 QHash<int, QObject *> MainAppInfo::hashRegisteredCustomPropertySettingObjects = QHash<int, QObject *>();//Needed to initialize the static variable!
+//QString MainAppInfo::sPluginsDirPath = "";//Needed to initialize the static variable!
+
+// Allocating and initializing MainAppInfoData's static data member.
+// The pointer is being allocated - not the object itself.
+MainAppInfoData *MainAppInfoData::s_instance = NULL;
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void MainAppInfo::setPluginsDirPath(const QString &sNewPath)
+{
+	MainAppInfoData::instance()->setPluginPath(sNewPath);
+}
+
+QString MainAppInfo::pluginsDirPath()
+{
+	QString tmpPath;
+	tmpPath = MainAppInfoData::instance()->getPluginPath();
+	if (tmpPath.isEmpty() == false)
+		return tmpPath;
+	QDir pluginsDir = appDebugDirPath();
+	pluginsDir.cd(MAIN_PROGRAM_PLUGINS_DIRNAME);
+	if (!pluginsDir.exists())
+		return appDebugDirPath().absolutePath();
+#ifdef WIN64
+	pluginsDir.cd("x64");
+#else
+	pluginsDir.cd("Win32");
+#endif
+	tmpPath = pluginsDir.absolutePath();
+	return tmpPath;
+}
 
 QString MainAppInfo::outputsDirPath()
 {
