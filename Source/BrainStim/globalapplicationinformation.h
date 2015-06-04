@@ -60,6 +60,7 @@ public:
 		bool bEnableNetworkServer;
 		QString sHostAddress;
 		QStringList lScriptIncludeDirectories;
+		QString sCustomPluginsRootDir;
 		quint16 nHostPort;
 		//See also serialization!!! -->  Initialize(), operator>>() and operator<<()
 	} MainAppInformationStructure;
@@ -99,6 +100,7 @@ public slots:
 
 private:
 	void initialize();
+	void discoverCustomPluginsPath();
 	void resetInternalStructure(bool bFullSystemReset = false);
 	void composeJavaScriptConfigurationFile();
 	bool switchRootSettingsGroup(const QString &sNewGroup);

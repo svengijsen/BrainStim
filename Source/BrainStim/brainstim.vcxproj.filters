@@ -644,6 +644,9 @@
     <CustomBuild Include="helphandler.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="installationmanagerbase.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="brainstim.rc" />

@@ -230,8 +230,13 @@ void PluginManagerDialog::installPlugin()
 	QString sInstallFilePath = QFileDialog::getOpenFileName(NULL, tr("Open Plugin installation file"), MainAppInfo::pluginsDirPath(), tr("Configuration Files (*.ini);;Compressed Install Package (*.zip)"));
 	if (sInstallFilePath.isEmpty() == false)
 	{
+		bool bRetval = false;
 		if (pInstallMngr->installPlugin(sInstallFilePath))
-			fillTable();
+		{
+			QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_LOADDYNAMICPLUGINS_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetval));
+			if (bRetval)
+				fillTable();
+		}
 	}
 	this->setEnabled(true);
 }

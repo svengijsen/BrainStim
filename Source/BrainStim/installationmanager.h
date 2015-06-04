@@ -22,8 +22,12 @@
 
 #include <QObject>
 #include <QSettings>
+#include <QFileInfo>
+#include <QMessageBox>
+#include <QDebug>
 #include "plugininterface.h"
 #include "archiver.h"
+#include "mainappinfo.h"
 
 #define INSTALLMNGR_SETTING_SECTION_CONFIGURATION	"Configuration"
 #define INSTALLMNGR_SETTING_SECTION_INSTALLATION	"Installation"
@@ -39,7 +43,7 @@ class installationManager : public QObject
 
 public:
 
-	installationManager(QObject *parent);
+	installationManager(QObject *parent = NULL);
 	~installationManager();
 
 	QString registerPlugin(QObject *plugin, const QString &sRootDirectory, const QString &sFileName, const bool &bIsEnabled, const bool &bIsStatic);

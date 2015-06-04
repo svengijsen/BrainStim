@@ -17,9 +17,10 @@ private:
 public slots :
 	void showHelp(const QUrl &url)
 	{
-		QString aa = url.path();
-		QString bb = url.fileName();
-		int a = 9 + 1;
+		Q_UNUSED(url);
+		//QString aa = url.path();
+		//QString bb = url.fileName();
+		//int a = 9 + 1;
 	};
 };
 

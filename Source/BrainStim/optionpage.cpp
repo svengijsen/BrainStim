@@ -183,6 +183,8 @@ void OptionPage::applySettings()
 	glob_AppInfo->setSettingsInformation(REGISTRY_OPENINEXTERNALDEBUGGER,(bool)(ui.chk_OpenDebOnError->checkState() && Qt::Checked),"bool");
 	glob_AppInfo->setSettingsInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE,(bool)(ui.chkAllowMultipleInstances->checkState() && Qt::Checked),"bool");
 	glob_AppInfo->setSettingsInformation(REGISTRY_ENABLECUSTOMUSERLOGINS, (bool)(ui.chkAllowCustomUserLogins->checkState() && Qt::Checked), "bool");
+	glob_AppInfo->setSettingsInformation(REGISTRY_CUSTOMPLUGINSROOTDIRECTORY, (QString)(ui.lneCustomPluginsRootDirectory->text()), "string");
+	MainAppInfo::setPluginsDirPath(ui.lneCustomPluginsRootDirectory->text());
 	glob_AppInfo->setSettingsInformation(REGISTRY_ENABLENETWORKSERVER,(bool)(ui.chkEnableNetworkServer->checkState() && Qt::Checked),"bool");
 	glob_AppInfo->setSettingsInformation(REGISTRY_SERVERHOSTADDRESS,(QString)(ui.edtNetworkServerAddress->text()),"string");
 	glob_AppInfo->setSettingsInformation(REGISTRY_SERVERHOSTPORT,ui.edtNetworkServerPort->text().toInt(),"int");
@@ -301,6 +303,11 @@ void OptionPage::readSettings()
 		bTemp = tmpVariant.toBool();
 		ui.chkAllowCustomUserLogins->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
 	}
+	if (glob_AppInfo->getSettingsInformation(REGISTRY_CUSTOMPLUGINSROOTDIRECTORY, tmpVariant))
+	{
+		sTemp = tmpVariant.toString();
+		ui.lneCustomPluginsRootDirectory->setText(sTemp);
+	}
 	if (glob_AppInfo->getSettingsInformation(REGISTRY_SCRIPTING_INCLUDEPATHS, tmpVariant))
 	{
 		lTemp = tmpVariant.toStringList();
@@ -376,7 +383,6 @@ void OptionPage::currentScriptDelete()
 	}
 }
 
-
 void OptionPage::on_btnBrowseForUserDocumentsRootDirectory_pressed()
 {
 	QFileDialog::Options options = QFlag(QFileDialog::DontResolveSymlinks | QFileDialog::ShowDirsOnly);
@@ -388,6 +394,19 @@ void OptionPage::on_btnBrowseForUserDocumentsRootDirectory_pressed()
 		options);
 	if (!sDirectory.isEmpty())
 		ui.lneUserDocumentsRootDirectory->setText(sDirectory);
+}
+
+void OptionPage::on_btnBrowseForCustomPluginsRootDirectory_pressed()
+{
+	QFileDialog::Options options = QFlag(QFileDialog::DontResolveSymlinks | QFileDialog::ShowDirsOnly);
+	QFileDialog tmpFileDialog;
+	QString sDirectory;
+	sDirectory = tmpFileDialog.getExistingDirectory(this,
+		"Select the directory",
+		ui.lneCustomPluginsRootDirectory->text(),
+		options);
+	if (!sDirectory.isEmpty())
+		ui.lneCustomPluginsRootDirectory->setText(sDirectory);
 }
 
 void OptionPage::on_chkEnableNetworkServer_toggled(bool)

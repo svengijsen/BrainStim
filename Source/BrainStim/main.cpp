@@ -115,6 +115,14 @@ int main(int argc, char **argv)
 	bool bProceed = true;
 	MainAppExchange appExchange(argc, argv, MAIN_PROGRAM_SHARED_MEM_KEY);
 	GlobalApplicationInformation *globAppInformation = appExchange.getGlobalAppInformationObjectPointer();
+	//Now the BrainStim.ini file is initialized/created if it did not yet exist.
+	if (argc >= 2)
+	{
+		QString sArg = QString(argv[1]);
+		if (sArg == "-i" || sArg == "-I")//only initialization, to make sure INI file exists?
+			return 0;
+	}
+
 	QVariant tmpVariant;
 	if (globAppInformation->getSettingsInformation(REGISTRY_ENABLECUSTOMUSERLOGINS, tmpVariant) == true)
 	{
@@ -160,7 +168,7 @@ int main(int argc, char **argv)
 				for (i = 1; i<argc;i++)
 				{
 					tempStr = argv[i];
-					if (tempStr == "-f" | tempStr == "-F")//path exists?
+					if ((tempStr == "-f") || (tempStr == "-F"))//path exists?
 					{				
 						if (i<(argc-1))//another argument available?
 						{
@@ -168,7 +176,7 @@ int main(int argc, char **argv)
 							sFilesToOpen.append(QString(argv[i]).split(";"));//separate multiple files (cmd) using a ';' Character!
 						}
 					}
-					else if (tempStr == "-e" | tempStr == "-E")//Immediately execute the loaded (-f <document) document?
+					else if ((tempStr == "-e") || (tempStr == "-E"))//Immediately execute the loaded (-f <document) document?
 					{
 						bExecuteDocument = true;
 					}
@@ -202,33 +210,32 @@ int main(int argc, char **argv)
 	if(bProceed)
 	{
 		Q_INIT_RESOURCE(brainstim);
-		QString sTemp = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/" + globAppInformation->getTitle() + "/" + MAIN_PROGRAM_PLUGINS_DIRNAME;
-		#ifdef WIN64
-		sTemp = sTemp + "/x64";
-		#else
-			sTemp = sTemp + "/Win32";
-		#endif
+		//QString sTemp = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/" + globAppInformation->getTitle() + "/" + MAIN_PROGRAM_PLUGINS_DIRNAME;
+		//#ifdef WIN64
+		//sTemp = sTemp + "/x64";
+		//#else
+		//	sTemp = sTemp + "/Win32";
+		//#endif
 
-		QDir userPluginsDir(sTemp);
-		bool bPluginUserDirExists = false;
-		QString finalPluginDir = "";
+		//QDir userPluginsDir(sTemp);
+		//bool bPluginUserDirExists = false;
+		//QString finalPluginDir = "";
 
-		if (userPluginsDir.exists() == false)
-		{
-			userPluginsDir.mkpath(sTemp);
-			if (userPluginsDir.exists())
-				bPluginUserDirExists = true;
-		}
-		else
-		{
-			bPluginUserDirExists = true;
-		}
-		if (bPluginUserDirExists)
-			finalPluginDir = sTemp;
-		else
-			finalPluginDir = MainAppInfo::pluginsDirPath();
-		MainAppInfo::setPluginsDirPath(finalPluginDir);
-		appExchange.addLibraryPath(finalPluginDir);
+		//if (userPluginsDir.exists() == false)
+		//{
+		//	userPluginsDir.mkpath(sTemp);
+		//	if (userPluginsDir.exists())
+		//		bPluginUserDirExists = true;
+		//}
+		//else
+		//{
+		//	bPluginUserDirExists = true;
+		//}
+		//if (bPluginUserDirExists)
+		//	finalPluginDir = sTemp;
+		//else
+		//	finalPluginDir = MainAppInfo::pluginsDirPath();
+		//appExchange.addLibraryPath(finalPluginDir);
 		MainWindow *appWindow = new MainWindow();
 		appWindow->setGlobalApplicationInformationObject(globAppInformation);
 		MainAppInfo::setMainWindow(appWindow);
@@ -239,7 +246,7 @@ int main(int argc, char **argv)
 			for (int i = 1; i<argc;i++)
 			{
 				tempStr = argv[i];
-				if (tempStr == "-f" | tempStr == "-F")//path exists?
+				if ((tempStr == "-f") || (tempStr == "-F"))//path exists?
 				{				
 					if (i<(argc-1))//another argument available?
 					{
@@ -247,7 +254,7 @@ int main(int argc, char **argv)
 						appWindow->setStartupFiles(argv[i]);//separate multiple files (cmd) using a ';' Character!
 					}
 				}
-				else if (tempStr == "-o" | tempStr == "-O")//valid argument?
+				else if ((tempStr == "-o") || (tempStr == "-O"))//valid argument?
 				{
 					if (i<(argc-1))//another argument available?
 					{
@@ -256,11 +263,11 @@ int main(int argc, char **argv)
 						flags = (flags | GlobalApplicationInformation::MainProgramModeFlag(tempStr.toInt()));
 					}				
 				}
-				else if (tempStr == "-v" | tempStr == "-V")//verbose mode?
+				else if ((tempStr == "-v") || (tempStr == "-V"))//verbose mode?
 				{
 					flags = (flags | GlobalApplicationInformation::VerboseMode);
 				}
-				else if (tempStr == "-e" | tempStr == "-E")//Immediately execute the loaded (-f <document) document?
+				else if ((tempStr == "-e") || (tempStr == "-E"))//Immediately execute the loaded (-f <document) document?
 				{
 					flags = (flags | GlobalApplicationInformation::ExecuteDocument);
 				}
@@ -269,7 +276,7 @@ int main(int argc, char **argv)
 		else if (argc == 2)//only one parameter defined!
 		{
 			tempStr = argv[1];
-			if (tempStr == "-v" | tempStr == "-V")//verbose mode?
+			if ((tempStr == "-v") || (tempStr == "-V"))//verbose mode?
 			{
 				flags = (flags | GlobalApplicationInformation::VerboseMode);
 			}

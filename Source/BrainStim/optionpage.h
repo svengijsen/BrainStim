@@ -48,6 +48,7 @@ private slots:
 	void on_rdb_3DRenderer_toggled(bool);
 	void on_chkEnableNetworkServer_toggled(bool);
 	void on_btnBrowseForUserDocumentsRootDirectory_pressed();
+	void on_btnBrowseForCustomPluginsRootDirectory_pressed();
 	void setUI3DRendererControls(int type);
 	void validateAndApplySettings();
 	void readSettings();

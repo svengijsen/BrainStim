@@ -17,6 +17,7 @@
 //
 
 #include "installationmanager.h"
+#include "installationmanagerbase.h"
 #include "mainappinfo.h"
 #include "customquestiondialog.h"
 #include "archiver.h"
@@ -404,7 +405,7 @@ bool installationManager::installPlugin(const QString &sPluginInstallFilePath)
 	}
 	else if (fiPluginInstallFilePath.completeSuffix() == "zip")
 	{
-		Archiver pluginArchiver = new Archiver(this);
+		Archiver pluginArchiver = new Archiver();
 		QStringList lArchiverFiles = pluginArchiver.getFileList(sPluginInstallFilePath);
 		QStringList lArchiverIniFiles;
 		foreach(QString sTmpFileArchiverPath, lArchiverFiles)
@@ -573,9 +574,10 @@ bool installationManager::installPlugin(const QString &sPluginInstallFilePath)
 						qDebug() << __FUNCTION__ << "Could not copy a plugin installation file to the plugin folder: " << sSourceFilePath;
 				}
 			}
-			bool bRetval = false;
-			if (QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_LOADDYNAMICPLUGINS_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetval)))
-				return bRetval;
+			//bool bRetval = false;
+			//if (QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_LOADDYNAMICPLUGINS_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetval)))
+			//	return bRetval;
+			return true;
 		}
 	}
 	return false;

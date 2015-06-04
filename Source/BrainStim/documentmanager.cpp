@@ -1004,8 +1004,8 @@ bool DocumentManager::appendKnownDocumentFileHandlerList(const QString &strDocHa
 		{
 			if((x==0))
 			{
-				if (lPluginDefinedPreLoadedHandlerInterfaces.hDocHandlerList.contains(sKey))
-					int dosomethinghere = 9;
+				//if (lPluginDefinedPreLoadedHandlerInterfaces.hDocHandlerList.contains(sKey))
+				//	int dosomethinghere = 9;
 				strcPluginHandlerInterface tmpPluginHandlerInterface;
 				lPluginDefinedPreLoadedHandlerInterfaces.hDocHandlerList.insert(sKey,tmpPluginHandlerInterface);
 				lPluginDefinedPreLoadedHandlerInterfaces.hDocHandlerList[sKey].pPluginObject = pluginObject;

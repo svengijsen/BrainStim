@@ -35,7 +35,7 @@
     </size>
    </property>
    <property name="currentIndex">
-    <number>0</number>
+    <number>1</number>
    </property>
    <widget class="QWidget" name="tab1">
     <attribute name="title">
@@ -161,6 +161,48 @@
      </property>
      <property name="text">
       <string>User Documents Root Directory:</string>
+     </property>
+    </widget>
+    <widget class="QLineEdit" name="lneCustomPluginsRootDirectory">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>190</y>
+       <width>671</width>
+       <height>31</height>
+      </rect>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnBrowseForCustomPluginsRootDirectory">
+     <property name="geometry">
+      <rect>
+       <x>590</x>
+       <y>230</y>
+       <width>91</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Browse...</string>
+     </property>
+    </widget>
+    <widget class="QLabel" name="label_8">
+     <property name="geometry">
+      <rect>
+       <x>10</x>
+       <y>160</y>
+       <width>261</width>
+       <height>21</height>
+      </rect>
+     </property>
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Custom Plugins Root Directory:</string>
      </property>
     </widget>
    </widget>
