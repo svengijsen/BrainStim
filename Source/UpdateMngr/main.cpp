@@ -138,15 +138,23 @@ int main(int argc, char **argv)
 				tempArgStr = argv[3];
 				if (tempArgStr == "install")
 				{
-					//installationManager *installMngrObject = new installationManager(NULL);
+					bool bOverwriteExistingFiles = false;
+					if (argc > 4)//other flags/parameters available?
+					{
+						for (int i = 4; i < argc; i++)
+						{
+							tempArgStr = argv[i];
+							if ((tempArgStr.toLower() == "-o") || (tempArgStr.toLower() == "-overwrite"))
+							{
+								bOverwriteExistingFiles = true;
+							}
+						}
+					}
 					bool bRetval = false;
-					if (baseInstallManager->installPlugin(sCustomPluginsRootDir, sIniFilePath))
-					//	QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_LOADDYNAMICPLUGINS_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetval));
-					//if (bRetval)
+					if (baseInstallManager->installPlugin(sCustomPluginsRootDir, sIniFilePath, bOverwriteExistingFiles) > 0)
 						qDebug() << __FUNCTION__ << "Plugin successfully installed as defined in (" << sIniFilePath << ")";
 					else
 						qDebug() << __FUNCTION__ << "Could not install the requested plugin defined in (" << sIniFilePath << "), exiting...";
-						//delete installMngrObject;
 				}
 			}
 		}

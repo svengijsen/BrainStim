@@ -41,6 +41,10 @@
  //#define INSTALLMNGR_SETTING_SETTING_ROOT			"RootDirectory"
  #define INSTALLMNGR_SETTING_SETTING_FILES			"Files"
  
+#define INSTALLMNGR_SETTING_MACRO_PLUGINNAME		"<PluginName>"
+#define INSTALLMNGR_SETTING_MACRO_PLUGINPATH		"<PluginPath>"
+#define INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH	"<MainAppPath>"
+
 //class Archiver;
 class installationManagerBase// : public QObject
 {
@@ -64,7 +68,7 @@ class installationManagerBase// : public QObject
 // 	bool isEnabledPlugin(const QString &sPluginFilePath);
 // 	bool isStaticPlugin(const QString &sRegisteredPluginName);
 	bool static unistallRegisteredPlugin(const QString &sRegisteredPluginName){ return true; };
-	bool installPlugin(const QString &sMainAppsPluginDirPath, const QString &sPluginInstallFilePath)
+	int installPlugin(const QString &sMainAppsPluginDirPath, const QString &sPluginInstallFilePath, const bool &bOverWriteExistingFiles)
 	{
 		QFileInfo fiPluginInstallFilePath(sPluginInstallFilePath);
 		QString sIniFilePath = "";
@@ -84,38 +88,43 @@ class installationManagerBase// : public QObject
 			if (lArchiverIniFiles.isEmpty())
 			{
 				qDebug() << __FUNCTION__ << "The compressed file doesn't seem to be a valid installer package, no configuration (*.ini) file found!";
-				return false;
+				return -1;
 			}
 			QTemporaryDir dir;
 			if (dir.isValid() == false)
 			{
 				qDebug() << __FUNCTION__ << "Could not create a temporarily directory for the extraction of the of the installer package, please try to extract it yourself and use the extracted configuration (*.ini) file for the installation process!";
-				return false;
+				return -2;
 			}
 			QStringList lExtractedFiles = JlCompress::extractDir(sPluginInstallFilePath, dir.path());
-			bool bRetVal = true;
+			int nRetVal = 0;
 			foreach(QString sTmpExtractedFilePath, lExtractedFiles)
 			{
 				if (QFileInfo(sTmpExtractedFilePath).completeSuffix() == "ini")
 				{
-					if (installPlugin(sMainAppsPluginDirPath, sTmpExtractedFilePath) == false)
-						bRetVal = false;
+					int nTempRetVal = installPlugin(sMainAppsPluginDirPath, sTmpExtractedFilePath, bOverWriteExistingFiles);
+					if (nTempRetVal < 0)
+					{
+						nRetVal = nTempRetVal;
+						break;
+					}
+					nRetVal = nRetVal + nTempRetVal;
 				}
 			}
 			dir.remove();
-			return bRetVal;
+			return nRetVal;
 		}
 		else
 		{
-			return false;
+			return -3;
 		}
 
 		QFile fPluginIniFile(sIniFilePath);
 		if (fPluginIniFile.exists())
 		{
 			QString sIniFileAbsDir = QFileInfo(sIniFilePath).absolutePath();
-			if (QDir(sMainAppsPluginDirPath).canonicalPath() == QDir(sIniFileAbsDir).canonicalPath())
-				return false;
+			if (QDir(sMainAppsPluginDirPath).canonicalPath() == QDir(sIniFileAbsDir).canonicalPath())//Is a ini file inside the plugins directory? 
+				return -4;
 
 			QSettings pluginSettings(sIniFilePath, QSettings::IniFormat);
 			pluginSettings.beginGroup(INSTALLMNGR_SETTING_SECTION_CONFIGURATION);
@@ -126,20 +135,23 @@ class installationManagerBase// : public QObject
 			lFileList = pluginSettings.value(INSTALLMNGR_SETTING_SETTING_FILES, QStringList()).toStringList();
 			pluginSettings.endGroup();
 
+			QString sIniFileName = QFileInfo(sIniFilePath).fileName();
 			//if (isRegisteredPlugin(QFileInfo(sIniFilePath).baseName()))
+			if (QFile(sMainAppsPluginDirPath + "/" + sIniFileName).exists())
 			{
-				int confirm = QMessageBox::question(NULL, "Uninstall already present plugin?", "A plugin with the same name (" + sPluginInternalName + ") is already in use.\nTo proceed this installation that active plugin first needs to be uninstalled, do you wish to do this?", QMessageBox::Ok | QMessageBox::Cancel);
-				if (confirm == QMessageBox::Ok)
+				//int confirm = QMessageBox::question(NULL, "Uninstall already present plugin?", "A plugin with the same name (" + sPluginInternalName + ") is already in use.\nTo proceed this installation that active plugin first needs to be un-installed, do you wish to proceed?", QMessageBox::Ok | QMessageBox::Cancel);
+				if (bOverWriteExistingFiles==false)//(confirm == QMessageBox::Ok)
 				{
-					if (unistallRegisteredPlugin(sPluginInternalName) == false)
-					{
-						qDebug() << __FUNCTION__ << "Could not uninstall the plugin: " << sPluginInternalName;
-						return false;
-					}
-				}
-				else if (QMessageBox::Cancel)
-				{
-					return false;
+					//if (unistallRegisteredPlugin(sPluginInternalName) == false)
+					//{
+					//	qDebug() << __FUNCTION__ << "Could not uninstall the plugin: " << sPluginInternalName;
+					//	return -5;
+					//}
+				//}
+				//else// if (QMessageBox::Cancel)
+				//{
+					qDebug() << __FUNCTION__ << "File already exists (" + sMainAppsPluginDirPath + "/" + sIniFileName + ")!" << sPluginInternalName;
+					return -5;
 				}
 			}
 
@@ -150,31 +162,39 @@ class installationManagerBase// : public QObject
 				QList<int> nPresentInCurrentInstallIndexes;
 				for (int i = 0; i < lFileList.count(); i++)
 				{
+					lFileList[i].replace(INSTALLMNGR_SETTING_MACRO_PLUGINPATH, sMainAppsPluginDirPath, Qt::CaseInsensitive);
+					lFileList[i].replace(INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH, sMainAppsPluginDirPath, Qt::CaseInsensitive);
+					lFileList[i].replace(INSTALLMNGR_SETTING_MACRO_PLUGINNAME, QFileInfo(sIniFileName).completeBaseName(), Qt::CaseInsensitive);
+				}
+				for (int i = 0; i < lFileList.count(); i++)
+				{
 					QString sFileName = QFileInfo(lFileList[i]).fileName();
-					QFile sSourceFilePath(sIniFileAbsDir + "/" + sFileName);
-					QFile sInstallationFilePath(sMainAppsPluginDirPath + "/" + lFileList[i]);
-					if (sSourceFilePath.exists() == false)
+					QFile fSourceFilePath(sIniFileAbsDir + "/" + sFileName);
+					QFile fInstallationFilePath(lFileList[i]); //sMainAppsPluginDirPath + "/" + lFileList[i]);
+					if (fSourceFilePath.exists() == false)
 					{
 						bAllFilesCheck = false;
 						break;
 					}
-					if (QFileInfo(sMainAppsPluginDirPath + "/" + lFileList[i]).exists())
+					if (fInstallationFilePath.exists())// QFileInfo(sMainAppsPluginDirPath + "/" + lFileList[i]).exists())
 						nPresentInCurrentInstallIndexes.append(i);
 				}
 				if (bAllFilesCheck == false)
-					return false;
+					return -6;
 
 				if (nPresentInCurrentInstallIndexes.isEmpty() == false)
 				{
 					//Todo handle shared files here!!, first disable all and then reboot, install and enable all
-					QString sSkippedFiles;
-					foreach(int nIndex, nPresentInCurrentInstallIndexes)
+					if (bOverWriteExistingFiles == false)
 					{
-						sSkippedFiles = sSkippedFiles + "\n" + lFileList[nIndex];
+						QString sSkippedFiles;
+						foreach(int nIndex, nPresentInCurrentInstallIndexes)
+						{
+							sSkippedFiles = sSkippedFiles + "\n" + lFileList[nIndex];
+						}
+						qDebug() << __FUNCTION__ << "Some installation files (for the " << sPluginInternalName << " plugin) were skipped because they were already present and in use: " << sSkippedFiles;
+						//see below uncommented copy step!!!
 					}
-					qDebug() << __FUNCTION__ << "Some installation files (for the " << sPluginInternalName << " plugin) were skipped because they were already present and in use: " << sSkippedFiles;
-					//see below uncommented copy step!!!
-
 
 
 
@@ -233,23 +253,49 @@ class installationManagerBase// : public QObject
 				//Copy the files to the installation folder
 				for (int i = 0; i < lFileList.count(); i++)
 				{
-					if (nPresentInCurrentInstallIndexes.contains(i) == false)
+					if ((nPresentInCurrentInstallIndexes.contains(i) == false) || (bOverWriteExistingFiles))
 					{
 						QString sFileName = QFileInfo(lFileList[i]).fileName();
 						QString sSourceFilePath = sIniFileAbsDir + "/" + sFileName;
-						QString sInstallationFilePath;
-						sInstallationFilePath  = sMainAppsPluginDirPath + "/" + lFileList[i];
-						if (QFile::copy(sSourceFilePath, sInstallationFilePath) == false)
+						//QString sInstallationFilePath;
+						//sInstallationFilePath  = sMainAppsPluginDirPath + "/" + lFileList[i];
+
+						if (QFile(lFileList[i]).exists())
+						{
+							//here we can be sure that we may remove the file...
+								//		//QFileInfo(MainAppInfo::pluginsDirPath() + "/" + lFileList[i]).exists())
+							bool bRemoveSucceeded = QFile::remove(lFileList[i]);
+							if (QFileInfo(lFileList[i]).exists())
+								bRemoveSucceeded = false;
+							if (bRemoveSucceeded == false)
+							{
+								qDebug() << __FUNCTION__ << "Could not replace the already present file (" << lFileList[i] << ")!";
+								return -7;
+							}
+						}
+						//Make sure that the destination folder exists...
+						if (QFileInfo(lFileList[i]).absoluteDir().exists() == false)
+						{
+							if (QDir().mkpath(QFileInfo(lFileList[i]).absolutePath()) == false)
+							{
+								qDebug() << __FUNCTION__ << "Could not create the destination directory path: " << QFileInfo(lFileList[i]).absolutePath();
+								return -8;
+							}
+						}
+						if (QFile::copy(sSourceFilePath, lFileList[i]) == false)
+						{
 							qDebug() << __FUNCTION__ << "Could not copy a plugin installation file to the plugin folder: " << sSourceFilePath;
+							return -9;
+						}
 					}
 				}
 				//bool bRetval = false;
 				//if (QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_LOADDYNAMICPLUGINS_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetval)))
 				//	return bRetval;
-				return true;
+				return 1;
 			}
 		}
-		return false;
+		return -99;
 	};
 // 	bool changeRegisteredPlugin(const QString &sRegisteredPluginName, const bool &bEnable);
 // 	QString getPluginIniFilePath(const QString &sPluginFilePath);

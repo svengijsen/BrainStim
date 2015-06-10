@@ -2319,6 +2319,11 @@ bool MainWindow::loadDynamicPlugins()
 		if (installMngr->isEnabledPlugin(sPluginAbsFilePath) == false)
 			bIsUnregisteredAndDisabled = true;
 
+		QString sTmpAddPluginDir = QFileInfo(sPluginAbsFilePath).absolutePath() + "/" + QFileInfo(fileName).completeBaseName();
+		QDir dirTmpAddPluginDir(sTmpAddPluginDir);
+		if (dirTmpAddPluginDir.exists())//Does a additional plugin directory exist?
+			qApp->addLibraryPath(dirTmpAddPluginDir.canonicalPath());
+
 		QPluginLoader *loader = new QPluginLoader(sPluginAbsFilePath, this);
 		QObject *plugin = loader->instance();//The QObject provided by the plugin, if it was compiled against an incompatible version of the Qt library, QPluginLoader::instance() returns a null pointer.
 		if (plugin)
