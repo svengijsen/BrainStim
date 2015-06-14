@@ -2306,9 +2306,9 @@ bool MainWindow::loadDynamicPlugins()
 	QString strRetVal = "";
 	const QMetaObject* metaObject = NULL;
 	bool bInterfaceResolved = false;
-	foreach(QString fileName, QDir(MainAppInfo::pluginsDirPath()).entryList(QDir::Files))
+	foreach(QString fileName, QDir(MainAppInfo::customPluginsDirPath()).entryList(QDir::Files))
 	{
-		QString sPluginAbsFilePath = QDir(MainAppInfo::pluginsDirPath()).absoluteFilePath(fileName);
+		QString sPluginAbsFilePath = QDir(MainAppInfo::customPluginsDirPath()).absoluteFilePath(fileName);
 		if (QFileInfo(fileName).completeSuffix().toLower() != "dll")
 			continue;
 		if (installMngr->getPluginIniFilePath(sPluginAbsFilePath).isEmpty())//Is there a configuration file?
@@ -2397,10 +2397,10 @@ bool MainWindow::loadDynamicPlugins()
 						//qWarning() << __FUNCTION__ << ", Plugin is compatibility(" << fileName << ")";
 						if (bIsUnregisteredAndDisabled)
 						{
-							installMngr->registerPlugin(plugin, QDir(MainAppInfo::pluginsDirPath()).canonicalPath(), fileName, false, false);
+							installMngr->registerPlugin(plugin, QDir(MainAppInfo::customPluginsDirPath()).canonicalPath(), fileName, false, false);
 							continue;
 						}
-						QString sPluginInternalName = installMngr->registerPlugin(plugin, QDir(MainAppInfo::pluginsDirPath()).canonicalPath(), fileName, true, false);
+						QString sPluginInternalName = installMngr->registerPlugin(plugin, QDir(MainAppInfo::customPluginsDirPath()).canonicalPath(), fileName, true, false);
 						if (insertPluginIntoMenu(sPluginInternalName))
 						{
 							//pluginFileNames += fileName;
@@ -2854,10 +2854,15 @@ void MainWindow::setAppDirectories()
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
 	QStringList paths = qApp->libraryPaths();
-	paths <<  MainAppInfo::pluginsDirPath();// pluginsDir.absolutePath();
+	QString sTempCustomPluginsDirPath = MainAppInfo::customPluginsDirPath();
+	paths << sTempCustomPluginsDirPath;
 #ifndef QT_NO_DEBUG_OUTPUT	
-	qDebug() << "Plugin path defined: " << MainAppInfo::pluginsDirPath();	
-#endif		
+	qDebug() << __FUNCTION__ << "Custom Plugin path defined: " << sTempCustomPluginsDirPath;
+#endif
+	//Update the INI file with the default base plugin path
+	QString sTempDefaultPluginsDirPath = MainAppInfo::defaultPluginsDirPath();
+	if (globAppInfo->setSettingsInformation(REGISTRY_DEFAULTPLUGINSROOTDIRECTORY, sTempDefaultPluginsDirPath, "string") == false)
+		qDebug() << __FUNCTION__ << "Could not configure the defined Plugin path in the main settings file: " << sTempDefaultPluginsDirPath;
 	qApp->setLibraryPaths(paths);
 }
 

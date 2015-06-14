@@ -85,7 +85,7 @@ void GlobalApplicationInformation::discoverCustomPluginsPath()
 	if (bPluginUserDirExists)
 		finalPluginDir = sTemp;
 	else
-		finalPluginDir = MainAppInfo::pluginsDirPath();
+		finalPluginDir = MainAppInfo::customPluginsDirPath();
 	mainAppInformation.sCustomPluginsRootDir = finalPluginDir;
 }
 

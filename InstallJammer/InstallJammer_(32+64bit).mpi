@@ -284,6 +284,7 @@ File ::3C576268-73F0-446F-A971-8048D032378F -name E:/Libraries/Qt5.3.2_64bit/5.3
 File ::CF55F259-CDE4-4EA3-9B22-6F3E6FD85271 -name E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl/bin/Qt5QuickParticles.dll -parent D562F7E3-157E-48ED-91CE-71FBA40B332D
 File ::0AA02078-0AB7-4B24-A17A-A0B5E9751212 -name E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl/bin/Qt5QuickTest.dll -parent D562F7E3-157E-48ED-91CE-71FBA40B332D
 File ::DA870406-130E-4100-B8B2-6B1BD624678E -name E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl/bin/Qt5QuickWidgets.dll -parent D562F7E3-157E-48ED-91CE-71FBA40B332D
+File ::918322BF-A612-4586-AE56-34103A4B494F -targetfilename UpdateMngr.exe -name E:/Projects/BrainStim/Install/UpdateMngr_x64_Release.exe -parent D562F7E3-157E-48ED-91CE-71FBA40B332D
 FileGroup ::E5DE8D2A-E046-4945-B382-97B2670A7E75 -setup Install -active Yes -platforms {Solaris-x86 TarArchive Windows ZipArchive} -name Documents -parent FileGroups
 File ::182C849A-4C78-4BB0-8AB8-DBA019559C3C -name E:/Projects/BrainStim/Install/Documents/MainDocumentation.qhc -parent E5DE8D2A-E046-4945-B382-97B2670A7E75
 File ::92D1763F-22CE-4811-860C-50DE5667D48D -name E:/Projects/BrainStim/Install/Documents/MainDocumentation.qch -parent E5DE8D2A-E046-4945-B382-97B2670A7E75
@@ -1024,6 +1025,7 @@ File ::DFADC2B6-D90C-415C-9CFC-B55BEF2ED423 -name E:/Libraries/Qt5.3.2_32bit/5.3
 File ::0667C6BB-94B6-44BC-BE0B-1D978690F66E -name E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/bin/Qt5QuickParticles.dll -parent 891CF076-368A-450C-890A-7E3FDCB8748B
 File ::35714E1A-D0C2-4B96-99E2-82D37726D344 -name E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/bin/Qt5QuickTest.dll -parent 891CF076-368A-450C-890A-7E3FDCB8748B
 File ::A78F5550-23AD-45A5-8F04-76DC7BA51559 -name E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/bin/Qt5QuickWidgets.dll -parent 891CF076-368A-450C-890A-7E3FDCB8748B
+File ::1D62E63A-3380-4EAA-BE73-24FFD33AC694 -targetfilename UpdateMngr.exe -name E:/Projects/BrainStim/Install/UpdateMngr_Win32_Release.exe -parent 891CF076-368A-450C-890A-7E3FDCB8748B
 FileGroup ::A1E87F59-F33A-4028-AA97-952F67EB031A -setup Install -active Yes -platforms {TarArchive Windows ZipArchive} -name {QML Plugins(win32)} -parent FileGroups
 File ::EE4D3E75-809E-427B-903D-3218F41D69A6 -name E:/Projects/BrainStim/Install/Qml/plugins/Win32/DefaultQMLPlugin_Win32_Release.dll -parent A1E87F59-F33A-4028-AA97-952F67EB031A
 File ::93ECB49A-702C-437D-91E8-793AE840F571 -type dir -name E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/qml/Qt -parent A1E87F59-F33A-4028-AA97-952F67EB031A
@@ -1466,7 +1468,7 @@ File ::5D03EE0B-325F-45AC-B259-3C8D25AF81CD -name qsqlodbcd.pdb -active 0 -paren
 File ::04C7B417-8C70-40FF-A967-02D64E0AB192 -name qsqlpsql.dll -parent 3A37FBD5-B711-440C-9713-617016B3F04B
 File ::063AC593-75D3-48D6-91B2-92E96D821AC8 -name qsqlpsqld.dll -active 0 -parent 3A37FBD5-B711-440C-9713-617016B3F04B
 File ::A930E56F-A33C-487B-AEDC-62855602F73B -name qsqlpsqld.pdb -active 0 -parent 3A37FBD5-B711-440C-9713-617016B3F04B
-File ::F2490433-C328-442B-ABCA-140BCB7C6AB6 -name qsqlibase.dll -parent 3A37FBD5-B711-440C-9713-617016B3F04B
+File ::F2490433-C328-442B-ABCA-140BCB7C6AB6 -name qsqlibase.dll -active 0 -parent 3A37FBD5-B711-440C-9713-617016B3F04B
 File ::20F4BDED-AA67-49C2-AD30-412B2BD77B2C -name qsqlibase.exp -active 0 -parent 3A37FBD5-B711-440C-9713-617016B3F04B
 File ::F25981D9-F906-49CB-8B2D-2DBF956D2653 -name qsqlibase.lib -active 0 -parent 3A37FBD5-B711-440C-9713-617016B3F04B
 File ::3D65FA28-FED5-4F2F-84CB-C578DC92982A -name qsqlibased.dll -active 0 -parent 3A37FBD5-B711-440C-9713-617016B3F04B
@@ -1579,7 +1581,7 @@ File ::A176D2AF-CFF8-41C8-966D-9ABF74471283 -name qsqlited.pdb -active 0 -parent
 File ::89AABBBF-69B1-4AEC-A029-DD1C999244E6 -name qsqlmysql.dll -parent D8A77711-E9C3-4C1A-9035-B1F8AF5622FA
 File ::B63EBF9A-77D8-4873-BDC6-5454D2AC1B60 -name qsqlmysqld.dll -active 0 -parent D8A77711-E9C3-4C1A-9035-B1F8AF5622FA
 File ::65AD33E3-9EBC-4230-A485-73BEA7EB7265 -name qsqlmysqld.pdb -active 0 -parent D8A77711-E9C3-4C1A-9035-B1F8AF5622FA
-File ::FB97FAF3-4CCE-4C80-828C-A702DAFFF946 -name qsqlibase.dll -parent D8A77711-E9C3-4C1A-9035-B1F8AF5622FA
+File ::FB97FAF3-4CCE-4C80-828C-A702DAFFF946 -name qsqlibase.dll -active 0 -parent D8A77711-E9C3-4C1A-9035-B1F8AF5622FA
 File ::92F2E1F1-B133-41D1-BA55-094DD8B1AAAC -name qsqlibase.exp -active 0 -parent D8A77711-E9C3-4C1A-9035-B1F8AF5622FA
 File ::6D0BECAB-AD9F-4B4C-8303-7DD39319F38D -name qsqlibase.lib -active 0 -parent D8A77711-E9C3-4C1A-9035-B1F8AF5622FA
 File ::6C959648-6A38-43AB-8226-C1FDA229F8E9 -name qsqlibased.dll -active 0 -parent D8A77711-E9C3-4C1A-9035-B1F8AF5622FA

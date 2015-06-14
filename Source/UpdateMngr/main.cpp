@@ -19,6 +19,7 @@
 #include "updatemngr.h"
 #include "../BrainStim/maindefines.h"
 #include "../BrainStim/installationManagerBase.h"
+#include "../BrainStim/mainappinfo.h"
 #include <QtWidgets/QApplication>
 #include <QFile>
 #include <QProcess>
@@ -116,13 +117,21 @@ int main(int argc, char **argv)
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	QVariant tmpVariant;
 	QString sCustomPluginsRootDir = "";
+	QString sDefaultPluginsRootDir = "";
 	QSettings sSettingsObj(MAIN_PROGRAM_INI_FILENAME, QSettings::IniFormat);
 	if (getSettingsInformation(sSettingsObj, REGISTRY_CUSTOMPLUGINSROOTDIRECTORY, tmpVariant) == false)
 	{
-		qDebug() << __FUNCTION__ << "Could not retrieve plugin root directory setting from *.ini file (" << MAIN_PROGRAM_INI_FILENAME << "), exiting...";
+		qDebug() << __FUNCTION__ << "Could not retrieve custom plugins root directory setting from *.ini file (" << MAIN_PROGRAM_INI_FILENAME << "), exiting...";
 		return 0;
 	}
 	sCustomPluginsRootDir = tmpVariant.toString();
+	if (getSettingsInformation(sSettingsObj, REGISTRY_DEFAULTPLUGINSROOTDIRECTORY, tmpVariant) == false)
+	{
+		qDebug() << __FUNCTION__ << "Could not retrieve default plugins root directory setting from *.ini file (" << MAIN_PROGRAM_INI_FILENAME << "), exiting...";
+		return 0;
+	}
+	sDefaultPluginsRootDir = tmpVariant.toString();
+
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	if (argc > 1)//arguments available?
 	{
@@ -151,7 +160,7 @@ int main(int argc, char **argv)
 						}
 					}
 					bool bRetval = false;
-					if (baseInstallManager->installPlugin(sCustomPluginsRootDir, sIniFilePath, bOverwriteExistingFiles) > 0)
+					if (baseInstallManager->installPlugin(QDir::currentPath(), sDefaultPluginsRootDir, sCustomPluginsRootDir, sIniFilePath, bOverwriteExistingFiles) > 0)
 						qDebug() << __FUNCTION__ << "Plugin successfully installed as defined in (" << sIniFilePath << ")";
 					else
 						qDebug() << __FUNCTION__ << "Could not install the requested plugin defined in (" << sIniFilePath << "), exiting...";

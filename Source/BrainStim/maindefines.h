@@ -77,6 +77,7 @@
 #define REGISTRY_ALLOWMULTIPLEINHERITANCE				"General/AllowMultipleInheritance"
 #define REGISTRY_RECENTFILELIST							"General/RecentFileList"
 #define REGISTRY_USERDOCUMENTSROOTDIRECTORY				"General/UserDocumentsRootDirectory"
+#define REGISTRY_DEFAULTPLUGINSROOTDIRECTORY			"General/DefaultPluginsRootDirectory"
 #define REGISTRY_CUSTOMPLUGINSROOTDIRECTORY				"General/CustomPluginsRootDirectory"
 #define REGISTRY_ENABLECUSTOMUSERLOGINS					"General/EnableCustomUserLogins"
 #define REGISTRY_OPENINEXTERNALDEBUGGER					"Debugging/OpenExtDebug"

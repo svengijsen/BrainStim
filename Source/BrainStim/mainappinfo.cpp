@@ -41,12 +41,17 @@ void MainAppInfo::setPluginsDirPath(const QString &sNewPath)
 	MainAppInfoData::instance()->setPluginPath(sNewPath);
 }
 
-QString MainAppInfo::pluginsDirPath()
+QString MainAppInfo::customPluginsDirPath()
 {
 	QString tmpPath;
 	tmpPath = MainAppInfoData::instance()->getPluginPath();
 	if (tmpPath.isEmpty() == false)
 		return tmpPath;
+	return defaultPluginsDirPath();
+}
+
+QString MainAppInfo::defaultPluginsDirPath()
+{
 	QDir pluginsDir = appDebugDirPath();
 	pluginsDir.cd(MAIN_PROGRAM_PLUGINS_DIRNAME);
 	if (!pluginsDir.exists())
@@ -56,7 +61,7 @@ QString MainAppInfo::pluginsDirPath()
 #else
 	pluginsDir.cd("Win32");
 #endif
-	tmpPath = pluginsDir.absolutePath();
+	QString tmpPath = pluginsDir.absolutePath();
 	return tmpPath;
 }
 

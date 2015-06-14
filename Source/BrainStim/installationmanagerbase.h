@@ -42,7 +42,8 @@
  #define INSTALLMNGR_SETTING_SETTING_FILES			"Files"
  
 #define INSTALLMNGR_SETTING_MACRO_PLUGINNAME		"<PluginName>"
-#define INSTALLMNGR_SETTING_MACRO_PLUGINPATH		"<PluginPath>"
+#define INSTALLMNGR_SETTING_MACRO_USERPLUGINPATH	"<PluginUserPath>"
+#define INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH	"<PluginDefaultPath>"
 #define INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH	"<MainAppPath>"
 
 //class Archiver;
@@ -68,7 +69,7 @@ class installationManagerBase// : public QObject
 // 	bool isEnabledPlugin(const QString &sPluginFilePath);
 // 	bool isStaticPlugin(const QString &sRegisteredPluginName);
 	bool static unistallRegisteredPlugin(const QString &sRegisteredPluginName){ return true; };
-	int installPlugin(const QString &sMainAppsPluginDirPath, const QString &sPluginInstallFilePath, const bool &bOverWriteExistingFiles)
+	int installPlugin(const QString &sMainAppDirPath, const QString &sMainAppsDefaultPluginDirPath, const QString &sMainAppsUserPluginDirPath, const QString &sPluginInstallFilePath, const bool &bOverWriteExistingFiles)
 	{
 		QFileInfo fiPluginInstallFilePath(sPluginInstallFilePath);
 		QString sIniFilePath = "";
@@ -102,7 +103,7 @@ class installationManagerBase// : public QObject
 			{
 				if (QFileInfo(sTmpExtractedFilePath).completeSuffix() == "ini")
 				{
-					int nTempRetVal = installPlugin(sMainAppsPluginDirPath, sTmpExtractedFilePath, bOverWriteExistingFiles);
+					int nTempRetVal = installPlugin(sMainAppDirPath, sMainAppsDefaultPluginDirPath, sMainAppsUserPluginDirPath, sTmpExtractedFilePath, bOverWriteExistingFiles);
 					if (nTempRetVal < 0)
 					{
 						nRetVal = nTempRetVal;
@@ -123,7 +124,7 @@ class installationManagerBase// : public QObject
 		if (fPluginIniFile.exists())
 		{
 			QString sIniFileAbsDir = QFileInfo(sIniFilePath).absolutePath();
-			if (QDir(sMainAppsPluginDirPath).canonicalPath() == QDir(sIniFileAbsDir).canonicalPath())//Is a ini file inside the plugins directory? 
+			if (QDir(sMainAppsUserPluginDirPath).canonicalPath() == QDir(sIniFileAbsDir).canonicalPath())//Is a ini file inside the plugins directory? 
 				return -4;
 
 			QSettings pluginSettings(sIniFilePath, QSettings::IniFormat);
@@ -137,7 +138,7 @@ class installationManagerBase// : public QObject
 
 			QString sIniFileName = QFileInfo(sIniFilePath).fileName();
 			//if (isRegisteredPlugin(QFileInfo(sIniFilePath).baseName()))
-			if (QFile(sMainAppsPluginDirPath + "/" + sIniFileName).exists())
+			if (QFile(sMainAppsUserPluginDirPath + "/" + sIniFileName).exists())
 			{
 				//int confirm = QMessageBox::question(NULL, "Uninstall already present plugin?", "A plugin with the same name (" + sPluginInternalName + ") is already in use.\nTo proceed this installation that active plugin first needs to be un-installed, do you wish to proceed?", QMessageBox::Ok | QMessageBox::Cancel);
 				if (bOverWriteExistingFiles==false)//(confirm == QMessageBox::Ok)
@@ -150,7 +151,7 @@ class installationManagerBase// : public QObject
 				//}
 				//else// if (QMessageBox::Cancel)
 				//{
-					qDebug() << __FUNCTION__ << "File already exists (" + sMainAppsPluginDirPath + "/" + sIniFileName + ")!" << sPluginInternalName;
+					qDebug() << __FUNCTION__ << "File already exists (" + sMainAppsUserPluginDirPath + "/" + sIniFileName + ")!" << sPluginInternalName;
 					return -5;
 				}
 			}
@@ -162,9 +163,10 @@ class installationManagerBase// : public QObject
 				QList<int> nPresentInCurrentInstallIndexes;
 				for (int i = 0; i < lFileList.count(); i++)
 				{
-					lFileList[i].replace(INSTALLMNGR_SETTING_MACRO_PLUGINPATH, sMainAppsPluginDirPath, Qt::CaseInsensitive);
-					lFileList[i].replace(INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH, sMainAppsPluginDirPath, Qt::CaseInsensitive);
+					lFileList[i].replace(INSTALLMNGR_SETTING_MACRO_USERPLUGINPATH, sMainAppsUserPluginDirPath, Qt::CaseInsensitive);
+					lFileList[i].replace(INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH, sMainAppDirPath, Qt::CaseInsensitive);
 					lFileList[i].replace(INSTALLMNGR_SETTING_MACRO_PLUGINNAME, QFileInfo(sIniFileName).completeBaseName(), Qt::CaseInsensitive);
+					lFileList[i].replace(INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH, sMainAppsDefaultPluginDirPath, Qt::CaseInsensitive);
 				}
 				for (int i = 0; i < lFileList.count(); i++)
 				{
