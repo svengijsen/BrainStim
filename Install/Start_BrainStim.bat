@@ -8,6 +8,7 @@ GOTO END
 :WIN32
 	IF /I '%DEBUGRELEASE%'=='d' CALL BrainStim_Win32_Debug.exe
 	IF /I '%DEBUGRELEASE%'=='r' CALL BrainStim_Win32_Release.exe
+	GOTO END
 
 :X64
 	IF /I '%DEBUGRELEASE%'=='d' CALL BrainStim_x64_Debug.exe

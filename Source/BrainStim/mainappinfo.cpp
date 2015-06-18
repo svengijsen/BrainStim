@@ -303,7 +303,8 @@ QWidget *MainAppInfo::retrieveCustomPropertySettingEditorWidget(const int &nVari
 			QByteArray normalizedSignature = QMetaObject::normalizedSignature(PLUGIN_CUSTOMTYPE_GETNEWEDITOR_METHOD_FULL);
 			int methodIndex = tmpObject->metaObject()->indexOfMethod(normalizedSignature);
 			QMetaMethod method = tmpObject->metaObject()->method(methodIndex);
-			bool bInvokeResult = method.invoke(tmpObject,
+			//bool bInvokeResult = 
+				method.invoke(tmpObject,
 				Qt::DirectConnection,
 				Q_RETURN_ARG(QWidget *, tmpEditorObject));
 			//if (tmpEditorObject)

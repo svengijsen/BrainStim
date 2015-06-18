@@ -577,7 +577,7 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
   <ImportGroup Label="ExtensionTargets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties MocDir=".\..\..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\Moc" QtVersion="5.3.2" Qt5Version_x0020_Win32="Qt532_32bit" Qt5Version_x0020_x64="Qt532_64bit" RccDir=".\..\..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles" UicDir=".\..\..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles" />
+      <UserProperties MocDir=".\..\..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\Moc" UicDir=".\..\..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles" RccDir=".\..\..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles" QtVersion="5.3.2" Qt5Version_x0020_Win32="Qt532_32bit" Qt5Version_x0020_x64="Qt532_64bit" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

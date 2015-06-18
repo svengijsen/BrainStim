@@ -1,43 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<ImportGroup Label="PropertySheets" />
+	<ImportGroup Label="PropertySheets">
+		<Import Project="..\base.props" />
+	</ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <!-- some comments... -->
-    <!--IsDebug: search for 'Debug' in Configuration-->
     <IsDebug>$([System.Convert]::ToString( $([System.Text.RegularExpressions.Regex]::IsMatch($(Configuration), '[Dd]ebug'))))</IsDebug>
-    <!--ShortPlatform-->
-    <QTDIR Condition="'$(Platform)' == 'Win32'">E:\Libraries\Qt5.3.2_32bit\5.3\msvc2013_opengl</QTDIR>
-    <QTDIR Condition="'$(Platform)' == 'x64'">E:\Libraries\Qt5.3.2_64bit\5.3\msvc2013_64_opengl</QTDIR>
-    <QSCINTILLA>E:\Libraries\QScintilla-gpl-2.7.2</QSCINTILLA>
-    <BRAINSTIM_HOME>E:\Projects\BrainStim</BRAINSTIM_HOME>
-    <Path>$(QTDIR)\bin%3b$(QSCINTILLA)\lib\$(Platform)\$(Configuration)%3b$(Path)</Path>
+    <QSCINTILLA>$(LIBRARY_DIR)\QScintilla-gpl-2.7.2</QSCINTILLA>
+    <Path>$(QSCINTILLA)\lib\$(Platform)\$(Configuration)%3b$(Path)</Path>
   </PropertyGroup>
   <PropertyGroup>
     <LocalDebuggerCommand>$(BRAINSTIM_HOME)\Install\BrainStim_$(Platform)_$(Configuration).exe</LocalDebuggerCommand>
     <LocalDebuggerWorkingDirectory>$(BRAINSTIM_HOME)\Install\</LocalDebuggerWorkingDirectory>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
-  <Choose>
-    <When Condition="$([System.Convert]::ToBoolean($(IsDebug)))">
-      <!-- debug macroses -->
-      <PropertyGroup Label="UserMacros">
-        <MyOutDirBase>debug</MyOutDirBase>
-        <DebugSuffix>d</DebugSuffix>
-      </PropertyGroup>
-    </When>
-    <Otherwise>
-      <!-- other/release macroses -->
-      <PropertyGroup Label="UserMacros">
-        <MyOutDirBase>release</MyOutDirBase>
-        <DebugSuffix></DebugSuffix>
-      </PropertyGroup>
-    </Otherwise>
-  </Choose>
   <ItemDefinitionGroup />
   <ItemGroup>
-    <BuildMacro Include="QTDIR">
-      <Value>$(QTDIR)</Value>
-    </BuildMacro>
     <BuildMacro Include="QSCINTILLA">
       <Value>$(QSCINTILLA)</Value>
     </BuildMacro>

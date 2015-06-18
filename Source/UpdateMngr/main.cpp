@@ -66,6 +66,42 @@ int main(int argc, char **argv)
 #endif
 #endif
 
+	QProcess *process = new QProcess();
+	QString sDebugMode;		//Release mode
+	QString sArchitecture;	//Win32 architecture
+
+#ifdef _DEBUG
+	sDebugMode = "d";
+#else
+	sDebugMode = "r";
+#endif
+#ifdef ENVIRONMENT32
+	sArchitecture = "1";
+#else
+	sArchitecture = "2";
+#endif
+	QString sConfigureFileName = "AutoStartConfigure_UpdateMngr.bat";
+	QString sConfigureFilePath = QDir::currentPath() + QDir::separator() + sConfigureFileName;
+	if (QFile(sConfigureFilePath).exists())
+	{
+		process->start(sConfigureFileName, QStringList() << sArchitecture << sDebugMode << QT_VERSION_STR);
+		if (process->waitForStarted())
+		{
+			if (process->waitForFinished())
+			{
+				qDebug() << __FUNCTION__ << sConfigureFileName << "output: \n" << process->readAll();
+				while (process->waitForReadyRead())
+				{
+					qDebug() << __FUNCTION__ << process->readAll();
+				}
+			}
+		}
+	}
+	else
+	{
+		qDebug() << __FUNCTION__ << sConfigureFileName << "not found!";
+	}
+
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	QString sAlternativeMainProgramFileName = MAIN_PROGRAM_NAME;
 #ifdef ENVIRONMENT64

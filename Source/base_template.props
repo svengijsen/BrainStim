@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros">
+  	<IsDebug>$([System.Convert]::ToString( $([System.Text.RegularExpressions.Regex]::IsMatch($(Configuration), '[Dd]ebug'))))</IsDebug>
+  	<LIBRARY_DIR>D:\Sven.Gijsen\Libraries</LIBRARY_DIR>
+  	<QTDIR Condition="'$(Platform)' == 'Win32'">$(LIBRARY_DIR)\Qt5.3.2_32bit\5.3\msvc2013_opengl</QTDIR>
+    <QTDIR Condition="'$(Platform)' == 'x64'">$(LIBRARY_DIR)\Qt5.3.2_64bit\5.3\msvc2013_64_opengl</QTDIR>
+    <QTVERSION>5.3.2</QTVERSION>
+    <BRAINSTIM_HOME>D:\Sven.Gijsen\Projects\BrainStim</BRAINSTIM_HOME>
+    <Path>$(QTDIR)\bin%3b$(Path)</Path>
+  </PropertyGroup>
+  <PropertyGroup>
+  </PropertyGroup>
+  <Choose>
+    <When Condition="$([System.Convert]::ToBoolean($(IsDebug)))">
+      <!-- debug macroses -->
+      <PropertyGroup Label="UserMacros">
+        <MyOutDirBase>debug</MyOutDirBase>
+        <DebugSuffix>d</DebugSuffix>
+      </PropertyGroup>
+    </When>
+    <Otherwise>
+      <!-- other/release macroses -->
+      <PropertyGroup Label="UserMacros">
+        <MyOutDirBase>release</MyOutDirBase>
+        <DebugSuffix></DebugSuffix>
+      </PropertyGroup>
+    </Otherwise>
+  </Choose>
+  <ItemDefinitionGroup/>
+  <ItemGroup>
+    <BuildMacro Include="QTDIR">
+      <Value>$(QTDIR)</Value>
+    </BuildMacro>
+    <BuildMacro Include="LIBRARY_DIR">
+      <Value>$(LIBRARY_DIR)</Value>
+    </BuildMacro>
+  </ItemGroup>
+</Project>

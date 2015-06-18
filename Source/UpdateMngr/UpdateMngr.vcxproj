@@ -103,25 +103,15 @@
 
 xcopy "$(TargetPath)" "$(ProjectDir)..\..\Install\" /i /d /y
 if errorlevel 1 goto BuildEventFailed
-
-copy "$(ProjectDir)..\..\Install\qt_$(PlatformArchitecture).conf" "$(ProjectDir)..\..\Install\qt.conf" /y
-
-REM copy "$(ProjectDir)..\..\Install\qt_$(PlatformArchitecture).conf" "$(ProjectDir)..\..\Install\qt.conf" /y
-REM xcopy "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)$(OutDir)" /i /d /y
-REM if errorlevel 1 goto BuildEventFailed
-REM echo GAC of: "$(SolutionDir)$(OutDir)$(TargetFileName)"
-REM gacutil.exe /nologo /i "$(SolutionDir)$(OutDir)$(TargetFileName)" /f
-REM if errorlevel 1 goto BuildEventFailed
-REM Exit properly because the build will not fail
-REM unless the final step exits with an error code
+copy "$(QUAZIP)\Win32\$(Configuration)\quazip.dll" "$(ProjectDir)..\..\Install\quazip.dll" /y
+if errorlevel 1 goto BuildEventFailed
 
 goto BuildEventOK
 :BuildEventFailed
 echo POSTBUILDSTEP for $(ProjectName) FAILED
 exit 1
 :BuildEventOK
-echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
-</Command>
+echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -145,25 +135,15 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
 
 xcopy "$(TargetPath)" "$(ProjectDir)..\..\Install\" /i /d /y
 if errorlevel 1 goto BuildEventFailed
-
-copy "$(ProjectDir)..\..\Install\qt_$(PlatformArchitecture).conf" "$(ProjectDir)..\..\Install\qt.conf" /y
-
-REM copy "$(ProjectDir)..\..\Install\qt_$(PlatformArchitecture).conf" "$(ProjectDir)..\..\Install\qt.conf" /y
-REM xcopy "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)$(OutDir)" /i /d /y
-REM if errorlevel 1 goto BuildEventFailed
-REM echo GAC of: "$(SolutionDir)$(OutDir)$(TargetFileName)"
-REM gacutil.exe /nologo /i "$(SolutionDir)$(OutDir)$(TargetFileName)" /f
-REM if errorlevel 1 goto BuildEventFailed
-REM Exit properly because the build will not fail
-REM unless the final step exits with an error code
+copy "$(QUAZIP)\x64\$(Configuration)\quazip.dll" "$(ProjectDir)..\..\Install\quazip.dll" /y
+if errorlevel 1 goto BuildEventFailed
 
 goto BuildEventOK
 :BuildEventFailed
 echo POSTBUILDSTEP for $(ProjectName) FAILED
 exit 1
 :BuildEventOK
-echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
-</Command>
+echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -186,25 +166,15 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
 
 xcopy "$(TargetPath)" "$(ProjectDir)..\..\Install\" /i /d /y
 if errorlevel 1 goto BuildEventFailed
-
-copy "$(ProjectDir)..\..\Install\qt_$(PlatformArchitecture).conf" "$(ProjectDir)..\..\Install\qt.conf" /y
-
-REM copy "$(ProjectDir)..\..\Install\qt_$(PlatformArchitecture).conf" "$(ProjectDir)..\..\Install\qt.conf" /y
-REM xcopy "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)$(OutDir)" /i /d /y
-REM if errorlevel 1 goto BuildEventFailed
-REM echo GAC of: "$(SolutionDir)$(OutDir)$(TargetFileName)"
-REM gacutil.exe /nologo /i "$(SolutionDir)$(OutDir)$(TargetFileName)" /f
-REM if errorlevel 1 goto BuildEventFailed
-REM Exit properly because the build will not fail
-REM unless the final step exits with an error code
+copy "$(QUAZIP)\Win32\$(Configuration)\quazip.dll" "$(ProjectDir)..\..\Install\quazip.dll" /y
+if errorlevel 1 goto BuildEventFailed
 
 goto BuildEventOK
 :BuildEventFailed
 echo POSTBUILDSTEP for $(ProjectName) FAILED
 exit 1
 :BuildEventOK
-echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
-</Command>
+echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -228,25 +198,15 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
 
 xcopy "$(TargetPath)" "$(ProjectDir)..\..\Install\" /i /d /y
 if errorlevel 1 goto BuildEventFailed
-
-copy "$(ProjectDir)..\..\Install\qt_$(PlatformArchitecture).conf" "$(ProjectDir)..\..\Install\qt.conf" /y
-
-REM copy "$(ProjectDir)..\..\Install\qt_$(PlatformArchitecture).conf" "$(ProjectDir)..\..\Install\qt.conf" /y
-REM xcopy "$(TargetDir)$(TargetName).pdb" "$(SolutionDir)$(OutDir)" /i /d /y
-REM if errorlevel 1 goto BuildEventFailed
-REM echo GAC of: "$(SolutionDir)$(OutDir)$(TargetFileName)"
-REM gacutil.exe /nologo /i "$(SolutionDir)$(OutDir)$(TargetFileName)" /f
-REM if errorlevel 1 goto BuildEventFailed
-REM Exit properly because the build will not fail
-REM unless the final step exits with an error code
+copy "$(QUAZIP)\x64\$(Configuration)\quazip.dll" "$(ProjectDir)..\..\Install\quazip.dll" /y
+if errorlevel 1 goto BuildEventFailed
 
 goto BuildEventOK
 :BuildEventFailed
 echo POSTBUILDSTEP for $(ProjectName) FAILED
 exit 1
 :BuildEventOK
-echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
-</Command>
+echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>

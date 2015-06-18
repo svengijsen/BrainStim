@@ -53,7 +53,7 @@ class installationManagerBase// : public QObject
 
 	public:
  
-		installationManagerBase(QObject *parent = NULL) {};
+		installationManagerBase(QObject *parent = NULL) {Q_UNUSED(parent)};
 		~installationManagerBase() {};
 
 // 	QString registerPlugin(QObject *plugin, const QString &sRootDirectory, const QString &sFileName, const bool &bIsEnabled, const bool &bIsStatic);
@@ -68,7 +68,7 @@ class installationManagerBase// : public QObject
 // 	QString getPluginAbsFilePath(const QString &sRegisteredPluginName);
 // 	bool isEnabledPlugin(const QString &sPluginFilePath);
 // 	bool isStaticPlugin(const QString &sRegisteredPluginName);
-	bool static unistallRegisteredPlugin(const QString &sRegisteredPluginName){ return true; };
+//	bool static unistallRegisteredPlugin(const QString &sRegisteredPluginName){ return true; };
 	int installPlugin(const QString &sMainAppDirPath, const QString &sMainAppsDefaultPluginDirPath, const QString &sMainAppsUserPluginDirPath, const QString &sPluginInstallFilePath, const bool &bOverWriteExistingFiles)
 	{
 		QFileInfo fiPluginInstallFilePath(sPluginInstallFilePath);
