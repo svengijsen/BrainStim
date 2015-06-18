@@ -35,3 +35,5 @@ Install/*.ini
 InstallJammer/build/*.*
 Install/Menus/*/*.ini
 Source/Plugins/ExperimentManager/experimentmanagerplugin.aps
+Source/base.props
+/Source/base.props
