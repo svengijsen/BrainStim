@@ -1612,11 +1612,11 @@ File ::82EC5EDA-8E12-400E-B1A6-081E83DF9387 -name qtaudio_windowsd.pdb -active 0
 FileGroup ::B8B5252C-BA02-416E-A353-667E13968192 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Additional Binaries(win32)} -parent FileGroups
 File ::5FA10F65-8D40-4B49-8346-A74F15D7C38D -name E:/Libraries/QScintilla-gpl-2.7.2/lib/Win32/Release/qscintilla2.dll -parent B8B5252C-BA02-416E-A353-667E13968192
 File ::4FF05130-E9B9-43A3-9BB5-BEAC48A3BE4F -name E:/Libraries/Ogre/OGRE-SDK-1.8.2-vc110-x86-28.05.2013/bin/Release/OgreMain.dll -parent B8B5252C-BA02-416E-A353-667E13968192
-File ::CB5C76A1-5009-46F7-901D-B76AEF016011 -name E:/Libraries/quazip-0.7.1/Win32/Release/quazip.dll -parent B8B5252C-BA02-416E-A353-667E13968192
+File ::CB5C76A1-5009-46F7-901D-B76AEF016011 -name E:/Libraries/quazip-0.7.1/Win32/Release/quazip.dll -active 0 -parent B8B5252C-BA02-416E-A353-667E13968192
 FileGroup ::C6C42CD1-B9D2-4DCB-B599-C7236551A39A -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Additional Binaries(x64)} -parent FileGroups
 File ::0D2844C6-D73C-44F3-8982-DBAA110424B6 -name E:/Libraries/QScintilla-gpl-2.7.2/lib/x64/Release/qscintilla2.dll -parent C6C42CD1-B9D2-4DCB-B599-C7236551A39A
 File ::85B9F3BC-A6DB-41C9-A8E9-6B49BBE117F9 -name E:/Libraries/Ogre/OGRE-SDK-1.8.2-vc110-x64-28.05.2013/bin/Release/OgreMain.dll -parent C6C42CD1-B9D2-4DCB-B599-C7236551A39A
-File ::9CA347F5-92C3-4D6D-AC21-583AE7FC1D12 -name E:/Libraries/quazip-0.7.1/x64/Release/quazip.dll -parent C6C42CD1-B9D2-4DCB-B599-C7236551A39A
+File ::9CA347F5-92C3-4D6D-AC21-583AE7FC1D12 -name E:/Libraries/quazip-0.7.1/x64/Release/quazip.dll -active 0 -parent C6C42CD1-B9D2-4DCB-B599-C7236551A39A
 FileGroup ::4DF71FAD-80BD-4091-929A-2A4F157EA0C5 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {VC(2012 & 2013) Redistributables(win32)} -parent FileGroups
 File ::B3E1AC79-CE0B-41F4-8A6F-49F75D1A905A -name E:/Libraries/VC_Redist/VC_2013/x86/Microsoft.VC120.CRT/msvcp120.dll -parent 4DF71FAD-80BD-4091-929A-2A4F157EA0C5
 File ::58AD1B13-5EF4-4ED8-8773-D14DD3ED0661 -name E:/Libraries/VC_Redist/VC_2013/x86/Microsoft.VC120.CRT/msvcr120.dll -parent 4DF71FAD-80BD-4091-929A-2A4F157EA0C5
@@ -1642,6 +1642,10 @@ File ::DC7DBA9A-0D93-43E3-9B45-DF64ACB15E24 -name BasicDBLogging.qs -parent B992
 File ::08E066AB-E312-4276-A7C1-CD10E6A87416 -name BasicExperiment.qs -parent B9929555-0D45-40DB-8AE9-A990141151B5
 File ::29C81B52-6CCA-4687-8571-325C10255FD6 -name BasicQMLExperiment.qs -parent B9929555-0D45-40DB-8AE9-A990141151B5
 File ::6AACE68F-2E9E-465F-86F1-9EB6781ACC84 -name BasicRetinotopyExperiment.qs -parent B9929555-0D45-40DB-8AE9-A990141151B5
+File ::83DBCBC2-DB7E-44E9-8DE5-53C9DE15DFCC -name ModuleReplaceInFile.qs -parent B9929555-0D45-40DB-8AE9-A990141151B5
+File ::EFF0A590-4F40-4394-9557-9AA134089DAC -name ModuleXMLReader.qs -parent B9929555-0D45-40DB-8AE9-A990141151B5
+File ::DFE9F18F-48C7-408B-9358-F3989C2D6A4C -name TBVExchanger.qs -active 0 -parent B9929555-0D45-40DB-8AE9-A990141151B5
+File ::77EB911C-01DA-4C45-BA06-3DDBD70B5808 -name TSIExchanger.qs -active 0 -parent B9929555-0D45-40DB-8AE9-A990141151B5
 File ::FE1E7D6C-EDF9-4B27-9BA1-556B055978A2 -type dir -name E:/Projects/BrainStim/Install/Include/BrainStim -parent 7882E581-7AAD-49F1-BBDF-1CCEAD0F5288
 File ::05180E26-0F72-405E-8DC8-AD256C7C0C61 -type dir -name Modules -parent FE1E7D6C-EDF9-4B27-9BA1-556B055978A2
 File ::DAE514BC-381A-441F-9DE6-59857CFC6AE6 -name qmldir -parent 05180E26-0F72-405E-8DC8-AD256C7C0C61

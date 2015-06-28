@@ -41,7 +41,7 @@ void MainAppInfo::setPluginsDirPath(const QString &sNewPath)
 	MainAppInfoData::instance()->setPluginPath(sNewPath);
 }
 
-QString MainAppInfo::customPluginsDirPath()
+QString MainAppInfo::userPluginsDirPath()
 {
 	QString tmpPath;
 	tmpPath = MainAppInfoData::instance()->getPluginPath();
@@ -99,8 +99,8 @@ void MainAppInfo::MyOutputHandler(QtMsgType type, const QMessageLogContext &cont
 	bool bDoAbort = false;
 	if(MainAppInfo::mainLogFile == NULL)
 	{
-		//QString aa = MainAppInfo::appLogFilePath();
-		MainAppInfo::mainLogFile = new QFile(MainAppInfo::appLogFilePath());
+		QString sAppLogFilePath = MainAppInfo::appLogFilePath();
+		MainAppInfo::mainLogFile = new QFile(sAppLogFilePath);
 	}
 	if(!MainAppInfo::mainLogFile->isOpen())
 	{

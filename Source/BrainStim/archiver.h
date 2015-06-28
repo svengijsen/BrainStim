@@ -23,6 +23,10 @@
 #include <QObject>
 #include <QtScript>
 #include <QScriptable>
+
+#ifndef QUAZIP_STATIC
+#define QUAZIP_STATIC
+#endif
 #include "quazip/JlCompress.h"
 
 //!  The Archiver class. 

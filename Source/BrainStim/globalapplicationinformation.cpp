@@ -27,10 +27,9 @@
 #include <QSharedMemory>
 #include <QDir>
 
-GlobalApplicationInformation::GlobalApplicationInformation(QObject *parent) : webView(NULL), AppRegistrySettings(NULL)
+GlobalApplicationInformation::GlobalApplicationInformation(QObject *parent) : webView(NULL), AppRegistrySettings(NULL), sCurrentSettingsFilePath("")
 {
-	Q_UNUSED(parent);
-	sCurrentSettingsFilePath = MainAppInfo::appDirPath() + "/" + MAIN_PROGRAM_INTERNAL_NAME + ".ini";
+	Q_UNUSED(parent)
 	initialize();
 };
 
@@ -55,7 +54,13 @@ void GlobalApplicationInformation::initialize()
 	resetInternalStructure(true);
 	composeJavaScriptConfigurationFile();
 	discoverCustomPluginsPath();
-	initAndParseRegistrySettings(sCurrentSettingsFilePath);
+	QString sDefaultSettingsAppDirectory = "";
+	if (sCurrentSettingsFilePath.isEmpty())
+	{
+		sDefaultSettingsAppDirectory = QDir::homePath() + "/" + getTitle();
+		sCurrentSettingsFilePath = sDefaultSettingsAppDirectory + "/" + MAIN_PROGRAM_INTERNAL_NAME + ".ini";
+	}
+	initAndParseRegistrySettings(sCurrentSettingsFilePath, sDefaultSettingsAppDirectory);
 	copyMainAppInformationStructureToSharedMemory(mainAppInformation);
 }
 
@@ -85,8 +90,8 @@ void GlobalApplicationInformation::discoverCustomPluginsPath()
 	if (bPluginUserDirExists)
 		finalPluginDir = sTemp;
 	else
-		finalPluginDir = MainAppInfo::customPluginsDirPath();
-	mainAppInformation.sCustomPluginsRootDir = finalPluginDir;
+		finalPluginDir = MainAppInfo::userPluginsDirPath();
+	mainAppInformation.sUserPluginsRootDir = finalPluginDir;
 }
 
 void GlobalApplicationInformation::resetInternalStructure(bool bFullSystemReset)
@@ -107,7 +112,7 @@ void GlobalApplicationInformation::resetInternalStructure(bool bFullSystemReset)
 	mainAppInformation.bAllowCustomUserLogins = false;
 	mainAppInformation.bEnableNetworkServer = false;
 	mainAppInformation.sHostAddress = "";
-	mainAppInformation.sCustomPluginsRootDir = "";
+	mainAppInformation.sUserPluginsRootDir = "";
 	mainAppInformation.nHostPort = 0;
 }
 
@@ -201,9 +206,9 @@ QString GlobalApplicationInformation::getInternalName()
 QString GlobalApplicationInformation::getTitle()
 {
 #ifdef WIN64
-	return mainAppInformation.sInternalName +  "(v" + mainAppInformation.sFileVersion + ", 64-bits)";
+	return mainAppInformation.sInternalName +  "(v" + mainAppInformation.sFileVersion + ", " + MAIN_PROGRAM_64BIT_STRING + ")";
 #else
-	return mainAppInformation.sInternalName +  "(v" + mainAppInformation.sFileVersion + ", 32-bits)";
+	return mainAppInformation.sInternalName + "(v" + mainAppInformation.sFileVersion + ", " + MAIN_PROGRAM_32BIT_STRING + ")";
 #endif
 }
 
@@ -255,7 +260,7 @@ bool GlobalApplicationInformation::switchRootSettingsGroup(const QString &sNewGr
 	return false;
 }
 
-bool GlobalApplicationInformation::initAndParseRegistrySettings(const QString &sSettingsFilePath)
+bool GlobalApplicationInformation::initAndParseRegistrySettings(const QString &sSettingsFilePath, const QString &sDefaultSettingsAppDirectory)
 {
 	if (AppRegistrySettings == NULL)
 	{
@@ -280,16 +285,17 @@ bool GlobalApplicationInformation::initAndParseRegistrySettings(const QString &s
 		AppRegistrySettings->setValue(REGISTRY_ENABLECUSTOMUSERLOGINS, mainAppInformation.bAllowCustomUserLogins);
 	}
 
-	if (AppRegistrySettings->contains(REGISTRY_CUSTOMPLUGINSROOTDIRECTORY))
+	if (AppRegistrySettings->contains(REGISTRY_USERPLUGINSROOTDIRECTORY))
 	{
-		mainAppInformation.sCustomPluginsRootDir = AppRegistrySettings->value(REGISTRY_CUSTOMPLUGINSROOTDIRECTORY).toString();
+		mainAppInformation.sUserPluginsRootDir = AppRegistrySettings->value(REGISTRY_USERPLUGINSROOTDIRECTORY).toString();
 	}
 	else //key doesn't exist, default value here!
 	{
-		AppRegistrySettings->setValue(REGISTRY_CUSTOMPLUGINSROOTDIRECTORY, mainAppInformation.sCustomPluginsRootDir);
+		AppRegistrySettings->setValue(REGISTRY_USERPLUGINSROOTDIRECTORY, mainAppInformation.sUserPluginsRootDir);
 	}
-	MainAppInfo::setPluginsDirPath(mainAppInformation.sCustomPluginsRootDir);
-	qApp->addLibraryPath(mainAppInformation.sCustomPluginsRootDir);
+
+	MainAppInfo::setPluginsDirPath(mainAppInformation.sUserPluginsRootDir);
+	qApp->addLibraryPath(mainAppInformation.sUserPluginsRootDir);
 	
 	if (bUserSpecified)
 	{
@@ -392,6 +398,16 @@ bool GlobalApplicationInformation::initAndParseRegistrySettings(const QString &s
 		AppRegistrySettings->setValue(REGISTRY_SCRIPTING_INCLUDEPATHS, mainAppInformation.lScriptIncludeDirectories);
 	}
 
+	if (AppRegistrySettings->contains(REGISTRY_USERDOCUMENTSROOTDIRECTORY))
+	{
+		MainAppInfo::setAppUserPath(AppRegistrySettings->value(REGISTRY_USERDOCUMENTSROOTDIRECTORY).toString());
+	}
+	else //key doesn't exist, default value here!
+	{
+		if (sDefaultSettingsAppDirectory.isEmpty() == false)
+			MainAppInfo::setAppUserPath(sDefaultSettingsAppDirectory);
+	}
+
 	AppRegistrySettings->sync();
 	return true;
 }
@@ -400,7 +416,7 @@ bool GlobalApplicationInformation::setSettingsInformation(const QString &sName, 
 {
 	bool bUserSpecified = (mainAppInformation.sCurrentUserName.isEmpty() == false);
 	bool bRetval = false;
-	if (bUserSpecified && ((sName == REGISTRY_ENABLECUSTOMUSERLOGINS) || (sName == REGISTRY_CUSTOMPLUGINSROOTDIRECTORY)))
+	if (bUserSpecified && ((sName == REGISTRY_ENABLECUSTOMUSERLOGINS) || (sName == REGISTRY_USERPLUGINSROOTDIRECTORY)))
 		switchRootSettingsGroup(REGISTRY_SETTINGS_SYSTEM);
 	if(sType!="")
 	{
@@ -426,7 +442,7 @@ bool GlobalApplicationInformation::setSettingsInformation(const QString &sName, 
 		else
 			bRetval = false;
 	}
-	if (bUserSpecified && ((sName == REGISTRY_ENABLECUSTOMUSERLOGINS) || (sName == REGISTRY_CUSTOMPLUGINSROOTDIRECTORY)))
+	if (bUserSpecified && ((sName == REGISTRY_ENABLECUSTOMUSERLOGINS) || (sName == REGISTRY_USERPLUGINSROOTDIRECTORY)))
 	{
 		switchRootSettingsGroup(REGISTRY_SETTINGS_USER);
 		AppRegistrySettings->beginGroup(mainAppInformation.sCurrentUserName);
@@ -459,14 +475,14 @@ bool GlobalApplicationInformation::getSettingsInformation(const QString &sName, 
 {
 	bool bUserSpecified = (mainAppInformation.sCurrentUserName.isEmpty() == false);
 	bool bRetval = false;
-	if ((sName == REGISTRY_ENABLECUSTOMUSERLOGINS) || (sName == REGISTRY_CUSTOMPLUGINSROOTDIRECTORY))
+	if ((sName == REGISTRY_ENABLECUSTOMUSERLOGINS) || (sName == REGISTRY_USERPLUGINSROOTDIRECTORY) || (sName == REGISTRY_USERPLUGINSROOTDIRECTORY))
 		switchRootSettingsGroup(REGISTRY_SETTINGS_SYSTEM);
 	bRetval = AppRegistrySettings->contains(sName);
 	if (bRetval)
 		vCurrentValue = AppRegistrySettings->value(sName);
 	else
 		vCurrentValue = NULL;
-	if (bUserSpecified && ((sName == REGISTRY_ENABLECUSTOMUSERLOGINS) || (sName == REGISTRY_CUSTOMPLUGINSROOTDIRECTORY)))
+	if (bUserSpecified && ((sName == REGISTRY_ENABLECUSTOMUSERLOGINS) || (sName == REGISTRY_USERPLUGINSROOTDIRECTORY)))
 	{
 		switchRootSettingsGroup(REGISTRY_SETTINGS_USER);
 		AppRegistrySettings->beginGroup(mainAppInformation.sCurrentUserName);

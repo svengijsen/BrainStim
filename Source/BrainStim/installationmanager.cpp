@@ -176,7 +176,7 @@ QString installationManager::getPluginAbsFilePath(const QString &sRegisteredPlug
 {
 	if (mapRegisteredPluginNametoDef.contains(sRegisteredPluginName))
 	{
-		return QDir(MainAppInfo::customPluginsDirPath()).absoluteFilePath(mapRegisteredPluginNametoDef.value(sRegisteredPluginName).sFileName);
+		return QDir(MainAppInfo::userPluginsDirPath()).absoluteFilePath(mapRegisteredPluginNametoDef.value(sRegisteredPluginName).sFileName);
 	}
 	return "";
 }
@@ -230,7 +230,7 @@ bool installationManager::createRegisteredPluginIniFile(const QString &sRegister
 	//QString sPluginFileName = getPluginFileName(sRegisteredPluginName);
 	QString sPluginAbsFilePath = getPluginAbsFilePath(sRegisteredPluginName);
 	QString sPluginSettingsFilePath = getPluginIniFilePath(sPluginAbsFilePath);
-	QDir dirRoot(MainAppInfo::customPluginsDirPath());
+	QDir dirRoot(MainAppInfo::userPluginsDirPath());
 
 	if (sPluginSettingsFilePath.isEmpty() == false)
 	{
@@ -254,6 +254,22 @@ bool installationManager::createRegisteredPluginIniFile(const QString &sRegister
 	}
 	return false;
 }
+
+//QStringList getPluginInstallFilesFromIniFile(const QString &sPluginIniFilePath)
+//{
+//	QStringList lReturnList;
+//	if (sPluginIniFilePath.isEmpty() == false)
+//	{	
+//		if (QFileInfo(sPluginIniFilePath).exists())
+//		{
+//			QSettings pluginSettings(sPluginIniFilePath, QSettings::IniFormat);
+//			pluginSettings.beginGroup(INSTALLMNGR_SETTING_SECTION_INSTALLATION);
+//			lReturnList = pluginSettings.value(INSTALLMNGR_SETTING_SETTING_FILES, QStringList()).toStringList();
+//			pluginSettings.endGroup();
+//		}
+//	}
+//	return lReturnList;
+//}
 
 bool installationManager::changePluginEnabledSetting(const QString &sPluginIniFilePath, const bool &bEnable)
 {
@@ -349,7 +365,7 @@ bool installationManager::unistallRegisteredPlugin(const QString &sRegisteredPlu
 								for (int i = 0; i < lFileList.count(); i++)
 								{
 									QString sFileName = QFileInfo(lFileList[i]).fileName();
-									QString sFilePath = MainAppInfo::customPluginsDirPath() + "/" + lFileList[i];
+									QString sFilePath = MainAppInfo::userPluginsDirPath() + "/" + lFileList[i];
 									QFile sInstallationFilePath(sFilePath);
 									if (sInstallationFilePath.exists())
 									{
@@ -405,8 +421,10 @@ bool installationManager::installPlugin(const QString &sPluginInstallFilePath)
 	}
 	else if (fiPluginInstallFilePath.completeSuffix() == "zip")
 	{
-		Archiver pluginArchiver = new Archiver();
-		QStringList lArchiverFiles = pluginArchiver.getFileList(sPluginInstallFilePath);
+		Archiver *pArchiver = new Archiver(this);
+		QStringList lArchiverFiles = pArchiver->getFileList(sPluginInstallFilePath);
+		delete pArchiver;
+		pArchiver = NULL;
 		QStringList lArchiverIniFiles;
 		foreach(QString sTmpFileArchiverPath, lArchiverFiles)
 		{
@@ -424,7 +442,7 @@ bool installationManager::installPlugin(const QString &sPluginInstallFilePath)
 			qDebug() << __FUNCTION__ << "Could not create a temporarily directory for the extraction of the of the installer package, please try to extract it yourself and use the extracted configuration (*.ini) file for the installation process!";
 			return false;
 		}
-		QStringList lExtractedFiles = pluginArchiver.extractDir(sPluginInstallFilePath, dir.path());
+		QStringList lExtractedFiles = JlCompress::extractDir(sPluginInstallFilePath, dir.path());
 		bool bRetVal = true;
 		foreach(QString sTmpExtractedFilePath, lExtractedFiles)
 		{
@@ -446,7 +464,7 @@ bool installationManager::installPlugin(const QString &sPluginInstallFilePath)
 	if (fPluginIniFile.exists())
 	{
 		QString sIniFileAbsDir = QFileInfo(sIniFilePath).absolutePath();
-		if (QDir(MainAppInfo::customPluginsDirPath()).canonicalPath() == QDir(sIniFileAbsDir).canonicalPath())
+		if (QDir(MainAppInfo::userPluginsDirPath()).canonicalPath() == QDir(sIniFileAbsDir).canonicalPath())
 			return false;
 
 		QSettings pluginSettings(sIniFilePath, QSettings::IniFormat);
@@ -484,13 +502,14 @@ bool installationManager::installPlugin(const QString &sPluginInstallFilePath)
 			{
 				QString sFileName = QFileInfo(lFileList[i]).fileName();
 				QFile sSourceFilePath(sIniFileAbsDir + "/" + sFileName);
-				QFile sInstallationFilePath(MainAppInfo::customPluginsDirPath() + "/" + lFileList[i]);
+				lFileList[i] = installationManagerBase::resolveFileDirectoryPath(lFileList[i], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sIniFilePath).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::appUserPath());
+				QFile sInstallationFilePath(lFileList[i]);// MainAppInfo::userPluginsDirPath() + "/" + lFileList[i]);
 				if (sSourceFilePath.exists() == false)
 				{
 						bAllFilesCheck = false;
 						break;
 				}
-				if (QFileInfo(MainAppInfo::customPluginsDirPath() + "/" + lFileList[i]).exists())
+				if (QFileInfo(lFileList[i]).exists())// MainAppInfo::userPluginsDirPath() + "/" + lFileList[i]).exists())
 					nPresentInCurrentInstallIndexes.append(i);
 			}
 			if(bAllFilesCheck == false)
@@ -569,9 +588,18 @@ bool installationManager::installPlugin(const QString &sPluginInstallFilePath)
 				{
 					QString sFileName = QFileInfo(lFileList[i]).fileName();
 					QString sSourceFilePath = sIniFileAbsDir + "/" + sFileName;
-					QString sInstallationFilePath = MainAppInfo::customPluginsDirPath() + "/" + lFileList[i];
-					if (QFile::copy(sSourceFilePath, sInstallationFilePath) == false)
-						qDebug() << __FUNCTION__ << "Could not copy a plugin installation file to the plugin folder: " << sSourceFilePath;
+					QString sInstallationFilePath = lFileList[i];//MainAppInfo::userPluginsDirPath() + "/" + lFileList[i];
+					QString sInstallationDirectory = QFileInfo(sInstallationFilePath).absolutePath();
+					QDir dirInstallationFile;
+					if (dirInstallationFile.mkpath(sInstallationDirectory))
+					{
+						if (QFile::copy(sSourceFilePath, sInstallationFilePath) == false)
+							qDebug() << __FUNCTION__ << "Could not copy a plugin installation file to the plugin folder: " << sSourceFilePath;
+					}
+					else
+					{
+						qDebug() << __FUNCTION__ << "Could not create a plugin installation sub directory: " << sInstallationDirectory;
+					}
 				}
 			}
 			//bool bRetval = false;
