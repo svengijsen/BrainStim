@@ -41,7 +41,7 @@ void MainAppInfo::setPluginsDirPath(const QString &sNewPath)
 	MainAppInfoData::instance()->setPluginPath(sNewPath);
 }
 
-QString MainAppInfo::customPluginsDirPath()
+QString MainAppInfo::userPluginsDirPath()
 {
 	QString tmpPath;
 	tmpPath = MainAppInfoData::instance()->getPluginPath();

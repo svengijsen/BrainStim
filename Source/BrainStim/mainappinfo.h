@@ -123,7 +123,7 @@ public:
 	static QString appLogFilePath()					{return (appDirPath() + QDir::separator() + MAIN_PROGRAM_LOGFILE_NAME);}
 	static QString appXsdFilePath()					{return (appDirPath() + QDir::separator() + MAIN_PROGRAM_XSD_DIRNAME + QDir::separator());}
 	static void setPluginsDirPath(const QString &sNewPath);
-	static QString customPluginsDirPath();
+	static QString userPluginsDirPath();
 	static QString defaultPluginsDirPath();
 	static QString outputsDirPath();
 	static QString qmlExtensionsPluginDirPath()

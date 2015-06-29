@@ -16,60 +16,51 @@
 //along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-
 #ifndef INSTALLATIONMANAGERBASE_H
 #define INSTALLATIONMANAGERBASE_H
 
 #include <QFileInfo>
 #include <QMessageBox>
-#include <QObject>
 #include <QDebug>
-// #include <QSettings>
-// #include "plugininterface.h"
 #include "mainappinfo.h"
 #include "quazip/JlCompress.h"
 #include <QTemporaryDir>
-//#include <QtScript>
-//#include <QScriptable>
-//#include "archiver.h"
  
- #define INSTALLMNGR_SETTING_SECTION_CONFIGURATION	"Configuration"
- #define INSTALLMNGR_SETTING_SECTION_INSTALLATION	"Installation"
- 
- #define INSTALLMNGR_SETTING_SETTING_ENABLED		"Enabled"
- #define INSTALLMNGR_SETTING_SETTING_NAME			"Name"
- //#define INSTALLMNGR_SETTING_SETTING_ROOT			"RootDirectory"
- #define INSTALLMNGR_SETTING_SETTING_FILES			"Files"
+#define INSTALLMNGR_SETTING_SECTION_CONFIGURATION	"Configuration"
+#define INSTALLMNGR_SETTING_SECTION_INSTALLATION	"Installation"
+#define INSTALLMNGR_SETTING_SETTING_ENABLED			"Enabled"
+#define INSTALLMNGR_SETTING_SETTING_NAME			"Name"
+#define INSTALLMNGR_SETTING_SETTING_FILES			"Files"
  
 #define INSTALLMNGR_SETTING_MACRO_PLUGINNAME		"<PluginName>"
 #define INSTALLMNGR_SETTING_MACRO_USERPLUGINPATH	"<PluginUserPath>"
 #define INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH	"<PluginDefaultPath>"
 #define INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH	"<MainAppPath>"
 
-//class Archiver;
-class installationManagerBase// : public QObject
+class installationManagerBase
 {
-	//Q_OBJECT
+	public: 
 
-	public:
- 
-		installationManagerBase(QObject *parent = NULL) {};
-		~installationManagerBase() {};
+	enum InstallResult
+	{
+		InstallResult_PluginsInstalled					=  1,
+		InstallResult_NoChanges							=  0, 
+		InstallResult_ErrorNoValidIniFileInZipFound		= -1,
+		InstallResult_ErrorCreatingTempExtractDir		= -2,
+		InstallResult_ErrorUnknownFileType				= -3,
+		InstallResult_ErrorIniFileInsidePluginsDir		= -4,
+		InstallResult_ErrorCannotOverwriteExistingFile	= -5,
+		InstallResult_ErrorNotAllSourceFilesAvailable	= -6,
+		InstallResult_ErrorCannotReplaceOriginalFile	= -7,
+		InstallResult_ErrorCannotCreateDestinationPath	= -8,
+		InstallResult_ErrorCannotCopySourceFile			= -9,
+		InstallResult_ErrorIniFileNotFound				= -10
+	};
+	
+	installationManagerBase(QObject *parent = NULL) {Q_UNUSED(parent)};
+	~installationManagerBase() {};
 
-// 	QString registerPlugin(QObject *plugin, const QString &sRootDirectory, const QString &sFileName, const bool &bIsEnabled, const bool &bIsStatic);
-// 	bool unregisterPlugin(const QString &sFileName);
-// 	bool isRegisteredPlugin(const QString &sFileBaseName);
-// 	QStringList getRegisteredAndEnabledPluginNames();
-// 	QMap<QString, bool> getRegisteredPluginNamesAndStates();
-// 	QString getRegisteredPluginName(const QString &sPluginFileName);
-// 	PluginInterface *getRegisteredPluginInterface(const QString &sRegisteredPluginName);
-// 	int configureRegisteredPluginScriptEngine(const QString &sRegisteredPluginName, QScriptEngine *pEngine);
-// 	PluginInterface::PluginType getPluginType(const QString &sRegisteredPluginName);
-// 	QString getPluginAbsFilePath(const QString &sRegisteredPluginName);
-// 	bool isEnabledPlugin(const QString &sPluginFilePath);
-// 	bool isStaticPlugin(const QString &sRegisteredPluginName);
-	bool static unistallRegisteredPlugin(const QString &sRegisteredPluginName){ return true; };
-	int installPlugin(const QString &sMainAppDirPath, const QString &sMainAppsDefaultPluginDirPath, const QString &sMainAppsUserPluginDirPath, const QString &sPluginInstallFilePath, const bool &bOverWriteExistingFiles)
+	static InstallResult installPlugin(const QString &sMainAppDirPath, const QString &sMainAppsDefaultPluginDirPath, const QString &sMainAppsUserPluginDirPath, const QString &sPluginInstallFilePath, const bool &bOverWriteExistingFiles)
 	{
 		QFileInfo fiPluginInstallFilePath(sPluginInstallFilePath);
 		QString sIniFilePath = "";
@@ -89,13 +80,13 @@ class installationManagerBase// : public QObject
 			if (lArchiverIniFiles.isEmpty())
 			{
 				qDebug() << __FUNCTION__ << "The compressed file doesn't seem to be a valid installer package, no configuration (*.ini) file found!";
-				return -1;
+				return InstallResult_ErrorNoValidIniFileInZipFound;
 			}
 			QTemporaryDir dir;
 			if (dir.isValid() == false)
 			{
 				qDebug() << __FUNCTION__ << "Could not create a temporarily directory for the extraction of the of the installer package, please try to extract it yourself and use the extracted configuration (*.ini) file for the installation process!";
-				return -2;
+				return InstallResult_ErrorCreatingTempExtractDir;
 			}
 			QStringList lExtractedFiles = JlCompress::extractDir(sPluginInstallFilePath, dir.path());
 			int nRetVal = 0;
@@ -113,19 +104,20 @@ class installationManagerBase// : public QObject
 				}
 			}
 			dir.remove();
-			return nRetVal;
+			if (nRetVal>0)
+				return InstallResult_PluginsInstalled;
 		}
 		else
 		{
-			return -3;
+			return InstallResult_ErrorUnknownFileType;
 		}
 
 		QFile fPluginIniFile(sIniFilePath);
 		if (fPluginIniFile.exists())
 		{
 			QString sIniFileAbsDir = QFileInfo(sIniFilePath).absolutePath();
-			if (QDir(sMainAppsUserPluginDirPath).canonicalPath() == QDir(sIniFileAbsDir).canonicalPath())//Is a ini file inside the plugins directory? 
-				return -4;
+			if (QDir(sMainAppsUserPluginDirPath).canonicalPath() == QDir(sIniFileAbsDir).canonicalPath())//Is a INI file inside the plugins directory? 
+				return InstallResult_ErrorIniFileInsidePluginsDir;
 
 			QSettings pluginSettings(sIniFilePath, QSettings::IniFormat);
 			pluginSettings.beginGroup(INSTALLMNGR_SETTING_SECTION_CONFIGURATION);
@@ -146,20 +138,20 @@ class installationManagerBase// : public QObject
 					//if (unistallRegisteredPlugin(sPluginInternalName) == false)
 					//{
 					//	qDebug() << __FUNCTION__ << "Could not uninstall the plugin: " << sPluginInternalName;
-					//	return -5;
+					//	return ??;
 					//}
 				//}
 				//else// if (QMessageBox::Cancel)
 				//{
 					qDebug() << __FUNCTION__ << "File already exists (" + sMainAppsUserPluginDirPath + "/" + sIniFileName + ")!" << sPluginInternalName;
-					return -5;
+					return InstallResult_ErrorCannotOverwriteExistingFile;
 				}
 			}
 
 			if (lFileList.isEmpty() == false)
 			{
 				//Check whether all files are present and mark those indexes of files which already exist in installation directory
-				bool bAllFilesCheck = true;
+				bool bAllFilesAvailableCheck = true;
 				QList<int> nPresentInCurrentInstallIndexes;
 				for (int i = 0; i < lFileList.count(); i++)
 				{
@@ -175,14 +167,14 @@ class installationManagerBase// : public QObject
 					QFile fInstallationFilePath(lFileList[i]); //sMainAppsPluginDirPath + "/" + lFileList[i]);
 					if (fSourceFilePath.exists() == false)
 					{
-						bAllFilesCheck = false;
+						bAllFilesAvailableCheck = false;
 						break;
 					}
 					if (fInstallationFilePath.exists())// QFileInfo(sMainAppsPluginDirPath + "/" + lFileList[i]).exists())
 						nPresentInCurrentInstallIndexes.append(i);
 				}
-				if (bAllFilesCheck == false)
-					return -6;
+				if (bAllFilesAvailableCheck == false)
+					return InstallResult_ErrorNotAllSourceFilesAvailable;
 
 				if (nPresentInCurrentInstallIndexes.isEmpty() == false)
 				{
@@ -197,8 +189,6 @@ class installationManagerBase// : public QObject
 						qDebug() << __FUNCTION__ << "Some installation files (for the " << sPluginInternalName << " plugin) were skipped because they were already present and in use: " << sSkippedFiles;
 						//see below uncommented copy step!!!
 					}
-
-
 
 					//bool bSkipAll = false;
 					//bool bOverwriteAll = false;
@@ -272,7 +262,7 @@ class installationManagerBase// : public QObject
 							if (bRemoveSucceeded == false)
 							{
 								qDebug() << __FUNCTION__ << "Could not replace the already present file (" << lFileList[i] << ")!";
-								return -7;
+								return InstallResult_ErrorCannotReplaceOriginalFile;
 							}
 						}
 						//Make sure that the destination folder exists...
@@ -281,64 +271,24 @@ class installationManagerBase// : public QObject
 							if (QDir().mkpath(QFileInfo(lFileList[i]).absolutePath()) == false)
 							{
 								qDebug() << __FUNCTION__ << "Could not create the destination directory path: " << QFileInfo(lFileList[i]).absolutePath();
-								return -8;
+								return InstallResult_ErrorCannotCreateDestinationPath;
 							}
 						}
 						if (QFile::copy(sSourceFilePath, lFileList[i]) == false)
 						{
 							qDebug() << __FUNCTION__ << "Could not copy a plugin installation file to the plugin folder: " << sSourceFilePath;
-							return -9;
+							return InstallResult_ErrorCannotCopySourceFile;
 						}
 					}
 				}
 				//bool bRetval = false;
 				//if (QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_LOADDYNAMICPLUGINS_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetval)))
 				//	return bRetval;
-				return 1;
+				return InstallResult_PluginsInstalled;
 			}
 		}
-		return -99;
+		return InstallResult_ErrorIniFileNotFound;
 	};
-// 	bool changeRegisteredPlugin(const QString &sRegisteredPluginName, const bool &bEnable);
-// 	QString getPluginIniFilePath(const QString &sPluginFilePath);
-// 	bool createPluginConfigurationSetting(const QString &sPluginInstallFilePath, const QString &sInternalName, const bool &bIsEnabled, const QStringList lInstallationFiles);
-// 	QStringList getPluginInstallFiles(const QString &sRegisteredPluginName);
-// 
- //private:
-
-	 //Archiver *pluginArchiver;
-
-	 // 	bool changePluginEnabledSetting(const QString &sPluginIniFilePath, const bool &bEnable);
-// 	QString getPluginFileName(const QString &sRegisteredPluginName);
-// 	bool createRegisteredPluginIniFile(const QString &sRegisteredPluginName);
-// 
-// 	struct strcPluginDefinition
-// 	{
-// 		QString sName;
-// 		PluginInterface::PluginType pType;
-// 		PluginInterface *pInterface;
-// 		int nScriptMetaID;
-// 		QScriptEngine *pScriptEngine;
-// 		QString sFileBaseName;
-// 		QString sFileName;
-// 		QStringList lInstallFileList;
-// 		bool bIsEnabled;
-// 		bool bIsStatic;
-// 		strcPluginDefinition()
-// 		{
-// 			bIsStatic = false;
-// 			bIsEnabled = false;
-// 			sName = "";
-// 			sFileBaseName = "";
-// 			sFileName = "";
-// 			pInterface = NULL;
-// 			pScriptEngine = NULL;
-// 			nScriptMetaID = -1;
-// 			pType = PluginInterface::UnknownPlugin;
-// 		}
-// 	};
-// 
-// 	QMap<QString, strcPluginDefinition> mapRegisteredPluginNametoDef;
  };
 
 #endif // INSTALLATIONMANAGERBASE_H

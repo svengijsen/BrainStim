@@ -135,8 +135,6 @@ int main(int argc, char **argv)
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	if (argc > 1)//arguments available?
 	{
-		installationManagerBase *baseInstallManager = new installationManagerBase(NULL);
-
 		QString tempArgStr = "";
 		tempArgStr = argv[1];
 		if ((argc > 3) && ((tempArgStr == "-p") || (tempArgStr == "-P")))//plugin related and minimal two more arguments available?
@@ -160,14 +158,13 @@ int main(int argc, char **argv)
 						}
 					}
 					bool bRetval = false;
-					if (baseInstallManager->installPlugin(QDir::currentPath(), sDefaultPluginsRootDir, sCustomPluginsRootDir, sIniFilePath, bOverwriteExistingFiles) > 0)
+					if(installationManagerBase::installPlugin(QDir::currentPath(), sDefaultPluginsRootDir, sCustomPluginsRootDir, sIniFilePath, bOverwriteExistingFiles) > 0)
 						qDebug() << __FUNCTION__ << "Plugin successfully installed as defined in (" << sIniFilePath << ")";
 					else
 						qDebug() << __FUNCTION__ << "Could not install the requested plugin defined in (" << sIniFilePath << "), exiting...";
 				}
 			}
 		}
-		delete baseInstallManager;
 	}
 	else
 	{

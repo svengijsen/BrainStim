@@ -22,22 +22,11 @@
 
 #include <QObject>
 #include <QSettings>
-#include <QFileInfo>
-#include <QMessageBox>
-#include <QDebug>
 #include "plugininterface.h"
 #include "archiver.h"
-#include "mainappinfo.h"
+#include "installationmanagerbase.h"
 
-#define INSTALLMNGR_SETTING_SECTION_CONFIGURATION	"Configuration"
-#define INSTALLMNGR_SETTING_SECTION_INSTALLATION	"Installation"
-
-#define INSTALLMNGR_SETTING_SETTING_ENABLED			"Enabled"
-#define INSTALLMNGR_SETTING_SETTING_NAME			"Name"
-//#define INSTALLMNGR_SETTING_SETTING_ROOT			"RootDirectory"
-#define INSTALLMNGR_SETTING_SETTING_FILES			"Files"
-
-class installationManager : public QObject
+class installationManager : public QObject, protected installationManagerBase
 {
 	Q_OBJECT
 
@@ -59,7 +48,7 @@ public:
 	bool isEnabledPlugin(const QString &sPluginFilePath);
 	bool isStaticPlugin(const QString &sRegisteredPluginName);
 	bool unistallRegisteredPlugin(const QString &sRegisteredPluginName);
-	bool installPlugin(const QString &sPluginInstallFilePath);
+	int installPlugin(const QString &sPluginInstallFilePath);
 	bool changeRegisteredPlugin(const QString &sRegisteredPluginName, const bool &bEnable);
 	QString getPluginIniFilePath(const QString &sPluginFilePath);
 	bool createPluginConfigurationSetting(const QString &sPluginInstallFilePath, const QString &sInternalName, const bool &bIsEnabled, const QStringList lInstallationFiles);

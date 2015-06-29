@@ -227,11 +227,11 @@ void PluginManagerDialog::uninstallSelectedPlugin()
 void PluginManagerDialog::installPlugin()
 {
 	this->setEnabled(false);
-	QString sInstallFilePath = QFileDialog::getOpenFileName(NULL, tr("Open Plugin installation file"), MainAppInfo::customPluginsDirPath(), tr("Configuration Files (*.ini);;Compressed Install Package (*.zip)"));
+	QString sInstallFilePath = QFileDialog::getOpenFileName(NULL, tr("Open Plugin installation file"), MainAppInfo::userPluginsDirPath(), tr("Configuration Files (*.ini);;Compressed Install Package (*.zip)"));
 	if (sInstallFilePath.isEmpty() == false)
 	{
 		bool bRetval = false;
-		if (pInstallMngr->installPlugin(sInstallFilePath))
+		if (pInstallMngr->installPlugin(sInstallFilePath) > 0)
 		{
 			QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_LOADDYNAMICPLUGINS_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetval));
 			if (bRetval)
@@ -295,7 +295,7 @@ void PluginManagerDialog::configurePlugin()
 
 void PluginManagerDialog::browsePluginDirectory()
 {
-	QDesktopServices::openUrl(QUrl("file:///" + MainAppInfo::customPluginsDirPath(), QUrl::TolerantMode));
+	QDesktopServices::openUrl(QUrl("file:///" + MainAppInfo::userPluginsDirPath(), QUrl::TolerantMode));
 }
 
 void PluginManagerDialog::backupAllPlugins()
@@ -360,7 +360,7 @@ void PluginManagerDialog::backupAllPlugins()
 									QString sFileName = QFileInfo(lInstallFiles[j]).fileName();
 									if (sFileName == sIniFileName)
 										continue;
-									QString sSourceFilePath = MainAppInfo::customPluginsDirPath() + "/" + lInstallFiles[j];
+									QString sSourceFilePath = MainAppInfo::userPluginsDirPath() + "/" + lInstallFiles[j];
 									QString sInstallationFilePath = sIniFileDirectoryPath + "/" + sFileName;
 									if (QFile::copy(sSourceFilePath, sInstallationFilePath) == false)
 									{
@@ -382,7 +382,7 @@ void PluginManagerDialog::backupAllPlugins()
 	}
 	else
 	{
-		QString sSaveFileName = QFileDialog::getSaveFileName(this, tr("Save File"), MainAppInfo::customPluginsDirPath(), tr("Compressed Install Package (*.zip)"));
+		QString sSaveFileName = QFileDialog::getSaveFileName(this, tr("Save File"), MainAppInfo::userPluginsDirPath(), tr("Compressed Install Package (*.zip)"));
 		if (sSaveFileName.isEmpty() == false)
 		{
 			Archiver tmpArchiver;
