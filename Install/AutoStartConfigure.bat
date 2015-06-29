@@ -8,20 +8,25 @@ SET ROOTDIR=%CD%
 SET ARCHITECTURE=%1
 SET DEBUGRELEASE=%2
 SET QT_VERSION=%3
-SET QSCINTILLA_PATH=E:\Libraries\QScintilla-gpl-2.7.2\lib
-SET MATLAB_PATH=C:\Program Files\MATLAB\R2014a\bin\win64
-
+SET LIBRARY_DIR=
+FOR /F "usebackq tokens=1" %%i IN (`PowerShell -NoProfile -ExecutionPolicy Bypass -Command "Include\PowerShell\getXMLValue.ps1 -inputfile '..\Source\base.props' -tagname 'LIBRARY_DIR'"`) DO SET LIBRARY_DIR=%%i
+ECHO Library directory set to: %LIBRARY_DIR%
+SET QSCINTILLA_PATH=%LIBRARY_DIR%\QScintilla-gpl-2.7.2\lib
+REM SET MATLAB_PATH=C:\Program Files\MATLAB\R2014a\bin\win64
+SET QT_FETCHED_VERSION=
+FOR /F "usebackq tokens=1" %%i IN (`PowerShell -NoProfile -ExecutionPolicy Bypass -Command "Include\PowerShell\getXMLValue.ps1 -inputfile '..\Source\base.props' -tagname 'QTVERSION'"`) DO SET QT_FETCHED_VERSION=%%i
 IF [%1] EQU [] SET /p ARCHITECTURE= Start the win32(1)[=default] or the x64(2) version? 
 IF [%2] EQU [] SET /p DEBUGRELEASE= Start the (d)ebug[=default] or (r)elease version? 
-IF [%3] EQU [] SET /p QT_VERSION= Define the used Qt version, ie '5.3.2'[=default]? 
-		
-IF /I '%QT_VERSION%'=='' SET QT_VERSION=5.3.2
+IF [%3] EQU [] SET /p QT_VERSION= Define the used Qt version, ie '%QT_FETCHED_VERSION%'[=default]? 		
+IF /I '%QT_VERSION%'=='' SET QT_VERSION=%QT_FETCHED_VERSION%
+ECHO %QT_VERSION%
+
 IF /I '%DEBUGRELEASE%'=='' SET DEBUGRELEASE=d
 IF /I '%ARCHITECTURE%'=='' SET ARCHITECTURE=1
 ECHO Your input was: Architecture(%ARCHITECTURE%) on %QT_VERSION%
 ECHO Additional to use library paths:
 ECHO %QSCINTILLA_PATH%
-ECHO %MATLAB_PATH%
+REM ECHO %MATLAB_PATH%
 MD Xsd
 COPY ..\Source\Plugins\ExperimentManager\xsd Xsd
 IF /I '%ARCHITECTURE%'=='1' GOTO WIN32
@@ -29,14 +34,14 @@ IF /I '%ARCHITECTURE%'=='2' GOTO X64
 GOTO END
 :WIN32
 	ECHO WIN32 was choosen
-	SET QT_ROOT_DIR=E:\Libraries\Qt%QT_VERSION%_32bit\5.3\msvc2013_opengl
+	SET QT_ROOT_DIR=%LIBRARY_DIR%\Qt%QT_VERSION%_32bit\5.3\msvc2013_opengl
 	ECHO %QT_ROOT_DIR%
 	SET QT_QPA_PLATFORM_PLUGIN_PATH=%QT_ROOT_DIR%\plugins\platforms
 	SET Path=%QT_ROOT_DIR%\bin;%Path%
-	SET OGRE_PATH=E:\Libraries\Ogre\OGRE-SDK-1.8.2-vc110-x86-28.05.2013\bin
-	SET INPOUT_PATH=E:\Libraries\InpOut_1500\Win32
-	SET QT_SCRIPT_BINDINGS_PATH=E:\Libraries\Qt5.3.2_ScriptBindings\Win32\bindings\script
-	SET QUAZIP_PATH=E:\Libraries\quazip-0.7.1\Win32
+	SET OGRE_PATH=%LIBRARY_DIR%\Ogre\OGRE-SDK-1.8.2-vc110-x86-28.05.2013\bin
+	SET INPOUT_PATH=%LIBRARY_DIR%\InpOut_1500\Win32
+	SET QT_SCRIPT_BINDINGS_PATH=%LIBRARY_DIR%\Qt5.3.2_ScriptBindings\Win32\bindings\script
+	SET QUAZIP_PATH=%LIBRARY_DIR%\quazip-0.7.1\Win32
 	
 	ECHO START COPYING...
 	COPY qt_32.conf qt.conf /y
@@ -157,7 +162,7 @@ GOTO END
 	IF /I '%DEBUGRELEASE%'=='r' COPY %QT_ROOT_DIR%\bin\Qt5SerialPort.dll Qt5SerialPort.dll /y
 	IF /I '%DEBUGRELEASE%'=='r' CALL "..\Source\QmlExtensions\Plugins\DefaultPlugin\createqmltypes.bat"
 	
-	SET Path=%MATLAB_PATH%;%Path%
+	REM SET Path=%MATLAB_PATH%;%Path%
 	
 	CD /d %ROOTDIR%
 
@@ -165,13 +170,13 @@ GOTO END
 	
 :X64
 	ECHO X64 was choosen
-	SET QT_ROOT_DIR=E:\Libraries\Qt%QT_VERSION%_64bit\5.3\msvc2013_64_opengl
-	QT_QPA_PLATFORM_PLUGIN_PATH=%QT_ROOT_DIR%\plugins\platforms
+	SET QT_ROOT_DIR=%LIBRARY_DIR%\Qt%QT_VERSION%_64bit\5.3\msvc2013_64_opengl
+	SET QT_QPA_PLATFORM_PLUGIN_PATH=%QT_ROOT_DIR%\plugins\platforms
 	SET Path=%QT_ROOT_DIR%\bin;%Path%
-	SET OGRE_PATH=E:\Libraries\Ogre\OGRE-SDK-1.8.2-vc110-x64-28.05.2013\bin
-	SET INPOUT_PATH=E:\Libraries\InpOut_1500\x64
-	SET QT_SCRIPT_BINDINGS_PATH=E:\Libraries\Qt5.3.2_ScriptBindings\x64\bindings\script
-	SET QUAZIP_PATH=E:\Libraries\quazip-0.7.1\x64
+	SET OGRE_PATH=%LIBRARY_DIR%\Ogre\OGRE-SDK-1.8.2-vc110-x64-28.05.2013\bin
+	SET INPOUT_PATH=%LIBRARY_DIR%\InpOut_1500\x64
+	SET QT_SCRIPT_BINDINGS_PATH=%LIBRARY_DIR%\Qt5.3.2_ScriptBindings\x64\bindings\script
+	SET QUAZIP_PATH=%LIBRARY_DIR%\quazip-0.7.1\x64
 	
 	ECHO START COPYING...
 	COPY qt_64.conf qt.conf /y
@@ -291,7 +296,7 @@ GOTO END
 	IF /I '%DEBUGRELEASE%'=='r' COPY %QT_ROOT_DIR%\bin\Qt5SerialPort.dll Qt5SerialPort.dll /y
 	IF /I '%DEBUGRELEASE%'=='r' CALL "..\Source\QmlExtensions\Plugins\DefaultPlugin\createqmltypes.bat"
 	
-	SET Path=%MATLAB_PATH%;%Path%
+	REM SET Path=%MATLAB_PATH%;%Path%
 	
 	CD /d %ROOTDIR%
 

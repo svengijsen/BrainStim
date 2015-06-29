@@ -1,4 +1,6 @@
 module BrainStim_QMLExtensions
+DebugMode 1.0 ..\..\..\..\Include\QML\DebugMode.qml
+CustomProgressBar 1.0 ..\..\..\..\Include\QML\CustomProgressBar.qml
 Clock 1.0 Clock.qml
 plugin DefaultQMLPlugin_Win32_Release ..\ #Name <Path>
 typeinfo BrainStim_QMLExtensions.qmltypes

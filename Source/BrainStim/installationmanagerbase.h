@@ -23,8 +23,12 @@
 #include <QMessageBox>
 #include <QDebug>
 #include "mainappinfo.h"
-#include "quazip/JlCompress.h"
 #include <QTemporaryDir>
+
+#ifndef QUAZIP_STATIC
+#define QUAZIP_STATIC
+#endif
+#include "quazip/JlCompress.h"
  
 #define INSTALLMNGR_SETTING_SECTION_CONFIGURATION	"Configuration"
 #define INSTALLMNGR_SETTING_SECTION_INSTALLATION	"Installation"
@@ -32,14 +36,15 @@
 #define INSTALLMNGR_SETTING_SETTING_NAME			"Name"
 #define INSTALLMNGR_SETTING_SETTING_FILES			"Files"
  
+#define INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH	"<MainAppPath>"
 #define INSTALLMNGR_SETTING_MACRO_PLUGINNAME		"<PluginName>"
 #define INSTALLMNGR_SETTING_MACRO_USERPLUGINPATH	"<PluginUserPath>"
 #define INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH	"<PluginDefaultPath>"
-#define INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH	"<MainAppPath>"
+#define INSTALLMNGR_SETTING_MACRO_USERAPPPATH		"<UserAppPath>"
 
 class installationManagerBase
 {
-	public: 
+public:
 
 	enum InstallResult
 	{
@@ -60,7 +65,18 @@ class installationManagerBase
 	installationManagerBase(QObject *parent = NULL) {Q_UNUSED(parent)};
 	~installationManagerBase() {};
 
-	static InstallResult installPlugin(const QString &sMainAppDirPath, const QString &sMainAppsDefaultPluginDirPath, const QString &sMainAppsUserPluginDirPath, const QString &sPluginInstallFilePath, const bool &bOverWriteExistingFiles)
+	static QString resolveFileDirectoryPath(const QString &sFileDirectoryPath, const QString &sMainAppsUserPluginDirPath, const QString &sMainAppDirPath, const QString &sIniCompleteBaseName, const QString &sMainAppsDefaultPluginDirPath, const QString &sUserAppPathPath)
+	{
+		QString sRetval = sFileDirectoryPath;
+		sRetval.replace(INSTALLMNGR_SETTING_MACRO_USERPLUGINPATH, sMainAppsUserPluginDirPath, Qt::CaseInsensitive);
+		sRetval.replace(INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH, sMainAppDirPath, Qt::CaseInsensitive);
+		sRetval.replace(INSTALLMNGR_SETTING_MACRO_PLUGINNAME, sIniCompleteBaseName, Qt::CaseInsensitive); //QFileInfo(sIniFileName).completeBaseName(), Qt::CaseInsensitive);
+		sRetval.replace(INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH, sMainAppsDefaultPluginDirPath, Qt::CaseInsensitive);
+		sRetval.replace(INSTALLMNGR_SETTING_MACRO_USERAPPPATH, sUserAppPathPath, Qt::CaseInsensitive);
+		return sRetval;
+	};
+
+	int installPlugin(const QString &sMainAppDirPath, const QString &sMainAppsDefaultPluginDirPath, const QString &sMainAppsUserPluginDirPath, const QString &sPluginInstallFilePath, const QString &sUserAppPath, const bool &bOverWriteExistingFiles)
 	{
 		QFileInfo fiPluginInstallFilePath(sPluginInstallFilePath);
 		QString sIniFilePath = "";
@@ -94,7 +110,7 @@ class installationManagerBase
 			{
 				if (QFileInfo(sTmpExtractedFilePath).completeSuffix() == "ini")
 				{
-					int nTempRetVal = installPlugin(sMainAppDirPath, sMainAppsDefaultPluginDirPath, sMainAppsUserPluginDirPath, sTmpExtractedFilePath, bOverWriteExistingFiles);
+					int nTempRetVal = installPlugin(sMainAppDirPath, sMainAppsDefaultPluginDirPath, sMainAppsUserPluginDirPath, sTmpExtractedFilePath, sUserAppPath, bOverWriteExistingFiles);
 					if (nTempRetVal < 0)
 					{
 						nRetVal = nTempRetVal;
@@ -155,10 +171,7 @@ class installationManagerBase
 				QList<int> nPresentInCurrentInstallIndexes;
 				for (int i = 0; i < lFileList.count(); i++)
 				{
-					lFileList[i].replace(INSTALLMNGR_SETTING_MACRO_USERPLUGINPATH, sMainAppsUserPluginDirPath, Qt::CaseInsensitive);
-					lFileList[i].replace(INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH, sMainAppDirPath, Qt::CaseInsensitive);
-					lFileList[i].replace(INSTALLMNGR_SETTING_MACRO_PLUGINNAME, QFileInfo(sIniFileName).completeBaseName(), Qt::CaseInsensitive);
-					lFileList[i].replace(INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH, sMainAppsDefaultPluginDirPath, Qt::CaseInsensitive);
+					lFileList[i] = resolveFileDirectoryPath(lFileList[i], sMainAppsUserPluginDirPath, sMainAppDirPath, QFileInfo(sIniFileName).completeBaseName(), sMainAppsDefaultPluginDirPath, sUserAppPath);
 				}
 				for (int i = 0; i < lFileList.count(); i++)
 				{
@@ -189,58 +202,6 @@ class installationManagerBase
 						qDebug() << __FUNCTION__ << "Some installation files (for the " << sPluginInternalName << " plugin) were skipped because they were already present and in use: " << sSkippedFiles;
 						//see below uncommented copy step!!!
 					}
-
-					//bool bSkipAll = false;
-					//bool bOverwriteAll = false;
-					//foreach(int nIndex, nPresentInCurrentInstallIndexes)
-					//{
-					//	bool bReplace = false;
-					//	bool bCancel = false;
-					//	if (bOverwriteAll == false)
-					//	{
-					//		customQuestionDialog questionDialog;
-					//		QStringList lQuestions;
-					//		lQuestions << "Overwrite" << "Overwrite All" << "Skip" << "Skip All" << "Cancel";
-					//		questionDialog.setOptions("File(s) already present", "The current installation already contains some of the files that are included by this plugin.\nWhat do you wish to do?", lQuestions, 2);
-					//		int nReply = questionDialog.exec();
-					//		switch (nReply)
-					//		{
-					//		case 0://Overwrite
-					//			bReplace = true;
-					//			break;
-					//		case 1://Overwrite All
-					//			bOverwriteAll = true;
-					//			bReplace = true;
-					//			break;
-					//		case 2://Skip
-					//			break;
-					//		case 3://Skip All
-					//			bSkipAll = true;
-					//			break;
-					//		case 4://Cancel
-					//			bCancel = true;
-					//			break;
-					//		default:
-					//			break;
-					//		}
-					//	}
-					//	else
-					//	{
-					//		bReplace = true;
-					//	}
-					//	if (bCancel || bSkipAll)
-					//		break;
-					//	if (bReplace)
-					//	{
-					//		//QFileInfo(MainAppInfo::pluginsDirPath() + "/" + lFileList[i]).exists())
-					//		bool bRemoveSucceeded = QFile::remove(MainAppInfo::pluginsDirPath() + "/" + lFileList[nIndex]);
-					//		if (QFileInfo(MainAppInfo::pluginsDirPath() + "/" + lFileList[nIndex]).exists())
-					//			bRemoveSucceeded = false;
-
-					//		//QFile::copy("/home/user/src.txt", "/home/user/dst.txt");
-					//		bReplace = bReplace;
-					//	}
-					//}
 				}
 				//Copy the files to the installation folder
 				for (int i = 0; i < lFileList.count(); i++)
@@ -249,13 +210,9 @@ class installationManagerBase
 					{
 						QString sFileName = QFileInfo(lFileList[i]).fileName();
 						QString sSourceFilePath = sIniFileAbsDir + "/" + sFileName;
-						//QString sInstallationFilePath;
-						//sInstallationFilePath  = sMainAppsPluginDirPath + "/" + lFileList[i];
 
 						if (QFile(lFileList[i]).exists())
 						{
-							//here we can be sure that we may remove the file...
-								//		//QFileInfo(MainAppInfo::pluginsDirPath() + "/" + lFileList[i]).exists())
 							bool bRemoveSucceeded = QFile::remove(lFileList[i]);
 							if (QFileInfo(lFileList[i]).exists())
 								bRemoveSucceeded = false;
@@ -281,9 +238,6 @@ class installationManagerBase
 						}
 					}
 				}
-				//bool bRetval = false;
-				//if (QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_LOADDYNAMICPLUGINS_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetval)))
-				//	return bRetval;
 				return InstallResult_PluginsInstalled;
 			}
 		}

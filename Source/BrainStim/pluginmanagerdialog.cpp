@@ -17,6 +17,7 @@
 //
 
 #include "pluginmanagerdialog.h"
+#include "installationmanagerbase.h"
 #include "MainAppInfo.h"
 #include "Archiver.h"
 #include <QStandardItem>
@@ -227,7 +228,7 @@ void PluginManagerDialog::uninstallSelectedPlugin()
 void PluginManagerDialog::installPlugin()
 {
 	this->setEnabled(false);
-	QString sInstallFilePath = QFileDialog::getOpenFileName(NULL, tr("Open Plugin installation file"), MainAppInfo::userPluginsDirPath(), tr("Configuration Files (*.ini);;Compressed Install Package (*.zip)"));
+	QString sInstallFilePath = QFileDialog::getOpenFileName(NULL, tr("Open Plugin installation file"), MainAppInfo::userPluginsDirPath(), tr("Compressed Install Package (*.zip);;Configuration Files (*.ini)"));
 	if (sInstallFilePath.isEmpty() == false)
 	{
 		bool bRetval = false;
@@ -357,15 +358,22 @@ void PluginManagerDialog::backupAllPlugins()
 									bDidCreatePackageDirectory = false;
 								for (int j = 0; j < lInstallFiles.count(); j++)
 								{
+									lInstallFiles[j] = installationManagerBase::resolveFileDirectoryPath(lInstallFiles[j], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sIniFileName).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::appUserPath());
 									QString sFileName = QFileInfo(lInstallFiles[j]).fileName();
 									if (sFileName == sIniFileName)
 										continue;
-									QString sSourceFilePath = MainAppInfo::userPluginsDirPath() + "/" + lInstallFiles[j];
+									QString sSourceFilePath = lInstallFiles[j]; //MainAppInfo::userPluginsDirPath() + "/" + lInstallFiles[j];
 									QString sInstallationFilePath = sIniFileDirectoryPath + "/" + sFileName;
-									if (QFile::copy(sSourceFilePath, sInstallationFilePath) == false)
+									QFile tmpFile;
+									tmpFile.setFileName(sSourceFilePath);
+									if (QFile(sInstallationFilePath).exists())
+									{
+										QFile(sInstallationFilePath).remove();
+									}
+									if (tmpFile.copy(sInstallationFilePath) == false)
 									{
 										bDidCreatePackageDirectory = false;
-										qDebug() << __FUNCTION__ << "Could not copy a registered plugin installation file: " << sSourceFilePath;
+										qDebug() << __FUNCTION__ << "Could not copy a registered plugin installation file from " << sSourceFilePath << " to " << sInstallationFilePath << "Qt error: " << tmpFile.error();
 										return;
 									}
 								}
@@ -387,7 +395,7 @@ void PluginManagerDialog::backupAllPlugins()
 		{
 			Archiver tmpArchiver;
 			if (tmpArchiver.compressDir(sSaveFileName, tempDir.path(), true))
-				QMessageBox::information(this,tr("Compressed Installer Backup Package Created"), "The Compressed Installer Backup Package was successfully Created.");
+				QMessageBox::information(this,tr("Compressed Installer Backup Package Created"), "The Compressed Installer Backup Package was successfully created.");
 		}
 	}
 	return;

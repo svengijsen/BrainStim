@@ -53,6 +53,21 @@ public:
 	QString getPluginIniFilePath(const QString &sPluginFilePath);
 	bool createPluginConfigurationSetting(const QString &sPluginInstallFilePath, const QString &sInternalName, const bool &bIsEnabled, const QStringList lInstallationFiles);
 	QStringList getPluginInstallFiles(const QString &sRegisteredPluginName);
+	static QStringList getPluginInstallFilesFromIniFile(const QString &sPluginIniFilePath)
+	{
+		QStringList lReturnList;
+		if (sPluginIniFilePath.isEmpty() == false)
+		{
+			if (QFileInfo(sPluginIniFilePath).exists())
+			{
+				QSettings pluginSettings(sPluginIniFilePath, QSettings::IniFormat);
+				pluginSettings.beginGroup(INSTALLMNGR_SETTING_SECTION_INSTALLATION);
+				lReturnList = pluginSettings.value(INSTALLMNGR_SETTING_SETTING_FILES, QStringList()).toStringList();
+				pluginSettings.endGroup();
+			}
+		}
+		return lReturnList;
+	};
 
 private:
 	bool changePluginEnabledSetting(const QString &sPluginIniFilePath, const bool &bEnable);

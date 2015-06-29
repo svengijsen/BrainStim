@@ -34,7 +34,7 @@
 #include "outputlistdelegate.h"
 #include "custommdisubwindow.h"
 #include "propertysettingswidgetcontainer.h"
-
+#include "installationmanagerbase.h"
 #include "../Plugins/ExperimentManager/experimentmanager.h"
 
 GlobalApplicationInformation::MainProgramModeFlags MainWindow::BrainStimFlags = GlobalApplicationInformation::Default;
@@ -2311,7 +2311,8 @@ bool MainWindow::loadDynamicPlugins()
 		QString sPluginAbsFilePath = QDir(MainAppInfo::userPluginsDirPath()).absoluteFilePath(fileName);
 		if (QFileInfo(fileName).completeSuffix().toLower() != "dll")
 			continue;
-		if (installMngr->getPluginIniFilePath(sPluginAbsFilePath).isEmpty())//Is there a configuration file?
+		QString sPluginIniFilePath = installMngr->getPluginIniFilePath(sPluginAbsFilePath);
+		if (sPluginIniFilePath.isEmpty())//Is there a configuration file?
 			continue;
 		if (installMngr->isRegisteredPlugin(QFileInfo(fileName).completeBaseName()))
 			continue;
@@ -2319,15 +2320,49 @@ bool MainWindow::loadDynamicPlugins()
 		if (installMngr->isEnabledPlugin(sPluginAbsFilePath) == false)
 			bIsUnregisteredAndDisabled = true;
 
+		//QString sRegisteredPluginName = installMngr->getRegisteredPluginName(sPluginIniFilePath);
 		QString sTmpAddPluginDir = QFileInfo(sPluginAbsFilePath).absolutePath() + "/" + QFileInfo(fileName).completeBaseName();
 		QDir dirTmpAddPluginDir(sTmpAddPluginDir);
 		if (dirTmpAddPluginDir.exists())//Does a additional plugin directory exist?
 			qApp->addLibraryPath(dirTmpAddPluginDir.canonicalPath());
 
+		//pre-load all needed libraries...
+		if (bIsUnregisteredAndDisabled == false)
+		{
+			QStringList lFiles = installationManager::getPluginInstallFilesFromIniFile(sPluginIniFilePath);
+			for (int i = 0; i < lFiles.count(); i++)
+			{
+				QString sFileName = QFileInfo(lFiles[i]).fileName();
+				//QFile sSourceFilePath(sIniFileAbsDir + "/" + sFileName);
+				lFiles[i] = installationManagerBase::resolveFileDirectoryPath(lFiles[i], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sPluginIniFilePath).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::appUserPath());
+				if (QFileInfo(lFiles[i]).canonicalPath() == dirTmpAddPluginDir.canonicalPath())//!= QFileInfo(sPluginAbsFilePath).canonicalFilePath()) && (QFileInfo(lFiles[i]).canonicalPath() != QDir(MainAppInfo::appDirPath()).canonicalPath()))
+				{
+					if (QLibrary::isLibrary(lFiles[i]))
+					{
+						QLibrary libTemp;
+						libTemp.setFileName(lFiles[i]);
+						if (libTemp.isLoaded() == false)
+						{
+							//bool bLoadResult = 
+							libTemp.load();
+
+							//if (bLoadResult)
+							//{
+								//libTemp.unload();
+							//}
+						}
+					}
+				}
+			}
+		}
+
 		QPluginLoader *loader = new QPluginLoader(sPluginAbsFilePath, this);
 		QObject *plugin = loader->instance();//The QObject provided by the plugin, if it was compiled against an incompatible version of the Qt library, QPluginLoader::instance() returns a null pointer.
 		if (plugin)
 		{
+			//bLoadResult = libTemp.unload();
+
+
 			DeviceInterface *iDevice = qobject_cast<DeviceInterface *>(plugin);
 			QString sTmpInternalPluginName = "";
 			if (iDevice)
@@ -2863,6 +2898,9 @@ void MainWindow::setAppDirectories()
 	QString sTempDefaultPluginsDirPath = MainAppInfo::defaultPluginsDirPath();
 	if (globAppInfo->setSettingsInformation(REGISTRY_DEFAULTPLUGINSROOTDIRECTORY, sTempDefaultPluginsDirPath, "string") == false)
 		qDebug() << __FUNCTION__ << "Could not configure the defined Plugin path in the main settings file: " << sTempDefaultPluginsDirPath;
+	QString sTempExamplesDirPath = MainAppInfo::appExampleDirPath();
+	if (globAppInfo->setSettingsInformation(REGISTRY_EXAMPLESROOTDIRECTORY, sTempExamplesDirPath, "string") == false)
+		qDebug() << __FUNCTION__ << "Could not configure the defined Examples path in the main settings file: " << sTempExamplesDirPath;
 	qApp->setLibraryPaths(paths);
 }
 

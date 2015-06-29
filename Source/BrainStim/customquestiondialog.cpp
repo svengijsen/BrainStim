@@ -58,7 +58,8 @@ void customQuestionDialog::buttonPressed(const int &nIndex)
 
 int customQuestionDialog::exec()
 {
-	int nRetVal = QDialog::exec();
+	//int nRetVal = 
+	QDialog::exec();
 	if (nLastButtonPressed >= 0)
 		return nLastButtonPressed;
 	return nDefValue;

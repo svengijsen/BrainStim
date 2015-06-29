@@ -5,9 +5,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
     <!-- some comments... -->
-    <QTPROPERTYBROWSER>E:\Libraries\CTK\QtPropertyBrowser</QTPROPERTYBROWSER>
-    <QUAZIP>E:\Libraries\quazip-0.7.1</QUAZIP>
-    <ZLIB>E:\Libraries\zlib\zlib-1.2.8</ZLIB>
+    <QTPROPERTYBROWSER>$(LIBRARY_DIR)\CTK\QtPropertyBrowser</QTPROPERTYBROWSER>
+    <QUAZIP>$(LIBRARY_DIR)\quazip-0.7.1</QUAZIP>
+    <ZLIB>$(LIBRARY_DIR)\zlib\zlib-1.2.8</ZLIB>
   </PropertyGroup>
   <ItemDefinitionGroup/>
   <ItemGroup>

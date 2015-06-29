@@ -183,7 +183,7 @@ void OptionPage::applySettings()
 	glob_AppInfo->setSettingsInformation(REGISTRY_OPENINEXTERNALDEBUGGER,(bool)(ui.chk_OpenDebOnError->checkState() && Qt::Checked),"bool");
 	glob_AppInfo->setSettingsInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE,(bool)(ui.chkAllowMultipleInstances->checkState() && Qt::Checked),"bool");
 	glob_AppInfo->setSettingsInformation(REGISTRY_ENABLECUSTOMUSERLOGINS, (bool)(ui.chkAllowCustomUserLogins->checkState() && Qt::Checked), "bool");
-	glob_AppInfo->setSettingsInformation(REGISTRY_CUSTOMPLUGINSROOTDIRECTORY, (QString)(ui.lneCustomPluginsRootDirectory->text()), "string");
+	glob_AppInfo->setSettingsInformation(REGISTRY_USERPLUGINSROOTDIRECTORY, (QString)(ui.lneCustomPluginsRootDirectory->text()), "string");
 	MainAppInfo::setPluginsDirPath(ui.lneCustomPluginsRootDirectory->text());
 	glob_AppInfo->setSettingsInformation(REGISTRY_ENABLENETWORKSERVER,(bool)(ui.chkEnableNetworkServer->checkState() && Qt::Checked),"bool");
 	glob_AppInfo->setSettingsInformation(REGISTRY_SERVERHOSTADDRESS,(QString)(ui.edtNetworkServerAddress->text()),"string");
@@ -303,7 +303,7 @@ void OptionPage::readSettings()
 		bTemp = tmpVariant.toBool();
 		ui.chkAllowCustomUserLogins->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
 	}
-	if (glob_AppInfo->getSettingsInformation(REGISTRY_CUSTOMPLUGINSROOTDIRECTORY, tmpVariant))
+	if (glob_AppInfo->getSettingsInformation(REGISTRY_USERPLUGINSROOTDIRECTORY, tmpVariant))
 	{
 		sTemp = tmpVariant.toString();
 		ui.lneCustomPluginsRootDirectory->setText(sTemp);

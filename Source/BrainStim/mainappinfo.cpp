@@ -99,8 +99,8 @@ void MainAppInfo::MyOutputHandler(QtMsgType type, const QMessageLogContext &cont
 	bool bDoAbort = false;
 	if(MainAppInfo::mainLogFile == NULL)
 	{
-		//QString aa = MainAppInfo::appLogFilePath();
-		MainAppInfo::mainLogFile = new QFile(MainAppInfo::appLogFilePath());
+		QString sAppLogFilePath = MainAppInfo::appLogFilePath();
+		MainAppInfo::mainLogFile = new QFile(sAppLogFilePath);
 	}
 	if(!MainAppInfo::mainLogFile->isOpen())
 	{
@@ -303,7 +303,8 @@ QWidget *MainAppInfo::retrieveCustomPropertySettingEditorWidget(const int &nVari
 			QByteArray normalizedSignature = QMetaObject::normalizedSignature(PLUGIN_CUSTOMTYPE_GETNEWEDITOR_METHOD_FULL);
 			int methodIndex = tmpObject->metaObject()->indexOfMethod(normalizedSignature);
 			QMetaMethod method = tmpObject->metaObject()->method(methodIndex);
-			bool bInvokeResult = method.invoke(tmpObject,
+			//bool bInvokeResult = 
+				method.invoke(tmpObject,
 				Qt::DirectConnection,
 				Q_RETURN_ARG(QWidget *, tmpEditorObject));
 			//if (tmpEditorObject)

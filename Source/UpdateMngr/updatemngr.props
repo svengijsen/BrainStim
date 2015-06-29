@@ -4,16 +4,8 @@
   	<Import Project="..\BrainStim\brainstim.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros">
-    <!-- some example... 
-    <QTPROPERTYBROWSER>E:\Libraries\CTK\QtPropertyBrowser</QTPROPERTYBROWSER>
-    -->
   </PropertyGroup>
   <ItemDefinitionGroup/>
   <ItemGroup>
-  <!--
-    <BuildMacro Include="QTPROPERTYBROWSER">
-      <Value>$(QTPROPERTYBROWSER)</Value>
-    </BuildMacro>
-  -->
   </ItemGroup>
 </Project>

@@ -66,6 +66,42 @@ int main(int argc, char **argv)
 #endif
 #endif
 
+	QProcess *process = new QProcess();
+	QString sDebugMode;		//Release mode
+	QString sArchitecture;	//Win32 architecture
+
+#ifdef _DEBUG
+	sDebugMode = "d";
+#else
+	sDebugMode = "r";
+#endif
+#ifdef ENVIRONMENT32
+	sArchitecture = "1";
+#else
+	sArchitecture = "2";
+#endif
+	QString sConfigureFileName = "AutoStartConfigure_UpdateMngr.bat";
+	QString sConfigureFilePath = QDir::currentPath() + QDir::separator() + sConfigureFileName;
+	if (QFile(sConfigureFilePath).exists())
+	{
+		process->start(sConfigureFileName, QStringList() << sArchitecture << sDebugMode << QT_VERSION_STR);
+		if (process->waitForStarted())
+		{
+			if (process->waitForFinished())
+			{
+				qDebug() << __FUNCTION__ << sConfigureFileName << "output: \n" << process->readAll();
+				while (process->waitForReadyRead())
+				{
+					qDebug() << __FUNCTION__ << process->readAll();
+				}
+			}
+		}
+	}
+	else
+	{
+		qDebug() << __FUNCTION__ << sConfigureFileName << "not found!";
+	}
+
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	QString sAlternativeMainProgramFileName = MAIN_PROGRAM_NAME;
 #ifdef ENVIRONMENT64
@@ -79,14 +115,22 @@ int main(int argc, char **argv)
 	sAlternativeMainProgramFileName = sAlternativeMainProgramFileName + "_Release.exe";
 #endif
 	//////////////////////////////////////////////////////////////////////////////////////////////
-	if (QFile(MAIN_PROGRAM_INI_FILENAME).exists() == false)
+	QString sUserIniFilePath = "";
+#ifdef ENVIRONMENT64
+	sUserIniFilePath = QDir::homePath() + "/" + MAIN_PROGRAM_INTERNAL_NAME + "(v" + MAIN_PROGRAM_FILE_VERSION_STRING + ", " + MAIN_PROGRAM_64BIT_STRING + ")" + "/" + MAIN_PROGRAM_INI_FILENAME;
+#else
+	sUserIniFilePath = QDir::homePath() + "/" + MAIN_PROGRAM_INTERNAL_NAME + "(v" + MAIN_PROGRAM_FILE_VERSION_STRING + ", " + MAIN_PROGRAM_32BIT_STRING + ")" + "/" + MAIN_PROGRAM_INI_FILENAME;
+#endif
+
+	//BrainStim(v1.0.0.1, 32-bits)
+	if (QFile(sUserIniFilePath).exists() == false)
 	{
 		QString sMainProgramFileName = MAIN_PROGRAM_FILENAME;
 		if (QFile(sMainProgramFileName).exists() == false)
 		{
 			if (QFile(sAlternativeMainProgramFileName).exists() == false)
 			{
-				qDebug() << __FUNCTION__ << "ERROR: " << "no *.ini file (" << MAIN_PROGRAM_INI_FILENAME << ") or main program file (" << MAIN_PROGRAM_FILENAME << ") found, exiting...";
+				qDebug() << __FUNCTION__ << "ERROR: " << "no *.ini file (" << sUserIniFilePath << ") or main program file (" << MAIN_PROGRAM_FILENAME << ") found, exiting...";
 				return 0;
 			}
 			sMainProgramFileName = sAlternativeMainProgramFileName;
@@ -108,9 +152,9 @@ int main(int argc, char **argv)
 		}
 		delete process;
 		//Check again...
-		if (QFile(MAIN_PROGRAM_INI_FILENAME).exists() == false)
+		if (QFile(sUserIniFilePath).exists() == false)
 		{
-			qDebug() << __FUNCTION__ << "Could not locate *.ini file (" << MAIN_PROGRAM_INI_FILENAME << "), exiting...";
+			qDebug() << __FUNCTION__ << "Could not locate *.ini file (" << sUserIniFilePath << "), exiting...";
 			return 0;
 		}
 	}
@@ -118,19 +162,25 @@ int main(int argc, char **argv)
 	QVariant tmpVariant;
 	QString sCustomPluginsRootDir = "";
 	QString sDefaultPluginsRootDir = "";
-	QSettings sSettingsObj(MAIN_PROGRAM_INI_FILENAME, QSettings::IniFormat);
-	if (getSettingsInformation(sSettingsObj, REGISTRY_CUSTOMPLUGINSROOTDIRECTORY, tmpVariant) == false)
+	QSettings sSettingsObj(sUserIniFilePath, QSettings::IniFormat);
+	if (getSettingsInformation(sSettingsObj, REGISTRY_USERPLUGINSROOTDIRECTORY, tmpVariant) == false)
 	{
-		qDebug() << __FUNCTION__ << "Could not retrieve custom plugins root directory setting from *.ini file (" << MAIN_PROGRAM_INI_FILENAME << "), exiting...";
+		qDebug() << __FUNCTION__ << "Could not retrieve custom plugins root directory setting from *.ini file (" << sUserIniFilePath << "), exiting...";
 		return 0;
 	}
 	sCustomPluginsRootDir = tmpVariant.toString();
 	if (getSettingsInformation(sSettingsObj, REGISTRY_DEFAULTPLUGINSROOTDIRECTORY, tmpVariant) == false)
 	{
-		qDebug() << __FUNCTION__ << "Could not retrieve default plugins root directory setting from *.ini file (" << MAIN_PROGRAM_INI_FILENAME << "), exiting...";
+		qDebug() << __FUNCTION__ << "Could not retrieve default plugins root directory setting from *.ini file (" << sUserIniFilePath << "), exiting...";
 		return 0;
 	}
 	sDefaultPluginsRootDir = tmpVariant.toString();
+	if (getSettingsInformation(sSettingsObj, REGISTRY_USERDOCUMENTSROOTDIRECTORY, tmpVariant) == false)
+	{
+		qDebug() << __FUNCTION__ << "Could not retrieve user documents root directory setting from *.ini file (" << sUserIniFilePath << "), exiting...";
+		return 0;
+	}
+	QString sUserAppRootDir = tmpVariant.toString();
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	if (argc > 1)//arguments available?

@@ -35,3 +35,7 @@ Install/*.ini
 InstallJammer/build/*.*
 Install/Menus/*/*.ini
 Source/Plugins/ExperimentManager/experimentmanagerplugin.aps
+Source/base.props
+/Source/base.props
+Install/Include/QtScript/TBVExchanger.qs
+Install/Include/QtScript/TSIExchanger.qs

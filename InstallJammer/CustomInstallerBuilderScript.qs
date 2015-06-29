@@ -1,4 +1,5 @@
-Include("ReplaceInFile.qs");
+Include("../Install/Include/QtScript/ModuleReplaceInFile.qs");
+Include("../Install/Include/QtScript/ModuleXMLReader.qs");
 
 var tmpString;
 var InstallProcess = new QProcess();
@@ -38,18 +39,23 @@ var installJammerProjectFileFromToChangesSelection = ReplaceInFile_CreateArray(i
 //----------------------------------------------
 var nCurrentChangeCounter = 0;
 var nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
-installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr("E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl");
+var sLibraryDir = getXmlFileItemValue("..\\Source\\base.props", ["Project","PropertyGroup","LIBRARY_DIR"]);
+if(typeof sLibraryDir === "undefined")
+	sLibraryDir = "E:/Libraries";
+else
+	Log("Found Library directory: " + sLibraryDir);
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr(sLibraryDir + "/Qt5.3.2_32bit/5.3/msvc2013_opengl");
 installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0] = installJammerProjectFileChanges[0][0];//make sure this is also defined like this in the default installjammer file
-installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr("E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr(sLibraryDir + "/Qt5.3.2_64bit/5.3/msvc2013_64_opengl");
 installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1];//make sure this is also defined like this in the default installjammer file
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0];
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];
 
 nCurrentChangeCounter = nCurrentChangeCounter + 1;
 nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
-installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr("E:/Libraries/Qt5.3.2_ScriptBindings/Win32/bindings/script");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr(sLibraryDir + "/Qt5.3.2_ScriptBindings/Win32/bindings/script");
 installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];//make sure this is also defined like this in the default installjammer file
-installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr("E:/Libraries/Qt5.3.2_ScriptBindings/x64/bindings/script");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr(sLibraryDir + "/Qt5.3.2_ScriptBindings/x64/bindings/script");
 installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1];//make sure this is also defined like this in the default installjammer file
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0];
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];
@@ -61,56 +67,56 @@ installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = insta
 
 nCurrentChangeCounter = nCurrentChangeCounter + 1;
 nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
-installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr("E:/Libraries/Firebird/Firebird-2.5.3.26778-0/Win32/Release");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr(sLibraryDir + "/Firebird/Firebird-2.5.3.26778-0/Win32/Release");
 installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];//make sure this is also defined like this in the default installjammer file
-installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr("E:/Libraries/Firebird/Firebird-2.5.3.26778-0/x64/Release");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr(sLibraryDir + "/Firebird/Firebird-2.5.3.26778-0/x64/Release");
 installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1];//make sure this is also defined like this in the default installjammer file
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0];
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];
 
 nCurrentChangeCounter = nCurrentChangeCounter + 1;
 nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
-installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr("E:/Libraries/InpOut_1500/Win32");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr(sLibraryDir + "/InpOut_1500/Win32");
 installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];//make sure this is also defined like this in the default installjammer file
-installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr("E:/Libraries/InpOut_1500/x64");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr(sLibraryDir + "/InpOut_1500/x64");
 installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1];//make sure this is also defined like this in the default installjammer file
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0];
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];
 
 nCurrentChangeCounter = nCurrentChangeCounter + 1;
 nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
-installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr("E:/Libraries/QScintilla-gpl-2.7.2/lib/Win32/Release");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr(sLibraryDir + "/QScintilla-gpl-2.7.2/lib/Win32/Release");
 installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];//make sure this is also defined like this in the default installjammer file
-installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr("E:/Libraries/QScintilla-gpl-2.7.2/lib/x64/Release");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr(sLibraryDir + "/QScintilla-gpl-2.7.2/lib/x64/Release");
 installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1];//make sure this is also defined like this in the default installjammer file
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0];
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];
 
 nCurrentChangeCounter = nCurrentChangeCounter + 1;
 nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
-installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr("E:/Libraries/Ogre/OGRE-SDK-1.8.2-vc110-x86-28.05.2013/bin/Release");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr(sLibraryDir + "/Ogre/OGRE-SDK-1.8.2-vc110-x86-28.05.2013/bin/Release");
 installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];//make sure this is also defined like this in the default installjammer file
-installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr("E:/Libraries/Ogre/OGRE-SDK-1.8.2-vc110-x64-28.05.2013/bin/Release");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr(sLibraryDir + "/Ogre/OGRE-SDK-1.8.2-vc110-x64-28.05.2013/bin/Release");
 installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1];//make sure this is also defined like this in the default installjammer file
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0];
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];
 
 nCurrentChangeCounter = nCurrentChangeCounter + 1;
 nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
-installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr("E:/Libraries/HIDAPI/Win32/bin");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0] = tr(sLibraryDir + "/HIDAPI/Win32/bin");
 installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];//make sure this is also defined like this in the default installjammer file
-installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr("E:/Libraries/HIDAPI/x64/bin");
+installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1] = tr(sLibraryDir + "/HIDAPI/x64/bin");
 installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][1];//make sure this is also defined like this in the default installjammer file
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter+1][0];
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileChanges[nCurrentDoubleChangeCounter][0];
 
 nCurrentChangeCounter = nCurrentChangeCounter + 1;
 nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
-installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = tr("E:/Libraries/VC_Redist/VC_2013");//From
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = tr(sLibraryDir + "/VC_Redist/VC_2013");//From
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0];//To
 nCurrentChangeCounter = nCurrentChangeCounter + 1;
 nCurrentDoubleChangeCounter = nCurrentChangeCounter*2;
-installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = tr("E:/Libraries/VC_Redist/VC_2013/x86/Microsoft.VC120");//From
+installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0] = tr(sLibraryDir + "/VC_Redist/VC_2013/x86/Microsoft.VC120");//From
 installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][1] = installJammerProjectFileFromToChangesSelection[nCurrentChangeCounter][0];//To
 
 var srcFile = new QFile(strInstallConfigurationFile);
@@ -127,6 +133,7 @@ function CleanUpScript()
 	Log("CleanUpScript started...");
 	ConnectDisconnectScriptFunctions(false);
 	ReplaceInFile_Cleanup();
+	cleanupXmlFileReader();
 	tr=null;
 	tmpByteArray=null;
 	tmpStringList=null;

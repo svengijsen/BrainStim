@@ -236,6 +236,7 @@ int main(int argc, char **argv)
 		//else
 		//	finalPluginDir = MainAppInfo::pluginsDirPath();
 		//appExchange.addLibraryPath(finalPluginDir);
+
 		MainWindow *appWindow = new MainWindow();
 		appWindow->setGlobalApplicationInformationObject(globAppInformation);
 		MainAppInfo::setMainWindow(appWindow);

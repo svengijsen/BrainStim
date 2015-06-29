@@ -16,7 +16,7 @@ public:
 	bool setOptions(const QString &sCaption, const QString &sText, const QStringList &lButtons, const int &nDefaultReturnIndex);
 
 public slots:
-	int customQuestionDialog::exec();
+	int exec();
 	void buttonPressed(const int &nIndex);
 
 private:
