@@ -416,9 +416,10 @@ int installationManager::installPlugin(const QString &sPluginInstallFilePath)
 	QString sMainAppDirPath = MainAppInfo::appDirPath();
 	QString sMainAppsDefaultPluginDirPath = MainAppInfo::defaultPluginsDirPath();
 	QString sMainAppsUserPluginDirPath = MainAppInfo::userPluginsDirPath();
+	QString sUserAppPath = MainAppInfo::appUserPath();
 	bool bOverWriteExistingFiles = true;
 
-	installationManagerBase::InstallResult installResult = installationManagerBase::installPlugin(sMainAppDirPath, sMainAppsDefaultPluginDirPath, sMainAppsUserPluginDirPath, sPluginInstallFilePath, bOverWriteExistingFiles);
+	installationManagerBase::InstallResult installResult = installationManagerBase::installPlugin(sMainAppDirPath, sMainAppsDefaultPluginDirPath, sMainAppsUserPluginDirPath, sPluginInstallFilePath, sUserAppPath, bOverWriteExistingFiles);
 
 
 	QFileInfo fiPluginInstallFilePath(sPluginInstallFilePath);

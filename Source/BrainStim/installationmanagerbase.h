@@ -76,7 +76,7 @@ public:
 		return sRetval;
 	};
 
-	int installPlugin(const QString &sMainAppDirPath, const QString &sMainAppsDefaultPluginDirPath, const QString &sMainAppsUserPluginDirPath, const QString &sPluginInstallFilePath, const QString &sUserAppPath, const bool &bOverWriteExistingFiles)
+	static InstallResult installPlugin(const QString &sMainAppDirPath, const QString &sMainAppsDefaultPluginDirPath, const QString &sMainAppsUserPluginDirPath, const QString &sPluginInstallFilePath, const QString &sUserAppPath, const bool &bOverWriteExistingFiles)
 	{
 		QFileInfo fiPluginInstallFilePath(sPluginInstallFilePath);
 		QString sIniFilePath = "";

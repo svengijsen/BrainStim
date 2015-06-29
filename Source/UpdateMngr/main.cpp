@@ -208,7 +208,7 @@ int main(int argc, char **argv)
 						}
 					}
 					bool bRetval = false;
-					if(installationManagerBase::installPlugin(QDir::currentPath(), sDefaultPluginsRootDir, sCustomPluginsRootDir, sIniFilePath, bOverwriteExistingFiles) > 0)
+					if (installationManagerBase::installPlugin(QDir::currentPath(), sDefaultPluginsRootDir, sCustomPluginsRootDir, sIniFilePath, sUserAppRootDir, bOverwriteExistingFiles) > 0)
 						qDebug() << __FUNCTION__ << "Plugin successfully installed as defined in (" << sIniFilePath << ")";
 					else
 						qDebug() << __FUNCTION__ << "Could not install the requested plugin defined in (" << sIniFilePath << "), exiting...";
