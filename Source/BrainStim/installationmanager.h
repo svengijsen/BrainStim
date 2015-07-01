@@ -48,7 +48,7 @@ public:
 	bool isEnabledPlugin(const QString &sPluginFilePath);
 	bool isStaticPlugin(const QString &sRegisteredPluginName);
 	bool unistallRegisteredPlugin(const QString &sRegisteredPluginName);
-	int installPlugin(const QString &sPluginInstallFilePath);
+	installationManagerBase::InstallResult installPlugin(const QString &sPluginInstallFilePath);
 	bool changeRegisteredPlugin(const QString &sRegisteredPluginName, const bool &bEnable);
 	QString getPluginIniFilePath(const QString &sPluginFilePath);
 	bool createPluginConfigurationSetting(const QString &sPluginInstallFilePath, const QString &sInternalName, const bool &bIsEnabled, const QStringList lInstallationFiles);
