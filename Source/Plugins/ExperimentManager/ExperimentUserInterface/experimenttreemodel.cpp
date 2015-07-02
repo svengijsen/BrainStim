@@ -1425,43 +1425,36 @@ bool ExperimentTreeModel::moveExperimentObjectInitFinit(const QList<int> &lInitF
 	return bRetVal;
 }
 
-bool ExperimentTreeModel::moveExperimentBlocks(const QList<int> &lBlockIDsToMove, const int &nBlockIDToSwitch, const int &nBlockNumberChangeDirection)
-{
-	enableModifiedSignaling(false);
-	QStringList sFilterList;
-	int nTempBlockID;
-	int nBlockNumberToSwitch = -1;
-	QList<ExperimentTreeItem*> lstActions;
-	QList<ExperimentTreeItem*> lstBlockTrials;
-	QList<ExperimentTreeItem*> lstBlocks;
-	QMap<int,int> mapNewBlockNumbers;//BlockNumber, BlockID	//QMap items are ordered by key -> BlockNumber!
-	QList<int> lstNewOrderedBlockIDList;
-
+QMap<int, int> ExperimentTreeModel::getExperimentBlockNumbersToIDsMap()
+{//BlockNumber, BlockID	//QMap items are ordered by key -> BlockNumber!
+	QList<QString> sFilterList;
 	sFilterList << EXPERIMENTTREEMODEL_FILTER_TAGS;
-	lstActions = getFilteredItemList(ACTIONS_TAG, sFilterList);
-	foreach (ExperimentTreeItem* tmpItem1 ,lstActions)
+	QList<ExperimentTreeItem*> lstActions = getFilteredItemList(ACTIONS_TAG, sFilterList);
+	int nTempBlockID;
+	int nTempBlockNumber;
+	QMap<int, int> mapBlockNumbersToIDs;
+
+	foreach(ExperimentTreeItem* tmpItem1, lstActions)
 	{
-		lstBlockTrials = getFilteredItemList(BLOCKTRIALS_TAG, sFilterList, tmpItem1);
-		foreach (ExperimentTreeItem* tmpItem2 ,lstBlockTrials)
+		QList<ExperimentTreeItem*> lstBlockTrials = getFilteredItemList(BLOCKTRIALS_TAG, sFilterList, tmpItem1);
+		foreach(ExperimentTreeItem* tmpItem2, lstBlockTrials)
 		{
-			lstBlocks = getFilteredItemList(BLOCK_TAG, sFilterList, tmpItem2);
-			foreach (ExperimentTreeItem* tmpItem3 ,lstBlocks)
+			QList<ExperimentTreeItem*> lstBlocks = getFilteredItemList(BLOCK_TAG, sFilterList, tmpItem2);
+			foreach(ExperimentTreeItem* tmpItem3, lstBlocks)
 			{
-				if(tmpItem3->getDefinitions().contains(ID_TAG))
+				if (tmpItem3->getDefinitions().contains(ID_TAG))
 				{
 					nTempBlockID = tmpItem3->getDefinition(ID_TAG).value.toInt();
-					if(nTempBlockID >= 0)
+					if (nTempBlockID >= 0)
 					{
 						if (tmpItem3->hasChildren())
 						{
-							for (int i=0;i<tmpItem3->rowCount();i++)
+							for (int i = 0; i < tmpItem3->rowCount(); i++)
 							{
-								if(tmpItem3->child(i)->getName().toLower() == BLOCKNUMBER_TAG)
+								if (tmpItem3->child(i)->getName().toLower() == BLOCKNUMBER_TAG)
 								{
-									int nTempBlockNumber = tmpItem3->child(i)->getValue().toInt();
-									mapNewBlockNumbers.insert(nTempBlockNumber, nTempBlockID);
-									if(nTempBlockID == nBlockIDToSwitch)
-										nBlockNumberToSwitch = nTempBlockNumber;
+									nTempBlockNumber = tmpItem3->child(i)->getValue().toInt();
+									mapBlockNumbersToIDs.insert(nTempBlockNumber, nTempBlockID);
 									break;
 								}
 							}
@@ -1471,11 +1464,22 @@ bool ExperimentTreeModel::moveExperimentBlocks(const QList<int> &lBlockIDsToMove
 			}
 		}
 	}
+	return mapBlockNumbersToIDs;
+}
+
+bool ExperimentTreeModel::moveExperimentBlocks(const QList<int> &lBlockIDsToMove, const int &nBlockIDToSwitch, const int &nBlockNumberChangeDirection)
+{
+	enableModifiedSignaling(false);
+	QMap<int, int> mapNewBlockNumbers = getExperimentBlockNumbersToIDsMap();//BlockNumber, BlockID	//QMap items are ordered by key -> BlockNumber!
+
 	if (mapNewBlockNumbers.isEmpty())
 	{
 		enableModifiedSignaling(true);
 		return false;
 	}
+
+	int nTempBlockID;
+	QList<int> lstNewOrderedBlockIDList;
 	bool bBlockIDsInjected = false;
 	foreach(nTempBlockID, mapNewBlockNumbers)
 	{
@@ -1483,12 +1487,12 @@ bool ExperimentTreeModel::moveExperimentBlocks(const QList<int> &lBlockIDsToMove
 		{
 			if(bBlockIDsInjected == false)
 			{
-				if(nBlockNumberChangeDirection == -1)
+				if(nBlockNumberChangeDirection < 0)
 				{
 					lstNewOrderedBlockIDList.append(lBlockIDsToMove);
 					lstNewOrderedBlockIDList.append(nBlockIDToSwitch);
 				}
-				else if(nBlockNumberChangeDirection == 1)
+				else if(nBlockNumberChangeDirection > 0)
 				{
 					lstNewOrderedBlockIDList.append(nBlockIDToSwitch);
 					lstNewOrderedBlockIDList.append(lBlockIDsToMove);

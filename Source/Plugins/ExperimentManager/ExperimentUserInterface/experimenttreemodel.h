@@ -220,6 +220,7 @@ class ExperimentTreeModel : public QStandardItemModel
 		void recursiveUidSearch(const QString &uuid, ExperimentTreeItem *item, bool found, QModelIndex &index);
 		bool fillModel();
 
+		QMap<int, int> getExperimentBlockNumbersToIDsMap();
 		int cleanupObjectDependencies(const int &nObjectId);
 		int cleanupBlockDependencies(const int &nBlockId);
 

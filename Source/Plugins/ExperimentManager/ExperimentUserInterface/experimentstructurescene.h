@@ -47,6 +47,7 @@ class ExperimentStructureScene : public QGraphicsScene
 		void setExperimentTreeModel(ExperimentTreeModel *pExpTreeModel);
 		void setGraphViewState(const ExperimentVisualizerGraphViewState &newGraphViewState) {currentGraphViewState = newGraphViewState;};
 		ExperimentVisualizerGraphViewState getGraphViewState() {return currentGraphViewState;};
+		void doSomething();
 
 	protected:
 		bool event(QEvent *event);

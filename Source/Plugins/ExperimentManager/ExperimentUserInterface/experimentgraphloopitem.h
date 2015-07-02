@@ -55,6 +55,10 @@ class ExperimentGraphLoopItem : public QGraphicsItem
 
 		virtual void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 		virtual void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
+		void dragEnterEvent(QGraphicsSceneDragDropEvent *event) Q_DECL_OVERRIDE;
+		void dragLeaveEvent(QGraphicsSceneDragDropEvent *event) Q_DECL_OVERRIDE;
+		void dropEvent(QGraphicsSceneDragDropEvent *event) Q_DECL_OVERRIDE;
 		
 	private:
 		QColor cSelectedColor;

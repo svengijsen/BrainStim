@@ -326,3 +326,11 @@ void ExperimentStructureScene::setExperimentTreeModel(ExperimentTreeModel *pExpT
 {
 	pExperimentTreeModel = pExpTreeModel;
 }
+
+void ExperimentStructureScene::doSomething()
+{
+	if (pExperimentTreeModel)
+		//pExpTreeModel->removeExperimentBlocks
+		pExperimentTreeModel->moveExperimentBlocks(QList<int>() << 1, 2, -1);
+
+}

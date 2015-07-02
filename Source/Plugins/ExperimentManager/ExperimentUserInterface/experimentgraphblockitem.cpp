@@ -44,6 +44,8 @@ ExperimentGraphBlockItem::ExperimentGraphBlockItem(QGraphicsItem *parent) : QGra
 	//this->setToolTip("ExperimentGraphBlockItem");
 	setAcceptHoverEvents(true);
 	setFlag(QGraphicsItem::ItemIsSelectable);
+	
+	setAcceptDrops(true);
 	//setFlag(QGraphicsItem::ItemIsMovable);
 }
 
@@ -160,4 +162,58 @@ void ExperimentGraphBlockItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 	else
 		this->setZValue(1);
 	update();
+}
+
+void ExperimentGraphBlockItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+	Q_UNUSED(event);
+	return;
+	//qDebug() << "I'm on the main window!";
+	//if (event->mimeData()->hasColor()) {
+	//	event->setAccepted(true);
+	//	dragOver = true;
+	//	update();
+	//}
+	//else {
+	//	event->setAccepted(false);
+	//}
+}
+
+void ExperimentGraphBlockItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+{
+	Q_UNUSED(event);
+	return;
+	//dragOver = false;
+	//update();
+}
+
+void ExperimentGraphBlockItem::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+	//qDebug() << "I'm on the main window!";
+	//dragOver = false;
+	QString sDroppedText = "";
+	if (event->mimeData()->hasText())//hasColor())
+	{
+		
+		sDroppedText = event->mimeData()->text();
+		//ExperimentStructureScene *expStructScene = qobject_cast<ExperimentStructureScene *>(this->scene());
+		ExperimentStructureScene *expStructScene = (ExperimentStructureScene *)(this->scene());
+		if (expStructScene)
+			expStructScene->doSomething();
+	}
+	//	color = qvariant_cast<QColor>(event->mimeData()->colorData());
+	//update();
+}
+
+void ExperimentGraphBlockItem::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
+{
+	if (QLineF(event->screenPos(), event->buttonDownScreenPos(Qt::LeftButton)).length() < 5) //QApplication::startDragDistance())//not enough dragged?
+		return;
+
+	QDrag *drag = new QDrag(event->widget());
+	QMimeData *mime = new QMimeData;
+	mime->setText("Test123");
+	drag->setMimeData(mime);
+	drag->exec();
+	//setCursor(Qt::OpenHandCursor);
 }

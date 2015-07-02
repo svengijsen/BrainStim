@@ -21,6 +21,8 @@
 
 #include <QGraphicsRectItem>
 #include <QPainter>
+#include <QGraphicsSceneMouseEvent>
+#include <QDrag>
 
 #define EXPGRAPHBLOCKITEM_BLOCK_WIDTH					1500
 #define EXPGRAPHBLOCKITEM_BLOCK_HEIGHT					250
@@ -51,6 +53,11 @@ class ExperimentGraphBlockItem : public QGraphicsItem
 	protected:
 		void hoverEnterEvent(QGraphicsSceneHoverEvent *event);
 		void hoverLeaveEvent(QGraphicsSceneHoverEvent *event);
+
+		void dragEnterEvent(QGraphicsSceneDragDropEvent *event) Q_DECL_OVERRIDE;
+		void dragLeaveEvent(QGraphicsSceneDragDropEvent *event) Q_DECL_OVERRIDE;
+		void dropEvent(QGraphicsSceneDragDropEvent *event) Q_DECL_OVERRIDE;
+		void mouseMoveEvent(QGraphicsSceneMouseEvent *event) Q_DECL_OVERRIDE;
 		
 	private:
 		int nBlockWidth;

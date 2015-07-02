@@ -41,6 +41,7 @@ ExperimentGraphLoopItem::ExperimentGraphLoopItem(QGraphicsItem *parent) : QGraph
 	//this->setToolTip("ExperimentGraphLoopItem");//Done by the owner of this class
 	setAcceptHoverEvents(true);
 	setFlag(QGraphicsItem::ItemIsSelectable);
+	setAcceptDrops(true);
 	//setFlag(QGraphicsItem::ItemIsMovable);
 }
 
@@ -208,4 +209,47 @@ void ExperimentGraphLoopItem::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 		this->setZValue(1);
 	update();
 	QGraphicsItem::hoverLeaveEvent(event);
+}
+
+void ExperimentGraphLoopItem::dragEnterEvent(QGraphicsSceneDragDropEvent *event)
+{
+	Q_UNUSED(event);
+	qDebug() << __FUNCTION__;
+	return;
+	
+	//if (event->mimeData()->hasColor()) {
+	//	event->setAccepted(true);
+	//	dragOver = true;
+	//	update();
+	//}
+	//else {
+	//	event->setAccepted(false);
+	//}
+}
+
+void ExperimentGraphLoopItem::dragLeaveEvent(QGraphicsSceneDragDropEvent *event)
+{
+	Q_UNUSED(event);
+	qDebug() << __FUNCTION__;
+	return;
+	//dragOver = false;
+	//update();
+}
+
+void ExperimentGraphLoopItem::dropEvent(QGraphicsSceneDragDropEvent *event)
+{
+	qDebug() << __FUNCTION__;
+	//dragOver = false;
+	QString sDroppedText = "";
+	if (event->mimeData()->hasText())//hasColor())
+	{
+
+		sDroppedText = event->mimeData()->text();
+		//ExperimentStructureScene *expStructScene = qobject_cast<ExperimentStructureScene *>(this->scene());
+		ExperimentStructureScene *expStructScene = (ExperimentStructureScene *)(this->scene());
+		if (expStructScene)
+			expStructScene->doSomething();
+	}
+	//	color = qvariant_cast<QColor>(event->mimeData()->colorData());
+	//update();
 }
