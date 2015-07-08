@@ -8,6 +8,34 @@ function BrainStim_Cleanup()
 {
 	//window.BrainStimInfo = null;
 	BrainStim_CreateArray = null;
+	BrainStim_Information.prototype.GetStrippedFileName = null;
+	BrainStim_Information.prototype.GetDocumentIndex = null;
+	BrainStim_Information.prototype.GetDocumentTitle = null;
+	BrainStim_Information.prototype.GetDocumentHeader = null;
+	BrainStim_Information.prototype.GetCurrentRelease = null;
+	BrainStim_Information.prototype.GetReleaseByIndex = null;
+	BrainStim_Information.prototype.GetReleaseQtVersionByIndex = null;
+	BrainStim_Information.prototype.GetReleaseProductVersionByIndex = null;
+	BrainStim_Information.prototype.GetNumberOfReleases = null;
+	BrainStim_Information.prototype.GetNumberOfComponentsByReleaseIndex = null;
+	BrainStim_Information.prototype.CheckComponentByIndexes = null;
+	BrainStim_Information.prototype.GetLatestComponentReleaseByName = null;
+	BrainStim_Information.prototype.GetLatestComponentIndexByName = null;
+	BrainStim_Information.prototype.GetComponentNameByIndexes = null;
+	BrainStim_Information.prototype.GetComponentStimGLVersionByIndexes = null;
+	BrainStim_Information.prototype.GetComponentVersionByIndexes = null;
+	BrainStim_Information.prototype.GetComponentProductVersionByIndexes = null;
+	BrainStim_Information.prototype.GetComponentMinimalEXMLVersionByIndexes = null;
+	BrainStim_Information.prototype.GetComponentDeviceInterfaceVersionByIndexes = null;
+	BrainStim_Information.prototype.GetComponentExtensionInterfaceVersionByIndexes = null;
+	BrainStim_Information.prototype.GetMainAppCopyrightString = null;
+	BrainStim_Information.prototype.GetMainAppCompanyName = null;
+	BrainStim_Information.prototype.GetMainAppInternalName = null;
+	BrainStim_Information.prototype.GetMainAppPluginDeviceInterfaceString = null;
+	BrainStim_Information.prototype.GetMainAppPluginExtensionInterfaceString = null;
+	BrainStim_Information.prototype = null;
+	BrainStim_Information = null;
+	BrainStim_Cleanup = null;
 }
 
 function BrainStim_CreateArray(length) 
