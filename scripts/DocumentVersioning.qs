@@ -1,3 +1,5 @@
+Include("common.qs");
+
 var sScriptPath = BrainStim.getActiveDocumentFileLocation() + "/";
 var tmpString = new String();
 var sTimeObject = new Date();//gettime() returns Milliseconds since midnight January 1, 1970
@@ -9,41 +11,36 @@ var sDestList = [];
 var changeSet = [];
 var bDoProcess = true;
 var nChangeCounter;
-var BrainStim_CurrentReleaseString_Index = "";
-var BrainStim_LatestCompReleaseString_Index = "";
-var tmpCurrentReleaseString = "";
-var tmpCurrentReleaseString_Array = "";
 var tmpMinimalXMLString = "";
 var tmpMinimalXMLString_Array = "";
-var tmpProductVersionString = "";
-var tmpProductVersionString_Array = "";
 var sComponentName = "";
 var sComponentIndex = "";
 var BrainStimInfo = null;
 
 /////////////////////////CONFIGURATION(BEGIN)////////////////////////////////////////////
-var sSourcePath = "E:/Projects/BrainStim_Documentation/";
-var sDestPath = sSourcePath;
-var jsConfigurationFile = new QFile("../BrainStim/Source/BrainStim/resources/brainStim.js");
-if(configureJSConfiguration())
-{
-	Include(jsConfigurationFile.fileName());
-	BrainStimInfo = new BrainStim_Information();
-	BrainStim_CurrentReleaseString_Index = BrainStimInfo.GetNumberOfReleases() - 1;
-	tmpCurrentReleaseString = BrainStimInfo.GetCurrentRelease();
-	tmpCurrentReleaseString_Array = tmpCurrentReleaseString.split(".");
-	tmpProductVersionString = BrainStimInfo.GetReleaseProductVersionByIndex(BrainStim_CurrentReleaseString_Index);
-	tmpProductVersionString_Array = tmpProductVersionString.split(".");
-}
-var sMainAuthor		= "Sven Gijsen";
-var sCurrentAuthoringMonth = "Juli 2015";
+var sSourcePath 			= "../";
+var sDestPath 				= sSourcePath;
+var sMainAuthor			= "Sven Gijsen";
+var sCurrentAuthoringMonth 	= "Juli 2015";
+var sComment 				= "Please do not edit this line manually, see DocumentVersioning.qs (" + CreateTimeStamp(sTimeObject) + ")";
+var sHTMLComment  		= "<!-- " + sComment + ", version " + BrainStim_Settings_CurrentBrainStimReleaseString + "-->"
 
-var sComment 		= "Please do not edit this line manually, see BinaryVersioning.qs (" + CreateTimeStamp(sTimeObject) + ")";
-var sHTMLComment  	= "<!-- " + sComment + ", version " + tmpCurrentReleaseString + "-->"
+sSourceList.push(sSourcePath + "js/BrainStim.js");
+sDestList.push(sSourceList[sSourceList.length-1]);
+	//changeSet = CreateArray(sSourceList.length,2,0);
+	changeSet[sSourceList.length-1] = CreateArray(2,0);
+	changeSet[sSourceList.length-1][0][0] = "var currentBrainStimRelease = ";
+	changeSet[sSourceList.length-1][1][0] = changeSet[sSourceList.length-1][0][0] + "'" + BrainStim_Settings_CurrentBrainStimReleaseString + "'";
+
+sSourceList.push(sSourcePath + "MainDocumentation.qhcp");
+sDestList.push(sSourceList[sSourceList.length-1]);
+	//changeSet = CreateArray(sSourceList.length,2,0);
+	changeSet[sSourceList.length-1] = CreateArray(2,0);
+	changeSet[sSourceList.length-1][0][0] = "<title>";
+	changeSet[sSourceList.length-1][1][0] = "\t" + changeSet[sSourceList.length-1][0][0] + "BrainStim v" + BrainStim_Settings_CurrentBrainStimReleaseString + "</title>" + sHTMLComment;
 
 //sSourceList.push(sSourcePath + "Tutorials/6_RetinoTopicMappingOutput/6_RetinoTopicMappingOutput.html");
 //sDestList.push(sSourceList[sSourceList.length-1]);
-	//changeSet = CreateArray(sSourceList.length,2,0);
 //	changeSet[sSourceList.length-1] = CreateArray(2,0);
 //	changeSet[sSourceList.length-1][0][0] = "<div class=\"doctitle\"><title>";
 //	changeSet[sSourceList.length-1][1][0] = changeSet[sSourceList.length-1][0][0] + "Retinotopic Mapping output files Tutorial" + "</title></div>" + sHTMLComment;
@@ -101,21 +98,6 @@ CleanupScript();
 
 /////Function Definitions/////
 function tr(s) { return s; }
-
-function configureJSConfiguration()
-{
-	if(jsConfigurationFile.exists() == false)
-	{
-		jsConfigurationFile.setFileName(getFileName());
-		if(jsConfigurationFile.exists() == false)
-		{
-			Log("Javascript configuration file not found.\n");
-			bDoProcess = false;
-			return false;
-		}
-	}
-	return true;
-}
 
 function stringToHTMLCompatibleCode(sInput)
 {
@@ -227,12 +209,10 @@ function getFileName()
 
 function CleanupScript()
 {
-	jsConfigurationFile = null;
 	sSourceList = null;
 	sDestList = null;
 	sTimeObject = null;
 	CreateTimeStamp = null;
-	configureJSConfiguration = null;
 	tmpString = null;
 	changeSet= null;
 	ProcessInFiles = null;

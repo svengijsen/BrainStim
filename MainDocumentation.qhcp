@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<QHelpCollectionProject version="1.0">
+    <assistant>
+	<title>BrainStim v1.0.0.1</title><!-- Please do not edit this line manually, see DocumentVersioning.qs (1568154054), version 1.0.0.1-->
+        <applicationIcon>../images/brainstim.png</applicationIcon>
+        <cacheDirectory>SvenGijsen/BrainStim</cacheDirectory>
+        <startPage>qthelp://com.svengijsen.brainstim/doc/index.html</startPage>
+        <aboutMenuText>
+            <text>About BrainStim</text>
+        </aboutMenuText>
+        <aboutDialog>
+            <file>../additional/about.txt</file>
+            <icon>../images/brainstim.png</icon>
+        </aboutDialog>
+        <enableDocumentationManager>false</enableDocumentationManager>
+        <enableAddressBar>false</enableAddressBar>
+        <enableFilterFunctionality>false</enableFilterFunctionality>
+    </assistant>
+    <docFiles>
+        <generate>
+            <file>
+                <input>MainDocumentation.qhp</input>
+                <output>MainDocumentation.qch</output>
+                </file>
+            </generate>
+        <register>
+            <file>MainDocumentation.qch</file>
+            </register>
+        </docFiles>
+    </QHelpCollectionProject>

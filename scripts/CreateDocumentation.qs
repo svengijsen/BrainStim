@@ -1,3 +1,5 @@
+Include("common.qs");
+
 var tmpString;
 var InstallProcess = new QProcess();
 var tmpByteArray = new QByteArray();
@@ -10,10 +12,9 @@ var bFileProccessed;
 var nCounter;
 var bSkipStep;
 
-var sQTDirWin32 = tr("E:\\Libraries\\Qt5.3.2_32bit\\5.3\\msvc2013_opengl\\");
-var sQTDirx64 = tr("E:\\Libraries\\Qt5.3.2_64bit\\5.3\\msvc2013_64_opengl\\");
 var sMainDocName = tr("MainDocumentation");
 var sScriptPath = BrainStim.getActiveDocumentFileLocation() + "/";
+var sConfFilesPath = sScriptPath + "../";
 var sBinairyPath;
 
 var sInstallerAppName = tr("BrainStim");//BrainStim
@@ -21,10 +22,7 @@ var sInstallerConfiguration = tr("win32");//win32 or x64
 var sInstallerVersion = tr("1.0.0.1");//<Major>.<Minor>.<Build>.<Revision>
 var sInstallerPlatform = tr("Windows");
 
-//var sQtDirectory_default = tr("C:/Qt/4.8.0");
-//var sQtDirectory = sQtDirectory_default;
-var sBrainStimProjectDirectory_default = tr("E:\\Projects\\BrainStim");
-var sBrainStimProjectDirectory = sBrainStimProjectDirectory_default;
+var sBrainStimProjectDirectory = BrainStim_Settings_ProjectDirectory;
 
 InstallProcess.setProcessChannelMode(QProcess.MergedChannels);
 
@@ -142,7 +140,7 @@ function DeleteFile(sPath)
 
 function ExecuteBinairy(binPath, argList)
 {
-	InstallProcess.start(binPath,argList,QIODevice.ReadWrite);//sQTDirWin32 + "bin/qhelpgenerator", tmpStringList);
+	InstallProcess.start(binPath,argList,QIODevice.ReadWrite);// + "bin/qhelpgenerator", tmpStringList);
 	var sCommand = binPath;
 	for(var i=0;i<argList.length;i++)
 		sCommand = sCommand + " " + argList[i];
@@ -165,6 +163,7 @@ ConnectDisconnectScriptFunctions(true);
 bDoCleanup = false;
 sBinairySteps = 9;
 sScriptPath = ToWindowsPath(sScriptPath);//Important!
+sConfFilesPath = ToWindowsPath(sConfFilesPath);//Important!
 //sQtDirectory = getString("Choose the Qt directory","Qt directory:",sQtDirectory_default);
 //Log("Qt directory = " + sQtDirectory);
 sBrainStimProjectDirectory = getString("Choose the BrainStim project directory","BrainStim project directory:",sBrainStimProjectDirectory);
@@ -178,31 +177,31 @@ for(nCounter=1;nCounter<=sBinairySteps;nCounter++)
 	if (nCounter==1)
 	{
 		bSkipStep = true;//see below for alternative code!
-		DeleteFile(sScriptPath + sMainDocName + ".qhc");
+		DeleteFile(sConfFilesPath + sMainDocName + ".qhc");
 	}
 	else if (nCounter==2)
 	{
 		bSkipStep = true;//see below for alternative code!
-		DeleteFile(sScriptPath + sMainDocName + ".qch");
+		DeleteFile(sConfFilesPath + sMainDocName + ".qch");
 	}
 	else if(nCounter==3)
 	{
 		//qhelpgenerator doc.qhp -o doc.qch
 		tmpStringList = [];//Reset list
-		tmpStringList[0] = sScriptPath + sMainDocName + ".qhp";
+		tmpStringList[0] = sConfFilesPath + sMainDocName + ".qhp";
 		tmpStringList[1] = "-o"
-		tmpStringList[2] = sScriptPath + sMainDocName + ".qch";//	Log(tmpStringList.length);
-		sBinairyPath = sQTDirWin32 + "bin/qhelpgenerator";
+		tmpStringList[2] = sConfFilesPath + sMainDocName + ".qch";//	Log(tmpStringList.length);
+		sBinairyPath = BrainStim_Settings_QTDirWin32 + "bin/qhelpgenerator";
 		bSkipStep = true;
 	}
 	else if (nCounter==4)
 	{
 	//	qcollectiongenerator mycollection.qhcp -o mycollection.qhc
 		tmpStringList = [];//Reset list
-		tmpStringList[0] = sScriptPath + sMainDocName + ".qhcp";
+		tmpStringList[0] = sConfFilesPath + sMainDocName + ".qhcp";
 		tmpStringList[1] = "-o"
-		tmpStringList[2] = sScriptPath + sMainDocName + ".qhc";
-		sBinairyPath = sQTDirWin32 + "bin/qcollectiongenerator";
+		tmpStringList[2] = sConfFilesPath + sMainDocName + ".qhc";
+		sBinairyPath = BrainStim_Settings_QTDirWin32 + "bin/qcollectiongenerator";
 	}
 	else if (nCounter==5)
 	{
@@ -217,8 +216,8 @@ for(nCounter=1;nCounter<=sBinairySteps;nCounter++)
 	else if (nCounter==7)
 	{
 		tmpStringList = [];//Reset list
-		tmpStringList[0] = sScriptPath + sMainDocName + ".qhc";//Xcopy only works with "\" for directories!
-		tmpStringList[1] = sBrainStimProjectDirectory + "\\Install\\documents\\";
+		tmpStringList[0] = sConfFilesPath + sMainDocName + ".qhc";//Xcopy only works with "\" for directories!
+		tmpStringList[1] = ToWindowsPath(sBrainStimProjectDirectory) + "\\Install\\documents\\";
 		tmpStringList[2] = "/Y";
 		tmpStringList[3] = "/F";
 		sBinairyPath = "xcopy";
@@ -226,8 +225,8 @@ for(nCounter=1;nCounter<=sBinairySteps;nCounter++)
 	else if (nCounter==8)
 	{
 		tmpStringList = [];//Reset list
-		tmpStringList[0] = sScriptPath + sMainDocName + ".qch";
-		tmpStringList[1] = sBrainStimProjectDirectory + "\\Install\\documents\\";
+		tmpStringList[0] = sConfFilesPath + sMainDocName + ".qch";
+		tmpStringList[1] = ToWindowsPath(sBrainStimProjectDirectory) + "\\Install\\documents\\";
 		tmpStringList[2] = "/Y";
 		tmpStringList[3] = "/F";
 		sBinairyPath = "xcopy";

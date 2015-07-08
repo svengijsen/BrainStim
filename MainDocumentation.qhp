@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- This file contains the files and structure -->
+<QtHelpProject version="1.0">
+    <namespace>com.trolltech.brainstim</namespace>
+    <virtualFolder>doc</virtualFolder>
+    <filterSection>
+        <toc>
+            <section title="BrainStim" ref="index.html">            
+<!--
+								<section title="Getting Started Guide" ref="./Tutorials/GettingStarted/GettingStartedGuide.html"></section>
+								<section title="Examples and Tutorials" ref="./Tutorials/index.html">
+									<section title="Retinotopic Mapping output files" ref="./Tutorials/6_RetinoTopicMappingOutput/6_RetinoTopicMappingOutput.html"></section>
+									<section title="NeuroFeedback Tutorial (with TBVExchanger plugin)" ref="./Tutorials/15_NeuroFeedBack/15_NeuroFeedBack.html"></section>				
+								</section>       
+
+		            <section title="Plugins" ref="./References/Plugins/PluginReference.html">
+		                <section title="ExperimentManager Plugin" ref="./References/Plugins/ExperimentManagerPlugin/ExperimentManagerPlugin.html">
+											<section title="ExperimentManager References" ref="./References/Script/ExperimentManagerPlugin/Doxygen/index.html"></section>
+										</section>
+										<section title="ParallelPortDevice Plugin" ref="./References/Plugins/ParallelPortDevicePlugin/ParallelPortDevicePlugin.html">
+											<section title="ParallelPortDevice References" ref="./References/Script/ParallelPortDevicePlugin/Doxygen/index.html"></section>
+										</section>
+										<section title="USBHIDDevice Plugin" ref="./References/Plugins/USBHIDDevicePlugin/USBHIDDevicePlugin.html">
+											<section title="USBHIDDevice References" ref="./References/Script/USBHIDDevicePlugin/Doxygen/index.html"></section>
+										</section>										
+										<section title="SerialPortDevice Plugin" ref="./References/Plugins/SerialPortDevicePlugin/SerialPortDevicePlugin.html">
+											<section title="SerialPortDevice References" ref="./References/Script/SerialPortDevicePlugin/Doxygen/index.html"></section>
+										</section>								
+										<section title="FireBirdClient Plugin" ref="./References/Plugins/FireBirdClientPlugin/FireBirdClientPlugin.html">
+											<section title="FireBirdClient References" ref="./References/Script/FireBirdClientPlugin/Doxygen/index.html"></section>
+										</section>
+										<section title="KeyBoardDevice Plugin" ref="./References/Plugins/KeyBoardDevicePlugin/KeyBoardDevicePlugin.html">
+											<section title="KeyBoardDevice References" ref="./References/Script/KeyBoardDevicePlugin/Doxygen/index.html"></section>
+										</section>
+										<section title="PiezoStimDevice Plugin" ref="./References/Plugins/PiezoStimDevicePlugin/PiezoStimDevicePlugin.html">
+											<section title="PiezoStimDevice References" ref="./References/Script/PiezoStimDevicePlugin/Doxygen/index.html"></section>
+										</section>
+										<section title="TBVExchanger Plugin" ref="./References/Plugins/TBVExchangerPlugin/TBVExchangerPlugin.html">
+											<section title="TBVExchanger References" ref="./References/Script/TBVExchangerPlugin/Doxygen/index.html"></section>
+										</section>
+										<section title="BrainStim QML Extensions Plugin" ref="./References/Plugins/BrainStim_QMLExtensions/BrainStim_QMLExtensions.html">
+											<section title="BrainStim QML Extensions References" ref="./References/QtQuick/BrainStim_QMLExtensions/Doxygen/index.html"></section>
+										</section>
+										<section title="TCPNetworkServer Plugin" ref="./References/Plugins/TCPNetworkServerPlugin/TCPNetworkServerPlugin.html">
+											<section title="TCPNetworkServer References" ref="./References/Script/TCPNetworkServerPlugin/Doxygen/index.html"></section>
+										</section>																																																		
+		            </section>
+		            <section title="Scripting" ref="./References/Script/ScriptingReference.html">
+									<section title="BrainStim Main Application" ref="./References/Script/BrainStimMainApp/Doxygen/class_main_window.html"></section>		            
+									<section title="ExperimentManager Script Class" ref="./References/Script/ExperimentManagerPlugin/Doxygen/class_experiment_manager.html"></section>
+									<section title="ParallelPortDevice Script Class" ref="./References/Script/ParallelPortDevicePlugin/Doxygen/class_parallel_port.html"></section>
+									<section title="USBHIDDevice Script Class" ref="./References/Script/USBHIDDevicePlugin/Doxygen/class_u_s_b_h_i_d_device.html"></section>
+									<section title="SerialPortDevice Script Class" ref="./References/Script/SerialPortDevicePlugin/Doxygen/class_serial_port_device.html"></section>
+									<section title="KeyBoardDevice Script Class" ref="./References/Script/KeyBoardDevicePlugin/Doxygen/class_key_board_capture.html"></section>
+		              <section title="FireBirdClient Script Class" ref="./References/Script/FireBirdClientPlugin/Doxygen/class_firebird_client.html"></section>
+			            <section title="PiezoStimDevice Script Class" ref="./References/Script/PiezoStimDevicePlugin/Doxygen/class_piezo_stim_device.html"></section>
+			            <section title="TBVExchanger Script Class" ref="./References/Script/TBVExchangerPlugin/Doxygen/class_t_b_v_exchanger.html"></section>
+			            <section title="TCPNetworkServer Script Class" ref="./References/Script/TCPNetworkServerPlugin/Doxygen/class_t_c_p_network_server.html"></section>
+		            </section> 		            
+		            <section title="QML" ref="./References/QtQuick/QMLExtensionsReference.html">
+									<section title="QML Extensions Class references" ref="./References/QtQuick/BrainStim_QMLExtensions/Doxygen/index.html"></section>
+		            </section>              
+		            <section title="Development" ref="./References/Developers/Developers.html">            
+										<section title="Pre Development Setup" ref="./Manuals/PreBuildDevelopmentSetup/PreBuildDevelopmentSetup.html"></section>
+										<section title="Extension Plugin Template" ref="./References/Plugins/ExtensionPluginTemplate/ExtensionPluginTemplate.html"></section>
+		            </section>
+		            
+-->
+		            
+            </section>       
+        </toc>
+        <keywords>
+            <keyword name="BrainStim" ref="index.html"/>
+<!--
+            <keyword name="Getting Started Guide" ref="./Tutorials/GettingStarted/GettingStartedGuide.html"/>            
+	<keyword name="Tutorials" ref="./Tutorials/index.html"/>						
+	<keyword name="Examples" ref="./Tutorials/index.html"/>
+            
+            <keyword name="History" ref="history.html"/>
+            <keyword name="License" ref="index.html"/>
+            <keyword name="Develop" ref="./References/Developers/Developers.html"/>
+
+            <keyword name="Scripting Reference" ref="./References/Script/ScriptingReference.html"/>
+            <keyword name="Plugin Reference" ref="./References/Plugins/PluginReference.html"/>
+            <keyword name="QML Plugin Reference" ref="./References/QtQuick/QMLExtensionsReference.html"/>
+            <keyword name="Development Setup" ref="././Manuals/PreBuildDevelopmentSetup/PreBuildDevelopmentSetup.html"/>
+            <keyword name="Experiment Manager" ref="./References/Plugins/ExperimentManagerPlugin/ExperimentManagerPlugin.html"/>
+            <keyword name="Parallel Port" ref="./References/Plugins/ParallelPortDevicePlugin/ParallelPortDevicePlugin.html"/>
+            <keyword name="USBHID Device" ref="./References/Plugins/USBHIDDevicePlugin/USBHIDDevicePlugin.html"/>
+						<keyword name="KeyBoard Device" ref="./References/Plugins/KeyBoardDevicePlugin/KeyBoardDevicePlugin.html"/>						
+						<keyword name="SerialPort Device" ref="./References/Plugins/SerialPortDevicePlugin/SerialPortDevicePlugin.html"/>
+						<keyword name="FireBird Client" ref="./References/Plugins/FireBirdClientPlugin/FireBirdClientPlugin.html"/>
+						<keyword name="PiezoStim Device" ref="./References/Plugins/PiezoStimDevicePlugin/PiezoStimDevicePlugin.html"/>
+						<keyword name="TBV Exchanger" ref="./References/Plugins/TBVExchangerPlugin/TBVExchangerPlugin.html"/>
+						<keyword name="TCP Network" ref="./References/Plugins/TCPNetworkServerPlugin/TCPNetworkServerPlugin.html"/>
+						<keyword name="Plugin Template" ref="./References/Plugins/ExtensionPluginTemplate/ExtensionPluginTemplate.html"/>
+						<keyword name="QML Extension" ref="./References/Plugins/BrainStim_QMLExtensions/BrainStim_QMLExtensions.html"/>
+            <keyword name="QML Extensions" ref="./References/QtQuick/BrainStim_QMLExtensions/Doxygen/index.html"/>            
+            <keyword name="ExperimentManager Script" ref="./References/Script/ExperimentManagerPlugin/Doxygen/class_experiment_manager.html"/>
+            <keyword name="ParallelPort Script" ref="./References/Script/ParallelPortDevicePlugin/Doxygen/class_parallel_port.html"/>
+            <keyword name="SerialPort Script" ref="./References/Script/SerialPortDevicePlugin/Doxygen/class_serial_port_device.html"/>
+            <keyword name="USBHIDDevice Script" ref="./References/Script/USBHIDDevicePlugin/Doxygen/class_u_s_b_h_i_d_device.html"/>
+            <keyword name="KeyBoardDevice Script" ref="./References/Script/KeyBoardDevicePlugin/Doxygen/class_key_board_capture.html"/>            
+						<keyword name="Firebird Script" ref="./References/Script/FireBirdClientPlugin/Doxygen/class_firebird_client.html"/>
+						<keyword name="PiezoStim Script" ref="./References/Script/PiezoStimDevicePlugin/Doxygen/class_piezo_stim_device.html"/>
+						<keyword name="TBV Exchanger Script" ref="./References/Script/TBVExchangerPlugin/Doxygen/class_t_b_v_exchanger.html"/>
+						<keyword name="TCP Network Server Script" ref="./References/Script/TCPNetworkServerPlugin/Doxygen/class_t_c_p_network_server.html"/>
+
+-->
+
+        </keywords>
+        <files>
+         <file>css/*</file>
+         <file>additional/*</file>
+         <file>fonts/*</file>
+         <file>images/*</file>
+         <file>js/*</file>
+         <file>favicon.ico</file>
+         
+		     <file>index.html</file>
+<!-- 
+            <file>bootstrap-3.3.5-dist/index.html</file>
+        
+            <file>js/testjs.js</file>
+            
+            <file>bootstrap-3.3.5-dist/theme.css</file>
+            <file>bootstrap-3.3.5-dist/js/bootstrap.js</file>
+            <file>bootstrap-3.3.5-dist/js/bootstrap.min.js</file>
+            <file>bootstrap-3.3.5-dist/js/npm.js</file>
+            <file>bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.eot</file>
+            <file>bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.svg</file>
+            <file>bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.ttf</file>
+            <file>bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.woff</file>
+            <file>bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.woff2</file>
+            <file>bootstrap-3.3.5-dist/css/bootstrap.css</file>
+            <file>bootstrap-3.3.5-dist/css/bootstrap.css.map</file>
+            <file>bootstrap-3.3.5-dist/css/bootstrap.min.css</file>
+            <file>bootstrap-3.3.5-dist/css/bootstrap-theme.css</file>
+            <file>bootstrap-3.3.5-dist/css/bootstrap-theme.css.map</file>
+            <file>bootstrap-3.3.5-dist/css/bootstrap-theme.min.css</file> 
+            <file>bootstrap-3.3.5-dist/assets/brand/bootstrap-outline.svg</file>
+            <file>bootstrap-3.3.5-dist/assets/brand/bootstrap-punchout.svg</file>
+            <file>bootstrap-3.3.5-dist/assets/brand/bootstrap-solid.svg</file>
+            <file>bootstrap-3.3.5-dist/assets/css/docs.min.css</file>
+            <file>bootstrap-3.3.5-dist/assets/css/src/docs.css</file>
+            <file>bootstrap-3.3.5-dist/assets/css/src/pygments-manni.css</file>
+            <file>bootstrap-3.3.5-dist/assets/flash/ZeroClipboard.swf</file>
+            <file>bootstrap-3.3.5-dist/assets/img/components.png</file>
+            <file>bootstrap-3.3.5-dist/assets/img/devices.png</file>
+            <file>bootstrap-3.3.5-dist/assets/img/sass-less.png</file>
+            <file>bootstrap-3.3.5-dist/assets/js/customize.min.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/docs.min.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/ie-emulation-modes-warning.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/ie10-viewport-bug-workaround.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/ie8-responsive-file-warning.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/raw-files.min.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/src/application.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/src/customizer.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/vendor/Blob.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/vendor/FileSaver.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/vendor/ZeroClipboard.min.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/vendor/anchor.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/vendor/autoprefixer.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/vendor/holder.min.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/vendor/jszip.min.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/vendor/less.min.js</file>
+            <file>bootstrap-3.3.5-dist/assets/js/vendor/uglify.min.js</file>
+
+            <file>Tutorials/GettingStarted/GettingStartedGuide.html</file>            
+	     <file>Tutorials/index.html</file>
+		<file>Tutorials/*.*</file>
+		<file>Tutorials/images/*.png</file>
+		<file>Tutorials/images/*.gif</file>
+		<file>Tutorials/6_RetinoTopicMappingOutput/*.*</file>
+		<file>Tutorials/6_RetinoTopicMappingOutput/images/*.png</file>
+		<file>Tutorials/6_RetinoTopicMappingOutput/images/*.gif</file>
+		<file>Tutorials/15_NeuroFeedBack/*.*</file>
+		<file>Tutorials/15_NeuroFeedBack/images/*.png</file>
+		<file>Tutorials/15_NeuroFeedBack/images/*.gif</file>	
+
+		<file>css/*.css</file>
+		<file>js/*.js</file>
+		<file>google-code-prettify/*.*</file>
+		<file>Images/*.png</file>
+		<file>Images/*.gif</file>	
+            
+
+            
+            <file>history.html</file>
+            <file>Additional/about.txt</file>
+            <file>References/Developers/Developers.html</file>            
+            <file>References/Script/ScriptingReference.html</file>
+            <file>References/Plugins/PluginReference.html</file>
+            <file>References/QtQuick/QMLExtensionsReference.html</file>
+
+           
+						<file>Manuals/PreBuildDevelopmentSetup/PreBuildDevelopmentSetup.html</file>            
+            <file>References/Plugins/ExperimentManagerPlugin/ExperimentManagerPlugin.html</file>
+            <file>References/Plugins/ExperimentManagerPlugin/images/*.*</file>
+					  <file>References/Script/ExperimentManagerPlugin/Doxygen/*.*</file>
+						<file>References/Plugins/ParallelPortDevicePlugin/ParallelPortDevicePlugin.html</file>
+            <file>References/Plugins/ParallelPortDevicePlugin/images/*.*</file>
+					  <file>References/Script/ParallelPortDevicePlugin/Doxygen/*.*</file>
+						<file>References/Plugins/USBHIDDevicePlugin/USBHIDDevicePlugin.html</file>
+            <file>References/Plugins/USBHIDDevicePlugin/images/*.*</file>
+					  <file>References/Script/USBHIDDevicePlugin/Doxygen/*.*</file>					  
+						<file>References/Plugins/SerialPortDevicePlugin/SerialPortDevicePlugin.html</file>
+            <file>References/Plugins/SerialPortDevicePlugin/images/*.*</file>
+					  <file>References/Script/SerialPortDevicePlugin/Doxygen/*.*</file>		
+						<file>References/Plugins/KeyBoardDevicePlugin/KeyBoardDevicePlugin.html</file>
+            <file>References/Plugins/KeyBoardDevicePlugin/images/*.*</file>
+					  <file>References/Script/KeyBoardDevicePlugin/Doxygen/*.*</file>	
+						<file>References/Plugins/FireBirdClientPlugin/FireBirdClientPlugin.html</file>
+            <file>References/Plugins/FireBirdClientPlugin/images/*.*</file>
+					  <file>References/Script/FireBirdClientPlugin/Doxygen/*.*</file>	
+						<file>References/Plugins/PiezoStimDevicePlugin/PiezoStimDevicePlugin.html</file>
+            <file>References/Plugins/PiezoStimDevicePlugin/images/*.*</file>
+					  <file>References/Script/PiezoStimDevicePlugin/Doxygen/*.*</file>	
+						<file>References/Plugins/TBVExchangerPlugin/TBVExchangerPlugin.html</file>
+            <file>References/Plugins/TBVExchangerPlugin/images/*.*</file>
+					  <file>References/Script/TBVExchangerPlugin/Doxygen/*.*</file>	
+						<file>References/Plugins/TCPNetworkServerPlugin/TCPNetworkServerPlugin.html</file>
+            <file>References/Plugins/TCPNetworkServerPlugin/images/*.*</file>
+					  <file>References/Script/TCPNetworkServerPlugin/Doxygen/*.*</file>	
+						<file>References/Plugins/BrainStim_QMLExtensions/BrainStim_QMLExtensions.html</file>
+            <file>References/Plugins/BrainStim_QMLExtensions/images/*.*</file>
+					  <file>References/QtQuick/BrainStim_QMLExtensions/Doxygen/*.*</file>						  					  					  					  					  					  			  
+						<file>References/Plugins/ExtensionPluginTemplate/ExtensionPluginTemplate.html</file>
+						<file>References/Script/BrainStimMainApp/Doxygen/*.*</file>	
+
+
+						
+-->								
+            </files>
+        </filterSection>
+    </QtHelpProject>

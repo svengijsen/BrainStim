@@ -1,4 +1,7 @@
 User-agent: Googlebot
 
 Disallow: /scripts/
+Disallow: /bootstrap_theme_example.html
 Disallow: /*.qs$
+Disallow: /*.qhp$
+Disallow: /*.qhcp$
