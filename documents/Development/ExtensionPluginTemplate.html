@@ -1,0 +1,157 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<title>Extension Plug-in Template v1.0</title>
+<!--doc-version-title-end-->
+</head>
+<body>
+    <div class="container">
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Extension Plug-in Template</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+        <h2>Introduction</h2>
+        <p>
+            This document describes how you can create and configure your own custom Plug-in for BrainStim using Visual Studio 2012.<br />
+            Plug-in may vary in the following ways:
+        </p>
+        <ul>
+            <li>
+                Type of BrainStim Plug-in, there are currently two types of BrainStim Plug-ins available, namely:
+                <ul>
+                    <li>  <strong>Extension</strong> Plug-ins, for extending the BrainStim framework</li>
+                    <li><strong>Device</strong> Plug-ins, for writing a Plug-in that creates an interface between BrainStim and a peripheral hardware device.</li>
+                </ul>
+            </li>
+            <li>
+                Static or Dynamic:
+                <ul>
+                    <li><strong>Static</strong>, a static Plug-in consists of routines that are compiled and linked directly into the main BrainStim program. When you compile the main BrainStim program that uses a static library, all the functionality of the static library becomes part of the BrainStim executable. On Windows, static libraries typically have a .lib extension, whereas on Linux, static libraries typically have an .a (archive) extension. One advantage of static libraries is that you only have to distribute the executable in order for users to run your Plug-In. Because the library becomes part of your program, this ensures that the right version of the library is always used with your program. Also, because static libraries become part of your program, you can use them just like functionality you?ve written for your own program. On the downside, because a copy of the library becomes part of every executable that uses it, this can cause a lot of wasted space. Static libraries also can not be upgraded easy ? to update the library, the entire executable needs to be replaced. For this reason only Plug-ins that can?t be seen as a separate module from BrainStim and are extensively tested are implemented statically as a Plug-in.</li>
+                    <li>
+                        <strong>Dynamic</strong>, a dynamic Plug-in consists of routines that can be loaded into a program at run time during start-up. When you compile a program that uses a dynamic library, the library does not become part of your executable ? it remains as a separate unit. On Windows, dynamic libraries typically have a .dll (dynamic link library) extension, whereas on Linux, dynamic libraries typically have a .so (shared object) extension. One advantage of dynamic libraries is that many programs can share one copy, which saves space. Perhaps a bigger advantage is that the dynamic library can be upgraded to a newer version without replacing all of the executables that use it.<br />
+                        Because we want to separate BrainStim from the Plug-ins, to keep everything modular, we don?t define and explicitly import these Plug-ins but they are automatically detected (inside the Plug-in directory) and automatically defined and loaded during start-up without explicitly defining them in the main BrainStim source code. After they are loaded the User Interface can be accessed trough BrainStim and some functionality is automatically linked to the script environment.
+                    </li>
+                </ul>
+            </li>
+            <li>  Build Platform, you can build your Plug-in for the <strong>32 or 64 bit platform</strong></li>
+        </ul>
+        <h2> Requirements</h2>
+        <p>  Please make sure you have the following tools installed:</p>
+        <ul>
+            <li>  Visual Studio 2012 (C++) 32 and/or 64 bit version</li>
+            <li>QT 5.1.0 (Win32 and/or x64 compiled version), the below example expects these Qt installations to be located at &quot;C:\Qt\5.1.0\win32&quot; and &quot;C:\Qt\5.1.0\x64&quot;</li>
+            <li>  A clone of the current BrainStim source branch located in a BrainStim source directory.</li>
+        </ul>
+        <h2>  Custom Plug-in Setup</h2>
+        <p>  After all the required tools are installed and correctly configured you can start with the following setup which describes how you can create and configure you own dynamic Extension Plug-in for BrainStim using the Extension Plug-in template.</p>
+        <ol>
+            <li>  Copy and Paste the folder &quot;ExtensionPluginTemplate&quot; (from BrainStim source directory/Source/Plug-ins/),  rename the new pasted folder to your own &lt;ExtensionName&gt; name (do not use blank spaces for this name!).</li>
+            <li>
+                Replace the substring &quot;_extensionname_&quot; from all file/(folder)-names with the choosen &lt;ExtensionName&gt; from the previous step.<br />
+                i.e. _extensionname__plugin_global.h becomes Retinotopic_Mapping_plugin_global.h if &lt;ExtensionName&gt; = &quot;Retinotopic_Mapping&quot;.
+            </li>
+            <li>Replace all substrings &quot;_extensionname_&quot; found in the content of all files to &lt;ExtensionName&gt;, you can use a text editor like UltraEdit  to quickly ?replace in files? to do this quickly, select include sub-folders!</li>
+            <li>Replace all substrings &quot;_authorname_&quot; found in the content of all files to &lt;AuthorName&gt;.</li>
+            <li>Open the <em>defines.h</em> file and further configure your custom Plug-in.</li>
+        </ol>
+        <h3>  Device Type Plug-in</h3>
+        <p>  If you are planning to build a Device type plug-in instead of an Extension type plug-in you need to perform the following additional steps:</p>
+        <ol>
+            <li>
+                Change the class signature<br />
+                class &lt;ExtensionName&gt;Plugin : public QObject, ExtensionInterface to<br />
+                class &lt;ExtensionName&gt;Plugin : public QObject, DeviceInterface in the file _extensionname_Plugin.h
+            </li>
+            <li>
+                Change the macros<br />
+                Q_PLUGIN_METADATA(IID &quot;BrainStim.Plugins.Extensions&quot; PLUGIN_JSON_FILENAME) to Q_PLUGIN_METADATA(IID &quot;BrainStim.Plugins.Devices&quot; &quot;_extensionname_.json&quot;) in the file _extensionname_Plugin.h<br />
+                Q_INTERFACES(ExtensionInterface) to Q_INTERFACES(DeviceInterface) in the file _extensionname_Plugin.h
+            </li>
+        </ol>
+        <h2>  Static Plug-in Setup</h2>
+        <p>  If you are planning to build a Static plug-in linked inside BrainStim then you need to perform the following additional steps:</p>
+        <ol>
+            <li>
+                From the custom Plug-in project:
+                <ol>
+                    <li>change the projects configuration type to &quot;Static Library (.lib)&quot;</li>
+                    <li>
+                        change the Preprocessor definitions:
+                        <ol>
+                            <li>Remove the QT_DLL</li>
+                            <li>Add the QT_STATICPLUGIN</li>
+                        </ol>
+                    </li>
+                    <li>
+                        Change the Library output file to:<br />
+                        $(ProjectDir)..\..\..\Build_VS2010\$(ProjectName)\$(PlatformName)\$(ConfigurationName)\$(ProjectName)_$(PlatformName)_$(ConfigurationName).lib
+                    </li>
+                    <li>
+                        Change the Post Build event to(or only the below line):<br />
+                        xcopy &quot;$(TargetPath)&quot; &quot;$(ProjectDir)..\..\..\StaticLibs\$(PlatformName)\&quot; /i /d /y
+                    </li>
+                </ol>
+            </li>
+            <li>
+                From the BrainStim project
+                <ol>
+                    <li>Add the following to the Linker-&gt;Input-&gt;Additional Dependencies:<br />&lt;ExtensionName&gt;plugin_$(PlatformName)_$(ConfigurationName).lib (replace &lt;ExtensionName&gt; with your own name!)</li>
+                    <li>
+                        Add the following include to the mainwindow.cpp document:<br />
+                        #include &quot;..\Plugins\&lt;ExtensionName&gt;\&lt;MainHeaderFile&gt;.h&quot;        (replace &lt;ExtensionName&gt; and &lt;MainHeaderFile&gt; with your own name!)
+                    </li>
+                    <li>
+                        Add the following line to the <br />
+                        void MainWindow::setupDynamicPluginMenus() procedure (just before the line &quot;foreach (QObject *plugin, QPluginLoader::staticInstances())&quot;:<br />
+                        Q_IMPORT_PLUGIN(&lt;ExtensionName&gt;plugin)        (replace &lt;ExtensionName&gt; with your own name!)
+                    </li>
+                </ol>
+            </li>
+            <li>  You might also need to change the solution project dependencies, BrainStim should the depend on the new library, this to make sure that the new library is build first.</li>
+            <li>  Also make BrainStim as the start-up build project!</li>
+            <li>  Validate the static load through the help-&gt;about BrainStim menu</li>
+        </ol>
+        <h2>  Testing</h2>
+        <p>To test the new custom Plug-in you can open the &lt;ExtensionName&gt;Plugin.sln solution with Visual Studio 2010 and try to build the solution and validate that the build was successful. If this was not the case than read the chapter common failures to see whether this can lead to a successful solution, otherwise you can contact a BrainStim developer.</p>
+        <h3>  Common Failures</h3>
+        <ol>
+            <li>  Check needed include and lib files.</li>
+            <li>  This project makes use of a pluginInterface.h file witch should be the same version as used in the BrainStim program project.</li>
+        </ol>
+        <h2>Finalizing</h2>
+        <ol>
+            <li>Add a (online using Google Docs or offline using Word) documentation/help file</li>
+            <li>    Add a custom example script file</li>
+            <li>    Create the Doxygen Source code documentation</li>
+        </ol>
+        <h2>Distribution</h2>
+        <ol>
+            <li>Make sure to distribute all needed dependencies for your dynamic library, you can make use of <a href="http://www.dependencywalker.com/" target="_blank">Dependency Walker</a> to see which one it uses.</li>
+        </ol>
+    </div>
+</body>
+</html>

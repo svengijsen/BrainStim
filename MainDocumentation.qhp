@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- This file contains the files and structure -->
 <QtHelpProject version="1.0">
-    <namespace>com.trolltech.brainstim</namespace>
-    <virtualFolder>doc</virtualFolder>
-    <filterSection>
-        <toc>
-            <section title="BrainStim" ref="index.html">            
+	<namespace>com.trolltech.brainstim</namespace>
+	<virtualFolder>doc</virtualFolder>
+	<filterSection>
+		<toc>
+			<section title="BrainStim" ref="index.html">
+				<section title="Default Plugins" ref="./documents/defaultplugins.html"></section>
+				
+				<section title="BrainStim doxygen index" ref="./documents/BrainStim/Doxygen/index.html"></section>
+				<section title="BrainStim_QMLExtensions doxygen index" ref="./documents/BrainStim_QMLExtensions/Doxygen/index.html"></section>
+				<section title="Development" ref="./documents/Development/Development.html"></section>
+				<section title="Development ExtensionPluginTemplate" ref="./documents/Development/ExtensionPluginTemplate.html"></section>
+				<section title="Development PreBuildDevelopmentSetup" ref="./documents/Development/PreBuildDevelopmentSetup.html"></section>
+				<section title="Examples" ref="./documents/Examples/ExamplesAndTutorials.html"></section>
+				<section title="Examples RetinoTopicMappingOutput" ref="./documents/Examples/RetinoTopicMappingOutput/RetinoTopicMappingOutput.html"></section>
+				<section title="ExperimentManagerPlugin" ref="./documents/ExperimentManagerPlugin/ExperimentManagerPlugin.html"></section>
+				<section title="ExperimentManagerPlugin doxygen" ref="./documents/ExperimentManagerPlugin/Doxygen/index.html"></section>
+				<section title="GettingStartedGuide" ref="./documents/GettingStartedGuide/GettingStartedGuide.html"></section>
+				<section title="settingsDialog" ref="./documents/BrainStim/settingsDialog.html"></section>
+			</section>
+			
+				
 <!--
 								<section title="Getting Started Guide" ref="./Tutorials/GettingStarted/GettingStartedGuide.html"></section>
 								<section title="Examples and Tutorials" ref="./Tutorials/index.html">
@@ -66,11 +82,11 @@
 		            </section>
 		            
 -->
-		            
-            </section>       
-        </toc>
-        <keywords>
-            <keyword name="BrainStim" ref="index.html"/>
+		</toc>
+		<keywords>
+			<keyword name="BrainStim" ref="index.html"/>
+			<keyword name="Plugins" ref="./documents/defaultplugins.html"/>
+	    
 <!--
             <keyword name="Getting Started Guide" ref="./Tutorials/GettingStarted/GettingStartedGuide.html"/>            
 	<keyword name="Tutorials" ref="./Tutorials/index.html"/>						
@@ -108,63 +124,95 @@
 
 -->
 
-        </keywords>
-        <files>
-         <file>css/*</file>
-         <file>additional/*</file>
-         <file>fonts/*</file>
-         <file>images/*</file>
-         <file>js/*</file>
-         <file>favicon.ico</file>
-         
-		     <file>index.html</file>
+		</keywords>
+		<files>
+			<file>additional/*</file>
+			<file>bootstrap/css/*</file>
+			<file>bootstrap/fonts/*</file>
+			<file>bootstrap/js/*</file>
+			<file>google-code-prettify/*</file>
+			<file>css/*</file>
+			<file>documents/*</file>
+			<file>documents/BrainStim/*</file>
+			<file>documents/BrainStim/Doxygen/*</file>
+			<file>documents/BrainStim_QMLExtensions/*</file>
+			<file>documents/BrainStim_QMLExtensions/Doxygen/*</file>
+			<file>documents/Development/*</file>
+			<file>documents/Examples/*</file>
+			<file>documents/Examples/RetinoTopicMappingOutput/*</file>
+			<file>documents/Examples/RetinoTopicMappingOutput/images/*</file>
+			<file>documents/ExperimentManagerPlugin/*</file>
+			<file>documents/ExperimentManagerPlugin/Doxygen/*</file>
+			<file>documents/ExperimentManagerPlugin/images/*</file>
+			<file>documents/GettingStartedGuide/*</file>
+			<file>images/*</file>
+			<file>js/*</file>
+			<file>favicon.ico</file>
+			<file>index.html</file>
+		
+			
 <!-- 
-            <file>bootstrap-3.3.5-dist/index.html</file>
+            <file>bootstrap/index.html</file>
         
             <file>js/testjs.js</file>
             
-            <file>bootstrap-3.3.5-dist/theme.css</file>
-            <file>bootstrap-3.3.5-dist/js/bootstrap.js</file>
-            <file>bootstrap-3.3.5-dist/js/bootstrap.min.js</file>
-            <file>bootstrap-3.3.5-dist/js/npm.js</file>
-            <file>bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.eot</file>
-            <file>bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.svg</file>
-            <file>bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.ttf</file>
-            <file>bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.woff</file>
-            <file>bootstrap-3.3.5-dist/fonts/glyphicons-halflings-regular.woff2</file>
-            <file>bootstrap-3.3.5-dist/css/bootstrap.css</file>
-            <file>bootstrap-3.3.5-dist/css/bootstrap.css.map</file>
-            <file>bootstrap-3.3.5-dist/css/bootstrap.min.css</file>
-            <file>bootstrap-3.3.5-dist/css/bootstrap-theme.css</file>
-            <file>bootstrap-3.3.5-dist/css/bootstrap-theme.css.map</file>
-            <file>bootstrap-3.3.5-dist/css/bootstrap-theme.min.css</file> 
-            <file>bootstrap-3.3.5-dist/assets/brand/bootstrap-outline.svg</file>
-            <file>bootstrap-3.3.5-dist/assets/brand/bootstrap-punchout.svg</file>
-            <file>bootstrap-3.3.5-dist/assets/brand/bootstrap-solid.svg</file>
-            <file>bootstrap-3.3.5-dist/assets/css/docs.min.css</file>
-            <file>bootstrap-3.3.5-dist/assets/css/src/docs.css</file>
-            <file>bootstrap-3.3.5-dist/assets/css/src/pygments-manni.css</file>
-            <file>bootstrap-3.3.5-dist/assets/flash/ZeroClipboard.swf</file>
-            <file>bootstrap-3.3.5-dist/assets/img/components.png</file>
-            <file>bootstrap-3.3.5-dist/assets/img/devices.png</file>
-            <file>bootstrap-3.3.5-dist/assets/img/sass-less.png</file>
-            <file>bootstrap-3.3.5-dist/assets/js/customize.min.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/docs.min.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/ie-emulation-modes-warning.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/ie10-viewport-bug-workaround.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/ie8-responsive-file-warning.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/raw-files.min.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/src/application.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/src/customizer.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/vendor/Blob.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/vendor/FileSaver.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/vendor/ZeroClipboard.min.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/vendor/anchor.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/vendor/autoprefixer.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/vendor/holder.min.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/vendor/jszip.min.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/vendor/less.min.js</file>
-            <file>bootstrap-3.3.5-dist/assets/js/vendor/uglify.min.js</file>
+            <file>bootstrap/theme.css</file>
+            <file>bootstrap/js/bootstrap.js</file>
+            <file>bootstrap/js/bootstrap.min.js</file>
+            <file>bootstrap/js/npm.js</file>
+            <file>bootstrap/fonts/glyphicons-halflings-regular.eot</file>
+            <file>bootstrap/fonts/glyphicons-halflings-regular.svg</file>
+            <file>bootstrap/fonts/glyphicons-halflings-regular.ttf</file>
+            <file>bootstrap/fonts/glyphicons-halflings-regular.woff</file>
+            <file>bootstrap/fonts/glyphicons-halflings-regular.woff2</file>
+            <file>bootstrap/css/bootstrap.css</file>
+            <file>bootstrap/css/bootstrap.css.map</file>
+            <file>bootstrap/css/bootstrap.min.css</file>
+            <file>bootstrap/css/bootstrap-theme.css</file>
+            <file>bootstrap/css/bootstrap-theme.css.map</file>
+            <file>bootstrap/css/bootstrap-theme.min.css</file> 
+            <file>bootstrap/assets/brand/bootstrap-outline.svg</file>
+            <file>bootstrap/assets/brand/bootstrap-punchout.svg</file>
+            <file>bootstrap/assets/brand/bootstrap-solid.svg</file>
+            <file>bootstrap/assets/css/docs.min.css</file>
+            <file>bootstrap/assets/css/src/docs.css</file>
+            <file>bootstrap/assets/css/src/pygments-manni.css</file>
+            <file>bootstrap/assets/flash/ZeroClipboard.swf</file>
+            <file>bootstrap/assets/img/components.png</file>
+            <file>bootstrap/assets/img/devices.png</file>
+            <file>bootstrap/assets/img/sass-less.png</file>
+            <file>bootstrap/assets/js/customize.min.js</file>
+            <file>bootstrap/assets/js/docs.min.js</file>
+            <file>bootstrap/assets/js/ie-emulation-modes-warning.js</file>
+            <file>bootstrap/assets/js/ie10-viewport-bug-workaround.js</file>
+            <file>bootstrap/assets/js/ie8-responsive-file-warning.js</file>
+            <file>bootstrap/assets/js/raw-files.min.js</file>
+            <file>bootstrap/assets/js/src/application.js</file>
+            <file>bootstrap/assets/js/src/customizer.js</file>
+            <file>bootstrap/assets/js/vendor/Blob.js</file>
+            <file>bootstrap/assets/js/vendor/FileSaver.js</file>
+            <file>bootstrap/assets/js/vendor/ZeroClipboard.min.js</file>
+            <file>bootstrap/assets/js/vendor/anchor.js</file>
+            <file>bootstrap/assets/js/vendor/autoprefixer.js</file>
+            <file>bootstrap/assets/js/vendor/holder.min.js</file>
+            <file>bootstrap/assets/js/vendor/jszip.min.js</file>
+            <file>bootstrap/assets/js/vendor/less.min.js</file>
+            <file>bootstrap/assets/js/vendor/uglify.min.js</file>
+	    
+	    E:/Projects/BrainStim_Documentation/bootstrap/css/bootstrap-theme.css
+E:/Projects/BrainStim_Documentation/bootstrap/css/bootstrap-theme.css.map
+E:/Projects/BrainStim_Documentation/bootstrap/css/bootstrap-theme.min.css
+E:/Projects/BrainStim_Documentation/bootstrap/css/bootstrap.css
+E:/Projects/BrainStim_Documentation/bootstrap/css/bootstrap.css.map
+E:/Projects/BrainStim_Documentation/bootstrap/css/bootstrap.min.css
+E:/Projects/BrainStim_Documentation/bootstrap/fonts/glyphicons-halflings-regular.eot
+E:/Projects/BrainStim_Documentation/bootstrap/fonts/glyphicons-halflings-regular.svg
+E:/Projects/BrainStim_Documentation/bootstrap/fonts/glyphicons-halflings-regular.ttf
+E:/Projects/BrainStim_Documentation/bootstrap/fonts/glyphicons-halflings-regular.woff
+E:/Projects/BrainStim_Documentation/bootstrap/fonts/glyphicons-halflings-regular.woff2
+E:/Projects/BrainStim_Documentation/bootstrap/js/bootstrap.js
+E:/Projects/BrainStim_Documentation/bootstrap/js/bootstrap.min.js
+E:/Projects/BrainStim_Documentation/bootstrap/js/npm.js
 
             <file>Tutorials/GettingStarted/GettingStartedGuide.html</file>            
 	     <file>Tutorials/index.html</file>
@@ -231,6 +279,6 @@
 
 						
 -->								
-            </files>
-        </filterSection>
-    </QtHelpProject>
+		</files>
+	</filterSection>
+</QtHelpProject>

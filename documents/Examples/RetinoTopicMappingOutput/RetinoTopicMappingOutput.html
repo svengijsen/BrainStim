@@ -1,0 +1,184 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<title>Retinotopic Mapping output files Tutorial v1.0</title>
+<!--doc-version-title-end-->
+</head>
+<body>
+    <div class="container">
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Retinotopic Mapping output files Tutorial</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+        <h2>Introduction</h2>
+        <p>This tutorial (installed in the directory <em>BrainStim\examples\Tutorials\6_RetinoTopicMappingOutput</em>) shows an example of how you can configure an object, derived from the RetinotopyMapper script class, to automatically generate output (mask) file(s) for you.</p>
+        <p>After running an Retinotopic mapping experiment the researchers might need to know exactly what the visual stimuli presented to the subjects screen (while running the experiment) contained because this information is needed for further (post) processing/analysing the experiment data. A case scenario where this output data is needed for could be the <a href="http://www.brainvoyager.com/bvqx/doc/UsersGuide/PRFEstimation/PopulationReceptiveFieldEstimation.html" target="new">Population Receptive Field Estimation</a> technique implemented in the <a href="http://www.brainvoyager.com/" target="new">BrainVoyager</a> software as described in the <a href="http://www.brainvoyager.com/bvqx/doc/UsersGuide/PRFEstimation/GeneratingBinaryStimulusFrames.html" target="new">Generating Binary Stimulus Frames</a> document.</p>
+        <p><strong>Important!</strong> This tutorial further describes a way of generating output files that is in line with the guidance of the online BrainVoyager <a href="http://www.brainvoyager.com/bvqx/doc/UsersGuide/PRFEstimation/GeneratingBinaryStimulusFrames.html" target="new">Generating Binary Stimulus Frames</a> document.</p>
+        <p>The generated output file(s) contain the pixel-level representation of the visual retinotopic stimuli in a binary form at each moment the object derived from the <em><a href="../../References/Script/ExperimentManagerPlugin/Doxygen/class_retinotopy_mapper.html">RetinotopyMapper</a></em><a href="../../References/Script/ExperimentManagerPlugin/Doxygen/class_retinotopy_mapper.html"> script class</a> its (<a href="../../References/Script/ExperimentManagerPlugin/Doxygen/class_experiment_engine.html">parent class</a>)<em> incrementExternalTrigger()</em> slot gets triggered. The generated output file(s) contain data of the requested information type (<em>Mask</em> or <em>Frame</em>) and are stored in one or more file(s) from a particular requested file type (<em>PNG</em>, <em>DAT</em> or <em>CDAT</em>) depending on the researchers request. </p>
+        <p>To generate this output we simply need to set the <em>OutputTriggerFrame</em> parameter (in the experiment file (*.exml) from the object derived from the <em>RetinotopyMapper</em> script class) to &lsquo;<em>true</em>&rsquo; for the Block Trials for which we want to automatically generate the output and fully run the experiment once. </p>
+        <p><strong>Important!</strong> Because generating output files can cause the experiment to slow down you should not enable this while running the experiment with a real subject. Therefore it&rsquo;s advised to enable this once before or after the experiment with the same configuration set, save the data and disable this feature again.</p>
+        <p>As explained above there are two types of information we can generate (<em>Mask</em> or <em>Frame</em>). These can also be set in the experiment file (*.exml) setting the <em>OutputFrameType</em> parameter (from the object derived from the <em>RetinotopyMapper</em> script class). The &ldquo;<em>Frame</em>&rdquo; setting contains the full color visual stimuli pixel presentation, The &ldquo;<em>Mask</em>&rdquo; setting only contains the visual stimuli mask of the activated visual area in white and the remaining information in black. </p>
+        <br />
+        <div>
+            <p align="center"> <img src="./images/image00.png" alt="" width="231" height="231" /><img src="./images/image01.png" alt="" width="231" height="231" /></p>
+        </div>
+        <p align="center"><em>OutputFrameType</em> = &ldquo;<em>Frame</em>&rdquo; and		<em>OutputFrameType</em> = &ldquo;<em>Mask</em>&rdquo;</p>
+        <p>Above you can see an example of the different types of generated visual information. The above two images are resized, the actual output file(s) contain the full pixel information resolution as configured in the experiment file (*.exml) (using the <em>StimulusWidthSpan</em> and the <em>StimulusHeightSpan</em> parameter). </p>
+        <p>The requested generated visual information is then stored in one or more file(s). In what kind of file(s) this is stored can be set using the <em>OutputFrameFormat</em> parameter. This parameter can be:</p>
+        <ul>
+            <li>
+                <p>&ldquo;PNG&rdquo;, the requested visual stimuli information is stored in one or more (*.png) file(s) for each generated visual output. The <a href="http://en.wikipedia.org/wiki/Portable_Network_Graphics" target="new">PNG (*.png) format</a> is a widespread used image format that stores the data compressed (<a href="http://en.wikipedia.org/wiki/Lossless_data_compression" target="new">but without loosing information</a>!) and can be opened(viewed) &nbsp;with almost all image viewers.</p>
+            </li>
+            <li>
+                <p>&ldquo;DAT&rdquo;, the requested visual stimuli information is stored in one or more (*.dat) file(s) for each generated visual output. The DAT (*.dat) format is a BrainStim format that stores the data uncompressed (raw) in a way that it can be processed very quickly in memory by BrainStim (or any other third party software tool) because the underlying pixel information can be accessed more directly. Unfortunately this type of storage takes much more disk space and can not be opened(viewed) with most image viewers.</p>
+            </li>
+            <li>
+                <p>&ldquo;CDAT&rdquo;, this is the same as the above &ldquo;DAT&rdquo; storage type but now all the generated visual output is saved in one single CDAT (*.cdat) (Concatenated DAT) file. This file has the same properties as the DAT storage type, but can be even quicker processed by BrainStim or an other &nbsp;third party software tool) because it now only needs to open and load one single file to memory for further processing. This file of course takes more space that a single DAT file because it stored all the generated visual output in one single file.</p>
+            </li>
+        </ul>
+        <p>The generated data automatically saved in the BrainStim outputs folder (in <em>BrainStim\outputs\</em>). For each time an experiment is run while this output data generation feature is enabled a sub-folder with a unique name is automatically created in the output folder and the requested data is saved there. The name of the sub-folder is combined from the following:</p>
+        <p><strong>&lt;Year&gt;&lt;Month&gt;&lt;Day&gt;&lt;Hour&gt;&lt;Minute&gt;&lt;Second&gt;&lt;millisecond&gt;_&lt;Experiment Name (set in the Experiment File)&gt;</strong></p>
+        <p>like: 20131018152750116_Retinotopic_Mapping_Output</p>
+        <p>means: recorded on the <em>18</em>th of <em>October</em> <em>2013</em>, <em>15</em>:<em>27</em>:<em>50</em> and <em>116</em> milliseconds with the experiment name &ldquo;<em>Retinotopic_Mapping_Output</em>&rdquo;.</p>
+        <p>making sure that each time you run an experiment, which is generating the above output, a new unique name (containing some useful information) for the sub-folder is automatically created for you.</p>
+        <p>Each file in the folder is then for the case of DAT or PNG files named like:</p>
+        <p><strong>&lt;Block&gt;_&lt;Trial&gt;_&lt;InternalTrigger&gt;_&lt;ExternalTrigger&gt;.&lt;dat or png&gt;</strong></p>
+        <p>and for the case of a single CDAT file like:</p>
+        <p><strong>&lt;ObjectID&gt;_&lt;OutputFrameType&gt;.cdat</strong></p>
+        <p>the above ObjectID is the ID of the object (derived from the <em>RetinotopyMapper</em> script class) as defined in the experiment file (*.exml) in the <em>&lt;declarations&gt;</em> section. The <em>OutputFrameType</em> is value of the earlier mentioned configured <em>OutputFrameType</em> parameter value.</p>
+        <h2>Hands On</h2>
+        <h3>The experiment file</h3>
+        <p>Let&rsquo;s take the above theory to practice?</p>
+        <ul>
+            <li>
+                <p>Start BrainStim</p>
+            </li>
+            <li>
+                <p>Open the file<em> PolarAngle.exml</em> from the directory <em>BrainStim\examples\Tutorials\6_RetinoTopicMappingOutput</em></p>
+            </li>
+            <li>
+                <p>Execute this experiment file directly from within BrainStim by pressing the &lsquo;<em>F5</em>&rsquo; shortcut key (<em>Execute</em>)</p>
+            </li>
+            <li>
+                <p>Press the &lsquo;<em>Alt</em>&rsquo; key to start the experiment &nbsp;and observe the visual stimuli steps (wait until it finishes, about 14 seconds, or abort using the <em>CTRL+&rsquo;a&rsquo;</em> (abort) key-combination.</p>
+            </li>
+        </ul>
+        <p>We just executed an Retinotopic Polar Angle experiment containing 3 Blocks (Fixation ? PolarAngle ? Fixation) as defined in the experiment file. The experiment is automatically externally triggered by the declared (line 18) <em>TriggerTimer</em> object that is connected (line 36) to the <em>incrementExternalTrigger()</em> slot of the declared (line 26) <em>RetinotopyMapper</em> object. </p>
+        <p>This <em>TriggerTimer</em> object emits a <em>timeout()</em> signal (line 38) each 500 milliseconds (line 53). The visual PolarAngle stimuli moves in discrete steps (see parameter <em>DiscreteTriggerSteps</em>, line 174) and completes one cycle (full rotation) in 12 internal trigger steps (see parameter <em>CycleTriggerAmount</em>, line 143). The 2 fixation blocks in the begin and end of the experiment take each 2 internal triggers. This leads to the following: </p>
+        <p>- Block (number 0), <em>Fixation_Block_Begin</em>: (<strong>2</strong> Int. Trigg &nbsp;* <strong>1</strong> Trial * &nbsp;<strong>500</strong>mSecs) = <strong>1</strong> second.</p>
+        <p>- Block (number 1), <em>PolarAngle_Block</em>: (<strong>12</strong> Int. Trigg * <strong>2</strong> Trials * &nbsp;<strong>500</strong>mSecs) = <strong>12</strong> seconds.</p>
+        <p>- Block (number 2), <em>Fixation_Block_End</em>: (<strong>2</strong> Int. Trigg &nbsp;* <strong>1</strong> Trial * &nbsp;<strong>500</strong>mSecs) = <strong>1</strong> second.</p>
+        <p>The total experiment lasts for <strong>14</strong> seconds and we should see two full <strong>PolarAngle</strong> cycles (rotations) in <strong>12</strong> discrete steps.</p>
+        <ul>
+            <li>
+                <p>Enable the visual stimuli output generation by setting the <em>OutputTriggerFrame</em> parameter (line 119) to &ldquo;<em>true</em>&rdquo;. Make sure that the <em>OutputFrameType</em> parameter is set to &ldquo;<em>Frame</em>&rdquo; and the <em>OutputFrameFormat</em> parameter is set to &ldquo;<em>PNG</em>&rdquo;. Execute the experiment again, but now wait until it completes.</p>
+            </li>
+            <li>
+                <p>Open the newly created sub directory from the <em>BrainStim\outputs\</em> directory and view the files. Notice that there are 28 (*.png) files created (for each internal trigger) that contain the full color (<em>Frame</em>) pixel information of the moment the visual stimuli data was created.</p>
+            </li>
+            <li>
+                <p>Now make sure to change the <em>OutputFrameType</em> parameter to &ldquo;<em>Mask</em>&rdquo; and run the experiment again completely until it finishes.</p>
+            </li>
+            <li>
+                <p>Examine again the generated output files and notice that these images only contain a activation mask of the visual stimuli, the area&rsquo;s where the visual stimuli was active has a white color and the inactive area region is black in the generated file.</p>
+            </li>
+            <li>
+                <p>Change the <em>OutputFrameFormat</em> parameter to &ldquo;<em>Dat</em>&rdquo; and run the experiment again, wait until it finished.</p>
+            </li>
+            <li>
+                <p>Open the newly created sub directory and notice that there are now again 28 files generated but with a different file extension (*.dat), which we can&rsquo;t open directly in a image viewer. The size of a single (*.dat) file (2305 KB) is also quite bigger than the size of a previously created (*.png) file (2 KB)!</p>
+            </li>
+        </ul>
+        <p><strong>Important!</strong> Because the Dat (*.dat) format takes a lot of disk space it&rsquo;s advised to use a program like Winzip for compression if you need this to send the data by e-mail for example, this can be very efficient (&gt;90%) because there&rsquo;s a lot of redundancy in this custom DAT file format.</p>
+        <ul>
+            <li>
+                <p>Now we change the <em>OutputFrameFormat</em> parameter to &ldquo;<em>CDAT</em>&rdquo; and run the experiment again, wait until it finished.</p>
+            </li>
+            <li>
+                <p>Open the newly created sub directory and notice that there&rsquo;s now only one file (64513 KB) file created by the export feature with the CDAT ( *.cdat) file extension.</p>
+            </li>
+        </ul>
+        <h3>Managing (C)DAT files</h3>
+        <p>The custom (C)DAT  format (*cdat and *.dat files) file protocol is well documented in the<a href="../../References/Plugins/ExperimentManagerPlugin/ExperimentManagerPlugin.html#experiment-output-file"> Experiment Manager Plug-in Documentation</a>. A third party can use this information to implement code to be able to directly handle these type of file(s) by writing their own custom file handling routines as documented. The ExperimentManager Plug-in script class <a href="../../References/Script/ExperimentManagerPlugin/Doxygen/annotated.html">collection</a> contains a script class (the <a href="../../References/Script/ExperimentManagerPlugin/Doxygen/class_image_processor.html">ImageProcessor  class</a>) that makes it possible  from within the BrainStim internal script environment  to directly handle these  file types. This script class contains several routines to handle the DAT and CDAT format. Now we&rsquo;ll take a look at two prepared scripts that use some of these routines. The first script creates a dialog where we can select a CDAT file (*.cdat) and view it using some controls, let&rsquo;s try this:</p>
+        <ul>
+            <li>
+                <p>Open the file <em>CDatFileViewer.qs</em> from the directory <em>BrainStim\examples\Tutorials\6_RetinoTopicMappingOutput</em></p>
+            </li>
+            <li>
+                <p>Examine the script</p>
+            </li>
+            <ul>
+                <li>
+                    <p>Notice that an object gets constructed from the <em>ImageProcessor</em> script class which is used for CDAT file handling</p>
+                </li>
+                <li>
+                    <p>There&rsquo;s a custom <em>Dialog</em> script object created which is used for the dialog and controls to load and view a CDAT file</p>
+                </li>
+            </ul>
+            <li>
+                <p>Run the script by pressing the &lsquo;<em>F5</em>&rsquo; shortcut key (<em>Execute</em>)</p>
+            </li>
+            <li>
+                <p>A Dialog is shown where we can select an input CDAT file, click the <em>Select *.(C)DAT File</em> and browse to the CDAT (*.cdat) &nbsp;file created in one of the above steps.</p>
+            </li>
+            <li>
+                <p>Step through the internal stored activity masks by pressing the <em>&gt;&gt;Next</em> and the <em>Previous&lt;&lt;</em> buttons</p>
+            </li>
+            <li>
+                <p>Close the dialog</p>
+            </li>
+            <li>
+                <p>Run the script again and for now browse and open a DAT (*.dat) file from within the dialog created by the script</p>
+            </li>
+            <li>
+                <p>Close the dialog</p>
+            </li>
+            <li>
+                <p>Examine the script code and try to figure out how the script does its job</p>
+            </li>
+        </ul>
+        <p>Sometimes we want to convert one of the available file formats to another format. The <a href="../../References/Script/ExperimentManagerPlugin/Doxygen/class_image_processor.html">ImageProcessor  script class</a> also implement some routines for doing this in the BrainStim internal script environment, this, let&rsquo;s take a look of an example script:</p>
+        <ul>
+            <li>
+                <p>Open the file<em> DatFileConcatination.qs</em> from the directory <em>BrainStim\examples\Tutorials\6_RetinoTopicMappingOutput</em></p>
+            </li>
+            <li>
+                <p>Run the script by pressing the &lsquo;<em>F5</em>&rsquo; shortcut key (<em>Execute</em>)</p>
+            </li>
+            <li>
+                <p>A file browser dialog is shown where we can select a directory that contains DAT (*.dat) files, browse and select the directory that contains the DAT files from one of the above examples.</p>
+            </li>
+        </ul>
+        <p>
+            The script concatenates all the DAT files together into a new CDAT (*.cdat) file and saves this file to a subdirectory inside the selected DAT file directory called &ldquo;<em>processed</em>&rdquo;. Hereafter the script again extracts/splits the created CDAT file to separate DAT files and saves them to the same created subdirectory. Finally these extracted files are again converted from the DAT (*.dat) format to the PNG (*.png) format.</strong>
+        </p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+    </div>
+</body>
+</html>

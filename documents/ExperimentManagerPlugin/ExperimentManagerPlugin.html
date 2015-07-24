@@ -1,0 +1,1352 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<title>Experiment Manager Plug-in v1.0</title>
+<!--doc-version-title-end-->
+</head>
+<body>
+    <div class="container">
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Experiment Manager Plug-in (v1.0.0.1)</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+        <div id="toc_Area">
+            <ul id="toc"></ul>
+            <h2>Introduction</h2>
+            <p>The Experiment Manager Plug-in implements a Experiment Engine that you can use to present various kinds of stimuli. It can load  an Experiment file (*.exml) that defines the configuration  for the experiment; see the EXML-File definition. The Experiment Manager can be created and used  by a script or can be used directly by executing an Experiment file by  BrainStim.</p>
+            <h3>Directories</h3>
+            <p>The Experiment manager uses the following directories inside the main root BrainStim directory:</p>
+            <p>
+                <strong>/outputs</strong><br />
+                this directory is used for storing files created by the Experiment Manager.
+            </p>
+            <h2>EXML-File definition</h2>
+            <p>The experiment file is an <a href="http://en.wikipedia.org/wiki/XML" target="_blank">XML file type</a> that can be loaded by the Experiment Manger for its configuration. You can manually edit this document in BrainStim or another text/code editor. The first lines consist out of a file header:</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+	&lt;?xml version='1.0' encoding='UTF-8'?&gt;<br />&lt;!DOCTYPE EXML&gt;<br />&lt;!-- <br />This is a comment example<br />Place you own text here...<br />--&gt;<br />&lt;EXML version=&quot;2.0.0.2&quot;&gt;
+	</pre>
+                    </td>
+                </tr>
+            </table>
+            <p>The header holds the XML and EXML version, there?s no reason for a user to change this manually. You may also find text between the &lt;!-- and --&gt; tag, these are used for comments and the text section between these tags is not parsed by the Experiment Manager.</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+	&lt;defines&gt;<br />    &lt;experiment ID=&quot;0&quot;&gt;<br />        &lt;name&gt;Experiment name&lt;/name&gt;<br />        &lt;debugmode&gt;false&lt;/debugmode&gt;<br />    &lt;/experiment&gt;<br />&lt;/defines&gt;
+	</pre>
+                    </td>
+                </tr>
+            </table>
+            <p>The &lt;defines&gt; section has an &lt;experiment&gt; section where the name of the experiment can be defined. Some tags include an ID=&quot;&lt;number&gt;&quot; attribute, this unique ID is automatically generated and used internally by BrainStim and therefore you should not change this. The &lt;debugmode&gt; section defines whether the experiment should be executed in debugmode or not. This debugmode can be helpful during the setup and debugging of the experiment because it outputs some extra information regarding the experiment. Because it can slow down the experiment speed you should disable it when you need to be sure it runs smoothly.</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+	&lt;declarations&gt; 
+	    &lt;object ID=&quot;0&quot;&gt;
+		&lt;class&gt;TriggerTimer&lt;/class&gt;
+		&lt;name&gt;Timer_Object_1&lt;/name&gt;
+		&lt;constructor&gt;
+		    &lt;param1/&gt;
+		&lt;/constructor&gt;
+	    &lt;/object&gt;
+	&nbsp;
+	    &lt;object ID=&quot;1&quot;&gt; 
+		&lt;class&gt;RetinotopyMapper&lt;/class&gt;
+		&lt;name&gt;RetinotopyMapper_object&lt;/name&gt;
+		&lt;constructor&gt;
+		    &lt;param1/&gt;
+		&lt;/constructor&gt;
+	    &lt;/object&gt; 
+	&lt;/declarations&gt;
+	</pre>
+                    </td>
+                </tr>
+            </table>
+            <p>In the &lt;declarations&gt; section all needed experiment objects are declared so they can be used for the experiment. The name &lt;name&gt; of the new object that should be constructed from a class &lt;class&gt; together with the optional parameter(s) &lt;param&lt;number&gt;&gt; are defined her per object.</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+	&lt;connections&gt; 
+	    &lt;object ID=&quot;2&quot;&gt; 
+		&lt;type&gt;signal&lt;/type&gt; 
+		&lt;signature&gt;CaptureThreadTriggered(short)&lt;/signature&gt; 
+		&lt;target ID=&quot;1&quot;&gt; 
+		    &lt;type&gt;slot&lt;/type&gt;  
+		    &lt;signature&gt;incrementExternalTrigger()&lt;/signature&gt;
+		&lt;/target&gt;
+	    &lt;/object&gt;
+	    &lt;object ID=&quot;0&quot;&gt; 
+		&lt;type&gt;signal&lt;/type&gt; 
+		&lt;signature&gt;timeout()&lt;/signature&gt; 
+		&lt;target ID=&quot;1&quot;&gt; 
+		    &lt;type&gt;slot&lt;/type&gt;  
+		    &lt;signature&gt;incrementExternalTrigger()&lt;/signature&gt;
+		&lt;/target&gt;
+	    &lt;/object&gt;
+	&lt;/connections&gt;
+	</pre>
+                    </td>
+                </tr>
+            </table>
+            <p>Inside the &lt;connections&gt; section the declared objects can be connected to each other (internally BrainStim is using the Qt signal/slot mechanism for establishing the connections, see <a href="http://qt-project.org/doc/qt-5.1/qtcore/signalsandslots.html" target="_blank">http://qt-project.org/doc/qt-5.1/qtcore/signalsandslots.html</a>). Signals and Slots can be connected to each other, the Signal or Slot (define this first by using the &lt;type&gt; section) signature &lt;signature&gt; can also be defined here.</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+	&lt;initializations&gt;
+	    &lt;object ID=&quot;0&quot;&gt;
+		&lt;type&gt;slot&lt;/type&gt;
+		&lt;signature&gt;startTimer&lt;/signature&gt;
+		&lt;parameters&gt;
+		    &lt;parameter ID=&quot;0&quot;&gt;
+			&lt;name&gt;msec&lt;/name&gt;
+			&lt;value&gt;200&lt;/value&gt;
+			&lt;type&gt;double&lt;/type&gt;
+		    &lt;/parameter&gt;
+		&lt;/parameters&gt;
+	    &lt;/object&gt;
+	&lt;/initializations&gt;
+	</pre>
+                    </td>
+                </tr>
+            </table>
+            <p>Declared objects often need to be initialized before they can be used. This can be defined within the &lt;initializations&gt; section. Initialization is done before the experiment starts and is done by providing the type &lt;type&gt; and signature &lt;signature&gt; and the declared object ID &lt;object ID=&quot;&lt;number&gt;&quot;&gt; which should be initialized. Furthermore parameter(s) can be defined and used for the initialization.</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+	&lt;actions&gt;
+	    &lt;blocks&gt;
+		&lt;block ID=&quot;0&quot;&gt;
+		    &lt;name&gt;Fixation_Block&lt;/name&gt;
+		    &lt;block_number&gt;0&lt;/block_number&gt;
+		    &lt;nr_of_trials&gt;1&lt;/nr_of_trials&gt;
+		    &lt;nr_of_internal_triggers&gt;8&lt;/nr_of_internal_triggers&gt;
+		    &lt;nr_of_external_triggers&gt;1&lt;/nr_of_external_triggers&gt;
+		    &lt;object ID=&quot;1&quot;&gt;
+			&lt;parameters&gt;
+			    parameter ID=&quot;0&quot;&gt;
+				&lt;name&gt;RetinoPattern&lt;/name&gt;
+				&lt;value&gt;fixation&lt;/value&gt;
+			    &lt;/parameter&gt;
+			    &lt;parameter ID=&quot;1&quot;&gt;
+				&lt;name&gt;ShowFixPoint&lt;/name&gt;
+				&lt;value&gt;true&lt;/value&gt;
+			    &lt;/parameter&gt;
+			&lt;/parameters&gt;
+		    &lt;/object&gt;
+		&lt;/block&gt;
+		&lt;block ID=&quot;1&quot;&gt;
+		    &lt;name&gt;PolarAngle_Block&lt;/name&gt;
+		    &lt;block_number&gt;1&lt;/block_number&gt;
+		    &lt;nr_of_trials&gt;6&lt;/nr_of_trials&gt;
+		    &lt;nr_of_internal_triggers&gt;36&lt;/nr_of_internal_triggers&gt;
+		    &lt;nr_of_external_triggers&gt;1&lt;/nr_of_external_triggers&gt;
+		    &lt;object ID=&quot;1&quot;&gt;
+			&lt;/parameters&gt;
+		    &lt;/object&gt;
+	    &lt;/blocks&gt;
+	&lt;/actions&gt;
+	</pre>
+                    </td>
+                </tr>
+            </table>
+            <p>When the experiment starts the section within the &lt;actions&gt; tag is executed. In case of a triggered block design you can specify the different blocks within the &lt;blocks&gt; section. The &lt;block_number&gt; defines the order of the blocks and how they are sequentially processed during the execution of the experiment. Within a defined block the &lt;nr_of_trials&gt; defines how many times the block is executed before going to the next block. </p>
+            <p>A block trial is externally triggered by an external source, like a hardware trigger device or a declared automatic trigger timer. This external source is then connected inside the &lt;connections&gt; section to the Experiment Manager default receive slot with the signature incrementExternalTrigger(). By making use of this slot the Experiment manager know when it should switch to another block depending on the configuration within the &lt;blocks&gt; section. At each incrementExternalTrigger() slot execution the External Trigger count is incremented.. It takes &lt;nr_of_external_triggers&gt; amount of External Triggers before the Internal Trigger count is incremented, thus this works like a sort of trigger divider (External-&gt;Internal). After &lt;nr_of_internal_triggers&gt; amount of Internal Triggers the Experiment manager switched to the next block trial.</p>
+            <p>In the above example the first fixation block takes 8 external triggers. In case a trigger is send each 2 seconds the first block trial is 16 seconds visible on the screen.</p>
+            <h2>Retinotopic Mapping</h2>
+            <p>The experiment manager includes a Retinotopic mapping feature which makes it easy to show different stimuli that can be fully configured for this purpose. The following Retinotopic mapping stimuli types can be used:</p>
+            <ul>
+                <li>Fixation </li>
+                <li>PolarAngle</li>
+                <li>Eccentricity</li>
+                <li>MovingBar</li>
+                <li>MovingDots</li>
+            </ul>
+            <p>To make use of one or more of these stimuli types you first have to declare (&lt;declarations&gt; section) an &lt;class&gt;RetinotopyMapper&lt;/class&gt; derived object. Connect (&lt;connections&gt; section) a Trigger object to its incrementExternalTrigger() slot and make use of it inside the &lt;actions&gt;, &lt;blocks&gt; section, see example files! Each stimuli type can be configured with specific or universal parameters names (can be used for all the types). All parameter values keep their last value when switching to another block trial, so only changes need to be defined.</p>
+            <h3>Universal parameters</h3>
+            <table cellpadding="0" cellspacing="0" class="paramtable">
+                <tbody>
+                    <tr>
+                        <th><p>Parameter</p></td>
+                        </th>
+                        <th><p>Possible values</p></td>
+                        </th>
+                        <th><p>Definition</p></td>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td><p>RetinoPattern</p></td>
+                        <td>
+                            <p>
+                                String (<br />
+                                &quot;PolarAngle&quot; or <br />
+                                &quot;Eccentricity&quot; or<br />
+                                &quot;MovingBar&quot; or<br />
+                                &quot;MovingDots&quot; or<br />
+                                &quot;Fixation&quot;)<br />
+                                (Default = &ldquo;PolarAngle&rdquo;)
+                            </p>
+                        </td>
+                        <td><p>With this parameter we can define the Retinotopic Mapping type we want to use.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>StimuliRefreshRate</p></td>
+                        <td>
+                            <p>
+                                Integer (0..display refresh rate)<br />
+                                (Default = 0)
+                            </p>
+                        </td>
+                        <td><p>If 0 then it draws as fast as possible (if present waiting for a vertical sync signal). If &gt;0 then the stimuli refresh rate (in Hertz) is synchronized with that value.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>ShowFixPoint</p></td>
+                        <td><p>Boolean (&quot;true&quot; or &quot;false&quot;) (default = &quot;true&quot;)</p></td>
+                        <td><p>Defines if the fixation point in the center of the screen is visible.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>FixationSize</p></td>
+                        <td><p>Integer value (default = 8)</p></td>
+                        <td><p>Defines the diameter of the fixation point in number of pixels</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>FixationColor</p></td>
+                        <td><p>HEX string representing a RGB color, see color format (default = #FF0000)</p></td>
+                        <td><p>Use this parameter to change the color of the fixation dot, see Color Format.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>BackGroundColor</p></td>
+                        <td><p>HEX string representing a RGB color, see color format (default = #575757)</p></td>
+                        <td><p>Use this parameter to change the background color of the active stimuli area.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>StimulusWidthSpan</p></td>
+                        <td><p>Float value (default = 480 pixels)</p></td>
+                        <td><p>This parameter defines the width for the active stimuli area on the screen.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>StimulusHeightSpan</p></td>
+                        <td><p>Float value (default = 480 pixels)</p></td>
+                        <td><p>This parameter defines the height for the active stimuli area on the screen.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>AntiAliasing</p></td>
+                        <td><p>Boolean (&quot;true&quot; or &quot;false&quot;) (default = &quot;true&quot;)</p></td>
+                        <td><p>Determines whether Anti-Aliasing should be enabled for the active stimuli.</p></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>&nbsp;</p>
+            <h4>Color Format</h4>
+            <p>Sets the RGB value, which may be in one of these formats:</p>
+            <ul>
+                <li>#RGB (each of R, G, and B is a single hex digit) or #RRGGBB or #RRRGGGBBB or #RRRRGGGGBBBB.</li>
+                <li>A name from the list of colors defined in the list of <a href="http://www.w3.org/TR/SVG/types.html#ColorKeywords" target="_blank">SVG color keyword names</a> provided by the World Wide Web Consortium; for example, &quot;steelblue&quot; or &quot;gainsboro&quot;. These color names work on all platforms.</li>
+            </ul>
+            <h3>Fixation specific parameters</h3>
+            <p><img src="images/image24.png" alt="" /></p>
+            <p>The above picture shows a fixation screen example. The active stimuli area (grey) is smaller than the screen (black) size. Within this area we can see a fixation point (red).</p>
+            <p>There are no more specific parameters available for this type of stimuli; see the Universal parameters.</p>
+            <h3>PolarAngle specific parameters</h3>
+            <p><img src="images/image25.png" alt="" /></p>
+            <p>The above picture shows a PolarAngle screen example. The active stimuli area (grey) is smaller than the screen (black) size. Within this area we can see a fixation point (red). The wedge consists of different rings with checkers and can rotate around the center point. A full wedge rotation (360 degrees) is called one cycle. </p>
+            <table cellpadding="0" cellspacing="0" class="paramtable">
+                <tbody>
+                    <tr>
+                        <th><p>Parameter</p></td>
+                        </th>
+                        <th><p>Possible values</p></td>
+                        </th>
+                        <th><p>Definition</p></td>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td><p>GapDiameter</p></td>
+                        <td><p>Integer value (&gt;=0) (default = 20)</p></td>
+                        <td><p>The diameter (pixels) of the gap (empty circular area) centered around the fixation point</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>CheckerColor1</p></td>
+                        <td><p>HEX string representing a RGB color, see color format (default = #FFFFFF)</p></td>
+                        <td><p>Use this parameter to change the color of the first checker.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>CheckerColor2</p></td>
+                        <td><p>HEX string representing a RGB color, see color format (default = #000000)</p></td>
+                        <td><p>Use this parameter to change the color of the second checker.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>PolarCheckAmount</p></td>
+                        <td><p>Integer value (&gt;0) (default = 4)</p></td>
+                        <td><p>The number of checkers inside the wedge along the wedge rotation direction.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>PolarRingAmount</p></td>
+                        <td><p>Integer value (&gt;0) (default = 20)</p></td>
+                        <td><p>The number of rings inside the wedge along the wedge direction.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>PolarWedgeSpan</p></td>
+                        <td><p>Float value (&gt;0 &amp;&amp; &lt;=360) (default = 22.5)</p></td>
+                        <td><p>The total wedge span angle in degrees.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>PolarRotationDirection</p></td>
+                        <td><p>Integer value  (1 or -1) (default = 1)</p></td>
+                        <td><p>The rotation direction of the wedge, 1 = Clockwise, -1 = Counterclockwise rotation.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>InternalTriggerDuration</p></td>
+                        <td><p>Float value (&gt;0.0) (default = 2000.0)</p></td>
+                        <td><p>The expected internal trigger period time duration. This defines how fast the wedge should rotate within a cycle</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>CycleTriggerAmount</p></td>
+                        <td><p>Integer value (&gt;0) (default = 1)</p></td>
+                        <td><p>The duration of a full wedge cycle (360 degrees) in number of internal triggers, see above parameter.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>FlickrFrequency</p></td>
+                        <td><p>Float value (&gt;0.0) (default = 5)</p></td>
+                        <td><p>The frequency of the flicker cycle (when the checker switch color). Ideally this value is equal to the StimuliRefreshRate parameter divided by an integer value.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>CorticalMagnitudeFactor</p></td>
+                        <td><p>Float value (&gt;=0.0) (default = 0.2)</p></td>
+                        <td><p>See chapter Cortical Magnitude Factor</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>DisableCortMagFac</p></td>
+                        <td><p>Boolean (true or false) (default = false)</p></td>
+                        <td><p>When enabled the single ring diameters (see A below picture) is the same for all rings, the above parameter is then automatically ignored.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>OutputTriggerFrame</p></td>
+                        <td><p>Boolean (true or false) (default = false)</p></td>
+                        <td>
+                            <p>
+                                When enabled the Experiment manager saves (to the /outputs directory) at each internal trigger a file containing the current state of the visible stimuli area. <br />
+                                Please bear in mind that enabling this option may dramatically slow down the experiment and may cause that the requested StimuliRefreshRate is not met!
+                            </p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><p>OutputFrameFormat</p></td>
+                        <td><p>String (&ldquo;PNG&rdquo;, &ldquo;DAT&rdquo; or &ldquo;CDAT&rdquo;) (default = &ldquo;DAT&rdquo;)</p></td>
+                        <td><p>If the OutputTriggerFrame parameter is enabled then this value specifies the output format (and extension). &ldquo;PNG&rdquo; creates a standard (*.png) file format containing the visible stimuli area. See chapter Custom graphical DAT and CDAT format for an explanation about the DAT and CDAT format.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>OutputFrameType</p></td>
+                        <td><p>String (&ldquo;Frame&rdquo; or &ldquo;Mask&rdquo;) (default = &ldquo;Frame&rdquo;)</p></td>
+                        <td><p>If the OutputTriggerFrame parameter is enabled then this value specifies the output frame type. Option &ldquo;Frame&rdquo; outputs the active stimuli area with all color information. Option &ldquo;Mask&rdquo; outputs the active stimuli area black and the full wedge and/or fixation point as white.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>DiscreteTriggerSteps</p></td>
+                        <td><p>Boolean (true or false) (default = false)</p></td>
+                        <td><p>When enabled then the wedge rotates in discrete steps at each trigger step. Between two triggers the wedge holds its position.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>RandomizeTriggerSteps</p></td>
+                        <td><p>Boolean (true or false) (default = false)</p></td>
+                        <td><p>When enabled then the wedge start rotating randomly at each trigger step. Between two triggers the wedge moves smooth (only whenDiscreteTriggerSteps is disabled) in thePolarRotationDirection. The randomization makes sure that all rotation steps are performed once before going to the next cycle.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>EmptyTriggerSteps</p></td>
+                        <td><p>Integer value (&gt;=0) (default = 0)</p></td>
+                        <td><p>This parameter defines how many Trigger Steps of a full cycle should be Empty (The Wedge is then invisible!). These Empty trigger steps are randomly chosen. The randomization keeps the history of empty trigger steps in memory within a block trial.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>RandomizeTriggerStepsArray</p></td>
+                        <td><p>None, One or more integer values (&gt;=0) seperated by a ',' (default = &quot;&quot;, empty array)</p></td>
+                        <td><p>This parameter is only taken into account if the 'RandomizeTriggerSteps' parameter is set to true. The default randomization is overridden by the value(s) defined here seperated by a comma. Each value refers to a specific index of the stimuli.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>EmptyTriggerStepsArray</p></td>
+                        <td><p>None, One or more integer values (&gt;=0) seperated by a ',' (default = &quot;&quot;, empty array)</p></td>
+                        <td><p>This parameter is only taken into account if the 'EmptyTriggerSteps' parameter is set to true. The default randomization is overridden by the value(s) defined here seperated by a comma. Each value refers to a specific index of the stimuli.</p></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>&nbsp;</p>
+            <h4>Wedge triggered cycles and rotation direction</h4>
+            <p>The below picture shows the wedge rotated at an angle of 0 degrees (at the X axis pointed to the right, with the right wedge border aligned over the X axis) when the PolarRotationDirection parameter is ?-1? (Counterclockwise). </p>
+            <p><img src="images/image26.png" alt="" /></p>
+            <p>When the PolarRotationDirection parameter is ?1? (Clockwise) then the wedge at an angle of 0 degrees is drawn like in the below picture. </p>
+            <p><img src="images/image27.png" alt="" /></p>
+            <p>
+                A full wedge cycle is internally subdivided by the CycleTriggerAmount parameter. These sub-cycles can be randomized and empty as explained in the above parameter table. Internally these sub-cycles are indexed from [0 ... (CycleTriggerAmount-1)]. The first index (with value 0) is always at 0 degree and is dependent of the PolarRotationDirection, as explained above. These indexed are internally also used to keep track of the
+                randomly chosen history and to output the result in the experiment output file (automatically generated in the /outputs directory for each run), see the Experiment Output File chapter. The below picture shows an example of an wedge together with the indexes (CycleTriggerAmount =12).
+            </p>
+            <p>PolarRotationDirection = 1, see below</p>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image28.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 0</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image17.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 3</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image14.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 6</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image20.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 9</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image18.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 1</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image23.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 4</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image37.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 7</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image38.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 10</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image45.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 2</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image46.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 5</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image48.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 8</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image49.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 11</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <p>PolarRotationDirection = -1, see below</p>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image49.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 0</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image48.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 3</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image46.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 6</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image45.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 9</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image38.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 1</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image37.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 4</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image23.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 7</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image18.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 10</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image20.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 2</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image14.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 5</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image17.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 8</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image28.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 11</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <h4>Cortical Magnitude Factor</h4>
+            <p>This factor defines how the polar rings are distributed from the outer wedge ring towards the center. </p>
+            <img src="images/image40.png" alt="" />
+            <p>&nbsp;</p>
+            <p>If for example the CorticalMagnitudeFactor = 0.2 then:</p>
+            <p>
+                A = 0.2 * B<br />
+                A' = 0.2 * B'<br />
+                ...
+            </p>
+            <p>
+                The most inner ring is automatically extended till the border of the defined gap diameter. If the CorticalMagnitudeFactor = 0.0 then the
+                rings are also equally divided over the wedge (B).
+            </p>
+            <h3>Eccentricity specific parameters</h3>
+            <img src="images/image39.png" alt="" />
+            <p>&nbsp;</p>
+            <p>
+                The above picture shows a Eccentricity screen example.
+                Within the active stimuli area (grey) a ring is presented consisting
+                out of several sub-rings each divided in checkers with an alternating color. Again in the center of the screen a fixation point (red) is shown.
+                The total ring center point remains positioned over the center of the active stimuli area whereas the ring diameter changes within a cycle.
+            </p>
+            <img src="images/image36.png" alt="" />
+            <p>&nbsp;</p>
+            <table cellpadding="0" cellspacing="0" class="paramtable">
+                <tbody>
+                    <tr>
+                        <th><p>Parameter</p></td>
+                        </th>
+                        <th><p>Possible values</p></td>
+                        </th>
+                        <th><p>Definition</p></td>
+                        </th>
+                    </tr>
+                    <tr>
+                        <td><p>GapDiameter</p></td>
+                        <td><p>Integer value (&gt;=0) (default = 20)</p></td>
+                        <td><p>The diameter (pixels) of the gap (empty circular area) centered around the fixation point, see C</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>CheckerColor1</p></td>
+                        <td><p>HEX string representing a RGB color, see color format (default = #FFFFFF)</p></td>
+                        <td><p>Use this parameter to change the color of the first checker</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>CheckerColor2</p></td>
+                        <td><p>HEX string representing a RGB color, see color format (default = #000000)</p></td>
+                        <td><p>Use this parameter to change the color of the second checker</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>EccentricityCheckAmount</p></td>
+                        <td><p>Integer value (&gt;0) (default = 20)</p></td>
+                        <td><p>The number of checkers inside one sub-ring</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>EccentricityRingAmount</p></td>
+                        <td><p>Integer value (&gt;0) (default = 4)</p></td>
+                        <td><p>The number of sub-rings, see A</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>FlickrFrequency</p></td>
+                        <td><p>Float value (&gt;0.0) (default = 5)</p></td>
+                        <td><p>The frequency of the flicker cycle(when the checkers change color). Ideally this value is equal to the StimuliRefreshRate parameter divided by an integer value</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>EccentricityDirection</p></td>
+                        <td><p>Integer value  (1 or -1) (default = 1)</p></td>
+                        <td><p>1 = Increased ring diameter, -1 = Decreased ring diameter</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>InternalTriggerDuration</p></td>
+                        <td><p>Float value (&gt;0.0) (default = 2000.0)</p></td>
+                        <td><p>The expected internal trigger period time duration, this defines how fast the ring should increase/decrease within a cycle</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>CorticalMagnitudeFactor</p></td>
+                        <td><p>Float value (&gt;=0.0) (default = 0.2)</p></td>
+                        <td><p>See the below CorticalMagnitudeFactor chapter</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>DisableCortMagFac</p></td>
+                        <td><p>Boolean (true or false) (default = false)</p></td>
+                        <td><p>When enabled the total width of the sub-rings (see A) remains the same independent off the eccentricity. This total ring diameter (see A) then is always the CorticalMagnitudeFactor times the maximum radius (see B)</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>CycleTriggerAmount</p></td>
+                        <td><p>Integer value (&gt;0) (default = nr_of_internal_triggers)</p></td>
+                        <td><p>The duration of a full cycle (increased/decreased diameter) in amount of triggers, the minimal diameter is the gap diameter, see C</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>OutputTriggerFrame</p></td>
+                        <td><p>Boolean (true or false) (default = false)</p></td>
+                        <td><p>When enabled the Experiment manager saves (to the /outputs directory) at each internal trigger a file containing the current state of the visible stimuli area. Please bear in mind that enabling this option may dramatically slow down the experiment and may cause that the requested StimuliRefreshRate is not met!</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>OutputFrameFormat</p></td>
+                        <td><p>String (&ldquo;PNG&rdquo;, &ldquo;DAT&rdquo; or &ldquo;CDAT&rdquo;) (default = &ldquo;DAT&rdquo;)</p></td>
+                        <td><p>If the OutputTriggerFrame parameter is enabled then this value specifies the output format (and extension). &ldquo;PNG&rdquo; creates a standard (*.png) file format containing the visible stimuli area. See chapter Custom graphical DAT and CDAT format for an explanation about the DAT and CDAT format.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>OutputFrameType</p></td>
+                        <td><p>String (&ldquo;Frame&rdquo; or &ldquo;Mask&rdquo;) (default = &ldquo;Frame&rdquo;)</p></td>
+                        <td><p>If the OutputTriggerFrame parameter is enabled then this value specifies the output frame type. Option &ldquo;Frame&rdquo; outputs the active stimuli area with all color information. Option &ldquo;Mask&rdquo; outputs the active stimuli area black and the full ring and/or fixation point as white</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>DiscreteTriggerSteps</p></td>
+                        <td><p>Boolean (true or false) (default = false)</p></td>
+                        <td><p>When enabled then the ring eccentricity occurs in discrete steps at each trigger step. Between two triggers the ring holds its position</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>RandomizeTriggerSteps</p></td>
+                        <td><p>Boolean (true or false) (default = false)</p></td>
+                        <td><p>When enabled then the ring eccentricity is randomly at each trigger step. Between two triggers the ring eccentricity is at a constant speed (only when DiscreteTriggerSteps is disabled) in the EccentricityDirection. The randomization makes sure that all eccentricity steps are performed once before going to the next cycle</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>EmptyTriggerSteps</p></td>
+                        <td><p>Integer value (&gt;=0) (default = 0)</p></td>
+                        <td><p>This parameter defines how many Trigger Steps of a full cycle should be Empty (The Ring is then invisible!). These Empty trigger steps are randomly chosen. The randomization keeps the history of empty trigger steps in memory within a block trial</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>RandomizeTriggerStepsArray</p></td>
+                        <td><p>None, One or more integer values (&gt;=0) seperated by a ',' (default = &quot;&quot;, empty array)</p></td>
+                        <td><p>This parameter is only taken into account if the 'RandomizeTriggerSteps' parameter is set to true. The default randomization is overridden by the value(s) defined here seperated by a comma. Each value refers to a specific index of the stimuli.</p></td>
+                    </tr>
+                    <tr>
+                        <td><p>EmptyTriggerStepsArray</p></td>
+                        <td><p>None, One or more integer values (&gt;=0) seperated by a ',' (default = &quot;&quot;, empty array)</p></td>
+                        <td><p>This parameter is only taken into account if the 'EmptyTriggerSteps' parameter is set to true. The default randomization is overridden by the value(s) defined here seperated by a comma. Each value refers to a specific index of the stimuli.</p></td>
+                    </tr>
+                </tbody>
+            </table>
+            <p>&nbsp;</p>
+            <h4>CorticalMagnitudeFactor</h4>
+            <p><img src="images/image36s.png" alt="" /></p>
+            <p>This factor defines how the total width (see A) of all the visible rings compared to the eccentricity amount. This width is dependant of the eccentricity (ring diameter) at that moment (doesn?t apply when the DisableCortMagFac is true). The smallest ring eccentricity diameter is equal to the gap diameter (see C).</p>
+            <p>E.g. CorticalMagnitudeFactor = 0.2 ==&gt;</p>
+            <p>A = 0.2 * B</p>
+            <p>All individual ring widths are equal.</p>
+            <h4>Eccentricity triggered cycles and Eccentricity direction</h4>
+            <p>A full Eccentricity cycle is internally subdivided by the CycleTriggerAmount parameter. These sub-cycles can be randomized and empty as explained in the above parameter table. Internally these sub-cycles are indexed from [0 ... (CycleTriggerAmount-1)]. The indexing is dependent of the EccentricityDirection. These indexed are internally also used to keep track of the randomly chosen history and to output the result in the experiment output file (automatically generated in the /outputs directory for each run), see the Experiment Output File chapter. The below picture shows an example of an ring together with the indexes (CycleTriggerAmount =12).</p>
+            <p>EccentricityDirection = 1, see below</p>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image22.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 0</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image21.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 3</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image19.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 6</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image16.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 9</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image15.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 1</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image13.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 4</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image11.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 7</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image08.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 10</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image06.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 2</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image33.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 5</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image31.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 8</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image32.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 11</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <p>EccentricityDirection = -1, see below</p>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image32.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 0</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image31.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 3</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image33.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 6</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image06.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 9</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image08.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 1</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image11.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 4</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image13.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 7</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image15.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 10</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image16.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 2</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image19.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 5</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image21.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 8</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image22.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 11</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <h3>MovingBar specific parameters</h3>
+            <img src="images/image34.png" alt="" />
+            <p>
+                <br />
+                The above picture shows a MovingBar screen example. Within the active stimuli area (grey) a moving bar is
+                presented consisting out of several checkers with an alternating color along its width and height. Again in
+                the center of the screen a fixation point (red) is shown. The bar moves in the direction perpendicular to
+                the bar width (in the direction of the fixation point). The bar angle remains the same during the movement.
+            </p>
+            <img src="images/image02.png" alt="" />
+            <p>&nbsp;</p>
+            <table cellspacing="0" cellpadding="0" class="paramtable">
+                <tr>
+                    <th><p>Parameter</p></td>
+                    </th>
+                    <th><p>Possible values</p></td>
+                    </th>
+                    <th><p>Definition</p></td>
+                    </th>
+                </tr>
+                <tr>
+                    <td><p>CheckerColor1</p></td>
+                    <td><p>HEX string representing a RGB color, see color format (default = #FFFFFF)</p></td>
+                    <td><p>Use this parameter to change the color of the first checker</p></td>
+                </tr>
+                <tr>
+                    <td><p>CheckerColor2</p></td>
+                    <td><p>HEX string representing a RGB color, see color format (default = #000000)</p></td>
+                    <td><p>Use this parameter to change the color of the second checker</p></td>
+                </tr>
+                <tr>
+                    <td><p>MovingBarHeight</p></td>
+                    <td><p>Float value (&gt;0.0) (default = 10.0)</p></td>
+                    <td><p>E.g. if the total bar movement is 640 pixel then the bar width is 640/10.0 = 64 pixels (see B)</p></td>
+                </tr>
+                <tr>
+                    <td><p>MovingBarHeightCheckAmount</p></td>
+                    <td><p>Integer value (&gt;0) (default = 4)</p></td>
+                    <td><p>The (maximum visible) number of checkers of the bar in the height direction of the bar (see B). The number of checkers in the bar width direction (see A) is automatically calculated making sure that the checkers are square (same width as height).</p></td>
+                </tr>
+                <tr>
+                    <td><p>MovingBarDirection</p></td>
+                    <td><p>Integer value  (1 or -1) (default = 1)</p></td>
+                    <td><p>1 = Up to Down, -1 = Down to Up</p></td>
+                </tr>
+                <tr>
+                    <td><p>MovingBarAngle</p></td>
+                    <td><p>Float value (&gt;0.0) (default = 45.0)</p></td>
+                    <td><p>The angle of the bar, 0 degrees is along the X axis. A larger value turns counterclockwise</p></td>
+                </tr>
+                <tr>
+                    <td><p>MovingBarCoverage</p></td>
+                    <td><p>Float value (&gt;0.0) (default = 0.5)</p></td>
+                    <td><p>The active stimulus area coverage of a full bar cycle movement. See chapter MovingBarCoverage for a detailed description</p></td>
+                </tr>
+                <tr>
+                    <td><p>FlickrFrequency</p></td>
+                    <td><p>Float value (&gt;0.0) (default = 5)</p></td>
+                    <td><p>The frequency of the flicker cycle(when the checkers change color). Ideally this value is equal to the StimuliRefreshRate parameter divided by an integer value</p></td>
+                </tr>
+                <tr>
+                    <td><p>MovingBarIncludeOppositeDirection (Disabled option!)</p></td>
+                    <td><p>Boolean (true or false) (default = false)</p></td>
+                    <td><p>This option is not available for the current version</p></td>
+                </tr>
+                <tr>
+                    <td><p>InternalTriggerDuration</p></td>
+                    <td><p>Float value (&gt;0.0) (default = 2000.0)</p></td>
+                    <td><p>The expected internal trigger period time duration, this defines how fast the bar should move within a cycle</p></td>
+                </tr>
+                <tr>
+                    <td><p>CycleTriggerAmount</p></td>
+                    <td><p>Integer value (&gt;0) (default = nr_of_internal_triggers)</p></td>
+                    <td><p>The duration of a full cycle (full coverage bar movement) in amount of triggers (see C)</p></td>
+                </tr>
+                <tr>
+                    <td><p>OutputTriggerFrame</p></td>
+                    <td><p>Boolean (true or false) (default = false)</p></td>
+                    <td><p>When enabled the Experiment manager saves (to the /outputs directory) at each internal trigger a file containing the current state of the visible stimuli area. Please bear in mind that enabling this option may dramatically slow down the experiment and may cause that the requested StimuliRefreshRate is not met!</p></td>
+                </tr>
+                <tr>
+                    <td><p>OutputFrameFormat</p></td>
+                    <td><p>String (&ldquo;PNG&rdquo;, &ldquo;DAT&rdquo; or &ldquo;CDAT&rdquo;) (default = &ldquo;DAT&rdquo;)</p></td>
+                    <td><p>If the OutputTriggerFrame parameter is enabled then this value specifies the output format (and extension). &ldquo;PNG&rdquo; creates a standard (*.png) file format containing the visible stimuli area. See chapter Custom graphical DAT and CDAT format for an explanation about the DAT and CDAT format.</p></td>
+                </tr>
+                <tr>
+                    <td><p>OutputFrameType</p></td>
+                    <td><p>String (&ldquo;Frame&rdquo; or &ldquo;Mask&rdquo;) (default = &ldquo;Frame&rdquo;)</p></td>
+                    <td><p>If the OutputTriggerFrame parameter is enabled then this value specifies the output frame type. Option &ldquo;Frame&rdquo; outputs the active stimuli area with all color information. Option &ldquo;Mask&rdquo; outputs the active stimuli area black and the full bar and/or fixation point as white</p></td>
+                </tr>
+                <tr>
+                    <td><p>DiscreteTriggerSteps</p></td>
+                    <td><p>Boolean (true or false) (default = false)</p></td>
+                    <td><p>When enabled then the bar movement occurs in discrete steps at each trigger step. Between two triggers the ring holds its position</p></td>
+                </tr>
+                <tr>
+                    <td><p>RandomizeTriggerSteps</p></td>
+                    <td><p>Boolean (true or false) (default = false)</p></td>
+                    <td><p>When enabled then the bar movement is randomly at each trigger step. Between two triggers the bar movement is at a constant speed (only when DiscreteTriggerSteps is disabled) in the MovingBarDirection. The randomization makes sure that all bar movement steps are performed once before going to the next cycle</p></td>
+                </tr>
+                <tr>
+                    <td><p>EmptyTriggerSteps</p></td>
+                    <td><p>Integer value (&gt;=0) (default = 0)</p></td>
+                    <td><p>This parameter defines how many Trigger steps of a full cycle should be Empty (The Bar is then invisible!). These Empty trigger steps are randomly chosen. The randomization keeps the history of empty trigger steps in memory within a block trial</p></td>
+                </tr>
+                <tr>
+                    <td><p>RandomizeTriggerStepsArray</p></td>
+                    <td><p>None, One or more integer values (&gt;=0) seperated by a ',' (default = &quot;&quot;, empty array)</p></td>
+                    <td><p>This parameter is only taken into account if the 'RandomizeTriggerSteps' parameter is set to true. The default randomization is overridden by the value(s) defined here seperated by a comma. Each value refers to a specific index of the stimuli.</p></td>
+                </tr>
+                <tr>
+                    <td><p>EmptyTriggerStepsArray</p></td>
+                    <td><p>None, One or more integer values (&gt;=0) seperated by a ',' (default = &quot;&quot;, empty array)</p></td>
+                    <td><p>This parameter is only taken into account if the 'EmptyTriggerSteps' parameter is set to true. The default randomization is overridden by the value(s) defined here seperated by a comma. Each value refers to a specific index of the stimuli.</p></td>
+                </tr>
+                <br />
+            </table>
+            <p>&nbsp;</p>
+            <h4>MovingBarCoverage</h4>
+            <img src="images/image09.png" alt="" />
+            <p>&nbsp;</p>
+            <p>
+                We see a active stimulus area (smaller than the full screen area) inside the red rectangle covering the diagonal B. The bar is at the first
+                initial position and moves along the direction of the yellow arrow(A) until it reaches the orange border above the fixation dot and the full cycle is complete.
+                The stimulus screen coverage is within the orange borders. The coverage is defined as:
+            </p>
+            <p>A = MovingBarCoverage * B</p>
+            <h4>MovingBar triggered cycles and MovingBar direction</h4>
+            <p>
+                A full MovingBar cycle is internally subdivided by the CycleTriggerAmount parameter. These sub-cycles can be randomized and empty as explained
+                in the above parameter table. Internally these sub-cycles are indexed from [0 ... (CycleTriggerAmount-1)]. The indexing is dependent of the MovingBarDirection.
+                These indexed are internally also used to keep track of the randomly chosen history and to output the result in the experiment output file
+                (automatically generated in the /outputs directory for each run), see the Experiment Output File chapter. The below picture shows an example
+                of an ring together with the indexes (CycleTriggerAmount =12).
+            </p>
+            <p>MovingBarDirection = 1, see below (MovingBarAngle = 30)</p>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image30.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 0</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image01.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 3</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image00.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 6</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image04.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 9</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image42.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 1</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image07.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 4</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image05.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 7</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image12.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 10</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image10.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 2</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image43.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 5</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image44.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 8</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image41.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 11</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+            </table>
+            <p>
+                <br />
+                MovingBarDirection = -1, see below (MovingBarAngle = 30)
+            </p>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image41.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 0</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image44.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 3</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image43.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 6</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image10.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 9</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image12.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 1</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image05.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 4</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image07.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 7</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image42.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 10</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image04.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 2</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image00.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 5</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image01.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 8</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image30.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 11</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <h3>MovingDots specific parameters</h3>
+            <img src="images/image29.png" alt="" />
+            <p>
+                <br />
+                The above picture shows a MovingDots screen example. Within the active stimuli area (grey) several dots are presented
+                inside two areas (Hemifields). These dots can move around when they leave the Hemifield they automatically appear again
+                in the opposite corner moving with the same speed and direction/angle making sure that the amount of visible dots remains
+                constant. In the above example the left and right hemifields are visible and divided by a distance from each other. Both
+                Hemifields contain the dots at the same position (They are identical). The distance between the hemifields could also be
+                made zero which would create one area with the dots smoothly moving from one area to the other. Again in the center of
+                the screen a fixation point (red) is shown.
+            </p>
+            <img src="images/image35.png" alt="" />
+            <p>&nbsp;</p>
+            <table cellspacing="0" cellpadding="0" class="paramtable">
+                <tr>
+                    <th><p>Parameter</p></td>
+                    </th>
+                    <th><p>Possible values</p></td>
+                    </th>
+                    <th><p>Definition</p></td>
+                    </th>
+                </tr>
+                <tr>
+                    <td><p>MovingDotsColor</p></td>
+                    <td><p>HEX string representing a RGB color, see color format (default = #FFFFFF)</p></td>
+                    <td><p>Use this parameter to change the color of the moving dots</p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>MovingDotsMinMoveSpeed and</p>
+                        <p>MovingDotsMaxMoveSpeed</p>
+                    </td>
+                    <td><p>Float value (&gt;0.0) (default = 4.0(both))</p></td>
+                    <td><p>The minimal and maximal movement speed of the Dots in Pixels/StimuliRefreshRate</p></td>
+                </tr>
+                <tr>
+                    <td>
+                        <p>MovingDotsMinMoveAngle and MovingDotsMaxMoveAngle</p>
+                        <p> </p>
+                    </td>
+                    <td><p>Integer values (&gt;=0) (default Min=0, Max=359)</p></td>
+                    <td><p>The minimal and maximal (random) movement angle of the Dots in degrees</p></td>
+                </tr>
+                <tr>
+                    <td><p>MovingDotsNrOfDots</p></td>
+                    <td><p>Integer value (&gt;0) (default =1000)</p></td>
+                    <td><p>The amount of active visible moving dots per visible Hemispere. If a dot moves over the corner of an Hemiphere the it will can be halfway visible at the e.g. the left and right side where it moves then back in again.</p></td>
+                </tr>
+                <tr>
+                    <td><p>MovingDotsDotSize</p></td>
+                    <td><p>Integer value (&gt;0) (default =12)</p></td>
+                    <td><p>The diameter of a single dot in pixels</p></td>
+                </tr>
+                <tr>
+                    <td><p>MovingDotsHemifield</p></td>
+                    <td><p>String (&quot;Left&quot; or &quot;Right&quot; or &quot;Both&quot;) (default = &quot;Both&quot;)</p></td>
+                    <td><p>Defines which Hemifield(s) are visible within the active stimuli area</p></td>
+                </tr>
+                <tr>
+                    <td><p>MovingDotsPixelFromCenter</p></td>
+                    <td><p>Integer value (&gt;=0) (default =100)</p></td>
+                    <td><p>The distance between the Hemifield (left and/or right) and the center X position on the screen in pixels (see red line). E.g. a value of 100 will make sure that the left and right hemifield are 2*100 pixels seperated from each other.</p></td>
+                </tr>
+                <tr>
+                    <td><p>MovingDotsStationairy</p></td>
+                    <td><p>Boolean (true or false) (default = false)</p></td>
+                    <td><p>Defines whether the dots should move or hold their initial position</p></td>
+                </tr>
+                <tr>
+                    <td><p>MovingDotsRetinalPosition</p></td>
+                    <td><p>--</p></td>
+                    <td><p>This parameter is not yet implemented...</p></td>
+                </tr>
+                <tr>
+                    <td><p>MovingDotsHemiFieldWidth</p></td>
+                    <td><p>Integer value (&gt;0) (default = 320)</p></td>
+                    <td><p>This defines the width of one Hemifield (including the MovingDotsPixelFromCenter), see the above yellow square.</p></td>
+                </tr>
+                <tr>
+                    <td><p>MovingDotsFieldHemiHeight</p></td>
+                    <td><p>Integer value (&gt;0) (default = 240)</p></td>
+                    <td><p>This defines the height of one Hemifield, see the above yellow square.</p></td>
+                </tr>
+                <br />
+            </table>
+            <p>&nbsp;</p>
+            <h2>Experiment Manager Usage</h2>
+            <p>When you start the Experiment Manager and run an experiment it shows (after the initialization &lt;initializations&gt; section) first an informative screen were you need to press the ?TAB? key to proceed or the ?CTRL+a? key combination to abort the experiment (You may also use this combination during a running experiment to abort). After you pressed the ?TAB? key it waits for the first Internal Trigger. After it receives this trigger the experiment starts running.</p>
+            <h2>Experiment Manager Public Signal and Slots</h2>
+            <p>The Experiment Manager exposes several <strong>public Signals and Slots</strong> that can be used from within c++ code, a script context or experiment file. These are explained in the <a href="../../Script/ExperimentManagerPlugin/Doxygen/class_experiment_manager.html">Experiment Manager script class reference</a>.</p>
+            <h2>Experiment Output File</h2>
+            <h3>Custom graphical DAT and CDAT format</h3>
+            <h4>DAT format</h4>
+            <p>The custom graphical DAT format is created for users who want an easily accessible file format. The file first always starts with a unique header (32 bits), containing the value (0xCAFE1234).</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+	#define ARGB_FORMAT_HEADER 0xCAFE1234
+	</pre>
+                    </td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <p>After the header the next 8 bytes are reserved for the Image resolution (width (=32 bits) and height (=32 bits)).</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+	quint32 width = image.width();
+	quint32 height = image.height();</pre>
+                    </td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <p>Hereafter the actual Image data can be found per pixel as a Qt?s QRgb type.</p>
+            <h4>QRgb type definition</h4>
+            <p>An ARGB quadruplet on the format #AARRGGBB, equivalent to an unsigned int. The type also holds a value for the alpha-channel. The default alpha channel is ff, i.e. opaque.</p>
+            <p>Below you can find an example C++ file showing how you can open and process an (*.dat) file:</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+	// ARGB_Test.cpp : Defines the entry point for the console application.
+	//
+	#include "stdafx.h"
+	#include <iostream>
+	#include <fstream>
+	using namespace std;
+	#define MAGIC_ARGB_FORMAT_HEADER 0xCAFE1234
+	#define ACTIVE_PIXEL 0xFFFFFFFF
+	#define INACTIVE_PIXEL 0xFF000000
+	#define MAX_VALUE 0xFFFF
+	#define MIN_VALUE 0x0000
+	struct HeaderData
+	{
+		unsigned int magic;
+		unsigned int width;
+		unsigned int height;
+	};
+	//inline unsigned short swap_16bit(unsigned short us)
+	//{
+	//        return (unsigned short)(((us & 0xFF00) >> 8) |
+	//                ((us & 0x00FF) << 8));
+	//}
+	inline unsigned long swap_32bit_ulong(unsigned long ul)
+	{
+		return (unsigned long)(((ul & 0xFF000000) >> 24) |
+			((ul & 0x00FF0000) >>  8) |
+			((ul & 0x0000FF00) <<  8) |
+			((ul & 0x000000FF) << 24));
+	}
+	inline unsigned int swap_32bit_uint(unsigned int ui)
+	{
+		return (unsigned long)(((ui & 0xFF000000) >> 24) |
+			((ui & 0x00FF0000) >>  8) |
+			((ui & 0x0000FF00) <<  8) |
+			((ui & 0x000000FF) << 24));
+	}
+	int _tmain(int argc, _TCHAR* argv[])
+	{
+		ifstream::pos_type size;
+		char *filename = "1_2_0_8.dat";
+		ifstream file (filename, ios::in|ios::binary|ios::ate);
+		HeaderData *header = new HeaderData();
+		//char pixelBuffer[4];//AARRGGBB,
+		//see http://doc.qt.nokia.com/latest/qimage.html#image-formats
+		unsigned short nPixelSubValue = 0;//2 bytes
+		unsigned long lPixelValue = 0;//4 bytes
+		int nBufferSize = sizeof(lPixelValue);
+		int nRow = 0;
+		int nColumn = 0;
+		
+		if (file.is_open())
+		{
+			size = file.tellg();
+			if (size >= 16)//>=1 pixel
+			{
+				file.seekg (0, ios::beg);
+				file.read((char*)header,sizeof(HeaderData));
+				header->height = swap_32bit_uint(header->height);
+				cout << "The height is " << header->height << endl;
+				header->width = swap_32bit_uint(header->width);
+				cout << "The width is " << header->width << endl;
+				header->magic = swap_32bit_uint(header->magic);
+				cout << "The magic number is " << header->magic << endl;
+				if (header->magic == MAGIC_ARGB_FORMAT_HEADER)
+				{
+					while (!file.eof())
+					{
+						//file.read((char*)pixelBuffer,nBufferSize);
+						file.read((char*)&lPixelValue,nBufferSize);  
+						lPixelValue = swap_32bit_ulong(lPixelValue);
+						 //BBGGRRAA -> AARRGGBB
+						if (lPixelValue == ACTIVE_PIXEL)
+						{
+							lPixelValue = lPixelValue;
+							cout << "X";
+						}
+						else if(lPixelValue == INACTIVE_PIXEL)
+						{
+							lPixelValue = lPixelValue;
+							cout << " ";
+						}
+						else
+						{
+							lPixelValue = lPixelValue;
+							cout << "?";
+						}
+						//For Accessing the sub pixel values A,R,G,B
+						//for (int i=0;i<4;i++) />/{
+						//        nPixelSubValue = (unsigned short)pixelBuffer[i];
+						//        if (nPixelSubValue == MAX_VALUE)
+						//        {
+						//                nPixelSubValue = nPixelSubValue;
+						//        }
+						//        else if(nPixelSubValue == MIN_VALUE)
+						//        {
+						//                nPixelSubValue = nPixelSubValue;
+						//        }
+						//        else
+						//        {
+						//                nPixelSubValue = nPixelSubValue;
+						//        }
+						//}
+						if ((nColumn + 1) == header->height)
+						{
+							cout << endl;
+							nColumn = 0;
+							if ((nRow + 1) == header->width)
+							{
+								nRow = 0;
+								nColumn = 0;
+								break;
+							}
+							else
+							{
+								nRow++;
+							}
+						}
+						else
+						{
+							nColumn++;
+						}
+					}
+				}
+			}
+			else
+			{
+				cout << "Too small file size";
+				file.close();
+				return 0;
+			}
+			file.close();
+		}
+		else
+		{
+			cout << "Unable to open file";
+			return 0;
+		}
+		cout << "End-of-file reached.." << endl;
+		return 0;
+	}</fstream></iostream></pre>
+                    </td>
+                </tr>
+            </table>
+            <p>You can also make use of the ImageProcessor script object to perform some simple (*.dat) file operations, see chapter ImageProcessor.</p>
+            <h4>CDAT format</h4>
+            <p>The CDAT format is like a sequential container for the DAT file(s). The file first always starts with a unique header (32 bits), containing the value (0xCAFE5678).</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+	#define ARGB_FORMAT_HEADER 0xCAFE5678
+	    </pre>
+                    </td>
+                </tr>
+            </table>
+            <p>
+                <br />
+                After the header the next 8 bytes are reserved for the number of Images the files contains.
+            </p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+	quint32 itemCount;
+	</pre>
+                    </td>
+                </tr>
+            </table>
+            <p>After the header the next 8 bytes are reserved for the Image(s) resolution (width (=32 bits) and height (=32 bits)).</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+	quint32 width = image.width();
+	quint32 height = image.height();</pre>
+                    </td>
+                </tr>
+            </table>
+            <p>Hereafter the actual Image(s) data can be found per pixel as a Qt?s QRgb type (image after image).</p>
+            <h2>Additional available script classes</h2>
+            <p>There are some additional classes defined inside the Experiment Manager which can be used to derive a new object from trough the BrainStim script environment, these are:</p>
+            <h3>ImageProcessor</h3>
+            <h3>PRTFormatManager</h3>
+            <h3>TriggerTimer and ExperimentTimer</h3>
+            <h3>ExperimentStructure</h3>
+            <h3>QML2Viewer</h3>
+            <h3>RandomGenerator</h3>
+            <p>&nbsp;</p>
+        </div>
+    </div>
+</body>
+</html>

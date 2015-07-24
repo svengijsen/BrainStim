@@ -17,13 +17,26 @@ function GDCF_ReplaceInFiles(strTemplate, strDestination, changeSetArr)
 	templateFile.open(QIODevice.OpenMode(QIODevice.ReadOnly) || QIODevice.OpenMode(QIODevice.Text));
 	var inStream = new QTextStream(templateFile);
 	var inData = new String();
+	var dDestDir = new QDir(); 
+	var fiDestFileInfo = new QFileInfo();
 	//inData = inStream.readLine();
 	inData = inStream.readAll();
 	//Log(inData);
 	templateFile.close();
 	///////////////////////////////////////////////////////////////////////////////////////
+	fiDestFileInfo.setFile(strDestination);
+	dDestDir = fiDestFileInfo.absoluteDir();
+	if(dDestDir.exists()==false)
+	{
+		if(dDestDir.mkpath(dDestDir.path())==false)
+			Log("<font color=\"red\">Could not create destination path: " + dDestDir.path() + "</font>");
+	}	
 	var outputFile = new QFile(strDestination);
-	outputFile.open(QIODevice.OpenMode(QIODevice.WriteOnly) || QIODevice.OpenMode(QIODevice.Text));
+	if(outputFile.open(QIODevice.OpenMode(QIODevice.WriteOnly) || QIODevice.OpenMode(QIODevice.Text))==false)
+	{
+		Log("<font color=\"red\">Could not open output file!</font>");
+		return false;
+	}
 	var outStream = new QTextStream(outputFile);
 	inData = CreateNewContent(inData,changeSetArr);
 	var outData = new QByteArray(inData);// or 'text'
@@ -37,6 +50,8 @@ function GDCF_ReplaceInFiles(strTemplate, strDestination, changeSetArr)
 	outputFile = null;
 	outStream = null;
 	outData = null;
+	dDestDir = null;
+	fiDestFileInfo = null;
 	return true;	
 }
 

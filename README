@@ -1,0 +1,52 @@
+This is the documentation (gh-pages) branch of the BrainStim software.
+All files inside this branch are used by GitHub to automatically create a project page, see http://svengijsen.github.io/BrainStim/.
+Furthermore these files are used to create the offline help documentation package available in BrainStim.
+The html pages make use of the Bootstrap v3.3.5 framework to make them responsive and mobile first for the web, see http://getbootstrap.com.
+
+For automatic inline code higlighting inside a html page, we make use of another GitHub project named code-prettify (or google-code-prettify), see http://github.com/google/code-prettify.
+You can use it like:
+
+		<table class="codeframe">
+			<tr>
+				<td>
+					<pre class="prettyprint"><code class="language-bsh"> echo %PROCESSOR_ARCHITECTURE% </code></pre>
+				</td>
+			</tr>
+		</table>
+
+You can specify a language by specifying the language extension along with the prettyprint class:		
+<pre class="prettyprint lang-html">
+  The lang-* class specifies the language file extensions.
+  File extensions supported by default include
+    "bsh", "c", "cc", "cpp", "cs", "csh", "cyc", "cv", "htm", "html",
+    "java", "js", "m", "mxml", "perl", "pl", "pm", "py", "rb", "sh",
+    "xhtml", "xml", "xsl".
+</pre>
+
+There are some coding conventions that you might want to follow for new pages, these are:
+
+- First put everything inside the <body> section inside this section:
+	<div class="container" role="main">
+	
+- Enable automatic configuration for different sections of the page by implementing that in the 'DocumentVersioning.qs' script:
+	- Use BrainStim to execute the script and to automatically search and replace defined sections from different pages, this makes the tracking of the document versioning much easier because all documents are then maintained within one file (the script).
+	- The replacement code uses TAGS to know the start and end point for the replacement, these can be:
+		Title												:	<!--doc-version-title-begin--><!--doc-version-title-end-->
+		Header section							:	<!--doc-version-default-header-begin--><!--doc-version-default-header-end-->
+		HTML CSS Javascript links		:	<!--doc-version-default-links-begin--><!--doc-version-default-links-end-->
+		
+		
+		
+		
+		jquery-ui-1.11.4.custom		js\jquery-ui
+		jquery-1.11.3.min					js\jquery-1.11.3.min.js
+		jquery.tocify.min					js\jquery.tocify.min.js
+															css\jquery.tocify.css
+															
+		images: class="img-responsive", see also img.centered
+		
+		container-fluid: full width
+		container: responsive
+		
+		<kbd></kbd> key input
+		

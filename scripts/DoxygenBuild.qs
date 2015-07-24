@@ -130,10 +130,9 @@ function ExecuteBinairy(binPath, argList)
 }
 
 ConnectDisconnectScriptFunctions(true);
-//Log(getString("This is an Title", "Some Text....","default x"));
 
 bDoCleanup = false;
-sBinairySteps = 1;//11;
+sBinairySteps = 3;
 for(nCounter=1;nCounter<=sBinairySteps;nCounter++)
 {
 	bFileProccessed = false;
@@ -184,137 +183,14 @@ for(nCounter=1;nCounter<=sBinairySteps;nCounter++)
 					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/ExperimentManager/RandomGenerator.cpp \\\n" +
 					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/ExperimentManager/ExperimentStructures.h \\\n" +
 					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/ExperimentManager/ExperimentEngine.h \\\n" +
-					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/ExperimentManager/Global.h \\\n";
+					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/ExperimentManager/Global.h \\\n" +
+					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/ExperimentManager/qml2interface.h \\\n";
 		changeSet[6][0] = preFix + "QHP_NAMESPACE" + postFix;
 		changeSet[6][1] = "BrainStim.doxygen.Project";
 		changeSet[7][0] = preFix + "PREDEFINED" + postFix; //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html
 		changeSet[7][1] = "";		
 	}
 	else if (nCounter==2)
-	{
-		ComponentName = "ParallelPortPlugin";		
-		Log("Component Name: " + ComponentName);
-		LastComponentReleaseIndex = BrainStim_Info.GetLatestComponentReleaseByName(ComponentName);
-		Log("Last Component Release Index: " + LastComponentReleaseIndex);
-		LastComponentIndex = BrainStim_Info.GetLatestComponentIndexByName(LastComponentReleaseIndex,ComponentName);
-		Log("Last Component Index: " + LastComponentIndex);
-		LastComponentVersion = BrainStim_Info.GetComponentVersionByIndexes(LastComponentReleaseIndex,LastComponentIndex);
-		Log("Last Component Version: " + LastComponentVersion);
-		Log("\n");
-		fileDest = ComponentName + ".cfg";
-		changeSet[0][0] = preFix + "PROJECT_NAME" + postFix;
-		changeSet[0][1] = "\"Parallel Port Device script class\"";
-		changeSet[1][0] = preFix + "PROJECT_NUMBER" + postFix;
-		changeSet[1][1] = "\"" + LastComponentVersion + "\"";
-		changeSet[2][0] = preFix + "PROJECT_BRIEF" + postFix;
-		changeSet[2][1] = "\"Parallel Port Device script class reference.\"";
-		changeSet[3][0] = preFix + "PROJECT_LOGO" + postFix;
-		changeSet[3][1] = "";//No quotes for empty!
-		changeSet[4][0] = preFix + "OUTPUT_DIRECTORY" + postFix;
-		changeSet[4][1] = "\"../References/Script/ParallelPortDevicePlugin\"";
-		changeSet[5][0] = preFix + "INPUT" + postFix;
-		changeSet[5][1] = BrainStim_Settings_ProjectDirectory + "/Source/Plugins/ParallelPortDevice/ParallelPort.h \\\n" +
-					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/ParallelPortDevice/ParallelPort.cpp \\\n" +
-					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/ParallelPortDevice/Global.h \\\n";
-		changeSet[6][0] = preFix + "QHP_NAMESPACE" + postFix;
-		changeSet[6][1] = "BrainStim.doxygen.Project";	
-		changeSet[7][0] = preFix + "PREDEFINED" + postFix; //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html
-		changeSet[7][1] = "";		
-	}
-	else if (nCounter==3)
-	{
-		ComponentName = "SerialPortPlugin";		
-		Log("Component Name: " + ComponentName);
-		LastComponentReleaseIndex = BrainStim_Info.GetLatestComponentReleaseByName(ComponentName);
-		Log("Last Component Release Index: " + LastComponentReleaseIndex);
-		LastComponentIndex = BrainStim_Info.GetLatestComponentIndexByName(LastComponentReleaseIndex,ComponentName);
-		Log("Last Component Index: " + LastComponentIndex);
-		LastComponentVersion = BrainStim_Info.GetComponentVersionByIndexes(LastComponentReleaseIndex,LastComponentIndex);
-		Log("Last Component Version: " + LastComponentVersion);
-		Log("\n");
-		fileDest = ComponentName + ".cfg";
-		changeSet[0][0] = preFix + "PROJECT_NAME" + postFix;
-		changeSet[0][1] = "\"Serial Port Device script class\"";
-		changeSet[1][0] = preFix + "PROJECT_NUMBER" + postFix;
-		changeSet[1][1] = "\"" + LastComponentVersion + "\"";
-		changeSet[2][0] = preFix + "PROJECT_BRIEF" + postFix;
-		changeSet[2][1] = "\"The Serial Port Device script class reference.\"";
-		changeSet[3][0] = preFix + "PROJECT_LOGO" + postFix;
-		changeSet[3][1] = "";//No quotes for empty!
-		changeSet[4][0] = preFix + "OUTPUT_DIRECTORY" + postFix;
-		changeSet[4][1] = "\"../References/Script/SerialPortDevicePlugin\"";
-		changeSet[5][0] = preFix + "INPUT" + postFix;
-		changeSet[5][1] = BrainStim_Settings_ProjectDirectory + "/Source/Plugins/SerialPortDevice/SerialPortDevice.h \\\n" +
-		                          BrainStim_Settings_ProjectDirectory + "/Source/Plugins/SerialPortDevice/SerialPortDevice.cpp \\\n" +
-		                          BrainStim_Settings_ProjectDirectory + "/Source/Plugins/SerialPortDevice/Global.h \\\n";
-		changeSet[6][0] = preFix + "QHP_NAMESPACE" + postFix;
-		changeSet[6][1] = "BrainStim.doxygen.Project";
-		changeSet[7][0] = preFix + "PREDEFINED" + postFix; //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html
-		changeSet[7][1] = "Q_OS_WIN";
-	}
-	else if (nCounter==4)
-	{
-		ComponentName = "USBHIDDevicePlugin";		
-		Log("Component Name: " + ComponentName);
-		LastComponentReleaseIndex = BrainStim_Info.GetLatestComponentReleaseByName(ComponentName);
-		Log("Last Component Release Index: " + LastComponentReleaseIndex);
-		LastComponentIndex = BrainStim_Info.GetLatestComponentIndexByName(LastComponentReleaseIndex,ComponentName);
-		Log("Last Component Index: " + LastComponentIndex);
-		LastComponentVersion = BrainStim_Info.GetComponentVersionByIndexes(LastComponentReleaseIndex,LastComponentIndex);
-		Log("Last Component Version: " + LastComponentVersion);
-		Log("\n");
-		fileDest = ComponentName + ".cfg";
-		changeSet[0][0] = preFix + "PROJECT_NAME" + postFix;
-		changeSet[0][1] = "\USB HID Device script class\"";
-		changeSet[1][0] = preFix + "PROJECT_NUMBER" + postFix;
-		changeSet[1][1] = "\"" + LastComponentVersion + "\"";
-		changeSet[2][0] = preFix + "PROJECT_BRIEF" + postFix;
-		changeSet[2][1] = "\"The USB HID Device script class reference.\"";
-		changeSet[3][0] = preFix + "PROJECT_LOGO" + postFix;
-		changeSet[3][1] = "";//No quotes for empty!
-		changeSet[4][0] = preFix + "OUTPUT_DIRECTORY" + postFix;
-		changeSet[4][1] = "\"../References/Script/USBHIDDevicePlugin\"";
-		changeSet[5][0] = preFix + "INPUT" + postFix;
-		changeSet[5][1] = BrainStim_Settings_ProjectDirectory + "/Source/Plugins/USBHIDDevice/USBHIDDevice.cpp \\\n" +
-		                          BrainStim_Settings_ProjectDirectory + "/Source/Plugins/USBHIDDevice/USBHIDDevice.h \\\n" +
-		                          BrainStim_Settings_ProjectDirectory + "/Source/Plugins/USBHIDDevice/Global.h \\\n";
-		changeSet[6][0] = preFix + "QHP_NAMESPACE" + postFix;
-		changeSet[6][1] = "BrainStim.doxygen.Project";
-		changeSet[7][0] = preFix + "PREDEFINED" + postFix; //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html
-		changeSet[7][1] = "";
-	}
-	else if (nCounter==5)
-	{
-		ComponentName = "KeyBoardPlugin";		
-		Log("Component Name: " + ComponentName);
-		LastComponentReleaseIndex = BrainStim_Info.GetLatestComponentReleaseByName(ComponentName);
-		Log("Last Component Release Index: " + LastComponentReleaseIndex);
-		LastComponentIndex = BrainStim_Info.GetLatestComponentIndexByName(LastComponentReleaseIndex,ComponentName);
-		Log("Last Component Index: " + LastComponentIndex);
-		LastComponentVersion = BrainStim_Info.GetComponentVersionByIndexes(LastComponentReleaseIndex,LastComponentIndex);
-		Log("Last Component Version: " + LastComponentVersion);
-		Log("\n");
-		fileDest = ComponentName + ".cfg";
-		changeSet[0][0] = preFix + "PROJECT_NAME" + postFix;
-		changeSet[0][1] = "\"KeyBoard Device script class\"";
-		changeSet[1][0] = preFix + "PROJECT_NUMBER" + postFix;
-		changeSet[1][1] = "\"" + LastComponentVersion + "\"";
-		changeSet[2][0] = preFix + "PROJECT_BRIEF" + postFix;
-		changeSet[2][1] = "\"The KeyBoard Device script class reference.\"";
-		changeSet[3][0] = preFix + "PROJECT_LOGO" + postFix;
-		changeSet[3][1] = "";//No quotes for empty!
-		changeSet[4][0] = preFix + "OUTPUT_DIRECTORY" + postFix;
-		changeSet[4][1] = "\"../References/Script/KeyBoardDevicePlugin\"";
-		changeSet[5][0] = preFix + "INPUT" + postFix;
-		changeSet[5][1] = BrainStim_Settings_ProjectDirectory + "/Source/Plugins/KeyBoardDevice/KeyBoardCapture.cpp \\\n" +
-		                          BrainStim_Settings_ProjectDirectory + "/Source/Plugins/KeyBoardDevice/KeyBoardCapture.h \\\n" +
-		                          BrainStim_Settings_ProjectDirectory + "/Source/Plugins/KeyBoardDevice/Global.h \\\n";
-		changeSet[6][0] = preFix + "QHP_NAMESPACE" + postFix;
-		changeSet[6][1] = "BrainStim.doxygen.Project";	
-		changeSet[7][0] = preFix + "PREDEFINED" + postFix; //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html
-		changeSet[7][1] = "";	
-	}
-	else if (nCounter==6)
 	{
 		ComponentName = "BrainStim_QMLExtensions";		
 		Log("Component Name: " + ComponentName);
@@ -335,18 +211,19 @@ for(nCounter=1;nCounter<=sBinairySteps;nCounter++)
 		changeSet[3][0] = preFix + "PROJECT_LOGO" + postFix;
 		changeSet[3][1] = "";//No quotes for empty!
 		changeSet[4][0] = preFix + "OUTPUT_DIRECTORY" + postFix;
-		changeSet[4][1] = "\"../References/QtQuick/BrainStim_QMLExtensions\"";
+		changeSet[4][1] = "\"../documents/BrainStim_QMLExtensions\"";
 		changeSet[5][0] = preFix + "INPUT" + postFix;
 		changeSet[5][1] = BrainStim_Settings_ProjectDirectory + "/Source/QmlExtensions/Plugins/DefaultPlugin/ogreitem.h \\\n" +		
 					  BrainStim_Settings_ProjectDirectory + "/Source/QmlExtensions/Plugins/DefaultPlugin/OgreCameraNode.h \\\n" +
-					  BrainStim_Settings_ProjectDirectory + "/Source/QmlExtensions/Plugins/DefaultPlugin/TimeModel.h \\\n" +
+					  BrainStim_Settings_ProjectDirectory + "/Source/QmlExtensions/Plugins/DefaultPlugin/OgreLightNode.h \\\n" +
+					  //BrainStim_Settings_ProjectDirectory + "/Source/QmlExtensions/Plugins/DefaultPlugin/TimeModel.h \\\n" +
 		                          BrainStim_Settings_ProjectDirectory + "/Source/QmlExtensions/Plugins/DefaultPlugin/defines.h \\\n";
 		changeSet[6][0] = preFix + "QHP_NAMESPACE" + postFix;
 		changeSet[6][1] = "BrainStim.doxygen.Project";
 		changeSet[7][0] = preFix + "PREDEFINED" + postFix; //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html
 		changeSet[7][1] = "";
 	}
-	else if (nCounter==7)
+	else if (nCounter==3)
 	{
 		ComponentName = "BrainStimMainApplication";		
 		//Log("Component Name: " + ComponentName);
@@ -367,140 +244,17 @@ for(nCounter=1;nCounter<=sBinairySteps;nCounter++)
 		changeSet[3][0] = preFix + "PROJECT_LOGO" + postFix;
 		changeSet[3][1] = "";//No quotes for empty!
 		changeSet[4][0] = preFix + "OUTPUT_DIRECTORY" + postFix;
-		changeSet[4][1] = "\"../References/Script/BrainStimMainApp\"";
+		changeSet[4][1] = "\"../documents/BrainStim\"";
 		changeSet[5][0] = preFix + "INPUT" + postFix;
 		changeSet[5][1] = BrainStim_Settings_ProjectDirectory + "/Source/BrainStim/mainwindow.h \\\n" +
 					  BrainStim_Settings_ProjectDirectory + "/Source/BrainStim/mainwindow.cpp \\\n" +
 					  BrainStim_Settings_ProjectDirectory + "/Source/BrainStim/GlobalApplicationInformation.h \\\n" +
+					  BrainStim_Settings_ProjectDirectory + "/Source/BrainStim/archiver.h \\\n" +
 					  BrainStim_Settings_ProjectDirectory + "/Source/BrainStim/scifinddialog.h \\\n";
 //		changeSet[6][0] = preFix + "QHP_NAMESPACE" + postFix;
 //		changeSet[6][1] = "BrainStim.doxygen.Project";
 //		changeSet[7][0] = preFix + "PREDEFINED" + postFix; //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html
 //		changeSet[7][1] = "";		
-	}	
-	else if (nCounter==8)
-	{
-		ComponentName = "FireBirdClientPlugin";		
-		Log("Component Name: " + ComponentName);
-		LastComponentReleaseIndex = BrainStim_Info.GetLatestComponentReleaseByName(ComponentName);
-		Log("Last Component Release Index: " + LastComponentReleaseIndex);
-		LastComponentIndex = BrainStim_Info.GetLatestComponentIndexByName(LastComponentReleaseIndex,ComponentName);
-		Log("Last Component Index: " + LastComponentIndex);
-		LastComponentVersion = BrainStim_Info.GetComponentVersionByIndexes(LastComponentReleaseIndex,LastComponentIndex);
-		Log("Last Component Version: " + LastComponentVersion);
-		Log("\n");
-		fileDest = ComponentName + ".cfg";
-		changeSet[0][0] = preFix + "PROJECT_NAME" + postFix;
-		changeSet[0][1] = "\"FireBird Client Device script class\"";
-		changeSet[1][0] = preFix + "PROJECT_NUMBER" + postFix;
-		changeSet[1][1] = "\"" + LastComponentVersion + "\"";
-		changeSet[2][0] = preFix + "PROJECT_BRIEF" + postFix;
-		changeSet[2][1] = "\"FireBird Client Device script class reference.\"";
-		changeSet[3][0] = preFix + "PROJECT_LOGO" + postFix;
-		changeSet[3][1] = "";//No quotes for empty!
-		changeSet[4][0] = preFix + "OUTPUT_DIRECTORY" + postFix;
-		changeSet[4][1] = "\"../References/Script/FireBirdClientPlugin\"";
-		changeSet[5][0] = preFix + "INPUT" + postFix;
-		changeSet[5][1] = BrainStim_Settings_ProjectDirectory + "/Source/Plugins/FirebirdClient/FirebirdClient.h \\\n" +
-					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/FirebirdClient/FirebirdClient.cpp \\\n" +
-					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/FirebirdClient/Global.h \\\n";
-		changeSet[6][0] = preFix + "QHP_NAMESPACE" + postFix;
-		changeSet[6][1] = "BrainStim.doxygen.Project";	
-		changeSet[7][0] = preFix + "PREDEFINED" + postFix; //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html
-		changeSet[7][1] = "";		
-	}
-	else if (nCounter==9)
-	{	
-		ComponentName = "PiezoStimDevicePlugin";		
-		Log("Component Name: " + ComponentName);
-		LastComponentReleaseIndex = BrainStim_Info.GetLatestComponentReleaseByName(ComponentName);
-		Log("Last Component Release Index: " + LastComponentReleaseIndex);
-		LastComponentIndex = BrainStim_Info.GetLatestComponentIndexByName(LastComponentReleaseIndex,ComponentName);
-		Log("Last Component Index: " + LastComponentIndex);
-		LastComponentVersion = BrainStim_Info.GetComponentVersionByIndexes(LastComponentReleaseIndex,LastComponentIndex);
-		Log("Last Component Version: " + LastComponentVersion);
-		Log("\n");
-		fileDest = ComponentName + ".cfg";
-		changeSet[0][0] = preFix + "PROJECT_NAME" + postFix;
-		changeSet[0][1] = "\"Piezo Stimulator Device script class\"";
-		changeSet[1][0] = preFix + "PROJECT_NUMBER" + postFix;
-		changeSet[1][1] = "\"" + LastComponentVersion + "\"";
-		changeSet[2][0] = preFix + "PROJECT_BRIEF" + postFix;
-		changeSet[2][1] = "\"Piezo Stimulator Device script class reference.\"";
-		changeSet[3][0] = preFix + "PROJECT_LOGO" + postFix;
-		changeSet[3][1] = "";//No quotes for empty!
-		changeSet[4][0] = preFix + "OUTPUT_DIRECTORY" + postFix;
-		changeSet[4][1] = "\"../References/Script/PiezoStimDevicePlugin\"";
-		changeSet[5][0] = preFix + "INPUT" + postFix;
-		changeSet[5][1] = BrainStim_Settings_ProjectDirectory + "/Source/Plugins/PiezoStimDevice/PiezoStimDevice.h \\\n" +
-					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/PiezoStimDevice/PiezoStimDevice.cpp \\\n" +
-					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/PiezoStimDevice/Global.h \\\n";
-		changeSet[6][0] = preFix + "QHP_NAMESPACE" + postFix;
-		changeSet[6][1] = "BrainStim.doxygen.Project";	
-		changeSet[7][0] = preFix + "PREDEFINED" + postFix; //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html
-		changeSet[7][1] = "";		
-	}
-	else if (nCounter==10)
-	{	
-		ComponentName = "TBVExchangerPlugin";		
-		Log("Component Name: " + ComponentName);
-		LastComponentReleaseIndex = BrainStim_Info.GetLatestComponentReleaseByName(ComponentName);
-		Log("Last Component Release Index: " + LastComponentReleaseIndex);
-		LastComponentIndex = BrainStim_Info.GetLatestComponentIndexByName(LastComponentReleaseIndex,ComponentName);
-		Log("Last Component Index: " + LastComponentIndex);
-		LastComponentVersion = BrainStim_Info.GetComponentVersionByIndexes(LastComponentReleaseIndex,LastComponentIndex);
-		Log("Last Component Version: " + LastComponentVersion);
-		Log("\n");
-		fileDest = ComponentName + ".cfg";
-		changeSet[0][0] = preFix + "PROJECT_NAME" + postFix;
-		changeSet[0][1] = "\"Turbo BrainVoyager Exchanger script class\"";
-		changeSet[1][0] = preFix + "PROJECT_NUMBER" + postFix;
-		changeSet[1][1] = "\"" + LastComponentVersion + "\"";
-		changeSet[2][0] = preFix + "PROJECT_BRIEF" + postFix;
-		changeSet[2][1] = "\"Turbo BrainVoyager Exchanger script class reference.\"";
-		changeSet[3][0] = preFix + "PROJECT_LOGO" + postFix;
-		changeSet[3][1] = "";//No quotes for empty!
-		changeSet[4][0] = preFix + "OUTPUT_DIRECTORY" + postFix;
-		changeSet[4][1] = "\"../References/Script/TBVExchangerPlugin\"";
-		changeSet[5][0] = preFix + "INPUT" + postFix;
-		changeSet[5][1] = BrainStim_Settings_ProjectDirectory + "/Source/Plugins/TBVExchanger/TBVExchanger.h \\\n" +
-					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/TBVExchanger/TBVExchanger.cpp \\\n" +
-					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/TBVExchanger/Global.h \\\n";
-		changeSet[6][0] = preFix + "QHP_NAMESPACE" + postFix;
-		changeSet[6][1] = "BrainStim.doxygen.Project";	
-		changeSet[7][0] = preFix + "PREDEFINED" + postFix; //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html
-		changeSet[7][1] = "";		
-	}
-	else if (nCounter==11)
-	{	
-		ComponentName = "TCPNetworkServerPlugin";		
-		Log("Component Name: " + ComponentName);
-		LastComponentReleaseIndex = BrainStim_Info.GetLatestComponentReleaseByName(ComponentName);
-		Log("Last Component Release Index: " + LastComponentReleaseIndex);
-		LastComponentIndex = BrainStim_Info.GetLatestComponentIndexByName(LastComponentReleaseIndex,ComponentName);
-		Log("Last Component Index: " + LastComponentIndex);
-		LastComponentVersion = BrainStim_Info.GetComponentVersionByIndexes(LastComponentReleaseIndex,LastComponentIndex);
-		Log("Last Component Version: " + LastComponentVersion);
-		Log("\n");
-		fileDest = ComponentName + ".cfg";
-		changeSet[0][0] = preFix + "PROJECT_NAME" + postFix;
-		changeSet[0][1] = "\"TCP Network Server Device script class\"";
-		changeSet[1][0] = preFix + "PROJECT_NUMBER" + postFix;
-		changeSet[1][1] = "\"" + LastComponentVersion + "\"";
-		changeSet[2][0] = preFix + "PROJECT_BRIEF" + postFix;
-		changeSet[2][1] = "\"TCP Network Server Device script class reference.\"";
-		changeSet[3][0] = preFix + "PROJECT_LOGO" + postFix;
-		changeSet[3][1] = "";//No quotes for empty!
-		changeSet[4][0] = preFix + "OUTPUT_DIRECTORY" + postFix;
-		changeSet[4][1] = "\"../References/Script/TCPNetworkServerPlugin\"";
-		changeSet[5][0] = preFix + "INPUT" + postFix;
-		changeSet[5][1] = BrainStim_Settings_ProjectDirectory + "/Source/Plugins/TCPNetworkServer/TCPNetworkServer.h \\\n" +
-					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/TCPNetworkServer/TCPNetworkServer.cpp \\\n" +
-					  BrainStim_Settings_ProjectDirectory + "/Source/Plugins/TCPNetworkServer/Global.h \\\n";
-		changeSet[6][0] = preFix + "QHP_NAMESPACE" + postFix;
-		changeSet[6][1] = "BrainStim.doxygen.Project";	
-		changeSet[7][0] = preFix + "PREDEFINED" + postFix; //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html //see http://www.stack.nl/~dimitri/doxygen/preprocessing.html
-		changeSet[7][1] = "";		
 	}	
 	else
 	{

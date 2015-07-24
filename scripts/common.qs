@@ -8,6 +8,7 @@ var BrainStim_Settings_CurrentBrainStimReleaseString = "";
 var BrainStim_Settings_CurrentBrainStimReleaseStringArray = "";
 var BrainStim_Settings_CurrentBrainStimProductVersionString = "";
 var BrainStim_Settings_CurrentBrainStimProductVersionStringArray = "";
+var BrainStim_Settings_LatestBrainStimReleaseIndex = -1;
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
@@ -56,6 +57,8 @@ if(tmpCommonbProceed)
 	BrainStim_Settings_CurrentBrainStimReleaseString_Array = BrainStim_Settings_CurrentBrainStimReleaseString.split(".");
 	BrainStim_Settings_CurrentBrainStimProductVersionString = tmpCommonBrainStimInfo.GetReleaseProductVersionByIndex(BrainStim_Settings_CurrentBrainStimReleaseIndex);
 	BrainStim_Settings_CurrentBrainStimProductVersionString_Array = BrainStim_Settings_CurrentBrainStimProductVersionString.split(".");
+	BrainStim_Settings_LatestBrainStimReleaseIndex = tmpCommonBrainStimInfo.GetNumberOfReleases()-1;
+	
 }
 
 tmpCommonFile = null;

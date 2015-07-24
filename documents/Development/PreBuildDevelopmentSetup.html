@@ -1,0 +1,62 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<title>Pre-Build Development Setup v1.0</title>
+<!--doc-version-title-end-->
+</head>
+<body>
+    <div class="container">
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Pre-Build Development Setup</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+        <h2>Introduction</h2>
+        <p>For developers who wish to build their own BrainStim program or one of its default Plug-ins they can clone a git repository from <a href="http://github.com/svengijsen/BrainStim" target="_blank">https://github.com/svengijsen/BrainStim</a>. This repository can be build/used/distributed under the terms of the GNU General Public License (GPL version 3), see <a href="http://www.gnu.org/licenses/gpl.html" target="_blank">http://www.gnu.org/licenses/gpl.html</a></p>
+        <h2>Build Tools</h2>
+        <p> You can build your own version of BrainStim using Microsoft Visual Studio 2012. Both solution/project files can be found inside the repository. Soon BrainStim can be build  for various platforms (Windows/Linux/Mac) with 32bit or 64bit support, at this moment only Windows 32 and 64-bit platforms are supported. BrainStim development will always try to stay closely in sync with the latest version of the free libraries it makes use of like the <a href="http://qt-project.org/" target="_blank">Qt library</a>. Only plug-ins that are build using the same version of the Qt library used for building BrainStim can be used (are compatible) with BrainStim. </p>
+        <h3>Development Environment Setup</h3>
+        <p>Setting up an Development Environment for building BrainStim can be difficult due to the fact that it uses many  free and/or open source third party libraries. To make the setup and configuration easier for you we created a single custom repository containing all the source code and libraries for building and running BrainStim with <a href="http://www.microsoft.com/visualstudio/eng/products/visual-studio-overview" target="_blank">Microsoft Visual Studio 2012</a> (with update 3). If you can install a full version of <em>MSVS2012</em> and wish to setup an Development Environment that let's you build your own custom version of BrainStim or a BrainStim plug-in we advice you to contact us at sven dot gijsen at maastrichtuniversity dot nl. Collaborators who wish to help improving BrainStim or the BrainStim plug-ins are off course warmly invited!</p>
+        <h2>The BrainStim repository</h2>
+        <p>The repository contains the following directories structure: </p>
+        <p>
+            <strong>/Source</strong> directory:<br />
+            Here you can find all the BrainStim source code together with the <em>Project/Solution</em> files. Inside the <em>/Source</em> directory you find a <em>/Plugin</em> and <em>/BrainStim</em> folder. The <em>/Plugin</em> folder contains all the Plug-in projects that can be used by the BrainStim main program. The source code for the BrainStim program can be found in the <em>/BrainStim</em> folder.
+        </p>
+        <p>
+            <strong>/Install</strong> directory:<br />
+            This directory contains all the needed files and binaries that you need for a valid installation. Some of them first need to be build by your IDE and some of them are already available in the <em>/Install</em> directory. A post build command can copy the build output from the IDE to this folder.
+        </p>
+        <p>
+            <strong>/InstallJammer</strong> directory:
+            This directory is the root directory for the <em>InstallJammer</em> project files and generated files. <em>InstallJammer</em> is used for building the various installers for the BrainStim application.
+        </p>
+        <p>&nbsp;</p>
+        <p>&nbsp;</p>
+    </div>
+
+</body>
+</html>

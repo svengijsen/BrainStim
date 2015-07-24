@@ -1,102 +1,119 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	
-<link href="css/Default.css" rel="stylesheet" type="text/css" />
-<script src="js/BrainStim.js" type="text/javascript" charset="utf-8"></script>
-<script>
-  (function() {
-    var cx = '005075287079406957487:ptx-9slcp1q';
-    var gcse = document.createElement('script');
-    gcse.type = 'text/javascript';
-    gcse.async = true;
-    gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
-        '//cse.google.com/cse.js?cx=' + cx;
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(gcse, s);
-  })();
-</script>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 
+    <script src="js/BrainStim.js" type="text/javascript" charset="utf-8"></script>
+    <script  type="text/javascript">
+        (function () {
+            var cx = '005075287079406957487:ptx-9slcp1q';
+            var gcse = document.createElement('script');
+            gcse.type = 'text/javascript';
+            gcse.async = true;
+            gcse.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') +
+                '//cse.google.com/cse.js?cx=' + cx;
+            var s = document.getElementsByTagName('script')[0];
+            s.parentNode.insertBefore(gcse, s);
+        })();
+    </script>
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
 <!-- Bootstrap core CSS -->
-<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
-<link href="css/bootstrap-theme.min.css" rel="stylesheet">
+<link href="bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="google-code-prettify/prettify.js" type="text/javascript"></script>
 <!-- Custom styles for this template -->
-<link href="css/custom_theme.css" rel="stylesheet">
-
-<title>BrainStim</title>
+<link href="css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+    <title>BrainStim</title>
 </head>
 <body>
-<div class="container theme-showcase" role="main">
-	<div class="jumbotron">
-		<h1>Welcome</h1>
-	</div>
-	<p>
-	BrainStim v<script type="text/javascript">document.write(currentBrainStimRelease);</script> is a free/open source application.
-	</p>
-	<p>BrainStim is a rich multiple document  and various file type editor  that has code editing features like automatic code completing and syntax highlighting.</p>
-	<p>BrainStim contains a automatic Plug-in loading framework that fully supports   developers to easily write various extensions.</p>
-	<p>BrainStim contains an internal script engine whose environment  can access a large part of the Qt SDK and loaded Plug-ins by making use of script bindings.</p>
-	<p>BrainStim is optimized for creating and running flexible behavioral experiments supported by the script engine and plug-in framework.</p>
-	<p>BrainStim has extensive support for  creating behavioral experiments using fully integrated  <a href="http://qt-project.org/doc/qt-5/qmlapplications.html">(Qt's) QML</a> and optimized Retinotopic Mapping modules.</p>
-	<p>The application is currently only supported under <a href="http://windows.microsoft.com" target="_blank">Windows</a> (32 and 64-bit architectures) but in the future BrainStim will be become cross-platform (<a href="http://www.apple.com/nl/mac/" target="_blank">Mac</a>, <a href="http://www.linux.org/" target="_blank">Linux</a>). </p>
-	<p>&nbsp;</p>
-	
-	<div class="panel panel-primary">
-	  <div class="panel-heading">
-	    <h2>Install</h2>
-	  </div>
-	  <div class="panel-body">
-	  </div>
-	</div>	
-	
-	<div class="panel panel-primary">
-	  <div class="panel-heading">
-	    <h2>Get Started</h2>
-	  </div>
-	  <div class="panel-body">
-	    Get started with the guidance of the <a href="Tutorials/GettingStarted/GettingStartedGuide.html">Getting Started Guide</a> and with the help of various <a href="Tutorials/index.html">tutorials</a>.
-	  </div>
-	</div>	
-	
-	<div class="panel panel-primary">
-	  <div class="panel-heading">
-	    <h2>Get Support</h2>
-	  </div>
-	  <div class="panel-body">
-			<p>Read the <a href="References/Plugins/PluginReference.html">Plug-in Reference</a>.</p>
-			<p>Read the <a href="References/Script/ScriptingReference.html">Scripting Reference</a>.</p>
-			<p>Please contact us for any questions regarding BrainStim at sven.gijsen at maastrichtuniversity dot nl.</p>
-	  </div>
-	</div>
+    <div class="container">
+        <div class="jumbotron">
+            <h1>Welcome</h1>
+        </div>
+        <p>
+            BrainStim v
+            <script type="text/javascript">document.write(currentBrainStimRelease);</script> is a free/open source application.
+        </p>
+        <p>BrainStim is a rich multiple document  and various file type editor  that has code editing features like automatic code completing and syntax highlighting.</p>
+        <p>BrainStim contains a automatic Plug-in loading framework that fully supports   developers to easily write various extensions.</p>
+        <p>BrainStim contains an internal script engine whose environment  can access a large part of the Qt SDK and loaded Plug-ins by making use of script bindings.</p>
+        <p>BrainStim is optimized for creating and running flexible behavioral experiments supported by the script engine and plug-in framework.</p>
+        <p>BrainStim has extensive support for  creating behavioral experiments using fully integrated  <a href="http://qt-project.org/doc/qt-5/qmlapplications.html">(Qt's) QML</a> and optimized Retinotopic Mapping modules.</p>
+        <p>The application is currently only supported under <a href="http://windows.microsoft.com" target="_blank">Windows</a> (32 and 64-bit architectures) but in the future BrainStim will be become cross-platform (<a href="http://www.apple.com/nl/mac/" target="_blank">Mac</a>, <a href="http://www.linux.org/" target="_blank">Linux</a>). </p>
+        <p>&nbsp;</p>
 
-	<div class="panel panel-primary">
-	  <div class="panel-heading">
-	    <h2>Get Involved</h2>
-	  </div>
-	  <div class="panel-body">
-			<p>Checkout <a href="http://github.com/svengijsen/BrainStim" target="_blank">github.com/svengijsen/BrainStim</a>.</p>
-			<p>Read the <a href="Manuals/PreBuildDevelopmentSetup/PreBuildDevelopmentSetup.html">Pre Build Development Setup</a>.</p>
-	  </div>
-	</div>
-	
-	<div class="panel panel-primary">
-	  <div class="panel-heading">
-	    <h2>Search Online for Help</h2>
-	  </div>
-	  <div class="panel-body">
-			<p><gcse:search></gcse:search></p>
-	  </div>
-	</div>
-	
-	<div class="well">
-		The source code is available at GitHub (<a href="http://github.com/svengijsen/BrainStim" target="_blank">github.com/svengijsen/BrainStim</a>), you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, see the GNU General Public License for more details, see <a href="http://www.gnu.org/licenses/" target="_blank">www.gnu.org/licenses/</a>.</p>
-	</div>
-	
-</div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <strong>
+                    Install
+                </strong>
+            </div>
+            <div class="panel-body">
+                Download, extract and install the <a href="http://github.com/svengijsen/BrainStim/releases/" target="_blank">latest release of the BrainStim installer</a>.
+            </div>
+        </div>
 
-<div class="footer">
-</div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <strong>
+                    Get Quickly Started
+                </strong>
+            </div>
+            <div class="panel-body">
+                Get started with the guidance of the <a href="documents/GettingStartedGuide/GettingStartedGuide.html">Getting Started Guide</a> and with the help of various <a href="documents/Examples/ExamplesAndTutorials.html">examples and tutorials</a>.
+            </div>
+        </div>
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <strong>
+                    Get More Support
+                </strong>
+            </div>
+            <div class="panel-body">
+                <p>Read about the <a href="documents/defaultplugins.html">default installed Plug-ins</a>.</p>
+            </div>
+        </div>
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <strong>
+                    Get Involved
+                </strong>
+            </div>
+            <div class="panel-body">
+                <p>Checkout our repository at <a href="http://github.com/svengijsen/BrainStim" target="_blank">github.com/svengijsen/BrainStim</a>.</p>
+                <p>Read about the <a href="Manuals/PreBuildDevelopmentSetup/PreBuildDevelopmentSetup.html">Pre Build Development Setup</a>.</p>
+            </div>
+        </div>
+
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <strong>
+                    Get Online Help
+                </strong>
+            </div>
+            <div class="panel-body">
+                <script type="text/javascript">
+                    if (location.host !== 'com.trolltech.brainstim') {
+                        document.write('<div class=\"panel-body\"><gcse:search></gcse:search></div>');
+                    }
+                    else {
+                        document.write("<a href=\"http://cse.google.com/cse/home?cx=005075287079406957487:ptx-9slcp1q\" target=\"_blank\">Search</a> online for more help.");
+                    }
+                </script>
+                <p><a href="mailto:sven.gijsen@maastrichtuniversity.nl"><img src="images/mail.png" style="width:24px;" /></a>   Please contact us for any questions regarding BrainStim at <strong><a href="mailto:sven.gijsen@maastrichtuniversity.nl">sven.gijsen@maastrichtuniversity.nl</a></strong>.</p>
+            </div>
+        </div>
+
+        <div class="well">
+            <p>The source code is available at GitHub (<a href="http://github.com/svengijsen/BrainStim" target="_blank">github.com/svengijsen/BrainStim</a>), you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, see the GNU General Public License for more details, see <a href="http://www.gnu.org/licenses/" target="_blank">www.gnu.org/licenses/</a>.</p>
+        </div>
+
+    </div>
 </body>
 </html>

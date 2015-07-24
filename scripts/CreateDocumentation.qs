@@ -11,17 +11,10 @@ var bDoCleanup;
 var bFileProccessed;
 var nCounter;
 var bSkipStep;
-
 var sMainDocName = tr("MainDocumentation");
 var sScriptPath = BrainStim.getActiveDocumentFileLocation() + "/";
 var sConfFilesPath = sScriptPath + "../";
 var sBinairyPath;
-
-var sInstallerAppName = tr("BrainStim");//BrainStim
-var sInstallerConfiguration = tr("win32");//win32 or x64
-var sInstallerVersion = tr("1.0.0.1");//<Major>.<Minor>.<Build>.<Revision>
-var sInstallerPlatform = tr("Windows");
-
 var sBrainStimProjectDirectory = BrainStim_Settings_ProjectDirectory;
 
 InstallProcess.setProcessChannelMode(QProcess.MergedChannels);
@@ -73,7 +66,7 @@ function ConnectDisconnectScriptFunctions(Connect)
 		} 
 		catch (e) 
 		{
-			Log(".*. Something went wrong connecting the Signal/Slots:" + e);
+			Log("<font color=\"red\">.*. Something went wrong connecting the Signal/Slots:</font>" + e);
 		}		
 	}
 	else
@@ -86,7 +79,7 @@ function ConnectDisconnectScriptFunctions(Connect)
 		} 
 		catch (e) 
 		{
-			Log(".*. Something went wrong disconnecting the Signal/Slots:" + e);
+			Log("<font color=\"red\">.*. Something went wrong disconnecting the Signal/Slots:</font>" + e);
 		}		
 	}	
 }
@@ -256,14 +249,14 @@ for(nCounter=1;nCounter<=sBinairySteps;nCounter++)
 		}
 		else
 		{
-			Log("\n+++++++++++ExecuteBinairy Failed!++++++++++++++\n");
+			Log("<font color=\"red\">+++++++++++ExecuteBinairy Failed!++++++++++++++</font>");
 			CleanUpScript();
 			break;
 		}
 	}
 	else
 	{
-		Log("** STEP "  + nCounter + " ** SKIPPED");
+		Log("<font color=\"green\">** STEP "  + nCounter + " ** SKIPPED</font>");
 		if(nCounter == sBinairySteps)
 			CleanUpScript();			
 		continue;
