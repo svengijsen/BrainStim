@@ -34,10 +34,13 @@ public:
     Assistant();
     ~Assistant();
     void showDocumentation(const QString &file, GlobalApplicationInformation *GlobAppInfo);
+	QStringList getPluginDocumentationPaths();
     
 private:
     bool startAssistant(GlobalApplicationInformation *GlobAppInfo);
     QProcess *proc;
+	QString strHelpPackagePath;
+	QString strHelpPackageDir;
 };
 
 #endif

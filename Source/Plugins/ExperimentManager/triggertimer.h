@@ -90,7 +90,7 @@ public slots:
 	*  This function starts the Trigger Timer and then automatically emits a TriggerTimer::timeout() signal when triggered.
 	* @param dMSec the period trigger time in milliseconds.
 	*/
-	void startTimer(double nMSec);
+	void startTimer(double dMSec);
 	/*! \brief Stops the Trigger Timer.
 	*  This function immediately stops the TriggerTimer, see TriggerTimer.startTimer.
 	*/

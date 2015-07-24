@@ -453,6 +453,12 @@ void RetinotopyMapper::adjustStimScreenArea()
 	rStimuliScreenArea = QRect((int)(rectScreenRes.width()-stimWidthPixelAmount)/2,(int)(rectScreenRes.height()-stimHeightPixelAmount)/2,stimWidthPixelAmount,stimHeightPixelAmount);
 }
 
+/*! \brief Configures the Output Directory Path.
+*
+*  This function configures the Output Directory Path to a new provided value.
+*  @param sOutputDirectory a string value containing the new directory path to the Output Directory.
+*  @return a boolean value determining whether the function executed successfully.
+*/
 bool RetinotopyMapper::setCustomOutputDirectoryPath(const QString &sOutputDirectory)
 {
 	if (QDir(sOutputDirectory).exists())

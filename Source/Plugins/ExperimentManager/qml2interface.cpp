@@ -58,7 +58,7 @@ QVariant Qml2Interface::invokeScriptEngine(const QString &sScriptCode)
 	return QVariant::Invalid;
 }
 
-QString Qml2Interface::getQMLFileName()
+QString Qml2Interface::getQMLFilePath()
 {
 	if (parentQMLViewerObject)
 	{

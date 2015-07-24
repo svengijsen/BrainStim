@@ -39,3 +39,5 @@ Source/base.props
 /Source/base.props
 Install/Include/QtScript/TBVExchanger.qs
 Install/Include/QtScript/TSIExchanger.qs
+InstallJammer/build/messages
+InstallJammer/output/*

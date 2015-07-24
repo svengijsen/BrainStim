@@ -344,15 +344,15 @@ bool GlobalApplicationInformation::initAndParseRegistrySettings(const QString &s
 		AppRegistrySettings->setValue(REGISTRY_SERVERHOSTPORT, (int)mainAppInformation.nHostPort);
 	}
 
-	if (AppRegistrySettings->contains(REGISTRY_OPENINEXTERNALDEBUGGER)) 
-	{
-		mainAppInformation.bOpenExtDebug = AppRegistrySettings->value(REGISTRY_OPENINEXTERNALDEBUGGER).toBool();
-	}
-	else //key doesn't exist, default value here!
-	{
-		mainAppInformation.bOpenExtDebug = false;
-		AppRegistrySettings->setValue(REGISTRY_OPENINEXTERNALDEBUGGER, mainAppInformation.bOpenExtDebug);
-	}
+	//if (AppRegistrySettings->contains(REGISTRY_OPENINEXTERNALDEBUGGER)) 
+	//{
+	//	mainAppInformation.bOpenExtDebug = AppRegistrySettings->value(REGISTRY_OPENINEXTERNALDEBUGGER).toBool();
+	//}
+	//else //key doesn't exist, default value here!
+	//{
+	//	mainAppInformation.bOpenExtDebug = false;
+	//	AppRegistrySettings->setValue(REGISTRY_OPENINEXTERNALDEBUGGER, mainAppInformation.bOpenExtDebug);
+	//}
 
 	if (AppRegistrySettings->contains(REGISTRY_RENDERTYPE)) 
 	{

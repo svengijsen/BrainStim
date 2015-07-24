@@ -11,9 +11,12 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>OptionPage</string>
+   <string>Option Page</string>
   </property>
   <widget class="QTabWidget" name="tabWidget">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="geometry">
     <rect>
      <x>10</x>
@@ -35,7 +38,7 @@
     </size>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab1">
     <attribute name="title">
@@ -60,7 +63,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Do not automatically load QT Script bindings</string>
+      <string>Skip automatic QT Script binding loading</string>
      </property>
      <property name="checked">
       <bool>false</bool>
@@ -85,7 +88,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Allow multiple instances simultaneously running.</string>
+      <string>Allow multiple instances of BrainStim</string>
      </property>
      <property name="checked">
       <bool>false</bool>
@@ -110,7 +113,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Enable custom user logins</string>
+      <string>Enable custom User Logins</string>
      </property>
      <property name="checked">
       <bool>false</bool>
@@ -203,36 +206,6 @@
      </property>
      <property name="text">
       <string>Custom Plugins Root Directory:</string>
-     </property>
-    </widget>
-   </widget>
-   <widget class="QWidget" name="tab2">
-    <attribute name="title">
-     <string>Debugging</string>
-    </attribute>
-    <widget class="QCheckBox" name="chk_OpenDebOnError">
-     <property name="enabled">
-      <bool>false</bool>
-     </property>
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>20</y>
-       <width>361</width>
-       <height>21</height>
-      </rect>
-     </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="text">
-      <string>Open External Debugger on Syntax Error</string>
-     </property>
-     <property name="checked">
-      <bool>true</bool>
      </property>
     </widget>
    </widget>
@@ -332,7 +305,7 @@
       </rect>
      </property>
      <property name="title">
-      <string>Include directories:</string>
+      <string>Include Directories:</string>
      </property>
      <widget class="QPushButton" name="pbNewScriptIncludeDir">
       <property name="geometry">

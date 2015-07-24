@@ -923,7 +923,7 @@ bool MainWindow::restartScriptEngine()
 	{
 		configurePluginScriptEngine(sPluginName);
 	}
-	configureDebugger();
+	//configureDebugger();
 	updateMenuControls();
 	resetContextState();
 	return true;
@@ -1593,7 +1593,7 @@ void MainWindow::createDefaultMenus()
 	fileMenu->addAction(quitAction);
 	menuBar()->addMenu(fileMenu);//the file menu..........................................................
 
-	editOutputMenu = editMenu->addMenu(QIcon(":/resources/log.png"), tr("&Output Log Pane"));
+	editOutputMenu = editMenu->addMenu(QIcon(":/resources/log.png"), tr("&Output Log"));
 
 	signalMapperCopyDebugger = new QSignalMapper(this);
 	mCopyDebuggerAction.insert(MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME, new QAction(QIcon(":/resources/logCopy.png"), QObject::tr("&Copy Selected Text"), 0));
@@ -2281,7 +2281,7 @@ bool MainWindow::unloadDynamicPlugins()
 	while (iterItem != mapPluginLoaders.end())
 	{
 		//bool bUnloadResult = 
-			iterItem.value()->unload();
+		iterItem.value()->unload();
 		delete iterItem.value();
 		iterItem.value() = NULL;
 		QString sRegisteredPluginName = installMngr->getRegisteredPluginName(iterItem.key());
@@ -2297,6 +2297,20 @@ bool MainWindow::unloadDynamicPlugins()
 		++iterItem;
 	}
 	mapPluginLoaders.clear();
+
+	foreach(QLibrary *tmpLib, lAdditionalLoadedPluginLibraries)
+	{
+		if (tmpLib->unload())
+		{
+			delete tmpLib;
+			lAdditionalLoadedPluginLibraries.removeAll(tmpLib);
+		}
+		else
+		{
+			qDebug() << __FUNCTION__ << "Could not unload the plugins dependency: " + tmpLib->fileName();
+		}
+	}
+
 	return restartScriptEngine();
 }
 
@@ -2339,17 +2353,17 @@ bool MainWindow::loadDynamicPlugins()
 				{
 					if (QLibrary::isLibrary(lFiles[i]))
 					{
-						QLibrary libTemp;
-						libTemp.setFileName(lFiles[i]);
-						if (libTemp.isLoaded() == false)
+						if (QLibrary(lFiles[i]).isLoaded() == false)
 						{
-							//bool bLoadResult = 
-							libTemp.load();
-
-							//if (bLoadResult)
-							//{
-								//libTemp.unload();
-							//}
+							QLibrary *pLib = new QLibrary(lFiles[i], this);
+							if (pLib->load())
+							{
+								lAdditionalLoadedPluginLibraries.append(pLib);
+							}
+							else
+							{
+								delete pLib;
+							}
 						}
 					}
 				}
@@ -3895,7 +3909,7 @@ void MainWindow::parseRemainingGlobalSettings()
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
 	setRenderer();
-	configureDebugger();	
+	//configureDebugger();	
 }
 
 void MainWindow::recoverLastScreenWindowSettings()
@@ -4107,17 +4121,17 @@ bool MainWindow::getSavedDockWidgetSizeHint(const QString &sDockWidgetGroupName,
 	return false;
 }
 
-bool MainWindow::configureDebugger()
-{
-	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
-		qDebug() << "Verbose Mode: " << __FUNCTION__;
-	QVariant tmpVariant;
-	if (globAppInfo->getSettingsInformation(REGISTRY_OPENINEXTERNALDEBUGGER, tmpVariant))
-		AppScriptEngine->ConfigureDebugger((bool)tmpVariant.toInt());
-	else//default
-		AppScriptEngine->ConfigureDebugger(false);
-	return true;
-}
+//bool MainWindow::configureDebugger()
+//{
+	//if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
+	//	qDebug() << "Verbose Mode: " << __FUNCTION__;
+	//QVariant tmpVariant;
+	//if (globAppInfo->getSettingsInformation(REGISTRY_OPENINEXTERNALDEBUGGER, tmpVariant))
+	//	AppScriptEngine->ConfigureDebugger((bool)tmpVariant.toInt());
+	//else//default
+	//	AppScriptEngine->ConfigureDebugger(false);
+	//return true;
+//}
 
 void MainWindow::writeMainWindowSettings()
 {

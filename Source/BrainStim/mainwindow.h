@@ -161,8 +161,9 @@ public slots:
 	/*! \brief Opens one or more files.
 	 *
 	 *  This function can open one or more files.
-	 * @param fileToLoad a String containing a single path to a file that should be loaded.
+	 * @param fileToLoad a String containing a single path to the file that should be loaded.
 	 * @param filesToLoad a String Array containing multiple Strings containing the paths to the files that should be loaded.
+	 * @param bViewAsText a boolean value determining whether the file(s) to open should be viewed/formatted as text.
 	 */
 	void openFiles(const QString &fileToLoad = QString(), const QStringList &filesToLoad = QStringList(), const bool &bViewAsText = false);
 	/*! \brief Executes the current active document.
@@ -362,7 +363,7 @@ public slots:
 	* If useParams is true then no Search window appears and the optional provided parameters are used for the search action, the first found occurrence (starting from the cursor position) 
 	* of the find result is then automatically selected.
 	* @param strFindString a String holding the text value to use.
-	* @param DocFindFlags a String holding the text value to use, you can create this structure in the script like: 
+	* @param findFlags a DocFindFlags structure holding the text value to use, you can create this structure in the script like: 
 	* \code 
 	* var varName=DocFindFlags; 
 	* varName.backwards = true; 
@@ -380,7 +381,7 @@ public slots:
 	 * of the find result is then automatically selected.
 	 * @param strFindString a String holding the String value to search for.
 	 * @param strReplaceString a String holding the text value to replace the found String strFindString with.
-	 * @param DocFindFlags a String holding the text value to use, you can create this structure in the script like: 
+	 * @param findFlags a DocFindFlags structure holding the text value to use, you can create this structure in the script like: 
 	 * \code 
 	 * var varName=DocFindFlags; 
 	 * varName.backwards = true; 
@@ -599,6 +600,7 @@ private:
 	qint64 currentMainRunningScriptID;	
 	QList<qint64> lCurrentRunningScriptIDList;
 	installationManager *installMngr;
+	QList<QLibrary*> lAdditionalLoadedPluginLibraries;
 
 	QPushButton button;
     QMenu *pluginsMenu;
@@ -667,7 +669,7 @@ private:
 	void newDocument(const GlobalApplicationInformation::DocType &docType, int &DocIndex, const bool &bIsNewUnsaved, const QString &strExtension = "", const QString &strCanonicalFilePath = "", const bool &bNativeMainAppView = false, const bool &bTryToInitialize = false);
 	//void setupSyntaxHighlighting(MdiChild *childWindow,MDIDocumentType tempFileType);
 	void parseRemainingGlobalSettings();
-	bool configureDebugger();
+	//bool configureDebugger();
 	int configurePluginScriptEngine(const QString &sRegisteredPluginName);
 	void writeMainWindowSettings();
 	bool checkPluginCompatibility(const QString &sRegisteredPluginName);

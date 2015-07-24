@@ -232,11 +232,25 @@ void PluginManagerDialog::installPlugin()
 	if (sInstallFilePath.isEmpty() == false)
 	{
 		bool bRetval = false;
-		if (pInstallMngr->installPlugin(sInstallFilePath) > 0)
+
+		//First unload all dynamic plugins
+		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_UNLOADDYNAMICPLUGINS_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetval));
+		if (bRetval == false)
+			qDebug() << __FUNCTION__ << "Could not unload the dynamic loaded plugins";
+
+		int nSuccessfullInstallations = pInstallMngr->installPlugin(sInstallFilePath);
+		if (nSuccessfullInstallations > 0)
 		{
 			QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_LOADDYNAMICPLUGINS_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetval));
 			if (bRetval)
 				fillTable();
+			QMessageBox msgBox(QMessageBox::Information, "Plugin Installation(s)", "The plugin(s) were successfully installed.", QMessageBox::Ok);
+			msgBox.exec();
+		}
+		else
+		{
+			QMessageBox msgBox(QMessageBox::Critical, "Plugin Installation(s)", "Something went wrong while installing the plugin(s)!", QMessageBox::Ok);
+			msgBox.exec();
 		}
 	}
 	this->setEnabled(true);
@@ -296,6 +310,9 @@ void PluginManagerDialog::configurePlugin()
 
 void PluginManagerDialog::browsePluginDirectory()
 {
+	QDir tmpDir(MainAppInfo::userPluginsDirPath());
+	if (tmpDir.exists() == false)
+		tmpDir.mkpath(MainAppInfo::userPluginsDirPath());
 	QDesktopServices::openUrl(QUrl("file:///" + MainAppInfo::userPluginsDirPath(), QUrl::TolerantMode));
 }
 

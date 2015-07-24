@@ -83,7 +83,15 @@ public slots:
 	*  This function can invoke/call a defined function within the current QML context.
 	* @param strRootObjectName the name of the root item containing the function definition in the QML context.
 	* @param strMethodName the name of the function to be called
-	* @param inputValue1 - these parameters are automatically passed to the function if they are defined.
+	* @param inputValue1 - a parameters that can be automatically passed to the function if it is provided.
+	* @param inputValue2 - a parameters that can be automatically passed to the function if it is provided.
+	* @param inputValue3 - a parameters that can be automatically passed to the function if it is provided.
+	* @param inputValue4 - a parameters that can be automatically passed to the function if it is provided.
+	* @param inputValue5 - a parameters that can be automatically passed to the function if it is provided.
+	* @param inputValue6 - a parameters that can be automatically passed to the function if it is provided.
+	* @param inputValue7 - a parameters that can be automatically passed to the function if it is provided.
+	* @param inputValue8 - a parameters that can be automatically passed to the function if it is provided.
+	* @param inputValue9 - a parameters that can be automatically passed to the function if it is provided.
 	* @return a QVariant containing the invoked function return value converted to a QVariant.
 	*/
 	QVariant invokeQml2Method(QString strRootObjectName, QString strMethodName, QVariant inputValue1 = QVariant(), QVariant inputValue2 = QVariant(), QVariant inputValue3 = QVariant(), QVariant inputValue4 = QVariant(), QVariant inputValue5 = QVariant(), QVariant inputValue6 = QVariant(), QVariant inputValue7 = QVariant(), QVariant inputValue8 = QVariant(), QVariant inputValue9 = QVariant());	
@@ -100,6 +108,7 @@ public slots:
 	*
 	*  This function can retrieve a QPixmap to the internal Image Buffer.
 	* @param pixmap the retrieved QPixmap from the internal Image Buffer.
+	* @param ID the String containing the unique String previously created by the Image Buffer.
 	* @return a boolean value representing whether the function executed successfully.
 	* See QML2Viewer::addPixmapToImageBuffer.
 	*/	
@@ -144,6 +153,7 @@ public slots:
 	*  It can been shown either full-screen where the root object defined in the QML file is automatically resized to the full-screen window size or
 	*  in a windowed mode, see also QML2Viewer::setTopLeftWindowPosition, where the size of the window is automatically sized to the size of the root object defined in the QML file.
 	* @param bIsFullScreen a boolean value specifying whether the mode for the presentation window should be full-screen (=default mode).
+	* @param bIsFrameless a boolean value specifying whether the presentation window should be displayed without a frame (=default mode).
 	* See QML2Viewer::setTopLeftWindowPosition.
 	*/
 	void setWindowMode(const bool &bIsFullScreen, const bool &bIsFrameless = true);

@@ -850,7 +850,7 @@ public slots:
 
 	//! \brief methodTypeToString slot.
 	/*!  This function returns from the provided Method Type the corresponding Method Type String value, see ExperimentStructuresNameSpace::MethodType.
-	 * @param sValue a integer value holding the Method Type.
+	 * @param nValue a integer value holding the Method Type.
 	 * @return a string value containing the requested corresponding Method Type value as string.
 	 */	
 	static QString methodTypeToString(const int &nValue)
@@ -1106,10 +1106,9 @@ public slots:
 	* @return a pointer to a cBlockStructure of the inserted block, if unsuccessful then it returns null.
 	*/
 	cBlockStructure *createBlock();
-	//! \brief insertBlock slot.
-	/*!  This function inserts a new cBlockStructure structure in the current Experiment Structure.
-	* @param cBlock a pointer to a cBlockStructure that needs to be inserted.
-	* @return a boolean value determining whether the function executed successfully.
+	//! \brief createObject slot.
+	/*!  This function inserts a new cObjectStructure structure in the current Experiment Structure.
+	* @return a pointer to a cObjectStructure of the inserted object, if unsuccessful then it returns null.
 	*/
 	cObjectStructure *createObject();
 	//! \brief insertObject slot.
@@ -1120,7 +1119,7 @@ public slots:
 	bool insertObject(cObjectStructure *cObject);
 	//! \brief insertObjectMethodConnection slot.
 	/*!  This function inserts a new cMethodConnection structure in the current Experiment Structure.
-	 * @param cMethodConnection a pointer to a cMethodConnectionStructure that needs to be inserted.
+	 * @param pMethodConnection a pointer to a cMethodConnectionStructure that needs to be inserted.
 	 * @return a boolean value determining whether the function executed successfully.
 	 */	
 	bool insertObjectMethodConnection(cMethodConnectionStructure *pMethodConnection);

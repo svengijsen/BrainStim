@@ -223,9 +223,9 @@ public slots:
 	void removeAt(int i);
 	/*! \brief Returns the index position of the first occurrence of the defined String in the list.
 	* 
-	* This function Returns the index position of the first occurrence of the defined String in the list, searching forward from index position from. Note that QList uses 0-based indexes.
+	* This function Returns the index position of the first occurrence of the defined String in the list, searching forward from index position nFrom. Note that QList uses 0-based indexes.
 	* @param sValue the String value to search for in the list.
-	* @nFrom an integer value holding the starting index position for the search operation. This value is 0 if not defined.
+	* @param nFrom an integer value holding the starting index position for the search operation. This value is 0 if not defined.
 	* @return an integer holding the index of the first occurrence of the defined String in the list. This function returns -1 if no item matched.
 	*/
 	int indexOf(const QString &sValue, int nFrom = 0) const;

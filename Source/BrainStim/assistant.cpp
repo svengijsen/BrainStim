@@ -26,6 +26,8 @@
 
 Assistant::Assistant() : proc(0)
 {
+	strHelpPackageDir = MainAppInfo::appDocDirPath();
+	strHelpPackagePath = strHelpPackageDir + QLatin1String(MAIN_PROGRAM_DOC_BINARYCOLLFILE);
 }
 
 Assistant::~Assistant()
@@ -42,10 +44,32 @@ void Assistant::showDocumentation(const QString &page, GlobalApplicationInformat
     if (!startAssistant(GlobAppInfo))
         return;
 
-    QByteArray ba("SetSource ");
-    ba.append("qthelp://com.trolltech.stimulgl/doc/");
-    
-    proc->write(ba + page.toLocal8Bit() + '\n');
+	QStringList lPluginDocPaths = getPluginDocumentationPaths();
+    QByteArray ba;
+	ba.append("SetSource qthelp://com.trolltech.brainstim/doc/" + page.toLocal8Bit() + "\n;");
+	foreach(QString sPluginPath, lPluginDocPaths)
+	{
+		ba.append("unregister " + sPluginPath + ";");
+		ba.append("register " + sPluginPath + ";");
+	}
+	proc->write(ba);
+}
+
+QStringList Assistant::getPluginDocumentationPaths()
+{
+	QDir tmpDir(strHelpPackageDir);
+	QStringList retList;
+	if (tmpDir.exists())
+	{
+		QStringList filter("*.qch");
+		retList = tmpDir.entryList(filter, QDir::Files | QDir::NoSymLinks);
+		retList.removeAll(MAIN_PROGRAM_DOC_COMPHELPFILE);
+		for (int i = 0; i < retList.count(); i++)
+		{
+			retList[i] = strHelpPackageDir + retList[i];
+		}
+	}
+	return retList;
 }
 
 bool Assistant::startAssistant(GlobalApplicationInformation *GlobAppInfo)
@@ -56,7 +80,6 @@ bool Assistant::startAssistant(GlobalApplicationInformation *GlobAppInfo)
     if (proc->state() != QProcess::Running) 
 	{
 		QString app;
-		QString strHelpPackagePath = MainAppInfo::appDocDirPath() + QLatin1String(MAIN_PROGRAM_DOC_BINARYCOLLFILE);
 		QFile file;
 		//Does the help binary package exist?
 		if(!file.exists(strHelpPackagePath))

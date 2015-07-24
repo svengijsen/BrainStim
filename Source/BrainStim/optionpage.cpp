@@ -180,7 +180,7 @@ bool OptionPage::validateIPAddressString(QString &input) const
 void OptionPage::applySettings()
 {
 	glob_AppInfo->setSettingsInformation(REGISTRY_DONOTLOADSCRIPTEXTENSION,(bool)(ui.chkDoNotLoadQTBindings->checkState() && Qt::Checked),"bool");
-	glob_AppInfo->setSettingsInformation(REGISTRY_OPENINEXTERNALDEBUGGER,(bool)(ui.chk_OpenDebOnError->checkState() && Qt::Checked),"bool");
+	//glob_AppInfo->setSettingsInformation(REGISTRY_OPENINEXTERNALDEBUGGER,(bool)(ui.chk_OpenDebOnError->checkState() && Qt::Checked),"bool");
 	glob_AppInfo->setSettingsInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE,(bool)(ui.chkAllowMultipleInstances->checkState() && Qt::Checked),"bool");
 	glob_AppInfo->setSettingsInformation(REGISTRY_ENABLECUSTOMUSERLOGINS, (bool)(ui.chkAllowCustomUserLogins->checkState() && Qt::Checked), "bool");
 	glob_AppInfo->setSettingsInformation(REGISTRY_USERPLUGINSROOTDIRECTORY, (QString)(ui.lneCustomPluginsRootDirectory->text()), "string");
@@ -240,11 +240,11 @@ void OptionPage::readSettings()
 		bTemp = tmpVariant.toBool();
 		ui.chkDoNotLoadQTBindings->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
 	}
-	if (glob_AppInfo->getSettingsInformation(REGISTRY_OPENINEXTERNALDEBUGGER, tmpVariant))
-	{
-		bTemp = tmpVariant.toBool();
-		ui.chk_OpenDebOnError->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
-	}
+	//if (glob_AppInfo->getSettingsInformation(REGISTRY_OPENINEXTERNALDEBUGGER, tmpVariant))
+	//{
+	//	bTemp = tmpVariant.toBool();
+	//	ui.chk_OpenDebOnError->setCheckState((Qt::CheckState)(bTemp*Qt::Checked));
+	//}
 	if (glob_AppInfo->getSettingsInformation(REGISTRY_ENABLENETWORKSERVER, tmpVariant))
 	{
 		bTemp = tmpVariant.toBool();

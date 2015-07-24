@@ -212,7 +212,7 @@ public slots:
 	QScriptValue getExperimentObjectParameter(const int &nObjectID, const QString &strName);
 	/*! \brief Sets the current value of an Experiment Parameter variable.
 	*
-	*  This function can be used to immediately set a value of an Experiment Parameter variable for a specific object.
+	*   This function can be used to immediately set a value of an Experiment Parameter variable for a specific object.
 	*	This parameter variable value is immediately set and used.
 	*/
 	bool setExperimentObjectParameter(const int &nObjectID, const QString &strName, const QScriptValue &sScriptVal);

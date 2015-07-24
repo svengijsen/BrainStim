@@ -6,7 +6,11 @@
 #include "./../../BrainStim/mainappinfo.h"
 
 class QML2Viewer;
-// First, define your QObject which provides the functionality.
+
+//!  The Qml2Interface class. 
+/*!
+The Qml2Interface can used as a interface from within a QML file to use BrainStim functionality and access the current active script context.
+*/
 class Qml2Interface : public QObject
 {
 	Q_OBJECT
@@ -26,9 +30,27 @@ public:
 	//QString message() const;
 	//QString RootDirectory() const;
 	
+	/*! \brief Executes some custom provided script code inside the current active script context.
+	*
+	*  This function invokes the script engine to execute some custom provided script code inside the current active script context.
+	*  @param sScriptCode a string containing the script code to execute.
+	*/
 	Q_INVOKABLE QVariant invokeScriptEngine(const QString &sScriptCode);
-	Q_INVOKABLE QString getQMLFileName();
+	/*! \brief Returns the file path of the QML file.
+	*
+	*  This function returns the file path of the QML file.
+	*/
+	Q_INVOKABLE QString getQMLFilePath();
+	/*! \brief Returns the current working directory of the QML file.
+	*
+	*  This function returns the current working directory of the QML file.
+	*/
 	Q_INVOKABLE QString getCurrentDirectory();
+	/*! \brief Writes a message to the default BrainStim Output Log Window.
+	*
+	*  This function writes a message to the default BrainStim Output Log Window.
+	*  @param sMessage a string containing the message.
+	*/
 	Q_INVOKABLE void writeToOutputWindow(const QString &sMessage);
 
 private:

@@ -60,7 +60,7 @@ public slots:
 	*
 	*  This function compresses (multiple) file(s).
 	* @param sCompressedFilePath a string containing the path to the archive.
-	* @param lFileToCompressPath a string list containing the file(s) to compress.
+	* @param lFilesToCompressPath a string list containing the file(s) to compress.
 	* @return a Boolean value representing whether the file(s) could be compressed.
 	*/
 	bool compressFiles(QString sCompressedFilePath, QStringList lFilesToCompressPath);

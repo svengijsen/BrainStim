@@ -273,7 +273,7 @@ public slots:
 	 *  @param nObjectID a integer value that holds the object ID.
 	 *  @param sName a string value that contains the parameter name.
 	 *  @param sValue a string value that contains the parameter value.
-	 *  @param bIsInitializing a boolean value, if true then then the new parameter is marked as Initializing, see #ParsedParameterDefinition.bIsInitialized. 
+	 *  @param bIsInitializing a boolean value, if true then then the new parameter is marked as Initializing, see strcParsedParameterDefinition.bIsInitialized 
 	 *  This property marks the parameter as unused which can be helpful for further setting the default value.
 	 *  @param bIsCustom a boolean value that determines whether the parameter should be treated as a custom parameter (default = false).
 	 *  @return a boolean value determining whether the function executed successfully.
@@ -364,7 +364,7 @@ public slots:
 	/*! \brief Returns the current in-memory Experiment Structure
 	 *
 	 *  This function returns a pointer to the current in-memory Experiment Structure.
-	 *  @param bCreateIfEmpty a boolean value (default = false) that can be used to force a new cExperimentStructure structure to be created when the current cExperimentStructure structure is undefined.
+	 *  @param bCreateIfUndefined a boolean value (default = false) that can be used to force a new cExperimentStructure structure to be created when the current cExperimentStructure structure is undefined.
 	 *  @return a pointer to a cExperimentStructure structure, if the function fails it returns NULL.
 	 */	
 	cExperimentStructure *getExperimentStructure(const bool bCreateIfUndefined = false);

@@ -30,7 +30,7 @@
 
 //Also search and change "Q_CLASSINFO("ScriptAPIClassName"..!!!
 
-#define MAIN_PROGRAM_COMPANY_NAME	"MBIC, Maastricht Brain Imaging Center"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define MAIN_PROGRAM_COMPANY_NAME	"MBIC"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 #define MAIN_PROGRAM_LEGAL_COPYRIGHT	"Copyright (C) 2015"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 #define MAIN_PROGRAM_FILE_VERSION_STRING_MAJOR	1   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 #define MAIN_PROGRAM_FILE_VERSION_STRING_MINOR	0   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
@@ -61,6 +61,7 @@
 #define MAIN_PROGRAM_PLUGINS_REGISTRY_DIRNAME			"Plugins"
 #define MAIN_PROGRAM_XSD_DIRNAME						"Xsd"
 #define MAIN_PROGRAM_DOC_BINARYCOLLFILE					"MainDocumentation.qhc"
+#define MAIN_PROGRAM_DOC_COMPHELPFILE					"MainDocumentation.qch"
 #define MAIN_PROGRAM_FILE_DESCRIPTION					MAIN_PROGRAM_INTERNAL_NAME ", a Open Source Cross Platform Scriptable Application"
 #define MAIN_PROGRAM_SHARED_MEM_KEY						MAIN_PROGRAM_INTERNAL_NAME "_SHARED"
 
@@ -83,7 +84,7 @@
 #define REGISTRY_USERPLUGINSROOTDIRECTORY				"General/UserPluginsRootDirectory"
 #define REGISTRY_EXAMPLESROOTDIRECTORY					"General/ExamplesRootDirectory"
 #define REGISTRY_ENABLECUSTOMUSERLOGINS					"General/EnableCustomUserLogins"
-#define REGISTRY_OPENINEXTERNALDEBUGGER					"Debugging/OpenExtDebug"
+//#define REGISTRY_OPENINEXTERNALDEBUGGER					"Debugging/OpenExtDebug"
 #define REGISTRY_RENDERTYPE								"Rendering/RenderType"
 #define REGISTRY_HQANTIALIAS							"Rendering/HQAntiAlias"
 #define REGISTRY_SCRIPTING_INCLUDEPATHS					"Scripting/IncludeDirectories"

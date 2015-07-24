@@ -120,7 +120,7 @@ public:
 				}
 			}
 			dir.remove();
-			if (nRetVal>0)
+			if (nRetVal > 0)
 				return InstallResult_PluginsInstalled;
 		}
 		else
@@ -149,16 +149,16 @@ public:
 			if (QFile(sMainAppsUserPluginDirPath + "/" + sIniFileName).exists())
 			{
 				//int confirm = QMessageBox::question(NULL, "Uninstall already present plugin?", "A plugin with the same name (" + sPluginInternalName + ") is already in use.\nTo proceed this installation that active plugin first needs to be un-installed, do you wish to proceed?", QMessageBox::Ok | QMessageBox::Cancel);
-				if (bOverWriteExistingFiles==false)//(confirm == QMessageBox::Ok)
+				if (bOverWriteExistingFiles == false)//(confirm == QMessageBox::Ok)
 				{
 					//if (unistallRegisteredPlugin(sPluginInternalName) == false)
 					//{
 					//	qDebug() << __FUNCTION__ << "Could not uninstall the plugin: " << sPluginInternalName;
 					//	return ??;
 					//}
-				//}
-				//else// if (QMessageBox::Cancel)
-				//{
+					//}
+					//else// if (QMessageBox::Cancel)
+					//{
 					qDebug() << __FUNCTION__ << "File already exists (" + sMainAppsUserPluginDirPath + "/" + sIniFileName + ")!" << sPluginInternalName;
 					return InstallResult_ErrorCannotOverwriteExistingFile;
 				}
@@ -213,6 +213,21 @@ public:
 
 						if (QFile(lFileList[i]).exists())
 						{
+							QLibrary tmpLib;
+							tmpLib.setFileName(lFileList[i]);
+							if (tmpLib.isLibrary(lFileList[i]))
+							{
+								//qDebug() << "isLibrary";
+								if (tmpLib.isLoaded())
+								{
+									//qDebug() << "unload";
+									if (tmpLib.unload()==false)
+									{
+										//qDebug() << "unload unsuccessful";
+									}
+								}
+							}
+
 							bool bRemoveSucceeded = QFile::remove(lFileList[i]);
 							if (QFileInfo(lFileList[i]).exists())
 								bRemoveSucceeded = false;
