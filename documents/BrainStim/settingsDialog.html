@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -14,7 +14,7 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
 <title>Settings Dialog v1.0</title>
 <!--doc-version-title-end-->
 <style type="text/css">
@@ -28,7 +28,7 @@
     <div class="container">
 
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Settings Dialog</h1>
@@ -69,18 +69,34 @@
 		    <tr>
 		      <th scope="row"></th>
 		      <td><strong>Skip automatic QT Script binding loading</strong></td>
-		      <td>If you check this setting then the script bindings (located in <em>
+		      <td>If you check this setting then the 
+			  <a href="QtLibraryScriptBindings.html">script bindings</a> (located in <em>
 			  &lt;Main Program Directory&gt;\Plugins\&lt;Architecture&gt;\script\</em>) will not be automatically loaded at the next BrainStim startup and therefore their functionality is then also not available in the script engine.</td>
 		    </tr>
 		    <tr>
 		      <th scope="row"></th>
 		      <td><strong>Allow multiple instances of BrainStim</strong></td>
-		      <td></td>
+		      <td>When checked then multiple instances of BrainStim are allowed 
+			  to run simultaneously as a seperate BrainStim process on the same 
+			  computer. If this setting is unchecked and you would try to start 
+			  another instance of BrainStim by executing again the executable 
+			  then this process is automatically stopped by the first instance. 
+			  A situation where this setting could be usefull is when you would 
+			  assiociate BrainStim in Windows with a particular file type 
+			  extensions, see <a href="FileTypeAssociations.html">this document</a> 
+			  for more information.</td>
 		    </tr>
 		    <tr>
 		      <th scope="row"></th>
 		      <td><strong>Enable custom User Logins</strong></td>
-		      <td></td>
+		      <td>This setting can be used to enable a custom BrainStim login 
+			  option, if this option is enabled then you first need to 
+			  login/register an account to make use of BrainStim the next time 
+			  it starts. This options can be usefull in situations where you 
+			  want to be able to store custom Brainstim-user account settings 
+			  seperately while using the same Windows-user account. See
+			  <a href="CustomUserLogins.html">this document</a> for more 
+			  information.</td>
 		    </tr>
 		    <tr>
 		      <th scope="row" class="active">Directories:</th>
@@ -89,13 +105,25 @@
 		    </tr>
 		    <tr>
 		      <th scope="row"></th>
-		      <td><strong>User Documents Root Directory</strong></td>
-		      <td></td>
+		      <td><strong>Main User Directory</strong></td>
+		      <td>Using this setting you can reconfigure the&nbsp;path of the
+			  <a href="../GettingStartedGuide/GettingStartedGuide.html#MainUserdirectory">
+			  Main User directory</a>. Important! Although the 
+			  <a href="../GettingStartedGuide/GettingStartedGuide.html#BrainStimSettingsfile">BrainStim 
+			  Settings File</a> (<span style="color: rgb(51, 51, 51); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: bold; letter-spacing: normal; line-height: 20px; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none; background-color: rgb(255, 255, 255);">BrainStim.ini</span>) 
+			  is located inside this directory by default the location of this 
+			  file doesn't change by changing this setting, for all the 
+			  remaining directories and files it does.</td>
 		    </tr>
 		    <tr>
 		      <th scope="row"></th>
-		      <td><strong>Custom Plugins Root Directory</strong></td>
-		      <td></td>
+		      <td><strong>Custom Plugin Directory</strong></td>
+		      <td>Using this setting you can reconfigure the&nbsp;path of the
+			  <a href="../GettingStartedGuide/GettingStartedGuide.html#CustomPlugindirectory">
+			  Custom Plugin directory</a>. Important! After changing this 
+			  setting you should copy all needed Plugin files from the "old" 
+			  directory setting to this "new" directory setting for the 
+			  plugin(s) that you still want to make use of in BrainStim. </td>
 		    </tr>
 		    <tr>
 		      <th scope="row" class="active">Renderer:</th>
@@ -105,7 +133,7 @@
 		    <tr>
 		      <th scope="row"></th>
 		      <td><strong>3D Renderer</strong></td>
-		      <td></td>
+		      <td>Here you can configure the type of 3D renderer used.</td>
 		    </tr>
 		    <tr>
 		      <th scope="row" class="active">Scripting:</th>
@@ -115,7 +143,11 @@
 		    <tr>
 		      <th scope="row"></th>
 		      <td><strong>Include Directories</strong></td>
-		      <td></td>
+		      <td>By using this setting you can configure the standard 
+			  directories, and the order of them, that BrainStim uses for 
+			  locating file(s) included by a script. See 
+			  <a href="FunctionsAndIncludes.html">this document</a> for more 
+			  information.</td>
 		    </tr>
 		    <tr>
 		      <th scope="row" class="active">Network:</th>
@@ -125,7 +157,14 @@
 		    <tr>
 		      <th scope="row"></th>
 		      <td><strong>Network Server</strong></td>
-		      <td></td>
+		      <td>BrainStim can be controlled over a network by enabling a 
+			  Internal Network Interface, see
+			  <a href="InternalNetworkInterface.html">this document</a> for more 
+			  information. If needed you can also specify here which IP-Address 
+			  and Port should be used for the interface setup. You can leave the
+			  <strong>IP-Address</strong> setting empty for auto-discovery and 
+			  if you leave the <strong>Port</strong> setting set to '0' then a 
+			  free Port number is automatically assigned to it.</td>
 		    </tr>
 		    <tr>
 		      <th scope="row" class="active">Plugins:</th>
@@ -135,7 +174,16 @@
 		    <tr>
 		      <th scope="row"></th>
 		      <td><strong>Properties</strong></td>
-		      <td></td>
+		      <td>These settings are automatically implemented by the installed 
+			  and enabled plugins.The by default available
+			  <a href="../ExperimentManagerPlugin/ExperimentManagerPlugin.html">
+			  ExperimentManager plugin</a> implements a <strong>Automatic EXML 
+			  File Validation</strong> setting allowing you to disable the 
+			  automatic validation of an EXML (*.exml) file when opened by 
+			  BrainStim, because this may lead to unwanted additional loading 
+			  time of such an document. If there are some custom plugins 
+			  installed then these may also provide some custom configurable 
+			  settings inside a dedicated tab.</td>
 		    </tr>
 		  </tbody>
 		</table>

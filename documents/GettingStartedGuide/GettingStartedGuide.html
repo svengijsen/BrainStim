@@ -3,19 +3,19 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--doc-version-jquery-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
 <!-- JQuery(UI) -->
 <script src="../../js/jquery.min.js" type="text/javascript"></script>
 <script src="../../js/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
 <!--doc-version-jquery-links-end-->
 <!--doc-version-tocify-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
 <!-- Tocify -->
 <link href="../../css/jquery.tocify.css" type="text/css" rel="stylesheet"/>
 <script src="../../js/jquery.tocify.min.js" type="text/javascript"></script>
 <!--doc-version-tocify-links-end-->
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -27,7 +27,7 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
 <title>Getting Started Guide v1.0</title>
 <!--doc-version-title-end-->
 </head>
@@ -35,7 +35,7 @@
     <div class="container-fluid">
         <div class="col-md-9 col-md-offset-3">
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Getting Started Guide</h1>
@@ -128,7 +128,6 @@
 				</table>
     
 
-                <p>&nbsp;</p>
 				<p>BrainStim makes use of two additional directories, these directories are created and used after the first start of BrainStim, these are:</p>
 
                 <h4>Main User directory</h4>
@@ -174,11 +173,23 @@
 				  </tbody>
 				</table>
 
-                <h4>Custom Plugin directory</h4>
+                <p><span lang="en-us">You can change this directory using the 
+				BrainStim <a href="../BrainStim/settingsDialog.html">Settings 
+				Dialog</a>. Important! Although the BrainStim Settings File (<span style="color: rgb(51, 51, 51); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: bold; letter-spacing: normal; line-height: 20px; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none; background-color: rgb(255, 255, 255);">BrainStim.ini</span>) 
+				is located inside this directory by default the location of this 
+				file doesn't change by changing this setting, for all the 
+				remaining directories and files it does.</span></p>
+				<h4 id="CustomPlugindirectory">Custom Plugin directory</h4>
                 <p>Depending on the windows login username and BrainStim version it's located at: </p>
                 <p><strong>C:\Users\<em>&lt;login username&gt;</em>\AppData\Local\MBIC\BrainStim\BrainStim(<em>vx.x.x.x, xx-bits</em>)\Plugins\<em>&lt;architecture&gt;</em>\</strong></p>
                 <p>This directory is  used for the installation of user specific custom Plugin and additional files that are needed for this plugin.	</p>
-                <h2>User Interface</h2>
+				<p><span lang="en-us">You can change this directory using the 
+				BrainStim <a href="../BrainStim/settingsDialog.html">Settings 
+				Dialog</a>. Important! After changing this setting you should 
+				copy all needed Plugin files from the "old" directory setting to 
+				this "new" directory setting for the plugin(s) that you still 
+				want to make use of in BrainStim. </span>	</p>
+                <h2 id="UserInterface">User Interface</h2>
                 <p><img src="./../../images/userinterface.png" class="img-responsive centered" alt="" /></p>
                 <p>&nbsp;</p>
                 <p>The default BrainStim User interface contains a MenuBar, ToolBar, Document Editing, OutputLog  and StatusBar area. These area's can be resized and moved around by a user and these customization are then automatically saved by file type extension of the current active document. Furthermore (custom) plugins may also define custom editing area's for different file type editing purposes. Later we'll see how the ExperimentManager's plugin implements a custom UserInterface by creating new areas for editing experiment files(<em>*.exml</em>).</p>
@@ -227,96 +238,31 @@
 				  </tbody>
 				</table>
                 <h2>Configuration and Settings</h2>
-                <h3>BrainStim Settings file</h3>
+                <h3 id="BrainStimSettingsfile">BrainStim Settings file</h3>
                 <p>BrainStim makes use of a configuration file to store all settings/configurations. This configuration file, named BrainStim.ini is located in the <a href="#MainProgramdirectory">Main Program Directory</a>, because this directory is different per Windows login user the settings are stored separately. The settings file is also used by BrainStim for storing custom layout settings of the different UI areas. </p>
                 <h3>BrainStim Settings dialog</h3>
-                <p>You can open the settings dialog from BrainStim by selecting the menu commands: <kbd>Tools</kbd> --> <kbd>Options</kbd>. Custom configured settings from this dialog are saved to the BrainStim configuration file.</p>
-                <p>&nbsp;</p>
+                <p>You can open the settings dialog from BrainStim by selecting the menu commands: <kbd>Tools</kbd> --> <kbd>Options</kbd>.
+				<span lang="en-us">Read more about this topic in
+				<a href="../BrainStim/SettingsDialog.html">this document</a>.</span></p>
                 <h3>Command-line switches</h3>
-                <p>BrainStim can be started from the command prompt with special defined switches accompanied with one or more parameter(s). By using these command-line switches it is possible to start BrainStim with one or more pre-defined document(s) and/or to enable/disable certain program features.</p>
-                <ul>
-                    <li>Start BrainStim.</li>
-                    <li>Open the file <em>StartBrainStim.bat</em>�found in the directory <em>BrainStim\examples\GettingStartedGuide\BasicScripting\</em>. A <a href="http://en.wikipedia.org/wiki/Batch_file" target="_blank">BAT (*.bat) file</a> is a script file which content  can be directly executed by Windows. </li>
-                    <li>Examine the batch file content,  the <a href="http://en.wikipedia.org/wiki/List_of_MS-DOS_commands#REM" target="_blank">REM command</a> is used for commenting the text behind it. There are two commands that are executed, see the file for the explanation about those commands. Also notice that the *.bat extension is not compatible with BrainStim, although you can edit is as plain text. The *.bat extension is not pre-registered inside BrainStim and therefore it's shown in the editor as plain text without coloring, custom styles, fonts, etc...</li>
-                    <li>Close BrainStim and execute this <em>StartBrainStim.bat</em> file directly from Windows by double clicking it.</li>
-                    <li>Notice that BrainStim is started and that it automatically opened the file pointed to in the batch file. The command switch '-f' implements this feature, see the below table for all available command switches.</li>
-                </ul>
-                <table width="80%" border="1" align="center">
-                    <tr>
-                        <th align="center" scope="col">SWITCH</th>
-                        <th scope="col">PARAMETER</th>
-                        <th scope="col">DESCRIPTION</th>
-                    </tr>
-                    <tr>
-                        <td align="center">-f</td>
-                        <td>Path to document(s) separated with a ';' character</td>
-                        <td>Allows you to let BrainStim automatically open one or more document(s).</td>
-                    </tr>
-                    <tr>
-                        <td align="center">-v</td>
-                        <td>Verbose mode</td>
-                        <td>Enables the verbose mode. In this mode BrainStim writes more detailed and more comprehensive information to the log file. It's advised to only use this option for debugging purpose.</td>
-                    </tr>
-                    <tr>
-                        <td align="center">-o</td>
-                        <td>Option flags (single number)</td>
-                        <td>Allows you to define one or more option flag(s) for BrainStim. Each flag is defined by a number and multiple flags can be combined together by summing up all their numbers. See the below table for the available flags with their numbers. If you would for example want BrainStim to start with the plug-ins and script bindings disabled you would use the command 'BrainStim -o 3'.</td>
-                    </tr>
-                    <tr>
-                        <td align="center">-e</td>
-                        <td>Execute active document</td>
-                        <td>This parameter allows you to let BrainStim automatically execute the active document (after loading the  document(s)). This is the last document defined with the -f switch.</td>
-                    </tr>
-                </table>
-                <p>&nbsp;</p>
-                <div align="center">
-                    <table width="80%" border="1">
-                        <tr>
-                            <th align="center" scope="col">FLAG</th>
-                            <th align="center" scope="col">NUMBER</th>
-                            <th scope="col">DESCRIPTION</th>
-                        </tr>
-                        <tr>
-                            <td align="left">DisableAllScriptBindings</td>
-                            <td align="center">1</td>
-                            <td>The Qt Library Script Bindings are not loaded during the startup of BrainStim.</td>
-                        </tr>
-                        <tr>
-                            <td align="left">DisableAllPlugins</td>
-                            <td align="center">2</td>
-                            <td>The Plug-ins are not loaded during the startup of BrainStim.</td>
-                        </tr>
-                        <tr>
-                            <td align="left">DisableSplash</td>
-                            <td align="center">4</td>
-                            <td>The splash message is not shown during the startup of BrainStim.</td>
-                        </tr>
-                        <tr>
-                            <td align="left">DisableNetworkServer</td>
-                            <td align="center">8</td>
-                            <td>The External Network Server (explained later) is not started during the startup of BrainStim.</td>
-                        </tr>
-                        <tr>
-                            <td align="left">VerboseMode</td>
-                            <td align="center">16</td>
-                            <td>Verbose mode is enabled during the startup of BrainStim, see also the above table (-v).</td>
-                        </tr>
-                        <tr>
-                            <td align="left">ExecuteDocument</td>
-                            <td align="center">32</td>
-                            <td>The document that is active after the BrainStim startup is automatically executed, see also above table (-e).</td>
-                        </tr>
-                    </table>
-                </div>
-                <p>&nbsp;</p>
-                <h3>
-                    Changing the default User Documents Root Directory
-                </h3>
-                <p>BrainStim makes use of a so called default <em>User Documents Root directory</em>, this directory is opened by default whenever you use the <em>File--&gt;Open</em> command to browse for a file. You might want to change this to another directory, you can do this trough the menu <em>Tools--&gt;Option--&gt;Directories</em> command. If you changed this directory you might also want to copy the already present examples from the original folder to this directory.</p>
+                <p>BrainStim can be started from the command prompt with special 
+				defined switches accompanied with one or more parameter(s).
+				<span lang="en-us">Read more about this topic in
+				<a href="../BrainStim/CommandLineOptions.html">this document</a>.</span></p>
                 <h2>Editing and Scripting</h2>
                 <p>
-                    At first glance BrainStim features  various text editing tools that are found in standard text editing applications, like for example notepad. BrainStim  allows to  open and edit multiple documents  simultaneously, the look and feel for these opened document(s) depends on the document type (that is defined by the document extension). BrainStim  automatically detects certain (pre-registered) document types (by extension), this is further explained in the example <a href="#running-an-experiment-file-directly-from-stimulgl">Running an Experiment File directly from BrainStim</a>. When such a  specific document    type is  detected and opened by BrainStim then the internal document editor is automatically configured  for this document type. This internal document editor configuration contains features like styling choices, support for syntax styling, code completion and call tips that can support  the editing and thus makes it more  more user-friendly.<br />
-                    A important  file type for BrainStim is  that of a script (<em>*.qs</em>) file. This file may contain <a href="http://en.wikipedia.org/wiki/QtScript" target="_blank">QtScript</a>�code and can be executed by the BrainStim internal Script Engine. This makes BrainStim be more that just a rich multiple document editor, namely also a script interpreter. This is handled by the internal script engine that can execute script code. The supported QtScript scripting language is based on the <a href="http://en.wikipedia.org/wiki/ECMAScript" target="_blank">ECMAScript</a> standard with a few extensions, such as <a href="http://qt-project.org/doc/qt-5.1/qtcore/signalsandslots.html" target="_blank">QObject-style signal and slot�connections</a> (which is explained later in this guide).
+                    At first glance BrainStim features various text editing 
+					tools that are found in standard text editing applications, 
+					like for example notepad. BrainStim allows to open and edit 
+					multiple documents simultaneously, the look and feel for 
+					these opened document(s) depends on the document type (that 
+					is <span lang="en-us">linked</span> <span lang="en-us">to</span> 
+					the document extension). BrainStim automatically detects 
+					certain (pre-registered) document types (by extension)<span lang="en-us">.</span> When such a  specific document    type is  detected and opened by BrainStim then the internal document editor is automatically configured  for this document type. This internal document editor configuration contains features like styling choices, support for syntax styling, code completion and call tips that can support  the editing and thus makes it more  more user-friendly.<br />
+                    A important  file type for BrainStim is  that of a script (<em>*.qs</em>) file. This file may contain <a href="http://en.wikipedia.org/wiki/QtScript" target="_blank">QtScript</a><span lang="en-us">
+					</span>code and can be executed by the BrainStim internal Script Engine. This makes BrainStim be more that just a rich multiple document editor, 
+					<span lang="en-us">because it's</span> also a script interpreter. This is handled by the internal script engine that can execute script code. The supported QtScript scripting language is based on the ECMAScript standard with a few extensions, such as <a href="http://qt-project.org/doc/qt-5.1/qtcore/signalsandslots.html" target="_blank">QObject-style signal and slot<span lang="en-us">
+					</span>connections</a> (explained later in this guide).
                 </p>
                 <h3>Exercises - Editing</h3>
                 <h4>The BrainStim User Interface</h4>
@@ -352,22 +298,9 @@
                 </ul>
                 <p>The QtScript code of the current active document is then evaluated and executed. You can see  in the Output Log pane when the script started/stopped evaluation and how many time it took to evaluate. We can also see that for each <em>Log()</em> function call there?s one  additional line appended to the Log Output pane.</p>
                 <h4>Functions and includes</h4>
-                <p>Within the BrainStim script (QtScript) you can define functions and includes that allow you to structure this script in a more modular way that give you the advantages  of <a href="http://en.wikipedia.org/wiki/Code_reuse" target="_blank">re-usable code</a>. </p>
-                <ul>
-                    <li>Start BrainStim.</li>
-                    <li>Open the <em>FunctionsAndIncludes1.qs</em> and the <em>FunctionsAndIncludes2.qs</em>�files found in the directory <em>BrainStim\examples\GettingStartedGuide\BasicScripting\</em>.</li>
-                    <li>View/activate the <em>FunctionsAndIncludes1.qs</em>�file you can use the Window menu for this purpose or use the <kbd>Ctrl</kbd> + <kbd>TAB</kbd> key combination to navigate through the opened documents.</li>
-                </ul>
-                <p>
-                    Notice that the script starts with an <em>Include</em> statement that allows you to include/embed other script (*.qs) files and thus also their code functionality. The <em>string</em> parameter from the <em>Include</em> statement holds the script file to include.<br />
-                    The provided string can be a absolute or a relative path, if only a filename is defined than the <em>Include</em> function searches for the filename inside the directory where the current active running script document is stored.  If the file is not found here then it  searches for the file in the default include directory (see <a href="#default-directories">Default Directories</a> chapter), if the file is even then not found then the search is extended to the optionally directories that are defined by the <em>Tools-&gt;Options-&gt;Scripting-&gt;Include Directories</em> setting.<br />
-                    In this case a function named <em>testFunction3</em>�is defined in the included script file.
-                    You can see that a function header doesn?t need to specify the amount and type of parameter(s) it accepts, nor does it need to specify the return value (see <em>testFunction3</em>). The function <em>testFunction1</em>�shows how you can iterate through the parameters it receives, but maybe you want to specify the parameters explicit like <em>testFunction2</em>�to make a better coding overview for a better code <a href="http://en.wikipedia.org/wiki/Readability" target="_blank">readability</a>. <br />
-                    Before the script ends we should set the defined functions again to null to make sure that the script engine can perform a successful <a href="http://en.wikipedia.org/wiki/Garbage_collection_(computer_science)" target="_blank">garbage collection</a>, this is explained later (see <a href="#dynamic-object-construction-and-garbage-collection">Dynamic Object construction and Garbage Collection</a>).
-                </p>
-                <ul>
-                    <li>Execute the QtScript code.</li>
-                </ul>
+                <p>Within the BrainStim script (QtScript) you can define functions and includes that allow you to structure this script in a more modular way 
+				<span lang="en-us">read more about this topic in
+				<a href="../BrainStim/FunctionsAndIncludes.html">this document</a>.</span></p>
                 <h4>Additional BrainStim Functions</h4>
                 <p>In a previous exercise we already made use of the additional <em>Log()</em> function to write text to the log output pane which can be very useful for debugging purpose. This  <em>Log()</em> function is made available in the script environment by the BrainStim application to provide a convenient way for the user to easily output  information from the running script to the main BrainStim User Interface. There are more additional convenient functions made available to the script environment by the BrainStim application, as you can see in the following example. </p>
                 <ul>
@@ -381,72 +314,26 @@
                     The <em>Log()</em> function is actually the same as the  <em>BrainStim.write2OutputWindow()</em> function (internally it does exactly the same) but because this functionality it's so commonly used and the <em>BrainStim.write2OutputWindow()</em> function takes a lot of characters(key presses)and time to code that it has been made available to the script engine under the short <em>Log()</em> function signature.
                 </p>
                 <h4>Dynamic Object construction and Garbage Collection</h4>
-                <p>The internal BrainStim script engine uses a <a href="http://en.wikipedia.org/wiki/Garbage_collection_(computer_science)" target="_blank">garbage collection</a> method to reclaim memory used by the script objects when they are no longer needed. An object's memory can be automatically reclaimed when it is no longer referenced anywhere in the scripting environment context by the script engine garbage collector. If all referenced (allocated) memory is successfully reclaimed and the script context ends then the internal BrainStim script engine automatically exits. If this is not the case then the script remains in a running state and thus does not end. For the garbage collection to work properly  you need to make sure that you follow the following guidelines before ending the script context:</p>
-                <ol>
-                    <li>Disconnect all signal/slot connections, signal slot connections are explained later in chapter (see the <a href="#the-signalslots-mechanism">The Signal/Slots mechanism</a> chapter).</li>
-                    <li>Set all dynamic constructed object (where you used the new�statement) to null.</li>
-                    <li>Set all defined script functions to null.</li>
-                    <li>At last optionally call the <em>BrainStim.cleanupScript()</em>�function to force a remaining automatic garbage collection to make sure that all the claimed script memory is released.</li>
-                </ol>
-                <ul>
-                    <li>Start BrainStim.</li>
-                    <li>Open the <em>ObjectConstructionAndGarbageCollection.qs</em> file found in the directory <em>BrainStim\examples\GettingStartedGuide\BasicScripting\</em>.</li>
-                    <li>Execute the QtScript code.</li>
-                </ul>
-                <p>If you look at the script code then you can see that a local (built-in type) <em>String</em> object is constructed  using the <em>new</em> keyword (which claims/allocates memory). This object is constructed from a <em>String</em> object class and its member functions can now be used to change the newly created <em>String</em> object. Before we end the script context we call the script function (<em>ScriptCleanupFunction()</em>) that makes sure that the above guidelines for a successful garbage collection are followed.</p>
-                <p>We can test what happens if we don't do follow these guidelines:</p>
-                <ul>
-                    <li>Comment (using the '//' comment tag in front of the line) the line <em>replaceFirstCharacter=null;</em> (which takes care of setting the script function to null).</li>
-                    <li>Execute the QtScript code.</li>
-                    <li>Notice that the 'Execute' command in the 'Document' menu (or the corresponding toolbar button) is now disabled. This button is automatically disabled by the internal script engine when the script is running. Because the <em>replaceFirstCharacter</em> function is not set to null the script engine doesn't know/detect that all referenced(allocated) memory is successfully reclaimed and that it can safely exit the running script. The 'Execute' commend now remains disabled. </li>
-                    <li>We can force the script engine to restart/release the current script that is running by using the menu <em>Document-&gt;Restart Script Engine</em> command, press the &quot;Restart Script Engine button&quot; now.</li>
-                    <li>Uncomment (by removing the '//' comment tag) of the line with the command <em>//BrainStim.cleanupScript();</em> Now execute the script again and notice that this time the script does return to it's pending stage because by enabling this line of code the script engine tries perform the the garbage collection automatically.</li>
-                </ul>
+                <p>The internal BrainStim script engine uses a <a href="http://en.wikipedia.org/wiki/Garbage_collection_(computer_science)" target="_blank">garbage collection</a> method to reclaim memory used by the script objects when they are no longer needed. 
+				<span lang="en-us">Because this is important it's a good 
+				programming pratice to follow some guidelines to make sure this 
+				can happen, read <a href="../BrainStim/GarbageCollection.html">
+				this document</a> for more information about this topic.</span></p>
                 <h4>Qt Library Script Bindings</h4>
                 <p>
-                    To further extend the script engine functionality BrainStim has a feature that automatically detects and integrates (pre-generated) Qt bindings for the Qt Script  environment. With these  bindings you get access to substantial portions of the Qt API from within Qt Script. These script binding are automatically loaded from the shared libraries inside the <em>BrainStim/plugins/[architecture]/script/�directory</em> during startup.
-                    These shared libraries include script binding for the Qt libraries:
-                    QtCore,
-                    QtGui,
-                    QtNetwork, QtWebkit,
-                    QtXml,
-                    QtXmlPatterns,
-                    QtSvg,
-                    QtSql,
-                    QtOpenGl and
-                    QtUiTools, see also the <a href="http://qt-project.org/doc/qt-5.0/qtdoc/modules.html" target="_blank">Qt Project Documentation</a>.
-                </p>
-                <ul>
-                    <li>Start BrainStim.</li>
-                    <li>Make sure that the shared library named <em>qtscript_gui.dll</em>�exists in the directory <em>BrainStim\plugins\[architecture]\script\</em>.</li>
-                    <li>Open the file <em>QtLibraryScriptBindings.qs</em>�found in the directory <em>BrainStim\examples\GettingStartedGuide\BasicScripting\</em>.</li>
-                </ul>
-                <p>
-                    This example makes use of the <a href="http://qt-project.org/doc/qt-5.1/qtgui/qcolor.html" target="_blank">QColor</a>�and the <a href="http://qt-project.org/doc/qt-5.1/qtwidgets/qcolordialog.html" target="_blank">QColorDialog</a>�class from the QtGui�library which is made available in the scripting environment due to the automatic linkage to the Qt Bindings (<em>qtscript_gui.dll</em>), as explained above. <br />
-                    The script first constructs a <em>QColor</em>�object. The passed parameter in the <em>QColor</em>�constructor is used to preset the color. A static member function (<a href="http://qt-project.org/doc/qt-5.1/qtwidgets/qcolordialog.html#getColor" target="_blank">getColor()</a>) of the <em>QColorDialog</em>�class  is used to present to the user a color picking dialog allowing a selection of a custom color that is then copied to the <em>QColor</em>�object.
-                    This color picking dialog  prevents further script execution and gives the control back after the user accepted or rejected the color picking dialog.
-                </p>
-                <ul>
-                    <li>Examine and execute the QtScript code.</li>
-                </ul>
-                <p>Notice how the output log pane notes that the script is fully Evaluated after the script engine actually ends (after the <em>ScriptCleanupFunction()</em>). We?ll see in the next chapter that this doesn?t have to be like this.</p>
+                    &nbsp;To further extend the script engine functionality BrainStim 
+					has a feature that automatically detects and integrates 
+					(pre-generated) Qt bindings for the Qt Script environment. 
+					With these bindings you get access to substantial portions 
+					of the Qt API from within Qt Script. <span lang="en-us">Read
+					<a href="../BrainStim/QtLibraryScriptBindings.html">this 
+					document</a> for more information about this topic.</span></p>
                 <h4>The Signal/Slots mechanism</h4>
-                <p>The BrainStim script engine  supports  <a href="http://qt-project.org/doc/qt-5.1/qtcore/signalsandslots.html" target="_blank">Qt-style signal and slot�connections</a>, that can make the script very flexible. It allows the script to dynamically connect/disconnect various objects to each other by  connecting their member signals and slots. Slots can be custom script functions or member functions from script objects. It is currently not possible to define a new signal in the script, this means that all signals must be defined in their underlying C++ object classes. The following example shows how Signal/slots connection can be used inside the script to pass a signal (an event)  from one object to another slot (a script function).</p>
-                <ul>
-                    <li>Start BrainStim.</li>
-                </ul>
-                <p>Make sure that the shared library named <em>qtscript_gui.dll</em>�exists in directory <em>BrainStim\plugins\[architecture]\script\</em>.</p>
-                <ul>
-                    <li>Open the file SignalSlotMechanism.qs�found in the directory <em>BrainStim\examples\GettingStartedGuide\BasicScripting\</em>.</li>
-                </ul>
-                <p>
-                    This example is almost the same as the previous example, it only differs in the way the color picking dialog is created and handled. This example makes use of the <em>QColor</em>�and the <em>QColorDialog</em>�class from the <em>QtGui</em>�library which is made available in the scripting environment due to the automatic linkage to the <em>Qt Bindings</em> (<em>qtscript_gui.dll</em>) as we saw before. <br />
-                    The script starts with constructing two objects, a <em>QColor</em>�and a <em>QColorDialog</em>�object. In this example the color picking dialog is shown using the constructed object from the class <em>QColorDialog</em>�with the use of an non-static member function (see <em>dialog.open();</em>). The script now need to know when the user picked a color or closed the dialog, this is achieved by a signal/slot connection (<em>see dialog.finished.connect(this, dialogFinished);</em>) which makes sure that a script function (<em>dialogFinished(result)</em>) gets called whenever the the color picking dialog finishes (and fires the <a href="http://qt-project.org/doc/qt-5.1/qtwidgets/qdialog.html#finished" target="_blank"><em>finished()</em></a> signal). When our script function  (<em>dialogFinished(result)</em>) gets called we  make sure that  the we perform a successful script cleanup and exit.
-                </p>
-                <ul>
-                    <li>Examine and execute the QtScript code.</li>
-                </ul>
-                <p>Notice how the output log pane notes that the script is fully Evaluated before the script engine actually ends (after the <em>ScriptCleanupFunction()</em>). </p>
+                <p>The BrainStim script engine  supports  <a href="http://qt-project.org/doc/qt-5.1/qtcore/signalsandslots.html" target="_blank">Qt-style signal and slot<span lang="en-us">
+				</span>connections</a>, that can make the script very 
+				<span lang="en-us">powerfull, see
+				<a href="../BrainStim/SignalSlotConnections.html">this document</a> 
+				for more information regarding this topic.</span></p>
                 <h4>BrainStim Plug-in Script Bindings</h4>
                 <p>BrainStim has the ability to automatically integrate (load and embed) plug-ins that extend the functionality  of BrainStim (see the <a href="../../References/Plugins/PluginReference.html">plug-in reference</a> for a list of available plug-ins). These plug-ins can  expose their functionality to the BrainStim Script engine, allowing the user to take advantage of these plug-ins  inside the script context. Usually this is done by constructing a object dynamically inside the script from the exposed plug-in script class which we can then make use of. Each plug-in has the possibility to implement its own custom  User Interface that can be opened from BrainStim, normally this User Interface offers a user friendly way  for  accessing and testing the plug-ins functionality. For a c++ programmer it's not difficult to create a new custom BrainStim plug-in to extend the program (if you are interested in this please contact us at sven dot gijsen at maastrichtuniversity dot nl).</p>
                 <p><u>Important</u>: The internal plug-in object, used by the plug-ins User Interface to show its functionality, is in no way connected to the script or any script object created from this plug-ins class! This is because that internal plug-in is only used for testing purpose and easy access it's features but not for a global configuration. Objects that are dynamically created inside the script context from the plug-ins script class are new instances and in no way connected to the plug-ins UI.</p>
@@ -659,36 +546,6 @@
                     <li><em>ShowExperimentStructure.qml</em>, another QML file that defines a component which is embedded/used and used in <em>Fruits.qml</em> that can be used to visually present the current Experiment Structure. This file also implements a interface by describing a function that can be used from the main script to control the Experiment structure presentation to the screen.</li>
                 </ol>
                 <p>All four files can be executed separately directly by BrainStim, but all the important  experiment control takes place in the script and that's why we should now use the script file to start and test the experiment. The script (<em>FruitsExperiment.qs</em>)  dynamically creates a <em>ExperimentManager</em> object that loads and executes the Experiment file (<em>BlockDesign2.exml</em>) which declares a <em>QML2Viewer</em> object for the execution of the QML file (<em>Fruits.qml</em>) that embeds another QML file (<em>ShowExperimentStructure.qml</em>) for the presentation of the Experiment Structure. Whenever the Experiment Structure changes this is automatically signalled to the script (signal/slot connections) which is then  responsible for the control over the presentation state made available by the interface described in the QML files. The choose of presentation state is selected from a pre filled and randomized Array that contains the states (Acai or Banana) for the experiment presentation. The Experiment Structure defined in the Experiment file (<em>BlockDesign2.exml</em>) now defines only two blocks and uses only one QML file. The first block is the fixation block and lasts for 5 external triggers (again 5 seconds for this case). The second block lasts for 10 trials of 2 external triggers, thus 10 trials of 2 seconds. Each trial of the second block is then automatically controlled by the script that uses an randomized array that defines whether the experiment should present the Acai or Banana state. The script also takes control over the visual presentation of the Experiment Structure.</p>
-                <h2>Multiple program instances and Network Communication (advanced)</h2>
-                <p>BrainStim allows by default only one instance of the program running simultaneously. If you try to start another instance it will  check first automatically whether a BrainStim instance is already running. You can change the allowance of the simultaneous instances:</p>
-                <ul>
-                    <li> In the <em>Tools--&gt;Options</em> menu, there's a 'General' tab with the <em>Allow multiple instances running simultaneously</em> checkbox. If you uncheck (default) this option and try to start another instance by executing another BrainStim executable (BrainStim.exe) you'll notice that the first (already opened instance) is re-activated again (becomes the active window) and no other instance is opened. Let's check this by making sure that this checkbox is unchecked.</li>
-                    <li>Try to Start another BrainStim instance by executing a BrainStim.exe file. When the new BrainStim instances detects another instance running it informs that instance by broadcasting some messages (actually these messages are scripts) to this instance. These messages are send over the internal TCP/IP network. Whenever new messages (scripts) are received these are automatically shown in the log output pane, therefore you should now see in the log output pane from the first instance running something like:</li>
-                </ul>
-                <p class="codeframe">
-                    <em>
-                        -&gt; SocketData Received [Log(&quot;New BrainStim Instance Initializing...&quot;);]<br />
-                        New BrainStim Instance Initializing...<br />
-                        -&gt; SocketData Successfully executed by the Script Engine.<br />
-                        -&gt; SocketData Received [BrainStim.activateMainWindow();]<br />
-                        -&gt; SocketData Successfully executed by the Script Engine.
-                    </em>
-                </p>
-                <p>The receiving instance receives 2 scripts (see the above two script line(s)  between the brackets ([])) from an <strong>internal Network Server</strong> over an internal TCP/IP socket and automatically executes them as you can see. This internal Network Server is started by BrainStim after startup and can be used for external access. Whatever it received is interpreted a BrainStim script code and automatically executed. This network server runs  internally which means that  it can only be used from within the same computer.</p>
-                <p>There's also an <strong>External Network Server </strong>available in BrainStim  to which other instances of BrainStim (or other programs that implement this) can connect  to. They can then   control BrainStim by this External network server over the internal and external TCP/IP network. Received messages are again automatically executed by BrainStim.   Clients can connect to this BrainStim External Network Server directly from the same computer or over a TCP/IP network such as the internet as long as the network permits/forwards this TCP/IP communication. Let's try this external network server:</p>
-                <ul>
-                    <li>Start one BrainStim instance and make sure to check the option <em>Allow multiple instances running simultaneously</em>.</li>
-                    <li>Open the Options Dialog by the menu Tools--&gt;Options.</li>
-                    <li>Open the 'Network' tab and check the <em>Enable the External Network Server at startup</em> checkbox. Enter '127.0.0.1' in the Server IP-Address and '200' in the Server Port setting.</li>
-                    <li>Close and re-start BrainStim again (this is needed for starting the External Network Server if it was not yet enabled in the settings), we'll be calling this new instance <em>instance A</em>. You may see a Windows warning which asks you wether you want to allow this network communication, you should allow this.</li>
-                    <li>Notice the line <em>&quot;Network Server started @ 127.0.0.1:200&quot;</em> in the log output pane, we now know that the server is successfully started.</li>
-                    <li>Start another instance of BrainStim, we'll be calling this instance <em>instance B</em>.</li>
-                    <li>Notice the line <em>&quot;Configured Network Server disabled.&quot;</em> in the log output pane, because only one Network Server can be active at the same time for a certain IP-Address and port combination.</li>
-                    <li>Open the file <em>TCPNetworkClient.qs</em>�found in the directory <em>BrainStim\examples\GettingStartedGuide\AdvancedScripting\</em> with <em>instance B</em> of BrainStim.</li>
-                    <li>Examine and then execute the QtScript code.</li>
-                    <li>Press  some keys and notice that their corresponding key-code is send (in a wrapped script function that logs the key-code value) from BrainStim <em>instance A</em> to <em>instance B</em> over the network card.</li>
-                    <li>Press the 'Escape' key to finalize the script, notice how the Server detects that the client disconnects.</li>
-                </ul>
                 <h2>How to proceed...</h2>
                 <p>Due to the huge capabilities of BrainStim this getting started guide might be difficult to fully understand immediately, this is not a  problem. It's important to gain a general idea of how BrainStim works and  what it's main capabilities are. If you then want to give it a try you could then start by copying a example from this getting started guide or from one of the <a href="..\index.html">tutorials</a> found in the <em>BrainStim\examples\Tutorials</em> directory. Off course you can also always contact us at sven dot gijsen at maastrichtuniversity dot nl for feedback and questions.</p>
                 <p>&nbsp;</p>
@@ -696,11 +553,11 @@
         </div>
     </div>
 <!--doc-version-default-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
 	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
 <!--doc-version-default-footer-end-->
 <!--doc-version-tocify-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
 <script type="text/javascript">$(function() {
 var toc = $("#toc").tocify({selectors: "h2,h3,h4"}).data("toc-tocify");
 toc.setOptions({ smoothScroll: false, showEffect: "none" });

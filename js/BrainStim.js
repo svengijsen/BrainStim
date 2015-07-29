@@ -1,5 +1,5 @@
 //doc-version-brainstimrelease-begin
-//Please do not edit the below line(s) manually, see DocumentVersioning.qs (15623112120), version 1.0.0.1
+//Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1
 var currentBrainStimRelease = '1.0.0.1';
 //doc-version-brainstimrelease-end
 
@@ -16,20 +16,33 @@ function BrainStimDocuments_Information()
 	///////////////////////////////////////////////////////////////
 	this.DocumentAuditing = BrainStimDocuments_CreateArray(5, AuthorCounter); //Default constructor!
 	///////////////////////////////////////////////////////////////
-	this.DocumentAuditing[0][this.Doc_FileName_Index] = 'GettingStartedGuide.html';
-	this.DocumentAuditing[0][this.Doc_Title_Index] = 'Getting Started Guide';
-	this.DocumentAuditing[0][this.Doc_Version_Index] = '1.0';
-	this.DocumentAuditing[0][this.Doc_Date_Index] = 'July 2015';
-	this.DocumentAuditing[0][this.Doc_Authors_Index] = 'Sven Gijsen';
+	var nCurrentDocIndex = 0;
+	this.DocumentAuditing[nCurrentDocIndex][this.Doc_FileName_Index] = 'GettingStartedGuide.html';
+	this.DocumentAuditing[nCurrentDocIndex][this.Doc_Title_Index] = 'Getting Started Guide';
+	this.DocumentAuditing[nCurrentDocIndex][this.Doc_Version_Index] = '1.0';
+	this.DocumentAuditing[nCurrentDocIndex][this.Doc_Date_Index] = 'July 2015';
+	this.DocumentAuditing[nCurrentDocIndex][this.Doc_Authors_Index] = 'Sven Gijsen';
+	nCurrentDocIndex++;
 	
-	this.DocumentAuditing[1] = ['PreBuildDevelopmentSetup.html','Pre-Build Development Setup','1.0','July 2015','Sven Gijsen'];
-	this.DocumentAuditing[2] = ['ExperimentManagerPlugin.html','Experiment Manager Plug-in','1.0','July 2015','Sven Gijsen'];
-	this.DocumentAuditing[3] = ['ExtensionPluginTemplate.html','Extension Plug-in Template','1.0','July 2015','Sven Gijsen'];	
-	this.DocumentAuditing[4] = ['BrainStim_QMLExtensions.html','BrainStim QML Extensions Plug-in','1.0','July 2015','Sven Gijsen'];
-	this.DocumentAuditing[5] = ['Development.html','BrainStim Development','1.0','July 2015','Sven Gijsen'];
-	this.DocumentAuditing[6] = ['ExamplesAndTutorials.html','Examples and Tutorials','1.0','July 2015','Sven Gijsen'];
-	this.DocumentAuditing[7] = ['RetinoTopicMappingOutput.html','Retinotopic Mapping output files Tutorial','1.0','July 2015','Sven Gijsen'];
-	this.DocumentAuditing[8] = ['settingsDialog.html','Settings Dialog','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['PreBuildDevelopmentSetup.html','Pre-Build Development Setup','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['ExperimentManagerPlugin.html','Experiment Manager Plug-in','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['ExtensionPluginTemplate.html','Extension Plug-in Template','1.0','July 2015','Sven Gijsen'];	
+	this.DocumentAuditing[nCurrentDocIndex++] = ['BrainStim_QMLExtensions.html','BrainStim QML Extensions Plug-in','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['Development.html','BrainStim Development','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['ExamplesAndTutorials.html','Examples and Tutorials','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['RetinoTopicMappingOutput.html','Retinotopic Mapping output files Tutorial','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['SettingsDialog.html','Settings Dialog','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['QtLibraryScriptBindings.html','Qt Library Script Bindings','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['FileTypeAssociations.html','Automatic File Type Associations','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['CustomUserLogins.html','Custom User Logins','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['FunctionsAndIncludes.html','Functions and Includes','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['GarbageCollection.html','Garbage Collection','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['CommandLineOptions.html','Command-Line Options','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['InternalNetworkInterface.html','Internal Network Interface','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['SignalSlotConnections.html','Signal-Slot Connections','1.0','July 2015','Sven Gijsen'];
+	
+	
+	
 }
 
 BrainStimDocuments_Information.prototype.GetStrippedFileName = function (strFileUrl)//var strFileUrl=window.location.pathname;

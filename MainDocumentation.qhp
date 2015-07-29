@@ -18,7 +18,19 @@
 				<section title="ExperimentManagerPlugin" ref="./documents/ExperimentManagerPlugin/ExperimentManagerPlugin.html"></section>
 				<section title="ExperimentManagerPlugin doxygen" ref="./documents/ExperimentManagerPlugin/Doxygen/index.html"></section>
 				<section title="GettingStartedGuide" ref="./documents/GettingStartedGuide/GettingStartedGuide.html"></section>
-				<section title="settingsDialog" ref="./documents/BrainStim/settingsDialog.html"></section>
+				<section title="SettingsDialog" ref="./documents/BrainStim/SettingsDialog.html"></section>
+				<section title="QtLibraryScriptBindings" ref="./documents/BrainStim/QtLibraryScriptBindings.html"></section>
+				<section title="FileTypeAssociations" ref="./documents/BrainStim/FileTypeAssociations.html"></section>
+				<section title="CustomUserLogins" ref="./documents/BrainStim/CustomUserLogins.html"></section>
+				<section title="FunctionsAndIncludes" ref="./documents/BrainStim/FunctionsAndIncludes.html"></section>
+				<section title="GarbageCollection" ref="./documents/BrainStim/GarbageCollection.html"></section>
+				<section title="CommandLineOptions" ref="./documents/BrainStim/CommandLineOptions.html"></section>
+				<section title="InternalNetworkInterface" ref="./documents/BrainStim/InternalNetworkInterface.html"></section>
+				<section title="SignalSlotConnections" ref="./documents/BrainStim/SignalSlotConnections.html"></section>
+				
+				
+				
+				
 			</section>
 			
 				

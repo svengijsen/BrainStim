@@ -1,0 +1,90 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<title>Custom User Logins v1.0</title>
+<!--doc-version-title-end-->
+</head>
+<body>
+    <div class="container">
+
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Custom User Logins</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+
+        <h2>Introduction</h2>
+		<p>You can check the <em><strong>Enable Custom User Logins</strong></em> 
+		setting in the <a href="settingsDialog.html">Settings Dialog</a>.&nbsp; 
+		If this setting is enabled then you first need to login/register an 
+		account to make use of BrainStim the next time it starts. This options 
+		can be usefull in situations where you want to be able to store custom 
+		Brainstim-user account settings seperately while using the same 
+		Windows-user account. The same
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#BrainStimSettingsfile">Settings File</a> 
+		is used for all Brainstim-user accounts but all user specific individual 
+		settings are stored seperately for each Brainstim-user account. </p>
+		<h2>Example</h2>
+		<p>Let's enable the Custom user logins in BrainStim.</p>
+		<ol>
+			<li>Enable the BrainStim setting <em><strong>Enable Custom User Logins</strong></em>, read <a href="settingsDialog.html">this document</a> 
+			on how to do this, close and open BrainStim again.</li>
+			<li>Notice that a custom <strong>User Login</strong> dialog is shown allowing you to 
+			create a new account, skip or login using a previously created 
+			custom User login account. If you select <kbd>Skip</kbd> then the 
+			default (no 
+			custom user account) is used. </li>
+			<li>Let's create a new account. Fill in a <em>Username</em> with a
+			<em>Password</em> and hit the <kbd>Login</kbd> button. After this you'll see a 
+			message that inform you about the creation of the new account and 
+			that this account is now automatically used for the current login.</li>
+			<li>Open the <a href="settingsDialog.html">Settings Dialog</a> and 
+			notice that all current custom user settings are cloned from the 
+			last configuration settings (where no custom account was used) when 
+			the new account was configured. </li>
+			<li>Activate the <strong>Plugins</strong> tab and uncheck the <em>
+			<strong>Automatic EXML File Validation</strong></em> setting, click 
+			<kbd>OK</kbd> to close the <a href="settingsDialog.html">Settings Dialog</a>.</li>
+			<li>Shutdown and restart BrainStim, and <kbd>Skip</kbd> the custom 
+			user account login feature this time.</li>
+			<li>Open again the <a href="settingsDialog.html">Settings Dialog</a> 
+			and notice that the changed <em>
+			<strong>Automatic EXML File Validation</strong></em> setting is 
+			still enabled for the default configuration where no custom user 
+			account is used.</li>
+			<li>Shutdown and restart BrainStim, and <kbd>Login</kbd> using the 
+			last created account.</li>
+			<li>Open again the <a href="settingsDialog.html">Settings Dialog</a> 
+			and notice that the changed <em>
+			<strong>Automatic EXML File Validation</strong></em> setting is 
+			disabled for the configuration where the last created 
+			account is used.</li>
+			<li>Disable the <strong> <em>Enable Custom User Logins</em></strong> 
+			setting and the shutdown and restart BrainStim again and notice that 
+			this time no custom <strong>User Login</strong> dialog is shown.</li>
+		</ol>
+    </div>
+</body>
+</html>

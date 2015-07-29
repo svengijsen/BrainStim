@@ -1,0 +1,176 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<title>Internal Network Interface v1.0</title>
+<!--doc-version-title-end-->
+<style type="text/css">
+.auto-style1 {
+	text-decoration: underline;
+}
+</style>
+</head>
+<body>
+    <div class="container">
+
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Internal Network Interface</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+    <h2>
+        Introduction</h2>
+		<p>
+		BrainStim can be externally controlled over a network by enabling a 
+			  Internal Network Interface by enabling a Internal Network 
+		Interface, see the <strong>Network Server</strong> setting of the
+		<a href="SettingsDialog.html">Settings Dialog</a>. After enabling it and 
+		restarting BrainStim the Internal Network Interface Server will 
+		automatically listen to a portnumber of an IP-Address for incomming 
+		messages. These messages are then directly threated and executed as 
+		QtScript code.</p>
+		<h2>
+		Example</h2>
+		<p>
+		Let's try to make use of this Internal Network Interface by enabling it 
+		and control one instance of a BrainStim process by another. </p>
+		<p>
+		Important! If we want to run two instances of BrainStim processes 
+		simultaneously we first have to make sure that this is possible by 
+		enabling the <strong>Allow multiple instances of BrainStim</strong> 
+		setting in the <a href="SettingsDialog.html">Settings Dialog</a>.</p>
+		<ol>
+			<li>Start (the first instance) of BrainStim.</li>
+			<li>Enable/check the BrainStim setting<span class="Apple-converted-space">&nbsp;</span><strong style="box-sizing: border-box; font-weight: 700;"><em style="box-sizing: border-box;">Allow 
+			multiple instances of BrainStim</em></strong><span style="box-sizing: border-box;"> 
+			in the <a href="SettingsDialog.html">Settings Dialog</a>.</span></li>
+			<li>Enable/check the BrainStim setting<span class="Apple-converted-space">&nbsp;</span><strong><em>Enable 
+			the Internal Network </em></strong>
+			<span style="box-sizing: border-box;"><strong><em>Interface at 
+			startup</em></strong> in the <a href="SettingsDialog.html">Settings 
+			Dialog</a>, leave the <strong><em>IP-Address</em></strong> field 
+			empty and <strong>Port</strong> set to '0' for 
+			auto-discovery-assignment.</span></li>
+			<li>Restart BrainStim, you might get a Windows security dialog 
+			asking for your configuration and permission to allow network 
+			traffic to be handled by our above enabled service, make sure to 
+			allow this.</li>
+			<li>After Brainstim started you might have noticed the following message 
+			to appear inside the<a href="../GettingStartedGuide/GettingStartedGuide.html#UserInterface"> 
+			'default' OutputLog tab</a>:<br />
+&nbsp;<pre>
+Debug: "Network Server started @ &lt;ip-address&gt;:&lt;port&gt;""""</pre>		
+		<p>The above message tells us that the Internal Network Interface Server 
+		was successfully started together with the auto assigned <strong>
+		IP-Address</strong> (see &lt;ip-address&gt;) and assigned <strong>Port</strong> 
+		number (see &lt;port&gt;). </p>
+			</li>
+			<li>Start (the second instance of) BrainStim.</li>
+			<li>After this (second instance of) Brainstim started you might have noticed the following message 
+			to appear inside the<a href="../GettingStartedGuide/GettingStartedGuide.html#UserInterface"> 
+			'default' OutputLog tab</a>:<br />
+&nbsp;<pre>
+Debug: Configured Network Server disabled.</pre>		
+		<p><strong>Important!</strong> The above message tells us that the Internal Network Interface Server 
+		was not started for this instance of BrainStim, because only
+		<span class="auto-style1">one instance of BrainStim at a time</span> can 
+		be used for handling network messages.</p>
+			<p>Furthermore the (first instance of) BrainStim now also shows the 
+			following message to appear inside the<a href="../GettingStartedGuide/GettingStartedGuide.html#UserInterface"> 
+			'default' OutputLog tab</a>:</p>
+	<pre>-> SocketData Received [Log("New BrainStim Instance Initializing...");]
+New BrainStim Instance Initializing...
+-> SocketData Successfully executed by the Script Engine.</pre>		
+			<p><strong>Important!</strong> Here we can see that the (first 
+			instance of) BrainStim also knows (detects) if another instance of 
+			BrainStim is starting, this feature is always enabled even if you 
+			disable the the <strong>Network Server</strong> setting of the
+		<a href="SettingsDialog.html">Settings Dialog</a> because these messages 
+			(SocketData) are send over another interface.</p>
+			<p>Now we can use the second instance of BrainStim to send messages 
+			(script code) to the first Instance, but first you'll have to make 
+			sure to install and enable the <strong>TCPNetworkServer</strong> 
+			plugin which is not by default installed. You can find it
+			<a href="http://github.com/svengijsen/TCPNetworkServer/releases" target="_blank">
+			here</a>. Alternatively you could make your own custom 
+			implementation for a client that can connect to BrainStim.</p>
+			<p>Now we'll proceed with making use of the <strong>TCPNetworkServer</strong> 
+			plugin.</p>
+			</li>
+			<li>Make sure to activate the second instance of BrainStim and open the<span class="Apple-converted-space">&nbsp;<em>TCPNetworkClient.qs 
+			</em></span>file 
+			located in the  
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> directory under the subfolder 
+			<em>\Examples\Scripts</em>.</li>
+			<li>Change the line where the Server Port Number is defined, and 
+			change the number to the assigned port number as shown in step 5.
+        <table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint">
+var sServerPort = "12345";</pre>
+                </td>
+            </tr>
+        </table>
+			</li>
+			<li>Save the document (<kbd>CTRL</kbd> + <kbd>s</kbd> key) and 
+			examine the code.</li>
+			<li>Execute (press the <kbd>F5</kbd> key) the QtScript code.</li>
+			<li>The<a href="../GettingStartedGuide/GettingStartedGuide.html#UserInterface"> 
+			'default' OutputLog tab</a> from (the second instance of) BrainStim 
+			now shows something like:<pre>... Valid Script Syntax ...
+... Script started Evaluating on 13:24:09...
+ServerDataRecieved() called: Welcome you're connected to BrainStim
+CleanupScript succeeded!
+... Total Time(ms): 11
+... Script fully Evaluated on 13:24:09 ...</pre>
+<p>We see that when we connect through this network interface and established a 
+connection a welcome message "Welcome you're connected to BrainStim" is then 
+send from the server to the client.</p>		
+			</li>
+			<li>if we now activate the first instance of BrainStim and look at 
+			the<a href="../GettingStartedGuide/GettingStartedGuide.html#UserInterface"> 
+			'default' OutputLog tab</a> we'll now see 
+			something like:<pre>Debug: "The Network Server accepted an incoming connection"
+This is send from the client
+Debug: NetworkServerThreadClient::clientDisconnected A client disconnected an active network connection.</pre>
+			</li>
+			<p>The first line tells us that the <strong>Internal Network Interface</strong> accepted an Incoming connection. The second line is the result from the execution of the 
+			script code send:</p>
+        <table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint">
+"Log(\"This string is send from the client\")"</pre>
+                </td>
+            </tr>
+        </table>
+      	And finally the third line shows that the client disconnected.</ol>
+   </div>
+<!--doc-version-default-footer-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
+<!--doc-version-default-footer-end-->
+ </body>
+</html>

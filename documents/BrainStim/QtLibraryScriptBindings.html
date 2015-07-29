@@ -1,0 +1,82 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<title>Qt Library Script Bindings v1.0</title>
+<!--doc-version-title-end-->
+</head>
+<body>
+    <div class="container">
+
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Qt Library Script Bindings</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+    <h2>
+        Introduction</h2>
+		<p>
+        To further extend the script engine functionality BrainStim has a feature that automatically detects and integrates (pre-generated) Qt bindings for the Qt Script  environment. With these  bindings you get access to substantial portions of the Qt API from within Qt Script. These script binding are automatically loaded from the shared libraries inside the 
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
+		Main Program Directory</a> subfolder path <em>/plugins/&lt;architecture&gt;/script </em> directory during startup.
+        These shared libraries include script binding for the Qt libraries:
+        QtCore,
+        QtGui,
+        QtNetwork, QtWebkit,
+        QtXml,
+        QtXmlPatterns,
+        QtSvg,
+        QtSql,
+        QtOpenGl and
+        QtUiTools, see also the <a href="http://qt-project.org/doc/qt-5.0/qtdoc/modules.html" target="_blank">Qt Project Documentation</a>.
+    	To turn of the auto-loading of Qt bindings for the Qt Script environment 
+		you can check the <strong>General/Skip automatic QT Script binding loading</strong> 
+		setting of the <a href="settingsDialog.html">Settings Dialog</a>.</p>
+    	<h2>Example</h2>
+		<p>Let's test and make use a functionality of a loaded Qt Library Script 
+		binding.</p>
+    <ul>
+        <li>Start BrainStim.</li>
+        <li>Make sure that the shared library named <em>qtscript_gui.dll </em>
+		exists in the 
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
+		Main Program Directory</a> subfolder path <em>/plugins/&lt;architecture&gt;/script </em> 
+		directory because this binding contains the functionality we're going to 
+		make use of.</li>
+        <li>Open the file <em>QtLibraryScriptBindings.qs</em> that is located in the  
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
+		Main Program Directory</a> subfolder <em>\Examples\Scripts</em>.</li>
+    </ul>
+    <p>
+        This example makes use of the <a href="http://qt-project.org/doc/qt-5/qcolor.html" target="_blank">QColor</a> and the <a href="http://qt-project.org/doc/qt-5/qcolordialog.html" target="_blank">QColorDialog</a> class from the 
+		<a href="http://doc.qt.io/qt-5/qtgui-index.html" target="_blank">QtGui</a> library which is made available in the scripting environment due to the automatic linkage to the Qt Bindings (<em>qtscript_gui.dll</em>), as explained above. <br />
+        The script first constructs a <em>QColor</em> object. The passed parameter in the <em>QColor</em> constructor is used to preset the color. A static member function (<a href="http://doc.qt.io/qt-5/qcolordialog.html#getColor" target="_blank">getColor()</a>) of the <em>QColorDialog </em>class  is used to present to the user a color picking dialog allowing a selection of a custom color that is then copied to the <em>QColor </em>object.
+        This color picking dialog  prevents further script execution and gives the control back after the user accepted or rejected the color picking dialog.
+    </p>
+    <ul>
+        <li>Examine and execute (press the <kbd>F5</kbd> key) the QtScript code.</li>
+    </ul>
+   </div> 
+ </body>
+</html>

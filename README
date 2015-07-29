@@ -49,4 +49,5 @@ There are some coding conventions that you might want to follow for new pages, t
 		container: responsive
 		
 		<kbd></kbd> key input
+		<samp></samp> program output/response/logging
 		

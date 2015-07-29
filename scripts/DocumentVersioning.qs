@@ -23,16 +23,35 @@ var tmpBrainStimDocumentInfo = new BrainStimDocuments_Information();
 	
 /////////////////////////CONFIGURATION(BEGIN)////////////////////////////////////////////
 var sSourcePath 			= "../";
-var sDestPath 			= sSourcePath;
+var sDestPath 				= sSourcePath;
 var sMainAuthor			= "Sven Gijsen";
 var sCurrentAuthoringMonth 	= "Juli 2015";
-var sComment 			= "Please do not edit the below line(s) manually, see DocumentVersioning.qs (" + CreateTimeStamp(sTimeObject) + ")";
+var sComment 				= "Please do not edit the below line(s) manually, see DocumentVersioning.qs (" + CreateTimeStamp(sTimeObject) + ")";
 var sScriptComment  		= "//" + sComment + ", version " + BrainStim_Settings_CurrentBrainStimReleaseString;
 var sHTMLComment  		= "<!-- " + sComment + ", version " + BrainStim_Settings_CurrentBrainStimReleaseString + "-->";
 
+defaultDocumentEditing("index.html", "index.html", 0);
+defaultDocumentEditing("documents/ExperimentManagerPlugin/ExperimentManagerPlugin.html", "ExperimentManagerPlugin.html", 2);
+defaultDocumentEditing("documents/GettingStartedGuide/GettingStartedGuide.html","GettingStartedGuide.html", 2);
+defaultDocumentEditing("documents/Development/PreBuildDevelopmentSetup.html","PreBuildDevelopmentSetup.html", 2);
+defaultDocumentEditing("documents/Development/Development.html","Development.html", 2);
+defaultDocumentEditing("documents/Development/ExtensionPluginTemplate.html","ExtensionPluginTemplate.html", 2);
+defaultDocumentEditing("documents/Examples/RetinoTopicMappingOutput/RetinoTopicMappingOutput.html","RetinoTopicMappingOutput.html", 3);
+defaultDocumentEditing("documents/Examples/ExamplesAndTutorials.html","ExamplesAndTutorials.html", 2);
+defaultDocumentEditing("documents/BrainStim/SettingsDialog.html", "SettingsDialog.html", 2);
+defaultDocumentEditing("documents/BrainStim/QtLibraryScriptBindings.html", "QtLibraryScriptBindings.html", 2);
+defaultDocumentEditing("documents/BrainStim/FileTypeAssociations.html", "FileTypeAssociations.html", 2);
+defaultDocumentEditing("documents/BrainStim/CustomUserLogins.html", "CustomUserLogins.html", 2);
+defaultDocumentEditing("documents/BrainStim/FunctionsAndIncludes.html", "FunctionsAndIncludes.html", 2);
+defaultDocumentEditing("documents/BrainStim/GarbageCollection.html", "GarbageCollection.html", 2);
+defaultDocumentEditing("documents/BrainStim/CommandLineOptions.html", "CommandLineOptions.html", 2);
+defaultDocumentEditing("documents/BrainStim/InternalNetworkInterface.html", "InternalNetworkInterface.html", 2);
+defaultDocumentEditing("documents/BrainStim/SignalSlotConnections.html", "SignalSlotConnections.html", 2);
+
+
+//Special (non-default document edits)
 sSourceList.push(sSourcePath + "js/BrainStim.js");
 sDestList.push(sSourceList[sSourceList.length-1]);
-	//changeSet = CreateArray(sSourceList.length,2,0);
 	changeSet[sSourceList.length-1] = CreateArray(3,0);
 	changeSet[sSourceList.length-1][0][0] = "//doc-version-brainstimrelease-begin";
 	changeSet[sSourceList.length-1][1][0] = sScriptComment + "\n" + "var currentBrainStimRelease = " + "'" + BrainStim_Settings_CurrentBrainStimReleaseString + "';";
@@ -43,21 +62,6 @@ sDestList.push(sSourceList[sSourceList.length-1]);
 	changeSet[sSourceList.length-1] = CreateArray(3,0);
 	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-title-begin-->";
 	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + "\t<title>BrainStim v" + BrainStim_Settings_CurrentBrainStimReleaseString + "</title>";
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-title-end-->";
-	
-sSourceList.push(sSourcePath + "index.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-links-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
-								CreateDefaultHTMLHeaderLinks(0);
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-links-end-->";	
-
-sSourceList.push(sSourcePath + "documents/ExperimentManagerPlugin/ExperimentManagerPlugin.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-title-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + "<title>" + tmpBrainStimDocumentInfo.GetDocumentTitle("ExperimentManagerPlugin.html") + "</title>";
 	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-title-end-->";
 
 sSourceList.push(sSourcePath + "documents/ExperimentManagerPlugin/ExperimentManagerPlugin.html");
@@ -70,265 +74,30 @@ sDestList.push(sSourceList[sSourceList.length-1]);
 								tmpBrainStimDocumentInfo.GetDocumentAuthors("ExperimentManagerPlugin.html"),
 								tmpBrainStimDocumentInfo.GetDocumentDate("ExperimentManagerPlugin.html"));
 	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-header-end-->";
+		
+	sSourceList.push(sSourcePath + "documents/GettingStartedGuide/GettingStartedGuide.html");
+	sDestList.push(sSourceList[sSourceList.length-1]);
+		changeSet[sSourceList.length-1] = CreateArray(3,0);
+		changeSet[sSourceList.length-1][0][0] = "<!--doc-version-jquery-links-begin-->";
+		changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
+									CreateJQueryHTMLHeaderLinks(2);
+		changeSet[sSourceList.length-1][2][0] = "<!--doc-version-jquery-links-end-->";
 
-sSourceList.push(sSourcePath + "documents/ExperimentManagerPlugin/ExperimentManagerPlugin.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-links-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
-								CreateDefaultHTMLHeaderLinks(2);
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-links-end-->";
-	
-sSourceList.push(sSourcePath + "documents/GettingStartedGuide/GettingStartedGuide.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-title-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + "<title>" + tmpBrainStimDocumentInfo.GetDocumentTitle("GettingStartedGuide.html") + "</title>";
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-title-end-->";
+	sSourceList.push(sSourcePath + "documents/GettingStartedGuide/GettingStartedGuide.html");
+	sDestList.push(sSourceList[sSourceList.length-1]);
+		changeSet[sSourceList.length-1] = CreateArray(3,0);
+		changeSet[sSourceList.length-1][0][0] = "<!--doc-version-tocify-links-begin-->";
+		changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
+									CreateTocifyHTMLHeaderLinks(2);
+		changeSet[sSourceList.length-1][2][0] = "<!--doc-version-tocify-links-end-->";
 
-sSourceList.push(sSourcePath + "documents/GettingStartedGuide/GettingStartedGuide.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-header-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" +
-		CreateHTMLHeaderSection(tmpBrainStimDocumentInfo.GetDocumentName("GettingStartedGuide.html"),
-		tmpBrainStimDocumentInfo.GetDocumentVersion("GettingStartedGuide.html"),
-		tmpBrainStimDocumentInfo.GetDocumentAuthors("GettingStartedGuide.html"),
-		tmpBrainStimDocumentInfo.GetDocumentDate("GettingStartedGuide.html"));
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-header-end-->";
-
-sSourceList.push(sSourcePath + "documents/GettingStartedGuide/GettingStartedGuide.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-links-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
-								CreateDefaultHTMLHeaderLinks(2);
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-links-end-->";
-
-sSourceList.push(sSourcePath + "documents/GettingStartedGuide/GettingStartedGuide.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-footer-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
-								CreateHTMLFooterSection();
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-footer-end-->";
-	
-sSourceList.push(sSourcePath + "documents/GettingStartedGuide/GettingStartedGuide.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-jquery-links-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
-								CreateJQueryHTMLHeaderLinks(2);
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-jquery-links-end-->";
-
-sSourceList.push(sSourcePath + "documents/GettingStartedGuide/GettingStartedGuide.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-tocify-links-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
-								CreateTocifyHTMLHeaderLinks(2);
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-tocify-links-end-->";
-
-sSourceList.push(sSourcePath + "documents/GettingStartedGuide/GettingStartedGuide.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-tocify-footer-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
-								CreateTocifyHTMLFooter();
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-tocify-footer-end-->";
-
-sSourceList.push(sSourcePath + "documents/Development/PreBuildDevelopmentSetup.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-title-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + "<title>" + tmpBrainStimDocumentInfo.GetDocumentTitle("PreBuildDevelopmentSetup.html") + "</title>";
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-title-end-->";
-
-sSourceList.push(sSourcePath + "documents/Development/PreBuildDevelopmentSetup.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-header-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" +
-		CreateHTMLHeaderSection(tmpBrainStimDocumentInfo.GetDocumentName("PreBuildDevelopmentSetup.html"),
-		tmpBrainStimDocumentInfo.GetDocumentVersion("PreBuildDevelopmentSetup.html"),
-		tmpBrainStimDocumentInfo.GetDocumentAuthors("PreBuildDevelopmentSetup.html"),
-		tmpBrainStimDocumentInfo.GetDocumentDate("PreBuildDevelopmentSetup.html"));
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-header-end-->";
-
-sSourceList.push(sSourcePath + "documents/Development/PreBuildDevelopmentSetup.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-links-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
-								CreateDefaultHTMLHeaderLinks(2);
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-links-end-->";
-
-sSourceList.push(sSourcePath + "documents/Development/Development.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-title-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + "<title>" + tmpBrainStimDocumentInfo.GetDocumentTitle("Development.html") + "</title>";
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-title-end-->";
-
-sSourceList.push(sSourcePath + "documents/Development/Development.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-header-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" +
-		CreateHTMLHeaderSection(tmpBrainStimDocumentInfo.GetDocumentName("Development.html"),
-		tmpBrainStimDocumentInfo.GetDocumentVersion("Development.html"),
-		tmpBrainStimDocumentInfo.GetDocumentAuthors("Development.html"),
-		tmpBrainStimDocumentInfo.GetDocumentDate("Development.html"));
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-header-end-->";
-
-sSourceList.push(sSourcePath + "documents/Development/Development.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-links-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
-								CreateDefaultHTMLHeaderLinks(2);
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-links-end-->";
-
-sSourceList.push(sSourcePath + "documents/Examples/ExamplesAndTutorials.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-title-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + "<title>" + tmpBrainStimDocumentInfo.GetDocumentTitle("ExamplesAndTutorials.html") + "</title>";
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-title-end-->";
-
-sSourceList.push(sSourcePath + "documents/Examples/ExamplesAndTutorials.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-header-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" +
-		CreateHTMLHeaderSection(tmpBrainStimDocumentInfo.GetDocumentName("ExamplesAndTutorials.html"),
-		tmpBrainStimDocumentInfo.GetDocumentVersion("ExamplesAndTutorials.html"),
-		tmpBrainStimDocumentInfo.GetDocumentAuthors("ExamplesAndTutorials.html"),
-		tmpBrainStimDocumentInfo.GetDocumentDate("ExamplesAndTutorials.html"));
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-header-end-->";
-
-sSourceList.push(sSourcePath + "documents/Examples/ExamplesAndTutorials.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-links-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
-								CreateDefaultHTMLHeaderLinks(2);
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-links-end-->";
-
-sSourceList.push(sSourcePath + "documents/Development/ExtensionPluginTemplate.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-title-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + "<title>" + tmpBrainStimDocumentInfo.GetDocumentTitle("ExtensionPluginTemplate.html") + "</title>";
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-title-end-->";
-
-sSourceList.push(sSourcePath + "documents/Development/ExtensionPluginTemplate.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-header-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" +
-		CreateHTMLHeaderSection(tmpBrainStimDocumentInfo.GetDocumentName("ExtensionPluginTemplate.html"),
-		tmpBrainStimDocumentInfo.GetDocumentVersion("ExtensionPluginTemplate.html"),
-		tmpBrainStimDocumentInfo.GetDocumentAuthors("ExtensionPluginTemplate.html"),
-		tmpBrainStimDocumentInfo.GetDocumentDate("ExtensionPluginTemplate.html"));
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-header-end-->";
-
-sSourceList.push(sSourcePath + "documents/Development/ExtensionPluginTemplate.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-links-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
-								CreateDefaultHTMLHeaderLinks(2);
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-links-end-->";
-	
-sSourceList.push(sSourcePath + "documents/Examples/RetinoTopicMappingOutput/RetinoTopicMappingOutput.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-title-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + "<title>" + tmpBrainStimDocumentInfo.GetDocumentTitle("RetinoTopicMappingOutput.html") + "</title>";
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-title-end-->";
-
-sSourceList.push(sSourcePath + "documents/Examples/RetinoTopicMappingOutput/RetinoTopicMappingOutput.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-header-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" +
-		CreateHTMLHeaderSection(tmpBrainStimDocumentInfo.GetDocumentName("RetinoTopicMappingOutput.html"),
-		tmpBrainStimDocumentInfo.GetDocumentVersion("RetinoTopicMappingOutput.html"),
-		tmpBrainStimDocumentInfo.GetDocumentAuthors("RetinoTopicMappingOutput.html"),
-		tmpBrainStimDocumentInfo.GetDocumentDate("RetinoTopicMappingOutput.html"));
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-header-end-->";
-
-sSourceList.push(sSourcePath + "documents/Examples/RetinoTopicMappingOutput/RetinoTopicMappingOutput.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-links-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
-								CreateDefaultHTMLHeaderLinks(3);
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-links-end-->";	
-	
-sSourceList.push(sSourcePath + "documents/BrainStim/settingsDialog.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-title-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + "<title>" + tmpBrainStimDocumentInfo.GetDocumentTitle("settingsDialog.html") + "</title>";
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-title-end-->";
-
-sSourceList.push(sSourcePath + "documents/BrainStim/settingsDialog.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-header-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" +
-		CreateHTMLHeaderSection(tmpBrainStimDocumentInfo.GetDocumentName("settingsDialog.html"),
-		tmpBrainStimDocumentInfo.GetDocumentVersion("settingsDialog.html"),
-		tmpBrainStimDocumentInfo.GetDocumentAuthors("settingsDialog.html"),
-		tmpBrainStimDocumentInfo.GetDocumentDate("settingsDialog.html"));
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-header-end-->";
-
-sSourceList.push(sSourcePath + "documents/BrainStim/settingsDialog.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-links-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
-								CreateDefaultHTMLHeaderLinks(2);
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-links-end-->";
-	
-sSourceList.push(sSourcePath + "documents/BrainStim/settingsDialog.html");
-sDestList.push(sSourceList[sSourceList.length-1]);
-	changeSet[sSourceList.length-1] = CreateArray(3,0);
-	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-footer-begin-->";
-	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
-								CreateHTMLFooterSection();
-	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-footer-end-->";	
-	
-	
-	
-	
-
-
-//sSourceList.push(sSourcePath + "Tutorials/6_RetinoTopicMappingOutput/6_RetinoTopicMappingOutput.html");
-//sDestList.push(sSourceList[sSourceList.length-1]);
-//	changeSet[sSourceList.length-1] = CreateArray(2,0);
-//	changeSet[sSourceList.length-1][0][0] = "<div class=\"doctitle\"><title>";
-//	changeSet[sSourceList.length-1][1][0] = changeSet[sSourceList.length-1][0][0] + "Retinotopic Mapping output files Tutorial" + "</title></div>" + sHTMLComment;
-//	changeSet[sSourceList.length-1][0][1] = "<div class=\"topheader\"><h1>";
-//	changeSet[sSourceList.length-1][1][1] = changeSet[sSourceList.length-1][0][1] + "Retinotopic Mapping output files Tutorial</h1></div>" + sHTMLComment;
-//	changeSet[sSourceList.length-1][0][2] = "<div class=\"versioning\">";
-//	changeSet[sSourceList.length-1][1][2] = changeSet[sSourceList.length-1][0][2] + "<p><em><strong>Version 1.0.0.1</strong></em></p></div>" + sHTMLComment;
-//	changeSet[sSourceList.length-1][0][3] = "<div class=\"authoring\">";
-//	changeSet[sSourceList.length-1][1][3] = changeSet[sSourceList.length-1][0][3] + "<p><em><strong>" + sCurrentAuthoringMonth + " by " + sMainAuthor + "</strong></em></p></div>" + sHTMLComment;
-//
-//sSourceList.push(sSourcePath + "Tutorials/15_NeuroFeedBack/15_NeuroFeedBack.html");
-//sDestList.push(sSourceList[sSourceList.length-1]);
-//	changeSet[sSourceList.length-1] = CreateArray(2,0);
-//	changeSet[sSourceList.length-1][0][0] = "<div class=\"doctitle\"><title>";
-//	changeSet[sSourceList.length-1][1][0] = changeSet[sSourceList.length-1][0][0] + "Neurofeedback Tutorial" + "</title></div>" + sHTMLComment;
-//	changeSet[sSourceList.length-1][0][1] = "<div class=\"topheader\"><h1>";
-//	changeSet[sSourceList.length-1][1][1] = changeSet[sSourceList.length-1][0][1] + "Neurofeedback Tutorial</h1></div>" + sHTMLComment;
-//	changeSet[sSourceList.length-1][0][2] = "<div class=\"versioning\">";
-//	changeSet[sSourceList.length-1][1][2] = changeSet[sSourceList.length-1][0][2] + "<p><em><strong>Version 1.0.0.1</strong></em></p></div>" + sHTMLComment;
-//	changeSet[sSourceList.length-1][0][3] = "<div class=\"authoring\">";
-//	changeSet[sSourceList.length-1][1][3] = changeSet[sSourceList.length-1][0][3] + "<p><em><strong>" + sCurrentAuthoringMonth + " by " + sMainAuthor + "</strong></em></p></div>" + sHTMLComment;
+	sSourceList.push(sSourcePath + "documents/GettingStartedGuide/GettingStartedGuide.html");
+	sDestList.push(sSourceList[sSourceList.length-1]);
+		changeSet[sSourceList.length-1] = CreateArray(3,0);
+		changeSet[sSourceList.length-1][0][0] = "<!--doc-version-tocify-footer-begin-->";
+		changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
+									CreateTocifyHTMLFooter();
+		changeSet[sSourceList.length-1][2][0] = "<!--doc-version-tocify-footer-end-->";
 
 /////////////////////////CONFIGURATION(END)//////////////////////////////////////////////
 
@@ -366,6 +135,43 @@ CleanupScript();
 
 /////Function Definitions/////
 function tr(s) { return s; }
+
+function defaultDocumentEditing(sPath, sFileName, nDirOffset)//"documents/BrainStim/settingsDialog.html", "SettingsDialog.html", 2
+{
+	sSourceList.push(sSourcePath + sPath);
+	sDestList.push(sSourceList[sSourceList.length-1]);
+		changeSet[sSourceList.length-1] = CreateArray(3,0);
+		changeSet[sSourceList.length-1][0][0] = "<!--doc-version-title-begin-->";
+		changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + "<title>" + tmpBrainStimDocumentInfo.GetDocumentTitle(sFileName) + "</title>";
+		changeSet[sSourceList.length-1][2][0] = "<!--doc-version-title-end-->";
+
+	sSourceList.push(sSourcePath + sPath);
+	sDestList.push(sSourceList[sSourceList.length-1]);
+		changeSet[sSourceList.length-1] = CreateArray(3,0);
+		changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-header-begin-->";
+		changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" +
+			CreateHTMLHeaderSection(tmpBrainStimDocumentInfo.GetDocumentName(sFileName),
+			tmpBrainStimDocumentInfo.GetDocumentVersion(sFileName),
+			tmpBrainStimDocumentInfo.GetDocumentAuthors(sFileName),
+			tmpBrainStimDocumentInfo.GetDocumentDate(sFileName));
+		changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-header-end-->";
+
+	sSourceList.push(sSourcePath + sPath);
+	sDestList.push(sSourceList[sSourceList.length-1]);
+		changeSet[sSourceList.length-1] = CreateArray(3,0);
+		changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-links-begin-->";
+		changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
+									CreateDefaultHTMLHeaderLinks(nDirOffset);
+		changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-links-end-->";
+		
+	sSourceList.push(sSourcePath + sPath);
+	sDestList.push(sSourceList[sSourceList.length-1]);
+		changeSet[sSourceList.length-1] = CreateArray(3,0);
+		changeSet[sSourceList.length-1][0][0] = "<!--doc-version-default-footer-begin-->";
+		changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + 
+									CreateHTMLFooterSection();
+		changeSet[sSourceList.length-1][2][0] = "<!--doc-version-default-footer-end-->";
+}
 
 function CreateDefaultHTMLHeaderLinks(nLevelsAbove)
 {
@@ -600,6 +406,7 @@ function CleanupScript()
 	CreateTocifyHTMLFooter = null;
 	CreateJQueryHTMLHeaderLinks = null;
 	CreateHTMLFooterSection = null;
+	defaultDocumentEditing = null;
 	tr = null;
 	quotedString = null;
 	stringToHTMLCompatibleCode = null;

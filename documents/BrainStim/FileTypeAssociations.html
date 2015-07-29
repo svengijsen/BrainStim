@@ -1,0 +1,84 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<title>Automatic File Type Associations v1.0</title>
+<!--doc-version-title-end-->
+</head>
+<body>
+    <div class="container">
+
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Automatic File Type Associations</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+
+        <h2>Introduction</h2>
+		<p>You can set a Automatic File Type Assiosiation in Windows in a way 
+		that BrainStim is the default program that Windows uses when you open a 
+		particular type of file. The next time when you execute a file of that 
+		type it is automatically opened by BrainStim.</p>
+		<h2>Example</h2>
+		<p>Let's configure a File Type Assiosiation in Windows to let script 
+		files (*.qs file) automatically be opened in BrainStim.</p>
+		<ol>
+			<li>Set the File Type Asssiosiation for a script file (*.qs file) 
+			for BrainStim by using the
+			<a href="http://windows.microsoft.com/en-us/windows-8/choose-programs-windows-uses-default" target="_blank">
+			online Microsoft documentation</a> (and skip step 2), or perform 
+			below step 2.</li>
+			<li>- Right click on a <em>script file (*.qs file)</em>, for example 
+			the <em>QtLibraryScriptBindings.qs</em> file that is located in the  
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
+		Main Program Directory</a> subfolder <em>/Examples\Script</em>.<br />
+			- Select the menu option <kbd>Open with</kbd> and then <kbd>Choose default program...</kbd><br />
+			- Make sure that the option <em><strong>Use this app for all .qs files</strong></em> is checked 
+			and expand (<strong><em>More options</em></strong>) and select
+			<strong><em>Look for another App on this pc</em></strong> and browse 
+			to the BrainStim Executable (BrainStim.exe) file in the <a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a>.</li>
+			<li>Open another script file (*.qs file) and notice that this file 
+			is then automatically opened by BrainStim.</li>
+			<li>Now uncheck the BrainStim setting <em><strong>Allow multiple instances 
+			of BrainStim</strong></em>, read <a href="settingsDialog.html">this document</a> 
+			on how to do this, and open again another script file (*.qs file) 
+			that is not currently opened in BrainStim. Notice that the script 
+			file is now loaded in a new instance of the BrainStim application.</li>
+			<li>Check (enable) again the <em><strong>Allow multiple instances of 
+			BrainStim</strong></em> setting and once again open another script file (*.qs 
+			file) that is not currently opened in BrainStim and notice the 
+			logging that appears in the default <strong>Output Log Tab</strong>:</li>
+		</ol>
+	<pre>
+	-&gt; SocketData Received [Log("New BrainStim Instance Initializing...");]
+	New BrainStim Instance Initializing...
+	-&gt; SocketData Successfully executed by the Script Engine.
+	-&gt; SocketData Received 
+	[BrainStim.openFiles(null,["E:/Projects/BrainStim/Install/Examples/Scripts/QtLibraryScriptBindings.qs"]);]
+	-&gt; SocketData Successfully executed by the Script Engine.
+	-&gt; SocketData Received [BrainStim.activateMainWindow();]
+	-&gt; SocketData Successfully executed by the Script Engine.</pre>		
+    </div>
+</body>
+</html>

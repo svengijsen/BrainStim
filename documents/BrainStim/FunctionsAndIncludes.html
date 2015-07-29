@@ -1,0 +1,253 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<title>Functions and Includes v1.0</title>
+<!--doc-version-title-end-->
+<style type="text/css">
+.auto-style1 {
+	text-decoration: underline;
+}
+</style>
+</head>
+<body>
+    <div class="container">
+
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Functions and Includes</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+    <h2>
+        Introduction</h2>
+		<p>
+		Inside a BrainStim script you can make use of script function(s) and 
+		include(s) that allow you to write better code because you can structure 
+		your code in smaller modules, making it reusable, easier to read and 
+		test. </p>
+		<h3>
+		Functions</h3>
+		<p>
+		A function is a group of reusable code which can be called anywhere in 
+		your program. This eliminates the need of writing the same code again 
+		and again. It helps programmers in writing modular codes. Functions 
+		allow a programmer to divide a big program into a number of small and 
+		manageable functions.</p>
+		<p>
+		Before we use a function, we need to define it. The most common way to 
+		<span class="auto-style1">define</span> a function is by using the <em><strong>function</strong></em> 
+		keyword, followed by a unique function name, a list of parameters (also 
+		refered to as 'arguments') (that 
+		might be empty)and a statement block surrounded by curly braces, like 
+		the below template:</p>
+        <table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint">
+function functionname(parameter-list)
+{
+    statements here...
+}
+</pre>
+                </td>
+            </tr>
+        </table>
+		<p><br />
+		Let's define a simple function that writes a message ('<em>Hello there</em>') 
+		to the BrainStim
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#UserInterface">
+		'default' OutputLog Tab</a> by calling the BrainStim <em>Log()</em> 
+		function. The below <em>sayHello()</em> function has no parameters or 
+		arguments defined.</p>
+        <table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint">
+function sayHello()
+{
+    Log("Hello there");
+}</pre>
+                </td>
+            </tr>
+        </table>
+		<p><br />
+		To invoke or call the <em>sayHello()</em> function somewhere later in the script, you would simply need to write the name of that function 
+		and provide the list of defined parameters (arguments) like:</p><table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint">sayHello();</pre>
+                </td>
+            </tr>
+        </table>
+		<p><br />
+		Before we end the script we have to make sure to set the function to <em>
+		null</em> in order for the script engine to finalize and perform a 
+		garbage collection(see<a href="GarbageCollection.html"> this document</a> for some more information about 
+		this topic) like:</p><table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint">sayHello = null;</pre>
+                </td>
+            </tr>
+        </table>
+		<br />
+		<p>Till now, we have seen a function without any parameters defined. 
+		But there is a facility to pass different parameters while calling a function. 
+		These passed parameters can be captured inside the function and any manipulation can be done over those parameters. 
+		A function can take multiple parameters separated by comma. Let's extend 
+		our <em>sayHello()</em> function with two parameters (arguments):</p>
+        <table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint">
+function sayHello(firstName, lastName)
+{
+    Log("Hello " + firstName + " " + lastName + ".");
+}</pre>
+                </td>
+            </tr>
+        </table>
+		<br />
+		<p>To invoke or call the <em>sayHello()</em> function we now also provide the parameters (arguments) like:</p><table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint">sayHello("John", "Doe");</pre>
+                </td>
+            </tr>
+        </table>
+		<br />
+		<p>A function can have an optional return statement. This is required if you want to return a value from a function. This statement should be the last statement in a function.
+
+For example, you can pass two numbers in a function and then you can expect the function to return their multiplication in your calling program.</p>
+		<table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint">
+function add(first, last)
+{
+    var full;
+    full = first + last;
+    return full;
+}</pre>
+                </td>
+            </tr>
+        </table>
+		<br />
+		<p>Calling that function could look 
+		something like:</p><table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint">
+var result = add(3, 5);
+Log("The result is: " + result);</pre>
+                </td>
+            </tr>
+        </table>
+		<br />
+		A complete example of the above code can be found in the script file <em>
+		Functions.qs</em> that is located in the  
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
+		Main Program Directory</a> directory under the subfolder <em>/Examples\Script</em>. 
+		To execute this example you can:<br />
+		<ul style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(51, 51, 51); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 20px; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
+			<li style="box-sizing: border-box;">Start BrainStim.</li>
+			<li style="box-sizing: border-box;">Open the<span class="Apple-converted-space">&nbsp;<em>Functions.qs </em> </span>file 
+			located in the  
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
+		Main Program Directory</a> directory under the subfolder <em>\Examples\Scripts</em>.</li>
+			<li style="box-sizing: border-box;">Examine and execute (press the <kbd>F5</kbd> key) the QtScript code.</li>
+		</ul>
+		<h3>Includes</h3>
+		<p>Inside the script you can make use of an<span class="Apple-converted-space">&nbsp;</span><span style="box-sizing: border-box;"><strong>Include</strong></span><span class="Apple-converted-space">&nbsp;keyword/</span>statement 
+		that allows you to include/embed other script (*.qs) files. Including 
+		another script file is like automatic copy/pasting the entire included 
+		document at the Include statement. The<span class="Apple-converted-space">&nbsp;</span><em style="box-sizing: border-box;">string</em><span class="Apple-converted-space">&nbsp;</span>parameter 
+		from the<span class="Apple-converted-space">&nbsp;</span><em style="box-sizing: border-box;">Include</em><span class="Apple-converted-space">&nbsp;function</span> 
+		holds the path to the script file to include. </p>
+		<p>The provided string can be a absolute or a relative path, if only a 
+		filename is defined than the<span class="Apple-converted-space">&nbsp;</span><em style="box-sizing: border-box;">Include</em><span class="Apple-converted-space">&nbsp;</span>function 
+		searches for the filename inside the directory where the current active 
+		running script document is stored. <br />
+		If the file is not found here then it 
+		searches for the file in the default Include directory (see<span class="Apple-converted-space">&nbsp;</span><a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory" style="box-sizing: border-box; color: rgb(51, 122, 183); text-decoration: none; background-color: transparent;">Main 
+		Program directory</a><span class="Apple-converted-space">&nbsp;</span>chapter), if 
+		the file is even then not found then the search is extended to the 
+		optionally directories that are defined (in order) by the
+		<em style="box-sizing: border-box;"><strong>Include 
+		Directories</strong></em><span class="Apple-converted-space">&nbsp;</span>setting 
+		in the <a href="settingsDialog.html">Settings Dialog</a>.</p>
+		<p>By using include(s) in your script you can make it even more modular 
+		and reusable, let's see how we can make use of an <strong>include</strong> 
+		statement:</p>
+		<ul style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(51, 51, 51); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 20px; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
+			<li style="box-sizing: border-box;">Start BrainStim.</li>
+			<li style="box-sizing: border-box;">Open the<span class="Apple-converted-space"> 
+			files&nbsp;<em>Includes.qs </em>and<em> MathFunctions.qs</em></span> 
+			located in the  
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
+		Main Program Directory</a> directory under the subfolder <em>\Examples\Scripts</em>.</li>
+			<li style="box-sizing: border-box;">View/activate the <span class="Apple-converted-space"><em>
+			MathFunctions.qs</em></span> file and notice how this file is used 
+			to define several mathematical functions and a <em>
+			cleanup_MathFunctions()</em> function that sets all defined 
+			functions to <em>null</em> (in order for the script engine to 
+			finalize and perform a garbage collection(see 
+			<a href="GarbageCollection.html">this document</a> for some 
+			more information about this topic)).</li>
+			<li style="box-sizing: border-box;">View/activate the <em><span class="Apple-converted-space">
+			Includes</span></em><span class="Apple-converted-space"><em>.qs</em></span> 
+			file and notice how it includes the <span class="Apple-converted-space"><em>
+			MathFunctions.qs</em></span> file and makes use of it's functions to 
+			calculate something, finally before ending the script the <em>
+			cleanup_MathFunctions() </em>function is called which sets all 
+			declared functions in the included file automatically for us to <em>
+			null</em>. The advantage of splitting code like this in seperate 
+			files is that we can organize specific functionality (like all math 
+			code) and rmake it reusable for other script files. If we then for 
+			example would update or remove a bug from a included file we only 
+			need to do that at in one file.
+			<ul style="box-sizing: border-box; margin-top: 0px; margin-bottom: 10px; color: rgb(51, 51, 51); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 20px; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">
+				<li style="box-sizing: border-box;">We could also set all 
+				included (math) function definitions to null in the <em>
+				<span class="Apple-converted-space">Includes</span></em><span class="Apple-converted-space"><em>.qs</em></span> 
+				file, but by doing it this way the <em>
+				<span class="Apple-converted-space">Includes</span></em><span class="Apple-converted-space"><em>.qs</em></span> 
+				file doen't need to be updated in case another math function is 
+				added to the <span class="Apple-converted-space"><em>
+				MathFunctions.qs</em></span> file. In that case the new function 
+				only needs to be set to <em>null</em> in the <em>
+				cleanup_MathFunctions() </em>function once.</li>
+			</ul>
+			</li>
+			<li style="box-sizing: border-box;">View/activate the <em><span class="Apple-converted-space">
+			Includes</span></em><span class="Apple-converted-space"><em>.qs</em></span> 
+			file and execute (press the <kbd>F5</kbd> key) the QtScript code.</li>
+		</ul>
+   </div>
+<!--doc-version-default-footer-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
+<!--doc-version-default-footer-end-->
+ </body>
+</html>

@@ -1,0 +1,194 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<title>Command-Line Options v1.0</title>
+<!--doc-version-title-end-->
+</head>
+<body>
+    <div class="container">
+
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Command-Line Options</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+    <h2>
+        Introduction</h2>
+		<p>
+
+		BrainStim can be started from a command prompt with special defined 
+		options accompanied with one or more parameter(s). By using these 
+		Command-Line Options it's for example possible to start BrainStim with one or more 
+		pre-defined document(s) and/or to enable/disable certain BrainStim 
+		features.<br />
+		</p>
+		<table class="table table-condensed">
+		  <thead>
+		    <tr>
+		      <th>Option</th>
+		      <th>Parameters</th>
+		      <th>Meaning</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <th scope="row">-f, -F</th>
+		      <td>Path to document(s) separated with a ';' character</td>
+		      <td>Allows you to let 
+		BrainStim automatically open one or more document(s).</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">-v, - V</th>
+		      <td>Verbose mode</td>
+		      <td>Enables the verbose mode. In this mode BrainStim writes 
+		more detailed and more comprehensive information to the log file. It's 
+		advised to only use this option for debugging purpose.</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">-o, -O</th>
+		      <td>Option flags (followed by a single number)</td>
+		      <td>Allows you to define one or more option 
+		flag(s) for BrainStim. Each flag is defined by a number and multiple 
+		flags can be combined together by summing up all their values. See also the 
+			  below table for the available flags with their corresponding numbering. If you would for 
+		example want BrainStim to start with the plug-ins and script bindings 
+		disabled you would use the command 'BrainStim -o 3'.</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">-e, -E</th>
+		      <td>Execute active document</td>
+		      <td>This parameter allows you to tell BrainStim 
+			  to automatically execute the active document (after loading all of the 
+		document(s)). This is the last document defined with the -f switch.</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">-i, -I</th>
+		      <td>Only perform initialization</td>
+		      <td>This option initializes BrainStim and then exits again. This 
+			  option is used to make sure that the
+			  <a href="../GettingStartedGuide/GettingStartedGuide.html#BrainStimSettingsfile">Settings 
+			  File</a> is created (after the first initialization of a BrainStim 
+			  installation).</td>
+		    </tr>
+		  </tbody>
+		</table>
+	
+		<p>When using the above mentioned <strong><em>Option flags</em></strong> 
+		parameter you also need to specify which flag(s) to set, these are:</p>
+		<table class="table table-condensed">
+		  <thead>
+		    <tr>
+		      <th>Flag</th>
+		      <th>Number</th>
+		      <th>Meaning</th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <th scope="row">DisableAllScriptBindings</th>
+		      <td>1</td>
+		      <td>
+		The <a href="QtLibraryScriptBindings.html">Qt Library Script Bindings</a> are not loaded 
+			  (skipped) 
+		during the startup of BrainStim.</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">DisableAllPlugins</th>
+		      <td>2</td>
+		      <td>The <a href="../defaultplugins.html">Plug-ins</a> are not loaded 
+			  (skipped) during the startup of 
+		BrainStim.</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">DisableSplash</th>
+		      <td>4</td>
+		      <td>The splash message is not shown during the startup of 
+		BrainStim.</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">DisableNetworkServer</th>
+		      <td>8</td>
+		      <td>The <a href="InternalNetworkInterface.html">Internal Network 
+			  Interface Server</a> is 
+		not started during the startup of BrainStim.</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">VerboseMode</th>
+		      <td>16</td>
+		      <td>Verbose mode is enabled during the startup of BrainStim, 
+		see also the above option <strong><em>Verbose mode</em></strong> (-v).</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">ExecuteDocument</th>
+		      <td>32</td>
+		      <td>The document that is active after the BrainStim 
+		startup is automatically executed, see also the above option <strong>
+			  <em>Execute active document</em></strong> (-e).</td>
+		    </tr>
+		  </tbody>
+		</table>
+		<h2>Example</h2>
+		<p>
+		Let's try some options by example:</p>
+		<ol>
+			<li>Open a Windows Command prompt by pressing the <kbd>Windows start button</kbd> 
+			, choose <kbd>Run...</kbd> and then enter the text <kbd>cmd</kbd> 
+			and hit the <kbd>enter</kbd> key</li>
+			<li>A command prompt opens, you can now browse to the BrainStim
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main 
+			Program directory</a> by entering a command like:
+        <table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint"><code class="language-bsh">cd C:\Program Files (x86)\BrainStim</code></pre>
+                </td>
+            </tr>
+        </table>
+			</li>
+			<li>
+			Close BrainStim if it's still open.<br />
+			</li>
+			<li>Now let's try to open and execute a file using the above 
+			information by entering a command like:<br />
+			<table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint"><code class="language-bsh">BrainStim.exe -f Examples\Scripts\Functions.qs -e </code></pre>
+                </td>
+            </tr>
+        </table>
+        <p>After executing the above command BrainStim should be started and the script file should be opened and executed. 
+		You can check this by reading the<a href="../GettingStartedGuide/GettingStartedGuide.html#UserInterface"> 
+			'default' OutputLog tab</a> messages.</p>
+
+			</li>
+		</ol>
+   </div>
+<!--doc-version-default-footer-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
+<!--doc-version-default-footer-end-->
+ </body>
+</html>
