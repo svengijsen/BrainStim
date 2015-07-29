@@ -69,7 +69,7 @@ class MainAppInfo
 private:
 	static QFile *mainLogFile;
 	static QWidget *mainWindow;
-	static QString sAppUserPath;
+	static QString sMainAppUserPath;
 	static QList<int> lRegisteredMetaTypeIds;
 	static QHash<int, QObject *> hashRegisteredCustomPropertySettingObjects;
 	static QString sPluginsDirPath;
@@ -113,15 +113,15 @@ public:
 	static bool getHexedOrderNumber(const int &nNumber, QString &sResult, const int &nDecimals);
 	static bool addRegisteredMetaTypeID(const int &nMetaTypeID);
 	static bool setMainWindow(QWidget *mainWin);
-	static QString appDirPath()						{return QDir(QCoreApplication::applicationDirPath()).absolutePath();}
-	static QString appUserPath()					{return sAppUserPath;}//QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);}//ie. Windows -> C:/Users/john.doe/Documents
-	static bool setAppUserPath(QString sPath)		{sAppUserPath = sPath;return true;}
-	static QStringList getUserFolderList()			{return (QStringList() << MAIN_PROGRAM_EXAMPLES_DIRNAME << MAIN_PROGRAM_OUTPUTS_DIRNAME); }
-	static QString appDocDirPath()					{return (appDirPath() + QDir::separator() + MAIN_PROGRAM_DOC_DIRNAME + QDir::separator());}
-	static QString appMenuDirPath()					{return (appDirPath() + QDir::separator() + MAIN_PROGRAM_MENUS_DIRNAME + QDir::separator()); }
-	static QString appExampleDirPath()				{return (MainAppInfo::appUserPath() + QDir::separator() + MAIN_PROGRAM_EXAMPLES_DIRNAME + QDir::separator());}//appDirPath() + QDir::separator() + MAIN_PROGRAM_EXAMPLES_DIRNAME + QDir::separator());}
-	static QString appLogFilePath()					{return (MainAppInfo::appUserPath() + QDir::separator() + MAIN_PROGRAM_LOGFILE_NAME); }
-	static QString appXsdFilePath()					{return (appDirPath() + QDir::separator() + MAIN_PROGRAM_XSD_DIRNAME + QDir::separator());}
+	static QString appDirPath()										{return QDir(QCoreApplication::applicationDirPath()).absolutePath();}
+	static QString getMainApplicationUserDirectory()				{ return sMainAppUserPath; }//QStandardPaths::writableLocation(QStandardPaths::DocumentsLocation);}//ie. Windows -> C:/Users/john.doe/Documents
+	static bool setMainApplicationUserDirectory(QString sPath)		{sMainAppUserPath = sPath; return true; }
+	static QStringList getUserFolderList()							{return (QStringList() << MAIN_PROGRAM_EXAMPLES_DIRNAME << MAIN_PROGRAM_OUTPUTS_DIRNAME); }
+	static QString appDocDirPath()									{return (appDirPath() + "/" + MAIN_PROGRAM_DOC_DIRNAME + "/");}
+	static QString appMenuDirPath()									{return (appDirPath() + "/" + MAIN_PROGRAM_MENUS_DIRNAME + "/"); }
+	static QString appExampleDirPath()								{ return (MainAppInfo::getMainApplicationUserDirectory() + "/" + MAIN_PROGRAM_EXAMPLES_DIRNAME + "/"); }//appDirPath() + QDir::separator() + MAIN_PROGRAM_EXAMPLES_DIRNAME + QDir::separator());}
+	static QString appLogFilePath()									{ return (MainAppInfo::getMainApplicationUserDirectory() + "/" + MAIN_PROGRAM_LOGFILE_NAME); }
+	static QString appXsdFilePath()									{return (appDirPath() + "/" + MAIN_PROGRAM_XSD_DIRNAME + "/");}
 	static void setPluginsDirPath(const QString &sNewPath);
 	static QString userPluginsDirPath();
 	static QString defaultPluginsDirPath();

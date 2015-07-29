@@ -160,7 +160,7 @@ int main(int argc, char **argv)
 	}
 	//////////////////////////////////////////////////////////////////////////////////////////////
 	QVariant tmpVariant;
-	QString sCustomPluginsRootDir = "";
+	QString sCustomPluginRootDir = "";
 	QString sDefaultPluginsRootDir = "";
 	QSettings sSettingsObj(sUserIniFilePath, QSettings::IniFormat);
 	if (getSettingsInformation(sSettingsObj, REGISTRY_USERPLUGINSROOTDIRECTORY, tmpVariant) == false)
@@ -168,14 +168,14 @@ int main(int argc, char **argv)
 		qDebug() << __FUNCTION__ << "Could not retrieve custom plugins root directory setting from *.ini file (" << sUserIniFilePath << "), exiting...";
 		return 0;
 	}
-	sCustomPluginsRootDir = tmpVariant.toString();
+	sCustomPluginRootDir = tmpVariant.toString();
 	if (getSettingsInformation(sSettingsObj, REGISTRY_DEFAULTPLUGINSROOTDIRECTORY, tmpVariant) == false)
 	{
 		qDebug() << __FUNCTION__ << "Could not retrieve default plugins root directory setting from *.ini file (" << sUserIniFilePath << "), exiting...";
 		return 0;
 	}
 	sDefaultPluginsRootDir = tmpVariant.toString();
-	if (getSettingsInformation(sSettingsObj, REGISTRY_USERDOCUMENTSROOTDIRECTORY, tmpVariant) == false)
+	if (getSettingsInformation(sSettingsObj, REGISTRY_MAINAPPUSERDIRECTORY, tmpVariant) == false)
 	{
 		qDebug() << __FUNCTION__ << "Could not retrieve user documents root directory setting from *.ini file (" << sUserIniFilePath << "), exiting...";
 		return 0;
@@ -208,7 +208,7 @@ int main(int argc, char **argv)
 						}
 					}
 					bool bRetval = false;
-					if (installationManagerBase::installPlugin(QDir::currentPath(), sDefaultPluginsRootDir, sCustomPluginsRootDir, sIniFilePath, sUserAppRootDir, bOverwriteExistingFiles) > 0)
+					if (installationManagerBase::installPlugin(QDir::currentPath(), sDefaultPluginsRootDir, sCustomPluginRootDir, sIniFilePath, sUserAppRootDir, bOverwriteExistingFiles) > 0)
 						qDebug() << __FUNCTION__ << "Plugin successfully installed as defined in (" << sIniFilePath << ")";
 					else
 						qDebug() << __FUNCTION__ << "Could not install the requested plugin defined in (" << sIniFilePath << "), exiting...";

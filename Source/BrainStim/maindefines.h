@@ -30,7 +30,7 @@
 
 //Also search and change "Q_CLASSINFO("ScriptAPIClassName"..!!!
 
-#define MAIN_PROGRAM_COMPANY_NAME	"MBIC, Maastricht Brain Imaging Center"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define MAIN_PROGRAM_COMPANY_SHORT_NAME	"MBIC"
 #define MAIN_PROGRAM_LEGAL_COPYRIGHT	"Copyright (C) 2015"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 #define MAIN_PROGRAM_FILE_VERSION_STRING_MAJOR	1   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 #define MAIN_PROGRAM_FILE_VERSION_STRING_MINOR	0   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
@@ -78,10 +78,10 @@
 #define REGISTRY_DONOTLOADSCRIPTEXTENSION				"General/DoNotLoadScriptExtension"
 #define REGISTRY_ALLOWMULTIPLEINHERITANCE				"General/AllowMultipleInheritance"
 #define REGISTRY_RECENTFILELIST							"General/RecentFileList"
-#define REGISTRY_USERDOCUMENTSROOTDIRECTORY				"General/UserDocumentsRootDirectory"
-#define REGISTRY_DEFAULTPLUGINSROOTDIRECTORY			"General/DefaultPluginsRootDirectory"
-#define REGISTRY_USERPLUGINSROOTDIRECTORY				"General/UserPluginsRootDirectory"
-#define REGISTRY_EXAMPLESROOTDIRECTORY					"General/ExamplesRootDirectory"
+#define REGISTRY_MAINAPPUSERDIRECTORY					"General/MainAppUserDirectory"			//contains BrainStim.ini, Examples and Outputs directories
+#define REGISTRY_USERPLUGINSROOTDIRECTORY				"General/UserPluginsRootDirectory"		//contains custom plugins
+#define REGISTRY_DEFAULTPLUGINSROOTDIRECTORY			"General/DefaultPluginsRootDirectory"	//cannot be configured through the settings dialog, is derived!
+#define REGISTRY_EXAMPLESROOTDIRECTORY					"General/ExamplesRootDirectory"			//cannot be configured through the settings dialog, is derived!
 #define REGISTRY_ENABLECUSTOMUSERLOGINS					"General/EnableCustomUserLogins"
 #define REGISTRY_OPENINEXTERNALDEBUGGER					"Debugging/OpenExtDebug"
 #define REGISTRY_RENDERTYPE								"Rendering/RenderType"

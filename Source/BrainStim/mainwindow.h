@@ -701,6 +701,7 @@ public:
 	bool extendAPICallTips(const QMetaObject* metaScriptObject = NULL);
 	void setGlobalApplicationInformationObject(GlobalApplicationInformation *globAppInformation);
 	void recoverLastScreenWindowSettings();
+	void preExecuteTask();
 	void setStartupFiles(const QString &path = QString());
 	Q_INVOKABLE bool registerDockWidget(QWidget *pMDIWindowSubWidget, MainWindowDockWidget *pDockWidget, int nDockWidgetAreaEnum);
 	void unregisterDockWidgets(CustomMDISubWindow* custSubWin);
@@ -710,7 +711,7 @@ public:
 
 protected:
 	void closeEvent(QCloseEvent *event);
-	void showEvent(QShowEvent * event);
+	//void showEvent(QShowEvent * event);
 	virtual bool openDroppedFiles(const QStringList &pathList);	
 };
 

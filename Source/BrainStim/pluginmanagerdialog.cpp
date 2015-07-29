@@ -62,6 +62,7 @@ PluginManagerDialog::PluginManagerDialog(installationManager *installMngr, QWidg
 	connect(ui.pbConfigure, SIGNAL(clicked()), this, SLOT(configurePlugin()));
 	connect(ui.pbBackup, SIGNAL(clicked()), this, SLOT(backupAllPlugins()));
 	connect(ui.pbBrowse, SIGNAL(clicked()), this, SLOT(browsePluginDirectory()));
+	connect(ui.pbReloadAll, SIGNAL(clicked()), this, SLOT(reloadAllPlugins()));
 	initialize();
 }
 
@@ -294,6 +295,20 @@ void PluginManagerDialog::configurePlugin()
 	this->close();
 }
 
+void PluginManagerDialog::reloadAllPlugins()
+{
+	bool bRetval = false;
+	if (QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_UNLOADDYNAMICPLUGINS_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetval)))
+	{
+
+	}
+	if (QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_LOADDYNAMICPLUGINS_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetval)))
+	{
+
+	}
+	fillTable();
+}
+
 void PluginManagerDialog::browsePluginDirectory()
 {
 	QDesktopServices::openUrl(QUrl("file:///" + MainAppInfo::userPluginsDirPath(), QUrl::TolerantMode));
@@ -358,7 +373,7 @@ void PluginManagerDialog::backupAllPlugins()
 									bDidCreatePackageDirectory = false;
 								for (int j = 0; j < lInstallFiles.count(); j++)
 								{
-									lInstallFiles[j] = installationManagerBase::resolveFileDirectoryPath(lInstallFiles[j], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sIniFileName).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::appUserPath());
+									lInstallFiles[j] = installationManagerBase::resolveFileDirectoryPath(lInstallFiles[j], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sIniFileName).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::getMainApplicationUserDirectory());
 									QString sFileName = QFileInfo(lInstallFiles[j]).fileName();
 									if (sFileName == sIniFileName)
 										continue;

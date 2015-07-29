@@ -35,7 +35,7 @@
     </size>
    </property>
    <property name="currentIndex">
-    <number>1</number>
+    <number>0</number>
    </property>
    <widget class="QWidget" name="tab1">
     <attribute name="title">
@@ -121,7 +121,7 @@
     <attribute name="title">
      <string>Directories</string>
     </attribute>
-    <widget class="QLineEdit" name="lneUserDocumentsRootDirectory">
+    <widget class="QLineEdit" name="lneMainApplicationUserDirectory">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -131,7 +131,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QPushButton" name="btnBrowseForUserDocumentsRootDirectory">
+    <widget class="QPushButton" name="btnBrowseForMainApplicationUserDirectory">
      <property name="geometry">
       <rect>
        <x>590</x>
@@ -141,7 +141,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Browse...</string>
+      <string>Select...</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_7">
@@ -160,10 +160,10 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>User Documents Root Directory:</string>
+      <string>Main User Directory:</string>
      </property>
     </widget>
-    <widget class="QLineEdit" name="lneCustomPluginsRootDirectory">
+    <widget class="QLineEdit" name="lneCustomPluginRootDirectory">
      <property name="geometry">
       <rect>
        <x>10</x>
@@ -173,7 +173,7 @@
       </rect>
      </property>
     </widget>
-    <widget class="QPushButton" name="btnBrowseForCustomPluginsRootDirectory">
+    <widget class="QPushButton" name="btnBrowseForCustomPluginRootDirectory">
      <property name="geometry">
       <rect>
        <x>590</x>
@@ -183,7 +183,7 @@
       </rect>
      </property>
      <property name="text">
-      <string>Browse...</string>
+      <string>Select...</string>
      </property>
     </widget>
     <widget class="QLabel" name="label_8">
@@ -202,7 +202,33 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Custom Plugins Root Directory:</string>
+      <string>Custom Plugin Directory:</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnViewMainApplicationUserDirectory">
+     <property name="geometry">
+      <rect>
+       <x>490</x>
+       <y>100</y>
+       <width>91</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Browse...</string>
+     </property>
+    </widget>
+    <widget class="QPushButton" name="btnViewCustomPluginRootDirectory">
+     <property name="geometry">
+      <rect>
+       <x>490</x>
+       <y>230</y>
+       <width>91</width>
+       <height>41</height>
+      </rect>
+     </property>
+     <property name="text">
+      <string>Browse...</string>
      </property>
     </widget>
    </widget>
@@ -436,7 +462,7 @@
       </sizepolicy>
      </property>
      <property name="text">
-      <string>Enable the External Network Server at startup.</string>
+      <string>Enable the Internal Network Interface at startup</string>
      </property>
      <property name="checked">
       <bool>false</bool>

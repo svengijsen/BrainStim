@@ -121,7 +121,6 @@ bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags m
 	setupContextMenus();
 	implementCustomActionMenu(":/resources/customMenuEntries.ini");
 	implementPluginCustomActionMenus();
-	if (startUpFiles.count()> 0) { openFiles(NULL,startUpFiles);}
 	if (BrainStimFlags.testFlag(GlobalApplicationInformation::DisableSplash)==false)
 	{
 		MainSplashScreen->finish(this);
@@ -138,7 +137,6 @@ bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags m
 	//	label->showMaximized();
 	//}
 	bMainWindowIsInitialized = true;
-
 	if (globAppInfo->shouldEnableNetworkServer())
 	{
 		if (BrainStimFlags.testFlag(GlobalApplicationInformation::DisableNetworkServer) == false)
@@ -253,19 +251,10 @@ bool MainWindow::executeCustomActionMenu()
 	return false;
 }
 
-void MainWindow::showEvent(QShowEvent * event)
-{
-	Q_UNUSED(event);
-	//bool bresult;
-	//if(event->spontaneous())
-	//	bresult = true;
-	if(bExecuteActiveDocument)//see BrainStimFlags & GlobalApplicationInformation::ExecuteDocument)
-	{
-		if (activeMdiChild())
-			executeActiveDocument();
-		bExecuteActiveDocument = false;
-	}
-}
+//void MainWindow::showEvent(QShowEvent * event)
+//{
+//	Q_UNUSED(event);
+//}
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
@@ -2334,7 +2323,7 @@ bool MainWindow::loadDynamicPlugins()
 			{
 				QString sFileName = QFileInfo(lFiles[i]).fileName();
 				//QFile sSourceFilePath(sIniFileAbsDir + "/" + sFileName);
-				lFiles[i] = installationManagerBase::resolveFileDirectoryPath(lFiles[i], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sPluginIniFilePath).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::appUserPath());
+				lFiles[i] = installationManagerBase::resolveFileDirectoryPath(lFiles[i], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sPluginIniFilePath).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::getMainApplicationUserDirectory());
 				if (QFileInfo(lFiles[i]).canonicalPath() == dirTmpAddPluginDir.canonicalPath())//!= QFileInfo(sPluginAbsFilePath).canonicalFilePath()) && (QFileInfo(lFiles[i]).canonicalPath() != QDir(MainAppInfo::appDirPath()).canonicalPath()))
 				{
 					if (QLibrary::isLibrary(lFiles[i]))
@@ -2737,7 +2726,7 @@ bool MainWindow::checkUserDirectories(QStringList &lPathsToCheck, bool bShowWarn
 	QString sUserPath = "";
 	bool bNoRegistrySetting = false;
 	QVariant tmpVariant;
-	if (globAppInfo->getSettingsInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY, tmpVariant))
+	if (globAppInfo->getSettingsInformation(REGISTRY_MAINAPPUSERDIRECTORY, tmpVariant))
 	{
 		sUserPath = QDir::fromNativeSeparators(tmpVariant.toString());
 	}
@@ -2754,10 +2743,10 @@ bool MainWindow::checkUserDirectories(QStringList &lPathsToCheck, bool bShowWarn
 		if (bNoRegistrySetting == false)
 			qDebug() << __FUNCTION__ << "User Document Path (" << sUserPath << ") doesn't exist. Switching to default path";
 		sUserPath = QDir::homePath() + "/" + globAppInfo->getTitle();//MainAppInfo::MainProgramTitle());;//QDir::toNativeSeparators(MainAppInfo::appDirPath());//Use the default BrainStim installation root path
-		if (globAppInfo->setSettingsInformation(REGISTRY_USERDOCUMENTSROOTDIRECTORY, sUserPath, "string") == false)
+		if (globAppInfo->setSettingsInformation(REGISTRY_MAINAPPUSERDIRECTORY, sUserPath, "string") == false)
 		{
 			qDebug() << __FUNCTION__ << "Could not set the default User Document Path (" << sUserPath << ") in the registry.";
-			MainAppInfo::setAppUserPath(sUserPath);
+			MainAppInfo::setMainApplicationUserDirectory(sUserPath);
 			return false;
 		}
 		tmpDir.setPath(sUserPath);
@@ -2769,11 +2758,11 @@ bool MainWindow::checkUserDirectories(QStringList &lPathsToCheck, bool bShowWarn
 
 		if(tmpDir.exists() == false) 
 		{
-			MainAppInfo::setAppUserPath(sUserPath);
+			MainAppInfo::setMainApplicationUserDirectory(sUserPath);
 			return false;
 		}
 	}
-	MainAppInfo::setAppUserPath(sUserPath);
+	MainAppInfo::setMainApplicationUserDirectory(sUserPath);
 	if(lPathsToCheck.isEmpty())
 			return true;
 	int i;
@@ -3903,6 +3892,19 @@ void MainWindow::recoverLastScreenWindowSettings()
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
 	loadSavedWindowLayout(MAINWINDOW_NAME, false);
+}
+
+void MainWindow::preExecuteTask()
+{
+	if (startUpFiles.count()> 0) { openFiles(NULL, startUpFiles); }
+	if (bExecuteActiveDocument)//see BrainStimFlags & GlobalApplicationInformation::ExecuteDocument)
+	{
+		if (activeMdiChild())
+		{
+			executeActiveDocument();
+			bExecuteActiveDocument = false;
+		}
+	}
 }
 
 void MainWindow::loadSavedDockWidgetConfiguration(const QString &sGroupName, MainWindowDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea)

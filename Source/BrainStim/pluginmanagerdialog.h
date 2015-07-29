@@ -55,6 +55,7 @@ private slots:
 	void configurePlugin();
 	void backupAllPlugins();
 	void browsePluginDirectory();
+	void reloadAllPlugins();
 
 private:
 	void initialize();
