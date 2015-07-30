@@ -144,7 +144,14 @@
       <item>
        <widget class="QPushButton" name="pbBrowse">
         <property name="text">
-         <string>Browse Dir</string>
+         <string>Browse</string>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QPushButton" name="pbReloadAll">
+        <property name="text">
+         <string>Reload</string>
         </property>
        </widget>
       </item>

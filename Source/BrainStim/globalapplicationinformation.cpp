@@ -60,7 +60,7 @@ void GlobalApplicationInformation::initialize()
 		sDefaultSettingsAppDirectory = QDir::homePath() + "/" + getTitle();
 		sCurrentSettingsFilePath = sDefaultSettingsAppDirectory + "/" + MAIN_PROGRAM_INTERNAL_NAME + ".ini";
 	}
-	initAndParseRegistrySettings(sCurrentSettingsFilePath, sDefaultSettingsAppDirectory);
+	initAndParseSettingFile(sCurrentSettingsFilePath, sDefaultSettingsAppDirectory);
 	copyMainAppInformationStructureToSharedMemory(mainAppInformation);
 }
 
@@ -260,7 +260,7 @@ bool GlobalApplicationInformation::switchRootSettingsGroup(const QString &sNewGr
 	return false;
 }
 
-bool GlobalApplicationInformation::initAndParseRegistrySettings(const QString &sSettingsFilePath, const QString &sDefaultSettingsAppDirectory)
+bool GlobalApplicationInformation::initAndParseSettingFile(const QString &sSettingsFilePath, const QString &sDefaultSettingsAppDirectory)
 {
 	if (AppRegistrySettings == NULL)
 	{
@@ -398,14 +398,14 @@ bool GlobalApplicationInformation::initAndParseRegistrySettings(const QString &s
 		AppRegistrySettings->setValue(REGISTRY_SCRIPTING_INCLUDEPATHS, mainAppInformation.lScriptIncludeDirectories);
 	}
 
-	if (AppRegistrySettings->contains(REGISTRY_USERDOCUMENTSROOTDIRECTORY))
+	if (AppRegistrySettings->contains(REGISTRY_MAINAPPUSERDIRECTORY))
 	{
-		MainAppInfo::setAppUserPath(AppRegistrySettings->value(REGISTRY_USERDOCUMENTSROOTDIRECTORY).toString());
+		MainAppInfo::setMainApplicationUserDirectory(AppRegistrySettings->value(REGISTRY_MAINAPPUSERDIRECTORY).toString());
 	}
 	else //key doesn't exist, default value here!
 	{
 		if (sDefaultSettingsAppDirectory.isEmpty() == false)
-			MainAppInfo::setAppUserPath(sDefaultSettingsAppDirectory);
+			MainAppInfo::setMainApplicationUserDirectory(sDefaultSettingsAppDirectory);
 	}
 
 	AppRegistrySettings->sync();
@@ -551,7 +551,7 @@ bool GlobalApplicationInformation::setCurrentUserCredentials(const QString &sUse
 	{
 		resetInternalStructure(false);
 		mainAppInformation.sCurrentUserName = sUserName;
-		initAndParseRegistrySettings(sCurrentSettingsFilePath);
+		initAndParseSettingFile(sCurrentSettingsFilePath);
 		if (sUserName.isEmpty()==false)
 		{
 			AppRegistrySettings->setValue(REGISTRY_USER_PASSWORDHASH, baPasswordHash);

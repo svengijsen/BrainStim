@@ -210,33 +210,6 @@ int main(int argc, char **argv)
 	if(bProceed)
 	{
 		Q_INIT_RESOURCE(brainstim);
-		//QString sTemp = QStandardPaths::writableLocation(QStandardPaths::ConfigLocation) + "/" + globAppInformation->getTitle() + "/" + MAIN_PROGRAM_PLUGINS_DIRNAME;
-		//#ifdef WIN64
-		//sTemp = sTemp + "/x64";
-		//#else
-		//	sTemp = sTemp + "/Win32";
-		//#endif
-
-		//QDir userPluginsDir(sTemp);
-		//bool bPluginUserDirExists = false;
-		//QString finalPluginDir = "";
-
-		//if (userPluginsDir.exists() == false)
-		//{
-		//	userPluginsDir.mkpath(sTemp);
-		//	if (userPluginsDir.exists())
-		//		bPluginUserDirExists = true;
-		//}
-		//else
-		//{
-		//	bPluginUserDirExists = true;
-		//}
-		//if (bPluginUserDirExists)
-		//	finalPluginDir = sTemp;
-		//else
-		//	finalPluginDir = MainAppInfo::pluginsDirPath();
-		//appExchange.addLibraryPath(finalPluginDir);
-
 		MainWindow *appWindow = new MainWindow();
 		appWindow->setGlobalApplicationInformationObject(globAppInformation);
 		MainAppInfo::setMainWindow(appWindow);
@@ -299,6 +272,7 @@ int main(int argc, char **argv)
 		appWindow->show();//showMaximized() creates weird behaviour!;
 		centerWidget(appWindow, false);
 		appWindow->recoverLastScreenWindowSettings();
+		appWindow->preExecuteTask();
 		int nRetVal = appExchange.exec();
 		delete appWindow;
 		appWindow = NULL;

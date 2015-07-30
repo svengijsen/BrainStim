@@ -25,7 +25,7 @@
 
 QFile *MainAppInfo::mainLogFile = NULL;//Needed to initialize the static variable!
 QWidget *MainAppInfo::mainWindow = NULL;//Needed to initialize the static variable!
-QString MainAppInfo::sAppUserPath = "";//Needed to initialize the static variable!
+QString MainAppInfo::sMainAppUserPath = "";//Needed to initialize the static variable!
 QList<int> MainAppInfo::lRegisteredMetaTypeIds = QList<int>();//Needed to initialize the static variable!
 QHash<int, QObject *> MainAppInfo::hashRegisteredCustomPropertySettingObjects = QHash<int, QObject *>();//Needed to initialize the static variable!
 //QString MainAppInfo::sPluginsDirPath = "";//Needed to initialize the static variable!
@@ -67,10 +67,10 @@ QString MainAppInfo::defaultPluginsDirPath()
 
 QString MainAppInfo::outputsDirPath()
 {
-	QDir OutputsDir = appUserPath();
-	if(QDir(appUserPath() + QString("/" MAIN_PROGRAM_OUTPUTS_DIRNAME "/")).exists()==false)
+	QDir OutputsDir = getMainApplicationUserDirectory();
+	if (QDir(getMainApplicationUserDirectory() + QString("/" MAIN_PROGRAM_OUTPUTS_DIRNAME "/")).exists() == false)
 	{
-		QDir().mkdir(QString(appUserPath()) + QString("/" MAIN_PROGRAM_OUTPUTS_DIRNAME "/"));
+		QDir().mkdir(QString(getMainApplicationUserDirectory()) + QString("/" MAIN_PROGRAM_OUTPUTS_DIRNAME "/"));
 	}
 	OutputsDir.cd(MAIN_PROGRAM_OUTPUTS_DIRNAME);
 	//QString tmpString = OutputsDir.absolutePath();

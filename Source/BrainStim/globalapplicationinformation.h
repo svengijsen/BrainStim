@@ -86,7 +86,7 @@ public:
 	QString getHostAddress();
 	quint16 getHostPort();
 
-	bool initAndParseRegistrySettings(const QString &sSettingsFilePath, const QString &sDefaultSettingsAppDirectory = "");
+	bool initAndParseSettingFile(const QString &sSettingsFilePath, const QString &sDefaultSettingsAppDirectory = "");
 
 	bool getSettingsInformation(const QString &sName, QVariant &vCurrentValue);
 	bool setSettingsInformation(const QString &sName, const QVariant &vValue, const QString &sType);

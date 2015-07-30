@@ -103,7 +103,7 @@ aboutQTDialog::aboutQTDialog(const QString &title, QWidget *parent) :
 		"<h1 style=""font-family:verdana;font-size:16px;"">" MAIN_PROGRAM_FULL_NAME "</h1>"
 		"<p style=""font-family:arial;font-size:12px;"">"
 		MAIN_PROGRAM_INTERNAL_NAME ", " MAIN_PROGRAM_LEGAL_COPYRIGHT "<br />"
-		MAIN_PROGRAM_COMPANY_NAME ", " MAIN_PROGRAM_AUTHOR_NAME "<br />"
+		MAIN_PROGRAM_COMPANY_SHORT_NAME ", " MAIN_PROGRAM_AUTHOR_NAME "<br />"
 		"BrainStim is free software: you can redistribute it and/or modify<br />"
 		"it under the terms of the GNU General Public License as published by<br />"
 		"the Free Software Foundation, either version 3 of the License, or<br />"
