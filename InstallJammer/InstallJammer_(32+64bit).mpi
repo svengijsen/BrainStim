@@ -1653,6 +1653,9 @@ File ::DAE514BC-381A-441F-9DE6-59857CFC6AE6 -name qmldir -parent 05180E26-0F72-4
 FileGroup ::0C5436ED-FF9C-488B-9F61-AE01D34F8BAD -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugins Custom Menus} -parent FileGroups
 File ::15003DEE-D648-4DA4-96D4-1A205770B6D0 -type dir -name E:/Projects/BrainStim/Source/Plugins/ExperimentManager/menus/ExperimentManager -active 0 -parent 0C5436ED-FF9C-488B-9F61-AE01D34F8BAD
 File ::9ED88436-F41C-48B4-9574-AC83E07ED193 -name CustomMenus.ini -active 0 -parent 15003DEE-D648-4DA4-96D4-1A205770B6D0
+FileGroup ::8B94EAF2-8AB8-46AA-BB50-1C7810BD5ACB -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name Menus -parent FileGroups
+File ::9DFF2D77-B9F0-4D44-BF03-D2450DE264FF -type dir -name E:/Projects/BrainStim/Install/Menus/Examples -parent 8B94EAF2-8AB8-46AA-BB50-1C7810BD5ACB
+File ::CC3C8127-6C49-4148-B326-9CF3C6D81BA2 -name Example1.ini -parent 9DFF2D77-B9F0-4D44-BF03-D2450DE264FF
 Component ::3E0D911D-E0AF-47F2-898C-7CF2EDCE0A33 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows} -name {Default Files(x64)} -parent Components
 Component ::C511BCE0-5730-4B6A-B67A-9BFDC29D6A11 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows} -name {Default Files(win32)} -parent Components
 Component ::0C4197C0-9F10-4AD0-86B8-506675EEFCBC -setup Install -active Yes -platforms Windows -name Default -parent Components
@@ -1866,7 +1869,7 @@ array set Properties {
 {1}
 
 0C4197C0-9F10-4AD0-86B8-506675EEFCBC,FileGroups
-{E5DE8D2A-E046-4945-B382-97B2670A7E75 B9E5284F-8A18-4881-AC62-4276DF5666EC 6F707DE3-E5BF-4944-9F3F-B84552A89AA0 A2DAA637-8263-44CD-9683-9B4B3EEDCD93 7882E581-7AAD-49F1-BBDF-1CCEAD0F5288 0C5436ED-FF9C-488B-9F61-AE01D34F8BAD}
+{E5DE8D2A-E046-4945-B382-97B2670A7E75 B9E5284F-8A18-4881-AC62-4276DF5666EC 6F707DE3-E5BF-4944-9F3F-B84552A89AA0 A2DAA637-8263-44CD-9683-9B4B3EEDCD93 7882E581-7AAD-49F1-BBDF-1CCEAD0F5288 0C5436ED-FF9C-488B-9F61-AE01D34F8BAD 8B94EAF2-8AB8-46AA-BB50-1C7810BD5ACB}
 
 0C4197C0-9F10-4AD0-86B8-506675EEFCBC,Name
 {Default}
@@ -2524,6 +2527,12 @@ array set Properties {
 
 892D6754-7CA6-4CF2-8429-428CDCED5C57,String
 {<%Answer%>}
+
+8B94EAF2-8AB8-46AA-BB50-1C7810BD5ACB,Destination
+{<%InstallDir%>/Menus}
+
+8B94EAF2-8AB8-46AA-BB50-1C7810BD5ACB,Name
+{Menus}
 
 8C9D799F-471C-44D5-B48F-30679D57E3B6,CheckCondition
 {Before Action is Executed}

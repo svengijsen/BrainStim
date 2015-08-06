@@ -246,23 +246,23 @@ public slots:
 	 * @param sTabName a String value holding the name of the tab that should be cleared, if left empty then the first "Default" tab is automatically cleared.
 	 */
 	void clearOutputWindow(const QString &sTabName = MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME);
-	/*! \brief Add a new tab to the Output Log Window.
-	 *
-	 * This function adds a new tab to the Output Log Window.
-	 * @param sTabName a String value holding the name of the new tab.
-	 * @return a boolean value determining whether the function did insert a new tab successfully.
-	 */
-	bool removeOutputWindow(const QString &sTabName = MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME);
 	/*! \brief Removes a named tab from the Output Log Window.
-	 *
-	 * This function removes a named tab from the Output Log Window.
-	 * @param sTabName a String value holding the name of the tab that should be removed.
-	 * @return a boolean value determining whether the function could remove the tab successfully.
-	 */
+	*
+	* This function removes a named tab from the Output Log Window.
+	* @param sTabName a String value holding the name of the tab that should be removed.
+	* @return a boolean value determining whether the function could remove the tab successfully.
+	*/
+	bool removeOutputWindow(const QString &sTabName = MAINWINDOW_DEFAULT_OUTPUTWINDOW_TABNAME);
+	/*! \brief Add a new tab to the Output Log Window.
+	*
+	* This function adds a new tab to the Output Log Window.
+	* @param sTabName a String value holding the name of the new tab.
+	* @return a boolean value determining whether the function did insert a new tab successfully.
+	*/
 	bool addOutputWindow(const QString &sTabName);
-	/*! \brief Saves the Output Log Window.
+	/*! \brief Saves the content of a Output Log window to a file.
 	 *
-	 * This function saves the named Output Log Window to a text file.
+	 * This function saves the content of a named Output Log Window to a text file.
 	 * @param sFilePath a String value holding the path to the destination file.
 	 * @param bOverwrite a Boolean value determining whether the destination file may be overwritten in case the file already exists.
 	 * @param sTabName a String value holding the name of the tab that should be saved.

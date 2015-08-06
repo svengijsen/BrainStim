@@ -183,36 +183,31 @@ bool MainWindow::implementCustomActionMenu(const QString &sMenuIniFilePath)
 	QSettings *sUILayoutSettings = new QSettings(sMenuIniFilePath, QSettings::IniFormat);
 	sUILayoutSettings->beginGroup("CustomMenuActions");
 	QStringList lAllKeys = sUILayoutSettings->allKeys();
-	foreach(QString sTmpString, lAllKeys)
+	if (lAllKeys.isEmpty() == false)
 	{
-		QStringList sSplittedString = sUILayoutSettings->value(sTmpString).toString().split(MENUACTION_SECTION_SEPERATOR);
-		if (sSplittedString.count() == 3)
+		foreach(QString sTmpString, lAllKeys)
 		{
-			//if (sSplittedString.at(0).toLower() == MENUACTION_TYPE_SCRIPTPATH)
-			//{
-				QStringList lSubMenuList = sSplittedString.at(2).split(MENUACTION_SUBMENU_SEPERATOR,QString::SkipEmptyParts);
-				//if (lSubMenuList.isEmpty() == false)
-				//{
-					//if (sSplittedString.at(1).isEmpty() == false)
-					//{
-						QAction *tmpAction = registerMainMenuAction(lSubMenuList, NULL, true);
-						if (sSplittedString.at(0).toLower() == MENUACTION_TYPE_SCRIPTPATH)
-						{
-							QString sCommand = QString("%1%2%3").arg(sSplittedString.at(0).toLower()).arg(MENUACTION_SECTION_SEPERATOR).arg(sSplittedString.at(1));
-							tmpAction->setData(sCommand);
-							//tmpAction->setShortcut(tr("Ctrl+Shift+C"));
-							//bool bConnectResult = 
-							if (connect(tmpAction, SIGNAL(triggered()), this, SLOT(executeCustomActionMenu())))
-								bRetval = true;
-						}
-
-					//}
-				//}
-			//}
-			//else if (sSplittedString.at(0).toLower() == MENUACTION_TYPE_MENUITEM)
-			//{
-			
-			//}
+			if (sTmpString.startsWith("#"))//Skip commented lines...
+				continue;
+			QStringList sSplittedString = sUILayoutSettings->value(sTmpString).toString().split(MENUACTION_SECTION_SEPERATOR);
+			if (sSplittedString.count() == 3)
+			{
+				QStringList lSubMenuList = sSplittedString.at(2).split(MENUACTION_SUBMENU_SEPERATOR, QString::SkipEmptyParts);
+				QAction *tmpAction = registerMainMenuAction(lSubMenuList, NULL, true);//Also need to be executed for non action menus!
+				if (sSplittedString.at(0).toLower() == MENUACTION_TYPE_SCRIPTPATH)
+				{
+					QString sCommand = QString("%1%2%3").arg(sSplittedString.at(0).toLower()).arg(MENUACTION_SECTION_SEPERATOR).arg(sSplittedString.at(1));
+					tmpAction->setData(sCommand);
+					//tmpAction->setShortcut(tr("Ctrl+Shift+C"));
+					//bool bConnectResult = 
+					if (connect(tmpAction, SIGNAL(triggered()), this, SLOT(executeCustomActionMenu())))
+						bRetval = true;
+				}
+				else if (sSplittedString.at(0).toLower() == MENUACTION_TYPE_MENUITEM)
+				{
+					bRetval = true;
+				}
+			}
 		}
 	}
 	sUILayoutSettings->endGroup();
@@ -239,8 +234,12 @@ bool MainWindow::executeCustomActionMenu()
 			{
 				if (lActionDataList.at(0) == MENUACTION_TYPE_SCRIPTPATH)
 				{
-					QScriptValue scriptRetValue = executeScriptFile(lActionDataList.at(1));
-					return true;
+					if (QFile(lActionDataList.at(1)).exists())
+					{
+						QScriptValue scriptRetValue = executeScriptFile(lActionDataList.at(1));
+						cleanupScript();
+						return true;
+					}
 				}
 			}
 		}
@@ -714,6 +713,7 @@ QScriptValue myExitScriptFunction(QScriptContext *context, QScriptEngine *engine
 {
 	context->setActivationObject(context->parentContext()->activationObject());
 	context->setThisObject(context->parentContext()->thisObject());
+	engine->abortEvaluation();
 	engine->collectGarbage();
 	return 0;
 }
