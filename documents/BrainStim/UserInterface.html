@@ -1,0 +1,211 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+<title>Default User-Interface v1.0</title>
+<!--doc-version-title-end-->
+<style type="text/css">
+.auto-style1 {
+	text-decoration: underline;
+}
+</style>
+</head>
+<body>
+    <div class="container">
+
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Default User-Interface</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+    <h2>
+        Introduction</h2>
+        
+                <p>The default BrainStim User-interface contains a <em>MenuBar</em>, 
+				<em>ToolBar</em>, <em>Document Editing</em>, <em>OutputLog</em> and a
+				<em>StatusBar</em> region:<br />
+				<br />
+		</p>
+				<p><img src="./../../images/userinterface.png" class="img-responsive centered" alt="" /></p>
+                <h2 id="Usercustomizations">User customizations</h2>
+		<p>The User-Interface can be customized by the user, customizations can 
+		be resizing, repositioning and hiding/showing elements. All 
+		customizations are 
+		automatically saved for each <a href="DocumentTypes.html">document type</a> 
+		to the <a href="../GettingStartedGuide/GettingStartedGuide.html#BrainStimSettingsfile">
+		Settings file</a> seperately 
+		and reloaded/applied when a document of that type is opened/activated.</p>
+		<h3>Dockable windows</h3>
+		<p>BrainStim can contain one or more dockable windows, like the 
+		<em>OutputLog</em>, that can be resized and moved around. You can resize these 
+		dockable windows by hovering your mouse over the borders of that window 
+		(the mouse icon changes) and then by using your left mouse button 
+		together with some movements (drag) to fit its size to your needs. You can even
+		drag the dockable window so that it becomes a 
+		free floating window, you can do this by left mouse click and hold the 
+		docable window header title (like the '<em>Output Log</em>' header title) and move it to somewere else and then release 
+		your left mouse button again. You might have notice while moving around 
+		the window that you can also move it to some predefined locations inside 
+		the Brainstim main window. These dockable areas are located around the 
+		left, top, right and bottom border of the <em>Document Editing region</em>. 
+		Furthermore it's even posible to completely hide a dockable window 
+		byusing your mouse and right click it's header and then uncheck it. 
+		<strong>Important!</strong> 
+		to show a dockable window again you can use your mouse and right click 
+		on the <strong>ToolBar</strong> and then check the dockable window from 
+		the list that appears again.<br />
+		(Custom) Plugins may also implement additional dockable windows<span lang="nl">, 
+				read <a href="../BrainStim/DocumentTypes.html">this document</a> 
+				for more information about that topic</span>.</p>
+                <h2 id="MenuBar">Menu Bar</h2>
+                <p>The <span lang="nl">default </span>menu bar includes the following menu's:</p>
+				<table class="table table-condensed">
+				  <thead>
+				    <tr>
+				      <th><em>File/Directory</em></th>
+				      <th><em>Description</em></th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <th scope="row">File</th>
+				      <td>contains commands for various file operations like opening, saving and printing files.</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">Edit</th>
+				      <td>contains commands for the editing of files and search/replace features. Furthermore there are some additional commands for controlling the Output Log tab(s).</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">Window</th>
+				      <td>contains commands for organizing, selecting and viewing one or more document(s).</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">Markers</th>
+				      <td>contains commands for the management of markers that can be used to mark or quickly jump to one or more specific position(s) in a loaded document.</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">Document</th>
+				      <td>contains commands for controlling the execution of various documents like script (<em>*.qs</em>) files.</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">Tools</th>
+				      <td>contains an option command that lets you configure the BrainStim settings.</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">Plugins</th>
+				      <td>contains commands for the loaded/embedded plug-ins in BrainStim. With these commands you can open the plug-in's  User Interface. Plug-ins are automatic divided in <em>Extension</em> and <em>Device</em> plug-ins. You can also open the Plugin Managers dialog from this menu.</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">Help</th>
+				      <td>contains commands for opening the  BrainStim help and viewing release information about  BrainStim.</td>
+				    </tr>				    
+				  </tbody>
+				</table>
+				<p>The<span lang="nl"> default menu bar can be extended by 
+				implementing one or more menu configuration files, read
+				<a href="CustomMenus.html">this document</a> for 
+				more infomation about this topic.</span></p>
+		<h2>File/document handling</h2>
+		<p>BrainStim can open and edit type of files, see
+		<a href="DocumentTypes.html">this document</a> for more information 
+		about this topic. To open a file in BrainStim you can simply drag/drop 
+		the file from a Windows File Explorer to the <em>Document Editing Region</em>, 
+		or use the menu entry <kbd>File</kbd> &gt; <kbd>Open...</kbd> (<kbd>CTRL</kbd> + <kbd>o</kbd> 
+		key combination) and then select the file(s) you wish to open. The last 10 
+		opened file(s) are also listed in the <kbd>File</kbd> menu and can be 
+		easily re-opened by using one of these menu entries. Saving a file can 
+		be performed by using the menu entry <kbd>File</kbd> &gt; <kbd>Save...</kbd> (<kbd>CTRL</kbd> + <kbd>
+		s</kbd> key combination) if no file path has yet been set then you'll be 
+		asked to do so. If you try close a file that has been changed then 
+		you're also automatically asked if it should be saved first. Creating a 
+		new file can be done using the menu entry <kbd>File</kbd> &gt; <kbd>New...</kbd> 
+		and then choosing a specific file type. BrainStim automatically detects 
+		the file type and optimizes the User-Interface suit the editing of this 
+		file type, read <a href="DocumentTypes.html">this document</a> for more 
+		information about this topic.</p>
+		<h3>Document windows</h3>
+		<p>BrainStim is a multiple document editor, meaning that it can open and 
+		edit multiple (different) files simultaneously in seperate documents. 
+		Each document has it's own <em>Document Editing</em> window and they can 
+		be activated by selecting them using the tabular bar right above the <em>
+		Document Editing</em> region. You can also swith between them using the
+		<kbd>Window</kbd> &gt; <kbd>Next</kbd> or <kbd>Window</kbd> &gt; <kbd>
+		Previous</kbd> menu entry, or by selecting one of them from the list of 
+		opened documents inside the <kbd>Window</kbd> menu. After you activate 
+		(or open) a new document BrainStim will automatically adapt it's 
+		User-Interface to that document type, read <a href="DocumentTypes.html">
+		this document</a> for more information about this topic.</p>
+		<h3>Code editing</h3>
+		<p>BrainStim makes use of a internal<em> Code editor</em> for the 
+		editing of document types that are text-based (that could be some kind of 
+		source code), like the QtScript file (*.qs) document type. Depending on the file 
+		type this code editor is automatically customized to support that type 
+		of file type editing. Some features are by default implemented like:</p>
+		<ul>
+			<li>Automatic <span class="auto-style1">line numbering</span> in 
+			front of each line.</li>
+			<li>Showing some information about the file and the position of the 
+			cursor in <em>StatusBar</em>.</li>
+			<li>Enabling the use of <span class="auto-style1">markers</span>, 
+			see below.</li>
+		</ul>
+		<h4>Markers</h4>
+		<p>Inside the internal <em>Code Editor</em> you can add/remove markers 
+		by clicking the line number to toggle it on/off. You can also do this 
+		using the menu entry <kbd>Markers</kbd> &gt; <kbd>Add/Remove marker</kbd> (<kbd>F2</kbd> 
+		key). After adding a marker you can see a small triangular item in front 
+		of the current line number and a new entry in the list of current 
+		markers in the <kbd>Markers</kbd> menu. If you select such an entry then 
+		the cursor will automatically jump to the position of that marker which 
+		makes it easy to jump from one stored location in a document to another 
+		instead of scrolling and searching through the documents content. 
+		Furthermore the menu entries <kbd>Markers</kbd> &gt; <kbd>Next marker</kbd> (<kbd>F4</kbd> 
+		key) and <kbd>Markers</kbd> &gt; <kbd>Previous marker</kbd> (<kbd>F6</kbd> 
+		key) are ideal for switching quickly back and forth through the custom 
+		added markers.</p>
+		<h2 id="OutputLogwindow">Output Log window</h2>
+		<p>The <em>Output Log window</em> is by default visible and located in the lower 
+		part of the BrainStim User-Interface, this can be customized (see the
+		<a href="#Usercustomizations">User customizations</a> chapter above for 
+		more information about this topic). The <em>Output Log window</em> can 
+		contain multiple sub-windows that can be selected individually by the 
+		use of a tabular selection bar. By default there's only one sub-window 
+		available under the name '<em>Default</em>'. Read
+		<a href="ScriptDebugging.html#UsingtheOutputLogwindow">this document</a> 
+		for more information about how to control this Output Log window from a 
+		script. The menu&nbsp; <kbd>Edit</kbd> &gt; 
+			<kbd>Output Log</kbd> contains several commans for working with the <em>Output Log window</em>, 
+		alternatively you can right click with you mouse in a sub-window to show 
+		a menu of commands.</p>
+		<h2>Executing a document</h2>
+		<h2>Options</h2>
+		<h2>Plugins plugin manager</h2>
+		<h2>Help</h2>
+   </div>
+<!--doc-version-default-footer-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
+<!--doc-version-default-footer-end-->
+ </body>
+</html>

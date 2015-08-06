@@ -47,6 +47,11 @@ defaultDocumentEditing("documents/BrainStim/GarbageCollection.html", "GarbageCol
 defaultDocumentEditing("documents/BrainStim/CommandLineOptions.html", "CommandLineOptions.html", 2);
 defaultDocumentEditing("documents/BrainStim/InternalNetworkInterface.html", "InternalNetworkInterface.html", 2);
 defaultDocumentEditing("documents/BrainStim/SignalSlotConnections.html", "SignalSlotConnections.html", 2);
+defaultDocumentEditing("documents/BrainStim/DocumentTypes.html", "DocumentTypes.html", 2);
+defaultDocumentEditing("documents/BrainStim/CustomMenus.html", "CustomMenus.html", 2);
+defaultDocumentEditing("documents/BrainStim/MainLogFile.html", "MainLogFile.html", 2);
+defaultDocumentEditing("documents/BrainStim/UserInterface.html", "UserInterface.html", 2);
+defaultDocumentEditing("documents/BrainStim/ScriptDebugging.html", "ScriptDebugging.html", 2);
 
 
 //Special (non-default document edits)

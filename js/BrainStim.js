@@ -1,5 +1,5 @@
 //doc-version-brainstimrelease-begin
-//Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1
+//Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1
 var currentBrainStimRelease = '1.0.0.1';
 //doc-version-brainstimrelease-end
 
@@ -40,6 +40,14 @@ function BrainStimDocuments_Information()
 	this.DocumentAuditing[nCurrentDocIndex++] = ['CommandLineOptions.html','Command-Line Options','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['InternalNetworkInterface.html','Internal Network Interface','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['SignalSlotConnections.html','Signal-Slot Connections','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['DocumentTypes.html','Document Types','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['CustomMenus.html','Custom Menu\'s','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['MainLogFile.html','Main Log-file','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['UserInterface.html','Default User-Interface','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['ScriptDebugging.html','Debugging scripts','1.0','July 2015','Sven Gijsen'];
+	
+	
+	
 	
 	
 	

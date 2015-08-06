@@ -27,7 +27,11 @@
 				<section title="CommandLineOptions" ref="./documents/BrainStim/CommandLineOptions.html"></section>
 				<section title="InternalNetworkInterface" ref="./documents/BrainStim/InternalNetworkInterface.html"></section>
 				<section title="SignalSlotConnections" ref="./documents/BrainStim/SignalSlotConnections.html"></section>
-				
+				<section title="DocumentTypes" ref="./documents/BrainStim/DocumentTypes.html"></section>
+				<section title="CustomMenus" ref="./documents/BrainStim/CustomMenus.html"></section>
+				<section title="MainLogFile" ref="./documents/BrainStim/MainLogFile.html"></section>
+				<section title="UserInterface" ref="./documents/BrainStim/UserInterface.html"></section>
+				<section title="ScriptDebugging" ref="./documents/BrainStim/ScriptDebugging.html"></section>
 				
 				
 				

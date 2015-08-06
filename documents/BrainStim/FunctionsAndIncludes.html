@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -14,7 +14,7 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
 <title>Functions and Includes v1.0</title>
 <!--doc-version-title-end-->
 <style type="text/css">
@@ -27,7 +27,7 @@
     <div class="container">
 
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Functions and Includes</h1>
@@ -46,8 +46,7 @@
 		include(s) that allow you to write better code because you can structure 
 		your code in smaller modules, making it reusable, easier to read and 
 		test. </p>
-		<h3>
-		Functions</h3>
+		<h3 id="Functions">Functions</h3>
 		<p>
 		A function is a group of reusable code which can be called anywhere in 
 		your program. This eliminates the need of writing the same code again 
@@ -64,12 +63,10 @@
         <table class="codeframe">
             <tr>
                 <td>
-                    <pre class="prettyprint">
-function functionname(parameter-list)
+                    <pre class="prettyprint"><code class="language-js">function functionname(parameter-list)
 {
-    statements here...
-}
-</pre>
+    //enter function body script code here...
+}</code></pre>
                 </td>
             </tr>
         </table>
@@ -83,11 +80,10 @@ function functionname(parameter-list)
         <table class="codeframe">
             <tr>
                 <td>
-                    <pre class="prettyprint">
-function sayHello()
+                    <pre class="prettyprint"><code class="language-js">function sayHello()
 {
     Log("Hello there");
-}</pre>
+}</code></pre>
                 </td>
             </tr>
         </table>
@@ -96,7 +92,7 @@ function sayHello()
 		and provide the list of defined parameters (arguments) like:</p><table class="codeframe">
             <tr>
                 <td>
-                    <pre class="prettyprint">sayHello();</pre>
+                    <pre class="prettyprint"><code class="language-js">sayHello();</code></pre>
                 </td>
             </tr>
         </table>
@@ -107,7 +103,7 @@ function sayHello()
 		this topic) like:</p><table class="codeframe">
             <tr>
                 <td>
-                    <pre class="prettyprint">sayHello = null;</pre>
+                    <pre class="prettyprint"><code class="language-js">sayHello = null;</code></pre>
                 </td>
             </tr>
         </table>
@@ -120,11 +116,10 @@ function sayHello()
         <table class="codeframe">
             <tr>
                 <td>
-                    <pre class="prettyprint">
-function sayHello(firstName, lastName)
+                    <pre class="prettyprint"><code class="language-js">function sayHello(firstName, lastName)
 {
     Log("Hello " + firstName + " " + lastName + ".");
-}</pre>
+}</code></pre>
                 </td>
             </tr>
         </table>
@@ -132,7 +127,7 @@ function sayHello(firstName, lastName)
 		<p>To invoke or call the <em>sayHello()</em> function we now also provide the parameters (arguments) like:</p><table class="codeframe">
             <tr>
                 <td>
-                    <pre class="prettyprint">sayHello("John", "Doe");</pre>
+                    <pre class="prettyprint"><code class="language-js">sayHello("John", "Doe");</code></pre>
                 </td>
             </tr>
         </table>
@@ -143,13 +138,12 @@ For example, you can pass two numbers in a function and then you can expect the 
 		<table class="codeframe">
             <tr>
                 <td>
-                    <pre class="prettyprint">
-function add(first, last)
+                    <pre class="prettyprint"><code class="language-js">function add(first, last)
 {
     var full;
     full = first + last;
     return full;
-}</pre>
+}</code></pre>
                 </td>
             </tr>
         </table>
@@ -158,9 +152,8 @@ function add(first, last)
 		something like:</p><table class="codeframe">
             <tr>
                 <td>
-                    <pre class="prettyprint">
-var result = add(3, 5);
-Log("The result is: " + result);</pre>
+                    <pre class="prettyprint"><code class="language-js">var result = add(3, 5);
+Log("The result is: " + result);</code></pre>
                 </td>
             </tr>
         </table>
@@ -178,7 +171,7 @@ Log("The result is: " + result);</pre>
 		Main Program Directory</a> directory under the subfolder <em>\Examples\Scripts</em>.</li>
 			<li style="box-sizing: border-box;">Examine and execute (press the <kbd>F5</kbd> key) the QtScript code.</li>
 		</ul>
-		<h3>Includes</h3>
+		<h3 id="Includes">Includes</h3>
 		<p>Inside the script you can make use of an<span class="Apple-converted-space">&nbsp;</span><span style="box-sizing: border-box;"><strong>Include</strong></span><span class="Apple-converted-space">&nbsp;keyword/</span>statement 
 		that allows you to include/embed other script (*.qs) files. Including 
 		another script file is like automatic copy/pasting the entire included 
@@ -246,7 +239,7 @@ Log("The result is: " + result);</pre>
 		</ul>
    </div>
 <!--doc-version-default-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
 	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
 <!--doc-version-default-footer-end-->
  </body>

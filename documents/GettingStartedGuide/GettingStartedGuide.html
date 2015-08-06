@@ -3,19 +3,19 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--doc-version-jquery-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
 <!-- JQuery(UI) -->
 <script src="../../js/jquery.min.js" type="text/javascript"></script>
 <script src="../../js/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
 <!--doc-version-jquery-links-end-->
 <!--doc-version-tocify-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
 <!-- Tocify -->
 <link href="../../css/jquery.tocify.css" type="text/css" rel="stylesheet"/>
 <script src="../../js/jquery.tocify.min.js" type="text/javascript"></script>
 <!--doc-version-tocify-links-end-->
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -27,7 +27,7 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
 <title>Getting Started Guide v1.0</title>
 <!--doc-version-title-end-->
 </head>
@@ -35,7 +35,7 @@
     <div class="container-fluid">
         <div class="col-md-9 col-md-offset-3">
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Getting Started Guide</h1>
@@ -112,15 +112,23 @@
 				      <th scope="row">Include</th>
 				      <td>The default include directory used for script files when using the &quot;Include()&quot; script function.</td>
 				    </tr>
-				    <tr>
+				      <tr>
+				      <th scope="row"><span lang="nl">Menus</span></th>
+				      <td><span lang="nl">This directory can contain some custom 
+					  menu definition files that define some custom Menu Bar 
+					  commands, read
+				<a href="../BrainStim/CustomMenus.html">this document</a> for 
+					  more information regarding this topic.</span></td>
+				      </tr>
+					  <tr>
 				      <th scope="row">Plugins</th>
 				      <td>This is the root directory in which BrainStim searches for default plug-ins to load during startup, if compatible then they are automatically embedded in BrainStim and are then ready for usage.</td>
-				    </tr>
-				    <tr>
+				      </tr>
+					  <tr>
 				      <th scope="row">Qml/plugins/[architecture]</th>
 				      <td>This is the root directory in which BrainStim searches for QML plug-ins to include during the startup of the QML viewer.</td>
-				    </tr>
-				    <tr>
+				      </tr>
+					  <tr>
 				      <th scope="row">Xsd</th>
 				      <td>This directory contains XML Schema (<em>*.xsd</em>) files, which let BrainStim validate experiment (<em>*.exml</em>) files. It is used to express a set of rules to which an experiment must conform in order to be considered 'valid' according to that schema.</td>
 				    </tr>
@@ -158,18 +166,20 @@
 				      <th scope="row">Examples\Plugins</th>
 				      <td>This directory contains  the example and tutorial files for installed custom plugins.</td>
 				    </tr>
-				    <tr>
+				  	<tr>
 				      <th scope="row">Outputs</th>
 				      <td>This directory is used when needed by BrainStim for saving logfiles that are generated during the execution of an experiment.</td>
-				    </tr>
-				    <tr>
+				      </tr>
+					  <tr>
 				      <th scope="row">logfile.txt</th>
-				      <td>This logfile is used by BrainStim for logging all main program execution information, warnings and errors.</td>
-				    </tr>
-				    <tr>
+				      <td>This logfile is used by BrainStim for logging all main program execution information, warnings and errors.<span lang="nl"> 
+					  See <a href="../BrainStim/MainLogFile.html">this document</a> 
+					  for more information.</span></td>
+				      </tr>
+					  <tr>
 				      <th scope="row">BrainStim.ini</th>
 				      <td>This file is used by BrainStim for storing and retrieving all internal settings/configurations.</td>
-				    </tr>
+  			        </tr>
 				  </tbody>
 				</table>
 
@@ -190,11 +200,22 @@
 				this "new" directory setting for the plugin(s) that you still 
 				want to make use of in BrainStim. </span>	</p>
                 <h2 id="UserInterface">User Interface</h2>
-                <p><img src="./../../images/userinterface.png" class="img-responsive centered" alt="" /></p>
                 <p>&nbsp;</p>
-                <p>The default BrainStim User interface contains a MenuBar, ToolBar, Document Editing, OutputLog  and StatusBar area. These area's can be resized and moved around by a user and these customization are then automatically saved by file type extension of the current active document. Furthermore (custom) plugins may also define custom editing area's for different file type editing purposes. Later we'll see how the ExperimentManager's plugin implements a custom UserInterface by creating new areas for editing experiment files(<em>*.exml</em>).</p>
-                <h3>Menu Bar</h3>
-                <p>The menu bar includes the following menu's:</p>
+				<p><img src="./../../images/userinterface.png" class="img-responsive centered" alt="" /></p>
+                <p>&nbsp;</p>
+                <p>The default BrainStim User interface contains a MenuBar, 
+				ToolBar, Document Editing, OutputLog and StatusBar area<span lang="nl">.
+				</span>These area's can be resized and moved around by a user 
+				and these customization are then automatically saved by file 
+				type extension of the current active document. <span lang="nl">
+				Read <a href="../BrainStim/UserInterface.html">this document</a> 
+				for more information about the default User-Interface</span>.<span lang="nl">
+				</span>Furthermore (custom) plugins may also define custom 
+				editing area's for different file type editing purposes<span lang="nl">, 
+				read <a href="../BrainStim/DocumentTypes.html">this document</a> 
+				for more information about that topic</span>.</p>
+                <h3 id="MenuBar">Menu Bar</h3>
+                <p>The <span lang="nl">default </span>menu bar includes the following menu's:</p>
 				<table class="table table-condensed">
 				  <thead>
 				    <tr>
@@ -237,6 +258,10 @@
 				    </tr>				    
 				  </tbody>
 				</table>
+				<p>The<span lang="nl"> default menu bar can be extended by 
+				implementing one or more menu configuration files, read
+				<a href="../BrainStim/CustomMenus.html">this document</a> for 
+				more infomation about this topic.</span></p>
                 <h2>Configuration and Settings</h2>
                 <h3 id="BrainStimSettingsfile">BrainStim Settings file</h3>
                 <p>BrainStim makes use of a configuration file to store all settings/configurations. This configuration file, named BrainStim.ini is located in the <a href="#MainProgramdirectory">Main Program Directory</a>, because this directory is different per Windows login user the settings are stored separately. The settings file is also used by BrainStim for storing custom layout settings of the different UI areas. </p>
@@ -254,24 +279,17 @@
                     At first glance BrainStim features various text editing 
 					tools that are found in standard text editing applications, 
 					like for example notepad. BrainStim allows to open and edit 
-					multiple documents simultaneously, the look and feel for 
-					these opened document(s) depends on the document type (that 
-					is <span lang="en-us">linked</span> <span lang="en-us">to</span> 
-					the document extension). BrainStim automatically detects 
-					certain (pre-registered) document types (by extension)<span lang="en-us">.</span> When such a  specific document    type is  detected and opened by BrainStim then the internal document editor is automatically configured  for this document type. This internal document editor configuration contains features like styling choices, support for syntax styling, code completion and call tips that can support  the editing and thus makes it more  more user-friendly.<br />
-                    A important  file type for BrainStim is  that of a script (<em>*.qs</em>) file. This file may contain <a href="http://en.wikipedia.org/wiki/QtScript" target="_blank">QtScript</a><span lang="en-us">
-					</span>code and can be executed by the BrainStim internal Script Engine. This makes BrainStim be more that just a rich multiple document editor, 
-					<span lang="en-us">because it's</span> also a script interpreter. This is handled by the internal script engine that can execute script code. The supported QtScript scripting language is based on the ECMAScript standard with a few extensions, such as <a href="http://qt-project.org/doc/qt-5.1/qtcore/signalsandslots.html" target="_blank">QObject-style signal and slot<span lang="en-us">
-					</span>connections</a> (explained later in this guide).
-                </p>
+					multiple documents simultaneously<span lang="nl">. T</span>he 
+					<span lang="nl">userinterface of BrainStim may completely 
+					change </span>depend<span lang="nl">ing</span>
+					<span lang="nl">of the document type </span>(<span lang="nl">which 
+					is automatically resolved by the d</span>ocument extension)<span lang="nl"> 
+					which makes BrainStim very flexible for editing various file 
+					types, read <a href="../BrainStim/DocumentTypes.html">this 
+					document</a> for more information about this topic</span>.                 </p>
                 <h3>Exercises - Editing</h3>
                 <h4>The BrainStim User Interface</h4>
                 <ul>
-                    <li>Start BrainStim by double clicking the BrainStim executable (BrainStim.exe). </li>
-                    <li>Notice the splash screen that  appears during the startup  of BrainStim (the time this splash screen is visible may depend on fast your system is). During this splash screen various tasks like plug-in detection/loading and the creation of the User Interface are performed.</li>
-                    <li>During the execution of BrainStim all kind of logging information is written to the standard log file (&lt;BrainStim directory&gt;/logfile.txt).</li>
-                    <li>Open the above standard log file with BrainStim, with the menu command File--&gt;Open... and then browsing and selecting the file.</li>
-                    <li>Notice that BrainStim opens the log  file and shows it textual content in a new document editing pane. The log file already contains some gathered information of the first BrainStim startup like the OpenGL version your system supports. Version 2.0 or higher is advised for an optimal usage. Each entry in the log file contains a date/time stamp and this  information is never  erased by BrainStim, each new entry is automatically appended to this file. If the file size gets too big (&gt;200MB) after a while you could consider to  delete it if you don't need the information inside anymore.</li>
                     <li>We can see that BrainStim automatically adds a line number in front of the text lines. In the right lower corner we can also see the total number of lines and some information about the cursor position inside the document.</li>
                     <li>It's possible to open and edit multiple files simultaneously, let's try this by opening another file, open the file (&lt;BrainStim directory&gt;BrainStim_32\examples\scripts\AnalogClock.qs) by using the shortcut key combination <kbd>CTRL</kbd> + <kbd>o</kbd> and then browsing and selecting the file.</li>
                     <li>This file has the extension (*.qs) and is known and detected  as a BrainStim script file. Although the document contains no text styling formatting information (only textual), the document is shown in the new document with a special styling formatting. This is automatically done by the internal document editor because it already knows how to handle this type of file. </li>
@@ -553,11 +571,11 @@
         </div>
     </div>
 <!--doc-version-default-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
 	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
 <!--doc-version-default-footer-end-->
 <!--doc-version-tocify-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15628163055), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
 <script type="text/javascript">$(function() {
 var toc = $("#toc").tocify({selectors: "h2,h3,h4"}).data("toc-tocify");
 toc.setOptions({ smoothScroll: false, showEffect: "none" });

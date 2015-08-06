@@ -15,13 +15,17 @@ You can use it like:
 		</table>
 
 You can specify a language by specifying the language extension along with the prettyprint class:		
-<pre class="prettyprint lang-html">
-  The lang-* class specifies the language file extensions.
+<pre class="prettyprint"><code class="language-js">
+  The code class specifies the language file extensions.
   File extensions supported by default include
     "bsh", "c", "cc", "cpp", "cs", "csh", "cyc", "cv", "htm", "html",
     "java", "js", "m", "mxml", "perl", "pl", "pm", "py", "rb", "sh",
     "xhtml", "xml", "xsl".
 </pre>
+Use only <pre> for Output Log messages
+Default used file extensions are: js, html, bsh
+If your prettyprint body text contains some special characters which are already preserved by the HTML language then you can endode this to a safe representation using
+a HTML entity decoder like: http://www.web2generators.com/html-based-tools/online-html-entities-encoder-and-decoder
 
 There are some coding conventions that you might want to follow for new pages, these are:
 

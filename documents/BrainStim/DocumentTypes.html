@@ -1,0 +1,287 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+<title>Document Types v1.0</title>
+<!--doc-version-title-end-->
+<style type="text/css">
+.auto-style1 {
+	text-decoration: underline;
+}
+</style>
+</head>
+<body>
+    <div class="container">
+
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Document Types</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+    <h2>
+        Introduction</h2>
+                <p>
+                    <span lang="nl">Depending of the currently opened active 
+					document type (which is automatically resolved by the file extension) 
+					BrainStim can adapt its file handling and user interface to 
+					optimize the view and editing capabilities for that document 
+					type. This feature makes BrainStim a very flexible editor 
+					for various document types. These pre-registered document 
+					types and defined file handling and user interface are 
+					automatically loaded at startup and can even be custom 
+					implemented by a Plugin. Each change manually made&nbsp; to 
+					the user interface is saved for each document type 
+					seperately, making it possible for the user to do some small 
+					layout changes that are automatically saved for the next 
+					session where you open a certain document of that type 
+					again.</span></p>
+		<h2>
+                    Main document types</h2>
+		<p>
+                    BrainStim implements some standard document types, these are:</p>
+				<table class="table table-condensed">
+				  <thead>
+				    <tr>
+				      <th><em>Document type(extension)</em></th>
+				      <th><em>Description</em></th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <th scope="row">QtScript (*.qs)</th>
+				      <td><span lang="nl">
+					  <a href="http://en.wikipedia.org/wiki/QtScript" target="_blank">QtScript</a><span lang="en-us">
+					</span>code (which is based on the ECMAScript standard (like 
+					  JavaScript) with 
+					  a more few extensions).<br />
+					  If this document executed (<kbd>F5</kbd> key) then internal Script Engine 
+					  from BrainStim will interpret and run the documents 
+					  content.</span></td>
+				    </tr>
+				    <tr>
+				      <th scope="row">&nbsp;</th>
+				      <td>&nbsp;</td>
+				    </tr>
+				  </tbody>
+				</table>
+		<p>
+                    The 
+					<a href="../ExperimentManagerPlugin/ExperimentManagerPlugin.html">ExperimentManager plugin</a> implements the following 
+					custom document types:</p>
+				<table class="table table-condensed">
+				  <thead>
+				    <tr>
+				      <th><em>Document type(extension)</em></th>
+				      <th><em>Description</em></th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <th scope="row">QML (*.qml)</th>
+				      <td><span lang="nl">
+					  <a href="http://en.wikipedia.org/wiki/QML" target="_blank">QML</a><span lang="en-us">
+					</span>code (a user interface markup language. It is a 
+					  JavaScript-based, declarative language for designing user 
+					  interface-centric applications).<br />
+					  If this document executed (<kbd>F5</kbd> key) then the QML 
+					  engine 
+					  from the
+					  <a href="../ExperimentManagerPlugin/ExperimentManagerPlugin.html">
+					  ExperimentManager plugin</a> will interpret and run the 
+					  documents content.</span></td>
+				    </tr>
+				    <tr>
+				      <th scope="row">Experiment (*.exml) </th>
+				      <td><span lang="nl">
+					  <a href="http://en.wikipedia.org/wiki/XML" target="_blank">XML</a>-based<span lang="en-us">
+					</span>code that specifies an experiment structure and flow, 
+					  read this document to learn more about this document type.<br />
+					  If this document executed (<kbd>F5</kbd> key) then the 
+					  Experiment 
+					  engine 
+					  from the
+					  <a href="../ExperimentManagerPlugin/ExperimentManagerPlugin.html">
+					  ExperimentManager plugin</a> will interpret and run the 
+					  documents content.</span></td>
+				    </tr>
+				  </tbody>
+				</table>
+				
+				<h3>
+                    Example</h3>
+		<p>
+                    Let's examine some of the above document types:</p>
+    	<ol>
+			<li>Start BrainStim.</li>
+			<li>Open the (QtScript) file <em>Functions.qs</em> that is located in the  
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> subfolder 
+		\<em>Examples\Scripts</em>. The script code of this file is explained in
+			<a href="FunctionsAndIncludes.html">this document</a> in more 
+			detail.</li>
+			<li>Examine the QtScript file and validate that:<br />
+			<p>- <span lang="nl">different <span class="auto-style1">text formatting</span> is automatically 
+			applied and automatically updated for the coding syntax of this type 
+			of document (*.qs). You can edit some formatted text and see how the 
+			text formatting is automatically updated.<br />
+			- automatic <span class="auto-style1">code 
+			hints and completion</span> are enabled. You can test this 
+			by placing the cursor at the end of the document and then begin 
+			start typing a known (or used word) like '<em>sayHello</em>', and see what 
+			happens.</span></p>
+			</li>
+			<li>Notice that, now we have opened a QtScript file, that the green
+			<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../images/runscript.png"/> button in the ToolBar (also the 
+			<kbd>Document</kbd> &gt; <kbd>Execute</kbd> MenuBar item) is enabled 
+			and therefore its possible for 
+			us to execute the documents content by the internal QtScript engine. Let's 
+			try that, press the <strong>Execute</strong> button and notice how the BrainStim
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#UserInterface">
+		'default' OutputLog Tab</a>
+			changes due to the executed script.</li>
+			<li>Close the document (<kbd>CTRL</kbd> + <kbd>Shift</kbd> + <kbd>c</kbd>) and notice how the
+			<strong>Execute</strong>&nbsp;button is automatically disabled if no 
+			executable document is activated.</li>
+			<li>
+			Open the (QML) file <em>Helloworld.qml</em> that is located in the  
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> subfolder 
+		\<em>Examples\Scripts</em>. The script code of this file is explained in
+			this document in more 
+			detail.<br />
+			Notice that again automatic text formatting and code 
+			hints/completion is in use. Because this document is of a different 
+			type and has a different syntax the rules applied for the formatting 
+			and code hints/completion is not the same as in the above example. 
+			The rules for this are defined in small (*.api) files that are 
+			stored in the  
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> 
+			subfolder named <strong><em>Apis</em></strong>.<br />
+			The green
+			<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../images/runscript.png"/> 
+			button in the ToolBar is again enabled, allowing us to execute the 
+			document. This time this is handled by a QML engine which is 
+			implemented inside the <span lang="nl">
+					  <a href="../ExperimentManagerPlugin/ExperimentManagerPlugin.html">
+					  ExperimentManager plugin</a>. <strong>Important!</strong> 
+			Remember that after executing this type of document you can close the full-screen 
+			window that will popup again by pressing <kbd>CTRL</kbd> + <kbd>a</kbd> (abort) 
+			key combination. <br />
+			Let's try 
+			that, press the <strong>Execute</strong> button and notice what 
+			happens, when you're ready you can close/abort the window again by 
+			pressing <kbd>CTRL</kbd> + <kbd>a</kbd> (abort) key combination.</span></li>
+			<li>Open the (EXML) file <em>PolarAngle.exml</em> that is located in the  
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> subfolder 
+		\<em>Examples\Scripts</em>. This document is explained in
+			this document in more 
+			detail.</li>
+			<li>Notice that the user interface completely changed after opening 
+			this document type. Activate (by using the menu <kbd>Window</kbd> &gt; 
+			<kbd>Helloworld.qml</kbd>), or re-open again the previous (QML) file <em>Helloworld.qml</em> that is located in the  
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> subfolder 
+		\<em>Examples\Scripts</em>. Notice how the user interface changes back 
+			to suit that of the QML file type.</li>
+			<li>Activate (<kbd>CTRL</kbd> + <kbd>TAB</kbd>) the <em>PolarAngle.exml</em> file again 
+			and notice that the green
+			<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../images/runscript.png"/> button in the ToolBar (also the 
+			<kbd>Document</kbd> &gt; <kbd>Execute</kbd> MenuBar item) stays 
+			enabled and therefore its again possible for us to execute this 
+			document type. The document execution is handled by the Experiment 
+			engine which is implemented inside the <span lang="nl">
+					  <a href="../ExperimentManagerPlugin/ExperimentManagerPlugin.html">
+					  ExperimentManager plugin</a>. <strong>Important!</strong> 
+			Remember that after executing this type of document you can close the full-screen 
+			window that will popup again by pressing <kbd>CTRL</kbd> + <kbd>a</kbd> (abort) 
+			key combination. 
+			Let's try 
+			that, press the <strong>Execute</strong> button and notice what 
+			happens. After a full-screen popup window appears you can press the 
+			<kbd>ALT</kbd> key to proceed and see what happens.<br />
+			If you like then you can close/abort the window again by 
+			pressing <kbd>CTRL</kbd> + <kbd>a</kbd> (abort) key combination.<br />
+			Aside the new dockable widgets that appeared for supporting the 
+			editing of this type of document you might also have noticed the 
+			appearance of the custom menu entry <kbd>View</kbd> &gt; <kbd>Switch to plain text view menu entry</kbd>. 
+			If you click this menu entry then the document type is reloaded but 
+			then viewed as plain text making it also possible to edit this 
+			document using the internal code editor. The underlying syntax of 
+			the EXML file is XML-based code and therefore can also be edited 
+			inside a code editor. You can revert to the extended visual editor 
+			by reloading (<kbd>File</kbd> &gt; <kbd>Reload</kbd>) the document 
+			again.</span></li>
+			<li>Close all open documents (<kbd>CTRL</kbd> + <kbd>Shift</kbd> + 
+			<kbd>F4</kbd>).</li>
+		</ol>
+		<h2>Additional supported document types</h2>
+		<p>BrainStim can also be used for the editing of some 
+					additional document types. For most of them the text 
+					formatting and code hints/completion is implemented for 
+					the syntax used for that document type. Currently these 
+					document types are supported:</p>
+		<table class="table table-condensed">
+			<thead>
+				<tr>
+					<th><em>Document type(extension)</em></th>
+					<th>Handling</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th scope="row">Unknown or Text Files (*.*, *.txt)</th>
+					<td>All files are treated as standard text files when they 
+					have an unknown file extension. These files can be edited in 
+					the internal code editor of BrainStim but features like 
+					automatic text formatting and code completion/hints are 
+					disabled.</td>
+				</tr>
+				<tr>
+					<th scope="row">C(++) Files (*.c, *.cpp, *.h)<br />
+					Javascript Files (*.js)<br />
+					Perl Files (*.py)<br />
+					Python Files (*.py)<br />
+					XML Files (*.xml)<br />
+					HTML Files (*.html)<br />
+					</th>
+					<td>These files can be edited in the internal code editor of 
+					BrainStim with features like automatic text formatting and 
+					code completion/hints enabled.</td>
+				</tr>
+				<tr>
+					<th scope="row">Scalable Vector Graphics (*.svg, *.gz, 
+					*.svgz)</th>
+					<td>These files can be edited in the internal code editor of 
+					BrainStim with features like automatic text formatting and 
+					code completion/hints enabled. Furthermore you can execute 
+					these files, see the (SVG) file <em>Helloworld.svg</em> that is located in the  
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> subfolder 
+		\<em>Examples\Scripts</em>.</td>
+				</tr>
+			</tbody>
+		</table>
+   </div>
+<!--doc-version-default-footer-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
+<!--doc-version-default-footer-end-->
+ </body>
+</html>

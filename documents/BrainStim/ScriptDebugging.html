@@ -1,0 +1,465 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+<title>Debugging scripts v1.0</title>
+<!--doc-version-title-end-->
+<style type="text/css">
+.auto-style1 {
+	text-decoration: underline;
+}
+</style>
+</head>
+<body>
+    <div class="container">
+
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Debugging scripts</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+    <h2>
+        Introduction</h2>
+        
+                <p>When you are creating new scripts (QtScript *.qs) and you 
+				want to test it's functionality or if you want to track down a 
+				bug in your script it's important to know what tools you can use 
+				to debug your code. Currently BrainStim unfortunately doesn't 
+				have yet a fully flavoured debugger for testing your code with 
+				various tools for adding breakpoints or running your program 
+				step by step and resolve values.
+				Below here are some techniques/features described which you may 
+				like to use for debugging your scripts.</p>
+		<h2 id="UsingtheOutputLogwindow">Using the Output Log window</h2>
+		<p>The <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+		is one of the most common tools for gathering information while a script 
+		is running. You can easily access and change this <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+		from within the script. Appending a line of text can beeasily done by 
+		using the <strong>Log()</strong> or <strong>
+		BrainStim.write2OutputWindow()</strong> function. These functions are 
+		internally the same, they both accept a string value for the first 
+		parameter that contains the message that should be logged. The <strong>
+		BrainStim.write2OutputWindow()</strong> function accepts another 
+		optional parameter that contains the name of the tab/sub-window to which 
+		the message should be written to, by default all messages are written to 
+		the standard '<em>Default</em>' sub-window. Furthermore the <strong>
+		Log()</strong> function is offcourse also quicker to type. Let's try 
+		this (the final result of the below steps are saved to the file <em>
+		OutputLogwindow.qs</em> that is located in the  
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> subfolder 
+		\<em>Examples\Scripts</em>):</p>
+		<ol>
+			<li>Create a QtScript document (<kbd>File</kbd> &gt; <kbd>New</kbd> &gt; 
+			<kbd>QtScript Document</kbd>) and enter 
+		(or copy/paste) the following text to the document:<br />
+&nbsp;<table class="codeframe">
+				<tr>
+					<td>
+					<pre class="prettyprint"><code class="language-js">Log("My first logged message.");
+var sumResult = 3 + 4;
+BrainStim.write2OutputWindow("3 + 4 =" + sumResult);</code></pre>
+					</td>
+				</tr>
+			</table>
+			</li>
+			<li>Execute (press the <kbd>F5</kbd> key) the QtScript code and 
+			validate that some text was written to the '<em>Default</em>' 
+			sub-window of the <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em>.</li>
+			<li>Aside standard text you can make use of some special characters 
+			and markup for the logged message, like:<br />
+			<strong>- '\n'</strong> a newline escape sequence that forces an 
+			end-of-line causing the message after this to appear on a new line.<br />
+			<strong>- '\t'</strong> a tab escape sequence that inserts a tab.<br />
+			You can even format your message using
+			<a href="http://www.w3schools.com/html/" target="_blank">HTML</a>/<a href="http://www.w3schools.com/css/" target="_blank">CSS</a>. 
+			Let's try this by appending the following text to our document:<br />
+&nbsp;<table class="codeframe">
+				<tr>
+					<td>
+					<pre class="prettyprint"><code class="language-js">Log(&quot;\nAdding\tSome\tTabs \nand Line-breaks.\n&quot;); 
+Log(&quot;&lt;h1&gt;Header 1&lt;/h1&gt;&quot;); Log(&quot;&lt;h2&gt;Header 2&lt;/h2&gt;&quot;); 
+Log(&quot;&lt;h3&gt;Header 3&lt;/h3&gt;&quot;); Log(&quot;&lt;h4&gt;Header 4&lt;/h4&gt;&quot;); 
+Log(&quot;&lt;font color=\&quot;red\&quot;&gt;This is some &lt;em&gt;custom&lt;/em&gt; &lt;strong&gt;formatted&lt;/strong&gt; text.&lt;/font&gt;&quot;);</code></pre>
+					</td>
+				</tr>
+			</table>
+
+			
+			</li>
+			<li>Execute (press the <kbd>F5</kbd> key) the QtScript code and 
+			validate the text that was written to the '<em>Default</em>' 
+			sub-window of the <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em>.</li>
+			<li>As already mentioned the <strong>
+		BrainStim.write2OutputWindow()</strong> function accepts another 
+			optional parameter that contains the name of the tab/sub-window to 
+			which the message should be written to. Before we can do this we 
+			need to make sure to add this subwindow using the 
+			BrainStim.addOutputWindow() providing the new sub-window name as the 
+			first parameter, like:<br />
+			<br />
+<table class="codeframe">
+				<tr>
+					<td>
+					<pre class="prettyprint"><code class="language-js">BrainStim.addOutputWindow("custom sub-window");
+BrainStim.write2OutputWindow("Custom sub-window logged message.", "custom sub-window");</code></pre>
+					</td>
+				</tr>
+			</table>
+			
+			</li>
+			<li>Execute (press the <kbd>F5</kbd> key) the QtScript code and 
+			validate the above code again.</li>
+			<li>You can manually clear <em>
+			<a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+			sub-window by either closing it or by using the menu command <kbd>Edit</kbd> &gt; 
+			<kbd>Output Log</kbd> &gt; <kbd>Clear All Output Item(s)</kbd>.<br />
+			</li>
+		</ol>
+		<p>The above used functions are described in the 
+		<a href="Doxygen/functions.html">BrainStim Main 
+			Application script reference</a>. Some other interesting 
+			functions for controlling the <em>
+		<a href="UserInterface.html#OutputLogwindow">Output Log window</a> 
+			are:<br />-</em> <strong>BrainStim.clearOutputWindow()</strong> : Clears the 
+		<em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em>.<br />
+		- <strong>BrainStim.removeOutputWindow()</strong> : Removes a named tab 
+		from the <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em>.<br />
+		- <strong>BrainStim.saveOutputWindow()</strong> :
+		<span style="color: rgb(0, 0, 0); font-family: 'Lucida Grande', Verdana, Geneva, Arial, sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 16.8999996185303px; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none; background-color: rgb(251, 252, 253);">
+		Saves the content of </span>
+		<span style="font-style: normal; font-variant: normal; font-weight: normal; line-height: 16.8999996185303px; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none; background-color: rgb(251, 252, 253);">
+		a</span> <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+		to a file.</p>
+		<h2>Additional global functions</h2>
+		<p>
+		We already mentioned above here the <strong>Log()</strong> function that 
+		internally simply executes the <strong>
+		BrainStim.write2OutputWindow()</strong> function passing the same first 
+		argument (the message) and setting the second argument to <em>'Default'</em> 
+		(for making sure that this <em>
+		<a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+		sub-window name is used). This <strong>Log()</strong> function is not 
+		descibed in a script reference document because it's a global function 
+		that doesn't "belong" to a object or namespace, like the <strong>
+		BrainStim.write2OutputWindow()</strong> function is part of the <strong>
+		BrainStim</strong> object/namespace. There're some more global functions like 
+		this, these are:</p>
+		<ul>
+			<li>- <strong>Beep()</strong> : this function plays a system 
+			beep sound</li>
+			<li>- <strong>Pause()</strong> : this function pauses the script 
+			execution by an amount a milliseconds, provided by the first 
+			parameter.</li>
+			<li>- <strong>ThrowError()</strong> : this function throws an error 
+			that results in a UncaughtException() inside the script engine, see 
+			the <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+			messages, this function also stops further script evaluation and 
+			aborts. The first parameter contains the message for the exception.</li>
+			<li>- <strong>ExitScript()</strong> : this function immediately 
+			stops the script evaluation and exits like the <strong>ThrowError()</strong> 
+			function but then without an error.</li>
+			<li>- <strong>Include()</strong> : this function includes another 
+			script file, read <a href="FunctionsAndIncludes.html#Includes">this 
+			document</a> for more information about the usage of this function.</li>
+		</ul>
+		<p>
+		Some examples using the above functions are used the file <em>
+		AdditionalFunctions.qs</em> that is located in the  
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> subfolder 
+		\<em>Examples\Scripts</em>).</p>
+		<h2>
+		Error handling</h2>
+		<p>
+		Knowing how to handle script errors and how to debug them is important 
+		for when you're creating new scripts. Let's take a closer look into this 
+		topic using an existing example:</p>
+    	<ol>
+			<li>Start BrainStim.</li>
+			<li>Open the file <em>ErrorHandling.qs</em> that is located in the  
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> subfolder 
+		\<em>Examples\Scripts</em>.<br />
+			This example script contains different sections that can be 
+			uncommented by removing the double forward slashes (//) or by 
+			removing the start (/*) and stop (*/) commenting characters before 
+			each line or section of code. <br />
+			First execute (press the <kbd>F5</kbd> key) the QtScript code to see 
+			what it does without any errors. Notice that a custom sub-window 
+			(named '<em>Script Output</em>') is first added to the <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a>.</em> 
+			This sub-window is used for the output of custom messages so we can 
+			see what and when some script code has been executed. The '<em>Default</em>' 
+			sub-window is only used for the automatic output of the internal 
+			script engine (error) messages. The two sub-windows should now 
+			contain something like:<br />
+&nbsp;		
+			<div class="row">
+			    <div class="col-md-6">
+					<table class="codeframe">
+						<tr>
+							<th>
+							<em>Default:</em>
+							</th>
+						</tr>
+						<tr>
+							<td style="padding-right:10px" valign="top">
+							<pre><code>... Valid Script Syntax ...
+... Script started Evaluating on 11:16:47...
+... Total Time(ms): 4
+... Script fully Evaluated on 11:16:47 ...</code></pre>
+							</td>
+						</tr>
+					</table>
+			    </div>
+			    <div class="col-md-6">
+					<table class="codeframe">
+						<tr>
+							<th>
+							<em>Script Output:</em>
+							</th>					
+						</tr>
+						<tr>
+							<td style="padding-right:10px" valign="top">
+							<pre><code>&lt;&lt;Script Start&gt;&gt;
+&lt;&lt;Script End&gt;&gt;</code></pre>
+							</td>
+						</tr>
+					</table>
+			    </div>
+			</div>
+			<p></p>
+			<p>In the '<em>Default</em>' sub-window we see that the script 
+			syntaxt was valid and it took 4ms to execute, the '<em>Script Output</em>' 
+			sub-window shows the two messages that are send to this sub-window 
+			at the start and end of the script execution. The '<em>Default</em>' 
+			sub-window is automatically cleared each time you run a script, this 
+			is not the case for custom sub-windows that are added with the 
+			script function <strong>BrainStim.addOutputWindow()</strong> so we 
+			can do this using the script function <strong>
+			BrainStim.clearOutputWindow() </strong>as we can see in the example 
+			document. <strong><br />
+			Important! </strong>Because the next example generates syntaxt error 
+			that leads to a non execution of the script (and therefore
+			<span class="auto-style1">not</span> executing the <strong>
+			BrainStim.clearOutputWindow()</strong> function) we have to clear 
+			the '<em>Script Output</em>' <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+			sub-window manually so we can better see what happens when we 
+			execute the script. Remove (clear) the '<em>Script Output</em>' <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+			sub-window manually by closing it.</p>
+			
+			</li>
+			<li>When you try to execute a QtScript document that contains one or 
+			more <span class="auto-style1">syntax errors</span> then this is 
+			reported in the '<em>Default</em>' 
+		sub-window of the <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+			during evaluation of the script code (before the script is actually 
+			executed). When a syntaxt error is detected then the cursor will then automatically jump to the position in the 
+			script code 
+		where the syntax error was first detected and the '<em>Default</em>' sub-windows 
+		shows a description of the syntaxt error containing the line and column 
+		of the syntaxt error position. Let's try this:<br />
+			Uncomment the QtScript code line that contains a syntax error:
+        <table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint"><code class="language-js">write2OutputWindow("forgot the last quote for closing this message, "Script Output");</code></pre>
+                </td>
+            </tr>
+        </table>
+		<p>Execute (press the <kbd>F5</kbd> key) the QtScript code and validate 
+		again the <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a> 
+		sub-windows:</em></p>
+		<p><em><strong>Default:</strong></em></p>
+		<pre>... Invalid Script Syntax, the program contains a syntax error ...
+... Script Syntax error at(line 7, col 70): Expected `;', `)' ...</pre>
+			<p>Notice that now the '<em>Script Output</em>' <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+			sub-window is not created by the script because the script is never 
+			executed because a script syntax error is detected! We can now see 
+			in the '<em>Default</em>' <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+			sub-window that a script syntaxt error was detected with some 
+			additional information about where (line, column) the syntax error 
+			was detected (notice that the cursor also automatically jumps to 
+			this section of the script code) and what it expected. Comment the 
+			line (move the curor to the line and use the <kbd>CTRL</kbd> + <kbd>k</kbd> key combination), or reload (without saving!) 
+			(using the menu entry <kbd>File</kbd> &gt; <kbd>Reload)</kbd> the document.</p>
+			</li>
+			<li>Often an exception doesn't happen at the time the script is evaluated, but at 
+			the time the script code that raises the exception actually gets 
+			executed, let's try this by uncommenting the next script code lines 
+			from the example:
+        <table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint"><code class="language-js">BrainStim.write2OutputWindow(&quot;&lt;&lt;Before NonExistingFunctionCall()&gt;&gt;&quot;, &quot;Script Output&quot;); 
+NonExistingFunctionCall();//This function is nowhere defined BrainStim.
+write2OutputWindow(&quot;&lt;&lt;After NonExistingFunctionCall()&gt;&gt;&quot;, &quot;Script Output&quot;);</code></pre>
+                </td>
+            </tr>
+        </table>
+<p>Note that the second line calls a function that doesn't exist because is 
+nowhere defined, although this is sytaxial correct this line&nbsp;raises an exception 
+when executed and causing the internal script engine to stop. Let's try this by 
+executing (press the <kbd>F5</kbd> key) the QtScript code and validate 
+		again the <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a> 
+		sub-windows:</em></p>
+		
+			<div class="row">
+			    <div class="col-md-6">
+					<table class="codeframe">
+						<tr>
+							<th>
+							<em>Default:</em>
+							</th>
+						</tr>
+						<tr>
+							<td style="padding-right:10px" valign="top">
+							<pre><code>... Valid Script Syntax ...
+... Script started Evaluating on 13:31:31...
+... Evaluate script::UncaughtException()
+Debug: MainWindow::executeScriptContent "... Evaluate script::UncaughtException()
+... Script stopped Evaluating due to error on line 13: --&gt; ReferenceError: Can't find variable: NonExistingFunctionCall...</code></pre>
+							</td>
+						</tr>
+					</table>
+			    </div>
+			    <div class="col-md-6">
+					<table class="codeframe">
+						<tr>
+							<th>
+							<em>Script Output:</em>
+							</th>					
+						</tr>
+						<tr>
+							<td style="padding-right:10px" valign="top">
+							<pre><code>&lt;&lt;Script Start&gt;&gt;
+&lt;&lt;Before NonExistingFunctionCall()&gt;&gt;</code></pre>
+							</td>
+						</tr>
+					</table>
+			    </div>
+			</div>
+			<p>Notice that now the '<em>Script Output</em>' <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+			sub-window shows us that the script actually started (because new 
+			messages are added) and ended some moment <span class="auto-style1">
+			after</span> the second message. The '<em>Default</em>' <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+			sub-window shows that the script code syntax was successfully 
+			validated and that the script was executed. At some moment an 
+			exception raised an error and the script stopped, the position and 
+			cause of the code that raised the exception are also shown here. 
+			This sub-window actually contained some more information, but for 
+			clarity reasons this is not shown in the above text.</p>
+			<p>If we were in the middle of doing something important in the 
+			script code than this kind of error can be very unwanted because it 
+			leads to an immediat ending of the script. There's a solution for 
+			this which allows us to catch the exception and handle it before it 
+			raises an error causing the script to end. This is done by using a 
+			<strong>try/catch</strong> statements. Let's comment the above lines again (by 
+			selecting the lines to comment and then using the <kbd>CTRL</kbd> + <kbd>k</kbd> key combination), or reload 
+			the document (without saving!) 
+			(using the menu entry <kbd>File</kbd> &gt; <kbd>Reload)</kbd> the document.</p>
+			</li>
+			<li>
+			<p>Uncomment the next script code lines from the example document:</p>
+<table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint"><code class="language-js">try
+{
+    BrainStim.write2OutputWindow(&quot;&lt;&lt;Before NonExistingFunctionCall()&gt;&gt;&quot;, &quot;Script Output&quot;);
+    NonExistingFunctionCall();//This function is nowhere defined
+    BrainStim.write2OutputWindow(&quot;&lt;&lt;After NonExistingFunctionCall()&gt;&gt;&quot;, &quot;Script Output&quot;);
+}
+catch (e)
+{
+    BrainStim.write2OutputWindow(&quot;&gt;&gt; Error&quot; + e, &quot;Script Output&quot;);
+}</code></pre>
+                </td>
+            </tr>
+        </table>
+<p>Note that the above example script code is the same as the previous example 
+code except for the <strong>try/catch</strong> statements. When an exception 
+occurres inside the <strong>try</strong> block then the <strong>catch</strong> 
+block is executed with the <em><strong>e</strong></em> parameter set to a 
+exception description and the code is still further executed which gives us a 
+possibility to handle it. Let's try this by 
+executing (press the <kbd>F5</kbd> key) the QtScript code and validate 
+		again the <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a> 
+		sub-windows:</em></p>
+		
+			<div class="row">
+			    <div class="col-md-6">
+					<table class="codeframe">
+						<tr>
+							<th>
+							<em>Default:</em>
+							</th>
+						</tr>
+						<tr>
+							<td style="padding-right:10px" valign="top">
+							<pre><code>... Valid Script Syntax ...
+... Script started Evaluating on 13:57:42...
+... Total Time(ms): 8
+... Script fully Evaluated on 13:57:42 ...</code></pre>
+							</td>
+						</tr>
+					</table>
+			    </div>
+			    <div class="col-md-6">
+					<table class="codeframe">
+						<tr>
+							<th>
+							<em>Script Output:</em>
+							</th>					
+						</tr>
+						<tr>
+							<td style="padding-right:10px" valign="top">
+							<pre><code>&lt;&lt;Script Start&gt;&gt;
+&lt;&lt;Before NonExistingFunctionCall()&gt;&gt;
+&gt;&gt; ErrorReferenceError: Can't find variable: NonExistingFunctionCall
+&lt;&lt;Script End&gt;&gt;</code></pre>
+							</td>
+						</tr>
+					</table>
+			    </div>
+			</div>
+			<p>Notice that now the '<em>Script Output</em>' <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+			sub-window shows us again that the script started and completely 
+			finished (see last message). We can now also see that the script 
+			code inside the <strong>try</strong> block caused an exception 
+			causing it to immediately jump to the <strong>catch</strong> block 
+			where we used the <strong>e</strong> parameter to output some 
+			important information and proceed with the script. The '<em>Default</em>' <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
+			sub-window shows that the script code syntax was successfully 
+			validated and that the script was executed.</p>
+			</li>
+		</ol>
+	    <h2>Time critical code</h2>
+		<p>Sometimes you want to debug some time critical script code and need a way to gather some timing information for that purpose. The easiest way for doing that is to make use of 
+		see timecritical.qs</p>
+		<p>&nbsp;</p>
+   </div>
+<!--doc-version-default-footer-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
+<!--doc-version-default-footer-end-->
+</body>
+</html>
