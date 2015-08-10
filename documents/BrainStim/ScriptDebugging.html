@@ -21,6 +21,9 @@
 .auto-style1 {
 	text-decoration: underline;
 }
+.auto-style2 {
+	font-style: normal;
+}
 </style>
 </head>
 <body>
@@ -452,9 +455,55 @@ executing (press the <kbd>F5</kbd> key) the QtScript code and validate
 			validated and that the script was executed.</p>
 			</li>
 		</ol>
-	    <h2>Time critical code</h2>
-		<p>Sometimes you want to debug some time critical script code and need a way to gather some timing information for that purpose. The easiest way for doing that is to make use of 
-		see timecritical.qs</p>
+	    <h2>Time critical script code</h2>
+		<p>Sometimes you want to debug some time critical script code and need a way to gather some timing information 
+		while executing the script code. The easiest way for doing this is to make use of 
+		the Date object, see
+		<a href="http://www.w3schools.com/jsref/jsref_obj_date.asp" target="_blank">
+		this online document</a> for more information about this object. Let's 
+		try this:</p>
+		<ol>
+			<li>Open the file <em>timecritical.qs</em> that is located in the  
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> subfolder 
+		\<em>Examples\Scripts</em>.</li>
+			<li>Execute (press the <kbd>F5</kbd> key) the QtScript code and try 
+			to understand what it does by examining the code and <em>
+			<a href="UserInterface.html#OutputLogwindow">Output Log window</a> 
+			messages</em>. <br />
+			Important here to understand is that the DateTime object is set to 
+			the current Date/Time at the moment that it's constructed like 
+			(using the <strong>new</strong> operator):<br />
+&nbsp;<table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint"><code class="language-js">objDateTime = new Date(); </code></pre>
+                </td>
+            </tr>
+        </table>
+			<br />
+			The <strong><em>getTime()</em></strong> funtion simply returns the number of milliseconds between midnight of January 1, 1970 and the 
+			moment that the <strong>Date</strong> object was constructed like we 
+			did above here. We can then store the result of the <strong><em>getTime()</em></strong> 
+			funtion to a temporarily variabele and re-construct (using the
+			<strong>new</strong> operator) the <strong>Date</strong> object 
+			again followed by a <strong><em>getTime()</em></strong> funtion call 
+			and store that result in another temporarily variabele. The 
+			difference between these temporarily variabeles is then the time it 
+			took to execute the code between the two moment that the <strong>
+			Date</strong> object was constructed.</li>
+		</ol>
+		<h2>Additional debugging methods</h2>
+		<p>It can happen that BrainStim or a plugin crashes while running an 
+		experiment or an script. Sometimes it's difficult to find out what 
+		caused this because the program stopped working. If this happens then 
+		you should first open and inspect the <a href="MainLogFile.html">Main 
+		Log-file</a> (stored in the
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainUserdirectory">Main 
+		User directory</a> 
+		under the name <em><strong>logfile.txt</strong><span class="auto-style2">)</span></em> 
+		using BrainStim (or another text editor), read
+		<a href="MainLogFile.html">this document</a> for more information about 
+		this topic. </p>
 		<p>&nbsp;</p>
    </div>
 <!--doc-version-default-footer-begin-->
