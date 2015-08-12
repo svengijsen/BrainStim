@@ -24,6 +24,7 @@
 #include <QDebug>
 #include "mainappinfo.h"
 #include <QTemporaryDir>
+#include <QLibrary>
 
 #ifndef QUAZIP_STATIC
 #define QUAZIP_STATIC
@@ -214,6 +215,8 @@ public:
 						if (QFile(lFileList[i]).exists())
 						{
 							QLibrary tmpLib;
+							QFile tmpFile;
+							tmpFile.setFileName(lFileList[i]);
 							tmpLib.setFileName(lFileList[i]);
 							if (tmpLib.isLibrary(lFileList[i]))
 							{
