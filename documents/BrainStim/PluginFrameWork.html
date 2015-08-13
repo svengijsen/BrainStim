@@ -15,7 +15,7 @@
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
 <!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
-<title>Internal Network Interface v1.0</title>
+<title>Plugin Framework v1.0</title>
 <!--doc-version-title-end-->
 <style type="text/css">
 .auto-style1 {
@@ -30,7 +30,7 @@
 <!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
-			<h1>Internal Network Interface</h1>
+			<h1>Plugin Framework</h1>
 			<div class="row">
 				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
 				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
@@ -42,14 +42,26 @@
     <h2>
         Introduction</h2>
 		<p>
-		BrainStim can be externally controlled over a network by enabling a 
-			  Internal Network Interface by enabling a Internal Network 
-		Interface, see the <strong>Network Server</strong> setting of the
-		<a href="SettingsDialog.html">Settings Dialog</a>. After enabling it and 
-		restarting BrainStim the Internal Network Interface Server will 
-		automatically listen to a portnumber of an IP-Address for incomming 
-		messages. These messages are then directly threated and executed as 
-		QtScript code.</p>
+BrainStim supports the integration of plugins that can further extend BrainStim, 
+		this is done by the internal <em>Plugin Framework</em>. It has an 
+		automatic plugin detecting and loading functionality that can integrate 
+		a plugin in different sections of the program, these section are the:</p>
+		<ul>
+			<li>User Interface</li>
+			<li>Script Engine</li>
+			<li>Option Settings</li>
+			<li>Custom File Handling</li>
+			<li>Help Documentation</li>
+		</ul>
+		<p>
+&nbsp;</p>
+		<p>
+		&nbsp;</p>
+		<p>
+		Furthermore it's even possible for a plugin to register one or more specific file type(s) by extension so it can implement the loading, saving and execution of such document types, read this document for more information about this topic.
+
+A plugin can implement a custom dialog that is available by clicking a menu entry inside the menu Plugins > Extension Plugins or Plugins > Device Plugins  depending on the type of the Plugin. This dialog together with it's underlying functionality is completely implemented by the plugin itself. A standard BrainStim installation contains some plugins that are automatically installed together with BrainStim, read this document for more information about this.		
+		</p>
 		<h2>
 		Example</h2>
 		<p>

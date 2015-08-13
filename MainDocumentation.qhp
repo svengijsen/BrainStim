@@ -6,8 +6,7 @@
 	<filterSection>
 		<toc>
 			<section title="BrainStim" ref="index.html">
-				<section title="Default Plugins" ref="./documents/defaultplugins.html"></section>
-				
+			
 				<section title="BrainStim doxygen index" ref="./documents/BrainStim/Doxygen/index.html"></section>
 				<section title="BrainStim_QMLExtensions doxygen index" ref="./documents/BrainStim_QMLExtensions/Doxygen/index.html"></section>
 				<section title="Development" ref="./documents/Development/Development.html"></section>
@@ -32,6 +31,10 @@
 				<section title="MainLogFile" ref="./documents/BrainStim/MainLogFile.html"></section>
 				<section title="UserInterface" ref="./documents/BrainStim/UserInterface.html"></section>
 				<section title="ScriptDebugging" ref="./documents/BrainStim/ScriptDebugging.html"></section>
+				<section title="PluginFrameWork" ref="./documents/BrainStim/PluginFrameWork.html"></section>
+				<section title="DefaultPlugins" ref="./documents/BrainStim/DefaultPlugins.html"></section>
+				
+				
 				
 				
 				
@@ -101,7 +104,6 @@
 		</toc>
 		<keywords>
 			<keyword name="BrainStim" ref="index.html"/>
-			<keyword name="Plugins" ref="./documents/defaultplugins.html"/>
 	    
 <!--
             <keyword name="Getting Started Guide" ref="./Tutorials/GettingStarted/GettingStartedGuide.html"/>            

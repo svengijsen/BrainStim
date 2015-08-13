@@ -52,6 +52,9 @@ defaultDocumentEditing("documents/BrainStim/CustomMenus.html", "CustomMenus.html
 defaultDocumentEditing("documents/BrainStim/MainLogFile.html", "MainLogFile.html", 2);
 defaultDocumentEditing("documents/BrainStim/UserInterface.html", "UserInterface.html", 2);
 defaultDocumentEditing("documents/BrainStim/ScriptDebugging.html", "ScriptDebugging.html", 2);
+defaultDocumentEditing("documents/BrainStim/DefaultPlugins.html", "DefaultPlugins.html", 2);
+defaultDocumentEditing("documents/BrainStim/PluginFrameWork.html", "PluginFrameWork.html", 2);
+
 
 
 //Special (non-default document edits)

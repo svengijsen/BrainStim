@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -14,7 +14,7 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
 <title>Default User-Interface v1.0</title>
 <!--doc-version-title-end-->
 <style type="text/css">
@@ -27,7 +27,7 @@
     <div class="container">
 
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Default User-Interface</h1>
@@ -47,7 +47,7 @@
 				<em>StatusBar</em> region:<br />
 				<br />
 		</p>
-				<p><img src="./../../images/userinterface.png" class="img-responsive centered" alt="" /></p>
+				<p><img src="./../../images/userinterface.png" class="img-responsive" alt="" /></p>
                 <h2 id="Usercustomizations">User customizations</h2>
 		<p>The User-Interface can be customized by the user, customizations can 
 		be resizing, repositioning and hiding/showing elements. All 
@@ -224,130 +224,110 @@
 		configure the program, you can read <a href="settingsDialog.html">this 
 		document</a> for more information about this topic.</p>
 		<h2>Plugins</h2>
-		<p>BrainStim supports the use of plugins that can extend and make use of 
-		BrainStim its features. It has an automatic plugin detecting and loading 
-		functionality that can automatically integrate a plugin in the
-		<span class="auto-style1">User Interface</span>,
-		<span class="auto-style1">Script engine</span>,
-		<span class="auto-style1">Option settings</span> and
-		<span class="auto-style1">Help documentation</span>. Furthermore it's 
-		even possible for a plugin to <span class="auto-style1">register one or 
-		more specific file type(s) by extension</span> so it can implement the 
-		loading, saving and execution of such document types,
-		<a href="DocumentTypes.html">read this document</a> for more information 
-		about this topic.</p>
+		<p>BrainStim supports the use of plugins that can extend and make use of BrainStim features 
+		using a Plugin Framework, read <a href="PluginFrameWork.html">this 
+		document</a> for more information about this topic. </p>
 		<p>A plugin can implement a custom dialog that is available by clicking 
 		a menu entry inside the menu 
 		<kbd>Plugins</kbd> &gt; <kbd>Extension Plugins</kbd> or 
 		<kbd>Plugins</kbd> &gt; <kbd>Device Plugins</kbd>&nbsp; depending on the 
 		type of the Plugin. This dialog together with it's underlying 
 		functionality is completely implemented by the plugin itself. A standard 
-		BrainStim installation contains some plugins that are automatically 
-		installed together with BrainStim, read <a href="../defaultplugins.html">
-		this document</a> for more information about this. </p>
+		BrainStim installation contains some <em>default plugins</em> that are automatically 
+		installed together with BrainStim, read <a href="DefaultPlugins.html">
+		this document</a> for more information about these default plugins. </p>
 		<h3>Plugin Manager</h3>
 		<p>By using the menu entry <kbd>Plugins</kbd> &gt; <kbd>Plugin Manager</kbd> (or using the <kbd>CTRL</kbd> + <kbd>ALT</kbd> + 
 		<kbd>p</kbd> key combination) you can open the Plugin Manager which 
 		allows you to manage the current plugins or install (a) new plugin(s).</p>
-		<p>&nbsp;</p>
-		<p>&nbsp;</p>
-		<p>These default plugins can be implemented in dynamic library (*.dll) 
-		stored somewhere in the <em>Plugins</em> directory inside the
+		<p class="text-center">
+		<img alt="" class="img-responsive" src="../../images/pluginmngr.png" /></p>
+		<p>This dialog contains a hierarchical list that contains all the 
+		detected plugin(s) during the startup of BrainStim. Each item can be 
+		expanded for more detailed information about the plugin. The listed
+		<span class="auto-style1">dynamic plugins</span> are actually files (dynamic libraries (*.dll)) 
+		stored in the <em>Plugins</em> directory inside the
 		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
-		Main Program directory</a>. the installed as a separate plug-in file or 
-		build inside the BrainStim executable (these plug-ins are called 
-		static). Plug-ins are grouped in either Device?or Extension?plug-ins. </p>
-		<p>&nbsp;BrainStim sets no limitations to the plugin implementation nor 
-		does it define what or how it should do things, 
-		making this plug-in framework very flexible for developers. You can read
-		<a href="../Development/Development.html">this document</a> for more 
-		information about how you can start creating a custom BrainStim plugin.</p>
-		<p>As we already know by now a plug-in can define a 
-		custom (script) class from which we can construct new script plug-in 
-		objects. Let's first take a look at a plug-ins implemented UI and some 
-		of its features:</p>
-		<p>This Plug that extend the functionality of BrainStim (see the plug-in 
-		reference for a list of available plug-ins). These plug-ins can expose 
-		their functionality to the BrainStim Script engine, allowing the user to 
-		take advantage of these plug-ins inside the script context. Usually this 
-		is done by constructing a object dynamically inside the script from the 
-		exposed plug-in script class which we can then make use of. . For a c++ 
-		programmer it's not difficult to create a new custom BrainStim plug-in 
-		to extend the program (if you are interested in this please contact us 
-		at sven dot gijsen at maastrichtuniversity dot nl).<br />
-		<br />
-		Important: The internal plug-in object, used by the plug-ins User 
-		Interface to show its functionality, is in no way connected to the 
-		script or any script object created from this plug-ins class! This is 
-		because that internal plug-in is only used for testing purpose and easy 
-		access it's features but not for a global configuration. Objects that 
-		are dynamically created inside the script context from the plug-ins 
-		script class are new instances and in no way connected to the plug-ins 
-		UI.<br />
-		<br />
-		BrainStim has totally no knowledge of the internal plug-ins 
-		implementation and does not define what or how they should do things, 
-		making this plug-in framework very flexible for developers. A BrainStim 
-		installation contains some standard plug-ins that are automatically 
-		installed together with BrainStim. These can be installed as a separate 
-		plug-in file or build inside the BrainStim executable (these plug-ins 
-		are called static). Plug-ins are grouped in either Device?or 
-		Extension?plug-ins. As we already know by now a plug-in can define a 
-		custom (script) class from which we can construct new script plug-in 
-		objects. Let's first take a look at a plug-ins implemented UI and some 
-		of its features:<br />
-		<br />
-		Start BrainStim.<br />
-		Make sure that the BrainStim plug-in named KeyBoardPlugin?is available 
-		by opening the menu Help -&gt; About BrainStim command. Inside the plug-ins 
-		listbox you should see this plug-in listed. It's marked as Static which 
-		means that this plug-in is build into the BrainStim executable and 
-		therefore is always available for usage. Dynamic plug-ins are 
-		automatically loaded and embedded at the startup of BrainStim.<br />
-		Open the KeyBoardPlugin User Interface by opening the menu Plugins -&gt; 
-		Device Plugins -&gt; KeyBoardDevice Plugin.<br />
-		This plug-in is capable of capturing key presses/releases, you can try 
-		this by clicking on the Start Capture Thread button and press some keys. 
-		Play around with the plug-ins dialog features to get an understanding of 
-		what the plug-in can do.<br />
-		Click on the Stop Capture Thread button and Close the plug-ins UI 
-		dialog.<br />
-		We can also construct a new plug-in object from this plug-ins script 
-		class, lets try this:<br />
-		<br />
-		Open the file BrainStimPluginScriptBindings.qs?found in the directory 
-		BrainStim\examples\GettingStartedGuide\BasicScripting\.<br />
-		Examine the script quickly and then execute the QtScript code.<br />
-		Repeat pressing a keyboard key (i.e. key '4') until the script finishes.<br />
-		We saw that the key codes (a unique number for each key) of the captured 
-		key presses where logged to the Output Log Pane and after having pressed 
-		4 times the script automatically ended. The line var KeyBoardCaptureObj 
-		= new KeyBoardCapture(); constructs a new object from the class defined 
-		by the KeyBoardCapture plug-in. This object is then used by the script. 
-		We now need to know what this plug-in object can do:<br />
-		<br />
-		Open the Help Contents by pressing the 'F1' key.<br />
-		Enter 'KeyBoardCapture' in the help search field and press enter. A help 
-		document with the name KeyBoard Device script class is found let's open 
-		that by clicking on the link.<br />
-		This help document is a script class reference, that shows all the 
-		available signals/slots and member function that can be used inside the 
-		script context for this plug-ins script class.</p>
-		<h3>&nbsp;</h3>
+		Main Program directory</a> except for those marked in the blue color and 
+		the <em>(Static)</em> post-text, these are the so called
+		<span class="auto-style1">static plugins</span>. These&nbsp; static 
+		plugins are implemented inside the BrainStim executable. All Plug-ins are grouped in either 
+		<strong>Device</strong> or <strong>Extension</strong> plugins. </p>
+		<p>The below table explains where the buttons on the right part of the dialog can be used for:</p>
+
+		<table class="table table-condensed">
+		  <thead>
+		    <tr>
+		      <th><em>Button</em></th>
+		      <th><em>Description</em></th>
+		    </tr>
+		  </thead>
+		  <tbody>
+		    <tr>
+		      <th scope="row">Enable</th>
+		      <td>A disabled plugin can be enabled by selecting this plugin in 
+			  the list and enable it again by using this button.</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">Disable</th>
+		      <td>This button allows you to disable a plugin that is selected in 
+			  the list, BrainStim then automatically skippes the plugin from 
+			  loading at startup. Newly installed plugins are automatically 
+			  enabled. If they are manually disabled the text of the plugin in 
+			  the list colors red and a <em>Disabled:</em> pre-text is appended.</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">Install</th>
+		      <td>This buttons allows you to install a single or more plugins. 
+			  You first need to browse to and select a <span class="auto-style1">
+			  Plugin Configuration File (*.ini)</span> for a single plugin 
+			  installation or a <span class="auto-style1">Compressed Install 
+			  Package file (*.zip)</span> that contains one or more Plugin 
+			  Configuration Files (*.ini). </td>
+		    </tr>
+		      <tr>
+		      <th scope="row">Uninstall</th>
+		      <td><span lang="nl">This button allows you to completely 
+			  remove/uninstall a plugin. You first need to select the plugin 
+			  from the list which you would like to uninstall and then click 
+			  this button.</span></td>
+		      </tr>
+			  <tr>
+		      <th scope="row">Configure</th>
+		      <td>This option is only for advanced users. If you select a plugin 
+			  from the list and click this button then the dialog closed and 
+			  BrainStim opens the <span class="auto-style1">Plugin Configuration 
+			  File (*.ini)</span> from that plugin.</td>
+		      </tr>
+			  <tr>
+		      <th scope="row">Backup</th>
+		      <td>This option can be used for making a backup by creating a
+			  <span class="auto-style1">Compressed Install Package file (*.zip)</span> 
+			  of all of the currently installed plugins, you can select the name 
+			  and location of the backup.</td>
+		      </tr>
+			  <tr>
+		      <th scope="row">Browse Dir</th>
+		      <td>This directory contains XML Schema (<em>*.xsd</em>) files, which let BrainStim validate experiment (<em>*.exml</em>) files. It is used to express a set of rules to which an experiment must conform in order to be considered 'valid' according to that schema.</td>
+		    </tr>
+		  </tbody>
+		</table>
+
+
 		<h2>Help</h2>
 		<p>You can always open the Help documentation by using the <kbd>F1</kbd> 
 		key or the menu entry <kbd>Help</kbd> &gt; <kbd>Help Contents</kbd>. 
 		This local help is completely offline available and you can use custom 
 		keywords to search for a specific topic for which you need help. This 
 		help contains the BrainStim help content including that of the
-		<a href="../defaultplugins.html">default plugins</a>, furthermore if you 
+		<a href="DefaultPlugins.html">default plugins</a>, furthermore if you 
 		installed some additional 3rd party plugins than this documentation (if 
 		provided by the plugin) is also available here.There's also an online 
 		version of this Help, use
 		<a href="http://svengijsen.github.io/BrainStim/" target="_blank">this 
 		link</a> to open the online Help collection. This online collection only 
 		contains the documentation for the latest release of BrainStim and it's
-		<a href="../defaultplugins.html">default plugins</a>, 3rd party plugins 
+		<a href="DefaultPlugins.html">default plugins</a>, 3rd party plugins 
 		can provide thier own online documentation somewhere else. By using the 
 		menu entry <kbd>Help</kbd> &gt; <kbd>About BrainStim</kbd> you can open 
 		a dialog that shows the current version and licensing information for 
@@ -358,7 +338,7 @@
 		<kbd>About Qt</kbd>.</p>
    </div>
 <!--doc-version-default-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1574143010), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
 	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
 <!--doc-version-default-footer-end-->
  </body>
