@@ -41,3 +41,4 @@ Install/Include/QtScript/TBVExchanger.qs
 Install/Include/QtScript/TSIExchanger.qs
 InstallJammer/build/messages
 InstallJammer/output/*
+Source/ipch/

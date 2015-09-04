@@ -138,7 +138,8 @@ public:
 		DisableSplash				= 4,
 		DisableNetworkServer		= 8,
 		VerboseMode					= 16,
-		ExecuteDocument				= 32
+		ExecuteDocument				= 32,
+		AllowMultipleInstances		= 64
 	};
 	Q_DECLARE_FLAGS(MainProgramModeFlags, MainProgramModeFlag)
 

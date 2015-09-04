@@ -18,6 +18,7 @@ signals:
 
 public:
 	MainAppExchange(int &argc, char *argv[], const QString uniqueKey);
+	~MainAppExchange();
 
 	bool isRunning();
 	bool sendMessage(const QString &message);
@@ -26,6 +27,7 @@ public:
 
 public slots:
 	void receiveMessage();
+	void stopRunning();
 
 private:
 	//QString getSharedDataSegment(const QString &sName);

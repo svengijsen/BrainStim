@@ -89,6 +89,15 @@ bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags m
 	//DisablePlugins			= 0x00001,
 	//DisableSplash				= 0x00002
 	//QWaitCondition sleep;
+
+	QStringList lInstallationResults;
+	if (checkForAvailableUpdates("", lInstallationResults, "There were some local updates found that are waiting to be installed.\nDo you want to proceed with this installation?"))
+	{
+		QString sInstallResult = "There were some updates installed:\n\n" + lInstallationResults.join("\n");
+		QMessageBox::information(this, "Updates Installed", sInstallResult);
+		qDebug() << sInstallResult;
+	}
+	
 	qDebug() << "Starting and initializing" << MAIN_PROGRAM_FULL_NAME;
 	//registerFileTypeByDefinition("BrainStim.QtScript","BrainStim Qt Script File",".qs");
 	//MainAppInfo::Initialize(this);
@@ -146,6 +155,134 @@ bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags m
 	}
 	bExecuteActiveDocument = BrainStimFlags & GlobalApplicationInformation::ExecuteDocument;
 	return true;
+}
+
+bool MainWindow::checkForAvailableUpdates(const QString &sRootSearchDirectory, QStringList &lInstallResults, const QString &sPermissionQuestion)
+{
+	
+	QString sResolvedRootSearchDirectory;
+	if (sRootSearchDirectory.isEmpty() == false)
+		sResolvedRootSearchDirectory = sRootSearchDirectory;
+	else
+		sResolvedRootSearchDirectory = MainAppInfo::appUpdatesPath();
+
+	bool bUpdateManagerExecuted = false;
+	QStringList lAllowedFileExtensions;
+	lAllowedFileExtensions << QString("*.") + INSTALLMNGR_INSTALL_ZIP_FILEEXT << QString("*.") + INSTALLMNGR_INSTALL_INI_FILEEXT << QString("*.") + INSTALLMNGR_INSTALL_LST_FILEEXT;
+	QStringList lSourceUpdateFiles = getFilesByExtension(sResolvedRootSearchDirectory, lAllowedFileExtensions);
+	if (lSourceUpdateFiles.isEmpty() == false)
+	{
+		if (sPermissionQuestion.isEmpty() == false)
+		{
+			int confirm = QMessageBox::question(this, tr("Install Updates?"), sPermissionQuestion, QMessageBox::Ok | QMessageBox::Cancel);
+			if (confirm == QMessageBox::Cancel)
+				return false;
+
+			bool bIsPacked = false;
+			if (lSourceUpdateFiles.count() > 1)//multiple files?
+			{
+				bIsPacked = true;
+				//Can we pack all the files inside a *.lst file? No other .lst files?
+				for (int i = 0; i < lSourceUpdateFiles.count(); i++)
+				{
+					if (QFileInfo(lSourceUpdateFiles[i]).completeSuffix() == INSTALLMNGR_INSTALL_LST_FILEEXT)
+					{
+						break;
+						bIsPacked = false;
+					}
+				}
+				if (bIsPacked)
+				{
+					QString sUniqueFileName = sResolvedRootSearchDirectory + QDateTime::currentDateTime().toString(MainAppInfo::stdDateTimeFormat());
+					QFile fTempFile(sUniqueFileName + "." + INSTALLMNGR_INSTALL_LST_FILEEXT);
+					int nRetries = 0;
+					while ((fTempFile.exists()))
+					{
+						sUniqueFileName = sUniqueFileName + "_";
+						fTempFile.setFileName(sUniqueFileName + "." + INSTALLMNGR_INSTALL_LST_FILEEXT);
+						nRetries++;
+						if (nRetries>=5)
+						{
+							qDebug() << __FUNCTION__ << "Could not create a unique file!";
+							return false;
+						}
+					}
+
+					if (fTempFile.open(QIODevice::WriteOnly))
+					{
+						QTextStream outStream(&fTempFile);
+						for (int i = 0; i < lSourceUpdateFiles.count(); i++)
+							outStream << lSourceUpdateFiles[i] << endl;
+						fTempFile.close();
+						lSourceUpdateFiles.clear();
+						lSourceUpdateFiles.append(fTempFile.fileName());
+					}
+				}
+			}
+			for (int i = 0; i < lSourceUpdateFiles.count(); i++)
+			{
+				qDebug() << lSourceUpdateFiles[i];
+				QStringList lParams;
+				lParams << "-p" << lSourceUpdateFiles[i] << "install" << "-o" << "-r";
+				QString sFileBaseName = QFileInfo(lSourceUpdateFiles[i]).baseName();
+				QString sFileExtension = QFileInfo(lSourceUpdateFiles[i]).completeSuffix();
+				QString sCoutFilePath = QFileInfo(lSourceUpdateFiles[i]).absolutePath() + "/" + sFileBaseName + "_" + sFileExtension + MAIN_PROGRAM_INSTALLATION_LOGFILE_POSTSTRING;
+				if (QFile(sCoutFilePath).exists())
+					QFile::remove(sCoutFilePath);
+				if (installationManagerBase::ExecuteUpdateMngr(true, lParams, sCoutFilePath))
+				{
+					QFile fCoutFile(sCoutFilePath);
+					if (fCoutFile.exists())
+					{
+						if (fCoutFile.open(QIODevice::ReadOnly) == false)
+						{
+							lInstallResults.append("Could not read " + sCoutFilePath + ", " + fCoutFile.errorString());
+						}
+						else
+						{
+							QTextStream in(&fCoutFile);
+							while (!in.atEnd())
+							{
+								lInstallResults.append(in.readLine());
+							}
+							fCoutFile.close();
+						}
+					}
+					bUpdateManagerExecuted = true;
+				}
+			}
+		}
+	}
+	return bUpdateManagerExecuted;
+}
+
+QStringList MainWindow::getFilesByExtension(const QString &sRootSearchDirectory, const QStringList &lAllowedFileExtensions)
+{
+	QStringList lSourceUpdateFilesFound;
+	QString sUpdatesDir;
+	QDir dirUpdatesRoot;
+	dirUpdatesRoot.setPath(sRootSearchDirectory);
+
+	if (dirUpdatesRoot.exists())
+	{
+		dirUpdatesRoot.setFilter(QDir::Files);// | QDir.Hidden | QDir.NoSymLinks);
+		dirUpdatesRoot.setNameFilters(lAllowedFileExtensions);
+		dirUpdatesRoot.setSorting(QDir::Name);//::Size | QDir::Reversed);
+		int nNumberOfFoundFiles = dirUpdatesRoot.count();
+		if (nNumberOfFoundFiles > 0)
+		{
+			for (int i = 0; i < dirUpdatesRoot.entryList().count(); i++)
+				lSourceUpdateFilesFound.append(sRootSearchDirectory + dirUpdatesRoot.entryList()[i]);
+		}
+		QDirIterator *it = new QDirIterator(sRootSearchDirectory);
+		while (it->hasNext())
+		{
+			QString sSubDir = it->next();
+			if (sSubDir.indexOf(".", sSubDir.count() - 1) == -1)
+				lSourceUpdateFilesFound.append(getFilesByExtension(sSubDir + "/", lAllowedFileExtensions));
+		}
+	}
+	return lSourceUpdateFilesFound;
 }
 
 bool MainWindow::implementPluginCustomActionMenus()
@@ -342,6 +479,11 @@ void MainWindow::closeEvent(QCloseEvent *event)
 			tmpLoader = NULL;
 		}
 	}
+}
+
+void MainWindow::stopAppExchange()
+{
+	emit TerminateAppExchange();
 }
 
 bool MainWindow::setContextState(const QString &sContextName)
@@ -2333,11 +2475,12 @@ bool MainWindow::loadDynamicPlugins()
 		if (bIsUnregisteredAndDisabled == false)
 		{
 			QStringList lFiles = installationManager::getPluginInstallFilesFromIniFile(sPluginIniFilePath);
+			bool bNeedsAdminPrivileges = false;
 			for (int i = 0; i < lFiles.count(); i++)
 			{
 				QString sFileName = QFileInfo(lFiles[i]).fileName();
 				//QFile sSourceFilePath(sIniFileAbsDir + "/" + sFileName);
-				lFiles[i] = installationManagerBase::resolveFileDirectoryPath(lFiles[i], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sPluginIniFilePath).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::getMainApplicationUserDirectory());
+				lFiles[i] = installationManagerBase::resolveFileDirectoryPath(lFiles[i], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sPluginIniFilePath).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::getMainApplicationUserDirectory(), bNeedsAdminPrivileges);
 				if (QFileInfo(lFiles[i]).canonicalPath() == dirTmpAddPluginDir.canonicalPath())//!= QFileInfo(sPluginAbsFilePath).canonicalFilePath()) && (QFileInfo(lFiles[i]).canonicalPath() != QDir(MainAppInfo::appDirPath()).canonicalPath()))
 				{
 					if (QLibrary::isLibrary(lFiles[i]))

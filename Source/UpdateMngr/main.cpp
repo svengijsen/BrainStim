@@ -47,6 +47,12 @@ bool getSettingsInformation(QSettings &settingsObj, const QString &sName, QVaria
 	return bRetval;
 }
 
+QTextStream& qStdOut()
+{
+	static QTextStream ts(stdout);
+	return ts;
+}
+
 int main(int argc, char **argv)
 {
 // Check windows
@@ -67,8 +73,8 @@ int main(int argc, char **argv)
 #endif
 
 	QProcess *process = new QProcess();
-	QString sDebugMode;		//Release mode
-	QString sArchitecture;	//Win32 architecture
+	QString sDebugMode;		//Build mode
+	QString sArchitecture;	//Architecture
 
 #ifdef _DEBUG
 	sDebugMode = "d";
@@ -183,19 +189,37 @@ int main(int argc, char **argv)
 	QString sUserAppRootDir = tmpVariant.toString();
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
+	//Do we need to elevate?
+	if (installationManagerBase::IsRunAsAdministrator() == false)
+	{
+		QStringList lParams;
+		if (argc > 1)//arguments available?
+		{
+			for (int i = 1; i < argc; i++)
+				lParams << argv[i];
+		}
+		installationManagerBase::ExecuteUpdateMngr(true, lParams);
+		return 0;
+	}
+	
+	//////////////////////////////////////////////////////////////////////////////////////////////
+	QApplication a(argc, argv);
+	UpdateMngr w;
+
 	if (argc > 1)//arguments available?
 	{
 		QString tempArgStr = "";
 		tempArgStr = argv[1];
 		if ((argc > 3) && ((tempArgStr == "-p") || (tempArgStr == "-P")))//plugin related and minimal two more arguments available?
 		{
-			QString sIniFilePath = argv[2];//second argument should be the plugin *.ini filepath
-			if (QFile(sIniFilePath).exists())
+			QString sSourceFilePath = argv[2];//second argument should be the plugin *.ini or *.zip filepath
+			if (QFile(sSourceFilePath).exists())
 			{
 				tempArgStr = argv[3];
 				if (tempArgStr == "install")
 				{
 					bool bOverwriteExistingFiles = false;
+					bool bRenameSourceInstallFileOnSuccess = false;
 					if (argc > 4)//other flags/parameters available?
 					{
 						for (int i = 4; i < argc; i++)
@@ -205,13 +229,25 @@ int main(int argc, char **argv)
 							{
 								bOverwriteExistingFiles = true;
 							}
+							else if ((tempArgStr.toLower() == "-r") || (tempArgStr.toLower() == "-rename"))
+							{
+								bRenameSourceInstallFileOnSuccess = true;
+							}
 						}
 					}
 					bool bRetval = false;
-					if (installationManagerBase::installPlugin(QDir::currentPath(), sDefaultPluginsRootDir, sCustomPluginRootDir, sIniFilePath, sUserAppRootDir, bOverwriteExistingFiles) > 0)
-						qDebug() << __FUNCTION__ << "Plugin successfully installed as defined in (" << sIniFilePath << ")";
+					QString sMessage;
+					installationManagerBase::InstallResult resInstall = installationManagerBase::installPlugin(qApp->applicationDirPath(), sDefaultPluginsRootDir, sCustomPluginRootDir, sSourceFilePath, sUserAppRootDir, bOverwriteExistingFiles, bRenameSourceInstallFileOnSuccess);
+					if (resInstall > 0)
+					{
+						sMessage = "- Installed: " + sSourceFilePath;
+						qStdOut() << sMessage << endl;
+					}
 					else
-						qDebug() << __FUNCTION__ << "Could not install the requested plugin defined in (" << sIniFilePath << "), exiting...";
+					{
+						sMessage = "- Failed: " + sSourceFilePath + ", return code: " + QString::number((int)resInstall);
+						qStdOut() << sMessage << endl;
+					}
 				}
 			}
 		}
@@ -219,8 +255,6 @@ int main(int argc, char **argv)
 	else
 	{
 		//Start User Interface
-		QApplication a(argc, argv);
-		UpdateMngr w;
 		w.show();
 		return a.exec();
 	}

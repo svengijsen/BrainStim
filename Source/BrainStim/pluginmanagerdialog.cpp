@@ -245,8 +245,12 @@ void PluginManagerDialog::installPlugin()
 			QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_LOADDYNAMICPLUGINS_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetval));
 			if (bRetval)
 				fillTable();
-			QMessageBox msgBox(QMessageBox::Information, "Plugin Installation(s)", "The plugin(s) were successfully installed.", QMessageBox::Ok);
-			msgBox.exec();
+
+			int confirm = QMessageBox::question(this, "Plugin Installation(s)", "The plugin(s) were successfully installed.\n It's advised to restart BrainStim, would you like to do that?", QMessageBox::Yes | QMessageBox::No);
+			if (confirm == QMessageBox::Yes)
+			{
+				installationManagerBase::RestartApplication(false);
+			}
 		}
 		else
 		{
@@ -380,7 +384,7 @@ void PluginManagerDialog::backupAllPlugins()
 								return;
 							}
 							QString sIniFileDirectoryPath = tempDir.path() + "/" + sPluginInternalName + "/" + sPluginFileBaseName;
-							QString sIniFileName = sPluginFileBaseName + ".ini";
+							QString sIniFileName = sPluginFileBaseName + "." + INSTALLMNGR_INSTALL_INI_FILEEXT;
 							QString sIniFilePath = sIniFileDirectoryPath + "/" + sIniFileName;
 							if (dIniFileDirectory.mkpath(sIniFileDirectoryPath))
 							{
@@ -388,9 +392,10 @@ void PluginManagerDialog::backupAllPlugins()
 								bDidCreatePackageDirectory = true;
 								if (pInstallMngr->createPluginConfigurationSetting(sIniFilePath, sPluginInternalName, true, lInstallFiles) == false)
 									bDidCreatePackageDirectory = false;
+								bool bNeedsAdminPrivileges = false;
 								for (int j = 0; j < lInstallFiles.count(); j++)
 								{
-									lInstallFiles[j] = installationManagerBase::resolveFileDirectoryPath(lInstallFiles[j], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sIniFileName).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::getMainApplicationUserDirectory());
+									lInstallFiles[j] = installationManagerBase::resolveFileDirectoryPath(lInstallFiles[j], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sIniFileName).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::getMainApplicationUserDirectory(), bNeedsAdminPrivileges);
 									QString sFileName = QFileInfo(lInstallFiles[j]).fileName();
 									if (sFileName == sIniFileName)
 										continue;

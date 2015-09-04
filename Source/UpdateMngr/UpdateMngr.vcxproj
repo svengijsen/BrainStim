@@ -96,7 +96,8 @@
       <OutputFile>$(OutDir)\$(TargetName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QUAZIP)\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>qtmain$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;quazip.lib</AdditionalDependencies>
+      <AdditionalDependencies>qtmain$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;quazip.lib;AdvAPI32.lib;shell32.lib</AdditionalDependencies>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>echo POSTBUILDSTEP for $(ProjectName)
@@ -128,7 +129,8 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
       <OutputFile>$(OutDir)\$(TargetName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QUAZIP)\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>qtmain$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;quazip.lib</AdditionalDependencies>
+      <AdditionalDependencies>qtmain$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;quazip.lib;AdvAPI32.lib;shell32.lib</AdditionalDependencies>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>echo POSTBUILDSTEP for $(ProjectName)
@@ -159,7 +161,7 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
       <OutputFile>$(OutDir)\$(TargetName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QUAZIP)\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>qtmain$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;quazip.lib</AdditionalDependencies>
+      <AdditionalDependencies>qtmain$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;quazip.lib;AdvAPI32.lib;shell32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>echo POSTBUILDSTEP for $(ProjectName)
@@ -191,7 +193,7 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
       <OutputFile>$(OutDir)\$(TargetName).exe</OutputFile>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QUAZIP)\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>false</GenerateDebugInformation>
-      <AdditionalDependencies>qtmain$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;quazip.lib</AdditionalDependencies>
+      <AdditionalDependencies>qtmain$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;quazip.lib;AdvAPI32.lib;shell32.lib</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>echo POSTBUILDSTEP for $(ProjectName)

@@ -113,6 +113,7 @@ int main(int argc, char **argv)
 	}
 
 	bool bProceed = true;
+	//MainAppExchange appExchange(argc, argv, MAIN_PROGRAM_SHARED_MEM_KEY);
 	MainAppExchange appExchange(argc, argv, MAIN_PROGRAM_SHARED_MEM_KEY);
 	GlobalApplicationInformation *globAppInformation = appExchange.getGlobalAppInformationObjectPointer();
 	//Now the BrainStim.ini file is initialized/created if it did not yet exist.
@@ -150,14 +151,45 @@ int main(int argc, char **argv)
 				globAppInformation->setCurrentUserCredentials(sLogonName, baLogonHashedPass);
 		}
 	}
+
+	bool bDoAllowMultipleInstances = false;
+	if (argc >= 2)
+	{
+		QString tempStr = "";
+		for (int i = 1; i < argc; i++)
+		{
+			tempStr = argv[i];
+			if ((tempStr == "-m") || (tempStr == "-M"))//allow multiple instances?
+			{
+				bDoAllowMultipleInstances = true;
+				break;
+			}
+			else if ((tempStr == "-o") || (tempStr == "-O"))//options defined?
+			{
+				if (i < (argc - 1))//another argument available?
+				{
+					i = i + 1;
+					tempStr = argv[i];
+					GlobalApplicationInformation::MainProgramModeFlags flags = GlobalApplicationInformation::Default;
+					flags = (flags | GlobalApplicationInformation::MainProgramModeFlag(tempStr.toInt()));
+					if (flags & GlobalApplicationInformation::AllowMultipleInstances)
+					{
+						bDoAllowMultipleInstances = true;
+						break;
+					}
+				}
+			}
+		}
+	}
+
 	if (appExchange.isRunning())
 	{
 		appExchange.sendMessage("Log(\"New BrainStim Instance Initializing...\");");
 		//if (appExchange.getSharedDataSegment("AllowMultipleInstance") == "false")
 		QVariant tmpVariant;
-		if (globAppInformation->getSettingsInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE, tmpVariant) == false)
+		if ((globAppInformation->getSettingsInformation(REGISTRY_ALLOWMULTIPLEINHERITANCE, tmpVariant) == false) && (bDoAllowMultipleInstances == false))
 			bProceed = false;
-		if (tmpVariant == false)
+		if ((tmpVariant == false) && (bDoAllowMultipleInstances == false))
 		{
 			QStringList sFilesToOpen;
 			int i;
@@ -228,6 +260,10 @@ int main(int argc, char **argv)
 						appWindow->setStartupFiles(argv[i]);//separate multiple files (cmd) using a ';' Character!
 					}
 				}
+				else if ((tempStr == "-m") || (tempStr == "-M"))//allow multiple instances?
+				{
+					//see above handling
+				}
 				else if ((tempStr == "-o") || (tempStr == "-O"))//valid argument?
 				{
 					if (i<(argc-1))//another argument available?
@@ -254,6 +290,10 @@ int main(int argc, char **argv)
 			{
 				flags = (flags | GlobalApplicationInformation::VerboseMode);
 			}
+			else if ((tempStr == "-m") || (tempStr == "-M"))//allow multiple instances?
+			{
+				//see above handling
+			}
 			//else if (tempStr == "-e" | tempStr == "-E")//Immediately execute the loaded (-f <document) document? --> doesn't work here because there's no file loaded, too few parameters
 			//{
 				//flags = (flags | GlobalApplicationInformation::ExecuteDocument);
@@ -268,7 +308,9 @@ int main(int argc, char **argv)
 
 		appWindow->initialize(flags);
 		// connect message queue to the main window.
-		QObject::connect(&appExchange, SIGNAL(messageAvailable(QString)), appWindow, SLOT(receiveExchangeMessage(QString)));
+		bool bConnectResult = false;
+		bConnectResult = QObject::connect(&appExchange, SIGNAL(messageAvailable(QString)), appWindow, SLOT(receiveExchangeMessage(QString)));
+		bConnectResult = QObject::connect(appWindow, SIGNAL(TerminateAppExchange()), &appExchange, SLOT(stopRunning()));
 		appWindow->show();//showMaximized() creates weird behaviour!;
 		centerWidget(appWindow, false);
 		appWindow->recoverLastScreenWindowSettings();

@@ -166,19 +166,7 @@
     <ClCompile Include="ExperimentUserInterface\experimentstructurescene.cpp">
       <Filter>Source Files\ExperimentUserInterface</Filter>
     </ClCompile>
-    <ClCompile Include="E:\Projects\BrainStim\Source\Plugins\ExperimentManager\ExperimentUserInterface\customdockwidget.cpp">
-      <Filter>Source Files\ExperimentUserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\Projects\BrainStim\Source\Plugins\ExperimentManager\ExperimentUserInterface\blockloopsdialog.cpp">
-      <Filter>Source Files\ExperimentUserInterface</Filter>
-    </ClCompile>
     <ClCompile Include="ExperimentUserInterface\experimentgraphloopitem.cpp">
-      <Filter>Source Files\ExperimentUserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\Projects\BrainStim\Source\Plugins\ExperimentManager\ExperimentUserInterface\experimentgraphmethodconnectionitem.cpp">
-      <Filter>Source Files\ExperimentUserInterface</Filter>
-    </ClCompile>
-    <ClCompile Include="E:\Projects\BrainStim\Source\Plugins\ExperimentManager\ExperimentUserInterface\experimentobjectsdialog.cpp">
       <Filter>Source Files\ExperimentUserInterface</Filter>
     </ClCompile>
     <ClCompile Include="ExperimentUserInterface\objectconnectionsdialog.cpp">
@@ -628,6 +616,18 @@
     <ClCompile Include="ExperimentUserInterface\experimentgraphobjectitem.cpp">
       <Filter>Source Files\ExperimentUserInterface</Filter>
     </ClCompile>
+    <ClCompile Include="ExperimentUserInterface\blockloopsdialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ExperimentUserInterface\customdockwidget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ExperimentUserInterface\experimentgraphmethodconnectionitem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ExperimentUserInterface\experimentobjectsdialog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="global.h">
@@ -675,9 +675,6 @@
     <ClInclude Include="ExperimentUserInterface\experimentgraphloopitem.h">
       <Filter>Header Files\ExperimentUserInterface</Filter>
     </ClInclude>
-    <ClInclude Include="E:\Projects\BrainStim\Source\Plugins\ExperimentManager\ExperimentUserInterface\experimentgraphmethodconnectionitem.h">
-      <Filter>Header Files\ExperimentUserInterface</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_ExperimentObjectsDialog.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
@@ -689,6 +686,9 @@
     </ClInclude>
     <ClInclude Include="..\..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_experimentstructurevisualizer.h">
       <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ExperimentUserInterface\experimentgraphmethodconnectionitem.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -803,23 +803,8 @@
     <CustomBuild Include="ExperimentUserInterface\experimentgraphblockitem.h">
       <Filter>Header Files\ExperimentUserInterface</Filter>
     </CustomBuild>
-    <CustomBuild Include="E:\Projects\BrainStim\Source\Plugins\ExperimentManager\ExperimentUserInterface\customdockwidget.h">
-      <Filter>Header Files\ExperimentUserInterface</Filter>
-    </CustomBuild>
     <CustomBuild Include="ExperimentUserInterface\experimentstructurescene.h">
       <Filter>Header Files\ExperimentUserInterface</Filter>
-    </CustomBuild>
-    <CustomBuild Include="E:\Projects\BrainStim\Source\Plugins\ExperimentManager\ExperimentUserInterface\blockloopsdialog.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
-    <CustomBuild Include="E:\Projects\BrainStim\Source\Plugins\ExperimentManager\ExperimentUserInterface\blockloopsdialog.h">
-      <Filter>Header Files\ExperimentUserInterface</Filter>
-    </CustomBuild>
-    <CustomBuild Include="E:\Projects\BrainStim\Source\Plugins\ExperimentManager\ExperimentUserInterface\experimentobjectsdialog.h">
-      <Filter>Header Files\ExperimentUserInterface</Filter>
-    </CustomBuild>
-    <CustomBuild Include="E:\Projects\BrainStim\Source\Plugins\ExperimentManager\ExperimentUserInterface\experimentobjectsdialog.ui">
-      <Filter>Form Files</Filter>
     </CustomBuild>
     <CustomBuild Include="ExperimentUserInterface\objectconnectionsdialog.ui">
       <Filter>Form Files</Filter>
@@ -844,6 +829,21 @@
     </CustomBuild>
     <CustomBuild Include="ExperimentUserInterface\experimentgraphobjectitem.h">
       <Filter>Header Files\ExperimentUserInterface</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ExperimentUserInterface\customdockwidget.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ExperimentUserInterface\blockloopsdialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ExperimentUserInterface\experimentobjectsdialog.h">
+      <Filter>Header Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ExperimentUserInterface\blockloopsdialog.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="ExperimentUserInterface\experimentobjectsdialog.ui">
+      <Filter>Form Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

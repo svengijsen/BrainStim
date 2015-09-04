@@ -204,7 +204,7 @@ QString installationManager::getPluginIniFilePath(const QString &sPluginFilePath
 	QFileInfo fiPluginPath(sPluginFilePath);
 	if (fiPluginPath.exists())
 	{
-		QString sPluginSettingsFilePath = fiPluginPath.canonicalPath() + "/" + fiPluginPath.completeBaseName() + ".ini";
+		QString sPluginSettingsFilePath = fiPluginPath.canonicalPath() + "/" + fiPluginPath.completeBaseName() + "." + INSTALLMNGR_INSTALL_INI_FILEEXT;
 		if (QFile(sPluginSettingsFilePath).exists())
 			return sPluginSettingsFilePath;
 	}
@@ -420,5 +420,14 @@ installationManagerBase::InstallResult installationManager::installPlugin(const 
 	bool bOverWriteExistingFiles = true;
 
 	installationManagerBase::InstallResult installResult = installationManagerBase::installPlugin(sMainAppDirPath, sMainAppsDefaultPluginDirPath, sMainAppsUserPluginDirPath, sPluginInstallFilePath, sUserAppPath, bOverWriteExistingFiles);
+	if (installResult == InstallResult_ErrorInsufficientRights)
+	{
+		int confirm = QMessageBox::question(NULL, "Administrator privileges requested", "A plugin needs administrator privileges to install!\nHit 'Ok' to automatically try restarting BrainStim with these privileges, after a restart you can retry the installation.\nHit 'Cancel' to skip this plugin installation.", QMessageBox::Ok | QMessageBox::Cancel);
+		if (confirm == QMessageBox::Ok)
+		{
+			QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_STOPAPPEXCHANGE_NAME, Qt::DirectConnection);
+			ElevateNow();
+		}
+	}
 	return installResult;
 }

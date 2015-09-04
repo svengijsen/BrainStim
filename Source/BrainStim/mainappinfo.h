@@ -122,6 +122,7 @@ public:
 	static QString appExampleDirPath()								{ return (MainAppInfo::getMainApplicationUserDirectory() + "/" + MAIN_PROGRAM_EXAMPLES_DIRNAME + "/"); }//appDirPath() + QDir::separator() + MAIN_PROGRAM_EXAMPLES_DIRNAME + QDir::separator());}
 	static QString appLogFilePath()									{ return (MainAppInfo::getMainApplicationUserDirectory() + "/" + MAIN_PROGRAM_LOGFILE_NAME); }
 	static QString appXsdFilePath()									{return (appDirPath() + "/" + MAIN_PROGRAM_XSD_DIRNAME + "/");}
+	static QString appUpdatesPath()									{ return (appDirPath() + "/" + MAIN_PROGRAM_UPDATES_DIRNAME + "/"); }
 	static void setPluginsDirPath(const QString &sNewPath);
 	static QString userPluginsDirPath();
 	static QString defaultPluginsDirPath();

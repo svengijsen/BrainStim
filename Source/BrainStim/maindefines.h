@@ -60,6 +60,7 @@
 #define MAIN_PROGRAM_PLUGINS_DIRNAME					"Plugins"
 #define MAIN_PROGRAM_PLUGINS_REGISTRY_DIRNAME			"Plugins"
 #define MAIN_PROGRAM_XSD_DIRNAME						"Xsd"
+#define MAIN_PROGRAM_UPDATES_DIRNAME					"Updates"
 #define MAIN_PROGRAM_DOC_BINARYCOLLFILE					"MainDocumentation.qhc"
 #define MAIN_PROGRAM_DOC_COMPHELPFILE					"MainDocumentation.qch"
 #define MAIN_PROGRAM_FILE_DESCRIPTION					MAIN_PROGRAM_INTERNAL_NAME ", a Open Source Cross Platform Scriptable Application"
@@ -70,6 +71,8 @@
 #define MAIN_PROGRAM_UNTITLED_NAME						"Untitled"
 #define UNKNOWNENUMSTRING								"Unknown_Enumeration Value"
 #define MAIN_PROGRAM_STANDARD_DATETIME_FORMAT			"yyyyMMddHHmmsszzz"
+#define MAIN_PROGRAM_INSTALLATIONFILE_EXT_POSTSTRING	"_installed"
+#define MAIN_PROGRAM_INSTALLATION_LOGFILE_POSTSTRING	MAIN_PROGRAM_INSTALLATIONFILE_EXT_POSTSTRING ".log"
 #define MAIN_PROGRAM_DEVICE_INTERFACE	"BrainStim.Plugins.DeviceInterface/1.0"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 #define MAIN_PROGRAM_EXTENSION_INTERFACE	"BrainStim.Plugins.ExtensionInterface/1.0"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 
@@ -104,6 +107,7 @@
 #define MAIN_PROGRAM_GETSTOREDSETTINGVALUE_NAME			"getStoredSettingValue"
 #define MAIN_PROGRAM_LOADDYNAMICPLUGINS_NAME			"loadDynamicPlugins"
 #define MAIN_PROGRAM_UNLOADDYNAMICPLUGINS_NAME			"unloadDynamicPlugins"
+#define MAIN_PROGRAM_STOPAPPEXCHANGE_NAME				"stopAppExchange"
 #define METHOD_TYPE_SIGNAL_TAG							"signal"
 #define METHOD_TYPE_SLOT_TAG							"slot"
 #define METHOD_TYPE_MEMBER_TAG							"member"

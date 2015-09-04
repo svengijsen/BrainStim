@@ -29,6 +29,11 @@ MainAppExchange::MainAppExchange(int &argc, char *argv[], const QString uniqueKe
 	}
 }
 
+MainAppExchange::~MainAppExchange()
+{
+	_isRunning = false;
+}
+
 GlobalApplicationInformation *MainAppExchange::getGlobalAppInformationObjectPointer()
 {
 	if(m_globAppInformation == NULL)
@@ -39,6 +44,11 @@ GlobalApplicationInformation *MainAppExchange::getGlobalAppInformationObjectPoin
 bool MainAppExchange::isRunning()
 {
 	return _isRunning;
+}
+
+void MainAppExchange::stopRunning()
+{
+	_isRunning = false;
 }
 
 void MainAppExchange::receiveMessage()

@@ -118,6 +118,7 @@ public:
 
 signals:
 	void CleanUpScriptExecuted();
+	void TerminateAppExchange();
 	//void NetworkDataAvailable(QString);
 		
 public slots:
@@ -439,6 +440,7 @@ public slots:
 	* This function closes the BrainStim application.
 	*/
 	void quit(){qApp->closeAllWindows();};
+	void stopAppExchange();
 
 #ifdef DEBUG
 	QString testFunction(QString inp = "");
@@ -665,6 +667,8 @@ private:
 	void setupToolBars();
 	void setRenderer();
 	bool implementPluginCustomActionMenus();
+	bool checkForAvailableUpdates(const QString &sUpdatePath = "", QStringList &lInstallResults = QStringList(), const QString &sPermissionQuestion = false);
+	QStringList getFilesByExtension(const QString &sUpdatePath, const QStringList &lAllowedFileExtensions);
 	bool implementCustomActionMenu(const QString &sMenuIniFilePath);
 	void newDocument(const GlobalApplicationInformation::DocType &docType, int &DocIndex, const bool &bIsNewUnsaved, const QString &strExtension = "", const QString &strCanonicalFilePath = "", const bool &bNativeMainAppView = false, const bool &bTryToInitialize = false);
 	//void setupSyntaxHighlighting(MdiChild *childWindow,MDIDocumentType tempFileType);

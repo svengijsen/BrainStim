@@ -102,21 +102,22 @@
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)vc90.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>UNICODE;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_SVG_LIB;QT_XML_LIB;QT_OPENGL_LIB;QT_WIDGETS_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Qtmain$(DebugSuffix).lib;Qt5Svg$(DebugSuffix).lib;Qt5Xml$(DebugSuffix).lib;Qt5OpenGL$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;Qt5Sql$(DebugSuffix).lib;Qt5Qml$(DebugSuffix).lib;Qt5WebKitWidgets$(DebugSuffix).lib;Qt5WebKit$(DebugSuffix).lib;Qt5Network$(DebugSuffix).lib;Qt5PrintSupport$(DebugSuffix).lib;Qt5Test$(DebugSuffix).lib;Qt5Quick$(DebugSuffix).lib;qscintilla2.lib;opengl32.lib;user32.lib;winmm.lib;ExperimentManagerplugin_$(Platform)_$(Configuration).lib;quazip.lib</AdditionalDependencies>
+      <AdditionalDependencies>Qtmain$(DebugSuffix).lib;Qt5Svg$(DebugSuffix).lib;Qt5Xml$(DebugSuffix).lib;Qt5OpenGL$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;Qt5Sql$(DebugSuffix).lib;Qt5Qml$(DebugSuffix).lib;Qt5WebKitWidgets$(DebugSuffix).lib;Qt5WebKit$(DebugSuffix).lib;Qt5Network$(DebugSuffix).lib;Qt5PrintSupport$(DebugSuffix).lib;Qt5Test$(DebugSuffix).lib;Qt5Quick$(DebugSuffix).lib;qscintilla2.lib;opengl32.lib;user32.lib;winmm.lib;AdvAPI32.lib;shell32.lib;ExperimentManagerplugin_$(Platform)_$(Configuration).lib;quazip.lib</AdditionalDependencies>
       <OutputFile>$(ProjectDir)..\..\Build_MSVC\$(ProjectName)\$(Platform)\$(Configuration)\$(ProjectName)_$(Platform)_$(Configuration).exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QTPROPERTYBROWSER)\lib\$(Platform);$(QSCINTILLA)\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\StaticLibs\$(Platform);$(QUAZIP)\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -174,21 +175,22 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
-      <ProgramDataBaseFileName>$(IntDir)vc90.pdb</ProgramDataBaseFileName>
+      <ProgramDataBaseFileName>$(IntDir)vc$(PlatformToolsetVersion).pdb</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>UNICODE;WIN64;QT_LARGEFILE_SUPPORT;QT_DLL;QT_SVG_LIB;QT_XML_LIB;QT_OPENGL_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT;QT_WIDGETS_LIB;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Qtmain$(DebugSuffix).lib;Qt5Svg$(DebugSuffix).lib;Qt5Xml$(DebugSuffix).lib;Qt5OpenGL$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;Qt5Sql$(DebugSuffix).lib;Qt5Qml$(DebugSuffix).lib;Qt5WebKitWidgets$(DebugSuffix).lib;Qt5WebKit$(DebugSuffix).lib;Qt5Network$(DebugSuffix).lib;Qt5PrintSupport$(DebugSuffix).lib;Qt5Test$(DebugSuffix).lib;Qt5Quick$(DebugSuffix).lib;qscintilla2.lib;opengl32.lib;user32.lib;winmm.lib;ExperimentManagerplugin_$(Platform)_$(Configuration).lib;quazip.lib</AdditionalDependencies>
+      <AdditionalDependencies>Qtmain$(DebugSuffix).lib;Qt5Svg$(DebugSuffix).lib;Qt5Xml$(DebugSuffix).lib;Qt5OpenGL$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;Qt5Sql$(DebugSuffix).lib;Qt5Qml$(DebugSuffix).lib;Qt5WebKitWidgets$(DebugSuffix).lib;Qt5WebKit$(DebugSuffix).lib;Qt5Network$(DebugSuffix).lib;Qt5PrintSupport$(DebugSuffix).lib;Qt5Test$(DebugSuffix).lib;Qt5Quick$(DebugSuffix).lib;qscintilla2.lib;opengl32.lib;user32.lib;winmm.lib;AdvAPI32.lib;shell32.lib;ExperimentManagerplugin_$(Platform)_$(Configuration).lib;quazip.lib</AdditionalDependencies>
       <OutputFile>$(ProjectDir)..\..\Build_MSVC\$(ProjectName)\$(Platform)\$(Configuration)\$(ProjectName)_$(Platform)_$(Configuration).exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QTPROPERTYBROWSER)\lib\$(Platform);$(QSCINTILLA)\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\StaticLibs\$(Platform);$(QUAZIP)\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -247,7 +249,7 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -256,12 +258,13 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
       <DebugInformationFormat>
       </DebugInformationFormat>
       <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>QT_NO_DEBUG;NDEBUG;UNICODE;WIN32;QT_LARGEFILE_SUPPORT;QT_DLL;QT_SVG_LIB;QT_XML_LIB;QT_OPENGL_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Qtmain$(DebugSuffix).lib;Qt5Svg$(DebugSuffix).lib;Qt5Xml$(DebugSuffix).lib;Qt5OpenGL$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;Qt5Sql$(DebugSuffix).lib;Qt5Qml$(DebugSuffix).lib;Qt5WebKitWidgets$(DebugSuffix).lib;Qt5WebKit$(DebugSuffix).lib;Qt5Network$(DebugSuffix).lib;Qt5PrintSupport$(DebugSuffix).lib;Qt5Test$(DebugSuffix).lib;Qt5Quick$(DebugSuffix).lib;qscintilla2.lib;opengl32.lib;user32.lib;winmm.lib;ExperimentManagerplugin_$(Platform)_$(Configuration).lib;quazip.lib</AdditionalDependencies>
+      <AdditionalDependencies>Qtmain$(DebugSuffix).lib;Qt5Svg$(DebugSuffix).lib;Qt5Xml$(DebugSuffix).lib;Qt5OpenGL$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;Qt5Sql$(DebugSuffix).lib;Qt5Qml$(DebugSuffix).lib;Qt5WebKitWidgets$(DebugSuffix).lib;Qt5WebKit$(DebugSuffix).lib;Qt5Network$(DebugSuffix).lib;Qt5PrintSupport$(DebugSuffix).lib;Qt5Test$(DebugSuffix).lib;Qt5Quick$(DebugSuffix).lib;qscintilla2.lib;opengl32.lib;user32.lib;winmm.lib;AdvAPI32.lib;shell32.lib;ExperimentManagerplugin_$(Platform)_$(Configuration).lib;quazip.lib</AdditionalDependencies>
       <OutputFile>$(ProjectDir)..\..\Build_MSVC\$(ProjectName)\$(Platform)\$(Configuration)\$(ProjectName)_$(Platform)_$(Configuration).exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QTPROPERTYBROWSER)\lib\$(Platform);$(QSCINTILLA)\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\StaticLibs\$(Platform);$(QUAZIP)\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -316,7 +319,7 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
       <ExceptionHandling>Sync</ExceptionHandling>
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <BufferSecurityCheck>false</BufferSecurityCheck>
-      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <TreatWChar_tAsBuiltInType>true</TreatWChar_tAsBuiltInType>
       <RuntimeTypeInfo>true</RuntimeTypeInfo>
       <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
       <ObjectFileName>$(IntDir)</ObjectFileName>
@@ -325,12 +328,13 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK
       <DebugInformationFormat>
       </DebugInformationFormat>
       <OpenMPSupport>true</OpenMPSupport>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>QT_NO_DEBUG;NDEBUG;UNICODE;WIN64;QT_LARGEFILE_SUPPORT;QT_DLL;QT_SVG_LIB;QT_XML_LIB;QT_OPENGL_LIB;QT_GUI_LIB;QT_CORE_LIB;QT_THREAD_SUPPORT;QT_WIDGETS_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>Qtmain$(DebugSuffix).lib;Qt5Svg$(DebugSuffix).lib;Qt5Xml$(DebugSuffix).lib;Qt5OpenGL$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;Qt5Sql$(DebugSuffix).lib;Qt5Qml$(DebugSuffix).lib;Qt5WebKitWidgets$(DebugSuffix).lib;Qt5WebKit$(DebugSuffix).lib;Qt5Network$(DebugSuffix).lib;Qt5PrintSupport$(DebugSuffix).lib;Qt5Test$(DebugSuffix).lib;Qt5Quick$(DebugSuffix).lib;qscintilla2.lib;opengl32.lib;user32.lib;winmm.lib;ExperimentManagerplugin_$(Platform)_$(Configuration).lib;quazip.lib</AdditionalDependencies>
+      <AdditionalDependencies>Qtmain$(DebugSuffix).lib;Qt5Svg$(DebugSuffix).lib;Qt5Xml$(DebugSuffix).lib;Qt5OpenGL$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;Qt5Sql$(DebugSuffix).lib;Qt5Qml$(DebugSuffix).lib;Qt5WebKitWidgets$(DebugSuffix).lib;Qt5WebKit$(DebugSuffix).lib;Qt5Network$(DebugSuffix).lib;Qt5PrintSupport$(DebugSuffix).lib;Qt5Test$(DebugSuffix).lib;Qt5Quick$(DebugSuffix).lib;qscintilla2.lib;opengl32.lib;user32.lib;winmm.lib;AdvAPI32.lib;shell32.lib;ExperimentManagerplugin_$(Platform)_$(Configuration).lib;quazip.lib</AdditionalDependencies>
       <OutputFile>$(ProjectDir)..\..\Build_MSVC\$(ProjectName)\$(Platform)\$(Configuration)\$(ProjectName)_$(Platform)_$(Configuration).exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QTPROPERTYBROWSER)\lib\$(Platform);$(QSCINTILLA)\lib\$(Platform)\$(Configuration);$(ProjectDir)..\..\StaticLibs\$(Platform);$(QUAZIP)\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
