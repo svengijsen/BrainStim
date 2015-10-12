@@ -229,7 +229,7 @@ void PluginManagerDialog::uninstallSelectedPlugin()
 void PluginManagerDialog::installPlugin()
 {
 	this->setEnabled(false);
-	QString sInstallFilePath = QFileDialog::getOpenFileName(NULL, tr("Open Plugin installation file"), MainAppInfo::userPluginsDirPath(), tr("Compressed Install Package (*.zip);;Configuration Files (*.ini)"));
+	QString sInstallFilePath = QFileDialog::getOpenFileName(NULL, tr("Open Plugin installation file"), MainAppInfo::userPluginsDirPath(), tr("Compressed Install Package (*.zip);;Configuration Files (*.ini);;Installer Source File List (*.lst)"));
 	if (sInstallFilePath.isEmpty() == false)
 	{
 		bool bRetval = false;

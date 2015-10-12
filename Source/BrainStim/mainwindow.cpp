@@ -93,9 +93,16 @@ bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags m
 	QStringList lInstallationResults;
 	if (checkForAvailableUpdates("", lInstallationResults, "There were some local updates found that are waiting to be installed.\nDo you want to proceed with this installation?"))
 	{
-		QString sInstallResult = "There were some updates installed:\n\n" + lInstallationResults.join("\n");
-		QMessageBox::information(this, "Updates Installed", sInstallResult);
-		qDebug() << sInstallResult;
+		QMessageBox tmpMessageBox;
+		tmpMessageBox.setWindowTitle("Updates Installed");
+		tmpMessageBox.setText("There were some updates installed, see the details for more information.");
+		tmpMessageBox.setDetailedText(lInstallationResults.join("\n"));
+		QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+		QGridLayout* layout = (QGridLayout*)tmpMessageBox.layout();
+		layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+		tmpMessageBox.exec();
+
+		qDebug() << "Updates Installed: " << lInstallationResults.join("\n");
 	}
 	
 	qDebug() << "Starting and initializing" << MAIN_PROGRAM_FULL_NAME;
@@ -143,7 +150,7 @@ bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags m
 	//if (QApplication::desktop()->numScreens() > 1) {
 	//	QLabel *label = new QLabel("Hello");
 	//	label->setGeometry(QApplication::desktop()->availableGeometry(1));
-	//	label->showMaximized();
+	//	label->showMaximized();F
 	//}
 	bMainWindowIsInitialized = true;
 	if (globAppInfo->shouldEnableNetworkServer())

@@ -87,6 +87,12 @@ public:
 	installationManagerBase(QObject *parent = NULL) {Q_UNUSED(parent)};
 	~installationManagerBase() {};
 
+	static QTextStream& qStdOut()
+	{
+		static QTextStream ts(stdout);
+		return ts;
+	}
+
 	static QString resolveFileDirectoryPath(const QString &sFileDirectoryPath, const QString &sMainAppsUserPluginDirPath, const QString &sMainAppDirPath, const QString &sIniCompleteBaseName, const QString &sMainAppsDefaultPluginDirPath, const QString &sUserAppPathPath, bool &bNeedsAdminPrivileges)
 	{
 		QString sRetval = sFileDirectoryPath;
@@ -104,6 +110,7 @@ public:
 
 	static InstallResult installPlugin(const QString &sMainAppDirPath, const QString &sMainAppsDefaultPluginDirPath, const QString &sMainAppsUserPluginDirPath, const QString &sPluginInstallFilePath, const QString &sUserAppPath, const bool &bOverWriteExistingFiles, const bool &bRenameSourceInstallFileOnSuccess = false)
 	{
+		//qStdOut() << "12345" << endl;//this will be appended to the cout install log file
 		QFileInfo fiPluginInstallFilePath(sPluginInstallFilePath);
 		QString sIniFilePath = "";
 		if (fiPluginInstallFilePath.completeSuffix() == INSTALLMNGR_INSTALL_INI_FILEEXT)
@@ -117,8 +124,9 @@ public:
 			{
 				if (fPluginInstallFilePath.open(QIODevice::ReadOnly) == false)
 				{
+					qStdOut() << "The installation list file could not be opened, " + fPluginInstallFilePath.errorString() << endl;
 					qDebug() << __FUNCTION__ << "The installation list file could not be opened, " + fPluginInstallFilePath.errorString();
-					return InstallResult_ErrorCouldNotReadListFile;
+					return InstallResult_ErrorCouldNotReadListFile; 
 				}
 				else
 				{
@@ -147,12 +155,15 @@ public:
 						if (bRenameSourceInstallFileOnSuccess)
 							if (renameInstalledFile(fPluginInstallFilePath.fileName()) == false)
 								return InstallResult_ErrorRenaming;
+						qStdOut() << "INSTALLED: (" << fPluginInstallFilePath.fileName() << ")" << endl;
 						return InstallResult_PluginsInstalled;
 					}
+					qStdOut() << "The lst-file doesn't seem to include a valid source file!" << endl;
 					qDebug() << __FUNCTION__ << "The lst-file doesn't seem to include a valid source file!";
 					return InstallResult_ErrorNoValidSourceFileInLstFound;
 				}
 			}
+			qStdOut() << __FUNCTION__ << "No valid lst-file found!" << endl;
 			qDebug() << __FUNCTION__ << "No valid lst-file found!";
 			return InstallResult_ErrorNoValidLstSourceFile;
 		}
@@ -167,12 +178,14 @@ public:
 			}
 			if (lArchiverIniFiles.isEmpty())
 			{
+				qStdOut() << "The compressed file doesn't seem to be a valid installer package, no configuration (*.ini) file found!" << endl;
 				qDebug() << __FUNCTION__ << "The compressed file doesn't seem to be a valid installer package, no configuration (*.ini) file found!";
 				return InstallResult_ErrorNoValidSourceFileInZipFound;
 			}
 			QTemporaryDir dir;
 			if (dir.isValid() == false)
 			{
+				qStdOut() << "Could not create a temporarily directory for the extraction of the of the installer package, please try to extract it yourself and use the extracted configuration (*.ini) file for the installation process!" << endl;
 				qDebug() << __FUNCTION__ << "Could not create a temporarily directory for the extraction of the of the installer package, please try to extract it yourself and use the extracted configuration (*.ini) file for the installation process!";
 				return InstallResult_ErrorCreatingTempExtractDir;
 			}
@@ -195,8 +208,11 @@ public:
 			if (nRetVal > 0)
 			{
 				if (bRenameSourceInstallFileOnSuccess)
+				{
 					if (renameInstalledFile(sPluginInstallFilePath) == false)
 						return InstallResult_ErrorRenaming;
+				}
+				qStdOut() << "INSTALLED: (" << sPluginInstallFilePath << ")" << endl;
 				return InstallResult_PluginsInstalled;
 			}
 		}
@@ -236,6 +252,7 @@ public:
 					//}
 					//else// if (QMessageBox::Cancel)
 					//{
+					qStdOut() << "File already exists (" + sMainAppsUserPluginDirPath + "/" + sIniFileName + ")!" << sPluginInternalName << endl;
 					qDebug() << __FUNCTION__ << "File already exists (" + sMainAppsUserPluginDirPath + "/" + sIniFileName + ")!" << sPluginInternalName;
 					return InstallResult_ErrorCannotOverwriteExistingFile;
 				}
@@ -255,6 +272,7 @@ public:
 				{
 					if (IsRunAsAdministrator() == false)
 					{
+						qStdOut() << "The plugin " << sPluginInternalName << " needs administrator privileges to install!" << endl;
 						qDebug() << "The plugin " << sPluginInternalName << " needs administrator privileges to install!";
 						return InstallResult_ErrorInsufficientRights;
 					}
@@ -285,6 +303,7 @@ public:
 						{
 							sSkippedFiles = sSkippedFiles + "\n" + lFileList[nIndex];
 						}
+						qStdOut() << "Some installation files (for the " << sPluginInternalName << " plugin) were skipped because they were already present and in use: " << sSkippedFiles << endl;
 						qDebug() << __FUNCTION__ << "Some installation files (for the " << sPluginInternalName << " plugin) were skipped because they were already present and in use: " << sSkippedFiles;
 						//see below uncommented copy step!!!
 					}
@@ -305,10 +324,8 @@ public:
 							tmpLib.setFileName(lFileList[i]);
 							if (tmpLib.isLibrary(lFileList[i]))
 							{
-								//qDebug() << "isLibrary";
 								if (tmpLib.isLoaded())
 								{
-									//qDebug() << "unload";
 									if (tmpLib.unload()==false)
 									{
 										//qDebug() << "unload unsuccessful";
@@ -321,6 +338,7 @@ public:
 								bRemoveSucceeded = false;
 							if (bRemoveSucceeded == false)
 							{
+								qStdOut() << "Could not replace the already present file (" << lFileList[i] << ")!" << endl;
 								qDebug() << __FUNCTION__ << "Could not replace the already present file (" << lFileList[i] << ")!";
 								return InstallResult_ErrorCannotReplaceOriginalFile;
 							}
@@ -330,12 +348,14 @@ public:
 						{
 							if (QDir().mkpath(QFileInfo(lFileList[i]).absolutePath()) == false)
 							{
+								qStdOut() << "Could not create the destination directory path: " << QFileInfo(lFileList[i]).absolutePath() << endl;
 								qDebug() << __FUNCTION__ << "Could not create the destination directory path: " << QFileInfo(lFileList[i]).absolutePath();
 								return InstallResult_ErrorCannotCreateDestinationPath;
 							}
 						}
 						if (QFile::copy(sSourceFilePath, lFileList[i]) == false)
 						{
+							qStdOut() << "Could not copy a plugin installation file (" << sSourceFilePath << ") to the plugin folder: " << endl;
 							qDebug() << __FUNCTION__ << "Could not copy a plugin installation file (" << sSourceFilePath << ") to the plugin folder: " << lFileList[i];
 							return InstallResult_ErrorCannotCopySourceFile;
 						}
@@ -344,6 +364,7 @@ public:
 				if (bRenameSourceInstallFileOnSuccess)
 					if (renameInstalledFile(sIniFilePath) == false)
 						return InstallResult_ErrorRenaming;
+				qStdOut() << "INSTALLED: (" << sIniFilePath << ")" << endl;
 				return InstallResult_PluginsInstalled;
 			}
 		}
@@ -413,11 +434,8 @@ public:
 		}
 		catch (...)
 		{
-			qDebug() << "Failed to determine if application was running with administrator rights";
-			//DWORD dwErrorCode = GetLastError();
-			//TCHAR szMessage[256];
-			//_stprintf_s(szMessage, ARRAYSIZE(szMessage), _T("Error code returned was 0x%08lx"), dwErrorCode);
-			//std::cout << szMessage << std::endl;
+			DWORD dwErrorCode = GetLastError();
+			qDebug() << "Failed to determine if application was running with administrator rights. " << QString("Error code returned was 0x%08lx").arg(dwErrorCode);
 		}
 		if (!bAlreadyRunningAsAdministrator)
 		{

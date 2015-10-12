@@ -41,5 +41,10 @@ Rectangle
 			debugModeFrame.visible = true;
 			return true
 		}
+		function disableDebugMode()
+		{
+			debugModeFrame.visible = false;
+			return true
+		}
 	}
 }

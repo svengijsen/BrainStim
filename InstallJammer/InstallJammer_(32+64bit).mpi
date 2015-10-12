@@ -1656,128 +1656,124 @@ File ::9ED88436-F41C-48B4-9574-AC83E07ED193 -name CustomMenus.ini -active 0 -par
 FileGroup ::8B94EAF2-8AB8-46AA-BB50-1C7810BD5ACB -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name Menus -parent FileGroups
 File ::9DFF2D77-B9F0-4D44-BF03-D2450DE264FF -type dir -name E:/Projects/BrainStim/Install/Menus/Examples -parent 8B94EAF2-8AB8-46AA-BB50-1C7810BD5ACB
 File ::CC3C8127-6C49-4148-B326-9CF3C6D81BA2 -name Example1.ini -parent 9DFF2D77-B9F0-4D44-BF03-D2450DE264FF
-FileGroup ::942CA64C-72B6-4E4B-A3AA-BDB1BBF5CFC4 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin Installation Files(win32)} -parent FileGroups
-File ::A6C94130-2454-4B18-8A45-A862558400BB -type dir -directory <%InstallDir>/Updates/FirebirdClient -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/Win32/Release -parent 942CA64C-72B6-4E4B-A3AA-BDB1BBF5CFC4
-File ::7CC76B15-C40F-4841-91C2-B03588DD6E68 -name fbclient.dll -parent A6C94130-2454-4B18-8A45-A862558400BB
-File ::736A3272-CB1E-4D1A-ABF6-DDF9D27D51B1 -name firebird.conf -parent A6C94130-2454-4B18-8A45-A862558400BB
-File ::BC507AB3-7E32-4F08-A16A-0FB6718D50E1 -name firebird.msg -parent A6C94130-2454-4B18-8A45-A862558400BB
-File ::AED50218-6F8A-4AAA-9BEF-5932FA7F4A9D -name firebirdclientplugin_Win32_Release.dll -parent A6C94130-2454-4B18-8A45-A862558400BB
-File ::DC3D526A-8341-4B3F-94F8-82D9F73175D8 -name firebirdclientplugin_Win32_Release.ini -parent A6C94130-2454-4B18-8A45-A862558400BB
-File ::FE84088F-073A-4643-BDD4-AFB054C05E3E -name icudt30.dll -parent A6C94130-2454-4B18-8A45-A862558400BB
-File ::AFE59D33-6E87-469D-A914-601CA558A14C -name icuin30.dll -parent A6C94130-2454-4B18-8A45-A862558400BB
-File ::41206ECC-1CB3-4985-A6FB-14D93F2F6EFF -name icuuc30.dll -parent A6C94130-2454-4B18-8A45-A862558400BB
-File ::C0427544-69C9-4B46-A9E5-8D1797E10CD8 -name msvcr80.dll -parent A6C94130-2454-4B18-8A45-A862558400BB
-File ::FD4E4B94-FBE6-4124-9513-37F025D6BE77 -name QScriptExample_FirebirdClientPlugin.qs -parent A6C94130-2454-4B18-8A45-A862558400BB
-File ::14B52DD9-A844-4B0E-8A00-147BAA60D06F -name qsqlibase.dll -parent A6C94130-2454-4B18-8A45-A862558400BB
-File ::79477954-D75F-4535-9B8E-C46354E7B4DB -type dir -directory <%InstallDir>/Updates/KeyBoardDevice -name E:/Projects/BrainStim_Plugins/KeyBoardDevice/build/Win32/Release -parent 942CA64C-72B6-4E4B-A3AA-BDB1BBF5CFC4
-File ::1A1CC4A4-A4DB-4719-B07F-7CAB8FC9FAAD -name keyboardplugin_Win32_Release.dll -parent 79477954-D75F-4535-9B8E-C46354E7B4DB
-File ::637EACA3-5968-4C18-BCE8-13F5EEEF9E89 -name keyboardplugin_Win32_Release.ini -parent 79477954-D75F-4535-9B8E-C46354E7B4DB
-File ::8B9A219F-EF42-47E7-B066-FC74BEE99CF0 -name QScriptExample_KeyBoard.qs -parent 79477954-D75F-4535-9B8E-C46354E7B4DB
-File ::B92DBFDF-C4CF-4213-BAAF-36CBE7AC5456 -type dir -directory <%InstallDir>/Updates/MatlabExchanger -name E:/Projects/BrainStim_Plugins/MatlabExchanger/build/Win32/Release -parent 942CA64C-72B6-4E4B-A3AA-BDB1BBF5CFC4
-File ::AAD1A506-1EE3-45AC-B7C2-14F613C9B0C5 -name MatlabExchangerExample.qs -parent B92DBFDF-C4CF-4213-BAAF-36CBE7AC5456
-File ::3CCDBAEE-EB45-4833-B730-B02F40839CBD -name MatlabExchangerplugin_Win32_Release.dll -parent B92DBFDF-C4CF-4213-BAAF-36CBE7AC5456
-File ::10BF4679-6FE9-4FB7-B1AD-A51528A7D6EA -name MatlabExchangerplugin_Win32_Release.ini -parent B92DBFDF-C4CF-4213-BAAF-36CBE7AC5456
-File ::A02412BA-75D3-49BE-AA7D-78CC54DE1CC1 -name testPlot.m -active 0 -parent B92DBFDF-C4CF-4213-BAAF-36CBE7AC5456
-File ::AAD00497-E912-4E34-86C0-54B9457908F5 -type dir -directory <%InstallDir>/Updates/ParallelPortDevice -name E:/Projects/BrainStim_Plugins/ParallelPortDevice/build/Win32/Release -parent 942CA64C-72B6-4E4B-A3AA-BDB1BBF5CFC4
-File ::57C055AB-F8B9-4416-B15F-828DFB977568 -name inpout32.dll -parent AAD00497-E912-4E34-86C0-54B9457908F5
-File ::34798D23-BEA2-4A86-A5D8-1B7F6EF44712 -name parallelportplugin_Win32_Release.dll -parent AAD00497-E912-4E34-86C0-54B9457908F5
-File ::18698375-8359-4BE1-8F8D-5F2F81D0E0F0 -name parallelportplugin_Win32_Release.ini -parent AAD00497-E912-4E34-86C0-54B9457908F5
-File ::ACE65CE9-C1C8-4458-9964-29B41FEDC610 -name QScriptExample_ParallelPort.qs -parent AAD00497-E912-4E34-86C0-54B9457908F5
-File ::48B38FBB-820B-4326-8510-2CE08B826F92 -type dir -directory <%InstallDir>/Updates/PiezoStimDevice -name E:/Projects/BrainStim_Plugins/PiezoStimDevice/build/Win32/Release -parent 942CA64C-72B6-4E4B-A3AA-BDB1BBF5CFC4
-File ::FA266277-1922-4EC9-B6A5-AFBB6AB36815 -name piezostimdeviceplugin_Win32_Release.dll -parent 48B38FBB-820B-4326-8510-2CE08B826F92
-File ::8825B2BD-99F9-4C45-B5FA-588A2F82FD8F -name piezostimdeviceplugin_Win32_Release.ini -parent 48B38FBB-820B-4326-8510-2CE08B826F92
-File ::D129F05B-6D4E-496E-8955-0604BF258C98 -name QScriptExample_PiezoStimDevice.qs -parent 48B38FBB-820B-4326-8510-2CE08B826F92
-File ::E98941CC-DF36-445D-BDBB-4F96F939C57B -name stimlib0.dll -parent 48B38FBB-820B-4326-8510-2CE08B826F92
-File ::909D9067-62A4-4ADB-8741-ED03E789FF3A -type dir -directory <%InstallDir>/Updates/SerialPortDevice -name E:/Projects/BrainStim_Plugins/SerialPortDevice/build/Win32/Release -parent 942CA64C-72B6-4E4B-A3AA-BDB1BBF5CFC4
-File ::87AC8A7C-71B0-4D01-AA7B-56D7F59DF060 -name QScriptExample_SerialPortDevice.qs -parent 909D9067-62A4-4ADB-8741-ED03E789FF3A
-File ::FC8C84F0-C63E-418B-A5C6-87F57266E276 -name Qt5SerialPort.dll -parent 909D9067-62A4-4ADB-8741-ED03E789FF3A
-File ::E4056F15-69F9-4C36-80D6-7AB00957E405 -name serialportdeviceplugin_Win32_Release.dll -parent 909D9067-62A4-4ADB-8741-ED03E789FF3A
-File ::617C1905-4686-4037-A228-6B72B1EC3C18 -name serialportdeviceplugin_Win32_Release.ini -parent 909D9067-62A4-4ADB-8741-ED03E789FF3A
-File ::0D2C5571-C734-4768-A08A-CA31F104C79B -type dir -directory <%InstallDir>/Updates/TBVExchanger -name E:/Projects/BrainStim_Plugins/TBVExchanger/build/Win32/Release -parent 942CA64C-72B6-4E4B-A3AA-BDB1BBF5CFC4
-File ::19C40768-C3E6-4372-985F-590FC255590E -name QScriptExample_TBVExchangerPlugin.qs -parent 0D2C5571-C734-4768-A08A-CA31F104C79B
-File ::D23C334C-30C8-404A-89C7-B92DFBF72849 -name TBVExchanger.qs -parent 0D2C5571-C734-4768-A08A-CA31F104C79B
-File ::B8855065-01F6-4EC9-AE16-399BF7F7E826 -name tbvexchangerplugin_Win32_Release.dll -parent 0D2C5571-C734-4768-A08A-CA31F104C79B
-File ::F94B651C-1F5D-446F-B75A-B63F1C7171C8 -name tbvexchangerplugin_Win32_Release.ini -parent 0D2C5571-C734-4768-A08A-CA31F104C79B
-File ::16727875-60E7-4C92-8D53-EFD3ADCB5525 -type dir -directory <%InstallDir>/Updates/TCPNetworkServer -name E:/Projects/BrainStim_Plugins/TCPNetworkServer/build/Win32/Release -parent 942CA64C-72B6-4E4B-A3AA-BDB1BBF5CFC4
-File ::0E5A651F-A345-4FBA-BFF0-F17B77F8B749 -name QScriptExample_TCPNetworkServerPlugin.qs -parent 16727875-60E7-4C92-8D53-EFD3ADCB5525
-File ::744DD5AF-54CC-4F69-923F-590C1617E433 -name tcpnetworkserverplugin_Win32_Release.dll -parent 16727875-60E7-4C92-8D53-EFD3ADCB5525
-File ::38388CEC-0320-40C4-8898-3DC4BE797430 -name tcpnetworkserverplugin_Win32_Release.ini -parent 16727875-60E7-4C92-8D53-EFD3ADCB5525
-File ::392A81E1-7B5B-4885-A5F1-52CB3F5C11A0 -type dir -directory <%InstallDir>/Updates/TSIExchanger -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/Win32/Release -parent 942CA64C-72B6-4E4B-A3AA-BDB1BBF5CFC4
-File ::3E97295A-5C35-4C1F-BFF8-215AC83B5023 -name FingerTapping.exml -parent 392A81E1-7B5B-4885-A5F1-52CB3F5C11A0
-File ::C40F88FC-EC64-4F9C-913A-F62815587E6C -name FingerTapping.qml -parent 392A81E1-7B5B-4885-A5F1-52CB3F5C11A0
-File ::6E735A49-C338-4D8C-8BFA-82324491617A -name FingerTapping.qs -parent 392A81E1-7B5B-4885-A5F1-52CB3F5C11A0
-File ::7878882C-AAF5-4595-8665-DE51C2F1B9E1 -name LeftHand.png -parent 392A81E1-7B5B-4885-A5F1-52CB3F5C11A0
-File ::EFC0F2AA-512D-4DCE-8283-D82FD255EEAF -name QScriptExample_TSIExchangerPlugin.qs -parent 392A81E1-7B5B-4885-A5F1-52CB3F5C11A0
-File ::FDA3A738-A0EB-464E-941D-686D9C8DDEE5 -name RightHand.png -parent 392A81E1-7B5B-4885-A5F1-52CB3F5C11A0
-File ::FCA529BE-11E2-43B7-B6FE-31AF62304F75 -name TSIExchanger.qs -parent 392A81E1-7B5B-4885-A5F1-52CB3F5C11A0
-File ::FB22776C-8D4A-488B-8099-9CE1E3A6BB98 -name TSIExchangerplugin_Win32_Release.dll -parent 392A81E1-7B5B-4885-A5F1-52CB3F5C11A0
-File ::4245E44A-CAF9-4A34-A25A-2B5283BAA1A6 -name TSIExchangerplugin_Win32_Release.ini -parent 392A81E1-7B5B-4885-A5F1-52CB3F5C11A0
-File ::ED8F457A-469D-49E3-A5B0-53FFCFB099CC -type dir -directory <%InstallDir>/Updates/USBHIDDevice -name E:/Projects/BrainStim_Plugins/USBHIDDevice/build/Win32/Release -parent 942CA64C-72B6-4E4B-A3AA-BDB1BBF5CFC4
-File ::63EF4B52-ED95-46BC-8847-D2A3D348C59E -name hidapi_win32.dll -parent ED8F457A-469D-49E3-A5B0-53FFCFB099CC
-File ::48B0B247-4BB8-42F4-9F82-768C25B821A6 -name QScriptExample_USBHIDDevice.qs -parent ED8F457A-469D-49E3-A5B0-53FFCFB099CC
-File ::D9D6F01C-6D5F-4C79-B300-5D63431E34F5 -name usbhiddeviceplugin_Win32_Release.dll -parent ED8F457A-469D-49E3-A5B0-53FFCFB099CC
-File ::A8D0EF59-01E4-45C3-9A1B-5EACA4EB7B31 -name usbhiddeviceplugin_Win32_Release.ini -parent ED8F457A-469D-49E3-A5B0-53FFCFB099CC
-FileGroup ::55269ED9-DCCB-432A-90C5-178AC914C101 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin Installation Files(x64)} -parent FileGroups
-File ::E141E637-3812-41FE-8C28-FAD125384A6B -type dir -directory <%InstallDir>/Updates/FirebirdClient -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/x64/Release -parent 55269ED9-DCCB-432A-90C5-178AC914C101
-File ::C3E8B362-B98B-48E9-B932-4FDC4745BD33 -name fbclient.dll -parent E141E637-3812-41FE-8C28-FAD125384A6B
-File ::7DBE8C1A-B8A0-485F-9086-2A69646D28C6 -name firebird.conf -parent E141E637-3812-41FE-8C28-FAD125384A6B
-File ::A905B2EB-1C0D-4493-8ABB-F35989DDEC0F -name firebird.msg -parent E141E637-3812-41FE-8C28-FAD125384A6B
-File ::654A548A-738A-48F7-8B25-A76CCAD8FFD5 -name firebirdclientplugin_x64_Release.dll -parent E141E637-3812-41FE-8C28-FAD125384A6B
-File ::77FE1E77-2C9B-4FF4-B2BD-15613400FEAF -name firebirdclientplugin_x64_Release.ini -parent E141E637-3812-41FE-8C28-FAD125384A6B
-File ::11498BEB-510C-4768-8ADB-5C029278DFFC -name icudt30.dll -parent E141E637-3812-41FE-8C28-FAD125384A6B
-File ::8118BF8E-D804-4FB2-9BC9-4523C28DDFFA -name icuin30.dll -parent E141E637-3812-41FE-8C28-FAD125384A6B
-File ::26B07AE7-A6C0-48B0-B282-1CA4BA6740A6 -name icuuc30.dll -parent E141E637-3812-41FE-8C28-FAD125384A6B
-File ::FF00829B-5C63-42E4-97AA-D1BC41CA71BC -name msvcr80.dll -parent E141E637-3812-41FE-8C28-FAD125384A6B
-File ::3D802B44-80D5-4037-AEF9-525475F66CD8 -name QScriptExample_FirebirdClientPlugin.qs -parent E141E637-3812-41FE-8C28-FAD125384A6B
-File ::145274D6-18B8-4816-848A-882AC23221CD -name qsqlibase.dll -parent E141E637-3812-41FE-8C28-FAD125384A6B
-File ::5D07C903-B3DA-41B0-B6A7-F74B23B8F186 -type dir -directory <%InstallDir>/Updates/KeyBoardDevice -name E:/Projects/BrainStim_Plugins/KeyBoardDevice/build/x64/Release -parent 55269ED9-DCCB-432A-90C5-178AC914C101
-File ::DCB72B32-3FB4-43D4-A772-374094759C6B -name keyboardplugin_x64_Release.dll -parent 5D07C903-B3DA-41B0-B6A7-F74B23B8F186
-File ::8D607CB8-6790-49DD-811E-4E6D9578B3EE -name keyboardplugin_x64_Release.ini -parent 5D07C903-B3DA-41B0-B6A7-F74B23B8F186
-File ::D2DB0A49-38AE-46A7-8B99-7B895B8C354B -name QScriptExample_KeyBoard.qs -parent 5D07C903-B3DA-41B0-B6A7-F74B23B8F186
-File ::D8AF5A7E-D303-474B-A337-F94B26D4C2F6 -type dir -directory <%InstallDir>/Updates/MatlabExchanger -name E:/Projects/BrainStim_Plugins/MatlabExchanger/build/x64/Release -parent 55269ED9-DCCB-432A-90C5-178AC914C101
-File ::6C82997B-E3AE-4CDE-B515-27175CE259AF -name MatlabExchangerExample.qs -parent D8AF5A7E-D303-474B-A337-F94B26D4C2F6
-File ::26F5E76A-9673-4489-83AB-68238E3C6B23 -name MatlabExchangerplugin_x64_Release.dll -parent D8AF5A7E-D303-474B-A337-F94B26D4C2F6
-File ::E3B2D55E-388D-4008-8535-FF6E89E639AF -name MatlabExchangerplugin_x64_Release.ini -parent D8AF5A7E-D303-474B-A337-F94B26D4C2F6
-File ::A72ACFA6-A0E3-463D-A3C6-C58939424A2A -name testPlot.m -parent D8AF5A7E-D303-474B-A337-F94B26D4C2F6
-File ::6DD27749-4E47-4AC1-85AB-CF15736210FC -type dir -directory <%InstallDir>/Updates/ParallelPortDevice -name E:/Projects/BrainStim_Plugins/ParallelPortDevice/build/x64/Release -parent 55269ED9-DCCB-432A-90C5-178AC914C101
-File ::5F2B7BB0-2979-46A7-A863-68CC8E57DC6E -name inpoutx64.dll -parent 6DD27749-4E47-4AC1-85AB-CF15736210FC
-File ::A76A3097-1922-4D14-AC15-754942BB4DD1 -name parallelportplugin_x64_Release.dll -parent 6DD27749-4E47-4AC1-85AB-CF15736210FC
-File ::FF295E0C-765C-48F0-B4CD-E1B0B1E9B7C7 -name parallelportplugin_x64_Release.ini -parent 6DD27749-4E47-4AC1-85AB-CF15736210FC
-File ::059E93B8-9DC4-4747-84C0-2FF72B860C0A -name QScriptExample_ParallelPort.qs -parent 6DD27749-4E47-4AC1-85AB-CF15736210FC
-File ::71B8F159-411C-4969-B1FD-36EDC678064C -type dir -directory <%InstallDir>/Updates/PiezoStimDevice -name E:/Projects/BrainStim_Plugins/PiezoStimDevice/build/x64/Release -active 0 -parent 55269ED9-DCCB-432A-90C5-178AC914C101
-File ::02E95326-3EE3-4707-956B-E26156B1B7D5 -name piezostimdeviceplugin_x64_Release.dll -parent 71B8F159-411C-4969-B1FD-36EDC678064C
-File ::F4C7595E-1F6A-47C2-B6F3-FC9D9E49C4B9 -name piezostimdeviceplugin_x64_Release.ini -parent 71B8F159-411C-4969-B1FD-36EDC678064C
-File ::1D611A06-EE72-43BD-B3CB-0E4A85DF7194 -name QScriptExample_PiezoStimDevice.qs -parent 71B8F159-411C-4969-B1FD-36EDC678064C
-File ::65E8057F-A57C-400A-92B5-53FCAB301B4E -name stimlib0.dll -parent 71B8F159-411C-4969-B1FD-36EDC678064C
-File ::89683EE3-9D02-4AD5-BBCB-9B358A582029 -type dir -directory <%InstallDir>/Updates/SerialPortDevice -name E:/Projects/BrainStim_Plugins/SerialPortDevice/build/x64/Release -parent 55269ED9-DCCB-432A-90C5-178AC914C101
-File ::C5578322-16F7-41FA-A896-E25C4BA4498E -name QScriptExample_SerialPortDevice.qs -parent 89683EE3-9D02-4AD5-BBCB-9B358A582029
-File ::B7638F99-D004-49CF-9BFB-0744C1252B03 -name Qt5SerialPort.dll -parent 89683EE3-9D02-4AD5-BBCB-9B358A582029
-File ::9B4548A5-7C6B-47CA-986F-BA894CA08971 -name serialportdeviceplugin_x64_Release.dll -parent 89683EE3-9D02-4AD5-BBCB-9B358A582029
-File ::E4DBB657-4D6B-41AF-98FC-5C8B9D952639 -name serialportdeviceplugin_x64_Release.ini -parent 89683EE3-9D02-4AD5-BBCB-9B358A582029
-File ::1C85A218-5213-439E-871C-3345ED0F77EA -type dir -directory <%InstallDir>/Updates/TBVExchanger -name E:/Projects/BrainStim_Plugins/TBVExchanger/build/x64/Release -parent 55269ED9-DCCB-432A-90C5-178AC914C101
-File ::25F2C715-96AD-4464-BF61-3806BF07CE86 -name QScriptExample_TBVExchangerPlugin.qs -parent 1C85A218-5213-439E-871C-3345ED0F77EA
-File ::EB16C09A-8706-430F-8528-2DE2B772F61E -name TBVExchanger.qs -parent 1C85A218-5213-439E-871C-3345ED0F77EA
-File ::6064AD6C-2930-49D0-8818-7087FECB130F -name tbvexchangerplugin_x64_Release.dll -parent 1C85A218-5213-439E-871C-3345ED0F77EA
-File ::87AADA2B-B41A-4F15-9F4E-6D606E829AF4 -name tbvexchangerplugin_x64_Release.ini -parent 1C85A218-5213-439E-871C-3345ED0F77EA
-File ::71962CCC-8061-46EE-B68D-E19AD3247D94 -type dir -directory <%InstallDir>/Updates/TCPNetworkServer -name E:/Projects/BrainStim_Plugins/TCPNetworkServer/build/x64/Release -parent 55269ED9-DCCB-432A-90C5-178AC914C101
-File ::683685E7-AF0E-4DC2-828B-FFA389878B88 -name QScriptExample_TCPNetworkServerPlugin.qs -parent 71962CCC-8061-46EE-B68D-E19AD3247D94
-File ::BE9BA6A7-322F-4FE2-8C7A-BE89225D5555 -name tcpnetworkserverplugin_x64_Release.dll -parent 71962CCC-8061-46EE-B68D-E19AD3247D94
-File ::874C21CE-34B5-4B66-8F06-F302D89378F1 -name tcpnetworkserverplugin_x64_Release.ini -parent 71962CCC-8061-46EE-B68D-E19AD3247D94
-File ::27F8EE7D-149F-419E-96B6-0EAB995A85E0 -type dir -directory <%InstallDir>/Updates/TSIExchanger -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/x64/Release -parent 55269ED9-DCCB-432A-90C5-178AC914C101
-File ::2624CA8E-4CFB-46D3-BF01-00166B90201D -name FingerTapping.exml -parent 27F8EE7D-149F-419E-96B6-0EAB995A85E0
-File ::88CC8905-82E2-4087-AC54-60510F32D1C4 -name FingerTapping.qml -parent 27F8EE7D-149F-419E-96B6-0EAB995A85E0
-File ::505D3C54-E0B3-4DFA-9798-2138216DE466 -name FingerTapping.qs -parent 27F8EE7D-149F-419E-96B6-0EAB995A85E0
-File ::A32AAD53-A851-4BE2-8F55-EAEC3C89E14A -name LeftHand.png -parent 27F8EE7D-149F-419E-96B6-0EAB995A85E0
-File ::76AC9E1D-F149-4A46-AD89-3FD1053C168B -name QScriptExample_TSIExchangerPlugin.qs -parent 27F8EE7D-149F-419E-96B6-0EAB995A85E0
-File ::0C4FBD43-83E4-4374-A988-79DD5DB34FF3 -name RightHand.png -parent 27F8EE7D-149F-419E-96B6-0EAB995A85E0
-File ::F4E62236-27FB-472F-AB24-0E8B1076F8AE -name TSIExchanger.qs -parent 27F8EE7D-149F-419E-96B6-0EAB995A85E0
-File ::3F426146-B695-4DC3-9ADE-5F69B97438C1 -name TSIExchangerplugin_x64_Release.dll -parent 27F8EE7D-149F-419E-96B6-0EAB995A85E0
-File ::E0AEB387-B934-476E-816F-3181F5B88086 -name TSIExchangerplugin_x64_Release.ini -parent 27F8EE7D-149F-419E-96B6-0EAB995A85E0
-File ::45D77FDD-F257-4205-B90F-F09BAD4FAB10 -type dir -directory <%InstallDir>/Updates/USBHIDDevice -name E:/Projects/BrainStim_Plugins/USBHIDDevice/build/x64/Release -parent 55269ED9-DCCB-432A-90C5-178AC914C101
-File ::DC26FE49-D15D-48B0-898A-AB090276B270 -name hidapi_x64.dll -parent 45D77FDD-F257-4205-B90F-F09BAD4FAB10
-File ::67AB4448-F93F-4A10-84B4-97EF8365C92D -name QScriptExample_USBHIDDevice.qs -parent 45D77FDD-F257-4205-B90F-F09BAD4FAB10
-File ::B1D1D95E-699E-48ED-9743-CDA92DB5FF5A -name usbhiddeviceplugin_x64_Release.dll -parent 45D77FDD-F257-4205-B90F-F09BAD4FAB10
-File ::833DF96C-5441-46F3-BDC9-097E27930C27 -name usbhiddeviceplugin_x64_Release.ini -parent 45D77FDD-F257-4205-B90F-F09BAD4FAB10
+FileGroup ::28812D3A-7176-4572-AFD9-10A065A458E5 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin FirebirdClient(win32)} -parent FileGroups
+File ::541B2FE2-70D0-4F22-9B46-752A6B0CD30A -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/Win32/Release/fbclient.dll -parent 28812D3A-7176-4572-AFD9-10A065A458E5
+File ::40C30A09-0571-4638-8DA9-195EF94BC243 -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/Win32/Release/firebird.conf -parent 28812D3A-7176-4572-AFD9-10A065A458E5
+File ::F4DD787F-9734-4CF9-9432-902D3C009BF5 -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/Win32/Release/firebird.msg -parent 28812D3A-7176-4572-AFD9-10A065A458E5
+File ::E169A2FE-F4EC-4810-897F-21DDFC5DB2E1 -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/Win32/Release/firebirdclientplugin_Win32_Release.dll -parent 28812D3A-7176-4572-AFD9-10A065A458E5
+File ::3EAE60C6-825F-4ED9-881B-2A64658B15F3 -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/Win32/Release/firebirdclientplugin_Win32_Release.ini -parent 28812D3A-7176-4572-AFD9-10A065A458E5
+File ::8B0CFCF3-68A7-4E68-870A-BF3A92A21F5B -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/Win32/Release/icudt30.dll -parent 28812D3A-7176-4572-AFD9-10A065A458E5
+File ::C694401B-DD18-4706-A767-086211C524DA -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/Win32/Release/icuin30.dll -parent 28812D3A-7176-4572-AFD9-10A065A458E5
+File ::E26AB102-423F-4968-832F-6D36773D3DCD -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/Win32/Release/icuuc30.dll -parent 28812D3A-7176-4572-AFD9-10A065A458E5
+File ::ECD1A56C-BDBB-4697-9BC9-9E259D268D7A -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/Win32/Release/msvcr80.dll -parent 28812D3A-7176-4572-AFD9-10A065A458E5
+File ::7A61351C-BCFF-470F-80CC-7B48CE7551B7 -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/Win32/Release/QScriptExample_FirebirdClientPlugin.qs -parent 28812D3A-7176-4572-AFD9-10A065A458E5
+File ::52999C34-5D48-4248-A1B5-AA63C4E26028 -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/Win32/Release/qsqlibase.dll -parent 28812D3A-7176-4572-AFD9-10A065A458E5
+FileGroup ::6C27AF6F-0ACB-4CF1-B920-94BA0CAF7D01 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin KeyBoardDevice(win32)} -parent FileGroups
+File ::115F7F4F-F2CC-4B36-BDA1-7C061593D853 -name E:/Projects/BrainStim_Plugins/KeyBoardDevice/build/Win32/Release/keyboardplugin_Win32_Release.dll -parent 6C27AF6F-0ACB-4CF1-B920-94BA0CAF7D01
+File ::D11EA7C7-D02C-4C0E-B905-1DBF9AD64FB1 -name E:/Projects/BrainStim_Plugins/KeyBoardDevice/build/Win32/Release/keyboardplugin_Win32_Release.ini -parent 6C27AF6F-0ACB-4CF1-B920-94BA0CAF7D01
+File ::D05E4ABD-5912-47A0-AA9A-DAEC9C420C56 -name E:/Projects/BrainStim_Plugins/KeyBoardDevice/build/Win32/Release/QScriptExample_KeyBoard.qs -parent 6C27AF6F-0ACB-4CF1-B920-94BA0CAF7D01
+FileGroup ::85850EEA-C404-43E7-BD78-15A8722F3FDB -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin MatlabExchanger(win32)} -parent FileGroups
+File ::BAA20D5B-8B34-4D59-8105-CF6AD22BF3ED -name E:/Projects/BrainStim_Plugins/MatlabExchanger/build/Win32/Release/MatlabExchangerExample.qs -parent 85850EEA-C404-43E7-BD78-15A8722F3FDB
+File ::CBCB3750-D72A-4266-99AE-9B537C2DBFB1 -name E:/Projects/BrainStim_Plugins/MatlabExchanger/build/Win32/Release/MatlabExchangerplugin_Win32_Release.dll -parent 85850EEA-C404-43E7-BD78-15A8722F3FDB
+File ::27ECD224-CC35-4FF6-BFF2-F6213B0AB540 -name E:/Projects/BrainStim_Plugins/MatlabExchanger/build/Win32/Release/MatlabExchangerplugin_Win32_Release.ini -parent 85850EEA-C404-43E7-BD78-15A8722F3FDB
+FileGroup ::98BF408D-F01C-4268-AF87-8DC9F08AD4E1 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin ParallelPortDevice(win32)} -parent FileGroups
+File ::68F48558-2448-4E5E-A476-AA56CA4BF1BC -name E:/Projects/BrainStim_Plugins/ParallelPortDevice/build/Win32/Release/inpout32.dll -parent 98BF408D-F01C-4268-AF87-8DC9F08AD4E1
+File ::32EB3BCF-445F-4696-A485-060CA7B1E9C4 -name E:/Projects/BrainStim_Plugins/ParallelPortDevice/build/Win32/Release/parallelportplugin_Win32_Release.dll -parent 98BF408D-F01C-4268-AF87-8DC9F08AD4E1
+File ::06302096-E2B9-4E2D-A01D-DB4AEEDA5CBD -name E:/Projects/BrainStim_Plugins/ParallelPortDevice/build/Win32/Release/parallelportplugin_Win32_Release.ini -parent 98BF408D-F01C-4268-AF87-8DC9F08AD4E1
+File ::F0D06CC7-55ED-40BD-94EB-2D013EDE7035 -name E:/Projects/BrainStim_Plugins/ParallelPortDevice/build/Win32/Release/QScriptExample_ParallelPort.qs -parent 98BF408D-F01C-4268-AF87-8DC9F08AD4E1
+FileGroup ::FF021AB4-CB34-4C6A-95D5-237AEFF9C5AB -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin PiezoStimDevice(win32)} -parent FileGroups
+File ::3FADB155-267F-4C5A-8FF3-F5CEDF3BD833 -name E:/Projects/BrainStim_Plugins/PiezoStimDevice/build/Win32/Release/piezostimdeviceplugin_Win32_Release.dll -parent FF021AB4-CB34-4C6A-95D5-237AEFF9C5AB
+File ::89EBD54C-5A6C-4D0A-BC40-44BFE8474FC5 -name E:/Projects/BrainStim_Plugins/PiezoStimDevice/build/Win32/Release/piezostimdeviceplugin_Win32_Release.ini -parent FF021AB4-CB34-4C6A-95D5-237AEFF9C5AB
+File ::007DBC50-72FD-4669-BE32-B08EEA2B3549 -name E:/Projects/BrainStim_Plugins/PiezoStimDevice/build/Win32/Release/QScriptExample_PiezoStimDevice.qs -parent FF021AB4-CB34-4C6A-95D5-237AEFF9C5AB
+File ::0266D2C1-2FF7-4A36-982E-C8028DEBDA8C -name E:/Projects/BrainStim_Plugins/PiezoStimDevice/build/Win32/Release/stimlib0.dll -parent FF021AB4-CB34-4C6A-95D5-237AEFF9C5AB
+FileGroup ::675B29A3-D1BF-4BE9-920A-7FDD52E9EEE7 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin SerialPortDevice(win32)} -parent FileGroups
+File ::CAB0523E-A4D3-4049-BF68-BDE74D9A8783 -name E:/Projects/BrainStim_Plugins/SerialPortDevice/build/Win32/Release/QScriptExample_SerialPortDevice.qs -parent 675B29A3-D1BF-4BE9-920A-7FDD52E9EEE7
+File ::10E2CE16-0EDF-4DB0-9C45-24881042846F -name E:/Projects/BrainStim_Plugins/SerialPortDevice/build/Win32/Release/Qt5SerialPort.dll -parent 675B29A3-D1BF-4BE9-920A-7FDD52E9EEE7
+File ::9D0B7EB3-CB59-43C7-9998-E4119E513988 -name E:/Projects/BrainStim_Plugins/SerialPortDevice/build/Win32/Release/serialportdeviceplugin_Win32_Release.dll -parent 675B29A3-D1BF-4BE9-920A-7FDD52E9EEE7
+File ::EC54BFC7-489F-4BE3-BE6D-07D8DA4692BD -name E:/Projects/BrainStim_Plugins/SerialPortDevice/build/Win32/Release/serialportdeviceplugin_Win32_Release.ini -parent 675B29A3-D1BF-4BE9-920A-7FDD52E9EEE7
+FileGroup ::3EFED135-25BE-4E66-975E-22E908F0CD0D -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin TBVExchanger(win32)} -parent FileGroups
+File ::96DD2E4A-070A-4AEA-83AC-4B0FBFD438F1 -name E:/Projects/BrainStim_Plugins/TBVExchanger/build/Win32/Release/QScriptExample_TBVExchangerPlugin.qs -parent 3EFED135-25BE-4E66-975E-22E908F0CD0D
+File ::AF32B8E0-4696-462C-87EE-CF59ACC079DD -name E:/Projects/BrainStim_Plugins/TBVExchanger/build/Win32/Release/TBVExchanger.qs -parent 3EFED135-25BE-4E66-975E-22E908F0CD0D
+File ::EA405477-4B0C-43BE-91D8-E36844CC0E8B -name E:/Projects/BrainStim_Plugins/TBVExchanger/build/Win32/Release/tbvexchangerplugin_Win32_Release.dll -parent 3EFED135-25BE-4E66-975E-22E908F0CD0D
+File ::21C514EA-CBEB-4F8C-9888-8B3062B6C65B -name E:/Projects/BrainStim_Plugins/TBVExchanger/build/Win32/Release/tbvexchangerplugin_Win32_Release.ini -parent 3EFED135-25BE-4E66-975E-22E908F0CD0D
+FileGroup ::4A39619B-2145-41FB-B4A7-BB347E6EFCF1 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin TCPNetworkServer(win32)} -parent FileGroups
+File ::06C00EBA-A9E3-42CC-9697-15CBB8753AA7 -name E:/Projects/BrainStim_Plugins/TCPNetworkServer/build/Win32/Release/QScriptExample_TCPNetworkServerPlugin.qs -parent 4A39619B-2145-41FB-B4A7-BB347E6EFCF1
+File ::129B5A23-2080-4960-A338-873E46475E5F -name E:/Projects/BrainStim_Plugins/TCPNetworkServer/build/Win32/Release/tcpnetworkserverplugin_Win32_Release.dll -parent 4A39619B-2145-41FB-B4A7-BB347E6EFCF1
+File ::5083366C-4142-45C6-9920-234766B21705 -name E:/Projects/BrainStim_Plugins/TCPNetworkServer/build/Win32/Release/tcpnetworkserverplugin_Win32_Release.ini -parent 4A39619B-2145-41FB-B4A7-BB347E6EFCF1
+FileGroup ::9FEB7907-4ED9-4627-84A3-26E80B10625E -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin TSIExchanger(win32)} -parent FileGroups
+File ::AFFDC2C0-ED6A-4E4F-B4F5-5421B02187B1 -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/Win32/Release/FingerTapping.exml -parent 9FEB7907-4ED9-4627-84A3-26E80B10625E
+File ::E89F21A1-2780-4F39-BD05-C28C6301F6ED -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/Win32/Release/FingerTapping.qml -parent 9FEB7907-4ED9-4627-84A3-26E80B10625E
+File ::8CAA83B5-2A13-4A1A-9CD4-5DC9D6E29B01 -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/Win32/Release/FingerTapping.qs -parent 9FEB7907-4ED9-4627-84A3-26E80B10625E
+File ::911D3A6F-526F-45A8-A698-A106915F6C92 -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/Win32/Release/LeftHand.png -parent 9FEB7907-4ED9-4627-84A3-26E80B10625E
+File ::BA6BBDC8-1631-4FC2-B13F-D6CC6F7786AA -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/Win32/Release/QScriptExample_TSIExchangerPlugin.qs -parent 9FEB7907-4ED9-4627-84A3-26E80B10625E
+File ::B70D22B8-3480-47AF-9A7B-541E70CAE0E1 -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/Win32/Release/RightHand.png -parent 9FEB7907-4ED9-4627-84A3-26E80B10625E
+File ::EEC6F243-0F3C-488B-8712-9C7DA82A3ECB -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/Win32/Release/TSIExchanger.qs -parent 9FEB7907-4ED9-4627-84A3-26E80B10625E
+File ::2C456BD8-5F86-4169-BCCF-1AB1355207BE -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/Win32/Release/TSIExchangerplugin_Win32_Release.dll -parent 9FEB7907-4ED9-4627-84A3-26E80B10625E
+File ::AFCBE4BB-CAD9-46A5-80A7-3B7FB0C4F072 -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/Win32/Release/TSIExchangerplugin_Win32_Release.ini -parent 9FEB7907-4ED9-4627-84A3-26E80B10625E
+FileGroup ::7B1FF3E8-0A0A-47DF-8F31-7FA172FF3848 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin USBHIDDevice(win32)} -parent FileGroups
+File ::5C4026A0-2B14-4297-BDF5-142E79CDDAEA -name E:/Projects/BrainStim_Plugins/USBHIDDevice/build/Win32/Release/hidapi_win32.dll -parent 7B1FF3E8-0A0A-47DF-8F31-7FA172FF3848
+File ::A0F20C2C-2A1B-4CE0-A383-4CA72F1CD969 -name E:/Projects/BrainStim_Plugins/USBHIDDevice/build/Win32/Release/QScriptExample_USBHIDDevice.qs -parent 7B1FF3E8-0A0A-47DF-8F31-7FA172FF3848
+File ::654DC2F9-DCC1-467F-B4DA-06DBDCF28645 -name E:/Projects/BrainStim_Plugins/USBHIDDevice/build/Win32/Release/usbhiddeviceplugin_Win32_Release.dll -parent 7B1FF3E8-0A0A-47DF-8F31-7FA172FF3848
+File ::150CD77D-BC16-4049-B2A7-8D0170D1A0B7 -name E:/Projects/BrainStim_Plugins/USBHIDDevice/build/Win32/Release/usbhiddeviceplugin_Win32_Release.ini -parent 7B1FF3E8-0A0A-47DF-8F31-7FA172FF3848
+FileGroup ::E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin FirebirdClient(x64)} -parent FileGroups
+File ::1E26F269-928F-46CA-B893-DBE3549DBE33 -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/x64/Release/fbclient.dll -parent E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB
+File ::FA1ABDA7-4D3F-4E13-8352-40969EB70B22 -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/x64/Release/firebird.conf -parent E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB
+File ::5D414F0C-F0AC-4987-9638-5E62C832CB2C -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/x64/Release/firebird.msg -parent E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB
+File ::EA608007-7F89-4598-BC2F-8F505BB4EDEF -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/x64/Release/firebirdclientplugin_x64_Release.dll -parent E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB
+File ::705F97B1-58B1-44ED-A751-71CBED9D9469 -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/x64/Release/firebirdclientplugin_x64_Release.ini -parent E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB
+File ::EDADB8FF-B037-4302-82B5-D02D7D5843CE -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/x64/Release/icudt30.dll -parent E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB
+File ::59538F9B-E2E6-43FB-9A6E-11EA8E1DF57B -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/x64/Release/icuin30.dll -parent E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB
+File ::7497AD03-0D8C-4DAA-B7D2-A914977B88E8 -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/x64/Release/icuuc30.dll -parent E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB
+File ::27A5D162-A3F8-4A87-84D4-F229721ECF8E -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/x64/Release/msvcr80.dll -parent E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB
+File ::C94271DA-2BBA-4A40-81DA-2464E6FD00FA -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/x64/Release/QScriptExample_FirebirdClientPlugin.qs -parent E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB
+File ::E998ED00-D6C8-4484-8397-A7165B39233D -name E:/Projects/BrainStim_Plugins/FirebirdClient/build/x64/Release/qsqlibase.dll -parent E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB
+FileGroup ::8CF69855-7E20-4C82-A52D-1C1F85EB5A95 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin KeyBoardDevice(x64)} -parent FileGroups
+File ::552AED57-C3A8-41C2-B1F4-1C42EB7703BD -name E:/Projects/BrainStim_Plugins/KeyBoardDevice/build/x64/Release/keyboardplugin_x64_Release.dll -parent 8CF69855-7E20-4C82-A52D-1C1F85EB5A95
+File ::32912590-9F79-45B7-81B8-1D9673D88CC8 -name E:/Projects/BrainStim_Plugins/KeyBoardDevice/build/x64/Release/keyboardplugin_x64_Release.ini -parent 8CF69855-7E20-4C82-A52D-1C1F85EB5A95
+File ::A2F52139-B554-4D67-8A5B-6DDBBEB31B77 -name E:/Projects/BrainStim_Plugins/KeyBoardDevice/build/x64/Release/QScriptExample_KeyBoard.qs -parent 8CF69855-7E20-4C82-A52D-1C1F85EB5A95
+FileGroup ::7FD7E101-08E3-4868-AAE0-FAAC3BBD6D7B -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin MatlabExchanger(x64)} -parent FileGroups
+File ::AA4AEB1E-FF68-4D52-B43C-546C06617BC9 -name E:/Projects/BrainStim_Plugins/MatlabExchanger/build/x64/Release/MatlabExchangerExample.qs -parent 7FD7E101-08E3-4868-AAE0-FAAC3BBD6D7B
+File ::9A76FED8-3603-484C-AB7D-372149CFE163 -name E:/Projects/BrainStim_Plugins/MatlabExchanger/build/x64/Release/MatlabExchangerplugin_x64_Release.dll -parent 7FD7E101-08E3-4868-AAE0-FAAC3BBD6D7B
+File ::67F07781-6998-4419-BFAE-F38A2E8983C3 -name E:/Projects/BrainStim_Plugins/MatlabExchanger/build/x64/Release/MatlabExchangerplugin_x64_Release.ini -parent 7FD7E101-08E3-4868-AAE0-FAAC3BBD6D7B
+FileGroup ::03D91071-F314-47D0-BEF1-F4382F73D9D8 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin ParallelPortDevice(x64)} -parent FileGroups
+File ::BF0C746B-096D-4BF8-9806-334D3C4CD465 -name E:/Projects/BrainStim_Plugins/ParallelPortDevice/build/x64/Release/inpoutx64.dll -parent 03D91071-F314-47D0-BEF1-F4382F73D9D8
+File ::2271120D-6569-44A6-98BD-241D81AA62DB -name E:/Projects/BrainStim_Plugins/ParallelPortDevice/build/x64/Release/parallelportplugin_x64_Release.dll -parent 03D91071-F314-47D0-BEF1-F4382F73D9D8
+File ::AB5D0534-B1E6-4D16-AA50-1DAA241EB514 -name E:/Projects/BrainStim_Plugins/ParallelPortDevice/build/x64/Release/parallelportplugin_x64_Release.ini -parent 03D91071-F314-47D0-BEF1-F4382F73D9D8
+File ::7BEA1E19-2343-4FEF-ACC8-02FAFAD06871 -name E:/Projects/BrainStim_Plugins/ParallelPortDevice/build/x64/Release/QScriptExample_ParallelPort.qs -parent 03D91071-F314-47D0-BEF1-F4382F73D9D8
+FileGroup ::A92D86C0-4AE0-4155-B825-62C9B76225A7 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin PiezoStimDevice(x64)} -parent FileGroups
+File ::148AAA7A-EA46-4F58-869D-8695A1616A49 -name E:/Projects/BrainStim_Plugins/PiezoStimDevice/build/x64/Release/piezostimdeviceplugin_x64_Release.dll -parent A92D86C0-4AE0-4155-B825-62C9B76225A7
+File ::AAF12F2D-222B-4B8C-BEA5-3166818B2D51 -name E:/Projects/BrainStim_Plugins/PiezoStimDevice/build/x64/Release/piezostimdeviceplugin_x64_Release.ini -parent A92D86C0-4AE0-4155-B825-62C9B76225A7
+File ::AF36A368-0B04-4072-89CA-DE037D8299F6 -name E:/Projects/BrainStim_Plugins/PiezoStimDevice/build/x64/Release/QScriptExample_PiezoStimDevice.qs -parent A92D86C0-4AE0-4155-B825-62C9B76225A7
+File ::F40DA4C8-18CB-4839-A2CB-2C2CE2A1647D -name E:/Projects/BrainStim_Plugins/PiezoStimDevice/build/x64/Release/stimlib0.dll -parent A92D86C0-4AE0-4155-B825-62C9B76225A7
+FileGroup ::BE5A5802-E5CC-435D-8B4C-8FCFCE351348 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin SerialPortDevice(x64)} -parent FileGroups
+File ::450DCCB4-8EA2-4721-95FF-DBDE0CFB255B -name E:/Projects/BrainStim_Plugins/SerialPortDevice/build/x64/Release/QScriptExample_SerialPortDevice.qs -parent BE5A5802-E5CC-435D-8B4C-8FCFCE351348
+File ::C96BBEB9-631A-4300-8D12-70F28CEF0DFA -name E:/Projects/BrainStim_Plugins/SerialPortDevice/build/x64/Release/Qt5SerialPort.dll -parent BE5A5802-E5CC-435D-8B4C-8FCFCE351348
+File ::D79BE0DA-0666-4039-8271-988C5F8F2863 -name E:/Projects/BrainStim_Plugins/SerialPortDevice/build/x64/Release/serialportdeviceplugin_x64_Release.dll -parent BE5A5802-E5CC-435D-8B4C-8FCFCE351348
+File ::89777A41-02C8-4609-9CE8-56101940A9A0 -name E:/Projects/BrainStim_Plugins/SerialPortDevice/build/x64/Release/serialportdeviceplugin_x64_Release.ini -parent BE5A5802-E5CC-435D-8B4C-8FCFCE351348
+FileGroup ::577CDF87-9034-45C2-BFBA-88241D13DF40 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin TBVExchanger(x64)} -parent FileGroups
+File ::E9E35C5F-C180-45E3-80B6-88209ED572F4 -name E:/Projects/BrainStim_Plugins/TBVExchanger/build/x64/Release/QScriptExample_TBVExchangerPlugin.qs -parent 577CDF87-9034-45C2-BFBA-88241D13DF40
+File ::F624F89D-EDEB-4FF8-AC53-06AB8F7270B2 -name E:/Projects/BrainStim_Plugins/TBVExchanger/build/x64/Release/TBVExchanger.qs -parent 577CDF87-9034-45C2-BFBA-88241D13DF40
+File ::DA8F0A7D-2EA5-49AC-B3FB-E7F9DDC9118D -name E:/Projects/BrainStim_Plugins/TBVExchanger/build/x64/Release/tbvexchangerplugin_x64_Release.dll -parent 577CDF87-9034-45C2-BFBA-88241D13DF40
+File ::6FB297D1-CC3F-4820-957D-0B4C12EDA600 -name E:/Projects/BrainStim_Plugins/TBVExchanger/build/x64/Release/tbvexchangerplugin_x64_Release.ini -parent 577CDF87-9034-45C2-BFBA-88241D13DF40
+FileGroup ::EBF80C7A-B5F4-47AF-8969-0236FC7AB884 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin TCPNetworkServer(x64)} -parent FileGroups
+File ::A8554072-749D-4F91-869F-C5FC6F2F8DA8 -name E:/Projects/BrainStim_Plugins/TCPNetworkServer/build/x64/Release/QScriptExample_TCPNetworkServerPlugin.qs -parent EBF80C7A-B5F4-47AF-8969-0236FC7AB884
+File ::9AF248C5-64F3-415A-9F8B-0F454E4BE360 -name E:/Projects/BrainStim_Plugins/TCPNetworkServer/build/x64/Release/tcpnetworkserverplugin_x64_Release.dll -parent EBF80C7A-B5F4-47AF-8969-0236FC7AB884
+File ::7AF76F83-A402-4E6C-A7D7-118EC5669060 -name E:/Projects/BrainStim_Plugins/TCPNetworkServer/build/x64/Release/tcpnetworkserverplugin_x64_Release.ini -parent EBF80C7A-B5F4-47AF-8969-0236FC7AB884
+FileGroup ::99AE4BF2-F50A-4CB1-9BCE-746C2177FEE2 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin TSIExchanger(x64)} -parent FileGroups
+File ::6BBCF5D3-7A30-4093-B5FA-0749B4AF2C70 -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/x64/Release/FingerTapping.exml -parent 99AE4BF2-F50A-4CB1-9BCE-746C2177FEE2
+File ::6F081212-4FE3-4973-9818-3CD5B91783AC -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/x64/Release/FingerTapping.qml -parent 99AE4BF2-F50A-4CB1-9BCE-746C2177FEE2
+File ::7F8AE161-0B4B-415A-B7C9-A2E10F344E65 -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/x64/Release/FingerTapping.qs -parent 99AE4BF2-F50A-4CB1-9BCE-746C2177FEE2
+File ::F9F961A1-8DA5-4D5B-8EB7-EA380454AAA6 -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/x64/Release/LeftHand.png -parent 99AE4BF2-F50A-4CB1-9BCE-746C2177FEE2
+File ::C9679742-CCBB-4E0E-8C73-37E52664F17C -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/x64/Release/QScriptExample_TSIExchangerPlugin.qs -parent 99AE4BF2-F50A-4CB1-9BCE-746C2177FEE2
+File ::ADB1C169-E652-4077-B182-F22005639713 -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/x64/Release/RightHand.png -parent 99AE4BF2-F50A-4CB1-9BCE-746C2177FEE2
+File ::BF929852-4AEE-4E25-9C22-8CE5B9BF2380 -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/x64/Release/TSIExchanger.qs -parent 99AE4BF2-F50A-4CB1-9BCE-746C2177FEE2
+File ::F6AC313A-265D-4336-8E56-582F60C35807 -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/x64/Release/TSIExchangerplugin_x64_Release.dll -parent 99AE4BF2-F50A-4CB1-9BCE-746C2177FEE2
+File ::FDE6EBFE-5D31-4859-80B7-FCB55841C6E4 -name E:/Projects/BrainStim_Plugins/TSIExchanger/build/x64/Release/TSIExchangerplugin_x64_Release.ini -parent 99AE4BF2-F50A-4CB1-9BCE-746C2177FEE2
+FileGroup ::471F4951-4F45-4576-9579-F75B14CE612A -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows TarArchive ZipArchive} -name {Plugin USBHIDDevice(x64)} -parent FileGroups
+File ::EC107C7E-6E49-4A0B-872B-689062C1F451 -name E:/Projects/BrainStim_Plugins/USBHIDDevice/build/x64/Release/hidapi_x64.dll -parent 471F4951-4F45-4576-9579-F75B14CE612A
+File ::63FD8A31-6D8F-4B84-A431-378A4485622C -name E:/Projects/BrainStim_Plugins/USBHIDDevice/build/x64/Release/QScriptExample_USBHIDDevice.qs -parent 471F4951-4F45-4576-9579-F75B14CE612A
+File ::4DC9289A-62B2-4502-B2CD-15F2F6634572 -name E:/Projects/BrainStim_Plugins/USBHIDDevice/build/x64/Release/usbhiddeviceplugin_x64_Release.dll -parent 471F4951-4F45-4576-9579-F75B14CE612A
+File ::4C982DDD-DF6A-4FDF-AE70-8ED7E4AA7B64 -name E:/Projects/BrainStim_Plugins/USBHIDDevice/build/x64/Release/usbhiddeviceplugin_x64_Release.ini -parent 471F4951-4F45-4576-9579-F75B14CE612A
 Component ::3E0D911D-E0AF-47F2-898C-7CF2EDCE0A33 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows} -name {Default Files(x64)} -parent Components
 Component ::C511BCE0-5730-4B6A-B67A-9BFDC29D6A11 -setup Install -active Yes -platforms {AIX-ppc FreeBSD-4-x86 FreeBSD-5-x86 FreeBSD-6-x86 FreeBSD-7-x86 HPUX-hppa Linux-x86 Linux-x86_64 Solaris-sparc Solaris-x86 Windows} -name {Default Files(win32)} -parent Components
 Component ::0C4197C0-9F10-4AD0-86B8-506675EEFCBC -setup Install -active Yes -platforms Windows -name Default -parent Components
@@ -1960,6 +1956,12 @@ array set Properties {
 02AD7066-582E-44F8-88AD-22D50D85E745,ShowSetupType
 {No}
 
+03D91071-F314-47D0-BEF1-F4382F73D9D8,Destination
+{<%InstallDir%>/Updates/ParallelPortDevice}
+
+03D91071-F314-47D0-BEF1-F4382F73D9D8,Name
+{Plugin ParallelPortDevice(x64)}
+
 03F14297-F67B-48CF-94E0-BAE14BDAE2B2,Alias
 {Setup Actions}
 
@@ -2122,6 +2124,12 @@ array set Properties {
 27F4102A-675C-4053-BE7B-B4829106F060,Level
 {system}
 
+28812D3A-7176-4572-AFD9-10A065A458E5,Destination
+{<%InstallDir%>/Updates/FirebirdClient}
+
+28812D3A-7176-4572-AFD9-10A065A458E5,Name
+{Plugin FirebirdClient(win32)}
+
 2F3D7E29-7A1D-4FEB-8DAF-FF0E06239BEB,Active
 {No}
 
@@ -2180,7 +2188,7 @@ array set Properties {
 {1}
 
 3E0D911D-E0AF-47F2-898C-7CF2EDCE0A33,FileGroups
-{D562F7E3-157E-48ED-91CE-71FBA40B332D 13ECD65D-69B5-4F91-B2C0-B4F9548060F8 D09FFE2D-0C13-4F41-ABE1-1E2763E77575 213874EE-2BCC-43BB-8B31-176507FEF175 AC052636-D32C-4BE2-8541-056511841A6C D66CC3C4-3C82-4A89-8A30-8695B7ADEAF2 C6C42CD1-B9D2-4DCB-B599-C7236551A39A C2965824-E1F7-41F1-988B-2789A12B339E 55269ED9-DCCB-432A-90C5-178AC914C101}
+{D562F7E3-157E-48ED-91CE-71FBA40B332D 13ECD65D-69B5-4F91-B2C0-B4F9548060F8 D09FFE2D-0C13-4F41-ABE1-1E2763E77575 213874EE-2BCC-43BB-8B31-176507FEF175 AC052636-D32C-4BE2-8541-056511841A6C D66CC3C4-3C82-4A89-8A30-8695B7ADEAF2 C6C42CD1-B9D2-4DCB-B599-C7236551A39A C2965824-E1F7-41F1-988B-2789A12B339E E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB 8CF69855-7E20-4C82-A52D-1C1F85EB5A95 7FD7E101-08E3-4868-AAE0-FAAC3BBD6D7B 03D91071-F314-47D0-BEF1-F4382F73D9D8 A92D86C0-4AE0-4155-B825-62C9B76225A7 BE5A5802-E5CC-435D-8B4C-8FCFCE351348 577CDF87-9034-45C2-BFBA-88241D13DF40 EBF80C7A-B5F4-47AF-8969-0236FC7AB884 99AE4BF2-F50A-4CB1-9BCE-746C2177FEE2 471F4951-4F45-4576-9579-F75B14CE612A}
 
 3E0D911D-E0AF-47F2-898C-7CF2EDCE0A33,Name
 {Default Files(x64)}
@@ -2193,6 +2201,12 @@ array set Properties {
 
 3E805411-7E12-41C4-BD8A-ADBD653ABF63,Filename
 {<%ProgramReadme%>}
+
+3EFED135-25BE-4E66-975E-22E908F0CD0D,Destination
+{<%InstallDir%>/Updates/TBVExchanger}
+
+3EFED135-25BE-4E66-975E-22E908F0CD0D,Name
+{Plugin TBVExchanger(win32)}
 
 3F6B02E5-8CF8-44A0-A089-F719579AFD59,CheckCondition
 {Before Action is Executed}
@@ -2245,6 +2259,18 @@ array set Properties {
 460325A4-F9C8-4C4D-843F-CE4004EBF7F3,Widget
 {Back Button;Next Button}
 
+471F4951-4F45-4576-9579-F75B14CE612A,Destination
+{<%InstallDir%>/Updates/USBHIDDevice}
+
+471F4951-4F45-4576-9579-F75B14CE612A,Name
+{Plugin USBHIDDevice(x64)}
+
+4A39619B-2145-41FB-B4A7-BB347E6EFCF1,Destination
+{<%InstallDir%>/Updates/TCPNetworkServer}
+
+4A39619B-2145-41FB-B4A7-BB347E6EFCF1,Name
+{Plugin TCPNetworkServer(win32)}
+
 4AB510E2-770D-465C-BBE4-7A5C17F2CB70,Alias
 {Install Actions}
 
@@ -2287,12 +2313,6 @@ array set Properties {
 551C1C69-3B6E-4256-80B9-76E8A757AE3F,Filename
 {<%ProgramExecutable%>}
 
-55269ED9-DCCB-432A-90C5-178AC914C101,Destination
-{<%InstallDir%>}
-
-55269ED9-DCCB-432A-90C5-178AC914C101,Name
-{Plugin Installation Files(x64)}
-
 56252ABB-FDB4-4460-8509-9B3F7FD68B91,BackButton,subst
 {1}
 
@@ -2319,6 +2339,12 @@ array set Properties {
 
 56252ABB-FDB4-4460-8509-9B3F7FD68B91,Title,subst
 {1}
+
+577CDF87-9034-45C2-BFBA-88241D13DF40,Destination
+{<%InstallDir%>/Updates/TBVExchanger}
+
+577CDF87-9034-45C2-BFBA-88241D13DF40,Name
+{Plugin TBVExchanger(x64)}
 
 5AED5E24-7D5D-442D-89D7-3D15214385B4,Background
 {#FFFFFF}
@@ -2485,6 +2511,12 @@ array set Properties {
 66452662-3831-44B5-80F7-9617D59B471C,Message,subst
 {1}
 
+675B29A3-D1BF-4BE9-920A-7FDD52E9EEE7,Destination
+{<%InstallDir%>/Updates/SerialPortDevice}
+
+675B29A3-D1BF-4BE9-920A-7FDD52E9EEE7,Name
+{Plugin SerialPortDevice(win32)}
+
 6AED0188-C13E-43E6-9E09-199FF2D86B06,CheckCondition
 {Before Action is Executed}
 
@@ -2493,6 +2525,12 @@ array set Properties {
 
 6BDF85DB-8CDC-44E7-A890-DC9834B0A0F4,ExitType
 {Finish}
+
+6C27AF6F-0ACB-4CF1-B920-94BA0CAF7D01,Destination
+{<%InstallDir%>/Updates/KeyBoardDevice}
+
+6C27AF6F-0ACB-4CF1-B920-94BA0CAF7D01,Name
+{Plugin KeyBoardDevice(win32)}
 
 6DC5F808-7E69-420E-B0D2-C931B482B6D7,Alias
 {Setup Actions}
@@ -2557,6 +2595,12 @@ array set Properties {
 7A091D4B-ADD5-4762-BD8C-C5F8E1FF8228,Conditions
 {0 conditions}
 
+7B1FF3E8-0A0A-47DF-8F31-7FA172FF3848,Destination
+{<%InstallDir%>/Updates/USBHIDDevice}
+
+7B1FF3E8-0A0A-47DF-8F31-7FA172FF3848,Name
+{Plugin USBHIDDevice(win32)}
+
 7E157748-C3A7-40B7-9341-3CE2FE2CFD29,Background
 {#FFFFFF}
 
@@ -2583,6 +2627,12 @@ array set Properties {
 
 7F11A057-D216-4077-A31E-520737955F95,String
 {<%GuiMode%>}
+
+7FD7E101-08E3-4868-AAE0-FAAC3BBD6D7B,Destination
+{<%InstallDir%>/Updates/MatlabExchanger}
+
+7FD7E101-08E3-4868-AAE0-FAAC3BBD6D7B,Name
+{Plugin MatlabExchanger(x64)}
 
 80310451-F0BB-4443-A165-5A7FD5023D45,CheckCondition
 {Before Action is Executed}
@@ -2635,6 +2685,12 @@ array set Properties {
 8231C65A-63DD-4B9D-92CA-B9AA28CAAD71,WorkingDirectory
 {<%InstallDir%>}
 
+85850EEA-C404-43E7-BD78-15A8722F3FDB,Destination
+{<%InstallDir%>/Updates/MatlabExchanger}
+
+85850EEA-C404-43E7-BD78-15A8722F3FDB,Name
+{Plugin MatlabExchanger(win32)}
+
 89114BA5-CC47-4E80-8F56-E066205F7FB6,Conditions
 {1 condition}
 
@@ -2670,6 +2726,12 @@ array set Properties {
 
 8C9D799F-471C-44D5-B48F-30679D57E3B6,String
 {<%UpgradeInstall%>}
+
+8CF69855-7E20-4C82-A52D-1C1F85EB5A95,Destination
+{<%InstallDir%>/Updates/KeyBoardDevice}
+
+8CF69855-7E20-4C82-A52D-1C1F85EB5A95,Name
+{Plugin KeyBoardDevice(x64)}
 
 90559B49-71AC-4ED3-909E-BBA8325FFBDD,ExecuteAction
 {Before Pane is Displayed}
@@ -2740,11 +2802,17 @@ array set Properties {
 921DF660-41D8-4BF5-88F0-349E21DE5E5D,Y
 {160}
 
-942CA64C-72B6-4E4B-A3AA-BDB1BBF5CFC4,Destination
-{<%InstallDir%>/Updates}
+98BF408D-F01C-4268-AF87-8DC9F08AD4E1,Destination
+{<%InstallDir%>/Updates/ParallelPortDevice}
 
-942CA64C-72B6-4E4B-A3AA-BDB1BBF5CFC4,Name
-{Plugin Installation Files(win32)}
+98BF408D-F01C-4268-AF87-8DC9F08AD4E1,Name
+{Plugin ParallelPortDevice(win32)}
+
+99AE4BF2-F50A-4CB1-9BCE-746C2177FEE2,Destination
+{<%InstallDir%>/Updates/TSIExchanger}
+
+99AE4BF2-F50A-4CB1-9BCE-746C2177FEE2,Name
+{Plugin TSIExchanger(x64)}
 
 9B6EA236-969D-43FC-A84A-06A74E6C3DBE,Destination
 {<%InstallDir%>/Qml/plugins/Win32/BrainStim_QMLExtensions}
@@ -2788,6 +2856,12 @@ array set Properties {
 9FAD9049-4135-43F0-847C-59893E37C15B,NextButton,subst
 {1}
 
+9FEB7907-4ED9-4627-84A3-26E80B10625E,Destination
+{<%InstallDir%>/Updates/TSIExchanger}
+
+9FEB7907-4ED9-4627-84A3-26E80B10625E,Name
+{Plugin TSIExchanger(win32)}
+
 A00C3163-87BB-4623-A657-71F6C34EE4F4,Conditions
 {0 conditions}
 
@@ -2814,6 +2888,12 @@ A511F175-2396-43C3-9A21-F32D0A97CC1F,CheckCondition
 
 A511F175-2396-43C3-9A21-F32D0A97CC1F,Filename
 {<%ProgramExecutable%>}
+
+A92D86C0-4AE0-4155-B825-62C9B76225A7,Destination
+{<%InstallDir%>/Updates/PiezoStimDevice}
+
+A92D86C0-4AE0-4155-B825-62C9B76225A7,Name
+{Plugin PiezoStimDevice(x64)}
 
 AA641D4F-CAD4-4ACB-B153-A810EAC7B4CA,Prompt
 {<%ConsoleSelectDestinationText%>}
@@ -3031,6 +3111,12 @@ BE5A32E5-B1CA-4FA9-B050-830962AC363D,WaitForProgram
 BE5A32E5-B1CA-4FA9-B050-830962AC363D,WorkingDirectory
 {<%InstallDir%>}
 
+BE5A5802-E5CC-435D-8B4C-8FCFCE351348,Destination
+{<%InstallDir%>/Updates/SerialPortDevice}
+
+BE5A5802-E5CC-435D-8B4C-8FCFCE351348,Name
+{Plugin SerialPortDevice(x64)}
+
 C0184BDB-433E-4DF8-99A9-D6765EE6D2A8,BackButton,subst
 {1}
 
@@ -3095,7 +3181,7 @@ C511BCE0-5730-4B6A-B67A-9BFDC29D6A11,DisplayName,subst
 {1}
 
 C511BCE0-5730-4B6A-B67A-9BFDC29D6A11,FileGroups
-{891CF076-368A-450C-890A-7E3FDCB8748B A1E87F59-F33A-4028-AA97-952F67EB031A 9B786F81-2B09-4F3D-A0CB-7EA6E2674A1F 9B6EA236-969D-43FC-A84A-06A74E6C3DBE 23EA39AB-E0A7-4451-8BBD-01D9ABBC739A FD2052F2-F691-4680-9D69-F50CA6E8F047 B8B5252C-BA02-416E-A353-667E13968192 4DF71FAD-80BD-4091-929A-2A4F157EA0C5 942CA64C-72B6-4E4B-A3AA-BDB1BBF5CFC4}
+{891CF076-368A-450C-890A-7E3FDCB8748B A1E87F59-F33A-4028-AA97-952F67EB031A 9B786F81-2B09-4F3D-A0CB-7EA6E2674A1F 9B6EA236-969D-43FC-A84A-06A74E6C3DBE 23EA39AB-E0A7-4451-8BBD-01D9ABBC739A FD2052F2-F691-4680-9D69-F50CA6E8F047 B8B5252C-BA02-416E-A353-667E13968192 4DF71FAD-80BD-4091-929A-2A4F157EA0C5 28812D3A-7176-4572-AFD9-10A065A458E5 6C27AF6F-0ACB-4CF1-B920-94BA0CAF7D01 85850EEA-C404-43E7-BD78-15A8722F3FDB 98BF408D-F01C-4268-AF87-8DC9F08AD4E1 FF021AB4-CB34-4C6A-95D5-237AEFF9C5AB 675B29A3-D1BF-4BE9-920A-7FDD52E9EEE7 3EFED135-25BE-4E66-975E-22E908F0CD0D 4A39619B-2145-41FB-B4A7-BB347E6EFCF1 9FEB7907-4ED9-4627-84A3-26E80B10625E 7B1FF3E8-0A0A-47DF-8F31-7FA172FF3848}
 
 C511BCE0-5730-4B6A-B67A-9BFDC29D6A11,Name
 {Default Files(win32)}
@@ -3352,6 +3438,12 @@ E842A1F1-FE21-4772-A0F9-97B19339723A,Default
 E842A1F1-FE21-4772-A0F9-97B19339723A,Prompt
 {<%UninstallStartupText%>}
 
+E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB,Destination
+{<%InstallDir%>/Updates/FirebirdClient}
+
+E889A7DA-9067-4BBA-82B4-E8FB7CD8A2FB,Name
+{Plugin FirebirdClient(x64)}
+
 EB2C8C16-18CE-4654-9C72-91F6B7CC3876,Caption,subst
 {1}
 
@@ -3375,6 +3467,12 @@ EBE9D823-6C63-4570-971C-847B4DBEDF0A,Alias
 
 EBE9D823-6C63-4570-971C-847B4DBEDF0A,Conditions
 {0 conditions}
+
+EBF80C7A-B5F4-47AF-8969-0236FC7AB884,Destination
+{<%InstallDir%>/Updates/TCPNetworkServer}
+
+EBF80C7A-B5F4-47AF-8969-0236FC7AB884,Name
+{Plugin TCPNetworkServer(x64)}
 
 EF8E4663-D71C-4BDE-9489-0EB24AB0DCB2,Background
 {#FFFFFF}
@@ -3459,6 +3557,12 @@ FEE2F8F2-0E09-4C64-8866-C8C8B080AF85,Default
 
 FEE2F8F2-0E09-4C64-8866-C8C8B080AF85,Prompt
 {<%InstallStartupText%>}
+
+FF021AB4-CB34-4C6A-95D5-237AEFF9C5AB,Destination
+{<%InstallDir%>/Updates/PiezoStimDevice}
+
+FF021AB4-CB34-4C6A-95D5-237AEFF9C5AB,Name
+{Plugin PiezoStimDevice(win32)}
 
 FreeBSD-4-x86,Active
 {No}

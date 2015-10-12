@@ -47,12 +47,6 @@ bool getSettingsInformation(QSettings &settingsObj, const QString &sName, QVaria
 	return bRetval;
 }
 
-QTextStream& qStdOut()
-{
-	static QTextStream ts(stdout);
-	return ts;
-}
-
 int main(int argc, char **argv)
 {
 // Check windows
@@ -240,13 +234,13 @@ int main(int argc, char **argv)
 					installationManagerBase::InstallResult resInstall = installationManagerBase::installPlugin(qApp->applicationDirPath(), sDefaultPluginsRootDir, sCustomPluginRootDir, sSourceFilePath, sUserAppRootDir, bOverwriteExistingFiles, bRenameSourceInstallFileOnSuccess);
 					if (resInstall > 0)
 					{
-						sMessage = "- Installed: " + sSourceFilePath;
-						qStdOut() << sMessage << endl;
+						sMessage = "-Installed: " + sSourceFilePath;
+						installationManagerBase::qStdOut() << sMessage << endl;
 					}
 					else
 					{
-						sMessage = "- Failed: " + sSourceFilePath + ", return code: " + QString::number((int)resInstall);
-						qStdOut() << sMessage << endl;
+						sMessage = "-Failed: " + sSourceFilePath + ", return code: " + QString::number((int)resInstall);
+						installationManagerBase::qStdOut() << sMessage << endl;
 					}
 				}
 			}
