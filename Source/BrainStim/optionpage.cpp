@@ -22,6 +22,7 @@
 #include <QFileDialog>
 #include <QListWidgetItem>
 #include <QDesktopServices>
+#include <QDebug>
 
 OptionPage::OptionPage(QWidget *parent, GlobalApplicationInformation *g_AppInfo) : QDialog(parent), glob_AppInfo(g_AppInfo)
 {
@@ -231,6 +232,7 @@ void OptionPage::readSettings()
 	int nTemp;
 
 	QVariant tmpVariant;
+	ui.lneUpdateDirectory->setText(MainAppInfo::appUpdatesPath());
 	if (glob_AppInfo->getSettingsInformation(REGISTRY_MAINAPPUSERDIRECTORY, tmpVariant))
 	{
 		sTemp = tmpVariant.toString();
@@ -413,6 +415,30 @@ void OptionPage::on_btnBrowseForCustomPluginRootDirectory_pressed()
 void OptionPage::on_btnViewMainApplicationUserDirectory_pressed()
 {
 	QDesktopServices::openUrl(QUrl("file:///" + ui.lneMainApplicationUserDirectory->text(), QUrl::TolerantMode));
+}
+
+void OptionPage::on_btnViewUpdatesDirectory_pressed()
+{
+	QDesktopServices::openUrl(QUrl("file:///" + ui.lneUpdateDirectory->text(), QUrl::TolerantMode));
+}
+
+void OptionPage::on_btnCheck4Updates_pressed()
+{
+	bool bRetVal = false;
+	QStringList lInstallationResults;
+	QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_CHECKFORAVAILABLEUPDATES_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(const QString&, ""), Q_ARG(QStringList&, lInstallationResults), Q_ARG(const QString&, ""), Q_ARG(const bool&, false));
+	if (bRetVal)
+	{
+		QMessageBox tmpMessageBox;
+		tmpMessageBox.setWindowTitle("Updates Installed");
+		tmpMessageBox.setText("There were some updates installed, see the details for more information.");
+		tmpMessageBox.setDetailedText(lInstallationResults.join("\n"));
+		QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+		QGridLayout* layout = (QGridLayout*)tmpMessageBox.layout();
+		layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+		tmpMessageBox.exec();
+		qDebug() << __FUNCTION__ << "Updates Installed: " << lInstallationResults.join("\n");
+	}
 }
 
 void OptionPage::on_btnViewCustomPluginRootDirectory_pressed()

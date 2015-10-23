@@ -34,10 +34,17 @@ MainAppExchange::~MainAppExchange()
 	_isRunning = false;
 }
 
-GlobalApplicationInformation *MainAppExchange::getGlobalAppInformationObjectPointer()
+GlobalApplicationInformation *MainAppExchange::getGlobalAppInformationObjectPointer(bool &bFirstTimeUserInitialization)
 {
-	if(m_globAppInformation == NULL)
+	if (m_globAppInformation == NULL)
+	{
 		m_globAppInformation = new GlobalApplicationInformation();
+		m_globAppInformation->initialize(bFirstTimeUserInitialization);
+	}
+	else
+	{
+		bFirstTimeUserInitialization = false;
+	}
 	return m_globAppInformation;
 }
 

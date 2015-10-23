@@ -249,10 +249,10 @@ void PluginManagerDialog::installPlugin()
 			int confirm = QMessageBox::question(this, "Plugin Installation(s)", "The plugin(s) were successfully installed.\n It's advised to restart BrainStim, would you like to do that?", QMessageBox::Yes | QMessageBox::No);
 			if (confirm == QMessageBox::Yes)
 			{
-				installationManagerBase::RestartApplication(false);
+				installationManagerBase::RestartApplication(false,true,"","-m");
 			}
 		}
-		else
+		else if(nSuccessfullInstallations < 0)
 		{
 			QMessageBox msgBox(QMessageBox::Critical, "Plugin Installation(s)", "Something went wrong while installing the plugin(s)!", QMessageBox::Ok);
 			msgBox.exec();

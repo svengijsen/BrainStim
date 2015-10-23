@@ -58,6 +58,7 @@
 #define INSTALLMNGR_INSTALL_INI_FILEEXT				"ini"
 #define INSTALLMNGR_INSTALL_ZIP_FILEEXT				"zip"
 #define INSTALLMNGR_INSTALL_LST_FILEEXT				"lst"
+#define INSTALLMNGR_INSTALL_ARG_FILESEP				";"
 
 class installationManagerBase
 {
@@ -83,6 +84,20 @@ public:
 		InstallResult_ErrorNoValidLstSourceFile			= -14,
 		InstallResult_ErrorRenaming						= -15
 	};
+
+	enum MessageType
+	{
+		Informative = 0,
+		Succeeded = 1,
+		Failed = 2
+	};
+	Q_DECLARE_FLAGS(MessageTypes, MessageType)
+
+	typedef struct strcMessage
+	{
+		QString sMessage;
+		MessageType nMessageType;
+	} strcMessageStructure;
 	
 	installationManagerBase(QObject *parent = NULL) {Q_UNUSED(parent)};
 	~installationManagerBase() {};
@@ -96,7 +111,7 @@ public:
 	static QString resolveFileDirectoryPath(const QString &sFileDirectoryPath, const QString &sMainAppsUserPluginDirPath, const QString &sMainAppDirPath, const QString &sIniCompleteBaseName, const QString &sMainAppsDefaultPluginDirPath, const QString &sUserAppPathPath, bool &bNeedsAdminPrivileges)
 	{
 		QString sRetval = sFileDirectoryPath;
-		if ((sRetval.contains(INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH, Qt::CaseInsensitive)) || (sRetval.contains(INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH, Qt::CaseInsensitive)))
+		if (needsAdminPrivilegesToInstall(sRetval))
 			bNeedsAdminPrivileges = true;
 		//else
 		//	bNeedsAdminPrivileges = false;
@@ -108,9 +123,88 @@ public:
 		return sRetval;
 	};
 
-	static InstallResult installPlugin(const QString &sMainAppDirPath, const QString &sMainAppsDefaultPluginDirPath, const QString &sMainAppsUserPluginDirPath, const QString &sPluginInstallFilePath, const QString &sUserAppPath, const bool &bOverWriteExistingFiles, const bool &bRenameSourceInstallFileOnSuccess = false)
+	static bool needsAdminPrivilegesToInstall(const QString &sMacroPath)
+	{
+		return (sMacroPath.contains(INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH, Qt::CaseInsensitive) || (sMacroPath.contains(INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH, Qt::CaseInsensitive)));
+	};
+
+	static bool isPackedFile(const QString &sFilePath)
+	{
+		return ((QFileInfo(sFilePath).completeSuffix() == INSTALLMNGR_INSTALL_INI_FILEEXT) || (QFileInfo(sFilePath).completeSuffix() == INSTALLMNGR_INSTALL_ZIP_FILEEXT));
+	};
+
+	static bool packedFileNeedsAdminPrivilegesToInstall(const QString &sPackedFilePath, bool &bNeedsAdminPrivileges)
+	{
+		if (QFile(sPackedFilePath).exists() == false)
+			return false;
+		QFileInfo fiPluginInstallFilePath(sPackedFilePath);
+		if (fiPluginInstallFilePath.completeSuffix() == INSTALLMNGR_INSTALL_INI_FILEEXT)
+		{
+			QTextStream in(&QString(sPackedFilePath));
+			while (!in.atEnd())
+			{
+				QString sTmpIniFile = in.readLine();
+				if (QFile(sTmpIniFile).exists() == false)
+					return false;
+				if (isPackedFile(sTmpIniFile))
+				{
+					bool bSubPackedNeedsAdminPrivileges = false;
+					if (packedFileNeedsAdminPrivilegesToInstall(sTmpIniFile, bSubPackedNeedsAdminPrivileges) == false)
+						return false;
+					if (bSubPackedNeedsAdminPrivileges)
+					{
+						bNeedsAdminPrivileges = true;
+						return true;
+					}
+				}
+				if (needsAdminPrivilegesToInstall(sTmpIniFile))
+				{
+					bNeedsAdminPrivileges = true;
+					return true;
+				}
+			}
+		}
+		else if (fiPluginInstallFilePath.completeSuffix() == INSTALLMNGR_INSTALL_ZIP_FILEEXT)
+		{
+			QStringList lArchiverFiles = JlCompress::getFileList(sPackedFilePath);
+			QStringList lArchiverIniFiles;
+			foreach(QString sTmpFileArchiverPath, lArchiverFiles)
+			{
+				if (QFileInfo(sTmpFileArchiverPath).completeSuffix() == INSTALLMNGR_INSTALL_INI_FILEEXT)
+					lArchiverIniFiles.append(sTmpFileArchiverPath);
+			}
+			if (lArchiverIniFiles.isEmpty() == false)
+			{
+				foreach(QString sTmpFilePath, lArchiverFiles)
+				{
+					if (needsAdminPrivilegesToInstall(sTmpFilePath))
+					{
+						bNeedsAdminPrivileges = true;
+						return true;
+					}
+				}
+			}
+		}
+		return false;
+	};
+
+	static void appendAndLogDebugMessage(const QString &sMessage, const installationManagerBase::MessageType &eMessageType, QList<installationManagerBase::strcMessage>* lMessages = NULL)
+	{
+		qDebug() << sMessage;
+		qStdOut() << sMessage << endl;
+		if (lMessages)
+		{
+			installationManagerBase::strcMessage tmpMessageStruct;
+			tmpMessageStruct.sMessage = sMessage;
+			tmpMessageStruct.nMessageType = eMessageType;
+			lMessages->append(tmpMessageStruct);
+		}
+	}
+
+	static InstallResult installPlugin(const QString &sMainAppDirPath, const QString &sMainAppsDefaultPluginDirPath, const QString &sMainAppsUserPluginDirPath, const QString &sPluginInstallFilePath, const QString &sUserAppPath, const bool &bOverWriteExistingFiles, const bool &bRenameSourceInstallFileOnSuccess = false, QList<installationManagerBase::strcMessage>* lMessages = NULL)
 	{
 		//qStdOut() << "12345" << endl;//this will be appended to the cout install log file
+		appendAndLogDebugMessage(QString(__FUNCTION__) + "> Arguments: " + sMainAppDirPath + ", " + sMainAppsDefaultPluginDirPath + ", " + sMainAppsUserPluginDirPath + ", " + sPluginInstallFilePath + ", " + sUserAppPath + ", " + QString::number(bOverWriteExistingFiles) + ", " + QString::number(bRenameSourceInstallFileOnSuccess), Informative, lMessages);
 		QFileInfo fiPluginInstallFilePath(sPluginInstallFilePath);
 		QString sIniFilePath = "";
 		if (fiPluginInstallFilePath.completeSuffix() == INSTALLMNGR_INSTALL_INI_FILEEXT)
@@ -122,10 +216,21 @@ public:
 			QFile fPluginInstallFilePath(sPluginInstallFilePath);
 			if (fPluginInstallFilePath.exists())
 			{
+				if (IsRunAsAdministrator() == false)
+				{
+					bool bLstFileNeedsAdminPrivileges = false;
+					if (packedFileNeedsAdminPrivilegesToInstall(sPluginInstallFilePath, bLstFileNeedsAdminPrivileges))
+					{
+						if (bLstFileNeedsAdminPrivileges)
+						{
+							appendAndLogDebugMessage("The installation list file needs administrator privileges to install", Failed, lMessages);
+							return InstallResult_ErrorInsufficientRights;
+						}
+					}
+				}
 				if (fPluginInstallFilePath.open(QIODevice::ReadOnly) == false)
 				{
-					qStdOut() << "The installation list file could not be opened, " + fPluginInstallFilePath.errorString() << endl;
-					qDebug() << __FUNCTION__ << "The installation list file could not be opened, " + fPluginInstallFilePath.errorString();
+					appendAndLogDebugMessage("The installation list file could not be opened, " + fPluginInstallFilePath.errorString(), Failed, lMessages);
 					return InstallResult_ErrorCouldNotReadListFile; 
 				}
 				else
@@ -137,9 +242,9 @@ public:
 						QString sTmpIniFile = in.readLine();
 						if (QFile(sTmpIniFile).exists())
 						{
-							if ((QFileInfo(sTmpIniFile).completeSuffix() == INSTALLMNGR_INSTALL_INI_FILEEXT) || (QFileInfo(sTmpIniFile).completeSuffix() == INSTALLMNGR_INSTALL_ZIP_FILEEXT))
+							if (isPackedFile(sTmpIniFile))
 							{
-								int nTempRetVal = installPlugin(sMainAppDirPath, sMainAppsDefaultPluginDirPath, sMainAppsUserPluginDirPath, sTmpIniFile, sUserAppPath, bOverWriteExistingFiles, bRenameSourceInstallFileOnSuccess);
+								int nTempRetVal = installPlugin(sMainAppDirPath, sMainAppsDefaultPluginDirPath, sMainAppsUserPluginDirPath, sTmpIniFile, sUserAppPath, bOverWriteExistingFiles, bRenameSourceInstallFileOnSuccess, lMessages);
 								if (nTempRetVal < 0)
 								{
 									nRetVal = nTempRetVal;
@@ -153,18 +258,25 @@ public:
 					if (nRetVal > 0)
 					{
 						if (bRenameSourceInstallFileOnSuccess)
+						{
 							if (renameInstalledFile(fPluginInstallFilePath.fileName()) == false)
+							{
+								appendAndLogDebugMessage("An error occurred while renaming the installer file", Failed, lMessages);
 								return InstallResult_ErrorRenaming;
+							}
+						}
 						qStdOut() << "INSTALLED: (" << fPluginInstallFilePath.fileName() << ")" << endl;
 						return InstallResult_PluginsInstalled;
 					}
-					qStdOut() << "The lst-file doesn't seem to include a valid source file!" << endl;
-					qDebug() << __FUNCTION__ << "The lst-file doesn't seem to include a valid source file!";
-					return InstallResult_ErrorNoValidSourceFileInLstFound;
+					else if (nRetVal == 0)
+					{
+						appendAndLogDebugMessage("The lst-file doesn't seem to include a valid source file!", Failed, lMessages);
+						return InstallResult_ErrorNoValidSourceFileInLstFound;
+					}
+					return (installationManagerBase::InstallResult)nRetVal;
 				}
 			}
-			qStdOut() << __FUNCTION__ << "No valid lst-file found!" << endl;
-			qDebug() << __FUNCTION__ << "No valid lst-file found!";
+			appendAndLogDebugMessage("No valid lst-file found!", Failed, lMessages);
 			return InstallResult_ErrorNoValidLstSourceFile;
 		}
 		else if (fiPluginInstallFilePath.completeSuffix() == INSTALLMNGR_INSTALL_ZIP_FILEEXT)
@@ -178,24 +290,22 @@ public:
 			}
 			if (lArchiverIniFiles.isEmpty())
 			{
-				qStdOut() << "The compressed file doesn't seem to be a valid installer package, no configuration (*.ini) file found!" << endl;
-				qDebug() << __FUNCTION__ << "The compressed file doesn't seem to be a valid installer package, no configuration (*.ini) file found!";
+				appendAndLogDebugMessage("The compressed file doesn't seem to be a valid installer package, no configuration (*.ini) file found!", Failed, lMessages);
 				return InstallResult_ErrorNoValidSourceFileInZipFound;
 			}
 			QTemporaryDir dir;
 			if (dir.isValid() == false)
 			{
-				qStdOut() << "Could not create a temporarily directory for the extraction of the of the installer package, please try to extract it yourself and use the extracted configuration (*.ini) file for the installation process!" << endl;
-				qDebug() << __FUNCTION__ << "Could not create a temporarily directory for the extraction of the of the installer package, please try to extract it yourself and use the extracted configuration (*.ini) file for the installation process!";
+				appendAndLogDebugMessage("Could not create a temporarily directory for the extraction of the of the installer package, please try to extract it yourself and use the extracted configuration (*.ini) file for the installation process!", Failed, lMessages);
 				return InstallResult_ErrorCreatingTempExtractDir;
 			}
 			QStringList lExtractedFiles = JlCompress::extractDir(sPluginInstallFilePath, dir.path());
 			int nRetVal = 0;
 			foreach(QString sTmpExtractedFilePath, lExtractedFiles)
 			{
-				if ((QFileInfo(sTmpExtractedFilePath).completeSuffix() == INSTALLMNGR_INSTALL_INI_FILEEXT) || (QFileInfo(sTmpExtractedFilePath).completeSuffix() == INSTALLMNGR_INSTALL_ZIP_FILEEXT))
+				if (isPackedFile(sTmpExtractedFilePath))
 				{
-					int nTempRetVal = installPlugin(sMainAppDirPath, sMainAppsDefaultPluginDirPath, sMainAppsUserPluginDirPath, sTmpExtractedFilePath, sUserAppPath, bOverWriteExistingFiles, bRenameSourceInstallFileOnSuccess);
+					int nTempRetVal = installPlugin(sMainAppDirPath, sMainAppsDefaultPluginDirPath, sMainAppsUserPluginDirPath, sTmpExtractedFilePath, sUserAppPath, bOverWriteExistingFiles, bRenameSourceInstallFileOnSuccess, lMessages);
 					if (nTempRetVal < 0)
 					{
 						nRetVal = nTempRetVal;
@@ -210,7 +320,10 @@ public:
 				if (bRenameSourceInstallFileOnSuccess)
 				{
 					if (renameInstalledFile(sPluginInstallFilePath) == false)
+					{
+						appendAndLogDebugMessage("An error occurred while renaming the installer file", Failed, lMessages);
 						return InstallResult_ErrorRenaming;
+					}
 				}
 				qStdOut() << "INSTALLED: (" << sPluginInstallFilePath << ")" << endl;
 				return InstallResult_PluginsInstalled;
@@ -218,6 +331,7 @@ public:
 		}
 		else
 		{
+			appendAndLogDebugMessage("The installer file is of an unknown file type", Failed, lMessages);
 			return InstallResult_ErrorUnknownFileType;
 		}
 
@@ -226,7 +340,10 @@ public:
 		{
 			QString sIniFileAbsDir = QFileInfo(sIniFilePath).absolutePath();
 			if (QDir(sMainAppsUserPluginDirPath).canonicalPath() == QDir(sIniFileAbsDir).canonicalPath())//Is a INI file inside the plugins directory? 
+			{
+				appendAndLogDebugMessage("Initialization file found, there should be no initialization file inside the plugins directory", Failed, lMessages);
 				return InstallResult_ErrorIniFileInsidePluginsDir;
+			}
 
 			QSettings pluginSettings(sIniFilePath, QSettings::IniFormat);
 			pluginSettings.beginGroup(INSTALLMNGR_SETTING_SECTION_CONFIGURATION);
@@ -252,8 +369,7 @@ public:
 					//}
 					//else// if (QMessageBox::Cancel)
 					//{
-					qStdOut() << "File already exists (" + sMainAppsUserPluginDirPath + "/" + sIniFileName + ")!" << sPluginInternalName << endl;
-					qDebug() << __FUNCTION__ << "File already exists (" + sMainAppsUserPluginDirPath + "/" + sIniFileName + ")!" << sPluginInternalName;
+					appendAndLogDebugMessage("File already exists and cannot replace the existing file (" + sMainAppsUserPluginDirPath + "/" + sIniFileName + "), " + sPluginInternalName, Failed, lMessages);
 					return InstallResult_ErrorCannotOverwriteExistingFile;
 				}
 			}
@@ -272,8 +388,7 @@ public:
 				{
 					if (IsRunAsAdministrator() == false)
 					{
-						qStdOut() << "The plugin " << sPluginInternalName << " needs administrator privileges to install!" << endl;
-						qDebug() << "The plugin " << sPluginInternalName << " needs administrator privileges to install!";
+						appendAndLogDebugMessage("The plugin(" + sPluginInternalName + ") needs administrator privileges to install!", Failed, lMessages);
 						return InstallResult_ErrorInsufficientRights;
 					}
 				}
@@ -291,7 +406,10 @@ public:
 						nPresentInCurrentInstallIndexes.append(i);
 				}
 				if (bAllFilesAvailableCheck == false)
+				{
+					appendAndLogDebugMessage("Not all source files for the installation are present!", Failed, lMessages);
 					return InstallResult_ErrorNotAllSourceFilesAvailable;
+				}
 
 				if (nPresentInCurrentInstallIndexes.isEmpty() == false)
 				{
@@ -303,8 +421,7 @@ public:
 						{
 							sSkippedFiles = sSkippedFiles + "\n" + lFileList[nIndex];
 						}
-						qStdOut() << "Some installation files (for the " << sPluginInternalName << " plugin) were skipped because they were already present and in use: " << sSkippedFiles << endl;
-						qDebug() << __FUNCTION__ << "Some installation files (for the " << sPluginInternalName << " plugin) were skipped because they were already present and in use: " << sSkippedFiles;
+						appendAndLogDebugMessage("Some installation files for the plugin(" + sPluginInternalName +") were skipped because they were already present and in use: " + sSkippedFiles, Informative, lMessages);
 						//see below uncommented copy step!!!
 					}
 				}
@@ -338,8 +455,7 @@ public:
 								bRemoveSucceeded = false;
 							if (bRemoveSucceeded == false)
 							{
-								qStdOut() << "Could not replace the already present file (" << lFileList[i] << ")!" << endl;
-								qDebug() << __FUNCTION__ << "Could not replace the already present file (" << lFileList[i] << ")!";
+								appendAndLogDebugMessage("Could not replace the already present file: " + lFileList[i], Failed, lMessages);
 								return InstallResult_ErrorCannotReplaceOriginalFile;
 							}
 						}
@@ -348,26 +464,30 @@ public:
 						{
 							if (QDir().mkpath(QFileInfo(lFileList[i]).absolutePath()) == false)
 							{
-								qStdOut() << "Could not create the destination directory path: " << QFileInfo(lFileList[i]).absolutePath() << endl;
-								qDebug() << __FUNCTION__ << "Could not create the destination directory path: " << QFileInfo(lFileList[i]).absolutePath();
+								appendAndLogDebugMessage("Could not create the destination directory path: " + QFileInfo(lFileList[i]).absolutePath(), Failed, lMessages);
 								return InstallResult_ErrorCannotCreateDestinationPath;
 							}
 						}
 						if (QFile::copy(sSourceFilePath, lFileList[i]) == false)
 						{
-							qStdOut() << "Could not copy a plugin installation file (" << sSourceFilePath << ") to the plugin folder: " << endl;
-							qDebug() << __FUNCTION__ << "Could not copy a plugin installation file (" << sSourceFilePath << ") to the plugin folder: " << lFileList[i];
+							appendAndLogDebugMessage("Could not copy a plugin installation file (" + sSourceFilePath + ") to the plugin folder: " + lFileList[i], Failed, lMessages);
 							return InstallResult_ErrorCannotCopySourceFile;
 						}
 					}
 				}
 				if (bRenameSourceInstallFileOnSuccess)
+				{
 					if (renameInstalledFile(sIniFilePath) == false)
+					{
+						appendAndLogDebugMessage("An error occurred while renaming the installer file", Failed, lMessages);
 						return InstallResult_ErrorRenaming;
+					}
+				}
 				qStdOut() << "INSTALLED: (" << sIniFilePath << ")" << endl;
 				return InstallResult_PluginsInstalled;
 			}
 		}
+		appendAndLogDebugMessage("The installer file was not found: " + sIniFilePath, Failed, lMessages);
 		return InstallResult_ErrorIniFileNotFound;
 	};
 
@@ -443,126 +563,186 @@ public:
 		}
 	};
 
-	static bool ExecuteUpdateMngr(const bool &bAsAdmin, const QStringList &lParameters = QStringList(), const QString &sCoutFilePath = QString(""))
+	static void WinErrorCodeToString(DWORD ErrorCode, QString &sMessage)
 	{
+		char* locbuffer = NULL;
+		DWORD count = FormatMessageA(FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_ALLOCATE_BUFFER, NULL, ErrorCode, 0, (LPSTR)&locbuffer, 0, nullptr);
+		if (locbuffer)
+		{
+			if (count)
+			{
+				int c;
+				int back = 0;
+				// strip any trailing "\r\n"s and replace by a single "\n"
+				while (((c = *CharPrevA(locbuffer, locbuffer + count)) == '\r') || (c == '\n')) 
+				{
+					count--;
+					back++;
+				}
+				if (back) 
+				{
+					locbuffer[count++] = '\n';
+					locbuffer[count] = '\0';
+				}
+				sMessage = "Error: ";
+				sMessage += locbuffer;
+			}
+			LocalFree(locbuffer);
+		}
+		else
+		{
+			sMessage = "Unknown error code: " + QString::number(ErrorCode);
+		}
+	}
+
+	static bool ExecuteUpdateMngr(const bool &bAsAdmin, const QStringList &lParameters = QStringList())//, const QString &sCoutFilePath = QString(""))
+	{//Make sure to quote ("") paths in the parameters!
 		bool bRetval = false;
 		QString sUpdateMngrFileName = QString(INSTALLMNGR_UPDATEMNGR_FILENAME) + QString(".exe");
 		QFile fUpdateMngrExeFile;
 		fUpdateMngrExeFile.setFileName(sUpdateMngrFileName);
+		if (fUpdateMngrExeFile.exists() == false)
+		{
+			sUpdateMngrFileName = qApp->applicationDirPath() + "/" + sUpdateMngrFileName;
+			fUpdateMngrExeFile.setFileName(sUpdateMngrFileName);
+		}
 
 		SHELLEXECUTEINFO sei = { sizeof(sei) };
 		sei.hwnd = NULL;
-		sei.nShow = SW_HIDE;//SW_NORMAL;
+		sei.nShow = SW_NORMAL;//SW_HIDE
 		if (bAsAdmin)
 			sei.lpVerb = L"runas";
 		else
 			sei.lpVerb = L"open"; 
 
+		bool bInsideDevEnvironment = false;
+		QString sDebugMode = "";		//Mode
+		QString sDebugModeArg = "";
+		QString sArchitecture = "";		//Architecture
+		QString sArchitectureArg = "";
+
 		if (fUpdateMngrExeFile.exists() == false) //Are we running inside Visual Studio?
 		{
 			// Check windows
-			#if _WIN32 || _WIN64
-			#if _WIN64
-			#define ENVIRONMENT64
-			#else
-			#define ENVIRONMENT32
-			#endif
-			#endif
+#if _WIN32 || _WIN64
+#if _WIN64
+#define ENVIRONMENT64
+#else
+#define ENVIRONMENT32
+#endif
+#endif
 			// Check GCC
-			#if __GNUC__
-			#if __x86_64__ || __ppc64__
-			#define ENVIRONMENT64
-			#else
-			#define ENVIRONMENT32
-			#endif
-			#endif
-			QString sDebugMode;		//Mode
-			QString sDebugModeArg;
-			QString sArchitecture;	//Architecture
-			QString sArchitectureArg;
+#if __GNUC__
+#if __x86_64__ || __ppc64__
+#define ENVIRONMENT64
+#else
+#define ENVIRONMENT32
+#endif
+#endif
 
-			#ifdef _DEBUG
-						sDebugMode = "Debug";
-						sDebugModeArg = "d";
-			#else
-						sDebugMode = "Release";
-						sDebugModeArg = "r";
-			#endif
-			#ifdef ENVIRONMENT32
-						sArchitecture = "Win32";
-						sArchitectureArg = "1";
-			#else
-						sArchitecture = "x64";
-						sArchitectureArg = "2";
-			#endif
+#ifdef _DEBUG
+			sDebugMode = "Debug";
+			sDebugModeArg = "d";
+#else
+			sDebugMode = "Release";
+			sDebugModeArg = "r";
+#endif
+#ifdef ENVIRONMENT32
+			sArchitecture = "Win32";
+			sArchitectureArg = "1";
+#else
+			sArchitecture = "x64";
+			sArchitectureArg = "2";
+#endif
+			qDebug() << __FUNCTION__ << "Could not locate the default UpdateManager application path: " << sUpdateMngrFileName;
 			sUpdateMngrFileName = QString(INSTALLMNGR_UPDATEMNGR_FILENAME) + "_" + sArchitecture + "_" + sDebugMode + ".exe";
 			fUpdateMngrExeFile.setFileName(sUpdateMngrFileName);
 			if (fUpdateMngrExeFile.exists() == false)
+			{
+				sUpdateMngrFileName = qApp->applicationDirPath() + "/" + sUpdateMngrFileName;
+				fUpdateMngrExeFile.setFileName(sUpdateMngrFileName);
+			}
+			if (fUpdateMngrExeFile.exists() == false)
+			{
+				qDebug() << __FUNCTION__ << "Could not locate the UpdateManager application path: " << sUpdateMngrFileName;
 				return false;
-
+			}
+			bInsideDevEnvironment = true;
 			sei.lpFile = L"cmd";
-			sei.fMask = SEE_MASK_NOCLOSEPROCESS;
+		}
+		if (fUpdateMngrExeFile.exists())
+			sUpdateMngrFileName = QFileInfo(sUpdateMngrFileName).absoluteFilePath();
+		sei.fMask = SEE_MASK_NOCLOSEPROCESS;
 
-			QString sCurrentPath = QDir::currentPath().replace("/","\\") + "\\";
-			QString sInstallMngrCommandArg = lParameters.join(" ");//ie. "-p E:\\Projects\\BrainStim\\Install\\Updates\\USBHIDDevice\\usbhiddeviceplugin_Win32_Debug\\usbhiddeviceplugin_Win32_Debug.ini install -o";
-			QString sCoutCommandString = "";
-			if (sCoutFilePath.isEmpty() == false)
-				sCoutCommandString = " >> " + sCoutFilePath;
-			QString sParameters = "/c \"" + sCurrentPath + INSTALLMNGR_UPDATEMNGR_BATCH_FILENAME + " " + sArchitectureArg + " " + sDebugModeArg + " " + QT_VERSION_STR + " E:\\Libraries\\" + " " + sCurrentPath + " && " + sCurrentPath + sUpdateMngrFileName + " " + sInstallMngrCommandArg + sCoutCommandString + "\"";
-			
-			sei.lpParameters = (LPCWSTR)sParameters.utf16();
-			if (!ShellExecuteEx(&sei))
-			{
-				return false;
-			}
-			else
-			{
-				bRetval = true;
-			}
-			//Another example
-			//QProcess process;
-			//process.setEnvironment(QStringList() << "");
-			//process.start("E:\\Projects\\BrainStim\\Install\\elevate.exe");//"E:\\Projects\\BrainStim\\Install\\test.bat");//, QStringList() << "E:\\Libraries\\Qt5.3.2_32bit\\5.3\\msvc2013_opengl\\bin" << "-p" << "E:\\Projects\\BrainStim\\Install\\Updates\\USBHIDDevice\\usbhiddeviceplugin_Win32_Debug\\usbhiddeviceplugin_Win32_Debug.ini install" << "-o");
-			//if (process.waitForStarted())
-			//{
-			//	if (process.waitForFinished())
-			//	{
-			//		//qDebug() << __FUNCTION__ << sConfigureFileName << "output: \n" << process->readAll();
-			//		while (process.waitForReadyRead())
-			//		{
-			//			qDebug() << __FUNCTION__ << process.readAll();
-			//		}
-			//	}
-			//}
+		QString sCurrentPath = QDir::currentPath().replace("/","\\") + "\\";
+		QString sInstallMngrCommandArg = lParameters.join(" ");//ie. "-p E:\\Projects\\BrainStim\\Install\\Updates\\USBHIDDevice\\usbhiddeviceplugin_Win32_Debug\\usbhiddeviceplugin_Win32_Debug.ini install -o";
+		//QString sCoutCommandString = "";
+		//if (sCoutFilePath.isEmpty() == false)
+		//{
+		//	QString sCheckedCoutFilePath = sCoutFilePath;
+		//	sCheckedCoutFilePath.replace("/", "\\");
+		//	sCoutCommandString = QString(" >> ") + sCheckedCoutFilePath;
+		//}
+		QString sParameters;
+		if (bInsideDevEnvironment)
+		{
+			sParameters = "/c \"" + sCurrentPath + INSTALLMNGR_UPDATEMNGR_BATCH_FILENAME + " " + sArchitectureArg + " " + sDebugModeArg + " " + QT_VERSION_STR + " E:\\Libraries\\" + " " + sCurrentPath + " && " + sCurrentPath + sUpdateMngrFileName + " " + sInstallMngrCommandArg + "\""; //+sCoutCommandString + "\"";
 		}
 		else
 		{
-			sei.lpFile = (const wchar_t*)QString(sUpdateMngrFileName).utf16();
-			sei.fMask = SEE_MASK_NOCLOSEPROCESS;
-			sei.lpParameters = (const wchar_t*)QString(lParameters.join(" ")).utf16();
-
-			if (!ShellExecuteEx(&sei))
-			{
-				DWORD dwError = GetLastError();
-				if (dwError == ERROR_CANCELLED)
-				{
-					// The user refused to allow privileges elevation.
-					qDebug() << "User did not allow elevation for the application";
-				}
-			}
-			else
-			{
-				bRetval = true;
-			}
+			sei.lpFile = (LPCWSTR)QString("\"" + sUpdateMngrFileName + "\"").utf16();
+			sParameters = sInstallMngrCommandArg;
 		}
+		sei.lpParameters = (LPCWSTR)sParameters.utf16();
+		if (ShellExecuteExRoutine(&sei)==false)
+			return false;
+		else
+			bRetval = true;
+		//Another example
+		//QProcess process;
+		//process.setEnvironment(QStringList() << "");
+		//process.start("E:\\Projects\\BrainStim\\Install\\elevate.exe");//"E:\\Projects\\BrainStim\\Install\\test.bat");//, QStringList() << "E:\\Libraries\\Qt5.3.2_32bit\\5.3\\msvc2013_opengl\\bin" << "-p" << "E:\\Projects\\BrainStim\\Install\\Updates\\USBHIDDevice\\usbhiddeviceplugin_Win32_Debug\\usbhiddeviceplugin_Win32_Debug.ini install" << "-o");
+		//if (process.waitForStarted())
+		//{
+		//	if (process.waitForFinished())
+		//	{
+		//		//qDebug() << __FUNCTION__ << sConfigureFileName << "output: \n" << process->readAll();
+		//		while (process.waitForReadyRead())
+		//		{
+		//			qDebug() << __FUNCTION__ << process.readAll();
+		//		}
+		//	}
+		//}
 		if (sei.hProcess)
 		{
 			// Wait until child process exits.
-			WaitForSingleObject(sei.hProcess, 10000);
+			WaitForSingleObject(sei.hProcess, INFINITE);// 100);
 			CloseHandle(sei.hProcess);
 		}
 		return bRetval;
 	};
+
+	static bool ShellExecuteExRoutine(SHELLEXECUTEINFOW *pExecInfo)
+	{
+		qDebug() << __FUNCTION__ << "Going to execute shell code: " << QString::fromStdWString(pExecInfo->lpFile) << QString::fromStdWString(pExecInfo->lpParameters);
+		if (!ShellExecuteEx(pExecInfo))
+		{
+			DWORD dwError = GetLastError();
+			//if (dwError == ERROR_CANCELLED)
+			//{
+			//	// The user refused to allow privileges elevation.
+			//	qDebug() << __FUNCTION__ << "User did not allow elevation for the application";
+			//}
+			//else
+			//{
+				QString sErrorMessage = "";
+				WinErrorCodeToString(dwError, sErrorMessage);
+				qDebug() << __FUNCTION__ << sErrorMessage;
+			//}
+			return false;
+		}
+		return true;
+	}
 
 	static bool RestartApplication(const bool &bAsAdmin, const bool &bAutoQuitSelf = true, const QString &sAppPath = "", const QString &sParameters = "")
 	{
@@ -588,21 +768,13 @@ public:
 			sei.lpVerb = L"runas";
 		else
 			sei.lpVerb = L"open";
+		//sChoosenAppPath = "C:\\Windows\\notepad.exe";
 		sei.lpFile = (const wchar_t*)QString(sChoosenAppPath).utf16();
 		sei.hwnd = NULL;
 		sei.nShow = SW_NORMAL;
 		sei.lpParameters = (const wchar_t*)QString(sParameters).utf16();//"param1 param2 \"\"\"text with quotes\"\"\" param4";
 
-		if (!ShellExecuteEx(&sei))
-		{
-			DWORD dwError = GetLastError();
-			if (dwError == ERROR_CANCELLED)
-			{
-				// The user refused to allow privileges elevation.
-				qDebug() << "End user did not allow elevation";
-			}
-		}
-		else
+		if (ShellExecuteExRoutine(&sei))
 		{
 			if (bAutoQuitSelf)
 				_exit(1);  // Quit itself

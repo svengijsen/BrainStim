@@ -97,7 +97,6 @@
       <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QUAZIP)\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>qtmain$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;quazip.lib;AdvAPI32.lib;shell32.lib</AdditionalDependencies>
-      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>echo POSTBUILDSTEP for $(ProjectName)
@@ -130,7 +129,6 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
       <AdditionalLibraryDirectories>$(QTDIR)\lib;$(QUAZIP)\$(Platform)\$(Configuration);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>qtmain$(DebugSuffix).lib;Qt5Core$(DebugSuffix).lib;Qt5Gui$(DebugSuffix).lib;Qt5Widgets$(DebugSuffix).lib;Qt5Script$(DebugSuffix).lib;Qt5ScriptTools$(DebugSuffix).lib;quazip.lib;AdvAPI32.lib;shell32.lib</AdditionalDependencies>
-      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
     </Link>
     <PostBuildEvent>
       <Command>echo POSTBUILDSTEP for $(ProjectName)
@@ -310,6 +308,11 @@ echo POSTBUILDSTEP for $(ProjectName) COMPLETED OK</Command>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\Build_MSVC\Qt\$(PlatformName)\$(ConfigurationName)\GeneratedFiles\ui_updatemngr.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\Error.png" />
+    <Image Include="resources\Information.png" />
+    <Image Include="resources\NoError.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

@@ -23,7 +23,7 @@ public:
 	bool isRunning();
 	bool sendMessage(const QString &message);
 
-	GlobalApplicationInformation *getGlobalAppInformationObjectPointer();
+	GlobalApplicationInformation *getGlobalAppInformationObjectPointer(bool &bFirstTimeUserInitialization);
 
 public slots:
 	void receiveMessage();

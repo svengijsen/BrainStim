@@ -30,7 +30,6 @@
 GlobalApplicationInformation::GlobalApplicationInformation(QObject *parent) : webView(NULL), AppRegistrySettings(NULL), sCurrentSettingsFilePath("")
 {
 	Q_UNUSED(parent)
-	initialize();
 };
 
 GlobalApplicationInformation::~GlobalApplicationInformation()
@@ -49,7 +48,7 @@ GlobalApplicationInformation::~GlobalApplicationInformation()
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-void GlobalApplicationInformation::initialize()
+void GlobalApplicationInformation::initialize(bool &bFirstTimeUserInitialization)
 {
 	resetInternalStructure(true);
 	composeJavaScriptConfigurationFile();
@@ -60,6 +59,8 @@ void GlobalApplicationInformation::initialize()
 		sDefaultSettingsAppDirectory = QDir::homePath() + "/" + getTitle();
 		sCurrentSettingsFilePath = sDefaultSettingsAppDirectory + "/" + MAIN_PROGRAM_INTERNAL_NAME + ".ini";
 	}
+	bFirstTimeUserInitialization = !QFile(sCurrentSettingsFilePath).exists();
+
 	initAndParseSettingFile(sCurrentSettingsFilePath, sDefaultSettingsAppDirectory);
 	copyMainAppInformationStructureToSharedMemory(mainAppInformation);
 }
@@ -469,6 +470,11 @@ bool GlobalApplicationInformation::getRegisteredUserCredentials(QStringList &lUs
 	}
 	switchRootSettingsGroup(REGISTRY_SETTINGS_SYSTEM);
 	return (lUserNames.isEmpty() == false);
+}
+
+QString GlobalApplicationInformation::getConfigurationFilePath()
+{
+	return sCurrentSettingsFilePath;
 }
 
 bool GlobalApplicationInformation::getSettingsInformation(const QString &sName, QVariant &vCurrentValue)

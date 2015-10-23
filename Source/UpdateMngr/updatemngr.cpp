@@ -18,8 +18,7 @@
 
 #include "updatemngr.h"
 
-UpdateMngr::UpdateMngr(QWidget *parent)
-	: QMainWindow(parent)
+UpdateMngr::UpdateMngr(QWidget *parent) : QMainWindow(parent)
 {
 	ui.setupUi(this);
 }
@@ -27,4 +26,26 @@ UpdateMngr::UpdateMngr(QWidget *parent)
 UpdateMngr::~UpdateMngr()
 {
 
+}
+
+void UpdateMngr::appendDebugMessages(const QList<installationManagerBase::strcMessage> &lMessages)
+{
+	foreach(installationManagerBase::strcMessage tmpMessage, lMessages)
+	{
+		QListWidgetItem *tmpItem = NULL;
+		tmpItem = new QListWidgetItem(tmpMessage.sMessage);
+		if (tmpMessage.nMessageType == installationManagerBase::Informative)
+		{
+			tmpItem->setIcon(QIcon(":UpdateMngr/resources/Information.png"));
+		}
+		else if (tmpMessage.nMessageType == installationManagerBase::Succeeded)
+		{
+			tmpItem->setIcon(QIcon(":UpdateMngr/resources/NoError.png"));
+		}
+		else if (tmpMessage.nMessageType == installationManagerBase::Failed)
+		{
+			tmpItem->setIcon(QIcon(":UpdateMngr/resources/Error.png"));
+		}
+		ui.listWidget->addItem(tmpItem);
+	}
 }

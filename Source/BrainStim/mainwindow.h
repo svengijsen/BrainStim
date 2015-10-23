@@ -650,6 +650,7 @@ private:
 	enum { MaxRecentFiles = 10 };
 	QList<QAction *> recentFileActs;
 
+	bool preinit();
 	void showSplashMessage(const QString message);
 	void setupMDI();
 	void setupDocumentManager();
@@ -667,7 +668,6 @@ private:
 	void setupToolBars();
 	void setRenderer();
 	bool implementPluginCustomActionMenus();
-	bool checkForAvailableUpdates(const QString &sUpdatePath = "", QStringList &lInstallResults = QStringList(), const QString &sPermissionQuestion = false);
 	QStringList getFilesByExtension(const QString &sUpdatePath, const QStringList &lAllowedFileExtensions);
 	bool implementCustomActionMenu(const QString &sMenuIniFilePath);
 	void newDocument(const GlobalApplicationInformation::DocType &docType, int &DocIndex, const bool &bIsNewUnsaved, const QString &strExtension = "", const QString &strCanonicalFilePath = "", const bool &bNativeMainAppView = false, const bool &bTryToInitialize = false);
@@ -696,6 +696,7 @@ private:
 
 public slots:
 	void updateMenuControls(QMdiSubWindow *mdiSubWin);
+	bool checkForAvailableUpdates(const QString &sUpdatePath = "", QStringList &lInstallResults = QStringList(), const QString &sPermissionQuestion = "", const bool &bDoRename = false);
 
 public:
 	Q_INVOKABLE QAction *registerMainMenuAction(const QStringList &lmenuItemSpecifier, QIcon *iMenuIcon = NULL, const bool &bSkipSubWindowRegistration = false);
@@ -708,6 +709,7 @@ public:
 	void setGlobalApplicationInformationObject(GlobalApplicationInformation *globAppInformation);
 	void recoverLastScreenWindowSettings();
 	void preExecuteTask();
+	void appendDebugMessages(const QStringList &lDebugMessages);
 	void setStartupFiles(const QString &path = QString());
 	Q_INVOKABLE bool registerDockWidget(QWidget *pMDIWindowSubWidget, MainWindowDockWidget *pDockWidget, int nDockWidgetAreaEnum);
 	void unregisterDockWidgets(CustomMDISubWindow* custSubWin);

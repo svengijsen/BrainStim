@@ -79,6 +79,7 @@ int main(int argc, char **argv)
 	QProcess *process = new QProcess();
 	QString sDebugMode;		//Release mode
 	QString sArchitecture;	//Win32 architecture
+	QStringList lDebugMessages;
 
 #ifdef _DEBUG
 	sDebugMode = "d";
@@ -99,24 +100,36 @@ int main(int argc, char **argv)
 		{ 
 			if (process->waitForFinished())
 			{
-				qDebug() << __FUNCTION__ << sConfigureFileName << "output: \n" << process->readAll();
+				lDebugMessages.append(QString(__FUNCTION__) + ": " + sConfigureFileName + ", output: \n" + process->readAll());
+				qDebug() << lDebugMessages.last();
 				while(process->waitForReadyRead())
 				{
-					qDebug() << __FUNCTION__ << process->readAll();
+					lDebugMessages.append(QString(__FUNCTION__) + ": " + process->readAll());
+					qDebug() << lDebugMessages.last();
 				}
 			}
 		}
 	}
 	else
 	{
-		qDebug() << __FUNCTION__ << sConfigureFileName << "not found!";
+		lDebugMessages.append(QString(__FUNCTION__) + ": " + "Configuration file not found: " + sConfigureFileName);
+		qDebug() << lDebugMessages.last();
 	}
 
 	bool bProceed = true;
 	//MainAppExchange appExchange(argc, argv, MAIN_PROGRAM_SHARED_MEM_KEY);
 	MainAppExchange appExchange(argc, argv, MAIN_PROGRAM_SHARED_MEM_KEY);
-	GlobalApplicationInformation *globAppInformation = appExchange.getGlobalAppInformationObjectPointer();
+
+	bool bFirstUserInitialization = false;
+	GlobalApplicationInformation *globAppInformation = appExchange.getGlobalAppInformationObjectPointer(bFirstUserInitialization);
 	//Now the BrainStim.ini file is initialized/created if it did not yet exist.
+	QString sConfigurationFilePath = globAppInformation->getConfigurationFilePath();
+	if (bFirstUserInitialization)
+	{
+		lDebugMessages.append(QString(__FUNCTION__) + ": " + "First time this account initializes BrainStim: " + sConfigurationFilePath);
+		qDebug() << lDebugMessages.last();
+	}
+	
 	if (argc >= 2)
 	{
 		QString sArg = QString(argv[1]);
@@ -243,6 +256,7 @@ int main(int argc, char **argv)
 	{
 		Q_INIT_RESOURCE(brainstim);
 		MainWindow *appWindow = new MainWindow();
+		appWindow->appendDebugMessages(lDebugMessages);
 		appWindow->setGlobalApplicationInformationObject(globAppInformation);
 		MainAppInfo::setMainWindow(appWindow);
 		GlobalApplicationInformation::MainProgramModeFlags flags = GlobalApplicationInformation::Default;
@@ -305,6 +319,8 @@ int main(int argc, char **argv)
 		}
 		if (appExchange.isRunning())
 			flags = flags | GlobalApplicationInformation::DisableNetworkServer;
+		if (bFirstUserInitialization)
+			flags = flags | GlobalApplicationInformation::UserFirstTimeInit;
 
 		appWindow->initialize(flags);
 		// connect message queue to the main window.

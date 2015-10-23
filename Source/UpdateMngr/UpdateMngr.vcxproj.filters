@@ -86,4 +86,15 @@
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\Error.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\NoError.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\Information.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

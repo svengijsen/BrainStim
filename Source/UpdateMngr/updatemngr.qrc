@@ -1,4 +1,7 @@
 <RCC>
     <qresource prefix="UpdateMngr">
+      <file>resources/NoError.png</file>
+      <file>resources/Error.png</file>
+      <file>resources/Information.png</file>
     </qresource>
 </RCC>

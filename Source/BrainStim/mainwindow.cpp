@@ -80,31 +80,31 @@ MainWindow::~MainWindow()//see void MainWindow::closeEvent(QCloseEvent *event)!
 {
 }
 
+bool MainWindow::preinit()
+{
+	bool bRetval = false;
+	//Make sure the Temp directory exists
+	QString sTempDirectoryPath = MainAppInfo::appTempDirPath();
+	QDir tmpDir(sTempDirectoryPath);
+	if (tmpDir.exists()==false)
+	{ 
+		bRetval = tmpDir.mkpath(sTempDirectoryPath);
+	}
+	else
+	{
+		bRetval = true;
+	}
+	if (bRetval==false)
+		qDebug() << __FUNCTION__ << "Could not create the temporarily program directory : " << sTempDirectoryPath;
+	return bRetval;
+}
+
 bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags mainFlags)
 {
 	BrainStimFlags = mainFlags;
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
-	//Default					= 0x00000,
-	//DisablePlugins			= 0x00001,
-	//DisableSplash				= 0x00002
-	//QWaitCondition sleep;
-
-	QStringList lInstallationResults;
-	if (checkForAvailableUpdates("", lInstallationResults, "There were some local updates found that are waiting to be installed.\nDo you want to proceed with this installation?"))
-	{
-		QMessageBox tmpMessageBox;
-		tmpMessageBox.setWindowTitle("Updates Installed");
-		tmpMessageBox.setText("There were some updates installed, see the details for more information.");
-		tmpMessageBox.setDetailedText(lInstallationResults.join("\n"));
-		QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-		QGridLayout* layout = (QGridLayout*)tmpMessageBox.layout();
-		layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
-		tmpMessageBox.exec();
-
-		qDebug() << "Updates Installed: " << lInstallationResults.join("\n");
-	}
-	
+	preinit();
 	qDebug() << "Starting and initializing" << MAIN_PROGRAM_FULL_NAME;
 	//registerFileTypeByDefinition("BrainStim.QtScript","BrainStim Qt Script File",".qs");
 	//MainAppInfo::Initialize(this);
@@ -123,8 +123,29 @@ bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags m
 	setWindowTitle(globAppInfo->getTitle());//  MainAppInfo::MainProgramTitle());
 	setUnifiedTitleAndToolBarOnMac(true);
 	createDockWindows();
+	showSplashMessage("Setup Application Directories...");
 	checkUserDirectories(MainAppInfo::getUserFolderList(),true);
 	setAppDirectories();
+
+	if (BrainStimFlags & GlobalApplicationInformation::UserFirstTimeInit)
+	{
+		showSplashMessage("First Time User Initialization...");
+		qDebug() << __FUNCTION__ << "First Time User Initialization: " + globAppInfo->getConfigurationFilePath();
+		QStringList lInstallationResults;
+		if (checkForAvailableUpdates("", lInstallationResults, "This seems to be the first time for the current account that BrainStim is started.\nThere are some local updates(plugins) found that are waiting to be installed.\nIt's advised to install them now.\nDo you want to proceed with this automatic installation?"))
+		{
+			QMessageBox tmpMessageBox;
+			tmpMessageBox.setWindowTitle("Updates Installed");
+			tmpMessageBox.setText("There were some updates installed, see the details for more information.");
+			tmpMessageBox.setDetailedText(lInstallationResults.join("\n"));
+			QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+			QGridLayout* layout = (QGridLayout*)tmpMessageBox.layout();
+			layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+			tmpMessageBox.exec();
+			qDebug() << __FUNCTION__ << "Updates Installed: " << lInstallationResults.join("\n");
+		}
+	}
+
 	setupScriptEngine();
 	setupStatusBar();
 	createDefaultMenus();
@@ -164,14 +185,20 @@ bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags m
 	return true;
 }
 
-bool MainWindow::checkForAvailableUpdates(const QString &sRootSearchDirectory, QStringList &lInstallResults, const QString &sPermissionQuestion)
+bool MainWindow::checkForAvailableUpdates(const QString &sRootSearchDirectory, QStringList &lInstallResults, const QString &sPermissionQuestion, const bool &bDoRename)
 {
-	
 	QString sResolvedRootSearchDirectory;
 	if (sRootSearchDirectory.isEmpty() == false)
 		sResolvedRootSearchDirectory = sRootSearchDirectory;
 	else
 		sResolvedRootSearchDirectory = MainAppInfo::appUpdatesPath();
+
+	QString sResolvedAppIniFilePath;
+#ifdef ENVIRONMENT64
+	sResolvedAppIniFilePath = QDir::homePath() + "/" + MAIN_PROGRAM_INTERNAL_NAME + "(v" + MAIN_PROGRAM_FILE_VERSION_STRING + ", " + MAIN_PROGRAM_64BIT_STRING + ")" + "/" + MAIN_PROGRAM_INI_FILENAME;
+#else
+	sResolvedAppIniFilePath = QDir::homePath() + "/" + MAIN_PROGRAM_INTERNAL_NAME + "(v" + MAIN_PROGRAM_FILE_VERSION_STRING + ", " + MAIN_PROGRAM_32BIT_STRING + ")" + "/" + MAIN_PROGRAM_INI_FILENAME;
+#endif
 
 	bool bUpdateManagerExecuted = false;
 	QStringList lAllowedFileExtensions;
@@ -184,66 +211,91 @@ bool MainWindow::checkForAvailableUpdates(const QString &sRootSearchDirectory, Q
 			int confirm = QMessageBox::question(this, tr("Install Updates?"), sPermissionQuestion, QMessageBox::Ok | QMessageBox::Cancel);
 			if (confirm == QMessageBox::Cancel)
 				return false;
+		}
+		bool bIsPacked = false;
+		if (lSourceUpdateFiles.count() > 1)//multiple files?
+		{
+			bIsPacked = true;
 
-			bool bIsPacked = false;
-			if (lSourceUpdateFiles.count() > 1)//multiple files?
-			{
-				bIsPacked = true;
-				//Can we pack all the files inside a *.lst file? No other .lst files?
-				for (int i = 0; i < lSourceUpdateFiles.count(); i++)
-				{
-					if (QFileInfo(lSourceUpdateFiles[i]).completeSuffix() == INSTALLMNGR_INSTALL_LST_FILEEXT)
-					{
-						break;
-						bIsPacked = false;
-					}
-				}
-				if (bIsPacked)
-				{
-					QString sUniqueFileName = sResolvedRootSearchDirectory + QDateTime::currentDateTime().toString(MainAppInfo::stdDateTimeFormat());
-					QFile fTempFile(sUniqueFileName + "." + INSTALLMNGR_INSTALL_LST_FILEEXT);
-					int nRetries = 0;
-					while ((fTempFile.exists()))
-					{
-						sUniqueFileName = sUniqueFileName + "_";
-						fTempFile.setFileName(sUniqueFileName + "." + INSTALLMNGR_INSTALL_LST_FILEEXT);
-						nRetries++;
-						if (nRetries>=5)
-						{
-							qDebug() << __FUNCTION__ << "Could not create a unique file!";
-							return false;
-						}
-					}
 
-					if (fTempFile.open(QIODevice::WriteOnly))
-					{
-						QTextStream outStream(&fTempFile);
-						for (int i = 0; i < lSourceUpdateFiles.count(); i++)
-							outStream << lSourceUpdateFiles[i] << endl;
-						fTempFile.close();
-						lSourceUpdateFiles.clear();
-						lSourceUpdateFiles.append(fTempFile.fileName());
-					}
-				}
-			}
+			/*
+			//Can we pack all the files inside a *.lst file? No other .lst files?
 			for (int i = 0; i < lSourceUpdateFiles.count(); i++)
 			{
-				qDebug() << lSourceUpdateFiles[i];
-				QStringList lParams;
-				lParams << "-p" << lSourceUpdateFiles[i] << "install" << "-o" << "-r";
-				QString sFileBaseName = QFileInfo(lSourceUpdateFiles[i]).baseName();
-				QString sFileExtension = QFileInfo(lSourceUpdateFiles[i]).completeSuffix();
-				QString sCoutFilePath = QFileInfo(lSourceUpdateFiles[i]).absolutePath() + "/" + sFileBaseName + "_" + sFileExtension + MAIN_PROGRAM_INSTALLATION_LOGFILE_POSTSTRING;
+				if (QFileInfo(lSourceUpdateFiles[i]).completeSuffix() == INSTALLMNGR_INSTALL_LST_FILEEXT)
+				{
+					break;
+					bIsPacked = false;
+				}
+			}
+			if (bIsPacked)
+			{
+				QString sUniqueFileName = sResolvedRootSearchDirectory + QDateTime::currentDateTime().toString(MainAppInfo::stdDateTimeFormat());
+				QFile fTempFile(sUniqueFileName + "." + INSTALLMNGR_INSTALL_LST_FILEEXT);
+				int nRetries = 0;
+				while ((fTempFile.exists()))
+				{
+					sUniqueFileName = sUniqueFileName + "_";
+					fTempFile.setFileName(sUniqueFileName + "." + INSTALLMNGR_INSTALL_LST_FILEEXT);
+					nRetries++;
+					if (nRetries>=5)
+					{
+						qDebug() << __FUNCTION__ << "Could not create a unique file!";
+						return false;
+					}
+				}
+
+				if (fTempFile.open(QIODevice::WriteOnly))
+				{
+					QTextStream outStream(&fTempFile);
+					for (int i = 0; i < lSourceUpdateFiles.count(); i++)
+						outStream << lSourceUpdateFiles[i] << endl;
+					fTempFile.close();
+					lSourceUpdateFiles.clear();
+					lSourceUpdateFiles.append(fTempFile.fileName());
+				}
+			}
+			*/
+		}
+		if (lSourceUpdateFiles.isEmpty() == false)
+		{
+			QStringList lParams;
+			lParams << "-p" << QString("\"") + lSourceUpdateFiles[0];
+			qDebug() << __FUNCTION__ << "Found update to install: " + lSourceUpdateFiles[0];
+			if (lSourceUpdateFiles.count() > 1)
+			{
+				for (int i = 1; i < lSourceUpdateFiles.count(); i++)
+				{
+					qDebug() << __FUNCTION__ << "Found update to install: " + lSourceUpdateFiles[i];
+					lParams << QString(INSTALLMNGR_INSTALL_ARG_FILESEP + lSourceUpdateFiles[i]);
+				}
+			}
+			lParams << "\"";//Close the installation file(s) string
+			lParams << "install" << "-o" << "-c";
+			if (bDoRename)
+				lParams << "-r";
+			lParams << "-i" << "\"" + sResolvedAppIniFilePath + "\"";
+			QString sCoutFilePath = "";
+			sCoutFilePath = MainAppInfo::appTempDirPath() + "InstallLog_" + QDateTime::currentDateTime().toString(MainAppInfo::stdDateTimeFormat()) + MAIN_PROGRAM_INSTALLATION_LOGFILE_POSTSTRING;
+			if (sCoutFilePath.isEmpty() == false)
+			{
 				if (QFile(sCoutFilePath).exists())
 					QFile::remove(sCoutFilePath);
-				if (installationManagerBase::ExecuteUpdateMngr(true, lParams, sCoutFilePath))
+				lParams << "-l" << "\"" + sCoutFilePath + "\"";
+				qDebug() << __FUNCTION__ << "Log Output file for installation set to: " + sCoutFilePath;
+			}
+			if (installationManagerBase::ExecuteUpdateMngr(true, lParams))
+			{
+				if (sCoutFilePath.isEmpty() == false)
 				{
 					QFile fCoutFile(sCoutFilePath);
 					if (fCoutFile.exists())
 					{
 						if (fCoutFile.open(QIODevice::ReadOnly) == false)
 						{
-							lInstallResults.append("Could not read " + sCoutFilePath + ", " + fCoutFile.errorString());
+							QString sErrorMessage = "Could not read " + sCoutFilePath + ", " + fCoutFile.errorString();
+							lInstallResults.append(sErrorMessage);
+							qDebug() << __FUNCTION__ << sErrorMessage;
 						}
 						else
 						{
@@ -255,11 +307,25 @@ bool MainWindow::checkForAvailableUpdates(const QString &sRootSearchDirectory, Q
 							fCoutFile.close();
 						}
 					}
-					bUpdateManagerExecuted = true;
+					else
+					{
+						QString sErrorMessage = "No output file created";
+						lInstallResults.append(sErrorMessage);
+						qDebug() << __FUNCTION__ << sErrorMessage;
+					}
 				}
+				bUpdateManagerExecuted = true;
+			}
+			else
+			{
+				QString sErrorMessage = "Could not execute the UpdateManager";
+				lInstallResults.append(sErrorMessage);
+				qDebug() << __FUNCTION__ << sErrorMessage;
 			}
 		}
 	}
+	if (bUpdateManagerExecuted)
+		qDebug() << __FUNCTION__ << "UpdateManager executed";
 	return bUpdateManagerExecuted;
 }
 
@@ -4056,6 +4122,12 @@ void MainWindow::recoverLastScreenWindowSettings()
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
 	loadSavedWindowLayout(MAINWINDOW_NAME, false);
+}
+
+void MainWindow::appendDebugMessages(const QStringList &lDebugMessages)
+{
+	foreach(QString sDebugMessage, lDebugMessages)
+		qDebug() << sDebugMessage;
 }
 
 void MainWindow::preExecuteTask()

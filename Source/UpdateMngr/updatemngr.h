@@ -21,6 +21,7 @@
 
 #include <QtWidgets/QMainWindow>
 #include "ui_updatemngr.h"
+#include "installationmanagerbase.h"
 
 class UpdateMngr : public QMainWindow
 {
@@ -29,6 +30,8 @@ class UpdateMngr : public QMainWindow
 public:
 	UpdateMngr(QWidget *parent = 0);
 	~UpdateMngr();
+
+	void appendDebugMessages(const QList<installationManagerBase::strcMessage> &lMessages);
 
 private:
 	Ui::UpdateMngrClass ui;

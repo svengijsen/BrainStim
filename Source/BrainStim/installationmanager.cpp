@@ -428,6 +428,7 @@ installationManagerBase::InstallResult installationManager::installPlugin(const 
 			QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_STOPAPPEXCHANGE_NAME, Qt::DirectConnection);
 			ElevateNow();
 		}
+		return InstallResult_NoChanges;
 	}
 	return installResult;
 }

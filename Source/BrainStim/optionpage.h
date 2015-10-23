@@ -49,6 +49,8 @@ private slots:
 	void on_chkEnableNetworkServer_toggled(bool);
 	void on_btnBrowseForMainApplicationUserDirectory_pressed();
 	void on_btnViewMainApplicationUserDirectory_pressed();
+	void on_btnViewUpdatesDirectory_pressed();
+	void on_btnCheck4Updates_pressed();
 	void on_btnBrowseForCustomPluginRootDirectory_pressed();
 	void on_btnViewCustomPluginRootDirectory_pressed();
 	void setUI3DRendererControls(int type);

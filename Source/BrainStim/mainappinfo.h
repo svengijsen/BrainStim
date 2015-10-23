@@ -120,6 +120,7 @@ public:
 	static QString appDocDirPath()									{return (appDirPath() + "/" + MAIN_PROGRAM_DOC_DIRNAME + "/");}
 	static QString appMenuDirPath()									{return (appDirPath() + "/" + MAIN_PROGRAM_MENUS_DIRNAME + "/"); }
 	static QString appExampleDirPath()								{ return (MainAppInfo::getMainApplicationUserDirectory() + "/" + MAIN_PROGRAM_EXAMPLES_DIRNAME + "/"); }//appDirPath() + QDir::separator() + MAIN_PROGRAM_EXAMPLES_DIRNAME + QDir::separator());}
+	static QString appTempDirPath()									{ return (MainAppInfo::getMainApplicationUserDirectory() + "/" + MAIN_PROGRAM_TEMP_DIRNAME + "/"); }
 	static QString appLogFilePath()									{ return (MainAppInfo::getMainApplicationUserDirectory() + "/" + MAIN_PROGRAM_LOGFILE_NAME); }
 	static QString appXsdFilePath()									{return (appDirPath() + "/" + MAIN_PROGRAM_XSD_DIRNAME + "/");}
 	static QString appUpdatesPath()									{ return (appDirPath() + "/" + MAIN_PROGRAM_UPDATES_DIRNAME + "/"); }

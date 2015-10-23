@@ -65,6 +65,8 @@ public:
 		//See also serialization!!! -->  Initialize(), operator>>() and operator<<()
 	} MainAppInformationStructure;
 
+	void initialize(bool &bFirstTimeUserInitialization);
+
 	MainAppInformationStructure getMainAppInformationStructure() {return mainAppInformation;};
 	static MainAppInformationStructure getStaticMainAppInformationStructureFromSharedMemory();
 	static bool copyMainAppInformationStructureToSharedMemory(const MainAppInformationStructure &mainAppInformationStructure);
@@ -94,12 +96,12 @@ public:
 	QVariant invokeJavaScriptConfigurationFile(const QString &sCode);
 	QString getJavaScriptConfigurationFileContents();
 	void showJavaScriptConfigurationFile();
+	QString getConfigurationFilePath();//The ini file!
 
 public slots:
 	void parseJavaScriptConfigurationFile();
 
 private:
-	void initialize();
 	void discoverCustomPluginsPath();
 	void resetInternalStructure(bool bFullSystemReset = false);
 	void composeJavaScriptConfigurationFile();
@@ -139,7 +141,8 @@ public:
 		DisableNetworkServer		= 8,
 		VerboseMode					= 16,
 		ExecuteDocument				= 32,
-		AllowMultipleInstances		= 64
+		AllowMultipleInstances		= 64,
+		UserFirstTimeInit			= 128
 	};
 	Q_DECLARE_FLAGS(MainProgramModeFlags, MainProgramModeFlag)
 
