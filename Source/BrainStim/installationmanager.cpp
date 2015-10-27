@@ -422,13 +422,31 @@ installationManagerBase::InstallResult installationManager::installPlugin(const 
 	installationManagerBase::InstallResult installResult = installationManagerBase::installPlugin(sMainAppDirPath, sMainAppsDefaultPluginDirPath, sMainAppsUserPluginDirPath, sPluginInstallFilePath, sUserAppPath, bOverWriteExistingFiles);
 	if (installResult == InstallResult_ErrorInsufficientRights)
 	{
-		int confirm = QMessageBox::question(NULL, "Administrator privileges requested", "A plugin needs administrator privileges to install!\nHit 'Ok' to automatically try restarting BrainStim with these privileges, after a restart you can retry the installation.\nHit 'Cancel' to skip this plugin installation.", QMessageBox::Ok | QMessageBox::Cancel);
-		if (confirm == QMessageBox::Ok)
-		{
-			QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_STOPAPPEXCHANGE_NAME, Qt::DirectConnection);
-			ElevateNow();
-		}
+		//int confirm = QMessageBox::question(NULL, "Administrator privileges requested", "A plugin needs administrator privileges to install!\nHit 'Ok' to automatically try restarting BrainStim with these privileges, after a restart you can retry the installation.\nHit 'Cancel' to skip this plugin installation.", QMessageBox::Ok | QMessageBox::Cancel);
+		//if (confirm == QMessageBox::Ok)
+		//{
+			//Old way of handling updates internally(in BrainStim.exe)...
+			//ElevateNow();//changes user and home variabele to admin!
+			//New way below here...
+			bool bRetVal = false;
+			QStringList lInstallationResults;
+			bRetVal = installationManagerBase::installUpdates(QStringList() << QFileInfo(sPluginInstallFilePath).absoluteFilePath(), lInstallationResults);
+			if (bRetVal)
+			{
+				QMessageBox tmpMessageBox;
+				tmpMessageBox.setWindowTitle("Plugin(s) Installed");
+				tmpMessageBox.setText("There were some plugin(s) installed, see the details for more information.");
+				tmpMessageBox.setDetailedText(lInstallationResults.join("\n"));
+				QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
+				QGridLayout* layout = (QGridLayout*)tmpMessageBox.layout();
+				layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
+				tmpMessageBox.exec();
+				qDebug() << __FUNCTION__ << "Plugin(s) Installed: " << lInstallationResults.join("\n");
+				return installationManagerBase::InstallResult_PluginsInstalled;
+			}
+		//}
 		return InstallResult_NoChanges;
 	}
 	return installResult;
 }
+

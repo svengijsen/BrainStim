@@ -25,6 +25,8 @@
 #include "mainappinfo.h"
 #include <QTemporaryDir>
 #include <QLibrary>
+#include <QDirIterator>
+#include <QTemporaryFile>
 
 #ifndef QUAZIP_STATIC
 #define QUAZIP_STATIC
@@ -106,6 +108,35 @@ public:
 	{
 		static QTextStream ts(stdout);
 		return ts;
+	}
+
+	static QStringList getFilesByExtension(const QString &sRootSearchDirectory, const QStringList &lAllowedFileExtensions)
+	{
+		QStringList lSourceUpdateFilesFound;
+		QString sUpdatesDir;
+		QDir dirUpdatesRoot;
+		dirUpdatesRoot.setPath(sRootSearchDirectory);
+
+		if (dirUpdatesRoot.exists())
+		{
+			dirUpdatesRoot.setFilter(QDir::Files);// | QDir.Hidden | QDir.NoSymLinks);
+			dirUpdatesRoot.setNameFilters(lAllowedFileExtensions);
+			dirUpdatesRoot.setSorting(QDir::Name);//::Size | QDir::Reversed);
+			int nNumberOfFoundFiles = dirUpdatesRoot.count();
+			if (nNumberOfFoundFiles > 0)
+			{
+				for (int i = 0; i < dirUpdatesRoot.entryList().count(); i++)
+					lSourceUpdateFilesFound.append(sRootSearchDirectory + dirUpdatesRoot.entryList()[i]);
+			}
+			QDirIterator *it = new QDirIterator(sRootSearchDirectory);
+			while (it->hasNext())
+			{
+				QString sSubDir = it->next();
+				if (sSubDir.indexOf(".", sSubDir.count() - 1) == -1)
+					lSourceUpdateFilesFound.append(getFilesByExtension(sSubDir + "/", lAllowedFileExtensions));
+			}
+		}
+		return lSourceUpdateFilesFound;
 	}
 
 	static QString resolveFileDirectoryPath(const QString &sFileDirectoryPath, const QString &sMainAppsUserPluginDirPath, const QString &sMainAppDirPath, const QString &sIniCompleteBaseName, const QString &sMainAppsDefaultPluginDirPath, const QString &sUserAppPathPath, bool &bNeedsAdminPrivileges)
@@ -545,23 +576,23 @@ public:
 		return fIsRunAsAdmin;
 	};
 
-	static void ElevateNow()
-	{
-		BOOL bAlreadyRunningAsAdministrator = FALSE;
-		try
-		{
-			bAlreadyRunningAsAdministrator = IsRunAsAdministrator();
-		}
-		catch (...)
-		{
-			DWORD dwErrorCode = GetLastError();
-			qDebug() << "Failed to determine if application was running with administrator rights. " << QString("Error code returned was 0x%08lx").arg(dwErrorCode);
-		}
-		if (!bAlreadyRunningAsAdministrator)
-		{
-			RestartApplication(true,true,"","-m");
-		}
-	};
+	//static void ElevateNow()//Commented because this function changes home and user variabele to admin!
+	//{
+	//	BOOL bAlreadyRunningAsAdministrator = FALSE;
+	//	try
+	//	{
+	//		bAlreadyRunningAsAdministrator = IsRunAsAdministrator();
+	//	}
+	//	catch (...)
+	//	{
+	//		DWORD dwErrorCode = GetLastError();
+	//		qDebug() << "Failed to determine if application was running with administrator rights. " << QString("Error code returned was 0x%08lx").arg(dwErrorCode);
+	//	}
+	//	if (!bAlreadyRunningAsAdministrator)
+	//	{
+	//		RestartApplication(true,true,"","-m");
+	//	}
+	//};
 
 	static void WinErrorCodeToString(DWORD ErrorCode, QString &sMessage)
 	{
@@ -595,7 +626,7 @@ public:
 		}
 	}
 
-	static bool ExecuteUpdateMngr(const bool &bAsAdmin, const QStringList &lParameters = QStringList())//, const QString &sCoutFilePath = QString(""))
+	static bool ExecuteUpdateMngr(const bool &bAsAdmin, const QStringList &lParameters = QStringList(), const bool bWaitUntillFinished = true)
 	{//Make sure to quote ("") paths in the parameters!
 		bool bRetval = false;
 		QString sUpdateMngrFileName = QString(INSTALLMNGR_UPDATEMNGR_FILENAME) + QString(".exe");
@@ -672,10 +703,28 @@ public:
 		}
 		if (fUpdateMngrExeFile.exists())
 			sUpdateMngrFileName = QFileInfo(sUpdateMngrFileName).absoluteFilePath();
-		sei.fMask = SEE_MASK_NOCLOSEPROCESS;
+		sei.hProcess = NULL;
+		if (bWaitUntillFinished)
+			sei.fMask = SEE_MASK_NOCLOSEPROCESS;
 
 		QString sCurrentPath = QDir::currentPath().replace("/","\\") + "\\";
 		QString sInstallMngrCommandArg = lParameters.join(" ");//ie. "-p E:\\Projects\\BrainStim\\Install\\Updates\\USBHIDDevice\\usbhiddeviceplugin_Win32_Debug\\usbhiddeviceplugin_Win32_Debug.ini install -o";
+		QString sCommandArgsFilePath = "";
+		//Now we need to wrap all the arguments in a temporarily file because otherwise the length would be too large for execution
+		QTemporaryFile tempArgFile;
+		tempArgFile.setAutoRemove(false);
+		if (tempArgFile.open())
+		{
+			QTextStream outArgs(&tempArgFile);
+			outArgs << lParameters.join("\n");//Write each argument line by line
+			sCommandArgsFilePath = tempArgFile.fileName();
+			tempArgFile.close();
+		}
+		//qDebug() << __FUNCTION__ << "Created a temporarily file for passing a large amount of arguments: " << tempArgFile.fileName() << " , " << QFileInfo(tempArgFile.fileName()).absoluteFilePath();
+		//QMessageBox::question(NULL, "Info", "Created a temporarily file for passing a large amount of arguments: " + tempArgFile.fileName() + " , " + QFileInfo(tempArgFile.fileName()).absoluteFilePath(), QMessageBox::Ok | QMessageBox::Cancel);
+		
+		
+		
 		//QString sCoutCommandString = "";
 		//if (sCoutFilePath.isEmpty() == false)
 		//{
@@ -684,16 +733,27 @@ public:
 		//	sCoutCommandString = QString(" >> ") + sCheckedCoutFilePath;
 		//}
 		QString sParameters;
+		//wchar_t wcFilePath[1024];
 		if (bInsideDevEnvironment)
 		{
 			sParameters = "/c \"" + sCurrentPath + INSTALLMNGR_UPDATEMNGR_BATCH_FILENAME + " " + sArchitectureArg + " " + sDebugModeArg + " " + QT_VERSION_STR + " E:\\Libraries\\" + " " + sCurrentPath + " && " + sCurrentPath + sUpdateMngrFileName + " " + sInstallMngrCommandArg + "\""; //+sCoutCommandString + "\"";
 		}
 		else
 		{
-			sei.lpFile = (LPCWSTR)QString("\"" + sUpdateMngrFileName + "\"").utf16();
-			sParameters = sInstallMngrCommandArg;
+			//sei.lpFile = (const wchar_t*)QString("\"" + sUpdateMngrFileName + "\"").utf16();//(LPCWSTR)QString("\"" + sUpdateMngrFileName + "\"").utf16();
+			sei.lpFile = (const wchar_t*)sUpdateMngrFileName.utf16();
+			//sUpdateMngrFileName.toWCharArray(wcFilePath);
+			//sei.lpFile = wcFilePath;
+			if (sCommandArgsFilePath.isEmpty() == false)
+			{
+				sParameters = "-a \"" + sCommandArgsFilePath + "\"";
+			}
+			else
+			{
+				sParameters = sInstallMngrCommandArg;
+			}
 		}
-		sei.lpParameters = (LPCWSTR)sParameters.utf16();
+		sei.lpParameters = (const wchar_t*)sParameters.utf16();
 		if (ShellExecuteExRoutine(&sei)==false)
 			return false;
 		else
@@ -724,7 +784,7 @@ public:
 
 	static bool ShellExecuteExRoutine(SHELLEXECUTEINFOW *pExecInfo)
 	{
-		qDebug() << __FUNCTION__ << "Going to execute shell code: " << QString::fromStdWString(pExecInfo->lpFile) << QString::fromStdWString(pExecInfo->lpParameters);
+		qDebug() << __FUNCTION__ << "Going to execute shell code: " + QString::fromStdWString(pExecInfo->lpFile) + QString::fromStdWString(pExecInfo->lpParameters);
 		if (!ShellExecuteEx(pExecInfo))
 		{
 			DWORD dwError = GetLastError();
@@ -773,7 +833,7 @@ public:
 		sei.hwnd = NULL;
 		sei.nShow = SW_NORMAL;
 		sei.lpParameters = (const wchar_t*)QString(sParameters).utf16();//"param1 param2 \"\"\"text with quotes\"\"\" param4";
-
+		//sei.fMask =  SEE_MASK_NOCLOSEPROCESS;
 		if (ShellExecuteExRoutine(&sei))
 		{
 			if (bAutoQuitSelf)
@@ -782,6 +842,116 @@ public:
 		}
 		return false;
 	}
+
+	static bool installUpdates(const QStringList &lSourceUpdateFiles, QStringList &lInstallResults = QStringList(), const QString &sPermissionQuestion = "", const bool &bDoRename = false, const bool &bDoAutoStart = false, const bool bWaitUntillFinished = true)
+	{
+		QString sResolvedAppIniFilePath;
+#ifdef ENVIRONMENT64
+		sResolvedAppIniFilePath = QDir::homePath() + "/" + MAIN_PROGRAM_INTERNAL_NAME + "(v" + MAIN_PROGRAM_FILE_VERSION_STRING + ", " + MAIN_PROGRAM_64BIT_STRING + ")" + "/" + MAIN_PROGRAM_INI_FILENAME;
+#else
+		sResolvedAppIniFilePath = QDir::homePath() + "/" + MAIN_PROGRAM_INTERNAL_NAME + "(v" + MAIN_PROGRAM_FILE_VERSION_STRING + ", " + MAIN_PROGRAM_32BIT_STRING + ")" + "/" + MAIN_PROGRAM_INI_FILENAME;
+#endif
+
+		bool bUpdateManagerExecuted = false;
+		if (lSourceUpdateFiles.isEmpty() == false)
+		{
+			if (sPermissionQuestion.isEmpty() == false)
+			{
+				int confirm = QMessageBox::question(NULL, "Install Updates?", sPermissionQuestion, QMessageBox::Ok | QMessageBox::Cancel);
+				if (confirm == QMessageBox::Cancel)
+					return false;
+			}
+
+			if (lSourceUpdateFiles.isEmpty() == false)
+			{
+				QStringList lParams;
+				QString sFiles = "";
+				lParams << "-p";
+				sFiles = QString("\"") + lSourceUpdateFiles[0];
+				qDebug() << __FUNCTION__ << "Found update to install: " + lSourceUpdateFiles[0];
+				if (lSourceUpdateFiles.count() > 1)
+				{
+					for (int i = 1; i < lSourceUpdateFiles.count(); i++)
+					{
+						qDebug() << __FUNCTION__ << "Found update to install: " + lSourceUpdateFiles[i];
+						sFiles = sFiles + QString(INSTALLMNGR_INSTALL_ARG_FILESEP + lSourceUpdateFiles[i]);
+					}
+				}
+				sFiles = sFiles + "\"";//Close the installation file(s) string
+				lParams << sFiles;
+				lParams << "install" << "-o" << "-c";
+				if (bDoRename)
+					lParams << "-r";
+				lParams << "-i" << "\"" + sResolvedAppIniFilePath + "\"";
+				QString sCoutFilePath = "";
+				sCoutFilePath = MainAppInfo::appTempDirPath() + "InstallLog_" + QDateTime::currentDateTime().toString(MainAppInfo::stdDateTimeFormat()) + MAIN_PROGRAM_INSTALLATION_LOGFILE_POSTSTRING;
+				if (sCoutFilePath.isEmpty() == false)
+				{
+					if (QFile(sCoutFilePath).exists())
+						QFile::remove(sCoutFilePath);
+					lParams << "-l" << "\"" + sCoutFilePath + "\"";
+					qDebug() << __FUNCTION__ << "Log Output file for installation set to: " + sCoutFilePath;
+				}
+				if (bDoAutoStart)
+					lParams << "-x" << "\"" + QCoreApplication::applicationFilePath() + "\"";
+				if (installationManagerBase::ExecuteUpdateMngr(true, lParams, bWaitUntillFinished))
+				{
+					if (sCoutFilePath.isEmpty() == false)
+					{
+						QFile fCoutFile(sCoutFilePath);
+						if (fCoutFile.exists())
+						{
+							if (fCoutFile.open(QIODevice::ReadOnly) == false)
+							{
+								QString sErrorMessage = "Could not read " + sCoutFilePath + ", " + fCoutFile.errorString();
+								lInstallResults.append(sErrorMessage);
+								qDebug() << __FUNCTION__ << sErrorMessage;
+							}
+							else
+							{
+								QTextStream in(&fCoutFile);
+								while (!in.atEnd())
+								{
+									lInstallResults.append(in.readLine());
+								}
+								fCoutFile.close();
+							}
+						}
+						else
+						{
+							QString sErrorMessage = "No output file created";
+							lInstallResults.append(sErrorMessage);
+							qDebug() << __FUNCTION__ << sErrorMessage;
+						}
+					}
+					bUpdateManagerExecuted = true;
+				}
+				else
+				{
+					QString sErrorMessage = "Could not execute the UpdateManager";
+					lInstallResults.append(sErrorMessage);
+					qDebug() << __FUNCTION__ << sErrorMessage;
+				}
+			}
+		}
+		if (bUpdateManagerExecuted)
+			qDebug() << __FUNCTION__ << "UpdateManager executed";
+		return bUpdateManagerExecuted;
+	}
+
+	static bool checkForAvailableUpdates(const QString &sUpdatePath = "", QStringList &lInstallResults = QStringList(), const QString &sPermissionQuestion = "", const bool &bDoRename = false, const bool bDoAutoStart = false, const bool bWaitUntillFinished = true)
+	{
+		QString sResolvedRootSearchDirectory;
+		if (sUpdatePath.isEmpty() == false)
+			sResolvedRootSearchDirectory = sUpdatePath;
+		else
+			sResolvedRootSearchDirectory = MainAppInfo::appUpdatesPath();
+		QStringList lAllowedFileExtensions;
+		lAllowedFileExtensions << QString("*.") + INSTALLMNGR_INSTALL_ZIP_FILEEXT << QString("*.") + INSTALLMNGR_INSTALL_INI_FILEEXT << QString("*.") + INSTALLMNGR_INSTALL_LST_FILEEXT;
+		QStringList lSourceUpdateFiles = getFilesByExtension(sResolvedRootSearchDirectory, lAllowedFileExtensions);
+		return installUpdates(lSourceUpdateFiles, lInstallResults, sPermissionQuestion, bDoRename, bDoAutoStart, bWaitUntillFinished);
+	}
+
  };
 
 #endif // INSTALLATIONMANAGERBASE_H

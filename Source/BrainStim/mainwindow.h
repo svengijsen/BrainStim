@@ -441,6 +441,7 @@ public slots:
 	*/
 	void quit(){qApp->closeAllWindows();};
 	void stopAppExchange();
+	void quitAndInstallUpdates(const QString &sRootUpdateDirectory);
 
 #ifdef DEBUG
 	QString testFunction(QString inp = "");
@@ -668,7 +669,6 @@ private:
 	void setupToolBars();
 	void setRenderer();
 	bool implementPluginCustomActionMenus();
-	QStringList getFilesByExtension(const QString &sUpdatePath, const QStringList &lAllowedFileExtensions);
 	bool implementCustomActionMenu(const QString &sMenuIniFilePath);
 	void newDocument(const GlobalApplicationInformation::DocType &docType, int &DocIndex, const bool &bIsNewUnsaved, const QString &strExtension = "", const QString &strCanonicalFilePath = "", const bool &bNativeMainAppView = false, const bool &bTryToInitialize = false);
 	//void setupSyntaxHighlighting(MdiChild *childWindow,MDIDocumentType tempFileType);
@@ -694,11 +694,8 @@ private:
 	bool addRegisteredDockWidgets(const Qt::DockWidgetArea debugDockArea);
 	bool getPluginCustomConfigurationOptions(const QString &sInternalPluginName);
 
-public slots:
-	void updateMenuControls(QMdiSubWindow *mdiSubWin);
-	bool checkForAvailableUpdates(const QString &sUpdatePath = "", QStringList &lInstallResults = QStringList(), const QString &sPermissionQuestion = "", const bool &bDoRename = false);
-
 public:
+	Q_INVOKABLE void updateMenuControls(QMdiSubWindow *mdiSubWin);
 	Q_INVOKABLE QAction *registerMainMenuAction(const QStringList &lmenuItemSpecifier, QIcon *iMenuIcon = NULL, const bool &bSkipSubWindowRegistration = false);
 	Q_INVOKABLE bool getSavedDockWidgetSizeHint(const QString &sDockWidgetGroupName, const QString &sDockWidgetAccessName, QRect &rSizeHint);
 	void loadSavedDockWidgetConfiguration(const QString &sGroupName, MainWindowDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea);

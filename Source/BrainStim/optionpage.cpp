@@ -23,6 +23,7 @@
 #include <QListWidgetItem>
 #include <QDesktopServices>
 #include <QDebug>
+#include "installationmanagerbase.h"
 
 OptionPage::OptionPage(QWidget *parent, GlobalApplicationInformation *g_AppInfo) : QDialog(parent), glob_AppInfo(g_AppInfo)
 {
@@ -424,21 +425,12 @@ void OptionPage::on_btnViewUpdatesDirectory_pressed()
 
 void OptionPage::on_btnCheck4Updates_pressed()
 {
-	bool bRetVal = false;
-	QStringList lInstallationResults;
-	QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_CHECKFORAVAILABLEUPDATES_NAME, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(const QString&, ""), Q_ARG(QStringList&, lInstallationResults), Q_ARG(const QString&, ""), Q_ARG(const bool&, false));
-	if (bRetVal)
-	{
-		QMessageBox tmpMessageBox;
-		tmpMessageBox.setWindowTitle("Updates Installed");
-		tmpMessageBox.setText("There were some updates installed, see the details for more information.");
-		tmpMessageBox.setDetailedText(lInstallationResults.join("\n"));
-		QSpacerItem* horizontalSpacer = new QSpacerItem(500, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-		QGridLayout* layout = (QGridLayout*)tmpMessageBox.layout();
-		layout->addItem(horizontalSpacer, layout->rowCount(), 0, 1, layout->columnCount());
-		tmpMessageBox.exec();
-		qDebug() << __FUNCTION__ << "Updates Installed: " << lInstallationResults.join("\n");
-	}
+	QFileDialog::Options options = QFlag(QFileDialog::DontResolveSymlinks | QFileDialog::ShowDirsOnly);
+	QFileDialog tmpFileDialog;
+	QString sDirectory;
+	sDirectory = tmpFileDialog.getExistingDirectory(this, "Select the root directory that contains the update file(s), subdirectories are automatically included.", ui.lneUpdateDirectory->text(), options);
+	if (!sDirectory.isEmpty())
+		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_QUITANDINSTALLUPDATES_NAME, Qt::DirectConnection, Q_ARG(QString, sDirectory));
 }
 
 void OptionPage::on_btnViewCustomPluginRootDirectory_pressed()

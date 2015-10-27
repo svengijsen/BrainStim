@@ -1,4 +1,3 @@
-#include <QLocalSocket>
 #include "mainappexchange.h"
 
 MainAppExchange::MainAppExchange(int &argc, char *argv[], const QString uniqueKey) : QApplication(argc, argv), _uniqueKey(uniqueKey)

@@ -36,6 +36,28 @@ MainAppInfoData *MainAppInfoData::s_instance = NULL;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+QString MainAppInfo::getCurrentOSAccountName()
+{
+#ifdef Q_OS_WIN
+	//char acUserName[MAX_USERNAME];
+	//DWORD nUserName = sizeof(acUserName);
+	//if (GetUserName(acUserName, &nUserName))
+	//	qDebug << acUserName;
+	//return 0;
+	return qgetenv("USERNAME");
+#elif Q_OS_UNIX
+	//QCoreApplication coreApplication(argc, argv);
+	//QProcess process;
+	//QObject::connect(&process, &QProcess::finished, [&coreApplication, &process](int exitCode, QProcess::ExitStatus exitStatus) {
+	//	qDebug() << process.readAllStandardOutput();
+	//	coreApplication.quit();
+	//});
+	//process.start("whoami");
+	//return coreApplication.exec();
+	return qgetenv("USER");
+#endif
+}
+
 void MainAppInfo::setPluginsDirPath(const QString &sNewPath)
 {
 	MainAppInfoData::instance()->setPluginPath(sNewPath);

@@ -80,6 +80,7 @@ int main(int argc, char **argv)
 	QString sDebugMode;		//Release mode
 	QString sArchitecture;	//Win32 architecture
 	QStringList lDebugMessages;
+	int nRetVal = 0;
 
 #ifdef _DEBUG
 	sDebugMode = "d";
@@ -117,10 +118,10 @@ int main(int argc, char **argv)
 	}
 
 	bool bProceed = true;
-	//MainAppExchange appExchange(argc, argv, MAIN_PROGRAM_SHARED_MEM_KEY);
 	MainAppExchange appExchange(argc, argv, MAIN_PROGRAM_SHARED_MEM_KEY);
 
 	bool bFirstUserInitialization = false;
+	QVariant tmpVariant;
 	GlobalApplicationInformation *globAppInformation = appExchange.getGlobalAppInformationObjectPointer(bFirstUserInitialization);
 	//Now the BrainStim.ini file is initialized/created if it did not yet exist.
 	QString sConfigurationFilePath = globAppInformation->getConfigurationFilePath();
@@ -134,10 +135,9 @@ int main(int argc, char **argv)
 	{
 		QString sArg = QString(argv[1]);
 		if (sArg == "-i" || sArg == "-I")//only initialization, to make sure INI file exists?
-			return 0;
+			goto EXITAPP;
 	}
 
-	QVariant tmpVariant;
 	if (globAppInformation->getSettingsInformation(REGISTRY_ENABLECUSTOMUSERLOGINS, tmpVariant) == true)
 	{
 		if(tmpVariant.toBool() == true)
@@ -331,10 +331,10 @@ int main(int argc, char **argv)
 		centerWidget(appWindow, false);
 		appWindow->recoverLastScreenWindowSettings();
 		appWindow->preExecuteTask();
-		int nRetVal = appExchange.exec();
+		nRetVal = appExchange.exec();
 		delete appWindow;
 		appWindow = NULL;
-		return nRetVal;
 	}
-	return 0;
+EXITAPP:
+	return nRetVal;
 }

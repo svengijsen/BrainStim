@@ -107,6 +107,7 @@ public:
 		return -1;
 	}
 
+	static QString getCurrentOSAccountName();
 	static bool registerCustomPropertySettingObject(QObject* objCustomPropSettObj, const int &nVariantType);
 	static QObject *getCustomPropertySettingObject(const int &nVariantType);
 	static QWidget *retrieveCustomPropertySettingEditorWidget(const int &nVariantType);// , const QString &sValue);

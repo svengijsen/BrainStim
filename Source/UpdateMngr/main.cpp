@@ -25,6 +25,7 @@
 #include <QProcess>
 #include <QDebug>
 #include <QSettings>
+#include "mainappexchange.h"
 
 bool getSettingsInformation(QSettings &settingsObj, const QString &sName, QVariant &vCurrentValue)
 {
@@ -84,7 +85,13 @@ int main(int argc, char **argv)
 	QApplication a(argc, argv);
 	UpdateMngr w;
 	QString sLogFilePath = "";
+	QString sCallingExecFilePath = "";
 	bool bAutoCloseWhenSuccessfullyFinished = false;
+	QStringList lLocal_argv;
+
+	//Copy the arguments
+	for (int i = 0; i < argc; i++)
+		lLocal_argv.append(QString(argv[i]));
 
 #ifdef _DEBUG
 	sDebugMode = "d";
@@ -133,25 +140,80 @@ int main(int argc, char **argv)
 	sAlternativeMainProgramFileName = sAlternativeMainProgramFileName + "_Release.exe";
 #endif
 	//////////////////////////////////////////////////////////////////////////////////////////////
+REDO_ARGUMENTS_PARSING:
+	appendLogMessage("Arguments passed: " + lLocal_argv.join(", "), bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
+
 	QString sUserIniFilePath = "";
-	//Is the configuration INI path provided?
+	QString sArgumentsFilePath = "";
 	bool bErrorWithCustomIniFile = false;
-	if (argc > 1)//arguments available?
+	bool bErrorWithCustomArgsFile = false;
+	if (lLocal_argv.count() > 1)//arguments available?
 	{
 		QString tmpString;
-		for (int i = 1; i < argc; i++)
+		for (int i = 1; i < lLocal_argv.count(); i++)
 		{
-			tmpString = QString(argv[i]);
+			tmpString = lLocal_argv[i];
+			if ((tmpString.toLower() == "-a") || (tmpString.toLower() == "-args"))
+			{
+				appendLogMessage("Arguments file flag set", bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
+				if ((i + 1) < lLocal_argv.count())
+				{
+					tmpString = QString(lLocal_argv[i + 1]).trimmed();
+					if (tmpString.isEmpty() == false)
+					{
+						sArgumentsFilePath = tmpString;
+						QFile tempArgFile(sArgumentsFilePath);
+						if (tempArgFile.exists() == false)
+						{
+							appendLogMessage("Arguments file path does not exist: " + sArgumentsFilePath, bOperationHasFailed, installationManagerBase::Failed, &lDebugMessages);
+							bErrorWithCustomArgsFile = true;
+						}
+						else
+						{
+							if (tempArgFile.open(QFile::ReadOnly | QFile::Text))
+							{
+								lLocal_argv.removeAt(i);//Remove -a argument
+								lLocal_argv.removeAt(i);//Remove arg-path argument
+								QTextStream inArgs(&tempArgFile);
+								while (!inArgs.atEnd())
+								{
+									QString sArgLine = inArgs.readLine().trimmed();
+									if (sArgLine.isEmpty() == false)
+										lLocal_argv.append(sArgLine);
+								}
+								tempArgFile.close();
+								appendLogMessage("New Arguments from file fetched, going to re-parse available arguments", bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
+								goto REDO_ARGUMENTS_PARSING;
+							}
+							else
+							{
+								bErrorWithCustomArgsFile = true;
+								appendLogMessage(tempArgFile.errorString() + ": " + sArgumentsFilePath, bOperationHasFailed, installationManagerBase::Failed, &lDebugMessages);
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	if (lLocal_argv.count() > 1)//arguments available?
+	{
+		QString tmpString;
+		for (int i = 1; i < lLocal_argv.count(); i++)
+		{
+			tmpString = lLocal_argv[i];
 			if ((tmpString.toLower() == "-i") || (tmpString.toLower() == "-ini"))
 			{
 				appendLogMessage("Initialization file flag set", bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
-				if ((i + 1) < argc)
+				if ((i + 1) < lLocal_argv.count())
 				{
-					tmpString = QString(argv[i+1]).trimmed();
+					tmpString = QString(lLocal_argv[i + 1]).remove("\"").trimmed();
 					if (tmpString.isEmpty() == false)
 					{
 						sUserIniFilePath = tmpString;
-						if (QFile(sUserIniFilePath).exists() == false)
+						QFile fUserIniFilePath(sUserIniFilePath);
+						if (fUserIniFilePath.exists() == false)
 						{
 							appendLogMessage("Initialization file path does not exist: " + sUserIniFilePath, bOperationHasFailed, installationManagerBase::Failed, &lDebugMessages);
 							bErrorWithCustomIniFile = true;
@@ -159,9 +221,45 @@ int main(int argc, char **argv)
 					}
 				}
 			}
+			else if ((tmpString.toLower() == "-x") || (tmpString.toLower() == "-exec"))
+			{
+				appendLogMessage("Auto-start flag set", bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
+				if ((i + 1) < lLocal_argv.count())
+				{
+					QString tempExecStr = QString(lLocal_argv[i + 1]).remove("\"").trimmed();
+					if (tempExecStr.isEmpty() == false)
+					{
+						if (QFile(tempExecStr).exists())
+						{
+							sCallingExecFilePath = tempExecStr;
+							appendLogMessage(QString("Auto-start executable defined: ") + sCallingExecFilePath, bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
+							//Check if an instance is still running...
+
+							QSharedMemory *sharedMemory = new QSharedMemory();
+							sharedMemory->setKey(MAIN_PROGRAM_SHARED_MEM_KEY);//Sets a new key for this shared memory object. If key and the current key are the same, the function returns without doing anything.
+							if (sharedMemory->attach(QSharedMemory::ReadOnly))//Attempts to attach the process to the shared memory segment identified by the key that was passed to the constructor.
+								appendLogMessage(QString("Auto-start executable is still running"), bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
+							else
+								appendLogMessage(QString("Auto-start executable is not running"), bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
+							delete sharedMemory;
+							sharedMemory = NULL;
+							
+							//Although the calling application might be stopped already let's wait an extra additional second to be sure...
+							int nWaitTime = 1000;
+							#ifdef Q_OS_WIN
+							Sleep(uint(nWaitTime));
+							#else
+							struct timespec ts = { nWaitTime / 1000, (nWaitTime % 1000) * 1000 * 1000 };
+							nanosleep(&ts, NULL);
+							#endif
+
+						}
+					}
+				}
+			}
 		}
 	}
-	if (bErrorWithCustomIniFile == false)
+	if ((bErrorWithCustomIniFile == false) && (bErrorWithCustomArgsFile == false))
 	{
 		if (QFile(sUserIniFilePath).exists() == false)
 		{
@@ -255,10 +353,10 @@ int main(int argc, char **argv)
 			appendLogMessage(QString("Administrator mode is not active."), bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
 			/*
 			QStringList lParams;
-			if (argc > 1)//arguments available?
+			if (lLocal_argv.count() > 1)//arguments available?
 			{
-			for (int i = 1; i < argc; i++)
-			lParams << argv[i];
+			for (int i = 1; i < lLocal_argv.count(); i++)
+			lParams << lLocal_argv[i];
 			}
 			installationManagerBase::ExecuteUpdateMngr(true, lParams);
 			return 0;
@@ -271,20 +369,13 @@ int main(int argc, char **argv)
 
 
 		//////////////////////////////////////////////////////////////////////////////////////////////
-		if (argc > 1)//arguments available?
+		if (lLocal_argv.count() > 1)//arguments available?
 		{
-			QString tmpArgString = "";
-			for (int i = 1; i < argc; i++)
-			{
-				tmpArgString = tmpArgString + argv[i] + " ";
-			}
-			appendLogMessage(QString("Arguments passed:\n") + tmpArgString, bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
-
 			QString tempArgStr = "";
-			tempArgStr = argv[1];
-			if ((argc > 3) && ((tempArgStr.toLower() == "-p") || (tempArgStr.toLower() == "-plugin")))//plugin related and minimal two more arguments available?
+			tempArgStr = lLocal_argv[1];
+			if ((lLocal_argv.count() > 3) && ((tempArgStr.toLower() == "-p") || (tempArgStr.toLower() == "-plugin")))//plugin related and minimal two more arguments available?
 			{
-				QString sSourceFilePathsCombined = argv[2];//second argument should be the plugin *.ini or *.zip filepath
+				QString sSourceFilePathsCombined = lLocal_argv[2];//second argument should be the plugin *.ini or *.zip filepath
 				QStringList lSourceFilePaths = sSourceFilePathsCombined.split(INSTALLMNGR_INSTALL_ARG_FILESEP, QString::SkipEmptyParts);
 				if (lSourceFilePaths.isEmpty() == false)
 				{
@@ -293,24 +384,24 @@ int main(int argc, char **argv)
 					{
 						if (bOperationHasFailed == true)
 							break;
-						sSingleSourceFilePath = sSingleSourceFilePath.trimmed();
+						sSingleSourceFilePath = sSingleSourceFilePath.remove("\"").trimmed();
 						if (sSingleSourceFilePath.isEmpty())
 							continue;
 						if (QFile(sSingleSourceFilePath).exists())
 						{
 							appendLogMessage(QString("Provided Plugin installation file (" + sSingleSourceFilePath + ") found"), bOperationHasFailed, installationManagerBase::Succeeded, &lDebugMessages);
-							tempArgStr = argv[3];
+							tempArgStr = lLocal_argv[3];
 							if (tempArgStr == "install")
 							{
 								if (bFirstSourceFile)
 									appendLogMessage(QString("Going to install one or more Plugin(s)"), bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
 								bool bOverwriteExistingFiles = false;
 								bool bRenameSourceInstallFileOnSuccess = false;
-								if (argc > 4)//other flags/parameters available?
+								if (lLocal_argv.count() > 4)//other flags/parameters available?
 								{
-									for (int i = 4; i < argc; i++)
+									for (int i = 4; i < lLocal_argv.count(); i++)
 									{
-										tempArgStr = argv[i];
+										tempArgStr = lLocal_argv[i];
 										if ((tempArgStr.toLower() == "-o") || (tempArgStr.toLower() == "-overwrite"))
 										{
 											if (bFirstSourceFile)
@@ -333,9 +424,9 @@ int main(int argc, char **argv)
 										{
 											if (sLogFilePath.isEmpty() && bFirstSourceFile)
 											{
-												if ((i + 1) < argc)
+												if ((i + 1) < lLocal_argv.count())
 												{
-													tempArgStr = argv[i + 1];
+													tempArgStr = QString(lLocal_argv[i + 1]).remove("\"").trimmed();
 													if (tempArgStr.isEmpty() == false)
 													{
 														sLogFilePath = tempArgStr;
@@ -348,6 +439,10 @@ int main(int argc, char **argv)
 								}
 								bool bRetval = false;
 								QString sMessage;
+
+								//QSystemSemaphore systemSem(MAIN_PROGRAM_FULL_NAME, 1, QSystemSemaphore::Open);
+								//systemSem.acquire();
+
 								installationManagerBase::InstallResult resInstall = installationManagerBase::installPlugin(a.applicationDirPath(), sDefaultPluginsRootDir, sCustomPluginRootDir, sSingleSourceFilePath, sUserAppRootDir, bOverwriteExistingFiles, bRenameSourceInstallFileOnSuccess, &lDebugMessages);
 								if (resInstall > 0)
 								{
@@ -357,6 +452,7 @@ int main(int argc, char **argv)
 								{
 									appendLogMessage(QString("Installation failed (" + sSingleSourceFilePath + ")"), bOperationHasFailed, installationManagerBase::Failed, &lDebugMessages);
 								}
+								//systemSem.release();
 							}
 						}
 						else
@@ -368,6 +464,34 @@ int main(int argc, char **argv)
 				}
 			}
 		}
+	}
+	//Auto start the executable
+	bool bDoStartAutoExecutable = false;
+	if (sCallingExecFilePath.isEmpty() == false)
+	{
+		QFile fExecFile(sCallingExecFilePath);
+		if (fExecFile.exists())
+		{
+			appendLogMessage(QString("Going to start the auto-start executable: " + sCallingExecFilePath), bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
+			bDoStartAutoExecutable = true;
+		}
+	}
+	bool bDoReturn = false;
+	//Auto close if no error and auto close flag is enabled
+	if (bAutoCloseWhenSuccessfullyFinished && (bOperationHasFailed == false))
+	{
+		if (bDoStartAutoExecutable)
+		{
+			//We'll use the explorer to make sure to start the executable as the default account (without elevated rights)...
+			sCallingExecFilePath = sCallingExecFilePath.remove("\"").trimmed().replace("/","\\");
+			sCallingExecFilePath = QString("\"") + sCallingExecFilePath + "\"";
+			bool bRestartResult = installationManagerBase::RestartApplication(false, false, qgetenv("WINDIR") + "\\explorer.exe", sCallingExecFilePath);
+			if (bRestartResult)
+				appendLogMessage(QString("Started the auto-start executable: " + sCallingExecFilePath), bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
+			else
+				appendLogMessage(QString("Failed to start the auto-start executable: " + sCallingExecFilePath), bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
+		}
+		bDoReturn = true;
 	}
 	//Save the debug information if a valid log-file path is defined
 	if (sLogFilePath.isEmpty() == false)
@@ -386,11 +510,13 @@ int main(int argc, char **argv)
 			fLogFile.close();
 		}
 	}
-	//Auto close if no error and auto close flag is enabled
-	if (bAutoCloseWhenSuccessfullyFinished && (bOperationHasFailed==false))
+	if (bDoReturn)
 		return 0;
 	//Start the User Interface
 	w.show();
 	w.appendDebugMessages(lDebugMessages);
-	return a.exec();
+	int nRes = a.exec();
+	if (bDoStartAutoExecutable)
+		installationManagerBase::RestartApplication(false, false, sCallingExecFilePath);
+	return nRes;
 }

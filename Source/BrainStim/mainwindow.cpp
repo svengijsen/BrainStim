@@ -120,7 +120,7 @@ bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags m
 	}
 	showSplashMessage("Setup User Interface...");
 	setupMDI();
-	setWindowTitle(globAppInfo->getTitle());//  MainAppInfo::MainProgramTitle());
+	setWindowTitle(globAppInfo->getTitle() + " - " + MainAppInfo::getCurrentOSAccountName());//  MainAppInfo::MainProgramTitle());
 	setUnifiedTitleAndToolBarOnMac(true);
 	createDockWindows();
 	showSplashMessage("Setup Application Directories...");
@@ -132,7 +132,7 @@ bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags m
 		showSplashMessage("First Time User Initialization...");
 		qDebug() << __FUNCTION__ << "First Time User Initialization: " + globAppInfo->getConfigurationFilePath();
 		QStringList lInstallationResults;
-		if (checkForAvailableUpdates("", lInstallationResults, "This seems to be the first time for the current account that BrainStim is started.\nThere are some local updates(plugins) found that are waiting to be installed.\nIt's advised to install them now.\nDo you want to proceed with this automatic installation?"))
+		if (installationManagerBase::checkForAvailableUpdates("", lInstallationResults, "This seems to be the first time for the current account(" + MainAppInfo::getCurrentOSAccountName() + ") that BrainStim is started.\nThere are some local updates(plugins) found that are waiting to be installed.\nIt's advised to install them now.\nDo you want to proceed with this automatic installation?"))
 		{
 			QMessageBox tmpMessageBox;
 			tmpMessageBox.setWindowTitle("Updates Installed");
@@ -183,179 +183,6 @@ bool MainWindow::initialize(GlobalApplicationInformation::MainProgramModeFlags m
 	}
 	bExecuteActiveDocument = BrainStimFlags & GlobalApplicationInformation::ExecuteDocument;
 	return true;
-}
-
-bool MainWindow::checkForAvailableUpdates(const QString &sRootSearchDirectory, QStringList &lInstallResults, const QString &sPermissionQuestion, const bool &bDoRename)
-{
-	QString sResolvedRootSearchDirectory;
-	if (sRootSearchDirectory.isEmpty() == false)
-		sResolvedRootSearchDirectory = sRootSearchDirectory;
-	else
-		sResolvedRootSearchDirectory = MainAppInfo::appUpdatesPath();
-
-	QString sResolvedAppIniFilePath;
-#ifdef ENVIRONMENT64
-	sResolvedAppIniFilePath = QDir::homePath() + "/" + MAIN_PROGRAM_INTERNAL_NAME + "(v" + MAIN_PROGRAM_FILE_VERSION_STRING + ", " + MAIN_PROGRAM_64BIT_STRING + ")" + "/" + MAIN_PROGRAM_INI_FILENAME;
-#else
-	sResolvedAppIniFilePath = QDir::homePath() + "/" + MAIN_PROGRAM_INTERNAL_NAME + "(v" + MAIN_PROGRAM_FILE_VERSION_STRING + ", " + MAIN_PROGRAM_32BIT_STRING + ")" + "/" + MAIN_PROGRAM_INI_FILENAME;
-#endif
-
-	bool bUpdateManagerExecuted = false;
-	QStringList lAllowedFileExtensions;
-	lAllowedFileExtensions << QString("*.") + INSTALLMNGR_INSTALL_ZIP_FILEEXT << QString("*.") + INSTALLMNGR_INSTALL_INI_FILEEXT << QString("*.") + INSTALLMNGR_INSTALL_LST_FILEEXT;
-	QStringList lSourceUpdateFiles = getFilesByExtension(sResolvedRootSearchDirectory, lAllowedFileExtensions);
-	if (lSourceUpdateFiles.isEmpty() == false)
-	{
-		if (sPermissionQuestion.isEmpty() == false)
-		{
-			int confirm = QMessageBox::question(this, tr("Install Updates?"), sPermissionQuestion, QMessageBox::Ok | QMessageBox::Cancel);
-			if (confirm == QMessageBox::Cancel)
-				return false;
-		}
-		bool bIsPacked = false;
-		if (lSourceUpdateFiles.count() > 1)//multiple files?
-		{
-			bIsPacked = true;
-
-
-			/*
-			//Can we pack all the files inside a *.lst file? No other .lst files?
-			for (int i = 0; i < lSourceUpdateFiles.count(); i++)
-			{
-				if (QFileInfo(lSourceUpdateFiles[i]).completeSuffix() == INSTALLMNGR_INSTALL_LST_FILEEXT)
-				{
-					break;
-					bIsPacked = false;
-				}
-			}
-			if (bIsPacked)
-			{
-				QString sUniqueFileName = sResolvedRootSearchDirectory + QDateTime::currentDateTime().toString(MainAppInfo::stdDateTimeFormat());
-				QFile fTempFile(sUniqueFileName + "." + INSTALLMNGR_INSTALL_LST_FILEEXT);
-				int nRetries = 0;
-				while ((fTempFile.exists()))
-				{
-					sUniqueFileName = sUniqueFileName + "_";
-					fTempFile.setFileName(sUniqueFileName + "." + INSTALLMNGR_INSTALL_LST_FILEEXT);
-					nRetries++;
-					if (nRetries>=5)
-					{
-						qDebug() << __FUNCTION__ << "Could not create a unique file!";
-						return false;
-					}
-				}
-
-				if (fTempFile.open(QIODevice::WriteOnly))
-				{
-					QTextStream outStream(&fTempFile);
-					for (int i = 0; i < lSourceUpdateFiles.count(); i++)
-						outStream << lSourceUpdateFiles[i] << endl;
-					fTempFile.close();
-					lSourceUpdateFiles.clear();
-					lSourceUpdateFiles.append(fTempFile.fileName());
-				}
-			}
-			*/
-		}
-		if (lSourceUpdateFiles.isEmpty() == false)
-		{
-			QStringList lParams;
-			lParams << "-p" << QString("\"") + lSourceUpdateFiles[0];
-			qDebug() << __FUNCTION__ << "Found update to install: " + lSourceUpdateFiles[0];
-			if (lSourceUpdateFiles.count() > 1)
-			{
-				for (int i = 1; i < lSourceUpdateFiles.count(); i++)
-				{
-					qDebug() << __FUNCTION__ << "Found update to install: " + lSourceUpdateFiles[i];
-					lParams << QString(INSTALLMNGR_INSTALL_ARG_FILESEP + lSourceUpdateFiles[i]);
-				}
-			}
-			lParams << "\"";//Close the installation file(s) string
-			lParams << "install" << "-o" << "-c";
-			if (bDoRename)
-				lParams << "-r";
-			lParams << "-i" << "\"" + sResolvedAppIniFilePath + "\"";
-			QString sCoutFilePath = "";
-			sCoutFilePath = MainAppInfo::appTempDirPath() + "InstallLog_" + QDateTime::currentDateTime().toString(MainAppInfo::stdDateTimeFormat()) + MAIN_PROGRAM_INSTALLATION_LOGFILE_POSTSTRING;
-			if (sCoutFilePath.isEmpty() == false)
-			{
-				if (QFile(sCoutFilePath).exists())
-					QFile::remove(sCoutFilePath);
-				lParams << "-l" << "\"" + sCoutFilePath + "\"";
-				qDebug() << __FUNCTION__ << "Log Output file for installation set to: " + sCoutFilePath;
-			}
-			if (installationManagerBase::ExecuteUpdateMngr(true, lParams))
-			{
-				if (sCoutFilePath.isEmpty() == false)
-				{
-					QFile fCoutFile(sCoutFilePath);
-					if (fCoutFile.exists())
-					{
-						if (fCoutFile.open(QIODevice::ReadOnly) == false)
-						{
-							QString sErrorMessage = "Could not read " + sCoutFilePath + ", " + fCoutFile.errorString();
-							lInstallResults.append(sErrorMessage);
-							qDebug() << __FUNCTION__ << sErrorMessage;
-						}
-						else
-						{
-							QTextStream in(&fCoutFile);
-							while (!in.atEnd())
-							{
-								lInstallResults.append(in.readLine());
-							}
-							fCoutFile.close();
-						}
-					}
-					else
-					{
-						QString sErrorMessage = "No output file created";
-						lInstallResults.append(sErrorMessage);
-						qDebug() << __FUNCTION__ << sErrorMessage;
-					}
-				}
-				bUpdateManagerExecuted = true;
-			}
-			else
-			{
-				QString sErrorMessage = "Could not execute the UpdateManager";
-				lInstallResults.append(sErrorMessage);
-				qDebug() << __FUNCTION__ << sErrorMessage;
-			}
-		}
-	}
-	if (bUpdateManagerExecuted)
-		qDebug() << __FUNCTION__ << "UpdateManager executed";
-	return bUpdateManagerExecuted;
-}
-
-QStringList MainWindow::getFilesByExtension(const QString &sRootSearchDirectory, const QStringList &lAllowedFileExtensions)
-{
-	QStringList lSourceUpdateFilesFound;
-	QString sUpdatesDir;
-	QDir dirUpdatesRoot;
-	dirUpdatesRoot.setPath(sRootSearchDirectory);
-
-	if (dirUpdatesRoot.exists())
-	{
-		dirUpdatesRoot.setFilter(QDir::Files);// | QDir.Hidden | QDir.NoSymLinks);
-		dirUpdatesRoot.setNameFilters(lAllowedFileExtensions);
-		dirUpdatesRoot.setSorting(QDir::Name);//::Size | QDir::Reversed);
-		int nNumberOfFoundFiles = dirUpdatesRoot.count();
-		if (nNumberOfFoundFiles > 0)
-		{
-			for (int i = 0; i < dirUpdatesRoot.entryList().count(); i++)
-				lSourceUpdateFilesFound.append(sRootSearchDirectory + dirUpdatesRoot.entryList()[i]);
-		}
-		QDirIterator *it = new QDirIterator(sRootSearchDirectory);
-		while (it->hasNext())
-		{
-			QString sSubDir = it->next();
-			if (sSubDir.indexOf(".", sSubDir.count() - 1) == -1)
-				lSourceUpdateFilesFound.append(getFilesByExtension(sSubDir + "/", lAllowedFileExtensions));
-		}
-	}
-	return lSourceUpdateFilesFound;
 }
 
 bool MainWindow::implementPluginCustomActionMenus()
@@ -557,6 +384,17 @@ void MainWindow::closeEvent(QCloseEvent *event)
 void MainWindow::stopAppExchange()
 {
 	emit TerminateAppExchange();
+}
+
+void MainWindow::quitAndInstallUpdates(const QString &sRootUpdateDirectory)
+{
+	QString sPermissionQuestion = "This action will stop BrainStim and then perform a automatic update, do you want to do this ?";
+	int confirm = QMessageBox::question(NULL, "Install Updates?", sPermissionQuestion, QMessageBox::Ok | QMessageBox::Cancel);
+	if (confirm == QMessageBox::Ok)
+	{
+		this->quit();
+		installationManagerBase::checkForAvailableUpdates(sRootUpdateDirectory, QStringList(), "", false, true, false);
+	}
 }
 
 bool MainWindow::setContextState(const QString &sContextName)
@@ -1568,7 +1406,7 @@ void MainWindow::updateMenuControls(QMdiSubWindow *mdiSubWin)
 		QString docTitle = strippedName(docFilePath);
 		if (docTitle == "")
 			docTitle = MainAppInfo::UntitledDocName();
-		setWindowTitle(tr("%1 - %2").arg(globAppInfo->getTitle()).arg(docTitle));
+		setWindowTitle(tr("%1 - %2 - %3").arg(globAppInfo->getTitle()).arg(MainAppInfo::getCurrentOSAccountName()).arg(docTitle));
 		GlobalApplicationInformation::DocType d;
 		d = DocManager->getDocType(mdiSubWin);
 		printAction->setEnabled(false);
@@ -1598,7 +1436,7 @@ void MainWindow::updateMenuControls(QMdiSubWindow *mdiSubWin)
 	}
 	else
 	{
-		setWindowTitle(tr("%1").arg(globAppInfo->getTitle()));
+		setWindowTitle(tr("%1 - %2").arg(globAppInfo->getTitle()).arg(MainAppInfo::getCurrentOSAccountName()));
 		if (lCurrentRunningScriptIDList.isEmpty())
 			setScriptRunningStatus(GlobalApplicationInformation::NoScript);
 	}
@@ -3705,16 +3543,16 @@ void MainWindow::setCurrentFile(const QString &fileName, bool bIsNotSaved)
 {
 	if (fileName.isEmpty())
 	{
-		setWindowTitle(globAppInfo->getTitle());//MainAppInfo::MainProgramTitle());
+		setWindowTitle(globAppInfo->getTitle() + " - " + MainAppInfo::getCurrentOSAccountName());//MainAppInfo::MainProgramTitle());
 	}
 	else if(fileName == MainAppInfo::UntitledDocName())
 	{
-		setWindowTitle(tr("%1 - %2").arg(globAppInfo->getTitle()).arg(MainAppInfo::UntitledDocName()));
+		setWindowTitle(tr("%1 - %2 - %3").arg(globAppInfo->getTitle()).arg(MainAppInfo::getCurrentOSAccountName()).arg(MainAppInfo::UntitledDocName()));
 	}	
 	else if (fileName.startsWith(":/") == false) 
 	{
 		m_currentPath = fileName;
-		setWindowTitle(tr("%1 - %2").arg(globAppInfo->getTitle()).arg(strippedName(m_currentPath)));
+		setWindowTitle(tr("%1 - %2 - %3").arg(globAppInfo->getTitle()).arg(MainAppInfo::getCurrentOSAccountName()).arg(strippedName(m_currentPath)));
 		if (bIsNotSaved == false)
 			updateRecentFileList(fileName);
 	}
