@@ -72,7 +72,7 @@ public:
 private:
 	bool changePluginEnabledSetting(const QString &sPluginIniFilePath, const bool &bEnable);
 	QString getPluginFileName(const QString &sRegisteredPluginName);
-	bool createRegisteredPluginIniFile(const QString &sRegisteredPluginName);
+	//bool createRegisteredPluginIniFile(const QString &sRegisteredPluginName);
 
 	struct strcPluginDefinition
 	{

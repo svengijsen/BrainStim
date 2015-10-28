@@ -36,7 +36,38 @@ installationManager::~installationManager()
 QString installationManager::registerPlugin(QObject *plugin, const QString &sRootDirectory, const QString &sFileName, const bool &bIsEnabled, const bool &bIsStatic)
 {
 	if (plugin == NULL)
-		return "";
+	{
+		if ((bIsEnabled == false) && (sFileName.isEmpty() == false))
+		{
+			//These are disabled plugin(s) that may have failed loading because the additional needed library loading is skipped. 
+			//We still need an option to enable and retry loading them, therefore the below.
+			strcPluginDefinition tmpStrcPluginDefinition;
+			tmpStrcPluginDefinition.pType = PluginInterface::UnknownPlugin;
+			tmpStrcPluginDefinition.pInterface = NULL;
+			tmpStrcPluginDefinition.bIsEnabled = bIsEnabled;
+			tmpStrcPluginDefinition.bIsStatic = bIsStatic;
+			tmpStrcPluginDefinition.sFileName = sFileName;
+			tmpStrcPluginDefinition.sFileBaseName = QFileInfo(sFileName).baseName();
+			tmpStrcPluginDefinition.sName = tmpStrcPluginDefinition.sFileBaseName;
+			QString sPluginAbsoluteFilePath = sRootDirectory + "/" + tmpStrcPluginDefinition.sFileName;
+			QString sPluginIniFilePath = getPluginIniFilePath(sPluginAbsoluteFilePath);
+			if (QFile(sPluginIniFilePath).exists())
+			{
+				QSettings pluginSettings(sPluginIniFilePath, QSettings::IniFormat);
+				pluginSettings.beginGroup(INSTALLMNGR_SETTING_SECTION_INSTALLATION);
+				QStringList lFileList;
+				tmpStrcPluginDefinition.lInstallFileList = pluginSettings.value(INSTALLMNGR_SETTING_SETTING_FILES, QStringList()).toStringList();
+				pluginSettings.endGroup();
+			}
+			if (tmpStrcPluginDefinition.sName.isEmpty() == false)
+				mapRegisteredPluginNametoDef.insert(tmpStrcPluginDefinition.sName, tmpStrcPluginDefinition);
+			return tmpStrcPluginDefinition.sName;
+		}
+		else
+		{
+			return "";
+		}
+	}
 	strcPluginDefinition tmpStrcPluginDefinition;
 	DeviceInterface *iDevice = qobject_cast<DeviceInterface *>(plugin);//For each plugin (static or dynamic), we check which interfaces it implements using qobject_cast()
 	if (iDevice)
@@ -156,9 +187,12 @@ int installationManager::configureRegisteredPluginScriptEngine(const QString &sR
 	if ((mapRegisteredPluginNametoDef.contains(sRegisteredPluginName)) && (pEngine))
 	{
 		mapRegisteredPluginNametoDef[sRegisteredPluginName].pScriptEngine = pEngine;
-		nNewMetaID = mapRegisteredPluginNametoDef.value(sRegisteredPluginName).pInterface->ConfigureScriptEngine(*pEngine);
-		if (nNewMetaID >= 0)
-			mapRegisteredPluginNametoDef[sRegisteredPluginName].nScriptMetaID = nNewMetaID;
+		if (mapRegisteredPluginNametoDef.value(sRegisteredPluginName).pInterface)
+		{
+			nNewMetaID = mapRegisteredPluginNametoDef.value(sRegisteredPluginName).pInterface->ConfigureScriptEngine(*pEngine);
+			if (nNewMetaID >= 0)
+				mapRegisteredPluginNametoDef[sRegisteredPluginName].nScriptMetaID = nNewMetaID;
+		}
 	}
 	return nNewMetaID;
 }
@@ -225,6 +259,7 @@ bool installationManager::isEnabledPlugin(const QString &sPluginFilePath)
 	return false;
 }
 
+/*
 bool installationManager::createRegisteredPluginIniFile(const QString &sRegisteredPluginName)
 {
 	//QString sPluginFileName = getPluginFileName(sRegisteredPluginName);
@@ -254,6 +289,7 @@ bool installationManager::createRegisteredPluginIniFile(const QString &sRegister
 	}
 	return false;
 }
+*/
 
 //QStringList getPluginInstallFilesFromIniFile(const QString &sPluginIniFilePath)
 //{
@@ -362,20 +398,67 @@ bool installationManager::unistallRegisteredPlugin(const QString &sRegisteredPlu
 						{
 							if (lFileList.isEmpty() == false)
 							{
+								QString sFileName;
+								QString sFilePath;
+								QString sUserPluginsDirPath = MainAppInfo::userPluginsDirPath();
+								QString sAppDirPath = MainAppInfo::appDirPath();
+								QString sIniCompleteBaseName = QFileInfo(sPluginAbsIniFilePath).completeBaseName();
+								QString sDefaultPluginsPath = MainAppInfo::defaultPluginsDirPath();
+								QString sMainAppUserDir = MainAppInfo::getMainApplicationUserDirectory();
+								QStringList lSubDirsToCheckForRemoval;
 								for (int i = 0; i < lFileList.count(); i++)
 								{
-									QString sFileName = QFileInfo(lFileList[i]).fileName();
-									QString sFilePath = MainAppInfo::userPluginsDirPath() + "/" + lFileList[i];
-									QFile sInstallationFilePath(sFilePath);
-									if (sInstallationFilePath.exists())
+									sFileName = QFileInfo(lFileList[i]).fileName();
+									sFilePath = lFileList[i];
+									
+									bool bNeedsAdminPrivileges = false;
+									bool bIsShared;
+									sFilePath = installationManagerBase::resolveFileDirectoryPath(sFilePath, sUserPluginsDirPath, sAppDirPath, sIniCompleteBaseName, sDefaultPluginsPath, sMainAppUserDir, bNeedsAdminPrivileges, bIsShared);
+									if (bIsShared)
 									{
+										int confirm = QMessageBox::question(NULL, "Shared file found", "The " + sRegisteredPluginName + " plugin links to an shared library(" + sFilePath + ").\nDeleting this file may cause some other plugin(s) to fail if they are also linking to this library.\nDo you want to keep this library?", QMessageBox::Yes | QMessageBox::No);
+										if (confirm != QMessageBox::No)
+											continue;
+									}
+
+									QFileInfo fiInstallationFilePath(sFilePath);
+									if (fiInstallationFilePath.exists())
+									{
+										QString sInstallationFileDir = fiInstallationFilePath.canonicalPath();
+
+										QLibrary tmpLib;
+										tmpLib.setFileName(sInstallationFileDir);
+										if (tmpLib.isLibrary(sInstallationFileDir))
+										{
+											if (tmpLib.isLoaded())
+											{
+												if (tmpLib.unload() == false)
+													qDebug() << __FUNCTION__ << "Could not unload the library : " + sFilePath;
+												else
+													qDebug() << __FUNCTION__ << "Library successfully unloaded : " + sFilePath;
+											}
+										}
+
 										//bool bRemoveSucceeded = 
 										QFile::remove(sFilePath);
-										if (sInstallationFilePath.exists())
+										if (QFile(sFilePath).exists())
 										{
-											qDebug() << __FUNCTION__ << "Could not remove the file: " << sFilePath;
-											return false;
+											qDebug() << __FUNCTION__ << "Could not remove the file: " + sFilePath;
+											//return false;
 										}
+										if (isSubDirectoryOfRoot(sUserPluginsDirPath, sInstallationFileDir))
+										{
+											if (lSubDirsToCheckForRemoval.contains(sInstallationFileDir) == false)
+												lSubDirsToCheckForRemoval.append(sInstallationFileDir);
+										}
+									}
+								}
+								if (lSubDirsToCheckForRemoval.isEmpty()==false)
+								{
+									//Is there a empty <PluginUserPath>/<PluginName> path left to remove?
+									foreach(QString sTempString, lSubDirsToCheckForRemoval)
+									{
+										removeEmptyDirectoryRecursive(sTempString);
 									}
 								}
 							}

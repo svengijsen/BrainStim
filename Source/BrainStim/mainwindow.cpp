@@ -2370,7 +2370,7 @@ bool MainWindow::loadDynamicPlugins()
 		QString sPluginIniFilePath = installMngr->getPluginIniFilePath(sPluginAbsFilePath);
 		if (sPluginIniFilePath.isEmpty())//Is there a configuration file?
 			continue;
-		if (installMngr->isRegisteredPlugin(QFileInfo(fileName).completeBaseName()))
+		if (installMngr->isRegisteredPlugin(QFileInfo(fileName).completeBaseName()))//Already registered?
 			continue;
 		bool bIsUnregisteredAndDisabled = false;
 		if (installMngr->isEnabledPlugin(sPluginAbsFilePath) == false)
@@ -2387,11 +2387,12 @@ bool MainWindow::loadDynamicPlugins()
 		{
 			QStringList lFiles = installationManager::getPluginInstallFilesFromIniFile(sPluginIniFilePath);
 			bool bNeedsAdminPrivileges = false;
+			bool bIsShared;
 			for (int i = 0; i < lFiles.count(); i++)
 			{
 				QString sFileName = QFileInfo(lFiles[i]).fileName();
 				//QFile sSourceFilePath(sIniFileAbsDir + "/" + sFileName);
-				lFiles[i] = installationManagerBase::resolveFileDirectoryPath(lFiles[i], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sPluginIniFilePath).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::getMainApplicationUserDirectory(), bNeedsAdminPrivileges);
+				lFiles[i] = installationManagerBase::resolveFileDirectoryPath(lFiles[i], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sPluginIniFilePath).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::getMainApplicationUserDirectory(), bNeedsAdminPrivileges, bIsShared);
 				if (QFileInfo(lFiles[i]).canonicalPath() == dirTmpAddPluginDir.canonicalPath())//!= QFileInfo(sPluginAbsFilePath).canonicalFilePath()) && (QFileInfo(lFiles[i]).canonicalPath() != QDir(MainAppInfo::appDirPath()).canonicalPath()))
 				{
 					if (QLibrary::isLibrary(lFiles[i]))
@@ -2535,6 +2536,12 @@ bool MainWindow::loadDynamicPlugins()
 			}
 			metaObject = NULL;
 			bRetVal = false;
+		}
+		else if (bIsUnregisteredAndDisabled)
+		{
+			//These are disabled plugin(s) that may have failed loading because the additional needed library loading is skipped. 
+			//We still need an option to enable and retry loading them, therefore the below.
+			installMngr->registerPlugin(NULL, QDir(MainAppInfo::userPluginsDirPath()).canonicalPath(), fileName, false, false);
 		}
 		else
 		{

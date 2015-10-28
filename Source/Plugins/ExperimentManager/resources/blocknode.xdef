@@ -16,7 +16,7 @@
 	    
 	    <parameter id="1">
 	        <enabled>true</enabled>
-	        <editable>true</editable>
+	        <editable>false</editable>
 	        <name>block_number</name>
 	        <displayname>Number</displayname>
 	        <grouppath></grouppath>

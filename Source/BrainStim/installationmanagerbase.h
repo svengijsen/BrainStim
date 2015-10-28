@@ -139,13 +139,15 @@ public:
 		return lSourceUpdateFilesFound;
 	}
 
-	static QString resolveFileDirectoryPath(const QString &sFileDirectoryPath, const QString &sMainAppsUserPluginDirPath, const QString &sMainAppDirPath, const QString &sIniCompleteBaseName, const QString &sMainAppsDefaultPluginDirPath, const QString &sUserAppPathPath, bool &bNeedsAdminPrivileges)
+	static QString resolveFileDirectoryPath(const QString &sFileDirectoryPath, const QString &sMainAppsUserPluginDirPath, const QString &sMainAppDirPath, const QString &sIniCompleteBaseName, const QString &sMainAppsDefaultPluginDirPath, const QString &sUserAppPathPath, bool &bNeedsAdminPrivileges, bool &bIsSharedFile)
 	{
 		QString sRetval = sFileDirectoryPath;
 		if (needsAdminPrivilegesToInstall(sRetval))
 			bNeedsAdminPrivileges = true;
 		//else
 		//	bNeedsAdminPrivileges = false;
+		bIsSharedFile = ((sRetval.contains(INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH)) || (sRetval.contains(INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH)));
+
 		sRetval.replace(INSTALLMNGR_SETTING_MACRO_USERPLUGINPATH, sMainAppsUserPluginDirPath, Qt::CaseInsensitive);
 		sRetval.replace(INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH, sMainAppDirPath, Qt::CaseInsensitive);
 		sRetval.replace(INSTALLMNGR_SETTING_MACRO_PLUGINNAME, sIniCompleteBaseName, Qt::CaseInsensitive); //QFileInfo(sIniFileName).completeBaseName(), Qt::CaseInsensitive);
@@ -153,6 +155,55 @@ public:
 		sRetval.replace(INSTALLMNGR_SETTING_MACRO_USERAPPPATH, sUserAppPathPath, Qt::CaseInsensitive);
 		return sRetval;
 	};
+
+	static bool isSubDirectoryOfRoot(const QString &sRootDirPath, const QString &sSubDirPath)
+	{
+		QDir dirRoot(sRootDirPath);
+		QDir dirSub(sSubDirPath);
+		if (dirRoot.exists() && dirSub.exists())
+		{
+			QString sCanoRootPath = dirRoot.canonicalPath();
+			QString sCanoSubPath = dirSub.canonicalPath();
+			if (sCanoRootPath.toLower() != sCanoSubPath.toLower())
+			{
+				return sCanoSubPath.startsWith(sCanoRootPath, Qt::CaseInsensitive);
+			}
+		}
+		return false;
+	}
+
+	static bool removeEmptyDirectoryRecursive(const QString &sRootFolder)
+	{
+		//Removes the Root directory folder including all the sub-directory folders which are empty (no files)
+		QDir dir(sRootFolder);
+		bool bDirsRemoved = false;
+		if (dir.exists())
+		{
+			const QFileInfoList list = dir.entryInfoList(QDir::AllDirs | QDir::NoDotAndDotDot);
+			QFileInfo fi;
+			bool bFileFound = false;
+			for (int l = 0; l < list.size(); l++)
+			{
+				fi = list.at(l);
+				QString sTempDirPath = fi.absoluteFilePath();
+				if (fi.isDir() && fi.fileName() != ".." && fi.fileName() != ".")//a directory?
+				{
+					if (removeEmptyDirectoryRecursive(sTempDirPath))
+						bDirsRemoved = true;
+				}
+				else if (fi.isFile())//a file?
+				{
+					bFileFound = true;
+				}
+			}
+			if (bFileFound == false)
+			{
+				dir.rmdir(sRootFolder);
+				bDirsRemoved = true;
+			}
+		}
+		return bDirsRemoved;
+	}
 
 	static bool needsAdminPrivilegesToInstall(const QString &sMacroPath)
 	{
@@ -411,9 +462,10 @@ public:
 				bool bAllFilesAvailableCheck = true;
 				QList<int> nPresentInCurrentInstallIndexes;
 				bool bNeedsAdminPrivileges = false;
+				bool bIsShared;
 				for (int i = 0; i < lFileList.count(); i++)
 				{
-					lFileList[i] = resolveFileDirectoryPath(lFileList[i], sMainAppsUserPluginDirPath, sMainAppDirPath, QFileInfo(sIniFileName).completeBaseName(), sMainAppsDefaultPluginDirPath, sUserAppPath, bNeedsAdminPrivileges);
+					lFileList[i] = resolveFileDirectoryPath(lFileList[i], sMainAppsUserPluginDirPath, sMainAppDirPath, QFileInfo(sIniFileName).completeBaseName(), sMainAppsDefaultPluginDirPath, sUserAppPath, bNeedsAdminPrivileges,bIsShared);
 				}
 				if (bNeedsAdminPrivileges)
 				{
@@ -736,7 +788,7 @@ public:
 		//wchar_t wcFilePath[1024];
 		if (bInsideDevEnvironment)
 		{
-			sParameters = "/c \"" + sCurrentPath + INSTALLMNGR_UPDATEMNGR_BATCH_FILENAME + " " + sArchitectureArg + " " + sDebugModeArg + " " + QT_VERSION_STR + " E:\\Libraries\\" + " " + sCurrentPath + " && " + sCurrentPath + sUpdateMngrFileName + " " + sInstallMngrCommandArg + "\""; //+sCoutCommandString + "\"";
+			sParameters = "/c \"" + sCurrentPath + INSTALLMNGR_UPDATEMNGR_BATCH_FILENAME + " " + sArchitectureArg + " " + sDebugModeArg + " " + QT_VERSION_STR + " E:\\Libraries\\" + " " + sCurrentPath + " && " + sUpdateMngrFileName + " " + sInstallMngrCommandArg + "\""; //+sCoutCommandString + "\"";
 		}
 		else
 		{
@@ -784,7 +836,7 @@ public:
 
 	static bool ShellExecuteExRoutine(SHELLEXECUTEINFOW *pExecInfo)
 	{
-		qDebug() << __FUNCTION__ << "Going to execute shell code: " + QString::fromStdWString(pExecInfo->lpFile) + QString::fromStdWString(pExecInfo->lpParameters);
+		qDebug() << __FUNCTION__ << "Going to execute shell code: " + QString::fromStdWString(pExecInfo->lpFile) + " " + QString::fromStdWString(pExecInfo->lpParameters);
 		if (!ShellExecuteEx(pExecInfo))
 		{
 			DWORD dwError = GetLastError();

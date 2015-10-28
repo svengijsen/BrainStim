@@ -113,8 +113,16 @@ void PluginManagerDialog::fillTable()
 	for (int nRow = 0; nRow < mapRegisteredPluginNamesToEnabledState.count(); nRow++)
 	{ 
 		sCurrentKey = mapRegisteredPluginNamesToEnabledState.keys().at(nRow);
-		sPluginInfo = pInstallMngr->getRegisteredPluginInterface(sCurrentKey)->GetPluginInformation();
-		sMinMainAppVersion = pInstallMngr->getRegisteredPluginInterface(sCurrentKey)->GetMinimalMainProgramVersion();
+		if (pInstallMngr->getRegisteredPluginInterface(sCurrentKey))
+		{
+			sPluginInfo = pInstallMngr->getRegisteredPluginInterface(sCurrentKey)->GetPluginInformation();
+			sMinMainAppVersion = pInstallMngr->getRegisteredPluginInterface(sCurrentKey)->GetMinimalMainProgramVersion();
+		}
+		else
+		{
+			sPluginInfo = sCurrentKey;
+			sMinMainAppVersion = "Unresolved";
+		}
 		pluginType = pInstallMngr->getPluginType(sCurrentKey);
 		sAbsFilePath = pInstallMngr->getPluginAbsFilePath(sCurrentKey);
 		bIsEnabled = mapRegisteredPluginNamesToEnabledState.value(sCurrentKey);
@@ -217,7 +225,7 @@ void PluginManagerDialog::uninstallSelectedPlugin()
 				if (confirm == QMessageBox::Ok)
 				{
 					//bool bResult = 
-						pInstallMngr->unistallRegisteredPlugin(sPluginInternalName);
+					pInstallMngr->unistallRegisteredPlugin(sPluginInternalName);
 					fillTable();
 				}
 			}
@@ -395,7 +403,8 @@ void PluginManagerDialog::backupAllPlugins()
 								bool bNeedsAdminPrivileges = false;
 								for (int j = 0; j < lInstallFiles.count(); j++)
 								{
-									lInstallFiles[j] = installationManagerBase::resolveFileDirectoryPath(lInstallFiles[j], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sIniFileName).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::getMainApplicationUserDirectory(), bNeedsAdminPrivileges);
+									bool bIsShared;
+									lInstallFiles[j] = installationManagerBase::resolveFileDirectoryPath(lInstallFiles[j], MainAppInfo::userPluginsDirPath(), MainAppInfo::appDirPath(), QFileInfo(sIniFileName).completeBaseName(), MainAppInfo::defaultPluginsDirPath(), MainAppInfo::getMainApplicationUserDirectory(), bNeedsAdminPrivileges, bIsShared);
 									QString sFileName = QFileInfo(lInstallFiles[j]).fileName();
 									if (sFileName == sIniFileName)
 										continue;
