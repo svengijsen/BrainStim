@@ -53,6 +53,8 @@ public:
 	QString getPluginIniFilePath(const QString &sPluginFilePath);
 	bool createPluginConfigurationSetting(const QString &sPluginInstallFilePath, const QString &sInternalName, const bool &bIsEnabled, const QStringList lInstallationFiles);
 	QStringList getPluginInstallFiles(const QString &sRegisteredPluginName);
+	QString getPluginFileName(const QString &sRegisteredPluginName);
+
 	static QStringList getPluginInstallFilesFromIniFile(const QString &sPluginIniFilePath)
 	{
 		QStringList lReturnList;
@@ -71,7 +73,6 @@ public:
 
 private:
 	bool changePluginEnabledSetting(const QString &sPluginIniFilePath, const bool &bEnable);
-	QString getPluginFileName(const QString &sRegisteredPluginName);
 	//bool createRegisteredPluginIniFile(const QString &sRegisteredPluginName);
 
 	struct strcPluginDefinition

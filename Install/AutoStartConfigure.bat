@@ -39,19 +39,18 @@ GOTO END
 	SET QT_QPA_PLATFORM_PLUGIN_PATH=%QT_ROOT_DIR%\plugins\platforms
 	SET Path=%QT_ROOT_DIR%\bin;%Path%
 	SET OGRE_PATH=%LIBRARY_DIR%\Ogre\OGRE-SDK-1.8.2-vc110-x86-28.05.2013\bin
-	SET INPOUT_PATH=%LIBRARY_DIR%\InpOut_1500\Win32
 	SET QT_SCRIPT_BINDINGS_PATH=%LIBRARY_DIR%\Qt5.3.2_ScriptBindings\Win32\bindings\script
 	SET QUAZIP_PATH=%LIBRARY_DIR%\quazip-0.7.1\Win32
 	
 	ECHO START COPYING...
 	COPY qt_32.conf qt.conf /y
-	COPY %INPOUT_PATH%\inpout32.dll inpout32.dll /y
 	MD Plugins\Win32\script
 	COPY %QT_SCRIPT_BINDINGS_PATH% Plugins\Win32\script
 	MD Qml\plugins\Win32\BrainStim_QMLExtensions
 	COPY ..\Source\QmlExtensions\Plugins\DefaultPlugin\BrainStimExtensions Qml\plugins\Win32\BrainStim_QMLExtensions
 	MD Plugins\Win32\platforms
 	COPY %QT_ROOT_DIR%\plugins\platforms Plugins\Win32\platforms
+	COPY %QT_ROOT_DIR%\bin\assistant.exe assistant.exe /y
 
 	MD Plugins\Win32\audio
 	COPY %QT_ROOT_DIR%\plugins\audio Plugins\Win32\audio
@@ -174,19 +173,18 @@ GOTO END
 	SET QT_QPA_PLATFORM_PLUGIN_PATH=%QT_ROOT_DIR%\plugins\platforms
 	SET Path=%QT_ROOT_DIR%\bin;%Path%
 	SET OGRE_PATH=%LIBRARY_DIR%\Ogre\OGRE-SDK-1.8.2-vc110-x64-28.05.2013\bin
-	SET INPOUT_PATH=%LIBRARY_DIR%\InpOut_1500\x64
 	SET QT_SCRIPT_BINDINGS_PATH=%LIBRARY_DIR%\Qt5.3.2_ScriptBindings\x64\bindings\script
 	SET QUAZIP_PATH=%LIBRARY_DIR%\quazip-0.7.1\x64
 	
 	ECHO START COPYING...
 	COPY qt_64.conf qt.conf /y
-	COPY %INPOUT_PATH%\inpoutx64.dll inpoutx64.dll /y
 	MD Plugins\x64\script
 	COPY %QT_SCRIPT_BINDINGS_PATH% Plugins\x64\script
 	MD Qml\plugins\x64\BrainStim_QMLExtensions
 	COPY ..\Source\QmlExtensions\Plugins\DefaultPlugin\BrainStimExtensions Qml\plugins\x64\BrainStim_QMLExtensions
 	MD Plugins\x64\platforms
 	COPY %QT_ROOT_DIR%\plugins\platforms Plugins\x64\platforms
+	COPY %QT_ROOT_DIR%\bin\assistant.exe assistant.exe /y
 	
 	MD Plugins\x64\audio
 	COPY %QT_ROOT_DIR%\plugins\audio Plugins\x64\audio

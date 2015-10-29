@@ -427,8 +427,8 @@ bool installationManager::unistallRegisteredPlugin(const QString &sRegisteredPlu
 										QString sInstallationFileDir = fiInstallationFilePath.canonicalPath();
 
 										QLibrary tmpLib;
-										tmpLib.setFileName(sInstallationFileDir);
-										if (tmpLib.isLibrary(sInstallationFileDir))
+										tmpLib.setFileName(sFilePath);
+										if (tmpLib.isLibrary(sFilePath))
 										{
 											if (tmpLib.isLoaded())
 											{

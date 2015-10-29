@@ -2349,10 +2349,23 @@ bool MainWindow::unloadDynamicPlugins()
 		}
 		else
 		{
-			qDebug() << __FUNCTION__ << "Could not unload the plugins dependency: " + tmpLib->fileName();
+			qDebug() << __FUNCTION__ << "Could not unload the plugin linked library: " + tmpLib->fileName();
 		}
 	}
-
+	//Are there still plugin(s) registered in the InstallationManager? Like just un-installed disabled plugin(s)?
+	QMap<QString, bool> mapRemainingPlugins = installMngr->getRegisteredPluginNamesAndStates();
+	if (mapRemainingPlugins.isEmpty() == false)
+	{
+		for (int nRow = 0; nRow < mapRemainingPlugins.count(); nRow++)
+		{
+			QString sCurrentKey = mapRemainingPlugins.keys().at(nRow);
+			if (installMngr->isStaticPlugin(sCurrentKey) == false)
+			{
+				QString sPluginIniFileName = installMngr->getPluginFileName(sCurrentKey);
+				installMngr->unregisterPlugin(sPluginIniFileName);
+			}
+		}
+	}
 	return restartScriptEngine();
 }
 
@@ -2381,6 +2394,10 @@ bool MainWindow::loadDynamicPlugins()
 		QDir dirTmpAddPluginDir(sTmpAddPluginDir);
 		if (dirTmpAddPluginDir.exists())//Does a additional plugin directory exist?
 			qApp->addLibraryPath(dirTmpAddPluginDir.canonicalPath());
+
+		QObject *plugin = NULL;
+		QPluginLoader *loader = NULL;
+		QString sLoaderErrorString = "";
 
 		//pre-load all needed libraries...
 		if (bIsUnregisteredAndDisabled == false)
@@ -2412,15 +2429,21 @@ bool MainWindow::loadDynamicPlugins()
 					}
 				}
 			}
-		}
+			loader = new QPluginLoader(this);
+			loader->setFileName(sPluginAbsFilePath);
+			loader->setLoadHints(QLibrary::ExportExternalSymbolsHint);// QLibrary::ResolveAllSymbolsHint);// | );
 
-		QPluginLoader *loader = new QPluginLoader(sPluginAbsFilePath, this);
-		QObject *plugin = loader->instance();//The QObject provided by the plugin, if it was compiled against an incompatible version of the Qt library, QPluginLoader::instance() returns a null pointer.
+			QLibrary::LoadHints lLoadHints = loader->loadHints();
+			bool bIsLoaded = loader->isLoaded();
+			bIsLoaded = loader->load();
+			bIsLoaded = loader->isLoaded();
+			if (bIsLoaded == false)
+				sLoaderErrorString = loader->errorString();
+			plugin = loader->instance();//The QObject provided by the plugin, if it was compiled against an incompatible version of the Qt library, QPluginLoader::instance() returns a null pointer.
+		}
 		if (plugin)
 		{
 			//bLoadResult = libTemp.unload();
-
-
 			DeviceInterface *iDevice = qobject_cast<DeviceInterface *>(plugin);
 			QString sTmpInternalPluginName = "";
 			if (iDevice)
@@ -2545,7 +2568,7 @@ bool MainWindow::loadDynamicPlugins()
 		}
 		else
 		{
-			qDebug() << __FUNCTION__ << "::Could not load the Dynamic Plugin (" << fileName << ")!";
+			qDebug() << __FUNCTION__ << "::Could not load the Dynamic Plugin (" << fileName << "). " + sLoaderErrorString;
 		}
 	}
 	return true;
