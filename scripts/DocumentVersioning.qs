@@ -54,7 +54,8 @@ defaultDocumentEditing("documents/BrainStim/UserInterface.html", "UserInterface.
 defaultDocumentEditing("documents/BrainStim/ScriptDebugging.html", "ScriptDebugging.html", 2);
 defaultDocumentEditing("documents/BrainStim/DefaultPlugins.html", "DefaultPlugins.html", 2);
 defaultDocumentEditing("documents/BrainStim/PluginFrameWork.html", "PluginFrameWork.html", 2);
-
+defaultDocumentEditing("documents/BrainStim/OsUserLogins.html", "OsUserLogins.html", 2);
+defaultDocumentEditing("documents/ExperimentManagerPlugin/CreatingExperiments.html", "CreatingExperiments.html", 2);
 
 
 //Special (non-default document edits)

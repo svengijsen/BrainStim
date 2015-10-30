@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -14,7 +14,7 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 <title>Command-Line Options v1.0</title>
 <!--doc-version-title-end-->
 </head>
@@ -22,7 +22,7 @@
     <div class="container">
 
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Command-Line Options</h1>
@@ -92,6 +92,13 @@
 			  File</a> is created (after the first initialization of a BrainStim 
 			  installation).</td>
 		    </tr>
+		    <tr>
+		      <th scope="row">-m, -M</th>
+		      <td>Allow multiple Instances</td>
+		      <td>This option forces(overrides) BrainStim to allow multiple simultaneous processes of BrainStim 
+			  running, although this option may be disabled in the <a href="settingsDialog.html">setting dialog</a>.</td>
+		    </tr>
+		    
 		  </tbody>
 		</table>
 	
@@ -147,6 +154,21 @@
 		startup is automatically executed, see also the above option <strong>
 			  <em>Execute active document</em></strong> (-e).</td>
 		    </tr>
+		    <tr>
+		      <th scope="row">AllowMultipleInstances</th>
+		      <td>64</td>
+		      <td>This is the same as the above explained <strong>-m</strong> 
+			  option.</td>
+		    </tr>
+		    <tr>
+		      <th scope="row">UserFirstTimeInit</th>
+		      <td>128</td>
+		      <td>If you set this flag then BrainStim will treat the startup 
+			  process as if it were the first time the logged on user starts 
+			  BrainStim, read <a href="OsUserLogins.html">this document</a> for more information about this 
+			  topic.</td>
+		    </tr>
+		   
 		  </tbody>
 		</table>
 		<h2>Example</h2>
@@ -187,7 +209,7 @@
 		</ol>
    </div>
 <!--doc-version-default-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
 <!--doc-version-default-footer-end-->
  </body>

@@ -33,7 +33,8 @@
 				<section title="ScriptDebugging" ref="./documents/BrainStim/ScriptDebugging.html"></section>
 				<section title="PluginFrameWork" ref="./documents/BrainStim/PluginFrameWork.html"></section>
 				<section title="DefaultPlugins" ref="./documents/BrainStim/DefaultPlugins.html"></section>
-				
+				<section title="OsUserLogins" ref="./documents/BrainStim/OsUserLogins.html"></section>
+				<section title="CreatingExperiments" ref="./documents/ExperimentManagerPlugin/CreatingExperiments.html"></section>
 				
 				
 				

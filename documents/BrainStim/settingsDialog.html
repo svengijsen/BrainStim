@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -14,7 +14,7 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 <title>Settings Dialog v1.0</title>
 <!--doc-version-title-end-->
 <style type="text/css">
@@ -22,13 +22,16 @@
 	letter-spacing: normal;
 	background-color: #FFFFFF;
 }
+.auto-style2 {
+	font-weight: bold;
+}
 </style>
 </head>
 <body>
     <div class="container">
 
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Settings Dialog</h1>
@@ -166,6 +169,25 @@
 			  if you leave the <strong>Port</strong> setting set to '0' then a 
 			  free Port number is automatically assigned to it.</td>
 		    </tr>
+		    <tr>
+		      <th scope="row" class="active">Updates:</th>
+		      <td></td>
+		      <td></td>
+		    </tr>
+		    <tr>
+		      <th scope="row"></th>
+		      <td><span class="auto-style2">Updates Directory</span></td>
+		      <td>This directory is fixed and therefore readonly here. This 
+			  directory is used by BrainStim for installing some automatic 
+			  updates each time a new user starts BrainStim for the first time.</td>
+		    </tr>
+		    <tr>
+		      <th scope="row"></th>
+		      <td class="auto-style2">Manual update</td>
+		      <td>Here you can browse and select a path to a root directory that 
+			  contains the updates, subdirectories are automatically included. 
+			  Found updates are then automatically installed.</td>
+		    </tr>			  
 		    <tr>
 		      <th scope="row" class="active">Plugins:</th>
 		      <td></td>

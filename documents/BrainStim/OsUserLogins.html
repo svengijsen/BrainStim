@@ -15,7 +15,7 @@
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
 <!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
-<title>Main Log-file v1.0</title>
+<title>Operating System Users v1.0</title>
 <!--doc-version-title-end-->
 </head>
 <body>
@@ -25,7 +25,7 @@
 <!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
-			<h1>Main Log-file</h1>
+			<h1>Operating System Users</h1>
 			<div class="row">
 				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
 				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
@@ -34,24 +34,20 @@
 		</div>
 	</div>
 <!--doc-version-default-header-end-->
-    <h2>
-        Introduction</h2>
-		There's a main Log-file that BrainStim uses to output all kind of 
-		application information (events, information, warnings, exceptions, 
-		errors) to. This file is stored in the
-		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainUserdirectory">Main 
-		User directory</a> 
-		under the name <em><strong>logfile.txt</strong></em>. Application 
-		information is automatically appended to this file where each line is 
-		prepended with a timestamp of when the application information was 
-		stored. This document can be important for analysing and debugging the 
-		program flow and therefore should always be consulted in case something 
-		unusual happened.<br />
-		<br />
-   </div>
-<!--doc-version-default-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
-	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
-<!--doc-version-default-footer-end-->
- </body>
+
+        <h2>Introduction</h2>
+		<p>There are two kinds of user management in BrainStim. This document 
+		explains the management of Operating System users, this is the user 
+		account that is used for logging into the operating system (e.g. 
+		Microsoft Windows) and this can be a local or domain account. The other 
+		type of user management is explained in <a href="CustomUserLogins.html">this document</a> 
+		and is disabled by default and named <strong>Custom User Logins</strong>, 
+		it's also advised to only make use of this feature when there's the need 
+		for different user management and there's no possibility of making use 
+		of the <strong>Operating System Users</strong> accounts.</p>
+		<p>The name of the current OS user is shown in the BrainStim main 
+		windows title, the second part (after the BrainStim version information) 
+		is the name of the current OS user.</p>
+    </div>
+</body>
 </html>

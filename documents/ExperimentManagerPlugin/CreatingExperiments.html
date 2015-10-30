@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
+<title>Creating Experiments with the Experiment Manager v1.0</title>
+<!--doc-version-title-end-->
+</head>
+<body>
+    <div class="container">
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Creating Experiments with the Experiment Manager</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+        <div id="toc_Area">
+            <ul id="toc"></ul>
+            <h2>Introduction</h2>
+            <p><span lang="en-us">This documents helps you get started in 
+			managing behavioral, psychological and physiological experiments in 
+			BrainStim, before you start reading it's advised to first walk 
+			trough the <a href="../GettingStartedGuide/GettingStartedGuide.html">
+			Getting Started Guide</a> of BrainStim if you not have done this. 
+			Almost all discussed features of this guide are implemented in a 
+			single plugin of BrainStim that is called the Experiment Manager 
+			plugin which is always available from within BrainStim.<br />
+			There are various ways of how you can create and run your 
+			experiments, therefore depending on your needs you should choose the 
+			implementation that suits your need best. Also the knowledge and 
+			level of expertise of the user may limit to which extend the 
+			experiment can be customized. An advanced users with a high level of 
+			expertise and scripting experience can probably adapt the experiment 
+			more to its needs than a user with novice knowledge and without any 
+			scripting experience. This document tries to help you getting 
+			started in creating and running your own experiments, starting from 
+			the most basic level, and to help you make desisions regarding the 
+			implementation for your experiment needs.</span></p>
+            <h2><span lang="en-us">Implementation considerations</span></h2>
+            <p><span lang="en-us">Depending on your experimental needs you can 
+			choose between two implementations for your experiment. These are 			<strong><em>Retinotopic Mapping</em></strong> or
+			<em><strong>QML</strong></em> -based implementations.</span></p>
+			
+			<table class="table table-condensed">
+				  <thead>
+				    <tr>
+				      <th><span lang="en-us"><em>Implementation</em></span></th>
+				      <th><em>Description</em></th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <th scope="row"><span lang="en-us">Retinotopic Mapping 
+					  based</span></th>
+				      <td><span lang="en-us">Allows for an <em>very fast</em> 
+					  and <em>accurate timed</em>(framerate) visual prentation 
+					  of various stimuli and is mainly used for creating <em>
+					  Retinotopic Mapping stimuli</em> experiments,
+					  read <a href="http://en.wikipedia.org/wiki/Retinotopy" target="_blank">
+					  this document</a> for more information about this 
+					  topic. It therefore mainly 
+					  offers support for only visual media presentation 
+					  capabilities and customization can be achieved by 
+					  configuring the fixed set of available <em>parameters</em>. 
+					  For advanced users with enough scripting knowledge it can 
+					  also be used inside a script for an <em>very fast and 
+					  accurate timed custom drawing of graphics</em> to the 
+					  screen that do not always have to be part of a Retinotopic 
+					  Mapping experiment.</span></td>
+				    </tr>
+				    <tr>
+				      <th scope="row"><span lang="en-us">QML based</span> </th>
+				      <td><span lang="en-us">Allows for an <em>fast presentation 
+					  of all kind of stimuli</em> (like graphics, movies, audio, 
+					  3D content...) and can make use of almost <em>any device 
+					  or feature</em>  available by default or through one of the 
+					  available plugin(s). QML-based experiments don't require 
+					  much scripting knowledge by default because almost 
+					  everything can be configured through the User Interface. 
+					  It can be highly flexible and customized for almost any 
+					  experimental need through scripting.</span></td>
+				    </tr>
+				  </tbody>
+				</table>
+
+			
+			<p><span lang="en-us">Both implementations make use of one or more 
+			file(s) that can be of a different file type(extension). Some of 
+			these file types can be used for both implementations, these are:</span></p>
+			
+			<table class="table table-condensed">
+				  <thead>
+				    <tr>
+				      <th><span lang="en-us"><em>File-type (extension)</em></span></th>
+				      <th><em>Description</em></th>
+				      <th><span lang="en-us"><em>Used for</em></span></th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <th scope="row"><span lang="en-us">Experiment Structure 
+					  file(*.exml)</span> </th>
+				      <td><span lang="en-us">a</span> sort of <a href="http://en.wikipedia.org/wiki/XML" target="_blank">XML file type</a> that describes 
+					  <span lang="en-us">mainly the structure of the</span> 
+					  experiment. <span lang="en-us">By configuring the 
+					  experiment structure you can divides the experiment in 
+					  smaller parts (like block, trials, triggers...) to fit 
+					  your timing needs. By doing this you can define when (and 
+					  how often) something should happen within one experimental 
+					  run. Editing of this type of file is made easy through the 
+					  UI support and capabilities, advanced users may also 
+					  choose to use BrainStim or another text editor for editing 
+					  this file.</span></td>
+				      <td><span lang="en-us">Retinotopic Mapping and QML-based 
+					  experiments</span></td>
+				    </tr>
+				    <tr>
+				      <th scope="row"><span lang="en-us">QML file(*.qml)</span></th>
+				      <td>a <span lang="en-us">U</span>ser <span lang="en-us">I</span>nterface 
+					  specification and programming language<span lang="en-us"> 
+					  that's developed and maintained within the
+					  <a href="http://www.qt.io/developers/" target="_blank">Qt 
+					  framework</a></span>. It allows <span lang="en-us">users
+					  </span>to create highly performant, <span lang="en-us">
+					  flexible and multicapable stimuli presentations. Editing 
+					  of type of file can be done within BrainStims code editing 
+					  capabilities. Less advanced users can also make use of 
+					  third party tool that allows you to create these stimuli 
+					  presentations with a easy WYSIWYG (what you see is what 
+					  you get) editor.</span></td>
+				      <td><span lang="en-us">QML-based experiments</span></td>
+				    </tr>
+				    <tr>
+				      <th scope="row"><span lang="en-us">Script file(*.qs)</span></th>
+				      <td>is based on the ECMAScript scripting language<span lang="en-us"> 
+					  (</span>Microsoft's JScript, and Netscape's JavaScript are 
+					  also based on the ECMAScript standard<span lang="en-us">)</span>. 
+					  If you are not familiar with the ECMAScript<span lang="en-us"> 
+					  (or JavaScript)</span> language, there are several 
+					  existing tutorials and books that cover this subject<span lang="en-us">.</span> </td>
+				      <td><span lang="en-us">Retinotopic Mapping and QML-based 
+					  experiments</span></td>
+				    </tr>
+				  </tbody>
+				</table>
+
+			
+			<p><span lang="en-us">Depending on your scripting capabilities and 
+			experiment requests you'll need to make use of one or more file(s) 
+			for your experimental design. Each from the above files can be 
+			executed directly in BrainStim to see the execution result, some 
+			files may link to another file (or use a resource from another 
+			file). The script file can be used to programmatically execute one 
+			of the other files and bind everything together. There is also some 
+			standard script code available that can be included inside your own 
+			experiment script. This code makes some standard experiment features 
+			available that can then be further easily configured from a custom 
+			script. These features are then quickly available for users who 
+			don't have much scripting expierience or advanced users. Sometimes 
+			the below examples might be a little difficult to follow because 
+			they always start from scratch, normally if you create your own 
+			experiments you would probably first start by copying some 
+			experiment files and then only adapt them for your needs.</span></p>
+			<h2><span lang="en-us">Examples</span></h2>
+			<p><span lang="en-us">We'll now take a look at some basic examples 
+			that show how different implementations as discussed above are used.</span></p>
+			<h3>Retinotopic Mapping<span lang="en-us"> examples</span></h3>
+			<p>Retinotopy is the mapping of visual input from the&nbsp;<span lang="en-us">retina </span>to neurons<span lang="en-us">,
+			<a href="http://en.wikipedia.org/wiki/Retinotopy" target="_blank">
+			read this document</a> for more information about this topic.Different 
+			types of stimuli presentations can be used for these types of 
+			Retinotopic Mapping experiments. This example makes use of a 
+			rotating wedge (polarangle). We'll be using only one file for the 
+			whole experiment, namely the Experiment Structure file (*.exml).</span></p>
+    	<ol>
+			<li>Start BrainStim.</li>
+			<li><span lang="en-us">Create a new Experiment Structure file using 
+			the menu entry <kbd>File</kbd> &gt; <kbd>New</kbd> &gt; <kbd>EXML 
+			Document</kbd></span></li>
+			<li><span lang="en-us">Save the experiment using the menu entry <kbd>
+			File</kbd> &gt; <kbd>Save</kbd> to a new empty Experiment Structure 
+			file.</span></li>
+		</ol>
+			<p><span lang="en-us">Now we need to think about our experiment 
+			timing, expecially when, how long and with how many repetitions 
+			something need to happen. <br />
+			For this example we first want to present a fixation dot for 4 
+			seconds. After this we want to show a rotating wedge that should 
+			rotate once in let's say 20 seconds and repeat this in total 4 
+			times. After this we again want to present a fixation dot for 4 
+			seconds wereafter the experiment should finish.</span></p>
+			<ol>
+				<li>Examine the QtScript file and validate that:<br />
+			<p>- <span lang="nl">different <span class="auto-style1">text formatting</span> is automatically 
+			applied and automatically updated for the coding syntax of this type 
+			of document (*.qs). You can edit some formatted text and see how the 
+			text formatting is automatically updated.<br />
+			- automatic <span class="auto-style1">code 
+			hints and completion</span> are enabled. You can test this 
+			by placing the cursor at the end of the document and then begin 
+			start typing a known (or used word) like '<em>sayHello</em>', and see what 
+			happens.</span></p>
+			</li>
+			<li>Notice that, now we have opened a QtScript file, that the green
+			<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../images/runscript.png"/> button in the ToolBar (also the 
+			<kbd>Document</kbd> &gt; <kbd>Execute</kbd> MenuBar item) is enabled 
+			and therefore its possible for 
+			us to execute the documents content by the internal QtScript engine. Let's 
+			try that, press the <strong>Execute</strong> button and notice how the BrainStim
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#UserInterface">
+		'default' OutputLog Tab</a>
+			changes due to the executed script.</li>
+			<li>Close the document (<kbd>CTRL</kbd> + <kbd>Shift</kbd> + <kbd>c</kbd>) and notice how the
+			<strong>Execute</strong>&nbsp;button is automatically disabled if no 
+			executable document is activated.</li>
+			<li>
+			Open the (QML) file <em>Helloworld.qml</em> that is located in the  
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> subfolder 
+		\<em>Examples\Scripts</em>. The script code of this file is explained in
+			this document in more 
+			detail.<br />
+			Notice that again automatic text formatting and code 
+			hints/completion is in use. Because this document is of a different 
+			type and has a different syntax the rules applied for the formatting 
+			and code hints/completion is not the same as in the above example. 
+			The rules for this are defined in small (*.api) files that are 
+			stored in the  
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> 
+			subfolder named <strong><em>Apis</em></strong>.<br />
+			The green
+			<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../images/runscript.png"/> 
+			button in the ToolBar is again enabled, allowing us to execute the 
+			document. This time this is handled by a QML engine which is 
+			implemented inside the <span lang="nl">
+					  <a href="../ExperimentManagerPlugin/ExperimentManagerPlugin.html">
+					  ExperimentManager plugin</a>. <strong>Important!</strong> 
+			Remember that after executing this type of document you can close the full-screen 
+			window that will popup again by pressing <kbd>CTRL</kbd> + <kbd>a</kbd> (abort) 
+			key combination. </span></li>
+		</ol>
+			<p>&nbsp;</p>
+			<p>&nbsp;</p>
+			<p><span lang="en-us">script, first refer to some script code and 
+			then use basicretinotopy experiment and then basic qml experiment</span></p>
+            <h2>Retinotopic Mapping</h2>
+            <p>The experiment manager includes a Retinotopic mapping feature which makes it easy to show different stimuli that can be fully configured for this purpose. The following Retinotopic mapping stimuli types can be used:</p>
+            <ul>
+                <li>Fixation</li>
+                <li>PolarAngle</li>
+                <li>Eccentricity</li>
+                <li>MovingBar</li>
+                <li>MovingDots</li>
+            </ul>
+            <p>To make use of one or more of these stimuli types you first have to declare (&lt;declarations&gt; section) an�&lt;class&gt;RetinotopyMapper&lt;/class&gt;�derived object. Connect (&lt;connections&gt; section) a Trigger object to its incrementExternalTrigger() slot and make use of it inside the &lt;actions&gt;, &lt;blocks&gt; section, see example files! Each stimuli type can be configured with specific or universal parameters names (can be used for all the types). All parameter values keep their last value when switching to another block trial, so only changes need to be defined.</p>
+            <p>&nbsp;</p>
+        </div>
+    </div>
+</body>
+</html>

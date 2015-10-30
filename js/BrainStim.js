@@ -1,5 +1,5 @@
 //doc-version-brainstimrelease-begin
-//Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1
+//Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1
 var currentBrainStimRelease = '1.0.0.1';
 //doc-version-brainstimrelease-end
 
@@ -47,6 +47,8 @@ function BrainStimDocuments_Information()
 	this.DocumentAuditing[nCurrentDocIndex++] = ['ScriptDebugging.html','Debugging scripts','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['PluginFrameWork.html','Plugin Framework','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['DefaultPlugins.html','Default Plugins','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['OsUserLogins.html','Operating System Users','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['CreatingExperiments.html','Creating Experiments with the Experiment Manager','1.0','July 2015','Sven Gijsen'];
 	
 	
 	

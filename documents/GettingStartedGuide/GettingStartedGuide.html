@@ -3,19 +3,19 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--doc-version-jquery-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 <!-- JQuery(UI) -->
 <script src="../../js/jquery.min.js" type="text/javascript"></script>
 <script src="../../js/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
 <!--doc-version-jquery-links-end-->
 <!--doc-version-tocify-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 <!-- Tocify -->
 <link href="../../css/jquery.tocify.css" type="text/css" rel="stylesheet"/>
 <script src="../../js/jquery.tocify.min.js" type="text/javascript"></script>
 <!--doc-version-tocify-links-end-->
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -27,7 +27,7 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 <title>Getting Started Guide v1.0</title>
 <!--doc-version-title-end-->
 </head>
@@ -35,7 +35,7 @@
     <div class="container-fluid">
         <div class="col-md-9 col-md-offset-3">
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Getting Started Guide</h1>
@@ -58,14 +58,25 @@
                 <p>
                     The purpose of this document is to show you the basic features of BrainStim in a tutorial way.
                     The best way working through this document is starting from the beginning and follow all tutorials
-                    till the end of the document, you could also only follow a single specific tutorial of your interest but then please bear
-                    in mind that some tutorials expect you to already gained some knowledge of previous tutorials. This Getting started guide is
+                    till the end of the document, you could also only follow a single specific 
+					<span lang="en-us">topic</span> of your interest but then please bear
+                    in mind that some <span lang="en-us">topics</span> e<span lang="en-us">x</span>pect you to already 
+					<span lang="en-us">have</span> some knowledge of previous t<span lang="en-us">opics</span>.<span lang="en-us"> 
+					This Getting Started guide mainly covers the basic usage of 
+					BrainStim and it's features, most user plan to use BrainStim 
+					for creating and running their behavioral, psychological and 
+					physiological experiments but because these features are 
+					beyond the basic BrainStim features these are described in 
+					the <a href="../ExperimentManagerPlugin/CreatingExperiments.html">Creating Experiments with the Experiment Manager guide</a>. 
+					Please be aware that this guide may exspect you to read the 
+					below <em>Getting Started Guide</em> first.</span><br />
+					This Getting started guide is
                     not perfect and continuously under construction, so we would be happy to receive feedback about bugs, typos, comments,
                     new ideas.
                 </p>
                 <h2>Installation</h2>
                 <p>
-                    Installing BrainStim on your computer is easy, you can download the latest release from the <a href="https://github.com/svengijsen/BrainStim/releases" target="_blank">GitHub project site</a>. The <a href="http://github.com/svengijsen/BrainStim" target="_blank">public BrainStim source code repository</a> is also hosted here.
+                    Installing BrainStim on your computer is easy, you can download the latest release from the <a href="http://github.com/svengijsen/BrainStim/releases" target="_blank">GitHub project site</a>. The <a href="http://github.com/svengijsen/BrainStim" target="_blank">public BrainStim source code repository</a> is also hosted here.
                     You can choose between a 32 and 64-bit version of BrainStim depending on <a href="http://www.howtogeek.com/howto/21726/how-do-i-know-if-im-running-32-bit-or-64-bit-windows-answers/" target="_blank">the Windows operating system type</a> you're using.
                     You can use the previous link as a guidance for checking this configuration or alternatively you can execute the following Command Prompt command (a Command prompt can be opened using the: <kbd>Windows start button</kbd> --&gt; <kbd>Run...</kbd> --&gt; enter the text <kbd>cmd</kbd> --&gt; hit the <kbd>enter</kbd> key):
 				</p>                    
@@ -79,7 +90,7 @@
 
                 <p>If it echoes with <em>x86</em> then you're working on a 32-bit architecture, if not then it's an  64-bit architecture.</p>
                 <p>
-                BrainStim strongly depends on the <a href="https://www.opengl.org/" target="_blank">OpenGL 2.0 (or higher) graphics library</a>, so for an optimal usage please make sure that your graphics card supports OpenGL 2.0 (or higher) and that the drivers for this graphics card are up to date.
+                BrainStim strongly depends on the <a href="http://www.opengl.org/" target="_blank">OpenGL 2.0 (or higher) graphics library</a>, so for an optimal usage please make sure that your graphics card supports OpenGL 2.0 (or higher) and that the drivers for this graphics card are up to date.
                 When installing BrainStim you should try to do this using administrator privileges. There are also some virus scanners which trigger a false virus detection due to the automatic installation of various (network) libraries. If you should receive a detection message like this, you could consider deactivating the real-time virus detection while installing BrainStim.
                 </p>
                 <p>
@@ -129,6 +140,13 @@
 				      <td>This is the root directory in which BrainStim searches for QML plug-ins to include during the startup of the QML viewer.</td>
 				      </tr>
 					  <tr>
+				      <th scope="row"><span lang="en-us">Updates</span></th>
+				      <td>This directory <span lang="en-us">can contain some 
+					  updates that are placed here by the installer. The first 
+					  time a user starts BrainStim he or she is asked whether 
+					  these available updates can be installed.</span></td>
+				    </tr>				 
+					  <tr>
 				      <th scope="row">Xsd</th>
 				      <td>This directory contains XML Schema (<em>*.xsd</em>) files, which let BrainStim validate experiment (<em>*.exml</em>) files. It is used to express a set of rules to which an experiment must conform in order to be considered 'valid' according to that schema.</td>
 				    </tr>
@@ -170,6 +188,11 @@
 				      <th scope="row">Outputs</th>
 				      <td>This directory is used when needed by BrainStim for saving logfiles that are generated during the execution of an experiment.</td>
 				      </tr>
+				  	<tr>
+				      <th scope="row">Temp</th>
+				      <td>This directory is used <span lang="en-us">by BrainStim 
+					  for storage of temporarily files.</span></td>
+				      </tr>				     
 					  <tr>
 				      <th scope="row">logfile.txt</th>
 				      <td>This logfile is used by BrainStim for logging all main program execution information, warnings and errors.<span lang="nl"> 
@@ -571,11 +594,11 @@
         </div>
     </div>
 <!--doc-version-default-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
 <!--doc-version-default-footer-end-->
 <!--doc-version-tocify-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (1571011526), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
 <script type="text/javascript">$(function() {
 var toc = $("#toc").tocify({selectors: "h2,h3,h4"}).data("toc-tocify");
 toc.setOptions({ smoothScroll: false, showEffect: "none" });
