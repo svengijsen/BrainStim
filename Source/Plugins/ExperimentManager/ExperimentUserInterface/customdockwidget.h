@@ -26,7 +26,7 @@ class customDockWidget : public MainWindowDockWidget
 	Q_OBJECT
 
 public:
-	customDockWidget(const QString &sTitle, QWidget *parent = NULL, Qt::WindowFlags flags = 0);
+	customDockWidget(const QString &sTitle, Qt::DockWidgetArea defaultDocWidgetArea, QWidget *parent = NULL, Qt::WindowFlags flags = 0);
 	~customDockWidget();
 
 	void setVisible(bool visible);

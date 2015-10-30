@@ -583,63 +583,70 @@
     <attribute name="title">
      <string>Updates</string>
     </attribute>
-    <widget class="QPushButton" name="btnViewUpdatesDirectory">
-     <property name="geometry">
-      <rect>
-       <x>490</x>
-       <y>100</y>
-       <width>91</width>
-       <height>41</height>
-      </rect>
-     </property>
-     <property name="text">
-      <string>Browse...</string>
-     </property>
-    </widget>
-    <widget class="QLineEdit" name="lneUpdateDirectory">
-     <property name="geometry">
-      <rect>
-       <x>10</x>
-       <y>60</y>
-       <width>671</width>
-       <height>31</height>
-      </rect>
-     </property>
-     <property name="readOnly">
-      <bool>true</bool>
-     </property>
-    </widget>
-    <widget class="QLabel" name="label_9">
+    <widget class="QGroupBox" name="groupBox_2">
      <property name="geometry">
       <rect>
        <x>10</x>
        <y>30</y>
-       <width>261</width>
-       <height>21</height>
+       <width>681</width>
+       <height>121</height>
       </rect>
      </property>
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+     <property name="title">
+      <string>Updates Directory</string>
      </property>
-     <property name="text">
-      <string>Updates Directory:</string>
-     </property>
+     <widget class="QLineEdit" name="lneUpdateDirectory">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>30</y>
+        <width>661</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="readOnly">
+       <bool>true</bool>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="btnViewUpdatesDirectory">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>70</y>
+        <width>151</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Browse...</string>
+      </property>
+     </widget>
     </widget>
-    <widget class="QPushButton" name="btnCheck4Updates">
+    <widget class="QGroupBox" name="groupBox_3">
      <property name="geometry">
       <rect>
-       <x>590</x>
-       <y>100</y>
-       <width>91</width>
-       <height>41</height>
+       <x>10</x>
+       <y>160</y>
+       <width>681</width>
+       <height>71</height>
       </rect>
      </property>
-     <property name="text">
-      <string>Update</string>
+     <property name="title">
+      <string>Manual Update</string>
      </property>
+     <widget class="QPushButton" name="btnCheck4Updates">
+      <property name="geometry">
+       <rect>
+        <x>520</x>
+        <y>20</y>
+        <width>151</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Install update...</string>
+      </property>
+     </widget>
     </widget>
    </widget>
    <widget class="QWidget" name="tabPlugins">

@@ -1140,14 +1140,13 @@ bool MainWindow::addRegisteredDockWidgets(const Qt::DockWidgetArea debugDockArea
 	return true;
 }
 
-bool MainWindow::registerDockWidget(QWidget *pMDIWindowSubWidget, MainWindowDockWidget *pDockWidget, int nDockWidgetAreaEnum)
+bool MainWindow::registerDockWidget(QWidget *pMDIWindowSubWidget, MainWindowDockWidget *pDockWidget)
 {
 	if(pMDIWindowSubWidget && pDockWidget && DocManager)
 	{
 		QMdiSubWindow *tmpMDISubWindow = DocManager->getDocSubWindow(pMDIWindowSubWidget);
 		if(tmpMDISubWindow)
 		{
-			Qt::DockWidgetArea dArea;
 			mapMDISubWindowToDockWidget.insertMulti(tmpMDISubWindow,pDockWidget);
 			QString sTmpDocTypeString = DocManager->getDocTypeString(DocManager->getDocType(tmpMDISubWindow));
 			if (sTmpDocTypeString.isEmpty())
@@ -1156,31 +1155,29 @@ bool MainWindow::registerDockWidget(QWidget *pMDIWindowSubWidget, MainWindowDock
 				if (lFileNameItems.count() > 1)
 					sTmpDocTypeString = lFileNameItems.at(lFileNameItems.count() - 1);
 			}
-			if((nDockWidgetAreaEnum < 0) && (debugLogDock))
+			if (pDockWidget == debugLogDock)
 			{
-				dArea = Qt::BottomDockWidgetArea;
 				//QString sTmpDocTypeString = DocManager->getDocTypeString(DocManager->getDocType(tmpMDISubWindow));
 				if (sTmpDocTypeString.isEmpty() == false)
-					loadSavedDockWidgetConfiguration(sTmpDocTypeString, pDockWidget, dArea);
-				addDockWidget(dArea, pDockWidget);
+					loadSavedDockWidgetConfiguration(sTmpDocTypeString, pDockWidget);
+				addDockWidget(pDockWidget->getCurrentDocWidgetArea(), pDockWidget);
 				pDockWidget->show();
 				tabifyDockWidget(debugLogDock, pDockWidget);
 			}
 			else
 			{
-				dArea = (Qt::DockWidgetArea)nDockWidgetAreaEnum;
 				if (sTmpDocTypeString.isEmpty() == false)
 				{
-					loadSavedDockWidgetConfiguration(sTmpDocTypeString, pDockWidget, dArea);
+					loadSavedDockWidgetConfiguration(sTmpDocTypeString, pDockWidget);
 					DocumentManager::strcDockLocation tmpDockLocation;
-					tmpDockLocation.dockArea = dArea;
+					tmpDockLocation.dockArea = pDockWidget->getCurrentDocWidgetArea();
 					tmpDockLocation.rGeometry = pDockWidget->geometry();
 					if (activeMdiChild())
 						DocManager->addDockWidgetRegistration(activeMdiChild(), pDockWidget, tmpDockLocation);
 				}
 				else
 				{
-					addDockWidget(dArea, pDockWidget);
+					addDockWidget(pDockWidget->getCurrentDocWidgetArea(), pDockWidget);
 				}
 			}
 			connect(pDockWidget, SIGNAL(destroyed(QObject *)), this, SLOT(dockWidgetDestroyed(QObject *)));
@@ -2141,7 +2138,8 @@ void MainWindow::createDockWindows()
 {
 	if(BrainStimFlags & GlobalApplicationInformation::VerboseMode)
 		qDebug() << "Verbose Mode: " << __FUNCTION__;
-	debugLogDock = new MainWindowDockWidget(MAINWINDOW_DOCK_OUTPUTWINDOW_NAME, this);
+	Qt::DockWidgetArea dArea = Qt::BottomDockWidgetArea;
+	debugLogDock = new MainWindowDockWidget(MAINWINDOW_DOCK_OUTPUTWINDOW_NAME, dArea, this);
 	debugLogDock->setAccessibleName(MAINWINDOW_DOCK_OUTPUTWINDOW_NAME);
 	debugLogDock->setObjectName(MAINWINDOW_DOCK_OUTPUTWINDOW_NAME);
 	debugLogDock->setAllowedAreas(Qt::AllDockWidgetAreas);// Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea | Qt::BottomDockWidgetArea);
@@ -2160,9 +2158,8 @@ void MainWindow::createDockWindows()
 	//outputWindowList->setStyleSheet("* { background-color:rgb(" + tmpColor + "); padding: 10px ; color:rgb(136,0,21)}");
 	//debugLogDock->setWidget(outputWindowList);
 	debugLogDock->setWidget(outputTabWidget);
-	Qt::DockWidgetArea dArea = Qt::BottomDockWidgetArea;
-	loadSavedDockWidgetConfiguration(MAINWINDOW_NAME, debugLogDock, dArea);
-	addDockWidget(dArea, debugLogDock);
+	loadSavedDockWidgetConfiguration(MAINWINDOW_NAME, debugLogDock);
+	addDockWidget(debugLogDock->getCurrentDocWidgetArea(), debugLogDock);
 	connect(debugLogDock, SIGNAL(resizingFinished(MainWindowDockWidget *)), this, SLOT(dockWidgetResizingFinished(MainWindowDockWidget *)));
 	//a1ddDockWidget(Qt::BottomDockWidgetArea, testrr);//(Qt::RightDockWidgetArea, debugLogDock);
 	//viewMenu->addAction(debugLogDock->toggleViewAction());
@@ -3097,11 +3094,10 @@ void MainWindow::onSubWindowClosed(CustomMDISubWindow* custSubWin)
 void MainWindow::loadMainWindowLayout(const QString &sGroupSection)
 {
 	bool bOldResizeSetting = debugLogDock->enableResizingSignaling(false);
-	Qt::DockWidgetArea tmpDockWidgetArea = Qt::DockWidgetArea::BottomDockWidgetArea;
 	removeDockWidget(debugLogDock);
 	outputTabWidget->setGroupName(sGroupSection);
-	loadSavedDockWidgetConfiguration(sGroupSection, debugLogDock, tmpDockWidgetArea);
-	addRegisteredDockWidgets(tmpDockWidgetArea);
+	loadSavedDockWidgetConfiguration(sGroupSection, debugLogDock);
+	addRegisteredDockWidgets(debugLogDock->getCurrentDocWidgetArea());
 	loadSavedWindowLayout(sGroupSection);
 	debugLogDock->enableResizingSignaling(bOldResizeSetting);
 }
@@ -4011,7 +4007,7 @@ void MainWindow::preExecuteTask()
 	}
 }
 
-void MainWindow::loadSavedDockWidgetConfiguration(const QString &sGroupName, MainWindowDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea)
+void MainWindow::loadSavedDockWidgetConfiguration(const QString &sGroupName, MainWindowDockWidget *dockWidget)
 {
 	bool bOldResizeSetting = dockWidget->enableResizingSignaling(false);
 	QString sAccesName = dockWidget->accessibleName();
@@ -4034,7 +4030,10 @@ void MainWindow::loadSavedDockWidgetConfiguration(const QString &sGroupName, Mai
 		tmpString = sAccesName + EXPERIMENT_DOCKWIDGET_PROPSEP_CHAR + DOCKITEM_SETTINGNAME_DOCKWIDGETAREA;
 		bResult = globAppInfo->getSettingsInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_DOCKWIDGETAREA), tmpVariantValue);
 		if (bResult)
-			defaultArea = (Qt::DockWidgetArea)tmpVariantValue.toInt();
+		{
+			Qt::DockWidgetArea currentDockArea = (Qt::DockWidgetArea)tmpVariantValue.toInt();
+			dockWidget->setCurrentDocWidgetArea(currentDockArea);
+		}
 	}
 	tmpString = sAccesName + EXPERIMENT_DOCKWIDGET_PROPSEP_CHAR + DOCKITEM_SETTINGNAME_GEOMETRY;
 	bResult = globAppInfo->getSettingsInformation(QString("%1/%2/%3/%4").arg(DOCKITEM_SETTINGNAME_USERINTERFACE).arg(sGroupName).arg(sAccesName).arg(DOCKITEM_SETTINGNAME_GEOMETRY), tmpVariantValue);

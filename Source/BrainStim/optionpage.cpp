@@ -428,7 +428,7 @@ void OptionPage::on_btnCheck4Updates_pressed()
 	QFileDialog::Options options = QFlag(QFileDialog::DontResolveSymlinks | QFileDialog::ShowDirsOnly);
 	QFileDialog tmpFileDialog;
 	QString sDirectory;
-	sDirectory = tmpFileDialog.getExistingDirectory(this, "Select the root directory that contains the update file(s), subdirectories are automatically included.", ui.lneUpdateDirectory->text(), options);
+	sDirectory = tmpFileDialog.getExistingDirectory(this, "Select the root update directory", ui.lneUpdateDirectory->text(), options);
 	if (!sDirectory.isEmpty())
 		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), MAIN_PROGRAM_QUITANDINSTALLUPDATES_NAME, Qt::DirectConnection, Q_ARG(QString, sDirectory));
 }

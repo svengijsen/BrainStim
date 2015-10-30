@@ -206,8 +206,9 @@ signals :
 	void resizingFinished(MainWindowDockWidget *);
 
 public:
-	MainWindowDockWidget(const QString &sTitle, QWidget *parent = NULL, Qt::WindowFlags flags = 0) : QDockWidget(sTitle, parent, flags) 
+	MainWindowDockWidget(const QString &sTitle, Qt::DockWidgetArea defaultDocWidgetArea, QWidget *parent = NULL, Qt::WindowFlags flags = 0) : QDockWidget(sTitle, parent, flags), defaultDocArea(defaultDocWidgetArea)
 	{
+		currentDocArea = defaultDocArea;
 		bEnableResizingSignaling = true;
 		bResizeStarted = false;
 		m_resizeTimer.setSingleShot(true);
@@ -218,6 +219,18 @@ public:
 		bool bTemp = bEnableResizingSignaling;
 		bEnableResizingSignaling = bEnable;
 		return bTemp;//returns original setting
+	};
+	Qt::DockWidgetArea getDefaultDocWidgetArea()
+	{
+		return defaultDocArea;
+	};
+	void setCurrentDocWidgetArea(const Qt::DockWidgetArea &newDockArea)
+	{
+		currentDocArea = newDockArea;
+	};
+	Qt::DockWidgetArea getCurrentDocWidgetArea()
+	{
+		return currentDocArea;
 	};
 
 protected:
@@ -252,6 +265,8 @@ private:
 	QTimer m_resizeTimer;
 	bool bResizeStarted;
 	bool bEnableResizingSignaling;
+	Qt::DockWidgetArea defaultDocArea;
+	Qt::DockWidgetArea currentDocArea;
 };
 
 class CustomChildDockTabWidget : public QTabWidget

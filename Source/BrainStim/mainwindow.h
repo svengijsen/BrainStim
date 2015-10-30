@@ -698,7 +698,7 @@ public:
 	Q_INVOKABLE void updateMenuControls(QMdiSubWindow *mdiSubWin);
 	Q_INVOKABLE QAction *registerMainMenuAction(const QStringList &lmenuItemSpecifier, QIcon *iMenuIcon = NULL, const bool &bSkipSubWindowRegistration = false);
 	Q_INVOKABLE bool getSavedDockWidgetSizeHint(const QString &sDockWidgetGroupName, const QString &sDockWidgetAccessName, QRect &rSizeHint);
-	void loadSavedDockWidgetConfiguration(const QString &sGroupName, MainWindowDockWidget *dockWidget, Qt::DockWidgetArea &defaultArea);
+	void loadSavedDockWidgetConfiguration(const QString &sGroupName, MainWindowDockWidget *dockWidget);
 	void loadSavedWindowLayout(const QString &sGroupName, const bool &bSkipMainWindowSettings = true);
 	void saveDockWidgetConfiguration(const QString &sGroupName, MainWindowDockWidget *dockWidget);
 	void saveWindowLayout(const QString &sGroupName, const bool &bSkipMainWindowSettings = true);
@@ -708,7 +708,7 @@ public:
 	void preExecuteTask();
 	void appendDebugMessages(const QStringList &lDebugMessages);
 	void setStartupFiles(const QString &path = QString());
-	Q_INVOKABLE bool registerDockWidget(QWidget *pMDIWindowSubWidget, MainWindowDockWidget *pDockWidget, int nDockWidgetAreaEnum);
+	Q_INVOKABLE bool registerDockWidget(QWidget *pMDIWindowSubWidget, MainWindowDockWidget *pDockWidget);
 	void unregisterDockWidgets(CustomMDISubWindow* custSubWin);
 
 	static GlobalApplicationInformation::MainProgramModeFlags BrainStimFlags;

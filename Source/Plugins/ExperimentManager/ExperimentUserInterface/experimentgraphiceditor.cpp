@@ -338,7 +338,7 @@ void ExperimentGraphicEditor::createDockWindows()
 {
 	if(pCustomPropertiesDockWidget == NULL)
 	{
-		pCustomPropertiesDockWidget = new customDockWidget(tr(NAME_DOCKWIDGET_LIST_VIEW), this);
+		pCustomPropertiesDockWidget = new customDockWidget(tr(NAME_DOCKWIDGET_LIST_VIEW), Qt::DockWidgetArea::RightDockWidgetArea, this);
 		pCustomPropertiesDockWidget->setAccessibleName(NAME_DOCKWIDGET_LIST_VIEW);
 		pCustomPropertiesDockWidget->setObjectName(NAME_DOCKWIDGET_LIST_VIEW);
 		pCustomPropertiesDockWidget->setAllowedAreas(Qt::AllDockWidgetAreas);
@@ -349,12 +349,12 @@ void ExperimentGraphicEditor::createDockWindows()
 			//menuView->addAction(actionToggle_ListViewDockVisibility);
 		}
 		bool bRetVal = false;
-		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(MainWindowDockWidget*, pCustomPropertiesDockWidget), Q_ARG(int, Qt::DockWidgetArea::RightDockWidgetArea));
+		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(MainWindowDockWidget*, pCustomPropertiesDockWidget));
 		//bConnectRes = connect(pCustomPropertiesDockWidget, SIGNAL(CustomDockWidgetIsDestroying(QDockWidget *)), MainAppInfo::getMainWindow(), SLOT(unregisterDockWidget(QDockWidget *)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 	}
 	if(pCustomParamTableDockWidget == NULL)
 	{
-		pCustomParamTableDockWidget = new customDockWidget(tr(NAME_DOCKWIDGET_TABLE_VIEW), this);
+		pCustomParamTableDockWidget = new customDockWidget(tr(NAME_DOCKWIDGET_TABLE_VIEW), Qt::DockWidgetArea::BottomDockWidgetArea, this);
 		pCustomParamTableDockWidget->setAccessibleName(NAME_DOCKWIDGET_TABLE_VIEW);
 		pCustomParamTableDockWidget->setObjectName(NAME_DOCKWIDGET_TABLE_VIEW);
 		pCustomParamTableDockWidget->setAllowedAreas(Qt::AllDockWidgetAreas);
@@ -365,12 +365,12 @@ void ExperimentGraphicEditor::createDockWindows()
 			//menuView->addAction(actionToggle_TableViewDockVisibility);
 		}
 		bool bRetVal = false;
-		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(MainWindowDockWidget *, pCustomParamTableDockWidget), Q_ARG(int, Qt::DockWidgetArea::BottomDockWidgetArea));// +Qt::DockWidgetArea::LeftDockWidgetArea));
+		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(MainWindowDockWidget *, pCustomParamTableDockWidget));// +Qt::DockWidgetArea::LeftDockWidgetArea));
 		//bConnectRes = connect(pCustomParamTableDockWidget, SIGNAL(CustomDockWidgetIsDestroying(QDockWidget *)), MainAppInfo::getMainWindow(), SLOT(unregisterDockWidget(QDockWidget *)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 	}
 	if (pCustomExperimentTreeDockWidget == NULL)
 	{
-		pCustomExperimentTreeDockWidget = new customDockWidget(tr(NAME_DOCKWIDGET_TREE_VIEW), this);
+		pCustomExperimentTreeDockWidget = new customDockWidget(tr(NAME_DOCKWIDGET_TREE_VIEW), Qt::DockWidgetArea::LeftDockWidgetArea, this);
 		pCustomExperimentTreeDockWidget->setAccessibleName(NAME_DOCKWIDGET_TREE_VIEW);
 		pCustomExperimentTreeDockWidget->setObjectName(NAME_DOCKWIDGET_TREE_VIEW);
 		pCustomExperimentTreeDockWidget->setAllowedAreas(Qt::AllDockWidgetAreas);
@@ -381,7 +381,7 @@ void ExperimentGraphicEditor::createDockWindows()
 			//menuView->addAction(actionToggle_TableViewDockVisibility);
 		}
 		bool bRetVal = false;
-		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(MainWindowDockWidget *, pCustomExperimentTreeDockWidget), Q_ARG(int, Qt::DockWidgetArea::LeftDockWidgetArea));//Qt::DockWidgetArea::BottomDockWidgetArea));
+		QMetaObject::invokeMethod(MainAppInfo::getMainWindow(), SLOT_REGISTERDOCKWIDGET_SIGNATURE, Qt::DirectConnection, Q_RETURN_ARG(bool, bRetVal), Q_ARG(QWidget *, this), Q_ARG(MainWindowDockWidget *, pCustomExperimentTreeDockWidget));//Qt::DockWidgetArea::BottomDockWidgetArea));
 		//bConnectRes = connect(pCustomExperimentTreeDockWidget, SIGNAL(CustomDockWidgetIsDestroying(QDockWidget *)), MainAppInfo::getMainWindow(), SLOT(unregisterDockWidget(QDockWidget *)), Qt::ConnectionType(Qt::UniqueConnection | Qt::DirectConnection));
 		if (treeView)
 		{

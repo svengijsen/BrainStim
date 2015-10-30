@@ -20,7 +20,7 @@
 #include "experimentgraphiceditor.h"
 #include <QResizeEvent>
 
-customDockWidget::customDockWidget(const QString &sTitle, QWidget *parent, Qt::WindowFlags flags) : MainWindowDockWidget(sTitle, parent, flags), bIsInitialized(false), bVisibilitySetByUser(true)
+customDockWidget::customDockWidget(const QString &sTitle, Qt::DockWidgetArea defaultDocWidgetArea, QWidget *parent, Qt::WindowFlags flags) : MainWindowDockWidget(sTitle, defaultDocWidgetArea, parent, flags), bIsInitialized(false), bVisibilitySetByUser(true)
 {
 }
 
