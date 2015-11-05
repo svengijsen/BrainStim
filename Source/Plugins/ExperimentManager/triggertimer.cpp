@@ -157,11 +157,7 @@ void TriggerTimer::startTimer(double dMSec)//Do not change the function name wit
 {
 	if(((currentTimerType == ExperimentManagerNameSpace::QPC_TriggerTimerType_Old) || (currentTimerType == ExperimentManagerNameSpace::QPC_TriggerTimerType)) && (QThread::currentThread() != &_thread))//Wrong thread
 	{
-		//if (
 		QMetaObject::invokeMethod(this, "startTimer", Qt::QueuedConnection, Q_ARG(double, dMSec));// == false)//Cannot be a DirectConnection !!
-		//{
-		//	int a = 9;
-		//}
 	}
 	else//Right thread
 	{

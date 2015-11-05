@@ -5,11 +5,11 @@
 	
 	    <parameter id="0">
 	        <enabled>true</enabled>
-	        <editable>true</editable>
+	        <editable>false</editable>
 	        <name>class</name>
-	        <displayname>Type</displayname>
+	        <displayname>Class</displayname>
 	        <grouppath></grouppath>
-	        <information>The type name of the object</information>
+	        <information>The class name of the object</information>
 	        <type>dynamicenumstring</type>
 	        <defaultvalue></defaultvalue>     	
 	    </parameter>	       

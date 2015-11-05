@@ -169,7 +169,7 @@ void ExperimentStructureVisualizer::setupMenuAndActions()
 	cmbViewSelection->addItem(QIcon(":/resources/blocks.png"), EXPGRAPH_VIEWSTATE_BLOCKS);
 	cmbViewSelection->addItem(QIcon(":/resources/objects.png"), EXPGRAPH_VIEWSTATE_OBJECTS);
 	QAction *tmpAction = toolBar->insertWidget(NULL, cmbViewSelection);
-	QLabel *labViewSelection = new QLabel("Show: ", this);
+	QLabel *labViewSelection = new QLabel("View: ", this);
 	toolBar->insertWidget(tmpAction, labViewSelection);
 	connect(cmbViewSelection, SIGNAL(currentIndexChanged(const QString &)), this, SLOT(toggleViewState(const QString &)), Qt::ConnectionType(Qt::UniqueConnection));
 

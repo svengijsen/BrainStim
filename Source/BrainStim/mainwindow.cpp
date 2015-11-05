@@ -1172,8 +1172,9 @@ bool MainWindow::registerDockWidget(QWidget *pMDIWindowSubWidget, MainWindowDock
 					DocumentManager::strcDockLocation tmpDockLocation;
 					tmpDockLocation.dockArea = pDockWidget->getCurrentDocWidgetArea();
 					tmpDockLocation.rGeometry = pDockWidget->geometry();
-					if (activeMdiChild())
-						DocManager->addDockWidgetRegistration(activeMdiChild(), pDockWidget, tmpDockLocation);
+					//QMdiSubWindow *mdiSubTmpWin = activeMdiChild();
+					//if (mdiSubTmpWin)
+					DocManager->addDockWidgetRegistration(tmpMDISubWindow, pDockWidget, tmpDockLocation);
 				}
 				else
 				{
@@ -3704,6 +3705,7 @@ void MainWindow::newDocument(const GlobalApplicationInformation::DocType &docTyp
 		DocManager->initFile(DocIndex);
 	}
 	newChild->showMaximized();
+	mdiArea->setActiveSubWindow(subWindow);
 }
 
 void MainWindow::setupStatusBar()
@@ -4302,11 +4304,18 @@ QString MainWindow::activeMdiChildFilePath()
 	return QString();
 }
 
-QMdiSubWindow *MainWindow::activeMdiChild()
+QMdiSubWindow *MainWindow::activeMdiChild(const bool &bReturnLastActiveIfNULL)
 {
 	QMdiSubWindow* tmpSubWin = mdiArea->activeSubWindow();
 	if (tmpSubWin)
 		return tmpSubWin;
+	if (bReturnLastActiveIfNULL == false)
+		return NULL;
+	QList<QMdiSubWindow*> lSubWindows = mdiArea->subWindowList(QMdiArea::ActivationHistoryOrder);
+	foreach(QMdiSubWindow* tempSubWindow, lSubWindows)
+	{
+		return tempSubWindow;
+	}
 	return NULL;
 }
 

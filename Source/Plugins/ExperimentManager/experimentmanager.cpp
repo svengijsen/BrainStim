@@ -1367,6 +1367,9 @@ bool ExperimentManager::initializeExperiment(bool bFinalize)
 				{
 					QString sInitMethodOrderHexNumber = "0000";
 					QList<cMethodParameterStructure*> currentMethodParamList = currentMethod->getMethodParameterList();
+					strcInvokeObjectDefs sObjInitInvokeDef;
+					for (int nArgCntr = 0; nArgCntr < MAX_INVOKE_ARG_COUNT; nArgCntr++)
+						sObjInitInvokeDef.lGenArgs << QGenericArgument();
 					if (currentMethodParamList.isEmpty() == false)
 					{
 						QStringList lParsedMethodParamValues;
@@ -1382,9 +1385,6 @@ bool ExperimentManager::initializeExperiment(bool bFinalize)
 						int nArgCount = currentMethodParamList.count();
 						QByteArray normType;
 						int typeId;
-						QList<QGenericArgument> sArguments;
-						for (int nArgCntr = 0; nArgCntr < MAX_INVOKE_ARG_COUNT; nArgCntr++)
-							sArguments << QGenericArgument();
 
 						for (int k = 0; k < MAX_INVOKE_ARG_COUNT; k++)//max arguments
 						{
@@ -1394,29 +1394,29 @@ bool ExperimentManager::initializeExperiment(bool bFinalize)
 								typeId = QMetaType::type(normType);
 								if (typeId == QMetaType::Bool)
 								{
-									sArguments[k] = Q_ARG(bool, lParsedMethodParamValues[k].toInt());
+									sObjInitInvokeDef.lGenArgs[k] = Q_ARG(bool, lParsedMethodParamValues[k].toInt());
 								}
 								else if (typeId == QMetaType::Int)
 								{
-									sArguments[k] = Q_ARG(int, lParsedMethodParamValues[k].toInt());
+									sObjInitInvokeDef.lGenArgs[k] = Q_ARG(int, lParsedMethodParamValues[k].toInt());
 								}
 								else if (typeId == QMetaType::Short)
 								{
-									sArguments[k] = Q_ARG(short, lParsedMethodParamValues[k].toShort());
+									sObjInitInvokeDef.lGenArgs[k] = Q_ARG(short, lParsedMethodParamValues[k].toShort());
 								}
 								else if (typeId == QMetaType::Double)
 								{
-									sArguments[k] = Q_ARG(double, lParsedMethodParamValues[k].toDouble());
+									sObjInitInvokeDef.lGenArgs[k] = Q_ARG(double, lParsedMethodParamValues[k].toDouble());
 								}
 								else if (typeId == QMetaType::Long)
 								{
-									sArguments[k] = Q_ARG(long, lParsedMethodParamValues[k].toLong());
+									sObjInitInvokeDef.lGenArgs[k] = Q_ARG(long, lParsedMethodParamValues[k].toLong());
 								}
 								else//In all other cases we marshal to QString and give that a try... 
 								{
 									qWarning() << "initializeExperimentObjects(" << bFinalize << ")::Undefined argument (typeId=" << typeId << "), switching to QString to create a generic argument...";
 									// below is dirty, but array doesn't work, passes wrong value to invoked function! weird bug??
-									sArguments[k] = Q_ARG(QString, lParsedMethodParamValues[k]);
+									sObjInitInvokeDef.lGenArgs[k] = Q_ARG(QString, lParsedMethodParamValues[k]);
 								}
 							}
 							else
@@ -1426,23 +1426,19 @@ bool ExperimentManager::initializeExperiment(bool bFinalize)
 						}
 						sInitMethodOrderHexNumber = "0000";
 						MainAppInfo::getHexedOrderNumber(currentMethod->getMethodOrderNumber(), sInitMethodOrderHexNumber, 4);
-						strcInvokeObjectDefs sObjInitInvokeDef;
 						sObjInitInvokeDef.pMetaObject = sourceMetaObject;
 						sObjInitInvokeDef.pObject = pSourceObject;
 						sObjInitInvokeDef.nOrderNumber = currentMethod->getMethodOrderNumber();
 						sObjInitInvokeDef.baSignature = currentMethod->getMethodSignature().toLatin1();
-						sObjInitInvokeDef.lGenArgs = sArguments;//<< sArguments0 << sArguments1 << sArguments2 << sArguments3 << sArguments4 << sArguments5 << sArguments6 << sArguments7 << sArguments8 << sArguments9;
 						mapHexNumberToObjectInitializationsInvokeDefs.insert(sInitMethodOrderHexNumber, sObjInitInvokeDef);
 						continue;
 					}
 					else//No parameters?
 					{
-						strcInvokeObjectDefs sObjInitInvokeDef;
 						sObjInitInvokeDef.pMetaObject = sourceMetaObject;
 						sObjInitInvokeDef.pObject = pSourceObject;
 						sObjInitInvokeDef.nOrderNumber = currentMethod->getMethodOrderNumber();
 						sObjInitInvokeDef.baSignature = currentMethod->getMethodSignature().toLatin1();
-						//sObjInitInvokeDef.lGenArgs;
 						mapHexNumberToObjectInitializationsInvokeDefs.insert(sInitMethodOrderHexNumber, sObjInitInvokeDef);
 						continue;
 					}
@@ -1452,11 +1448,11 @@ bool ExperimentManager::initializeExperiment(bool bFinalize)
 	}
 	foreach(strcInvokeObjectDefs tmpObjInitInvokeDef, mapHexNumberToObjectInitializationsInvokeDefs)
 	{
-		if (!(tmpObjInitInvokeDef.pMetaObject->invokeMethod(tmpObjInitInvokeDef.pObject, tmpObjInitInvokeDef.baSignature, tmpObjInitInvokeDef.lGenArgs.value(0, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(1, QGenericArgument())
-			, tmpObjInitInvokeDef.lGenArgs.value(2, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(3, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(4, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(5, QGenericArgument())
-			, tmpObjInitInvokeDef.lGenArgs.value(6, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(7, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(8, QGenericArgument()), tmpObjInitInvokeDef.lGenArgs.value(9, QGenericArgument()))))
+		if (!(tmpObjInitInvokeDef.pMetaObject->invokeMethod(tmpObjInitInvokeDef.pObject, tmpObjInitInvokeDef.baSignature, tmpObjInitInvokeDef.lGenArgs[0], tmpObjInitInvokeDef.lGenArgs[1]
+			, tmpObjInitInvokeDef.lGenArgs[2], tmpObjInitInvokeDef.lGenArgs[3], tmpObjInitInvokeDef.lGenArgs[4], tmpObjInitInvokeDef.lGenArgs[5]
+			, tmpObjInitInvokeDef.lGenArgs[6], tmpObjInitInvokeDef.lGenArgs[7], tmpObjInitInvokeDef.lGenArgs[8], tmpObjInitInvokeDef.lGenArgs[9])))
 		{
-			qDebug() << __FUNCTION__ << "(isFinalize:" << bFinalize << ")::Could not invoke the Method(" << tmpObjInitInvokeDef.baSignature << ")!";
+			qDebug() << __FUNCTION__ << "(isFinalize:" << bFinalize << ")::Could not invoke the Method(" << tmpObjInitInvokeDef.baSignature << ")!";//tmpObjInitInvokeDef.lGenArgs[0]
 			return false;
 		}
 	}

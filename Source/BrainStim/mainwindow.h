@@ -684,7 +684,7 @@ private:
 	void setCurrentFile(const QString &fileName, bool bIsNotSaved = false);
 	void updateRecentFileActions();
 	QString strippedName(const QString &fullFileName);
-	QMdiSubWindow *activeMdiChild();
+	QMdiSubWindow *activeMdiChild(const bool &bReturnLastActiveIfNULL = false);
 	QString activeMdiChildFilePath();
 	QMdiSubWindow *findMdiChild(const QString &fileName);
 	void updateRecentFileList(const QString &fileName);
