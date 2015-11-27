@@ -1,0 +1,1706 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<title>RetinoMapper Class v1.0</title>
+<!--doc-version-title-end-->
+	<style type="text/css">
+	.auto-style1 {
+		font-weight: normal;
+	}
+	</style>
+	</head>
+<body>
+    <div class="container">
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>RetinoMapper Class</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version:</strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong>July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+        <div id="toc_Area">
+            <ul id="toc"></ul>
+            <h2>Introduction</h2>
+            <p>The Experiment Manager Plug-in features a 
+			<strong>
+			<a href="Doxygen/class_retinotopy_mapper.html" target="_blank">RetinoMapper</a></strong> <em>class</em> (derived from the 
+			<strong>
+			<a href="Doxygen/class_experiment_engine.html" target="_blank">ExperimentEngine</a></strong><em>
+			class</em>) that 
+			is created and optimized for displaying various 
+			Retinotopy stimuli. Configuration of these stimuli can be achieved 
+			through various available parameters that are described in this 
+			document.</p>
+            <h2>Retinotopy Parameters</h2>
+            <h3>Retinotopy Pattern</h3>
+			<p>There are various Retinotopy Parameters that 
+			can be configured for an object created from a 
+			<strong>
+			<a href="Doxygen/class_retinotopy_mapper.html" target="_blank">RetinoMapper</a> </strong> 
+			<em>class</em>, 
+			most parameters availability is dependend of another parameter and 
+			so not all of them are in use 
+			during the retinotopy stimuli presentation. In this document we'll 
+			split up and describe the parameter groups that depend on the Retinotopy pattern 
+			(RetinoPattern parameter) seperately. The available Retinotopy patterns are:</p>
+            <ul>
+                <li>Fixation</li>
+                <li>PolarAngle</li>
+                <li>Eccentricity</li>
+                <li>MovingBar</li>
+                <li>MovingDots</li>
+            </ul>
+            <h3>Universal parameters</h3>
+			<p>Some of the parameters are always available 
+			for you to configure 
+			(independent of the Retinotopy pattern you choose), these are:</p>
+				<table class="table table-condensed">
+				  <thead>
+				    <tr>
+				      <th>Name</th>
+				      <th>Type</th>
+				      <th>Restrictions</th>
+				      <th>Default</th>
+				      <th>Description</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <th scope="row">RetinoPattern</th>
+				      <td>String</td>
+				      <td>"PolarAngle", "Eccentricity",
+					  "MovingBar", "MovingDots" 
+					  or "Fixation"</td>
+				      <td>"PolarAngle"</td>
+				      <td>the Retinotopy stimuli pattern we would like to display</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">StimuliRefreshRate</th>
+				      <td>Integer</td>
+                      <td>0..display refresh rate</td>
+                      <td>0</td>
+                      <td>If 0 then it draws as fast as possible (if present waiting for a vertical sync signal). If &gt;0 then the stimuli refresh rate (in Hertz) is synchronized with that value.</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">ShowFixPoint</th>
+				      <td>Boolean</td>
+                      <td>"true" or "false"</td>
+                      <td>"true"</td>
+                      <td>if the fixation point in the center of the screen is 
+					  visible</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">FixationSize</th>
+				      <td>Integer</td>
+                      <td>&gt;=0</td>
+                      <td>8</td>
+                      <td>the diameter of the fixation point in number of pixels</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">FixationColor</th>
+				      <td>String</td>
+                      <td>see <a href="#ColorFormat">Color Format</a> 
+					  chapter</td>
+                      <td>"#FF0000"</td>
+                      <td>the color of the fixation dot, see
+					  <a href="#ColorFormat">Color Format</a> 
+					  chapter</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">BackGroundColor</th>
+				      <td>String</td>
+                      <td>see <a href="#ColorFormat">Color Format</a> 
+					  chapter</td>
+                      <td>"#575757"</td>
+                      <td>the color of the background, 
+					  see  <a href="#ColorFormat">Color Format</a> chapter</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">StimulusWidthSpan</th>
+				      <td>Float</td>
+                      <td>&gt;0</td>
+                      <td>480</td>
+                      <td>the width of the retinotopy stimuli 
+					  area</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">StimulusHeightSpan</th>
+				      <td>Float</td>
+                      <td>&gt;0</td>
+                      <td>480</td>
+                      <td>the height of the retinotopy 
+					  stimuli area</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">AntiAliasing</th>
+				      <td>Boolean</td>
+                      <td>"true" or "false"</td>
+                      <td>"true"</td>
+                      <td>if anti-aliasing 
+					  should be enabled for the retinotopy 
+					  stimuli</td>
+				    </tr>
+				  </tbody>
+				</table>
+
+            <h4 id="ColorFormat">Color Format</h4>
+            <p>The format specifies the RGB value 
+			for the color, which may be in one of these formats:</p>
+            <ul>
+                <li>#RGB (each of R, G, and B is a single hex digit) or #RRGGBB or #RRRGGGBBB or #RRRRGGGGBBBB.</li>
+                <li>A name from the list of colors defined in the list of <a href="http://www.w3.org/TR/SVG/types.html#ColorKeywords" target="_blank">SVG color keyword names</a>
+				provided by the World Wide Web Consortium; for example, &quot;steelblue&quot; or &quot;gainsboro&quot;. These color names work on all platforms.</li>
+            </ul>
+            <h3>Fixation specific parameters</h3>
+            <p><img src="images/image24.png" alt="" /></p>
+            <p>The above picture shows stimuli presentation 
+			where the <em>Fixation</em> <strong>RetinoPattern</strong> parameter 
+			is used. The <em>retinotopy stimuli area</em> (in
+			grey) is smaller than the screen (black) 
+			output area. Within the <em>retinotopy 
+			stimuli area</em> we can see a fixation point (red). 
+			There are no further parameters defined which only belong to this
+			<em>Fixation</em> <strong>RetinoPattern</strong>.</p>
+            <h3>PolarAngle specific parameters</h3>
+            <p><img src="images/image25.png" alt="" /></p>
+            <p>The above picture shows a stimuli presentation 
+			where the <em>PolarAngle</em> <strong>RetinoPattern</strong> 
+			parameter is used. It's the same as the
+			<em>Fixation</em> <strong>RetinoPattern</strong>
+			plus an additional wedge consisting of different rings with checkers 
+			that can rotate around the center point. A full wedge rotation (360 degrees) is called one cycle.
+			Special parameters that belong to this <em>
+			PolarAngle</em> <strong>RetinoPattern</strong> are:</p>
+			<p>&nbsp;</p>
+<table class="table table-condensed">
+				  <thead>
+				    <tr>
+				      <th>Name</th>
+				      <th>Type</th>
+				      <th>Restrictions</th>
+				      <th>Default</th>
+				      <th>Description</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <th scope="row">GapDiameter</th>
+				      <td>Integer</td>
+				      <td>&gt;=0</td>
+				      <td>20</td>
+				      <td>the diameter (pixels) of the gap (empty circular area) centered around the fixation point</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">CheckerColor1</th>
+				      <td>String</td>
+                      <td>see <a href="#ColorFormat">Color Format</a> 
+					  chapter</td>
+                      <td>"#FFFFFF"</td>
+                      <td>&nbsp;the color of the first checker 
+					  color group</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">CheckerColor2</th>
+				      <td>String</td>
+                      <td>see <a href="#ColorFormat">Color Format</a> 
+					  chapter</td>
+                      <td>"#000000"</td>
+                      <td>&nbsp;the color of the second 
+					  checker color group</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">PolarCheckAmount</th>
+				      <td>Integer</td>
+                      <td>&gt;0</td>
+                      <td>4</td>
+                      <td>the number of checkers 
+					  inside the wedge along the wedge rotation direction</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">PolarRingAmount</th>
+				      <td>Integer</td>
+                      <td>&gt;0</td>
+                      <td>20</td>
+                      <td>the number of rings inside 
+					  the wedge along the wedge direction</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">PolarWedgeSpan</th>
+				      <td>Float</td>
+                      <td>&gt;0</td>
+                      <td>22.5</td>
+                      <td>the total wedge span angle 
+					  in degrees</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">PolarRotationDirection</th>
+				      <td>Integer</td>
+                      <td>1 or -1</td>
+                      <td>1</td>
+                      <td>the rotation direction of 
+					  the wedge, 1 = Clockwise, -1 = Counterclockwise rotation</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">InternalTriggerDuration</th>
+				      <td>Float</td>
+                      <td>&gt;0</td>
+                      <td>2000.0</td>
+                      <td>the expected internal trigger period time duration, 
+					  this defines how fast the wedge 
+					  rotates within 
+					  one step of a cycle</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">CycleTriggerAmount</th>
+				      <td>Integer</td>
+                      <td>&gt;0</td>
+                      <td>automatically set to the <strong>
+					  Internal Triggers</strong> setting of the current block</td>
+                      <td>the duration of a full wedge 
+					  cycle (360 degrees) in number of internal triggers</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">FlickrFrequency</th>
+				      <td>Float</td>
+                      <td>&gt;0</td>
+                      <td>5</td>
+                      <td>the frequency of the flicker cycle (when the checker 
+					  categories switch from color), 
+					  ideally this value is equal to the 
+					  StimuliRefreshRate parameter divided by an integer value</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">CorticalMagnitudeFactor</th>
+				      <td>Float</td>
+                      <td>&gt;=0</td>
+                      <td>0.2</td>
+                      <td>see 
+					  <a href="#CorticalMagnitudeFactorPolar">Cortical Magnitude Factor</a> 
+					  chapter</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">DisableCortMagFac</th>
+				      <td>Boolean</td>
+                      <td>"true" or "false"</td>
+                      <td>"false"</td>
+                      <td>when enabled the single ring 
+					  diameters (see A in below 
+					  picture) is the same for all rings, the <strong>CorticalMagnitudeFactor</strong>
+					  parameter is then automatically ignored</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">OutputTriggerFrame</th>
+				      <td>Boolean</td>
+                      <td>"true" or "false"</td>
+                      <td>"false"</td>
+                      <td>when enabled then 
+					  the Experiment manager saves a 
+					  retinotopic stimuli display (to the /outputs
+					  directory) for each stimuli step 
+					  to a file, see the <a href="#RetinoMapperOutputExport">RetinoMapper Output 
+					  Export</a> chapter.
+					  Please bear in mind that enabling this option may dramatically slow down the experiment and may cause that the requested
+					  <strong>StimuliRefreshRate</strong>
+					  is not met!                             </td>
+				    </tr>
+				    <tr>
+				      <th scope="row">OutputFrameFormat</th>
+				      <td>String</td>
+                      <td>‚??PNG‚?ù, ‚??DAT‚?ù or ‚??CDAT‚?ù</td>
+                      <td>"DAT"</td>
+                      <td>if the <strong>OutputTriggerFrame</strong> parameter is enabled then this value specifies the output format (and extension) 
+					  for the saved file(s). &ldquo;PNG&rdquo; creates a standard (*.png) file format containing the 
+					  <em>retinotopy stimuli area</em>. See 
+					  the chapter 
+					  about <a href="#OutputFrameFormat">Output Frame Format</a>
+					  for an explanation about the DAT and CDAT format</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">OutputFrameType</th>
+				      <td>String</td>
+                      <td>‚??Frame‚?ù or ‚??Mask‚?ù</td>
+                      <td>"Frame"</td>
+                      <td>if the <strong>OutputTriggerFrame</strong> 
+					  parameter is enabled then this value specifies the output 
+					  frame type. Option ‚??Frame‚?ù outputs the active stimuli area 
+					  with all color information. Option ‚??Mask‚?ù outputs the 
+					  active stimuli area black and the full wedge and/or 
+					  fixation point as white</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">DiscreteTriggerSteps</th>
+				      <td>Boolean</td>
+                      <td>"true" or "false"</td>
+                      <td>"false"</td>
+                      <td>if true then the wedge 
+					  rotates in discrete steps at each trigger step. Between 
+					  two triggers the wedge holds its position</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">RandomizeTriggerSteps</th>
+				      <td>Boolean</td>
+                      <td>"true" or "false"</td>
+                      <td>"false"</td>
+                      <td>if true then the wedge start rotating randomly at each trigger step. Between two triggers the wedge moves smooth (only when
+					  <strong>DiscreteTriggerSteps</strong>
+					  is disabled) in the
+					  <strong>PolarRotationDirection</strong>. The randomization 
+					  makes sure that all rotation steps are performed once 
+					  before going to the next cycle</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">EmptyTriggerSteps</th>
+				      <td>Integer</td>
+                      <td>&gt;=0</td>
+                      <td>0</td>
+                      <td>this parameter defines how many Trigger Steps of a full cycle should be Empty (the Wedge is then
+					  hidden!). These Empty trigger steps are randomly choosen. 
+					  The randomization keeps the history of empty trigger steps 
+					  in memory within each block 
+					  trial</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">RandomizeTriggerStepsArray</th>
+				      <td>Integer Array</td>
+                      <td>a String containing one or more 
+					  index positions seperated by a comma, like "2,4,6,8"</td>
+                      <td>"" (empty string)</td>
+                      <td>this parameter is only taken 
+					  into account if the <strong>RandomizeTriggerSteps</strong> 
+					  parameter is set to true. The default randomization is 
+					  overridden by the value(s) defined here seperated by a 
+					  comma. Each value refers to a specific index of the 
+					  stimuli</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">EmptyTriggerStepsArray</th>
+				      <td>Integer Array</td>
+                      <td>a String containing one or more 
+					  index positions seperated by a comma, like "2,4,6,8"</td>
+                      <td>"" (empty string)</td>
+                      <td>This parameter is only taken into account if the
+					  <strong>EmptyTriggerSteps</strong> parameter is set to 
+					  true. The default randomization is overridden by the 
+					  value(s) defined here seperated by a comma. Each value 
+					  refers to a specific index of the stimuli</td>
+				    </tr>
+				  </tbody>
+				</table>
+           
+            <h4>Wedge triggered cycles and rotation direction</h4>
+            <p>The below picture shows the wedge rotated at an angle of 0 degrees (at the X axis pointed to the right, with the right wedge border aligned over the X axis) when the PolarRotationDirection
+			parameter is set to <strong>-1</strong> (<em>=Counterclockwise</em>). </p>
+            <p><img src="images/image26.png" alt="" /></p>
+            <p>When the PolarRotationDirection parameter is 
+			set to <strong>1</strong> (<em>=Clockwise</em>) then the wedge at an angle of 0 degrees is drawn like in the below picture. </p>
+            <p><img src="images/image27.png" alt="" /></p>
+            <p>
+                A full wedge cycle is internally subdivided by the <strong>CycleTriggerAmount</strong>
+				parameter. These steps can be randomized 
+				(see <strong>RandomizeTriggerSteps</strong> 
+				parameter) and empy (see <strong>EmptyTriggerSteps</strong> 
+				parameter) as explained in the above parameter table. Internally these sub-cycles are indexed from [0 ... (CycleTriggerAmount-1)]. The first index (with value 0) is always at 0 degree and is dependent of the 
+				<strong>PolarRotationDirection 
+				</strong>parameter, as explained above. These indexed are internally also used to keep track of the
+                randomly chosen history and to output the result in the experiment output file (automatically generated in the /outputs directory for each run), see the <a href="#RetinoMapperOutputExport">RetinoMapper Output Export</a> chapter. The below pictures show 
+				how the different indexes are set for 
+				each step of 12 steps (<strong>CycleTriggerAmount</strong> = 12) 
+				from one full wedge rotation for both directions.
+            </p>
+            <p><strong>PolarRotationDirection</strong> = 1 (<em>Clockwise</em>)
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image28.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 0</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image17.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 3</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image14.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 6</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image20.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 9</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image18.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 1</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image23.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 4</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image37.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 7</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image38.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 10</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image45.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 2</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image46.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 5</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image48.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 8</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image49.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 11</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+            </table>
+            <p></p>
+            <p><strong>PolarRotationDirection</strong> = -1 (<em>Counterclockwise</em>).</p>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image49.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 0</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image48.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 3</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image46.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 6</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image45.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 9</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image38.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 1</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image37.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 4</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image23.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 7</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image18.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 10</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image20.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 2</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image14.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 5</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image17.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 8</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image28.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 11</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <h4 id="CorticalMagnitudeFactorPolar">Cortical Magnitude Factor</h4>
+            <p>This factor defines how the polar rings are distributed from the outer wedge ring towards the center. </p>
+            <img src="images/image40.png" alt="" />
+            <p>&nbsp;</p>
+            <p>If for example the CorticalMagnitudeFactor = 0.2 then:</p>
+            <p>
+                A = 0.2 * B<br />
+                A' = 0.2 * B'<br />
+                ...
+            </p>
+            <p>
+                The most inner ring is automatically extended till the border of the defined gap diameter. If the CorticalMagnitudeFactor = 0.0 then the
+                rings are also equally divided over the wedge (B).
+            </p>
+            <h3>Eccentricity specific parameters</h3>
+            <img src="images/image39.png" alt="" />
+            <p>&nbsp;</p>
+            <p>
+                The above picture shows a stimuli presentation 
+			where the <em>Eccentricity</em> <strong>RetinoPattern</strong> 
+			parameter is used. It's again the same as the
+			<em>Fixation</em> <strong>RetinoPattern</strong>
+			plus an additional ring inside the retinotopy 
+				stimuli area in which its diameter can change (eccentricity). One cycle here 
+				means a full diameter change of the wedge. The ring consist
+                out of several sub-ring(s) each divided in checkers 
+				of which it's color can again alternate. 
+				Again in the center of the screen a fixation point (red) is 
+				shown.</p>
+            <img src="images/image36.png" alt="" />
+            <p>&nbsp;</p>
+<table class="table table-condensed">
+				  <thead>
+				    <tr>
+				      <th>Name</th>
+				      <th>Type</th>
+				      <th>Restrictions</th>
+				      <th>Default</th>
+				      <th>Description</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <th scope="row">GapDiameter</th>
+				      <td>Integer</td>
+				      <td>&gt;=0</td>
+				      <td>20</td>
+				      <td>the diameter (pixels) of the gap (empty circular area) centered around the fixation point, see 
+					  mark C in the 
+					  above picture</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">CheckerColor1</th>
+				      <td>String</td>
+                      <td>see <a href="#ColorFormat">Color Format</a> 
+					  chapter</td>
+                      <td>"#FFFFFF"</td>
+                      <td>&nbsp;the color of the first checker color group</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">CheckerColor2</th>
+				      <td>String</td>
+                      <td>see <a href="#ColorFormat">Color Format</a> 
+					  chapter</td>
+                      <td>"#000000"</td>
+                      <td>&nbsp;the color of the second checker color group</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">EccentricityCheckAmount</th>
+				      <td>Integer</td>
+                      <td>&gt;0</td>
+                      <td>20</td>
+                      <td>the number of checkers inside one 
+					  sub-ring</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">EccentricityRingAmount</th>
+				      <td>Integer</td>
+                      <td>&gt;0</td>
+                      <td>4</td>
+                      <td>the number of 
+					  sub-rings inside the wedge</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">FlickrFrequency</th>
+				      <td>Float</td>
+                      <td>&gt;0</td>
+                      <td>5</td>
+                      <td>the frequency of the flicker cycle (when the checker 
+					  categories switch from color), 
+					  ideally this value is equal to the 
+					  StimuliRefreshRate parameter divided by an integer value</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">EccentricityDirection</th>
+				      <td>Integer</td>
+                      <td>1 or -1</td>
+                      <td>1</td>
+                      <td>whether the wedge diameter is 
+					  increasing or decreasing, 1 = Increased ring diameter, -1 = Decreased ring diameter</td>
+				    </tr>
+				      <tr>
+				      <th scope="row">InternalTriggerDuration</th>
+				      <td>Float</td>
+                      <td>&gt;0</td>
+                      <td>2000.0</td>
+                      <td>the expected internal trigger period time duration, 
+					  this defines how fast the wedge 
+					  changes its diameter within a step of 
+					  an cycle</td>
+				      </tr>
+				      <tr>
+				      <th scope="row">CorticalMagnitudeFactor</th>
+				      <td>Float</td>
+                      <td>&gt;=0</td>
+                      <td>0.2</td>
+                      <td>see 
+					  <a href="#CorticalMagnitudeFactorEccentricity">Cortical Magnitude Factor</a> 
+					  chapter</td>
+				      </tr>
+					  <tr>
+				      <th scope="row">DisableCortMagFac</th>
+				      <td>Boolean</td>
+                      <td>"true" or "false"</td>
+                      <td>"false"</td>
+                      <td>when enabled the total width of the 
+					  sub-rings (see A) remains the same independent off the 
+					  eccentricity, the total width of the sub-rings (see A) then is always the
+					  <strong>CorticalMagnitudeFactor</strong> times the maximum radius (see B)</td>
+				      </tr>
+					  <tr>
+				      <th scope="row">CycleTriggerAmount</th>
+				      <td>Integer</td>
+                      <td>&gt;0</td>
+                      <td>automatically set to the <strong>
+					  Internal Triggers</strong> setting of the current block</td>
+                      <td>the duration of a 
+					  full eccentricity cycle (increased/decreased diameter) in amount of triggers, the minimal diameter is the gap diameter, see C</td>
+				      </tr>
+				    <tr>
+				      <th scope="row">OutputTriggerFrame</th>
+				      <td>Boolean</td>
+                      <td>"true" or "false"</td>
+                      <td>"false"</td>
+                      <td>when enabled then 
+					  the Experiment manager saves a 
+					  retinotopic stimuli display (to the /outputs
+					  directory) for each stimuli step 
+					  to a file, see the <a href="#RetinoMapperOutputExport">RetinoMapper Output 
+					  Export</a> chapter.
+					  Please bear in mind that enabling this option may dramatically slow down the experiment and may cause that the requested
+					  <strong>StimuliRefreshRate</strong>
+					  is not met!                             
+                            </td>
+				    </tr>
+				    <tr>
+				      <th scope="row">OutputFrameFormat</th>
+				      <td>String</td>
+                      <td>‚??PNG‚?ù, ‚??DAT‚?ù or ‚??CDAT‚?ù</td>
+                      <td>"DAT"</td>
+                      <td>if the <strong>OutputTriggerFrame</strong> parameter is enabled then this value specifies the output format (and extension) 
+					  for the saved file(s). &ldquo;PNG&rdquo; creates a standard (*.png) file format containing the 
+					  <em>retinotopy stimuli area</em>. See 
+					  the chapter 
+					  about <a href="#OutputFrameFormat">Output Frame Format</a>
+					  for an explanation about the DAT and CDAT format</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">OutputFrameType</th>
+				      <td>String</td>
+                      <td>‚??Frame‚?ù or ‚??Mask‚?ù</td>
+                      <td>"Frame"</td>
+                      <td>if the <strong>OutputTriggerFrame</strong> 
+					  parameter is enabled then this value specifies the output 
+					  frame type. Option ‚??Frame‚?ù outputs the active stimuli area 
+					  with all color information. Option ‚??Mask‚?ù outputs the 
+					  active stimuli area black and the full 
+					  ring and/or 
+					  fixation point as white</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">DiscreteTriggerSteps</th>
+				      <td>Boolean</td>
+                      <td>"true" or "false"</td>
+                      <td>"false"</td>
+                      <td>if true then the 
+					  ring diameter changes in discrete steps at each trigger step. Between 
+					  two triggers the wedge holds its position</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">RandomizeTriggerSteps</th>
+				      <td>Boolean</td>
+                      <td>"true" or "false"</td>
+                      <td>"false"</td>
+                      <td>if true then the 
+					  rings diameter is choosen randomly at each trigger step. Between two triggers the 
+					  ring diamater changes smoothly 
+					  to the next closest diameter (only when
+					  <strong>DiscreteTriggerSteps</strong>
+					  is disabled) in the
+					  <strong>EccentricityRotationDirection</strong>. The randomization 
+					  makes sure that all ring diameter steps are 
+					  used once 
+					  before going to the next cycle</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">EmptyTriggerSteps</th>
+				      <td>Integer</td>
+                      <td>&gt;=0</td>
+                      <td>0</td>
+                      <td>this parameter defines how many Trigger Steps of a full cycle should be Empty (the 
+					  Ring is then
+					  hidden!). These Empty trigger steps are randomly choosen. 
+					  The randomization keeps the history of empty trigger steps 
+					  in memory within each block 
+					  trial</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">RandomizeTriggerStepsArray</th>
+				      <td>Integer Array</td>
+                      <td>a String containing one or more 
+					  index positions seperated by a comma, like "2,4,6,8"</td>
+                      <td>"" (empty string)</td>
+                      <td>this parameter is only taken 
+					  into account if the <strong>RandomizeTriggerSteps</strong> 
+					  parameter is set to true. The default randomization is 
+					  overridden by the value(s) defined here seperated by a 
+					  comma. Each value refers to a specific index of the 
+					  stimuli</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">EmptyTriggerStepsArray</th>
+				      <td>Integer Array</td>
+                      <td>a String containing one or more 
+					  index positions seperated by a comma, like "2,4,6,8"</td>
+                      <td>"" (empty string)</td>
+                      <td>This parameter is only taken into account if the
+					  <strong>EmptyTriggerSteps</strong> parameter is set to 
+					  true. The default randomization is overridden by the 
+					  value(s) defined here seperated by a comma. Each value 
+					  refers to a specific index of the stimuli</td>
+				    </tr>
+				  </tbody>
+				</table>
+                       
+            <p>&nbsp;</p>
+            <h4 id="CorticalMagnitudeFactorEccentricity">Cortical Magnitude Factor</h4>
+            <p><img src="images/image36s.png" alt="" /></p>
+            <p>This factor defines how the total width (see A) of all the visible rings compared to the eccentricity amount. This width is dependant of the eccentricity (ring diameter) at that moment (this
+			doesn't apply when the 
+			<strong>DisableCortMagFac</strong> parameter
+			is set to true). The smallest ring eccentricity diameter is equal to the gap diameter (see C).</p>
+            <p>E.g. CorticalMagnitudeFactor = 0.2 ==&gt;
+			A = 0.2 * B</p>
+            <p>All individual ring widths are equal.<br />
+			</p>
+            <h4>Eccentricity triggered cycles and direction</h4>
+            <p>A full Eccentricity cycle is internally subdivided by the <strong>CycleTriggerAmount</strong>
+			parameter. These steps can be randomized (see <strong>RandomizeTriggerSteps</strong> 
+				parameter) and empy (see <strong>EmptyTriggerSteps</strong> 
+				parameter) as explained in the above parameter table. Internally these sub-cycles are indexed from [0 ... (CycleTriggerAmount-1)]. The indexing is dependent of the 
+			<strong>EccentricityDirection</strong> parameter. 
+			These indexed are internally also used to keep track of the randomly 
+			chosen history and to output the result in the experiment output 
+			file (automatically generated in the /outputs directory for each 
+			run), see the <a href="#RetinoMapperOutputExport">RetinoMapper Output Export</a> chapter. The below pictures show 
+				how the different indexes are set for 
+				each step of 12 steps (<strong>CycleTriggerAmount</strong> = 12) 
+				from one full eccentricity cycle for both directions. </p>
+            <p><strong>EccentricityDirection</strong> = 1 (<em>Increasing</em> 
+			diameter)</p>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image22.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 0</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image21.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 3</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image19.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 6</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image16.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 9</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image15.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 1</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image13.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 4</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image11.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 7</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image08.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 10</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image06.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 2</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image33.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 5</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image31.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 8</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image32.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 11</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <p><strong>EccentricityDirection</strong> = -1 
+			(<em>Decreasing</em> diameter)</p>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image32.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 0</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image31.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 3</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image33.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 6</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image06.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 9</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image08.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 1</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image11.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 4</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image13.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 7</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image15.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 10</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image16.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 2</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image19.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 5</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image21.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 8</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image22.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 11</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <h3>MovingBar specific parameters</h3>
+            <img src="images/image34.png" alt="" />
+            <p>
+                &nbsp;</p>
+			<p>
+                The above picture shows a stimuli presentation where 
+				the <strong>MovingBar</strong> <em>RetinoPattern</em> parameter is used.It's the same as 
+				the <strong>Fixation</strong> <em>RetinoPattern</em> plus an additional bar consisting of 
+				different sub-bar(s) that can move within the 
+				retinotopy stimuli area. Each sub-bar 
+				consists out of several checkers with an alternating 
+				color along its lenght (see below A). A full bar movement 
+				(see below C direction) is called one 
+				cycle. The moving bar has a set angle which 
+				remains the same during one cycle. Special parameters that belong to this
+				<strong>MovingBar</strong> 
+				RetinoPattern are:
+                <br />
+            </p>
+			<br />
+            <img src="images/image02.png" alt="" />
+            <p>&nbsp;</p>
+<table class="table table-condensed">
+				  <thead>
+				    <tr>
+				      <th>Name</th>
+				      <th>Type</th>
+				      <th>Restrictions</th>
+				      <th>Default</th>
+				      <th>Description</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				      <tr>
+				      <th scope="row">CheckerColor1</th>
+				      <td>String</td>
+                      <td>see <a href="#ColorFormat">Color Format</a> 
+					  chapter</td>
+                      <td>"#FFFFFF"</td>
+                      <td>&nbsp;the color of the first checker 
+					  color group</td>
+				      </tr>
+					  <tr>
+				      <th scope="row">CheckerColor2</th>
+				      <td>String</td>
+                      <td>see <a href="#ColorFormat">Color Format</a> 
+					  chapter</td>
+                      <td>"#000000"</td>
+                      <td>&nbsp;the color of the second checker 
+					  color group</td>
+				      </tr>
+				    <tr>
+				      <th scope="row">MovingBarHeight</th>
+				      <td>Float</td>
+				      <td>&gt;0</td>
+				      <td>10.0</td>
+				      <td>if for example the total bar movement is 640 pixels 
+					  and this parameter is set to <strong>10.0</strong> then the 
+					  total bar 
+					  height (see B above picture) is 640/10.0 = 64 
+					  pixels</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">MovingBarHeightCheckAmount</th>
+				      <td>Integer</td>
+                      <td>&gt;0</td>
+                      <td>4</td>
+                      <td>the number of sub-bar(s) in 
+					  the height direction of the bar (see B 
+					  above picture), the 
+					  number of checkers in the bar width direction (see A) is
+					  then automatically calculated 
+					  making sure that the checkers are 
+					  perfect square. </td>
+				    </tr>
+				      <tr>
+				      <th scope="row">FlickrFrequency</th>
+				      <td>Float</td>
+                      <td>&gt;0</td>
+                      <td>5</td>
+                      <td>the frequency of the flicker cycle (when the checker 
+					  categories switch from color), 
+					  ideally this value is equal to the 
+					  StimuliRefreshRate parameter divided by an integer value</td>
+				      </tr>
+					  <tr>
+				      <th scope="row">MovingBarDirection</th>
+				      <td>Integer</td>
+                      <td>1 or -1</td>
+                      <td>1</td>
+                      <td>The movement direction od the bar 
+					  within one cycle, 1 = Downwards, 
+					  -1 = Upwards</td>
+				      </tr>
+				    <tr>
+				      <th scope="row">MovingBarAngle</th>
+				      <td>Float</td>
+                      <td>&gt;0</td>
+                      <td>45.0</td>
+                      <td>the angle of the bar, 0 
+					  degrees is along the X axis. A larger value turns 
+					  the bar counterclockwise </td>
+				    </tr>
+				    <tr>
+				      <th scope="row">MovingBarCoverage</th>
+				      <td>Float</td>
+                      <td>&gt;0</td>
+                      <td>0.5</td>
+                      <td>the 
+					  covered area in which the moving bar can move within one 
+					  full cycle. See chapter <a href="MovingBarCoverage">MovingBarCoverage</a> for a 
+					  detailed description </td>
+				    </tr>
+				      <tr>
+				      <th scope="row">InternalTriggerDuration</th>
+				      <td>Float</td>
+                      <td>&gt;0</td>
+                      <td>2000.0</td>
+                      <td>the expected internal trigger period time duration, 
+					  this defines how fast the bar moves
+					  within each step of an cycle</td>
+				      </tr>				      
+					  <tr>
+				      <th scope="row">CycleTriggerAmount</th>
+				      <td>Integer</td>
+                      <td>&gt;0</td>
+                      <td>automatically set to the <strong>
+					  Internal Triggers</strong> setting of the current block</td>
+                      <td>the duration of a 
+					  full bar movement cycle in 
+					  amount of triggers</td>
+				      </tr>
+				    <tr>
+				      <th scope="row">OutputTriggerFrame</th>
+				      <td>Boolean</td>
+                      <td>"true" or "false"</td>
+                      <td>"false"</td>
+                      <td>when enabled then 
+					  the Experiment manager saves a 
+					  retinotopic stimuli display (to the /outputs
+					  directory) for each stimuli step 
+					  to a file, see the <a href="#RetinoMapperOutputExport">RetinoMapper Output 
+					  Export</a> chapter.
+					  Please bear in mind that enabling this option may dramatically slow down the experiment and may cause that the requested
+					  <strong>StimuliRefreshRate</strong>
+					  is not met!&nbsp;
+                            </td>
+				    </tr>
+				    <tr>
+				      <th scope="row">OutputFrameFormat</th>
+				      <td>String</td>
+                      <td>‚??PNG‚?ù, ‚??DAT‚?ù or ‚??CDAT‚?ù</td>
+                      <td>"DAT"</td>
+                      <td>if the <strong>OutputTriggerFrame</strong> parameter is enabled then this value specifies the output format (and extension) 
+					  for the saved file(s). &ldquo;PNG&rdquo; creates a standard (*.png) file format containing the 
+					  <em>retinotopy stimuli area</em>. See 
+					  the chapter 
+					  about <a href="#OutputFrameFormat">Output Frame Format</a>
+					  for an explanation about the DAT and CDAT format</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">OutputFrameType</th>
+				      <td>String</td>
+                      <td>‚??Frame‚?ù or ‚??Mask‚?ù</td>
+                      <td>"Frame"</td>
+                      <td>if the <strong>OutputTriggerFrame</strong> 
+					  parameter is enabled then this value specifies the output 
+					  frame type. Option ‚??Frame‚?ù outputs the active stimuli area 
+					  with all color information. Option ‚??Mask‚?ù outputs the 
+					  active stimuli area black and the full 
+					  bar and/or 
+					  fixation point as white</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">DiscreteTriggerSteps</th>
+				      <td>Boolean</td>
+                      <td>"true" or "false"</td>
+                      <td>"false"</td>
+                      <td>if true then the 
+					  bar movement changes in discrete steps at each trigger step. Between 
+					  two triggers the bar moves smoothly 
+					  untill the next closest position</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">RandomizeTriggerSteps</th>
+				      <td>Boolean</td>
+                      <td>"true" or "false"</td>
+                      <td>"false"</td>
+                      <td>if true then the 
+					  bar movement starting position is choosen randomly at each trigger step. Between two triggers the 
+					  bar still moves smoothly to the 
+					  next closest diameter if the
+					  <strong>DiscreteTriggerSteps</strong>
+
+					  is disabled in the
+					  <strong>EccentricityRotationDirection/</strong>. The randomization 
+					  makes sure that all bar movement 
+					  starting positions for each step are 
+					  used once 
+					  before going to the next cycle</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">EmptyTriggerSteps</th>
+				      <td>Integer</td>
+                      <td>&gt;=0</td>
+                      <td>0</td>
+                      <td>this parameter defines how many Trigger Steps of a full cycle should be Empty (the 
+					  Bar is then
+					  hidden!). These Empty trigger steps are randomly choosen. 
+					  The randomization keeps the history of empty trigger steps 
+					  in memory within each block 
+					  trial</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">RandomizeTriggerStepsArray</th>
+				      <td>Integer Array</td>
+                      <td>a String containing one or more 
+					  index positions seperated by a comma, like "2,4,6,8"</td>
+                      <td>"" (empty string)</td>
+                      <td>this parameter is only taken 
+					  into account if the <strong>RandomizeTriggerSteps</strong> 
+					  parameter is set to true. The default randomization is 
+					  overridden by the value(s) defined here seperated by a 
+					  comma. Each value refers to a specific index of the 
+					  stimuli</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">EmptyTriggerStepsArray</th>
+				      <td>Integer Array</td>
+                      <td>a String containing one or more 
+					  index positions seperated by a comma, like "2,4,6,8"</td>
+                      <td>"" (empty string)</td>
+                      <td>This parameter is only taken into account if the
+					  <strong>EmptyTriggerSteps</strong> parameter is set to 
+					  true. The default randomization is overridden by the 
+					  value(s) defined here seperated by a comma. Each value 
+					  refers to a specific index of the stimuli</td>
+				    </tr>
+				  </tbody>
+				</table>
+
+            <p>&nbsp;</p>
+            <h4 id="MovingBarCoverage">Moving Bar Coverage</h4>
+            <img src="images/image09.png" alt="" />
+            <p>&nbsp;</p>
+            <p>
+                We see above inside a full screen area(see 
+				total grey area) an retinotopy stimuli area 
+				(see marker B, the red rectangle) covering the diagonal B. The bar is at 
+				its first
+                initial position (first step of a full cycle) and moves along the direction of the yellow arrow(see 
+				marker A) until it reaches the orange border above the fixation dot and then 
+				the full cycle is complete.
+                The <strong>MovingBarCoverage</strong> 
+				parameter defines the full cycle movement (independent of the
+				<strong>MovingBarAngle</strong> parameter) in such way that:</p>
+            <p>A = <strong>MovingBarCoverage</strong> * B<br />
+			</p>
+            <h4>MovingBar triggered cycles and MovingBar direction</h4>
+            <p>
+                A full MovingBar cycle is internally subdivided by the <strong>CycleTriggerAmount
+				</strong>parameter. These steps 
+				can be randomized (see <strong>RandomizeTriggerSteps</strong> 
+				parameter) and empy (see <strong>EmptyTriggerSteps</strong> 
+				parameter) as explained in the above parameter table. Internally 
+				these sub-cycles are indexed from [0 ... 
+				(CycleTriggerAmount-1)]. The indexing is dependent of the 
+				MovingBarDirection. These indexed are internally also used to 
+				keep track of the randomly chosen history and to output the 
+				result in the experiment output file (automatically generated in 
+				the /outputs directory for each run), see the <a href="#RetinoMapperOutputExport">RetinoMapper Output Export</a> chapter. The below pictures show 
+				how the different indexes are set for 
+				each step of 12 steps (<strong>CycleTriggerAmount</strong> = 12) 
+				from one full bar movement.</p>
+            <p><strong>MovingBarDirection</strong> = 1(downwards), 			<strong>MovingBarAngle</strong> = 30</p>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image30.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 0</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image01.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 3</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image00.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 6</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image04.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 9</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image42.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 1</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image07.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 4</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image05.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 7</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image12.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 10</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image10.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 2</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image43.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 5</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image44.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 8</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image41.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>IndexIndex 11</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+            </table>
+            <p>
+                <br />
+                <strong>MovingBarDirection</strong> = -1(upwards), 				<strong>MovingBarAngle</strong> = 30</p>
+            <table width="100%" border="0" cellspacing="0" cellpadding="0">
+                <tr>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image41.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 0</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image44.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 3</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image43.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 6</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                    <td width="1%"><p align="left"><strong><img src="images/image10.png" alt="" /></strong></p></td>
+                    <td width="10%"><div align="left"><strong>Index 9</strong></div></td>
+                    <td width="1%"><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image12.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 1</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image05.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 4</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image07.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 7</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image42.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 10</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+                <tr>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image04.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 2</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image00.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 5</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image01.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 8</strong></div></td>
+                    <td><div align="left"></div></td>
+                    <td><div align="left"></div></td>
+                    <td><p align="left"><strong><img src="images/image30.png" alt="" /></strong></p></td>
+                    <td><div align="left"><strong>Index 11</strong></div></td>
+                    <td><div align="left"></div></td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <h3>MovingDots specific parameters</h3>
+            <img src="images/image29.png" alt="" />
+            <p>
+                <br />
+                The abThe above picture shows a MovingDots screen example. Within the active 
+				retinotopy stimuli area (grey) several dots are presented
+                inside two areas (Hemifields). These dots can move around when they leave the Hemifield they automatically appear again
+                in the opposite corner moving with the same speed and direction/angle making sure that the amount of visible dots remains
+                constant. In the above example the left and right hemifields are visible and divided by a distance from each other. Both
+                Hemifields contain the dots at the same position (They are identical). The distance between the hemifields could also be
+                made zero which would create one area with the dots smoothly moving from one area to the other. Again in the center of
+                the screen a fixation point (red) is shown.
+            </p>
+            <img src="images/image35.png" alt="" />
+            <p>&nbsp;</p>
+<table class="table table-condensed">
+				  <thead>
+				    <tr>
+				      <th>Name</th>
+				      <th>Type</th>
+				      <th>Restrictions</th>
+				      <th>Default</th>
+				      <th>Description</th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				      <tr>
+				      <th scope="row">MovingDotsColor</th>
+				      <td>String</td>
+                      <td>see <a href="#ColorFormat">Color Format</a> 
+					  chapter</td>
+                      <td>"#FFFFFF"</td>
+                      <td>&nbsp;the color of the moving dots</td>
+				      </tr>
+					  <tr>
+				      <th scope="row">MovingDotsMinMoveSpeed, MovingDotsMaxMoveSpeed</th>
+				      <td>Float</td>
+                      <td>&gt;0</td>
+                      <td>4.0</td>
+                      <td>the minimal and maximal movement speed of the Dots in Pixels/StimuliRefreshRate,, 
+					  if your computer is fast enough too keep display your 
+					  retinotopy stimuli with your choosen parameter 
+					  configuration then the <strong>StimuliRefreshRate</strong> will be the same 
+					  as the screen refresh rate</td>
+				      </tr>
+				    <tr>
+				      <th scope="row">MovingDotsMinMoveAngle, MovingDotsMaxMoveAngle</th>
+				      <td>Integer</td>
+				      <td>&gt;0</td>
+				      <td>Min = 0, Max = 359</td>
+				      <td>the minimal and maximal 
+					  (random) movement angle of the Dots in degrees</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">MovingDotsNrOfDots</th>
+				      <td>Integer</td>
+                      <td>&gt;0</td>
+                      <td>1000</td>
+                      <td>the amount of active visible 
+					  moving dots per visible Hemispere. If a dot moves over the 
+					  corner of an Hemiphere the it will can be halfway visible 
+					  at the e.g. the left and right side where it moves then 
+					  back in again</td>
+				    </tr>
+				      <tr>
+				      <th scope="row">MovingDotsDotSize</th>
+				      <td>Integer</td>
+                      <td>&gt;0</td>
+                      <td>12</td>
+                      <td>the diameter of a single dot 
+					  in pixels</td>
+				      </tr>
+					  <tr>
+				      <th scope="row">MovingDotsHemifield</th>
+				      <td>String</td>
+                      <td>"Left, "Right" or "Both"</td>
+                      <td>"Both"</td>
+                      <td>defines which Hemifield(s) 
+					  are visible within the active stimuli area</td>
+				      </tr>
+				    <tr>
+				      <th scope="row">MovingDotsPixelFromCenter</th>
+				      <td>Integer</td>
+                      <td>&gt;0</td>
+                      <td>100</td>
+                      <td>the distance between the 
+					  Hemifield (left and/or right) and the center X position on 
+					  the screen in pixels (see red line). E.g. a value of 100 
+					  will make sure that the left and right hemifield are 2*100 
+					  pixels seperated from each other</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">MovingDotsStationairy</th>
+				      <td>Boolean</td>
+                      <td>"true" or "false"</td>
+                      <td>"false"</td>
+                      <td>defines whether the dots should move or hold their initial
+					  randomly choosen position</td>
+				    </tr>
+					  <tr>
+				      <th scope="row">MovingDotsHemiFieldWidth</th>
+				      <td>Integer</td>
+                      <td>&gt;0</td>
+                      <td>320</td>
+                      <td>defines the width of one Hemifield (including the 
+					  <strong>MovingDotsPixelFromCenter</strong> 
+					  parameter, see the yellow square 
+					  in the above picture</td>
+				      </tr>
+				    <tr>
+				      <th scope="row">MovingDotsFieldHemiHeight</th>
+				      <td>Integer</td>
+                      <td>&gt;0</td>
+                      <td>240</td>
+                      <td>this defines the height of 
+					  one Hemifield, see the yellow square in 
+					  the above picture</td>
+				    </tr>				    
+				  </tbody>
+				</table>
+           
+            <h2 id="RetinoMapperOutputExport">RetinoMapper Output 
+			Export</h2>
+			<p>if the
+			<span style="color: rgb(51, 51, 51); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: bold; letter-spacing: normal; line-height: 20px; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none; background-color: rgb(255, 255, 255);">
+			OutputTriggerFrame<span style="color: rgb(51, 51, 51); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; letter-spacing: normal; line-height: 20px; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none; background-color: rgb(255, 255, 255);"> 
+			parameter is set to "<em>true</em>" (only applies for the "Fixation", 
+			"PolarAngle", "Eccentricity" 
+			or "MovingBar" <strong>RetinoPattern</strong> 
+			parameter) then the Experiment manager 
+			automatically saves for each trigger step 
+			the displayed 
+					  retinotopic stimuli  
+					  to a file. This option is only usable 
+			in non-experimental modes where accurate timing is not an critical 
+			issue because enabling this option may dramatically slow down the experiment and may cause that the requested
+					  <strong>StimuliRefreshRate</strong>
+					  is not met! If you want to save 
+			the displayed result for each trigger step to a file then it's 
+			advised is to re-run the configured experiment with the same 
+			parameters set and the set this option to "true".
+			<h3>Output Directory</h3>
+			<p>Exported files are saved (under 
+			subdirectories) inside the Output Directory, which is by default the
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainUserdirectory" target="_blank">
+			Main User Directory</a>\Outputs directory. You can override this 
+			output directory to which 
+			the <em>RetinoMapper</em> object saves these files to, you 
+			can do this by making use of the <em>
+			<a href="Doxygen/class_retinotopy_mapper.html#ae811ef8bd7108d634a97cd1418e5020f">
+			setCustomOutputDirectoryPath()</a></em> slot. Finally the file(s) 
+			are saved to the output directory in a 
+			subdirectory called "RetinotopyMapper" with one or more 
+			subdirectories (for each run) containing the generated files.</p>
+            <h3 id="OutputFrameFormat">Output Frame Format</h3>
+			<p>By using the <strong>OutputFrameFormat</strong> parameter we can 
+			configure the format (and file extension) of the generated files. </p>
+            <h4>DAT format</h4>
+            <p>The custom graphical DAT format is created for users who 
+			need a easy to 
+			access/parse file format and don't mind it's 
+			file size that much. The file first always starts with a unique header (32 bits), containing the value (0xCAFE1234).</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+<code class="language-cpp">#define ARGB_FORMAT_HEADER 0xCAFE1234</code></pre>
+                    </td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <p>After the header the next 8 bytes are reserved for the Image resolution (width (=32 bits) and height (=32 bits)).</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+<code class="language-cpp">quint32 width = image.width();
+quint32 height = image.height();</code></pre>
+                    </td>
+                </tr>
+            </table>
+            <p>&nbsp;</p>
+            <p>Hereafter the actual Image data can be found per pixel as a 
+			<a href="http://doc.qt.io/qt-5/qcolor.html#QRgb-typedef" target="_blank">Qt QRgb type</a>.</p>
+            <h4>QRgb type definition</h4>
+            <p>An ARGB quadruplet on the format #AARRGGBB, equivalent to an unsigned int. The type also holds a value for the alpha-channel. The default alpha channel is ff, i.e. opaque.</p>
+            <p>Below you can find an example C++ file showing how you can open and process an (*.dat) file:</p>
+            
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+<code class="language-cpp">// ARGB_Test.cpp : Defines the entry point for the console application.
+//
+#include "stdafx.h"
+#include <iostream>
+#include <fstream>
+using namespace std;
+#define MAGIC_ARGB_FORMAT_HEADER 0xCAFE1234
+#define ACTIVE_PIXEL 0xFFFFFFFF
+#define INACTIVE_PIXEL 0xFF000000
+#define MAX_VALUE 0xFFFF
+#define MIN_VALUE 0x0000
+struct HeaderData
+{
+	unsigned int magic;
+	unsigned int width;
+	unsigned int height;
+};
+//inline unsigned short swap_16bit(unsigned short us)
+//{
+//        return (unsigned short)(((us & 0xFF00) >> 8) |
+//                ((us & 0x00FF) << 8));
+//}
+inline unsigned long swap_32bit_ulong(unsigned long ul)
+{
+	return (unsigned long)(((ul & 0xFF000000) >> 24) |
+		((ul & 0x00FF0000) >>  8) |
+		((ul & 0x0000FF00) <<  8) |
+		((ul & 0x000000FF) << 24));
+}
+inline unsigned int swap_32bit_uint(unsigned int ui)
+{
+	return (unsigned long)(((ui & 0xFF000000) >> 24) |
+		((ui & 0x00FF0000) >>  8) |
+		((ui & 0x0000FF00) <<  8) |
+		((ui & 0x000000FF) << 24));
+}
+int _tmain(int argc, _TCHAR* argv[])
+{
+	ifstream::pos_type size;
+	char *filename = "1_2_0_8.dat";
+	ifstream file (filename, ios::in|ios::binary|ios::ate);
+	HeaderData *header = new HeaderData();
+	//char pixelBuffer[4];//AARRGGBB,
+	//see http://doc.qt.nokia.com/latest/qimage.html#image-formats
+	unsigned short nPixelSubValue = 0;//2 bytes
+	unsigned long lPixelValue = 0;//4 bytes
+	int nBufferSize = sizeof(lPixelValue);
+	int nRow = 0;
+	int nColumn = 0;
+	
+	if (file.is_open())
+	{
+		size = file.tellg();
+		if (size >= 16)//>=1 pixel
+		{
+			file.seekg (0, ios::beg);
+			file.read((char*)header,sizeof(HeaderData));
+			header->height = swap_32bit_uint(header->height);
+			cout << "The height is " << header->height << endl;
+			header->width = swap_32bit_uint(header->width);
+			cout << "The width is " << header->width << endl;
+			header->magic = swap_32bit_uint(header->magic);
+			cout << "The magic number is " << header->magic << endl;
+			if (header->magic == MAGIC_ARGB_FORMAT_HEADER)
+			{
+				while (!file.eof())
+				{
+					//file.read((char*)pixelBuffer,nBufferSize);
+					file.read((char*)&lPixelValue,nBufferSize);  
+					lPixelValue = swap_32bit_ulong(lPixelValue);
+					 //BBGGRRAA -> AARRGGBB
+					if (lPixelValue == ACTIVE_PIXEL)
+					{
+						lPixelValue = lPixelValue;
+						cout << "X";
+					}
+					else if(lPixelValue == INACTIVE_PIXEL)
+					{
+						lPixelValue = lPixelValue;
+						cout << " ";
+					}
+					else
+					{
+						lPixelValue = lPixelValue;
+						cout << "?";
+					}
+					//For Accessing the sub pixel values A,R,G,B
+					//for (int i=0;i<4;i++) />/{
+					//        nPixelSubValue = (unsigned short)pixelBuffer[i];
+					//        if (nPixelSubValue == MAX_VALUE)
+					//        {
+					//                nPixelSubValue = nPixelSubValue;
+					//        }
+					//        else if(nPixelSubValue == MIN_VALUE)
+					//        {
+					//                nPixelSubValue = nPixelSubValue;
+					//        }
+					//        else
+					//        {
+					//                nPixelSubValue = nPixelSubValue;
+					//        }
+					//}
+					if ((nColumn + 1) == header->height)
+					{
+						cout << endl;
+						nColumn = 0;
+						if ((nRow + 1) == header->width)
+						{
+							nRow = 0;
+							nColumn = 0;
+							break;
+						}
+						else
+						{
+							nRow++;
+						}
+					}
+					else
+					{
+						nColumn++;
+					}
+				}
+			}
+		}
+		else
+		{
+			cout << "Too small file size";
+			file.close();
+			return 0;
+		}
+		file.close();
+	}
+	else
+	{
+		cout << "Unable to open file";
+		return 0;
+	}
+	cout << "End-of-file reached.." << endl;
+	return 0;
+}</code></pre>
+                    </td>
+                </tr>
+            </table>
+            <p>You can also make use of the 
+			<a href="Doxygen/class_image_processor.html">ImageProcessor</a>
+			<em>class</em> to declare an object that can
+			perform some simple (*.dat) file operations.</p>
+            <h4>CDAT format</h4>
+            <p>The CDAT format is like a sequential container for the DAT file(s). The file first always starts with a unique header (32 bits), containing the value (0xCAFE5678).</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+<code class="language-cpp">#define ARGB_FORMAT_HEADER 0xCAFE5678</code></pre>
+                    </td>
+                </tr>
+            </table>
+            <p>
+                <br />
+                After the header the next 8 bytes are reserved for the number of Images the files contains.
+            </p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+<code class="language-cpp">quint32 itemCount;</code></pre>
+                    </td>
+                </tr>
+            </table>
+            <p>After the header the next 8 bytes are reserved for the Image(s) resolution (width (=32 bits) and height (=32 bits)).</p>
+            <table class="codeframe">
+                <tr>
+                    <td>
+                        <pre class="prettyprint">
+<code class="language-cpp">quint32 width = image.width();
+quint32 height = image.height();</code></pre>
+                    </td>
+                </tr>
+            </table>
+            <p>Hereafter the actual Image(s) data can be found per pixel as a 
+			<a href="http://doc.qt.io/qt-5/qcolor.html#QRgb-typedef" target="_blank">Qt QRgb type</a> type (image after image).</p>
+            <p>&nbsp;</p>
+        </div>
+    </div>
+<!--doc-version-default-footer-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
+<!--doc-version-default-footer-end-->
+</body>
+</html>

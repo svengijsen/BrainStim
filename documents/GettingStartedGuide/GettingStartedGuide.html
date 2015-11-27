@@ -3,19 +3,19 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--doc-version-jquery-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
 <!-- JQuery(UI) -->
 <script src="../../js/jquery.min.js" type="text/javascript"></script>
 <script src="../../js/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
 <!--doc-version-jquery-links-end-->
 <!--doc-version-tocify-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
 <!-- Tocify -->
 <link href="../../css/jquery.tocify.css" type="text/css" rel="stylesheet"/>
 <script src="../../js/jquery.tocify.min.js" type="text/javascript"></script>
 <!--doc-version-tocify-links-end-->
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -27,7 +27,7 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
 <title>Getting Started Guide v1.0</title>
 <!--doc-version-title-end-->
 </head>
@@ -35,14 +35,14 @@
     <div class="container-fluid">
         <div class="col-md-9 col-md-offset-3">
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Getting Started Guide</h1>
 			<div class="row">
-				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
-				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
-				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+				<div class="col-md-4"><p><strong>Document version:</strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong>July 2015</p></div>
 			</div>
 		</div>
 	</div>
@@ -83,7 +83,7 @@
                 <table class="codeframe">
                     <tr>
                         <td>
-                            <pre class="prettyprint"><code class="language-bsh"> echo %PROCESSOR_ARCHITECTURE% </code></pre>
+                            <pre class="prettyprint"><code class="language-bsh">echo %PROCESSOR_ARCHITECTURE% </code></pre>
                         </td>
                     </tr>
                 </table>
@@ -314,7 +314,10 @@
                 <h4>The BrainStim User Interface</h4>
                 <ul>
                     <li>We can see that BrainStim automatically adds a line number in front of the text lines. In the right lower corner we can also see the total number of lines and some information about the cursor position inside the document.</li>
-                    <li>It's possible to open and edit multiple files simultaneously, let's try this by opening another file, open the file (&lt;BrainStim directory&gt;BrainStim_32\examples\scripts\AnalogClock.qs) by using the shortcut key combination <kbd>CTRL</kbd> + <kbd>o</kbd> and then browsing and selecting the file.</li>
+                    <li>It's possible to open and edit multiple files 
+					simultaneously, let's try this by opening another file, open 
+					the file (&lt;BrainStim directory&gt;\Examples\BrainStim\QtScript 
+					UserInterfaces\AnalogClock.qs) by using the shortcut key combination <kbd>CTRL</kbd> + <kbd>o</kbd> and then browsing and selecting the file.</li>
                     <li>This file has the extension (*.qs) and is known and detected  as a BrainStim script file. Although the document contains no text styling formatting information (only textual), the document is shown in the new document with a special styling formatting. This is automatically done by the internal document editor because it already knows how to handle this type of file. </li>
                     <li>If we open the <em>Window</em> menu we can see the two opened documents, you can switch between them pressing the <kbd>Ctrl</kbd> + <kbd>TAB</kbd> shortcut key combination or maybe by selecting one from the <em>Window</em> menu. Furthermore if you choose the <em>Tile</em> option the two documents are automatically tiled, alternatively you can move and resize them.</li>
                     <li>Recently opened documents (the last 8 previously opened document(s)) can be quickly reopened using the <em>File</em> menu and then selecting the appropriate document, try this after having closed the opened documents.</li>
@@ -331,13 +334,13 @@
                 <p>Let's first try to open/view and execute a very basic script with BrainStim</p>
                 <ul>
                     <li>Start BrainStim</li>
-                    <li>Open the file (<em>File -&gt; Open</em>... or use the <kbd>Ctrl</kbd> + <kbd>o</kbd> key combination) <em>HelloWorld.qs</em>�found in the directory <em>BrainStim\examples\GettingStartedGuide\BasicScripting\</em>.</li>
+                    <li>Open the file (<em>File -&gt; Open</em>... or use the <kbd>Ctrl</kbd> + <kbd>o</kbd> key combination) <em>HelloWorld.qs </em>found in the directory <em>BrainStim\examples\GettingStartedGuide\BasicScripting\</em>.</li>
                 </ul>
-                <p>You can see again that the plain text is automatically highlighted/styled according to the syntax it contains. Text/code can be commented using the single line comment <em>?//?</em> or the multi-line <em>?/*?</em> and <em>?*/?</em> combination, commented text is not executed by the internal script engine but can be  used for the documentation of script code for a better understanding. In the script three variables are declared (using the <em>var</em>�statement) and a value is assigned to them,  the third variable  is assigned to the calculated sum  of the first two variables. The value of this third variable is then used in a special function called <em>Log()</em> that  appends the provided string parameter to the BrainStim Output Log pane. To clear the Output Log pane right-click on it and select <em>Clear All Output Item(s)</em>. Some times you might want to copy some text  from the output log pane, you can do this by selecting the text to copy  to the clipboard and then right-click on it and select <em>Copy Selected Text</em>. Alternatively you can also use the default operating systems Copy/Paste commands.</p>
+                <p>You can see again that the plain text is automatically highlighted/styled according to the syntax it contains. Text/code can be commented using the single line comment <em>?//?</em> or the multi-line <em>?/*?</em> and <em>?*/?</em> combination, commented text is not executed by the internal script engine but can be  used for the documentation of script code for a better understanding. In the script three variables are declared (using the <em>var </em>statement) and a value is assigned to them,  the third variable  is assigned to the calculated sum  of the first two variables. The value of this third variable is then used in a special function called <em>Log()</em> that  appends the provided string parameter to the BrainStim Output Log pane. To clear the Output Log pane right-click on it and select <em>Clear All Output Item(s)</em>. Some times you might want to copy some text  from the output log pane, you can do this by selecting the text to copy  to the clipboard and then right-click on it and select <em>Copy Selected Text</em>. Alternatively you can also use the default operating systems Copy/Paste commands.</p>
                 <ul>
                     <li>Execute the QtScript code (done by the internal BrainStim script engine) by using the <kbd>F5</kbd> key or by the menu  <em>Document -&gt; Execute</em> command.</li>
                 </ul>
-                <p>The QtScript code of the current active document is then evaluated and executed. You can see  in the Output Log pane when the script started/stopped evaluation and how many time it took to evaluate. We can also see that for each <em>Log()</em> function call there?s one  additional line appended to the Log Output pane.</p>
+                <p>The QtScript code of the current active document is then evaluated and executed. You can see  in the Output Log pane when the script started/stopped evaluation and how many time it took to evaluate. We can also see that for each <em>Log()</em> function call there's one  additional line appended to the Log Output pane.</p>
                 <h4>Functions and includes</h4>
                 <p>Within the BrainStim script (QtScript) you can define functions and includes that allow you to structure this script in a more modular way 
 				<span lang="en-us">read more about this topic in
@@ -346,13 +349,13 @@
                 <p>In a previous exercise we already made use of the additional <em>Log()</em> function to write text to the log output pane which can be very useful for debugging purpose. This  <em>Log()</em> function is made available in the script environment by the BrainStim application to provide a convenient way for the user to easily output  information from the running script to the main BrainStim User Interface. There are more additional convenient functions made available to the script environment by the BrainStim application, as you can see in the following example. </p>
                 <ul>
                     <li>Start BrainStim.</li>
-                    <li>Open the file <em>AdditionalBrainStimFunctions.qs</em>�found in the directory <em>BrainStim\examples\GettingStartedGuide\BasicScripting\</em>.</li>
+                    <li>Open the file <em>AdditionalBrainStimFunctions.qs </em>found in the directory <em>BrainStim\examples\GettingStartedGuide\BasicScripting\</em>.</li>
                     <li>Execute the QtScript code.</li>
                     <li>Take a look at the script and make sure that it makes sense to you.</li>
                 </ul>
                 <p>
                     When we look at the script code we see that it uses some additional functions prepended with the ?<em>BrainStim</em>? namespace (followed/separated by a dot) because these used functions belong to the BrainStim main program. We see some functions that can retrieve absolute directory paths, environment information etc, but also some functions that perform BrainStim UI functionality like <em>find()</em> and<em> closeSelectedScriptFile()</em>. All available additional BrainStim script functions are described in the  <a href="../../References/Script/BrainStimMainApp/Doxygen/class_main_window.html">BrainStim Main Application Scripting Reference</a>. <br />
-                    The <em>Log()</em> function is actually the same as the  <em>BrainStim.write2OutputWindow()</em> function (internally it does exactly the same) but because this functionality it's so commonly used and the <em>BrainStim.write2OutputWindow()</em> function takes a lot of characters(key presses)and time to code that it has been made available to the script engine under the short <em>Log()</em> function signature.
+                    The <em>Log()</em> function is actually the same as the  <em>BrainStim.write2OutputWindow()</em> function (internally it does exactly the same) but because this functionality it's so commonly used and the <em>BrainStim.write2OutputWindow()</em> function takes a lot of characters(key presses) and time to code that it has been made available to the script engine under the short <em>Log()</em> function signature.
                 </p>
                 <h4>Dynamic Object construction and Garbage Collection</h4>
                 <p>The internal BrainStim script engine uses a <a href="http://en.wikipedia.org/wiki/Garbage_collection_(computer_science)" target="_blank">garbage collection</a> method to reclaim memory used by the script objects when they are no longer needed. 
@@ -378,17 +381,17 @@
                 <h4>BrainStim Plug-in Script Bindings</h4>
                 <p>BrainStim has the ability to automatically integrate (load and embed) plug-ins that extend the functionality  of BrainStim (see the <a href="../../References/Plugins/PluginReference.html">plug-in reference</a> for a list of available plug-ins). These plug-ins can  expose their functionality to the BrainStim Script engine, allowing the user to take advantage of these plug-ins  inside the script context. Usually this is done by constructing a object dynamically inside the script from the exposed plug-in script class which we can then make use of. Each plug-in has the possibility to implement its own custom  User Interface that can be opened from BrainStim, normally this User Interface offers a user friendly way  for  accessing and testing the plug-ins functionality. For a c++ programmer it's not difficult to create a new custom BrainStim plug-in to extend the program (if you are interested in this please contact us at sven dot gijsen at maastrichtuniversity dot nl).</p>
                 <p><u>Important</u>: The internal plug-in object, used by the plug-ins User Interface to show its functionality, is in no way connected to the script or any script object created from this plug-ins class! This is because that internal plug-in is only used for testing purpose and easy access it's features but not for a global configuration. Objects that are dynamically created inside the script context from the plug-ins script class are new instances and in no way connected to the plug-ins UI.</p>
-                <p> BrainStim has totally no knowledge of the internal plug-ins implementation and does not define  what or how they should do things, making this plug-in framework  very flexible for developers. A BrainStim installation contains some standard plug-ins that are automatically installed together with BrainStim. These can be installed as a separate plug-in file or build inside the BrainStim executable (these plug-ins are called <em>static</em>).  Plug-ins are grouped in either <em>Device</em>�or <em>Extension</em>�plug-ins. As we already know by now a plug-in can define a custom (script) class from which we can construct new script plug-in objects. Let's first take a look at a plug-ins implemented UI and some of its features:</p>
+                <p> BrainStim has totally no knowledge of the internal plug-ins implementation and does not define  what or how they should do things, making this plug-in framework  very flexible for developers. A BrainStim installation contains some standard plug-ins that are automatically installed together with BrainStim. These can be installed as a separate plug-in file or build inside the BrainStim executable (these plug-ins are called <em>static</em>).  Plug-ins are grouped in either <em>Device </em>or <em>Extension </em>plug-ins. As we already know by now a plug-in can define a custom (script) class from which we can construct new script plug-in objects. Let's first take a look at a plug-ins implemented UI and some of its features:</p>
                 <ul>
                     <li>Start BrainStim.</li>
-                    <li>Make sure that the<em> </em>BrainStim plug-in named <em>KeyBoardPlugin</em>�is available by opening the menu <em>Help -&gt; About BrainStim</em> command. Inside the plug-ins listbox you should see this plug-in listed. It's marked as  <em>Static</em> which means that this plug-in is build into the BrainStim executable and therefore is always available for usage. <em>Dynamic</em> plug-ins are automatically loaded  and embedded  at the startup of BrainStim.  </li>
+                    <li>Make sure that the<em> </em>BrainStim plug-in named <em>KeyBoardPlugin </em>is available by opening the menu <em>Help -&gt; About BrainStim</em> command. Inside the plug-ins listbox you should see this plug-in listed. It's marked as  <em>Static</em> which means that this plug-in is build into the BrainStim executable and therefore is always available for usage. <em>Dynamic</em> plug-ins are automatically loaded  and embedded  at the startup of BrainStim.  </li>
                     <li>Open the <em>KeyBoardPlugin</em> User Interface by opening the menu <em>Plugins -&gt; Device Plugins -&gt; KeyBoardDevice Plugin</em>.</li>
                     <li>This plug-in is capable of capturing key presses/releases, you can try this by clicking on the <em>Start Capture Thread</em> button and press some keys. Play around with the plug-ins dialog features to get an understanding of what the plug-in can do.</li>
                     <li>Click on the <em>Stop  Capture Thread</em> button and Close the plug-ins UI dialog.</li>
                 </ul>
                 <p>We can also construct a new plug-in object from this plug-ins script class, lets try this:</p>
                 <ul>
-                    <li>Open the file <em>BrainStimPluginScriptBindings.qs</em>�found in the directory <em>BrainStim\examples\GettingStartedGuide\BasicScripting\</em>.</li>
+                    <li>Open the file <em>BrainStimPluginScriptBindings.qs </em>found in the directory <em>BrainStim\examples\GettingStartedGuide\BasicScripting\</em>.</li>
                     <li>Examine the script quickly and then execute the QtScript code.</li>
                     <li>Repeat pressing a keyboard key (i.e. key <em>'4') </em> until the script finishes.</li>
                 </ul>
@@ -398,207 +401,35 @@
                     <li>Enter '<em>KeyBoardCapture</em>' in the help search field and press enter. A help document with the name <em>KeyBoard Device script class</em> is found let's open that by clicking on the link. </li>
                 </ul>
                 <p>This help document is a script class reference, that shows all the available signals/slots and member function that can be used inside the script context for this plug-ins script class.  </p>
-                <h2>Creating Experiments with the Experiment Manager</h2>
-                <p>We saw that BrainStim is a rich multiple document editor with an internal script engine that can execute scripts and that it can be extended by the use of custom  plug-ins. However, the  main goal during  development  was to create a platform for editing and executing behavioural experiments for supporting cognitive research. Creating behavioural experiments can be done by using solely the BrainStim script engine but this is pretty difficult for an average user. Therefore a BrainStim plug-in called the <em>Experiment Manager</em> was created to support  more functionality for creating and managing behavioural experiments, see the <a href="../../References/Plugins/ExperimentManagerPlugin/ExperimentManagerPlugin.html">Experiment Manager documentation</a>. In this chapter we?ll take a look at it?s features and how it can be used to create/edit and run custom experiments.</p>
-                <h3>Running an Experiment File from the Experiment Manager Plug-in User Interface</h3>
-                <p>The Experiment Manager User Interface is available through the <em>Plugins -&gt; Extensions Plugins</em>�menu. </p>
-                <ul>
-                    <li>Start BrainStim.</li>
-                    <li>Make sure that the (static) BrainStim plug-in named <em>ExperimentManagerPlugin</em>�exists  by opening the menu <em>Help -&gt; About BrainStim</em> command. </li>
-                    <li>Open the <em>Experiment Manager </em>plug-ins User Interface by opening the menu <em>Plugins -&gt; Extensions Plugins -&gt; Experiment Manager Plugin</em>�command. </li>
-                    <li>Click the<em> Run Experiment File</em>�button to browse, open and execute the <em>PolarAngle.exml</em>�Experiment file found in the <em>BrainStim\examples\GettingStartedGuide\ExperimentManager\RetinotopicMapping\</em>directory.</li>
-                </ul>
-                <p>We should now see a default screen that allows us to start the experiment (by pressing the<em> ?ALT? key</em>) or abort (by pressing the <kbd>CTRL</kbd> + <kbd>a</kbd> combination). After we have started the experiment we should see a <em>Polar Angle Retinotopic experiment</em> running. We can always abort an experiment by pressing the <kbd>CTRL</kbd> + <kbd>a</kbd> key combination or wait until the experiment is finished.</p>
-                <ul>
-                    <li>Abort (<kbd>CTRL</kbd> + <kbd>a</kbd>) the experiment or wait until it has finished and close the <em>Experiment Manager</em> plug-ins User Interface.</li>
-                </ul>
-                <p>The experiment we just executed by the Experiment Manager is completely defined in a Experiment File (*.exml), this is explained later. For now we only need to know that we can run these experiment files from the Experiment Managers plug-ins UI.</p>
-                <h3>Running an Experiment File directly from BrainStim</h3>
-                <p>
-                    Plug-ins like the <em>ExperimentManager</em> plug-in can pre-register specific file types (by extension) in BrainStim (as we mentioned in the beginning of this getting started guide). These registered file types can then be automatically forwarded to the plug-in when loaded and/or executed in BrainStim (without BrainStim interfering). This custom file handling can then be for example a custom widget that contains a rich User Interface that can edit a specific file when it is opened in BrainStim. It could also be an custom file handler that activates when a specific file type gets executed (by using the menu <em>document--&gt;Execute</em> command) in BrainStim. The later custom file (*.exml) execution handler is also implemented by the  <em>Experiment Manager</em> plug-in. <br />
-                    The Experiment Manager plug-in automatically registers the (<em>*.exml</em>) file type extension in BrainStim and implements a custom execution handler for this type of file. This execution handler is called whenever you use the menu <em>Document--&gt;Execute</em> command in BrainStim. Due to this it?s possible to directly start an experiment file after opening this document with BrainStim even without using the  plug-ins User Interface like we saw above. Let's try this:
-                </p>
-                <ul>
-                    <li>Start BrainStim.</li>
-                    <li>Open again the file <em>PolarAngle.exml</em>�Experiment file found in the directory <em>BrainStim\examples\GettingStartedGuide\ExperimentManager\RetinotopicMapping\</em> with BrainStim directly.</li>
-                    <li>Execute the Experiment file directly by using the key <em>?F5?</em> or through the <em>Document -&gt; Execute</em> command.</li>
-                    <li>Press the <em>'TAB'</em> key to start the experiment.</li>
-                    <li>Abort (<kbd>CTRL</kbd> + <kbd>a</kbd>) the experiment or wait until it has finished completely.</li>
-                </ul>
-                <p>We now saw that we can start the same Experiment file directly from within BrainStim by using the execution handler for this file type implemented by the <em>Experiment Manager</em>.</p>
-                <h3>The Experiment File (*.exml)</h3>
-                <p>The <a href="../../References/Plugins/ExperimentManagerPlugin/ExperimentManagerPlugin.html#exml-file-definition">Experiment File�(<em>*.exml</em>)</a> is an sort of <a href="http://en.wikipedia.org/wiki/XML" target="_blank">XML file type</a> that describes an experiment. The Experiment file consist out of different sections that determine the behavior/configuration of the experiment, these sections are automatically processed by the Experiment Manager (a short name for the Experiment Manager used in this document is <em>EM</em>). The below global explanation about these sections may be difficult to understand for an average user (non-programmer), this should not be a problem for the usage, but this explanation together with further examples should make things a little bit more clear. In the future development of BrainStim the EM plug-in will be extended with a user friendly interface to edit these sections.</p>
-                <p>If we take a look at the example Experiment file we can see that after a standard header that there are different elements defined starting with a start-tag ( for example: &lt;section&gt;) and ending with a end-tag�(for example: &lt;/section&gt;) or empty-element tags�(for example: &lt;param1/&gt;). These elements may also include other element, named child-elements. The child-elements�from the &lt;EXML&gt; element have a special meaning, these are:</p>
-                <p>
-                    <strong>&lt;defines&gt;</strong> : Within this section we  define  global Experiment settings.<br />
-                    <strong>&lt;declarations&gt;</strong> : This section declares objects that are automatically constructed and can then be  used in the experiment. These  can be standard Qt objects (available via the script bindings) or objects derived from plug-ins script classes. These objects are then automatically constructed at the initialization of a experiment (and afterwards automatically destructed). They are managed by the EM.<br />
-                    <strong>&lt;connections&gt;</strong>�: The above derived objects have no or less  functionality on their own within the Experiment execution if they don't cooperate with other objects. We use this section  to connect them to other declared objects using the <a href="http://qt-project.org/doc/qt-5.0/qtcore/signalsandslots.html" target="_blank">Qt-style signal and slot�connections</a>. We can also connect them to the EM itself. These connected objects are also automatically disconnected before the experiment has been stopped, we don't have to take care of this.<br />
-                    <strong>&lt;initializations&gt;</strong>�: Often we first need  to  initialize a constructed  objects before we can  actually use them in the  running Experiment, maybe we first need to perform some configuration? This section allows us  to do this.<br />
-                    <strong>&lt;actions&gt;</strong>�: This section contains the actual actions that should be performed when running the Experiment. Inside the <strong>&lt;blocks&gt;</strong>�child-element you can  describe an sequentially Block-design experiment with pre-defined <strong>&lt;parameters&gt;</strong> that are used by an derived object during the execution of the experiment.<br />
-                    <strong>&lt;finalizations&gt;</strong>�: This section allows you to perform some operations before the EM finalizes the experiment.
-                </p>
-                <h4>The Experiment Structure and the Experiment Triggering</h4>
-                <p>
-                    Before the Block-design experiment actually starts the user is presented a screen where the experiment can be started or aborted as we have seen before. After the user  pressed the <em>'TAB'</em> key to start the experiment, the EM executes the experiment defined in the (&lt;actions&gt;, &lt;blocks&gt;) sections (or the <kbd>CTRL</kbd> + <kbd>a</kbd> key combination to abort the Experiment).<br />
-                    Inside the <em>&lt;blocks&gt;</em> section of the <em>&lt;actions&gt;</em> section you can find the sections that define the Experiment Structure  Block(s)/Trial(s)/Internal  and External Trigger(s). This Experiment Structure is used while running the Experiment to step through the different BlockTrial(s) that can be defined with parameter(s) <em>&lt;parameter&gt;</em> for the corresponding object(s) <em>&lt;object&gt;</em>. The Experiment Structure is optimized for the definition of an Block Experiment design. In a block design, two or more conditions are alternated in blocks and trials, these conditions can be defined  by the different parameters for the objects. Each BlockTrial will have a duration of a certain number of i.e. fMRI scans and within each block only one condition is presented. By making the conditions differ in only the cognitive process of interest, the fMRI signal that differentiates the conditions should represent this cognitive process of interest.<br />
-                    We see that there are only 2 Blocks defined in the above  <em>PolarAngle.exml</em>�Experiment file. The first Block that is executed is the one with Block number <strong>0</strong> (<em>see &lt;block_number&gt;0&lt;/block_number&gt;</em>) and  named <strong>Fixation_Block</strong> (<em>see &lt;name&gt;Fixation_Block&lt;/name&gt;</em>)  has an internal Block-ID of <strong>0 </strong>(<em>see &lt;block ID=&quot;0&quot;&gt;</em>). This Block  only takes <strong>1</strong> Trial (the number of repetitions of this Block) <strong></strong>(<em>see &lt;nr_of_trials&gt;1&lt;/nr_of_trials&gt;</em>) and one Trial takes <strong>2</strong> Internal Triggers <strong></strong>(<em>see &lt;nr_of_internal_triggers&gt;2&lt;/nr_of_internal_triggers</em>) and one Internal Trigger takes <strong>1</strong> External Trigger (<em>see &lt;nr_of_external_triggers&gt;1&lt;/nr_of_external_triggers</em>). So what does this exactly mean? If the Experiment Structure is externally triggered by an signal that for example fires each time the fMRI scanner scans one volume (i.e. Tr = 2 Seconds) than the external trigger counter will increment each 2 seconds because the Experiment Manager will then automatically step through the Experiment Structure defined here. Because one Internal Trigger only takes 1 External Trigger in this Block the Internal Trigger is also incremented each 2 seconds (if <em>nr_of_external_triggers</em> would be set to 3 then each Internal Trigger would take 6 (=3*2 seconds in this example) seconds. After 2 Internal Triggers the Trial counter would be incremented if there were more than one Trials defined but because the is not the case it will then advance to the  next Block with  Block Number 1 (=0+1=1), because the Blocks are sequentially activated by their defined Block Number (starting with 0). We now know that the Block with Block Number 0 (the 'Fixation_Block') only takes in total 2 External Triggers, thus 4 Seconds in our example.<br />
-                    The Block with Block Number <strong>1</strong> would thus take (1 External Trigger * 36 Internal Triggers * 6 Trials * 2 seconds per External Trigger) 432 seconds, each Trial  takes 72 seconds. We also see different Parameters defined in the Block definitions. These parameters are linked to the Object with Object ID <strong>1</strong> (<em>see &lt;object ID=&quot;1&quot;&gt;</em>)<em>, </em>this is the Object with the name <strong>RetinoMap_Object_1</strong> derived from the script class <strong>RetinotopyMapper</strong> (see the ObjectID=1 definition in the <em>&lt;declaration&gt;</em> section). The available Parameters from the <strong>RetinotopyMapper</strong> class are described in a <a href="../../References/Plugins/ExperimentManagerPlugin/ExperimentManagerPlugin.html#retinotopic-mapping">detailed explanation here</a>. We see that the parameters have an fixed value within each Block. Parameters that aren't defined automatically use their default value and if they are changed inside the Experiment File they hold/buffer that value until the Experiment ends. Whenever the current Experiment Structure switches to a new  BlockTrial (Block or Trial) the defined parameter values are parsed and used in the experiment. By implementing a Experiment like the above we have an declarative way of defining different conditions with parameters in a block design Experiment that is defined by our Experiment Structure. The parameter values are now statically defined (they have fixed values) in the Experiment File, later on we'll see how we can dynamically change them inside our  script environment. When there are no more Block to run the Experiment is automatically finalized (see the <em><strong>&lt;</strong>finalizations<strong>&gt;</strong></em> section) and hereafter stopped. We can also always manually abort the Experiment when its running by pressing the <kbd>CTRL</kbd> + <kbd>a</kbd> (for <strong>A</strong>bort) key combination.
-                </p>
-                <p>
-                    <strong><em>Important:</em></strong><br />
-                    Sometimes we also want to be able to increment the External Trigger (see above) manually for testing purpose, we can do this with   the available key combination <kbd>CTRL</kbd> + <kbd>t</kbd> (for <strong>T</strong>rigger), for each of this key combination press the External Trigger counter increments one step.
-                </p>
-                <p>In the above example we imagined that the Experiment would be Triggered externally by a signal that would be synchronized with a fMRI scanner Trigger. But in real this Experiment is triggered automatically by a object derived from a <em>TriggerTimer</em> class each 1000 milliseconds, next we'll see how this is done.</p>
-                <h4>Connecting Experiment Objects</h4>
-                <p>
-                    The declared objects in the <em>&lt;declarations&gt;</em> section of the Experiment file have an unique &lt;object ID=&quot;&quot;&gt;�tag that is used in all of the remaining  sections to address to that object. In the experiment file, in the declarations section, we see that an object named <em>Timer_Object_1</em>, with ID number 0, is declared and derived from the <em><a href="../../References/Script/ExperimentManagerPlugin/Doxygen/class_trigger_timer.html">TriggerTimer</a></em>�script class (this class is made available by the EM). This TriggerTimer object is then used in the Experiment for the automatic triggering of the experiment by connecting its <em>timeout()</em> signal for triggering the experiment. We can see this in the <em>&lt;connections&gt;</em> section, the TriggerTimer <em>timeout()</em> signal is here connected to a <a href="../../References/Script/ExperimentManagerPlugin/Doxygen/class_g_l_widget_wrapper.html">incrementExternalTrigger()</a> slot of the <em>RetinotopyMapper</em>�class derived object. We use this <em>TriggerTimer</em>�class derived object because it can perform very accurate timing and triggering (by emitting a signal) other objects. <br />
-                    We then also initialize (&lt;initializations&gt;) the <em>TriggerTimer</em>�object with the<em> startTimer(1000)�</em>function before the Experiment actually starts. This function initializes and starts the <em>TriggerTimer</em> object which then signals/emits the<em> timeout()</em>�signal each 1000 milliseconds. When the Experiment stops or has been aborted the <em>Timer_Object_1</em> is stopped automatically automatically because of the slot <em>stopTimer()</em> is then called (see the <em>&lt;finalizations&gt;</em> section).<br />
-                </p>
-                <h4>Experiment Types</h4>
-                <p>The above example runs an Retinotopic Polar Angle mapping experiment. </p>
-                <p>The second object it declares is named <em>RetinoMap_Object_1</em>, with ID number 0, this object is derived from the <em>RetinotopyMapper</em> script class. It?s purpose is to support the calculation and drawing (with the use of OpenGL) for various kind of Retinotopic visual stimuli like the Polar Angle. At the moment there are only 2 classes available in the Experiment Manager plug-in of which you can derive from for the presentation of  stimuli, these are:</p>
-                <ol>
-                    <li><strong>Retinotopic mapping</strong> experiments�which make use of the <em>RetinotopyMapper</em> class, see the <a href="../../References/Plugins/ExperimentManagerPlugin/ExperimentManagerPlugin.html#retinotopic-mapping">detailed explanation</a>.</li>
-                    <li><strong>QML based</strong> experiments which make use of the <em>QML2Viewer</em> class, this is explained later (see the below <a href="#qml-based-experiments">explanations</a>).</li>
-                </ol>
-                <h3>Block-design and Retinotopic mapping Experiments</h3>
-                <p>The Block-design definition inside the (&lt;actions&gt;, &lt;blocks&gt;) sections defines one or more experiment blocks (for example: &lt;block ID=&quot;0&quot;&gt;), each block again has an unique ID. Each block is defined by the elements:</p>
-                <p>
-                    <strong>&lt;name&gt;</strong>�: With this element you can define the name for the block. At the moment this parameter is not yet used by the EM.<br />
-                    <strong>&lt;block_number&gt;</strong> : This element defines the block number and thus when the block is active. All numbering inside the EM starts counting at 0. Please note that the position of the block sections and their ID do not define when the block is active.<br />
-                    <strong>&lt;nr_of_trials&gt;</strong> : This element defines the number of trials for this block. For each trial all defined block settings inside the block element are used. Each trial can be triggered by one or more other object(s) (i.e. this could be a timer like the example experiment but also a special hardware port that can emit a signal). This other object then defines how fast it triggers the EM by connecting its signal to the incrementExternalTrigger()�slot of the EM. The EM then processes these incoming triggers (signals) automatically by changing the state of the experiment structure automatically. This experiment structure is defined by the current block, trial and internal trigger number. <br />
-                    <strong>&lt;nr_of_internal_triggers&gt;</strong> : This element defines after how many internal triggers the EM should switch to the next trial for the block (or next block if there are no more trials, or end the experiment if there are no more blocks defined).<br />
-                    <strong>&lt;nr_of_external_triggers&gt;</strong> : This element defines after how many external triggers received by the EM (by invoking the slot incrementExternalTrigger()) the internal trigger counter should be incremented with one. Normally this is element is set to value ?1? making the internal and external trigger counter increment synchronously.<br />
-                    <strong>&lt;object ID=&quot;&lt;ID&gt;&quot;&gt;{&lt;parameters&gt;}</strong> : The parameters section defines all the parameter(s) for the experiment object (with Object ID=&lt;ID&gt;). These parameters can here be defined for each block section. These parameters are then automatically parsed and used by the experiment object in our example case by, the object with ID=1, the <em>RetinotopyMapper</em>�object.
-                </p>
-                <p>We see that each parameter has an unique name and a corresponding value. In the example experiment file there?s a parameter named <em>RetinoPattern</em>. This parameter defines which type of Retinotopic mapping visual pattern is shown on the screen for the current block. The first block (with block_number�0) shows an fixation cross (<em>fixation</em>) on the screen, the second block shown a polar angle (<em>PolarAngle</em>) Retinotopic pattern on the screen. All parameter names are case insensitive and hold (buffer) their last set value during the whole experiment and therefore you do not need to define the values for them if they don?t change.</p>
-                <h3>Running an Experiment File from script</h3>
-                <p>Another way to run Experiment files is to construct an EM in the  script context and then control that EM object in the script to execute the  Experiment. The EM plug-in defines a script class which we can then use to construct a new EM script object. Running experiments like this gives us much more flexibility and control over the EM object and thus the experiment. The <a href="../../References/Plugins/ExperimentManagerPlugin/ExperimentManagerPlugin.html">EM script class</a> defines several public signals and slots we can access and use inside the script context for more control and functionality:</p>
-                <ul>
-                    <li>Open the file <em>RetinotopicMapping.qs</em>�found in the directory <em>BrainStim\examples\GettingStartedGuide\ExperimentManager\RetinotopicMapping\</em>.</li>
-                    <li>Quickly examine the QtScript code.</li>
-                </ul>
-                <p>
-                    The script first constructs a EM object (<em> = new ExperimentManager();</em>) needed for running the Experiment. It then makes use of a BrainStim script function (<em>getActiveDocumentFileLocation()</em>) to retrieve the directory path of the script file, the variable is later used to create a directory pat to the Experiment File (*.exml) which contains the configuration of the Experiment for the EM. It then  defines some local script functions that are  connected to some EM signals for further integration within the script context inside the function (<em>ConnectDisconnectScriptFunctions()</em>). <br />
-                    In the  end of the script we set the Experiment File directory path by using the EM Slot <em>setExperimentFileName()</em>�(see code at the end of the document) and then run the Experiment with <em>runExperiment()</em>. The <em>CleanupScript()</em> function is invoked when the EM signals that it has been stopped in the function <em>ExperimentStateChanged()</em> and this will then nicely follow the guidelines for garbage collection and exit/release the script.
-                </p>
-                <h4>Experiment states</h4>
-                <p>The EM can pass different states after it has been constructed because it works like a sort of <a href="http://en.wikipedia.org/wiki/State_machine" target="_blank">state machine</a>�for running experiments. A signal named <em>ExperimentStateHasChanged()</em> is emitted each time after the EM state changes. You can connect this signal to a script function, as the example does. By doing this you have more control and information about the EM. The example makes use of this option to automatically call the <em>CleanupScript()</em>�function after the state changes to <em>ExperimentManager_Stopped</em>. The documentation for the different Experiment Manager states is available <a href="../../References/Script/ExperimentManagerPlugin/Doxygen/class_experiment_manager.html" target="new">here</a>.</p>
-                <p>The experiment can be stopped (or aborted) by several reasons, the user can normally abort it by pressing <kbd>CTRL</kbd> + <kbd>a</kbd> when it has been started or when something goes wrong or when the Experiment has been completely executed.</p>
-                <h3>QML based Experiments</h3>
-                <p>An huge advantage of using a Retinotopic mapping experiment�object is it?s visual presentation speed, accuracy and flexible parameter configurability. Aside Retinotopic experiments there?s also a need for a more rich featured experiment type that allows the presentation various content like text, movies, sounds, pictures and easy input from keyboard and mouse. For this purpose the EM also supports the usage of <a href="http://qt-project.org/doc/qt-5.0/qtdoc/gettingstartedqml.html" target="_blank">QML-based</a> experiments (*.qml)�files, that contains QtQuick2 code, by implementing the <strong><em>QML2Viewer</em></strong> experiment object (instead of the <em><strong>RetinotopyMapper</strong></em>�object). In the &lt;declarations&gt; section of the Experiment File we can then also declare an object of this object class and use it's features in the experiment. We can use this <strong><em>QML2Viewer</em></strong> experiment object directly by executing one of it's input (*.qml) files (a QtQuick2 content file) by BrainStim or by the Experiment Managers UI, let's try this:</p>
-                <ul>
-                    <li>Start BrainStim.</li>
-                    <li>Make sure that the static BrainStim plug-in named <em>ExperimentManagerPlugin</em>�exists  by opening the menu <em>Help -&gt; About BrainStim</em>.</li>
-                    <li>Open the <em>Experiment Manager plug-ins User Interface</em> by opening the<em> Plugins -&gt; Extensions Plugins -&gt; Experiment Manager</em> Plugin�menu option.</li>
-                    <li>Click the <em>Run QtQuick2 File</em>�button and browse to open and execute the<em> Helloworld.qml</em>�QtQuick2 file found in the directory <em>BrainStim\examples\GettingStartedGuide\ExperimentManager\QtQuick2\</em> directory<em>, </em>please remember that you can always abort the experiment with the <kbd>CTRL</kbd> + <kbd>a</kbd> key combination.</li>
-                    <li>Close the EM plug-in User Interface.</li>
-                </ul>
-                <p>The EM first tried to parse the files QtQuick2 code and execute this QML-based  file. As a result we saw a screen presented with a yellow background,  a  &quot;Hello world&quot; text and two filled rectangles (red and blue). Again we can also execute this  file  directly from within BrainStim because the EM also installed a custom execution handler for this type of file (*.qml), let's try this:</p>
-                <ul>
-                    <li>Open the<em> </em> <em>Helloworld.qml</em> file again but now directly from within BrainStim.</li>
-                </ul>
-                <p>We can now see the content of the file. It?s plain  text  containing some declarations (the QtQuick2 code).</p>
-                <ul>
-                    <li>Examine the file content, and try globally understand how the documents content declaratively defines everything we just saw when we executed the document. Further explanation of the QtQuick2 syntax and how you can make use of it  is not fully explained in this getting started guide. In the <em>BrainStim\examples\Tutorials\</em> you can find tutorials about some  features and about how you can make use of these QtQuick2 files for creating your own experiments.  If you are further interested in reading/learning  this a good practice is to start  reading the online <a href="http://qt-project.org/doc/qt-5.0/qtquick/qtquick-quickstart-basics.html" target="_blank">Qt documentation</a> about this.</li>
-                </ul>
-                <h4>Editing QML-based files with Qt Creator</h4>
-                <p>Qt offers an extensive Integrated Development Environment (IDE) package for designing Qt based applications; the <a href="http://qt-project.org/doc/qtcreator-2.8/" target="_blank">Qt Creator IDE</a>. This package also contains the <a href="http://qt-project.org/doc/qtcreator-2.8/creator-using-qt-quick-designer.html" target="_blank">Qt Quick designer</a>. This is a textual and easy WYSIWYG�(What-You-See-Is-What-You-Get) visual editor for QML files with QtQuick2 content. It allows you to rapidly design and build Qt Quick (*.qml files) components from scratch. It is completely integrated into Qt Creator and works seamlessly with the QML code editor. Both modes (design and edit) can be used according to requirements. You can download the IDE <a href="http://qt-project.org/downloads#qt-creator" target="_blank">here</a>. See a <a href="http://www.youtube.com/watch?v=k5gMAMSz77Q" target="_blank">YouTube movie</a>�demonstrating some of the basic Qt Quick editing features using Qt Creator. The installation of QtCreator is pretty easy, let's try this:</p>
-                <ul>
-                    <li>Browse to the QtCreator <a href="http://qt-project.org/downloads#qt-creator" target="_blank">download page</a> and download the latest installer for your platform.</li>
-                    <li>Execute the installer and install QtCreator using the default installation options.</li>
-                    <li>Launch Qt Creator.</li>
-                    <li>Open the <em>Helloworld.qml</em> file from<em> the directory BrainStim\examples\GettingStartedGuide\ExperimentManager\QtQuick2\ </em>from QtCreator. Go to the <em>Design mode</em> (left toolbar, third button) and notice the error that pop-ups. This is because  BrainStim by default can't edit QtQuick2 content in design mode, for this it needs an additional extension. We can add this extension, first we close QtCreator, then we download needed extension file (<em>qml2puppet.exe</em>) from <a href="http://docs.google.com/file/d/0B90qhWJ3-8NZWEVhdmJqdkZBWkE/edit?usp=sharing">here</a>. Once downloaded make sure to copy the file to the QtCreator's <em>bin</em> directory (<em>C:\Qt\qtcreator-&lt;version&gt;\bin</em>).</li>
-                    <li>Start QtCreator again and retry to view the <em>Helloworld.qml</em> file within the <em>Design mode</em>, please be patient because this can take some time.</li>
-                    <li>Although we can now open the <em>Design mode</em> for QtQuick2 files we see that it's pretty slow and it still complains about an <em>invalid property name</em>, we'll fix these issues by creating and editing a QtQuick2 project file. </li>
-                    <li> Close QtCreator again.</li>
-                </ul>
-                <p>We'll now see how we can  use a custom BrainStim script to create automatically a QtQuick2 project file that can be loaded/edited by QtCreator. Furthermore we'll see how we then can access  BrainStim from QtCreator for running the QtQuick2 content.</p>
-                <ul>
-                    <li>Start BrainStim.</li>
-                    <li>Open the script file <em>CreateQtCreatorProject.qs</em> from the directory <em>BrainStim\examples\GettingStartedGuide\ExperimentManager\QtQuick2\</em>. This script can create a QtQuick2 project file that can be opened in QtCreator.</li>
-                    <li>Execute the script. </li>
-                    <li>First the script opens a dialog where you can browse and select a QtQuick2 (*.qml) file that is going to be the main source file for the new QtQuick2 project. Browse to the <em>BrainStim\examples\GettingStartedGuide\ExperimentManager\QtQuick2\</em> directory and select the <em>Helloworld.qml</em> file.</li>
-                    <li>Hereafter the script pop-ups another dialog where you can define where the QtQuick2 project file (*.qmlproject) should be saved. Browse to the same directory as the above input QtQuick file and enter <em>HelloWorld_project.qmlproject</em> for the file name.</li>
-                    <li>
-                        The script finishes and in the directory you can see that the above QtQuick2 project file has been automatically created for you, open this file in BrainStim and examine its contents. We see that this file defines a file path to an QtQuick2 input file and some directory paths that can contain 	content (Qml,
-                        JavaScript and Image Files) for the QtQuick2 project.
-                    </li>
-                    <li>Not only  the internal QtScript engine can be extended by using plug-ins like we saw before but also the internal QML/QtQuick2 engine of BrainStim. By default there are already some plug-ins installed with BrainStim and it's important to include this BrainStim QML plug-in directory to the QtQuick2 project to make sure that new types and functionality from the plug-ins are then known by QtCreator when opening a QtQuick2 project file. For defining this QML plug-in path we can make use of the    parameter <em>importPaths</em> inside the QtQuick project file, we see that the script  already automatically defined this for us. </li>
-                    <li>Close the <em>HelloWorld_project.qmlproject</em> file in BrainStim and open it again but now by using QtCreator. You might also want to set QtCreator to automatically open future QtQuick2 projects (<em>*.qmlproject</em>) files  for you, by setting it's file extension type association (see an <a href="http://support.microsoft.com/kb/307859/en-us" target="_blank">explanation</a> for doing this in Windows).</li>
-                    <li>Notice how the QtQuick2 project automatically includes additional files from the same directory. You can see this in the <em>Projects</em> pane (Top Left) file tree, use this pane to open (double click) the <em>Helloworld.qml</em> file.</li>
-                    <li>If we now switch to the <em>Design mode</em> we'll see the file presented in a WYSIWYG�(What-You-See-Is-What-You-Get) visual editor and by using our mouse we can simply select and edit (see also the property pane on the right) the QtQuick2 file.</li>
-                    <li>The (visual) editing features of QtCreator are really convenient if we need to edit the QtQuick2 contents. We can then already preview the QtQuick2 content visually but if we want to test how the QtQuick file really behaves we should executes the file. Let's try this in QtCreator by pressing the <kbd>CTRL</kbd> + <kbd>r</kbd> (Run) key combination or the <em>Run</em> button (Bottom Left pane). We can see that QtCreator executes the QtQuick content inside a window that pop-ups. We can even set breakpoints in the editor and use this for debugging the QtQuick2 content.</li>
-                </ul>
-                <p>We can also make use of BrainStim to execute QtQuick content from within QtCreator, before we can do this we should register BrainStim in QtCreator as an external tool that can execute QtQuick2 files, let's try this:</p>
-                <ul>
-                    <li>Open the menu <em>Tools --&gt; External --&gt; Configure...</em> from within QtCreator.</li>
-                    <li>Select <em>Qt Quick</em> from the tree view pane, here you can already see the tools that are registered for editing/executing QtQuick files.</li>
-                    <li>Click the button <em>Add-&gt;Add Tool, </em>double click on the newly created item the tree view pane and rename the item to something like <strong>BrainStim (execute QtQuick2)</strong>.</li>
-                    <li>
-                        Complete the configuration by entering the following settings:
-                        <ul>
-                            <li><strong>Description</strong>: a description like:<em><strong> Executes the current active QtQuick2 document with BrainStim</strong></em><strong></strong></li>
-                            <li><strong>Executable</strong>: the file path to the BrainStim executable (without the extension!), like <em><strong>C:\Program Files (x86)\BrainStim\BrainStim</strong></em></li>
-                            <li><strong>Arguments</strong>: the arguments to pass to the BrainStim executable, we'll pass the QML document path using the BrainStim -f (file(s)) command line switch (as explained in this guide) and the -e (execute) command line switch to make sure that it executes directly, like <em><strong>-f %{CurrentDocument:FilePath} -e</strong></em></li>
-                            <li><strong>Working directory</strong>:the working directory, we'll use the documents directory for this, like <em><strong>%{CurrentDocument:Path}</strong></em></li>
-                            <li><strong>Output</strong>: Select the <em><strong>Show in Pane</strong></em><strong></strong> option</li>
-                            <li><strong>Error output</strong>: Select the <em><strong>Show in Pane</strong></em><strong></strong> option</li>
-                            <li><strong>Modifies current document</strong>: Leave this setting <strong><em>unchecked</em></strong>.</li>
-                            <li><strong>Input</strong>: Leave this field empty</li>
-                        </ul>
-                    </li>
-                    <li>Press <em>Apply</em> and <em>OK</em> to close the settings dialog.</li>
-                    <li>Test the newly registered external tool by executing the menu <em>Tools --&gt; External --&gt; Qt Quick --&gt; BrainStim (execute QtQuick2)</em> command. The current active QtQuick2 document should now open in BrainStim and automatically execute.</li>
-                    <li>
-                        Notice that BrainStim always executes the QtQuick2 content in a frameless full screen window.<br />
-                    </li>
-                </ul>
-                <h4>Access QML based files from an EXML based Experiment File</h4>
-                <p>We can also make use of the  <em>QML </em> <em>(QtQuick2 content) based </em>files  from within <em>EXML based</em> Experiment files. This collaboration creates a huge advantage because we can then combine the advantages (speed, plug-in  flexibility and block designs features) from the <em>Experiment files (*.exml files)</em> together with the advantages (rich, fast and easy to setup content) of <em>QtQuick2 (*.qml files)</em> within the <em>Experiment Manager</em>. Let?s take a look at an example of how we can achieve this:</p>
-                <ul>
-                    <li>Start BrainStim.</li>
-                    <li>Open the<em> BlockDesign1.exml</em>�Experiment file found in the  <em>BrainStim\examples\GettingStartedGuide\ExperimentManager\QtQuick2\ </em>directory.</li>
-                    <li>Examine the experiment file content, notice how a object (named <em>QML2Viewer_Object_1</em>) is derived from the <em>QML2Viewer</em> class is declared (line 20) and used in the experiment for the (visual and auditory) presentation. There are 3 blocks  defined that each define a <em>QmlMainFilePath</em> parameter for the <em>QML2Viewer_Object_1</em> object. This parameter sets the input QtQuick2 (*.qml) file for the <em>QML2Viewer_Object_1</em> object. We can view these different QtQuick2 files with BrainStim or QtCreator as explained before.</li>
-                    <li>To see what these files (<em>Acai.qml</em>, <em>Banana.qml</em> and <em>Fixation.qml</em>) describe let's open them separately in BrainStim and execute them directly (from  BrainStim).</li>
-                    <li>Inside the Experiment file we also see an <em>Timer_Object_1</em> object (derived from the <em>TriggerTimer</em> class) declared (line 28). This timer is connected (line 37) to the <em>incrementExternalTrigger()</em> slot of the <em>QML2Viewer_Object_1</em> object which then leads to an change in the experiment structure (as mentioned before). We can also see how the experiment structure is defined, there are 3 blocks defined that take in total 2 external triggers. Because the <em>Timer_Object_1</em> object fires each second (line 54) the total experiment takes 6 seconds, and one block 2 seconds.</li>
-                    <li>Execute the experiment file and press the <em>'Alt'</em> key to start the experiment and notice what happens.</li>
-                    <li>Press the<em> ?Alt?</em> key to start the experiment file and observe what happens, wait until the experiment automatically finishes.</li>
-                    <li>We just saw an experiment that combined the advantages of the  <em>QML </em> <em>(QtQuick2 content) based </em>files  and the  <em>EXML based</em> Experiment files. By doing it like this we combined the (visual and auditory) presentation defined inside the  QtQuick2 content together with the Experiment Structure inside the Experiment file.</li>
-                </ul>
-                <p>The above example shows how we can setup an experiment by combining the Experiment Structure with the Experiment Presentation. This works fine but we might want to improve the experiment to:</p>
-                <ol>
-                    <li> Make sure that all the (visual and auditory) experiment presentation, as defined in the various QML files, is defined in only one single QML file (instead of three files). This has some important  advantages, like that if we need to change the experiment presentation we only need to edit  one file. Furthermore  because (like in this example) some QML  files are often almost identical  (compare the <em>Acai.qml </em>and <em>Banana.qml file</em>), using one file that reuses functionality for different presentation states makes it less error-prone and more modular in use, often this also speeds up the execution of a QML file. A disadvantage might be that the code looks a bit more complex to understand...</li>
-                    <li>Add an visual component to the Presentation (QML file) that show us the current state of the experiment structure while the experiment is running, we'll use this component for  feedback and testing purpose.</li>
-                    <li>Start the Experiment file from  a script that creates a <em>ExperimentManager</em> object  and uses this object to dynamically load and execute the Experiment file (*.exml). Using this  script  then gives us the advantage of having more control over the experiment and all of it's objects, which is  convenient because this gives us more direct access, flexibility and control over the experiment. In our example the script will add support for:  </li>
-                </ol>
-                <ul>
-                    <li>controlling the presentation (QML file) by invoking a function defined inside the QML file that can change the experiment presentation stimuli.</li>
-                    <li>the randomization  of an array defined in the script that is used to determine which stimuli presentation should be activated (Acai/Banana or fixation) in a BlockTrial. </li>
-
-                    <li>controlling the presentation (QML file) by invoking a function defined inside the QML file that can change the visual experiment structure presentation.</li>
-                    <li>making use of the Output Log Pane capabilities of BrainStim from the script to extract various experiment information while it's running.</li>
-            	</ul>
-                <p>The above improvements result in a experiment that consists out of 4 files, found in the  <em>BrainStim\examples\GettingStartedGuide\ExperimentManager\QtQuick2\ </em>directory, these are:</p>
-                <ol>
-                    <li><em>FruitsExperiment.qs</em>, the main script file that can start and takes control over the Experiment execution.</li>
-                    <li><em>BlockDesign2.exml</em>,  the experiment file that defines the  Experiment structure and the Experiment configuration.</li>
-                    <li><em>Fruits.qml</em>, the main QML  file that defines the Experiment presentation (visual and auditory), it also implements a interface by describing one or more function(s) that can be executes from a script file for the control of the presentation state.</li>
-                    <li><em>ShowExperimentStructure.qml</em>, another QML file that defines a component which is embedded/used and used in <em>Fruits.qml</em> that can be used to visually present the current Experiment Structure. This file also implements a interface by describing a function that can be used from the main script to control the Experiment structure presentation to the screen.</li>
-                </ol>
-                <p>All four files can be executed separately directly by BrainStim, but all the important  experiment control takes place in the script and that's why we should now use the script file to start and test the experiment. The script (<em>FruitsExperiment.qs</em>)  dynamically creates a <em>ExperimentManager</em> object that loads and executes the Experiment file (<em>BlockDesign2.exml</em>) which declares a <em>QML2Viewer</em> object for the execution of the QML file (<em>Fruits.qml</em>) that embeds another QML file (<em>ShowExperimentStructure.qml</em>) for the presentation of the Experiment Structure. Whenever the Experiment Structure changes this is automatically signalled to the script (signal/slot connections) which is then  responsible for the control over the presentation state made available by the interface described in the QML files. The choose of presentation state is selected from a pre filled and randomized Array that contains the states (Acai or Banana) for the experiment presentation. The Experiment Structure defined in the Experiment file (<em>BlockDesign2.exml</em>) now defines only two blocks and uses only one QML file. The first block is the fixation block and lasts for 5 external triggers (again 5 seconds for this case). The second block lasts for 10 trials of 2 external triggers, thus 10 trials of 2 seconds. Each trial of the second block is then automatically controlled by the script that uses an randomized array that defines whether the experiment should present the Acai or Banana state. The script also takes control over the visual presentation of the Experiment Structure.</p>
+                <h2>The Experiment Manager plug-in</h2>
+                <p>We saw that BrainStim is a rich multiple document editor with an internal script engine that can execute scripts and that it can be extended by the use of custom  plug-ins. However, the  main goal during  development  was to create a platform for editing and executing behavioural experiments for supporting cognitive research. Creating behavioural experiments can be done by using solely the BrainStim script engine but this is pretty difficult for an average user. Therefore a BrainStim plug-in called the <em>Experiment Manager</em> 
+				was created to support more functionality for creating and 
+				running behavioural experiments. <strong>Important!</strong> 
+				It's advised to read the document
+				<a href="../ExperimentManagerPlugin/CreatingExperiments.html">
+				Creating Experiments with the Experiment Manager</a> to get 
+				started!</p>
                 <h2>How to proceed...</h2>
-                <p>Due to the huge capabilities of BrainStim this getting started guide might be difficult to fully understand immediately, this is not a  problem. It's important to gain a general idea of how BrainStim works and  what it's main capabilities are. If you then want to give it a try you could then start by copying a example from this getting started guide or from one of the <a href="..\index.html">tutorials</a> found in the <em>BrainStim\examples\Tutorials</em> directory. Off course you can also always contact us at sven dot gijsen at maastrichtuniversity dot nl for feedback and questions.</p>
+                <p>Due to the huge capabilities of BrainStim this Getting Started guide might be 
+				somehow difficult to fully understand immediately, this is not a  
+				real problem. It's important to gain a general idea of how BrainStim works and  what it's main capabilities are. If you then want to give it a try you could then start by 
+				changing an example from this Getting Started Guide or proceed 
+				with one of the 
+				<a href="../Examples/AdvancedExamples.html" target="_blank">Advanced 
+				Examples</a> found in the <em>&lt;BrainStim Installation Directory&gt;\examples\BrainStim\Advanced\</em> directory. 
+				<br />
+				Off course you can always contact us at sven dot gijsen at 
+				maastrichtuniversity dot nl for feedback and questions!</p>
                 <p>&nbsp;</p>
             </div>
         </div>
     </div>
 <!--doc-version-default-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
 	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
 <!--doc-version-default-footer-end-->
 <!--doc-version-tocify-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
 <script type="text/javascript">$(function() {
 var toc = $("#toc").tocify({selectors: "h2,h3,h4"}).data("toc-tocify");
 toc.setOptions({ smoothScroll: false, showEffect: "none" });

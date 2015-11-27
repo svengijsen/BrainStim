@@ -1,5 +1,5 @@
 //doc-version-brainstimrelease-begin
-//Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1
+//Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1
 var currentBrainStimRelease = '1.0.0.1';
 //doc-version-brainstimrelease-end
 
@@ -29,7 +29,7 @@ function BrainStimDocuments_Information()
 	this.DocumentAuditing[nCurrentDocIndex++] = ['ExtensionPluginTemplate.html','Extension Plug-in Template','1.0','July 2015','Sven Gijsen'];	
 	this.DocumentAuditing[nCurrentDocIndex++] = ['BrainStim_QMLExtensions.html','BrainStim QML Extensions Plug-in','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['Development.html','BrainStim Development','1.0','July 2015','Sven Gijsen'];
-	this.DocumentAuditing[nCurrentDocIndex++] = ['ExamplesAndTutorials.html','Examples and Tutorials','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['AdvancedExamples.html','Advanced Examples','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['RetinoTopicMappingOutput.html','Retinotopic Mapping output files Tutorial','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['SettingsDialog.html','Settings Dialog','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['QtLibraryScriptBindings.html','Qt Library Script Bindings','1.0','July 2015','Sven Gijsen'];
@@ -49,11 +49,15 @@ function BrainStimDocuments_Information()
 	this.DocumentAuditing[nCurrentDocIndex++] = ['DefaultPlugins.html','Default Plugins','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['OsUserLogins.html','Operating System Users','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['CreatingExperiments.html','Creating Experiments with the Experiment Manager','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['RetinoMapper.html','RetinoMapper Class','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['QML2Viewer.html','QML2Viewer Class','1.0','July 2015','Sven Gijsen'];
 	
 	
 	
-	
-	
+	//Additional dynamic documentation information
+	this.DocumentInformation = [];//BrainStimDocuments_CreateArray(2, 2); //Default constructor!
+	this.DocumentInformation[0] = ["QtCreatorDownloadDir", "<a href=\"http://download.qt.io/official_releases/qtcreator/3.5/3.5.1/\" target=\"_blank\">here</a>"];
+	this.DocumentInformation[1] = ["QtCreatorDownloadName", "qt-creator-opensource-windows-x86-3.5.1.exe"];
 }
 
 BrainStimDocuments_Information.prototype.GetStrippedFileName = function (strFileUrl)//var strFileUrl=window.location.pathname;
@@ -82,14 +86,31 @@ function BrainStimDocuments_CreateArray(length)
                     	 //  new Array(2)]
     var a = new Array(length || 0);
     if (arguments.length > 1) 
-	{
+    {
         var args = Array.prototype.slice.call(arguments, 1);
         for (var i = 0; i < length; i++) 
-		{
+	{
             a[i] = BrainStimDocuments_CreateArray.apply(this, args);
         }
     }
     return a;
+}
+
+BrainStimDocuments_Information.prototype.GetDocumentInformation = function (strKey)
+{
+	//alert('GetDocumentInformation');
+	var nDocIndex = -1;
+	if ((strKey===undefined) || (strKey==''))
+		return "<invalid key>";
+	var nDocumentInfoCount = this.DocumentInformation.length;
+	for (var i=0;i<nDocumentInfoCount;i++) 
+	{
+		if(this.DocumentInformation[i][0] == strKey)
+		{
+			return this.DocumentInformation[i][1];
+		}
+	}
+	return "<undefined>";
 }
 
 BrainStimDocuments_Information.prototype.GetDocumentIndex = function (strFileUrl)//var strFileUrl=window.location.pathname;

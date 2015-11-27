@@ -12,7 +12,7 @@
 				<section title="Development" ref="./documents/Development/Development.html"></section>
 				<section title="Development ExtensionPluginTemplate" ref="./documents/Development/ExtensionPluginTemplate.html"></section>
 				<section title="Development PreBuildDevelopmentSetup" ref="./documents/Development/PreBuildDevelopmentSetup.html"></section>
-				<section title="Examples" ref="./documents/Examples/ExamplesAndTutorials.html"></section>
+				<section title="Advanced Examples" ref="./documents/Examples/AdvancedExamples.html"></section>
 				<section title="Examples RetinoTopicMappingOutput" ref="./documents/Examples/RetinoTopicMappingOutput/RetinoTopicMappingOutput.html"></section>
 				<section title="ExperimentManagerPlugin" ref="./documents/ExperimentManagerPlugin/ExperimentManagerPlugin.html"></section>
 				<section title="ExperimentManagerPlugin doxygen" ref="./documents/ExperimentManagerPlugin/Doxygen/index.html"></section>
@@ -35,8 +35,8 @@
 				<section title="DefaultPlugins" ref="./documents/BrainStim/DefaultPlugins.html"></section>
 				<section title="OsUserLogins" ref="./documents/BrainStim/OsUserLogins.html"></section>
 				<section title="CreatingExperiments" ref="./documents/ExperimentManagerPlugin/CreatingExperiments.html"></section>
-				
-				
+				<section title="RetinoMapper" ref="./documents/ExperimentManagerPlugin/RetinoMapper.html"></section>
+				<section title="QML2Viewer" ref="./documents/ExperimentManagerPlugin/QML2Viewer.html"></section>
 				
 				
 			</section>

@@ -37,7 +37,7 @@ defaultDocumentEditing("documents/Development/PreBuildDevelopmentSetup.html","Pr
 defaultDocumentEditing("documents/Development/Development.html","Development.html", 2);
 defaultDocumentEditing("documents/Development/ExtensionPluginTemplate.html","ExtensionPluginTemplate.html", 2);
 defaultDocumentEditing("documents/Examples/RetinoTopicMappingOutput/RetinoTopicMappingOutput.html","RetinoTopicMappingOutput.html", 3);
-defaultDocumentEditing("documents/Examples/ExamplesAndTutorials.html","ExamplesAndTutorials.html", 2);
+defaultDocumentEditing("documents/Examples/AdvancedExamples.html","AdvancedExamples.html", 2);
 defaultDocumentEditing("documents/BrainStim/SettingsDialog.html", "SettingsDialog.html", 2);
 defaultDocumentEditing("documents/BrainStim/QtLibraryScriptBindings.html", "QtLibraryScriptBindings.html", 2);
 defaultDocumentEditing("documents/BrainStim/FileTypeAssociations.html", "FileTypeAssociations.html", 2);
@@ -56,6 +56,9 @@ defaultDocumentEditing("documents/BrainStim/DefaultPlugins.html", "DefaultPlugin
 defaultDocumentEditing("documents/BrainStim/PluginFrameWork.html", "PluginFrameWork.html", 2);
 defaultDocumentEditing("documents/BrainStim/OsUserLogins.html", "OsUserLogins.html", 2);
 defaultDocumentEditing("documents/ExperimentManagerPlugin/CreatingExperiments.html", "CreatingExperiments.html", 2);
+defaultDocumentEditing("documents/ExperimentManagerPlugin/RetinoMapper.html", "RetinoMapper.html", 2);
+defaultDocumentEditing("documents/ExperimentManagerPlugin/QML2Viewer.html", "QML2Viewer.html", 2);
+
 
 
 //Special (non-default document edits)
@@ -108,6 +111,19 @@ sDestList.push(sSourceList[sSourceList.length-1]);
 									CreateTocifyHTMLFooter();
 		changeSet[sSourceList.length-1][2][0] = "<!--doc-version-tocify-footer-end-->";
 
+sSourceList.push(sSourcePath + "documents/ExperimentManagerPlugin/CreatingExperiments.html");
+sDestList.push(sSourceList[sSourceList.length-1]);
+	changeSet[sSourceList.length-1] = CreateArray(3,0);
+	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-qtCreatorDownloadName-begin-->";
+	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + tmpBrainStimDocumentInfo.GetDocumentInformation("QtCreatorDownloadName");
+	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-qtCreatorDownloadName-end-->";
+	
+sSourceList.push(sSourcePath + "documents/ExperimentManagerPlugin/CreatingExperiments.html");
+sDestList.push(sSourceList[sSourceList.length-1]);
+	changeSet[sSourceList.length-1] = CreateArray(3,0);
+	changeSet[sSourceList.length-1][0][0] = "<!--doc-version-qtCreatorDownloadDir-begin-->";
+	changeSet[sSourceList.length-1][1][0] = sHTMLComment + "\n" + tmpBrainStimDocumentInfo.GetDocumentInformation("QtCreatorDownloadDir");
+	changeSet[sSourceList.length-1][2][0] = "<!--doc-version-qtCreatorDownloadDir-end-->";
 /////////////////////////CONFIGURATION(END)//////////////////////////////////////////////
 
 //BrainStim.openFiles("",sSourceList);
@@ -234,9 +250,9 @@ function CreateHTMLHeaderSection(sHeaderTitle, sDocumentVersion, sDocumentAuthor
 	"\t\t<div class=\"alert alert-info\" role=\"alert\">\n" +
 	"\t\t\t<h1>" + sHeaderTitle + "</h1>\n" +
 	"\t\t\t<div class=\"row\">\n" +
-	"\t\t\t\t<div class=\"col-md-4\"><p><strong>Document version:</strong> " + sDocumentVersion + "</p></div>\n" +
-	"\t\t\t\t<div class=\"col-md-4\"><p><strong>Author(s):</strong> " + sDocumentAuthors + "</p></div>\n" +
-	"\t\t\t\t<div class=\"col-md-4\"><p><strong>Date:</strong> " + sDocumentDate + "</p></div>\n" +
+	"\t\t\t\t<div class=\"col-md-4\"><p><strong>Document version: </strong>" + sDocumentVersion + "</p></div>\n" +
+	"\t\t\t\t<div class=\"col-md-4\"><p><strong>Author(s): </strong>" + sDocumentAuthors + "</p></div>\n" +
+	"\t\t\t\t<div class=\"col-md-4\"><p><strong>Date: </strong>" + sDocumentDate + "</p></div>\n" +
 	"\t\t\t</div>\n" +
 	"\t\t</div>\n" +
 	"\t</div>";	

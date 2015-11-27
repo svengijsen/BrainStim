@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -15,21 +15,21 @@
 <link href="../../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
 <title>Retinotopic Mapping output files Tutorial v1.0</title>
 <!--doc-version-title-end-->
 </head>
 <body>
     <div class="container">
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (159309539), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Retinotopic Mapping output files Tutorial</h1>
 			<div class="row">
-				<div class="col-md-4"><p><strong>Document version:</strong> 1.0</p></div>
-				<div class="col-md-4"><p><strong>Author(s):</strong> Sven Gijsen</p></div>
-				<div class="col-md-4"><p><strong>Date:</strong> July 2015</p></div>
+				<div class="col-md-4"><p><strong>Document version:</strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s):</strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date:</strong>July 2015</p></div>
 			</div>
 		</div>
 	</div>
@@ -126,7 +126,8 @@
         <p>The custom (C)DAT  format (*cdat and *.dat files) file protocol is well documented in the<a href="../../References/Plugins/ExperimentManagerPlugin/ExperimentManagerPlugin.html#experiment-output-file"> Experiment Manager Plug-in Documentation</a>. A third party can use this information to implement code to be able to directly handle these type of file(s) by writing their own custom file handling routines as documented. The ExperimentManager Plug-in script class <a href="../../References/Script/ExperimentManagerPlugin/Doxygen/annotated.html">collection</a> contains a script class (the <a href="../../References/Script/ExperimentManagerPlugin/Doxygen/class_image_processor.html">ImageProcessor  class</a>) that makes it possible  from within the BrainStim internal script environment  to directly handle these  file types. This script class contains several routines to handle the DAT and CDAT format. Now we&rsquo;ll take a look at two prepared scripts that use some of these routines. The first script creates a dialog where we can select a CDAT file (*.cdat) and view it using some controls, let&rsquo;s try this:</p>
         <ul>
             <li>
-                <p>Open the file <em>CDatFileViewer.qs</em> from the directory <em>BrainStim\examples\Tutorials\6_RetinoTopicMappingOutput</em></p>
+                <p>Open the file <em>CDatFileViewer.qs</em> from the directory <em>
+				&lt;BrainStim install Dir&gt;\Examples\BrainStim\Retinotopy Output\</em></p>
             </li>
             <li>
                 <p>Examine the script</p>
