@@ -107,7 +107,7 @@
 #define RETINOMAPPER_MOVINGDOTS_HEMIFIELDHEIGHT			"movingdotshemifieldheight"		/*!< "movingdotshemifieldheight" */
 /**@}*/
 
-#define RETINOMAPPER_OUTPUT_SUBFOLDER					"/RetinoWidget/"
+#define RETINOMAPPER_OUTPUT_SUBFOLDER					"/RetinotopyMapper/"
 
 typedef struct strcMovingDotsStructure
 {

@@ -88,7 +88,7 @@ public:
 		ExperimentManager_Constructed	= 1, /*!< this state is used to determine whenever the object has been constructed, this state also cannot be detected/used in the script environment. */
 		ExperimentManager_Loaded		= 2, /*!< after the Experiment file (*.exml) is successfully loaded (and validated) the ExperimentManager state changes to this state.*/
 		ExperimentManager_PreParsed		= 3, /*!< when the Experiment could be successfully pre-parsed (after loading) then the ExperimentManager state changes to this state.*/
-		ExperimentManager_Configured	= 4, /*!< after the function runExperiment() is called the ExperimentManager (validates if it has not been done before) and configures the experiment, it then changes to this state if the configuration was done.*/
+		ExperimentManager_Configured	= 4, /*!< after the function runExperiment() is called the ExperimentManager (validates if it has not been done before) and configures the experiment, it then changes to this state if the configuration was done.*/
 		ExperimentManager_Initialized	= 5, /*!< after the Experiment configuration the ExperimentManager tries to initialized and changes the state to this state if this step was successful.*/
 		ExperimentManager_IsStarting	= 6, /*!< after the Experiment initialization the ExperimentManager is ready to actually start the Experiment but first it changes the state to this state.*/
 		ExperimentManager_Started		= 7, /*!< after the Experiment is successfully started the ExperimentManager changes to this state.*/
@@ -96,6 +96,12 @@ public:
 		ExperimentManager_Stopped		= 9  /*!< after the ExperimentManager could finalize and stop the Experiment it changes to this state.*/
 	};
 	Q_ENUMS(ExperimentState)
+
+	enum ExperimentStructureConvertResult
+	{
+		ES_Convert_Succeeded = 1,
+		ES_Convert_Failed_UnknownReason = 0
+	};
 
 	typedef struct strcObjectElement
 	{
@@ -117,7 +123,7 @@ public:
 			typedExpParamCntnr = NULL;
 		}
 	} objectElement;
-
+	
 	struct strcInvokeObjectDefs
 	{
 		const QMetaObject* pMetaObject;
@@ -142,6 +148,7 @@ public:
 	static QScriptValue ctor__experimentManager(QScriptContext* context, QScriptEngine* engine);
 	static QScriptValue ctor__experimentStateEnum(QScriptContext *context, QScriptEngine *engine);
 
+	bool reparseExperiment(const bool &bSkipXMLValidation = false);
 	bool createExperiment();
 	void cleanupSingletons();
 	ExperimentState getCurrExperimentState() { return experimentCurrentState; }
@@ -149,13 +156,13 @@ public:
 	tParsedParameterList *getObjectBlockParamListById(int nID);
 	tParsedParameterList *constructOrRetrieveExperimentObjectBlockParameterStructure(const int nObjectID);
 	bool getScriptContextValue(const QString &sScriptContextStatement, QVariant &sScriptContextReturnValue);
-	bool expandExperimentBlockParameterValue(QString &sValue);
+	bool expandExperimentBlockParameterValue(QString &sValue, bool *bScriptRefFound = NULL);
 	bool getExperimentObjectScriptValue(const int &nObjectID,const QString &sKeyName,QScriptValue &sScriptValue);
-	bool setExperimentObjectFromScriptValue(const int &nObjectID,const QString &sKeyName,const QScriptValue &sScriptValue);
+	bool setExperimentObjectFromScriptValue(const int &nObjectID, const QString &sKeyName, const QScriptValue &sScriptValue, const bool &bBufferTillChanged);
 	QWidget *getVisualExperimentEditor();
 	ExperimentTreeModel *getCurrentExperimentTreeModel() { return currentExperimentTree; };
 
-	static bool createExperimentStructure(QList<ExperimentTreeItem*> &lExpTreeItems, ExperimentTreeModel *expTreeModel = NULL, cExperimentStructure* cExpStruct = NULL, QMap<int, objectElement> *mObjectElements = NULL, ExperimentManager *pCurrentExpManager = NULL);
+	static bool createExperimentStructure(QList<ExperimentTreeItem*> &lExpTreeItems, ExperimentTreeModel *expTreeModel = NULL, cExperimentStructure* cExpStruct = NULL, QMap<int, objectElement> *mObjectElements = NULL, ExperimentManager *pCurrentExpManager = NULL, bool *bUnresolvedScriptRefs = NULL);
 
 	template< typename T > T* getExperimentObjectVariabelePointer(const int &nObjectID,const QString &sKeyName)
 	{
@@ -419,7 +426,7 @@ private slots:
 	void visualExperimentEditorDestroyed(ExperimentGraphicEditor *pExpGraphEditor);
 
 private:
-	static bool convertExperimentDataStructure(QList<ExperimentTreeItem*> *ExpRootTreeItems = NULL, cExperimentStructure *expStruct = NULL, ExperimentTreeModel *expTreeModel = NULL, QMap<int, objectElement> *mObjectElements = NULL, ExperimentManager *currentExpManager = NULL, const ExperimentManager::ExperimentDataStructureConversionType &conversionMethod = EDS_TreeItemList_To_ExperimentStructure);
+	static ExperimentStructureConvertResult convertExperimentDataStructure(QList<ExperimentTreeItem*> *ExpRootTreeItems = NULL, cExperimentStructure *expStruct = NULL, ExperimentTreeModel *expTreeModel = NULL, QMap<int, objectElement> *mObjectElements = NULL, ExperimentManager *currentExpManager = NULL, const ExperimentManager::ExperimentDataStructureConversionType &conversionMethod = EDS_TreeItemList_To_ExperimentStructure, bool *bUnresolvedScriptRefs = NULL);
 	int createExperimentBlockParamsFromExperimentStructure(const int &nBlockNumber, const int &nObjectID, tParsedParameterList *hParams = NULL);
 
 	void DefaultConstruct();
@@ -436,6 +443,7 @@ private:
 	bool finalizeExperimentObjects();
 	bool startExperimentObjects(bool bRunFullScreen = true);
 	bool initExperimentObjects();
+	bool initExperimentObjectCustomParameters();
 	bool stopExperimentObjects();
 	bool abortExperimentObjects();
 	bool changeExperimentObjectsSignalSlots(bool bDisconnect = false, int nSpecificIndex = -1);
@@ -467,7 +475,6 @@ private:
 	ExperimentLogger *expDataLogger;
 	int nExperimentTimerIndex;
 	QString sExperimentOutputDataPostString;
-
 };
 
 #endif // ExperimentManager_H

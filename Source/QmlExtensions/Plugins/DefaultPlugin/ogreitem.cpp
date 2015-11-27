@@ -20,10 +20,13 @@
 #include "ogrecameranode.h"
 #include <QtCore/QPropertyAnimation>
 #include <QTimer>
+#include <QTest>
+#include <windows.h>
 
 OgreItem::OgreItem(QQuickItem *parent) : QQuickItem(parent), m_timerID(0)
 {
 	bIsPreInitializing = false;
+	bWindowActivated = false;
 	m_node = NULL;
 	m_camera = NULL;
 	cAmbientSceneColor = NULL;
@@ -58,6 +61,24 @@ OgreItem::~OgreItem()
 
 bool OgreItem::addResourceLocation(const QString &sLocation,const QString &sType)
 {
+	if (sType == "FileSystem")
+	{
+		QDir tmpDir;
+		tmpDir.setPath(sLocation);
+		if (tmpDir.exists() == false)
+			return false;
+	}
+	else if (sType == "Zip")
+	{
+		QFileInfo tmpFileInfo;
+		tmpFileInfo.setFile(sLocation);
+		if (tmpFileInfo.exists() == false)
+			return false;
+	}
+	else
+	{
+		return false;
+	}
 	sTypeOgreResourcesStructure tmpResource;
 	tmpResource.sLocation = sLocation;
 	tmpResource.sType = sType;
@@ -250,6 +271,28 @@ QSGNode *OgreItem::updatePaintNode(QSGNode *oldNode, UpdatePaintNodeData *)
     m_camera = static_cast<QObject *>(m_node->camera());
 	if(bDoEmit)
 		QTimer::singleShot(1, this, SIGNAL(ogreNodeInitialized()));//Thread safety
+
+	if (bWasFirstUpdatePaintNode)
+	{
+		//Ogre::Root *m_root;
+		//Ogre::Camera *m_camera;
+		//Ogre::SceneManager *m_sceneManager;
+		//Ogre::RenderTexture *m_renderTexture;
+		//Ogre::Viewport *m_viewport;
+		//Ogre::TexturePtr rtt_texture;
+		//Ogre::RenderWindow *m_window;
+		
+		//QEvent event(QEvent::FocusIn);
+		//event.
+		//window()->sendEvent(this, &event);//QQuickItem *item, QEvent *e);
+
+		if (bWindowActivated == false)
+		{
+			bWindowActivated = true;
+			mouse_event(MOUSEEVENTF_RIGHTDOWN, 100, 200, 0, 0);
+			mouse_event(MOUSEEVENTF_RIGHTUP, 100, 200, 0, 0);	
+		}
+	}
     return m_node;
 }
 

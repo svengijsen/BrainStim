@@ -3668,7 +3668,7 @@ void MainWindow::newFile()
 	QString sCanoFileDir = QDir(MainAppInfo::appExampleDirPath()).canonicalPath() + "/";
 	QString sCanoFilePath = sCanoFileDir + MainAppInfo::UntitledDocName() + "." + sExtension;
 	int nUniqueUntitledCounter = 1;
-	while (QFile(sCanoFilePath).exists())
+	while (QFile(sCanoFilePath).exists() || (DocManager->getDocIndex(sCanoFilePath) >= 0))
 	{
 		sCanoFilePath = sCanoFileDir + MainAppInfo::UntitledDocName() + "_" + QString::number(nUniqueUntitledCounter) + "." + sExtension;
 		nUniqueUntitledCounter++;
@@ -3689,6 +3689,7 @@ void MainWindow::newDocument(const GlobalApplicationInformation::DocType &docTyp
 	subWindow->setAttribute(Qt::WA_DeleteOnClose);
 	newChild->setAttribute(Qt::WA_DeleteOnClose);
 	DocManager->setSubWindow(DocIndex,subWindow);
+
 	bool bResult = connect(subWindow, SIGNAL(SubWindowClosed(CustomMDISubWindow*)), this, SLOT(onSubWindowClosed(CustomMDISubWindow*)), Qt::DirectConnection);
 	bResult = connect(subWindow, SIGNAL(SubWindowDestroyed(CustomMDISubWindow*)), this, SLOT(onSubWindowDestroyed(CustomMDISubWindow*)), Qt::DirectConnection);
 
@@ -3704,8 +3705,9 @@ void MainWindow::newDocument(const GlobalApplicationInformation::DocType &docTyp
 		DocManager->setFileName(DocIndex, strCanonicalFilePath, true);
 		DocManager->initFile(DocIndex);
 	}
-	newChild->showMaximized();
+
 	mdiArea->setActiveSubWindow(subWindow);
+	newChild->showMaximized();
 }
 
 void MainWindow::setupStatusBar()

@@ -251,10 +251,14 @@ class cBlockParameterStructure : public QObject
 		/*!  Use this property to set or retrieve the Block Parameter Value.
 		*/
 		Q_PROPERTY(QString BlockParameterValue WRITE setBlockParameterValue READ getBlockParameterValue)
+		//! \brief BlockParameterIsCustom property.
+		/*!  Use this property to set or retrieve whether the Block Parameter is custom or not.
+		*/
+		Q_PROPERTY(bool BlockParameterIsCustom WRITE setBlockParameterIsCustom READ getBlockParameterIsCustom)
 
 public:
 	cBlockParameterStructure();
-	cBlockParameterStructure(const int &nBlockParamId, const QString &sBlockParamName, const QString &sBlockParamValue);
+	cBlockParameterStructure(const int &nBlockParamId, const QString &sBlockParamName, const QString &sBlockParamValue, const bool &bBlockParamIsCustom);
 	cBlockParameterStructure(const cBlockParameterStructure& other);
 	~cBlockParameterStructure();
 
@@ -295,6 +299,17 @@ public:
 	* @return a string value containing the requested Block Parameter Value.
 	*/
 	QString getBlockParameterValue() const { return sBlockParameterValue; };
+	//! \brief setBlockParameterIsCustom slot.
+	/*!  This function sets the IsCustom Block Parameter property to the new provided value.
+	* @param bIsCustom a boolean value holding the new IsCustom Block Parameter property value.
+	*/
+	void setBlockParameterIsCustom(const bool &bIsCustom) { bBlockParameterIsCustom = bIsCustom; };
+	//! \brief getBlockParameterIsCustom slot.
+	/*!  This function returns the Block Parameter IsCustom property value.
+	* @return a boolean value containing the requested Block Parameter IsCustom property value.
+	*/
+	bool getBlockParameterIsCustom() const { return bBlockParameterIsCustom; };
+
 
 private:
 	bool Initialize();
@@ -303,6 +318,7 @@ private:
 	int nBlockParameterID;
 	QString sBlockParameterValue;
 	QString sBlockParameterName;
+	bool bBlockParameterIsCustom;
 };
 
 class cBlockStructure_SharedData : public QSharedData

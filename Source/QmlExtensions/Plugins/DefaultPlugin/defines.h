@@ -22,13 +22,18 @@
 //#include "./../../../BrainStim/maindefines.h"
 #include "./../../../BrainStim/mainappinfo.h"
 
-#define DEFAULT_BRAINSTIM_PLUGIN_QML_NAME		"BrainStim_QMLExtensions"
+#define DEFAULT_BRAINSTIM_PLUGIN_QML_NAME			"BrainStim_QMLExtensions"
 #define QML_VERSION_STRING_MAJOR	1   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
 #define QML_VERSION_STRING_MINOR	0   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
-#define TIMEMODEL_TYPE_QML_NAME					"Time"
-#define TIMEMODEL_VERSION_STRING_REVISION		1
-#define OGRE3DITEM_TYPE_QML_NAME				"OgreItem"
-#define OGRE3DITEM_VERSION_STRING_REVISION		1
+#define TIMEMODEL_TYPE_QML_NAME						"Time"
+#define TIMEMODEL_VERSION_STRING_REVISION			1
+#define OGRE3DITEM_TYPE_QML_NAME					"OgreItem"
+#define OGRE3DITEM_VERSION_STRING_REVISION			1
+#define BRAINSTIMITEM_TYPE_QML_NAME					"BrainStimItem"
+#define BRAINSTIMITEM_VERSION_STRING_REVISION		1
+#define PLUGIN_BRAINSTIMINTERFACE_PROVIDER_MAJOR	1
+#define PLUGIN_BRAINSTIMINTERFACE_PROVIDER_MINOR	0
+#define PLUGIN_BRAINSTIM_PROVIDER_APINAME			"BrainStimAPI"
 
 #endif // DEFAULTQMLPLUGINDEFINES_H
 

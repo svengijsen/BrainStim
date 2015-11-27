@@ -21,6 +21,8 @@
 
 #include <QtQml/QtQml>
 
+//class QtQuick2ApplicationViewer;
+
 class QDefaultQmlPlugin : public QQmlExtensionPlugin
 {
 	Q_OBJECT
@@ -28,7 +30,14 @@ class QDefaultQmlPlugin : public QQmlExtensionPlugin
 	//Q_PLUGIN_METADATA(IID "BrainStim.QML.Plugins.Default" FILE defaultqmlplugin.json)
 
 public:
+	QDefaultQmlPlugin();
+
 	void registerTypes(const char *uri);
+	void initializeEngine(QQmlEngine * engine, const char * uri);
+
+private:
+	QObject *pBrainStimInterfaceObject;
+
 };
 #endif QDEFAULTQMLPLUGIN_H
 

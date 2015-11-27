@@ -125,7 +125,7 @@ BasicExperiment.__proto__.preExperimentStateChanged = _.wrap(BasicExperiment.__p
 BasicExperiment.__proto__.StartExperimentObjects = _.compose(BasicExperiment.StartExperimentObjects, function()
 {
 	BasicExperiment.LogFunctionSignature("BasicRetinotopyExperiment","StartExperimentObjects", arguments, true);
-	if(BasicExperiment.sChoosenExperimenMode == "Testing_Mode")
+	if(BasicExperiment.sChoosenExperimenMode == BasicExperiment.arrExperimentModes[0])
 	{
 		BasicExperiment.TriggerTimerObj.timeout.connect(BasicExperiment.RetinotopyMapperObj, BasicExperiment.RetinotopyMapperObj.incrementExternalTrigger);
 	}
@@ -139,7 +139,7 @@ BasicExperiment.__proto__.StartExperimentObjects = _.compose(BasicExperiment.Sta
 BasicExperiment.__proto__.StopExperimentObjects = _.compose(BasicExperiment.StopExperimentObjects, function()
 {
 	BasicExperiment.LogFunctionSignature("BasicRetinotopyExperiment","StopExperimentObjects", arguments, true);
-	if(BasicExperiment.sChoosenExperimenMode == "Testing_Mode")
+	if(BasicExperiment.sChoosenExperimenMode == BasicExperiment.arrExperimentModes[0])
 	{	
 		BasicExperiment.TriggerTimerObj.timeout.disconnect(BasicExperiment.RetinotopyMapperObj, BasicExperiment.RetinotopyMapperObj.incrementExternalTrigger);
 	}

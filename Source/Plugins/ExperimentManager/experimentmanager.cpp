@@ -236,7 +236,7 @@ bool ExperimentManager::insertExperimentObjectBlockParameter(const int nObjectID
 		{
 			//Already set while initializing?
 			if (bIsInitializing)
-			{
+			{	
 				if (mExperimentObjectList.value(nObjectID).ExpBlockParams)
 				{
 					if (mExperimentObjectList.value(nObjectID).ExpBlockParams->contains(sName))
@@ -325,7 +325,7 @@ bool ExperimentManager::getExperimentObjectScriptValue(const int &nObjectID,cons
 	return false;
 }
 
-bool ExperimentManager::setExperimentObjectFromScriptValue(const int &nObjectID,const QString &sKeyName,const QScriptValue &sScriptValue)
+bool ExperimentManager::setExperimentObjectFromScriptValue(const int &nObjectID, const QString &sKeyName, const QScriptValue &sScriptValue, const bool &bBufferTillChanged)
 {
 	if (nObjectID >= 0)
 	{
@@ -333,15 +333,26 @@ bool ExperimentManager::setExperimentObjectFromScriptValue(const int &nObjectID,
 		{
 			if ((mExperimentObjectList.value(nObjectID).ExpBlockParams == NULL) || (mExperimentObjectList.value(nObjectID).ExpBlockParams->isEmpty()))
 				return false;
-			//int nCount = mExperimentObjectList.value(nObjectID).ExpBlockParams->count();
 			if (mExperimentObjectList.value(nObjectID).ExpBlockParams->contains(sKeyName.toLower()))
 			{
 				if (mExperimentObjectList.value(nObjectID).typedExpParamCntnr)
 				{
+					bool bPropSetResult = false;
 					QString tmpString = sScriptValue.toString();
 					if (expandExperimentBlockParameterValue(tmpString))
-						return mExperimentObjectList.value(nObjectID).typedExpParamCntnr->setPropertySetting(sKeyName, tmpString);
-					return mExperimentObjectList.value(nObjectID).typedExpParamCntnr->setPropertySetting(sKeyName, sScriptValue);
+					{
+						bPropSetResult = mExperimentObjectList.value(nObjectID).typedExpParamCntnr->setPropertySetting(sKeyName, tmpString);
+					}
+					else
+					{
+						bPropSetResult = mExperimentObjectList.value(nObjectID).typedExpParamCntnr->setPropertySetting(sKeyName, sScriptValue);
+					}
+					if (bPropSetResult)
+					{
+						if (bBufferTillChanged)
+							(*mExperimentObjectList.value(nObjectID).ExpBlockParams)[sKeyName.toLower()].sValue = sScriptValue.toString();
+					}
+					return bPropSetResult;
 				}
 				return false;
 			}
@@ -449,6 +460,18 @@ bool ExperimentManager::saveExperiment(QString strFile)
 		return false;
 	if(currentExperimentTree->write(fileName))
 	{
+		return true;
+	}
+	return false;
+}
+
+bool ExperimentManager::reparseExperiment(const bool &bSkipXMLValidation)
+{
+	changeCurrentExperimentState(ExperimentManager_Constructed);
+	if (prePassiveParseExperiment(bSkipXMLValidation))
+	{
+		//if (ExpGraphicEditor)
+		//	ExpGraphicEditor->setExperimentTreeModel(currentExperimentTree, fileName);
 		return true;
 	}
 	return false;
@@ -679,6 +702,12 @@ bool ExperimentManager::runExperiment(const bool bSkipXMLValidation)
 	initializeDataLogger();//below should be after createExperimentObjects()
 
 	if(!initExperimentObjects())
+	{
+		changeCurrentExperimentState(ExperimentManager_PreParsed);
+		return false;
+	}
+
+	if (!initExperimentObjectCustomParameters())
 	{
 		changeCurrentExperimentState(ExperimentManager_PreParsed);
 		return false;
@@ -992,6 +1021,64 @@ bool ExperimentManager::initExperimentObjects()
 	return bRetVal;
 }
 
+bool ExperimentManager::initExperimentObjectCustomParameters()
+{
+	if (cExperimentBlockTrialStructure == NULL)
+		return false;
+
+	return true;
+
+	int nObjectID = 0;
+	//QString sKeyName = "_customparam1";
+
+	if (nObjectID >= 0)
+	{
+		if (mExperimentObjectList.contains(nObjectID))
+		{
+			if ((mExperimentObjectList.value(nObjectID).ExpBlockParams == NULL) || (mExperimentObjectList.value(nObjectID).ExpBlockParams->isEmpty()))
+				return false;
+			ParsedParameterDefinition tmpParsedParamDef;
+			QString sParamKey = "";
+			QString sScriptValue;
+
+			//return currentScriptEngine->undefinedValue();
+
+
+			for (int i = 0; i < mExperimentObjectList.value(nObjectID).ExpBlockParams->count();i++)
+			{ 
+				sParamKey = mExperimentObjectList.value(nObjectID).ExpBlockParams->keys()[i];
+				if (mExperimentObjectList.value(nObjectID).ExpBlockParams->value(sParamKey).bIsCustom)
+				{
+					sScriptValue = mExperimentObjectList.value(nObjectID).ExpBlockParams->value(sParamKey).sValue;
+					if (mExperimentObjectList.value(nObjectID).typedExpParamCntnr->createPropertySetting<QString>(sParamKey, sScriptValue) == false)
+					{
+						qDebug() << __FUNCTION__ << "Could not initialize the custom parameter : " << sParamKey;
+						return false;
+					}
+				}
+			}
+			
+			//if (mExperimentObjectList.value(nObjectID).ExpBlockParams->contains(sKeyName.toLower()))
+			//{
+			//	if (mExperimentObjectList.value(nObjectID).typedExpParamCntnr)
+			//	{
+					//return mExperimentObjectList.value(nObjectID).typedExpParamCntnr->getPropertySetting(sKeyName, sScriptValue, currentScriptEngine);
+			//		return true;
+			//	}
+			//}
+		}
+	}
+	return true;
+
+
+	//cExperimentBlockTrialStructure->
+
+	//mExperimentObjectList.value(nObjectID).ExpBlockParams->contains(sKeyName.toLower()))
+	//not in return mExperimentObjectList.value(nObjectID).typedExpParamCntnr->getPropertySetting(sKeyName, sScriptValue, currentScriptEngine);
+
+	//return bRetVal;
+}
+
 bool ExperimentManager::startExperimentObjects(bool bRunFullScreen)
 {
 	Q_UNUSED(bRunFullScreen);
@@ -1011,16 +1098,26 @@ bool ExperimentManager::prePassiveParseExperiment(const bool bSkipXMLValidation)
 		return false;
 	}
 	QList<ExperimentTreeItem*> ExperimentTreeItemList;
-	if (!createExperimentStructure(ExperimentTreeItemList, currentExperimentTree, cExperimentBlockTrialStructure, &mExperimentObjectList, this))
+	bool bUnresolvedScriptRefs = false;
+	if (!createExperimentStructure(ExperimentTreeItemList, currentExperimentTree, cExperimentBlockTrialStructure, &mExperimentObjectList, this, &bUnresolvedScriptRefs))
 	{
 		changeCurrentExperimentState(ExperimentManager_Loaded);
 		return false;
+	}
+	else
+	{
+		if (bUnresolvedScriptRefs)
+		{
+			qDebug() << __FUNCTION__ << "The experiment contains script references and can only be executed from a script!";
+			changeCurrentExperimentState(ExperimentManager_Loaded);
+			return false;
+		}
 	}
 	changeCurrentExperimentState(ExperimentManager_PreParsed);
 	return true;
 }
 
-bool ExperimentManager::createExperimentStructure(QList<ExperimentTreeItem*> &lExpTreeItems, ExperimentTreeModel *expTreeModel, cExperimentStructure* cExpStruct, QMap<int, objectElement> *mObjectElements, ExperimentManager *pCurrentExpManager)
+bool ExperimentManager::createExperimentStructure(QList<ExperimentTreeItem*> &lExpTreeItems, ExperimentTreeModel *expTreeModel, cExperimentStructure* cExpStruct, QMap<int, objectElement> *mObjectElements, ExperimentManager *pCurrentExpManager, bool *bUnresolvedScriptRefs)
 {
 	if ((expTreeModel == NULL) || (cExpStruct == NULL))
 	{
@@ -1033,7 +1130,7 @@ bool ExperimentManager::createExperimentStructure(QList<ExperimentTreeItem*> &lE
 
 	if(ExperimentTreeModel::getStaticTreeElements(strList, lExpTreeItems,expTreeModel->getRootItem()) > 0)
 	{
-		if (convertExperimentDataStructure(&lExpTreeItems, cExpStruct, NULL, mObjectElements, pCurrentExpManager, EDS_TreeItemList_To_ExperimentStructure))
+		if (((int)convertExperimentDataStructure(&lExpTreeItems, cExpStruct, NULL, mObjectElements, pCurrentExpManager, EDS_TreeItemList_To_ExperimentStructure, bUnresolvedScriptRefs)) > 0)
 		{
 			if (cExpStruct->prepareExperiment(true) == false)
 			{
@@ -1314,7 +1411,8 @@ bool ExperimentManager::parseCurrentExperimentStructure()
 		currentExperimentTree->enableModifiedSignaling(true);
 		return false;
 	}
-	bool bResult = convertExperimentDataStructure(NULL, cExperimentBlockTrialStructure, currentExperimentTree, NULL, NULL, EDS_ExperimentStructure_To_ExperimentTreeModel);
+	ExperimentStructureConvertResult convResult = convertExperimentDataStructure(NULL, cExperimentBlockTrialStructure, currentExperimentTree, NULL, NULL, EDS_ExperimentStructure_To_ExperimentTreeModel);
+	bool bResult = (((int)convResult) > 0);
 	if (bResult)
 	{
 		if(cExperimentBlockTrialStructure->prepareExperiment(true))
@@ -1459,7 +1557,7 @@ bool ExperimentManager::initializeExperiment(bool bFinalize)
 	return true;
 }
 
-bool ExperimentManager::expandExperimentBlockParameterValue(QString &sValue)
+bool ExperimentManager::expandExperimentBlockParameterValue(QString &sValue, bool *bScriptRefFound)
 {
 	if (!sValue.isEmpty())
 	{		
@@ -1470,6 +1568,8 @@ bool ExperimentManager::expandExperimentBlockParameterValue(QString &sValue)
 			if((nFirstIndex >= 0) && (nFirstIndex < nLastIndex))
 			{
 				QVariant varResult = "";
+				if (bScriptRefFound)
+					*bScriptRefFound = true;
 				if(getScriptContextValue(sValue.mid(nFirstIndex+1,nLastIndex-nFirstIndex-1),varResult))
 				{
 					if(varResult.type() == QVariant::List)
@@ -1676,6 +1776,8 @@ bool ExperimentManager::fetchExperimentBlockParameters(const int &nBlockNumber, 
 
 int ExperimentManager::createExperimentBlockParamsFromExperimentStructure(const int &nBlockNumber, const int &nObjectID, tParsedParameterList *hParams)
 {
+	//This function should only be called dynamically (when the experiment is running) so we can 
+	//expect that the order of blocks processed (function calls to here) has a valid straightforward history.
 	if (hParams == NULL)
 		return -1;
 	if(hParams->count() == 0)
@@ -1720,6 +1822,7 @@ int ExperimentManager::createExperimentBlockParamsFromExperimentStructure(const 
 							{
 								//typeMapBlockParameterContainer *lParameterContainerStruct = &(*lObjectsParameterContainerStruct)[nObjectID];
 								QMapIterator<QString, cBlockParameterStructure*> iterParamInner((*lObjectsParameterContainerStruct)[nObjectID]);//Iterate through all Parameters
+								bool bScriptRefFound = false;
 								while (iterParamInner.hasNext())
 								{
 									iterParamInner.next();
@@ -1729,9 +1832,13 @@ int ExperimentManager::createExperimentBlockParamsFromExperimentStructure(const 
 										if (iterParamInner.value())
 										{
 											tmpValue = iterParamInner.value()->getBlockParameterValue();//pSubTreeItem->getValue();
-											expandExperimentBlockParameterValue(tmpValue);
+											tmpParDef.sLastUsedScriptRef = tmpValue;
+											expandExperimentBlockParameterValue(tmpValue, &bScriptRefFound);
+											if (bScriptRefFound == false)
+												tmpParDef.sLastUsedScriptRef = "";
 											tmpParDef.sValue = tmpValue;
 											tmpParDef.bHasChanged = true;
+											tmpParDef.bIsCustom = iterParamInner.value()->getBlockParameterIsCustom();
 											hParams->insert(tmpString, tmpParDef);
 											nResult++;
 										}
@@ -1739,6 +1846,35 @@ int ExperimentManager::createExperimentBlockParamsFromExperimentStructure(const 
 								}
 							}
 						}
+					}
+				}
+			}
+
+			//Here we finally check if previously configured script references, that are not reconfigured, should be re-parsed again?
+			tmpStrValueList.clear();
+			tmpStrValueList = hParams->values();//The order is guaranteed to be the same as that used by keys()!
+			tmpStrKeyList.clear();
+			tmpStrKeyList = hParams->keys();//The order is guaranteed to be the same as that used by values()!
+			QString sTempLastValue = "";
+			QString sTempLastScriptRef = "";
+			for (int i = 0; i < tmpStrKeyList.count(); i++)
+			{
+				sTempLastScriptRef = tmpStrValueList[i].sLastUsedScriptRef;
+				if ((sTempLastScriptRef.isEmpty() == false) && (tmpStrValueList[i].bHasChanged == false))
+				{
+					sTempLastValue = tmpStrValueList[i].sValue;
+					tmpValue = sTempLastScriptRef;
+					bool bScriptRefFound = false;
+					expandExperimentBlockParameterValue(tmpValue, &bScriptRefFound);
+					if (bScriptRefFound == false)//No script reference used?
+						tmpStrValueList[i].sLastUsedScriptRef = "";
+					if (tmpValue != sTempLastValue)//Value changed by the script reference?
+					{
+						tmpStrValueList[i].sValue = tmpValue;
+						tmpStrValueList[i].bHasChanged = true;
+						tmpParDef.sValue = tmpValue;
+						hParams->insert(tmpStrKeyList[i], tmpParDef);
+						nResult++;
 					}
 				}
 			}
@@ -1752,14 +1888,14 @@ int ExperimentManager::createExperimentBlockParamsFromExperimentStructure(const 
 	return -1;
 }
 
-bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*> *ExpRootTreeItems, cExperimentStructure *expStruct, ExperimentTreeModel *expTreeModel, QMap<int, objectElement> *mObjectElements, ExperimentManager *currentExpManager, const ExperimentManager::ExperimentDataStructureConversionType &conversionMethod)
+ExperimentManager::ExperimentStructureConvertResult ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*> *ExpRootTreeItems, cExperimentStructure *expStruct, ExperimentTreeModel *expTreeModel, QMap<int, objectElement> *mObjectElements, ExperimentManager *currentExpManager, const ExperimentManager::ExperimentDataStructureConversionType &conversionMethod, bool *bUnresolvedScriptRefs)
 {
 	if (conversionMethod == EDS_TreeItemList_To_ExperimentStructure)
 	{
 		if (ExpRootTreeItems == NULL)
-			return false;
+			return ExperimentManager::ES_Convert_Failed_UnknownReason;
 		if (ExpRootTreeItems->count() < 1)
-			return false;
+			return ExperimentManager::ES_Convert_Failed_UnknownReason;
 
 		QStringList strSearchPathList;
 		QList<ExperimentTreeItem*> lFoundExpTreeItems; 
@@ -1813,7 +1949,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 		if (bExperimentDefinesParseResult == false)
 		{
 			expStruct->resetExperimentState();
-			return false;
+			return ExperimentManager::ES_Convert_Failed_UnknownReason;
 		}
 
 		//Experiment Blocks, Parameters, Loops//
@@ -1898,8 +2034,8 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 												bIsCustomParameter = true;
 
 											QList<ExperimentTreeItem*> tmpObjectBlockParameterTreeItemList;
-											int nObjectListCount = ExperimentTreeModel::getStaticTreeElements(QStringList() << OBJECT_TAG, tmpObjectBlockParameterTreeItemList, lFoundExpTreeItems.at(i));
-											if (nObjectListCount > 0)
+											int nObjectListCount = ExperimentTreeModel::getStaticTreeElements(QStringList() << OBJECT_TAG, tmpObjectBlockParameterTreeItemList, lFoundExpTreeItems.at(i));//In the Block(i), search for objects
+											if (nObjectListCount > 0)//Number of Found Objects in Block(i)
 											{
 												QMap<QString, TreeItemDefinition> tTmpTreeObjectItemDefs;
 												int nCurrentObjectID;
@@ -1911,9 +2047,9 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 													{
 														nCurrentObjectID = tTmpTreeObjectItemDefs[ID_TAG].value.toInt();//ObjectID
 														if (bIsCustomParameter)
-															tmpTreeItem = tmpObjectBlockParameterTreeItemList.at(j)->firstChild(CUSTOM_PARAMETERS_TAG);//j loops through available blocks
+															tmpTreeItem = tmpObjectBlockParameterTreeItemList.at(j)->firstChild(CUSTOM_PARAMETERS_TAG);
 														else
-															tmpTreeItem = tmpObjectBlockParameterTreeItemList.at(j)->firstChild(PARAMETERS_TAG);//j loops through available blocks
+															tmpTreeItem = tmpObjectBlockParameterTreeItemList.at(j)->firstChild(PARAMETERS_TAG);
 														if (tmpTreeItem)
 														{
 															QString tmpString;
@@ -1958,9 +2094,18 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 																				tmpBlockParameter->setBlockParameterID(nCurrentParamID);
 																				tmpBlockParameter->setBlockParameterName(tmpString);
 																				tmpBlockParameter->setBlockParameterValue(tmpValue);
+																				tmpBlockParameter->setBlockParameterIsCustom(bIsCustomParameter);
 																				if (tmpBlock->insertObjectParameter(nCurrentObjectID, tmpBlockParameter, bIsCustomParameter))
 																				{
-																					currentExpManager->expandExperimentBlockParameterValue(tmpValue);
+																					bool bIsScriptReference = false;
+																					tmpParDef.sLastUsedScriptRef = tmpValue;
+																					if (currentExpManager->expandExperimentBlockParameterValue(tmpValue, &bIsScriptReference)==false)
+																					{
+																						if ((bUnresolvedScriptRefs) && (bIsScriptReference))
+																							*bUnresolvedScriptRefs = true;
+																					}
+																					if (bIsScriptReference==false)
+																						tmpParDef.sLastUsedScriptRef = "";
 																					tmpParDef.sValue = tmpValue;
 																					tmpParDef.bHasChanged = true;
 																					tmpParDef.bIsCustom = bIsCustomParameter;
@@ -2041,7 +2186,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 					if (!bUpdateSucceeded)
 					{
 						expStruct->resetExperimentState();
-						return false;
+						return ExperimentManager::ES_Convert_Failed_UnknownReason;
 					}
 				}
 			}
@@ -2091,7 +2236,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 					if (!bUpdateSucceeded)
 					{
 						expStruct->resetExperimentState();
-						return false;
+						return ExperimentManager::ES_Convert_Failed_UnknownReason;
 					}
 				}
 				bObjectsParseResult = true;
@@ -2101,7 +2246,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 				bObjectsParseResult = true;
 			}
 			if (bObjectsParseResult == false)
-				return false;
+				return ExperimentManager::ES_Convert_Failed_UnknownReason;
 		}
 
 		//Connections//
@@ -2178,7 +2323,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 					if (!bUpdateSucceeded)
 					{
 						expStruct->resetExperimentState();
-						return false;
+						return ExperimentManager::ES_Convert_Failed_UnknownReason;
 					}
 				}
 				bMethodConnectionsResult = true;
@@ -2323,21 +2468,21 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 						if (!bUpdateSucceeded)
 						{
 							expStruct->resetExperimentState();
-							return false;
+							return ExperimentManager::ES_Convert_Failed_UnknownReason;
 						}
 					}
 				}
 			}
 			bFinitInitResult = true;
-			return bFinitInitResult;
+			return ExperimentManager::ES_Convert_Succeeded;
 		}
 	}
 	else if (conversionMethod == EDS_ExperimentStructure_To_ExperimentTreeModel)
 	{
 		if (expStruct == NULL)
-			return false;
+			return ExperimentManager::ES_Convert_Failed_UnknownReason;
 		if (expTreeModel == NULL)
-			return false;
+			return ExperimentManager::ES_Convert_Failed_UnknownReason;
 
 		expTreeModel->enableModifiedSignaling(false);
 		QList<ExperimentTreeItem*> tmpExpTreeItemList;
@@ -2384,7 +2529,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 			else
 			{
 				expTreeModel->enableModifiedSignaling(true);
-				return false;
+				return ExperimentManager::ES_Convert_Failed_UnknownReason;
 			}
 		}
 
@@ -2426,7 +2571,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 							{
 								expTreeModel->enableModifiedSignaling(true);
 								expTreeModel->resetExperiment();
-								return false;
+								return ExperimentManager::ES_Convert_Failed_UnknownReason;
 							}
 						}
 					}
@@ -2461,7 +2606,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 							{
 								expTreeModel->enableModifiedSignaling(true);
 								expTreeModel->resetExperiment();
-								return false;
+								return ExperimentManager::ES_Convert_Failed_UnknownReason;
 							}
 						}
 					}
@@ -2470,7 +2615,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 				{
 					expTreeModel->enableModifiedSignaling(true);
 					expTreeModel->resetExperiment();
-					return false;
+					return ExperimentManager::ES_Convert_Failed_UnknownReason;
 				}
 			}
 
@@ -2497,7 +2642,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 							{
 								expTreeModel->enableModifiedSignaling(true);
 								expTreeModel->resetExperiment();
-								return false;
+								return ExperimentManager::ES_Convert_Failed_UnknownReason;
 							}
 						}
 					}
@@ -2575,7 +2720,7 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 										{
 											expTreeModel->enableModifiedSignaling(true);
 											expTreeModel->resetExperiment();
-											return false;
+											return ExperimentManager::ES_Convert_Failed_UnknownReason;
 										}
 									}
 								}
@@ -2596,14 +2741,14 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 									{
 										expTreeModel->enableModifiedSignaling(true);
 										expTreeModel->resetExperiment();
-										return false;
+										return ExperimentManager::ES_Convert_Failed_UnknownReason;
 									}
 								}
 								else
 								{
 									expTreeModel->enableModifiedSignaling(true);
 									expTreeModel->resetExperiment();
-									return false;
+									return ExperimentManager::ES_Convert_Failed_UnknownReason;
 								}
 							}
 						}
@@ -2612,24 +2757,24 @@ bool ExperimentManager::convertExperimentDataStructure(QList<ExperimentTreeItem*
 					{
 						expTreeModel->enableModifiedSignaling(true);
 						expTreeModel->resetExperiment();
-						return false;
+						return ExperimentManager::ES_Convert_Failed_UnknownReason;
 					}
 				}
 				else
 				{
 					expTreeModel->enableModifiedSignaling(true);
 					expTreeModel->resetExperiment();
-					return false;
+					return ExperimentManager::ES_Convert_Failed_UnknownReason;
 				}
 			}
 		}
 		expTreeModel->emitModifiedSignal(false);
 		expTreeModel->enableModifiedSignaling(true);
-		return true;
+		return ExperimentManager::ES_Convert_Failed_UnknownReason;
 	}
 	expTreeModel->emitModifiedSignal(false);
 	expTreeModel->enableModifiedSignaling(true);
-	return false;
+	return ExperimentManager::ES_Convert_Failed_UnknownReason;
 }
 
 bool ExperimentManager::createExperimentObjects()

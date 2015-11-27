@@ -1,0 +1,18 @@
+import QmlProject 1.1
+
+Project {
+	mainFile: "./ImagesAndText_Scripted.qml"
+
+	/* Include .qml, .js, and image files from current directory and subdirectories */
+	QmlFiles {
+		directory: "."
+	}
+	JavaScriptFiles {
+		directory: "."
+	}
+	ImageFiles {
+		directory: "."
+	}
+	/* List of plugin directories passed to QML runtime */
+    importPaths: [ "E:/Projects/BrainStim_Installed/BrainStim_32/1.0.0.1/Qml/plugins/Win32" ]
+}

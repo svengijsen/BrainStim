@@ -39,7 +39,7 @@
 	        <enabled>true</enabled>
 	        <editable>true</editable>
 	        <name>nr_of_loops</name>
-	        <displayname>Loops</displayname>
+	        <displayname>Repetitions</displayname>
 	        <grouppath></grouppath>
 	        <information>The number of loop-backs for this loop</information>
 	        <type>integer</type>

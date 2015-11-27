@@ -190,7 +190,7 @@ bool QML2Viewer::initObject()
 			qDebug() << __FUNCTION__ << "::Added the BrainStim script Include path (" << tmpString << ").";
 		}
 	}
-	quick2ViewerWindow->registerDefaultCustomQMLTypes();
+	//quick2ViewerWindow->registerDefaultCustomQMLTypes();//removed to be compatible with QtCreator design, everything moved to the DefaultQMLPlugin
 	//qmlErrorHandler = new QmlErrorHandler(*qmlViewer,this);
 	parseExperimentObjectBlockParameters(true,false);
 	setExperimentMetaObject();

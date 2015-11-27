@@ -121,11 +121,13 @@ namespace ExperimentManagerNameSpace
 			bHasChanged = true;
 			bIsInitialized = true;
 			bIsCustom = false;
+			sLastUsedScriptRef = "";
 		}	
-		QString sValue;		 //!< A String that stores the value of the parameter
-		bool bHasChanged;    //!< A Boolean value determining whether the parameter has been changed since it's initialization
-		bool bIsInitialized; //!< A Boolean value determining whether the parameter already has been initialized
-		bool bIsCustom;		 //!< A Boolean value determining whether the parameter is defined by the is custom (defined by the user)
+		QString sValue;					//!< A String that stores the value of the parameter
+		bool bHasChanged;				//!< A Boolean value determining whether the parameter has been changed since it's initialization
+		bool bIsInitialized;			//!< A Boolean value determining whether the parameter already has been initialized
+		bool bIsCustom;					//!< A Boolean value determining whether the parameter is defined by the is custom (defined by the user)
+		QString sLastUsedScriptRef;		//!< A String that stores the script-reference that was last used for resolving the value of the parameter, this value is buffered until changed, if no script-reference was used then this value is an empty string
 	};
 
 	/*! Creates a type name for strcParsedParameterDefinition */ 

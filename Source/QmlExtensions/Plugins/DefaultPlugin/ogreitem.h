@@ -21,6 +21,7 @@
 
 #include <QtQuick/QQuickItem>
 #include <QtCore/QPropertyAnimation>
+#include <QDir>
 #include "ogrenode.h"
 
 class OgreCameraNode;
@@ -140,6 +141,7 @@ protected:
 private:
 	bool bIsPreInitializing;
 	bool bFirstUpdatePaintNode;
+	bool bWindowActivated;
     int m_timerID;
     QObject *m_camera;
 	OgreNode *m_node;

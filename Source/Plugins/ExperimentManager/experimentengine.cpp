@@ -52,11 +52,19 @@ ExperimentEngine::~ExperimentEngine()
 	sConfiguredActiveScreen = NULL;
 }
 
-bool ExperimentEngine::insertExpObjectBlockParameter(const int nObjectID,const QString sName,const QString sValue,bool bIsInitializing, bool bIsCustom)
+bool ExperimentEngine::insertExpObjectBlockParameter(const int nObjectID, const QString sName, const QString sValue, bool bIsInitializing, bool bIsCustom, bool bForceImmediateParse)
 {
 	if (ExpBlockParams == NULL)
 		ExpBlockParams = pExperimentManager->constructOrRetrieveExperimentObjectBlockParameterStructure(nObjectID);
 	bool bRetVal = pExperimentManager->insertExperimentObjectBlockParameter(nObjectID,sName.toLower(),sValue,bIsInitializing,bIsCustom);
+	if (bRetVal && bForceImmediateParse)
+	{
+		if (pExperimentManager)
+		{
+			QString *sMemoryString = new QString(sValue);
+			pExperimentManager->insertExperimentObjectVariabelePointer<QString>(nObjectID, sName, *sMemoryString);
+		}
+	}
 	return bRetVal;
 }
 
@@ -167,11 +175,11 @@ bool ExperimentEngine::setExperimentManager(ExperimentManager *expManager)
 	return false;
 }
 
-bool ExperimentEngine::expandExperimentBlockParameterValue(QString &sValue)
+bool ExperimentEngine::expandExperimentBlockParameterValue(QString &sValue, bool *bScriptRefFound)
 {
 	if (pExperimentManager)
 	{
-		return pExperimentManager->expandExperimentBlockParameterValue(sValue);				
+		return pExperimentManager->expandExperimentBlockParameterValue(sValue, bScriptRefFound);
 	}
 	return false;
 }
@@ -350,7 +358,6 @@ void ExperimentEngine::incrementExternalTrigger()
 
 void ExperimentEngine::initBlockTrial()
 {
-	//emit NewInitBlockTrial(); moved 28 october by sven
 	bExperimentShouldStop = false;
 	expTrialTimer.restart();
 	emit PrepareNewInitBlockTrial();
@@ -529,7 +536,7 @@ QScriptValue ExperimentEngine::getExperimentObjectParameter(const int &nObjectID
 	return NULL;	
 }
 
-bool ExperimentEngine::setExperimentObjectParameter(const int &nObjectID, const QString &strName, const QScriptValue &sScriptVal)
+bool ExperimentEngine::setExperimentObjectParameter(const int &nObjectID, const QString &strName, const QScriptValue &sScriptVal, const bool &bBufferTillChanged)
 {
-	return pExperimentManager->setExperimentObjectFromScriptValue(nObjectID,strName.toLower(),sScriptVal);
+	return pExperimentManager->setExperimentObjectFromScriptValue(nObjectID, strName.toLower(), sScriptVal, bBufferTillChanged);
 }

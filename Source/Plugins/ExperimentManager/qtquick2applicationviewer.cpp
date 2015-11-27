@@ -57,15 +57,15 @@ QtQuick2ApplicationViewer::QtQuick2ApplicationViewer(QObject *parent) : QQuickVi
 	connect(engine(), &QQmlEngine::quit, this, &QtQuick2ApplicationViewer::qtQuick2EngineQuit, Qt::ConnectionType(Qt::UniqueConnection));
     setResizeMode(QQuickView::SizeRootObjectToView);
 	this->setFlags(Qt::FramelessWindowHint);
-	qml2InterfaceObject = new Qml2Interface(this);
-	if (parentObject)
-	{
-		QML2Viewer *tmpParentViewer = qobject_cast<QML2Viewer*>(parentObject);
-		if (tmpParentViewer)
-		{
-			qml2InterfaceObject->setQMLViewerObject(tmpParentViewer);
-		}
-	}
+	//qml2InterfaceObject = new Qml2Interface(this);
+	//if (parentObject)
+	//{
+	//	QML2Viewer *tmpParentViewer = qobject_cast<QML2Viewer*>(parentObject);
+	//	if (tmpParentViewer)
+	//	{
+	//		qml2InterfaceObject->setQMLViewerObject(tmpParentViewer);
+	//	}
+	//}
 }
 
 void QtQuick2ApplicationViewer::qtQuick2EngineQuit()
@@ -77,8 +77,8 @@ void QtQuick2ApplicationViewer::qtQuick2EngineQuit()
 QtQuick2ApplicationViewer::~QtQuick2ApplicationViewer()
 {
     delete d;
-	if(qml2InterfaceObject)
-		delete qml2InterfaceObject;
+//	if(qml2InterfaceObject)
+//		delete qml2InterfaceObject;
 }
 
 QScreen *QtQuick2ApplicationViewer::grabScreenUnderMouseCursor()
@@ -94,11 +94,12 @@ QScreen *QtQuick2ApplicationViewer::grabScreenUnderMouseCursor()
 	return QGuiApplication::primaryScreen();
 }
 
-int QtQuick2ApplicationViewer::registerDefaultCustomQMLTypes()
-{
-	int nTypeID = qmlRegisterSingletonType<Qml2Interface>(PLUGIN_QML_INTERFACE_PROVIDER_URI, PLUGIN_QML_INTERFACE_PROVIDER_MAJOR, PLUGIN_QML_INTERFACE_PROVIDER_MINOR, PLUGIN_QML_INTERFACE_PROVIDER_APINAME, interface_singletontype_provider);
-	return nTypeID;
-}
+//int QtQuick2ApplicationViewer::registerDefaultCustomQMLTypes()
+//{
+//	int nTypeID = qmlRegisterSingletonType<Qml2Interface>(PLUGIN_QML_INTERFACE_PROVIDER_URI, PLUGIN_QML_INTERFACE_PROVIDER_MAJOR, PLUGIN_QML_INTERFACE_PROVIDER_MINOR, PLUGIN_QML_INTERFACE_PROVIDER_APINAME, qml2interface_singletontype_provider);
+//	return nTypeID;
+//	return 1;
+//}
 
 void QtQuick2ApplicationViewer::setMainQmlFile(const QString &file)
 {

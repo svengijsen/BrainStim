@@ -11,8 +11,6 @@ BrainStim.clearOutputWindow("BasicQMLExperiment");
 //////////////////////////
 //Public Property Variabeles//
 //////////////////////////
-//QML Experiment Directories
-BasicExperiment.sQmlFilePath = BasicExperiment.sScriptRootPath + "/" + "FileName.qml";
 //QML Experiment Objects
 BasicExperiment.QMLViewerObject = null;
 var tmpQMLViewerObj = null;
@@ -28,7 +26,7 @@ BasicExperiment.__proto__.InvokeQMLFunction = function(sMainItemName, sFunctionN
 {
 	BasicExperiment.LogFunctionSignature("BasicQMLExperiment","InvokeQMLFunction", arguments, true);
 	var retVal = BasicExperiment.QMLViewerObject.invokeQml2Method(sMainItemName,sFunctionName,vParam1, vParam2, vParam3, vParam4, vParam5, vParam6, vParam7, vParam8, vParam9);
-	if(BasicExperiment.sChoosenExperimenMode == "Testing_Mode")
+	if(BasicExperiment.sChoosenExperimenMode == BasicExperiment.arrExperimentModes[0])
 	{
 		var sArguments = "";
 		if(arguments.length > 2)
@@ -48,7 +46,7 @@ BasicExperiment.__proto__.InvokeQMLFunction = function(sMainItemName, sFunctionN
 BasicExperiment.__proto__.preNewQMLSourceLoaded = function(sSource)
 {
 	BasicExperiment.LogFunctionSignature("BasicQMLExperiment","preNewQMLSourceLoaded", arguments, true);
-	if(BasicExperiment.sChoosenExperimenMode == "Testing_Mode")
+	if(BasicExperiment.sChoosenExperimenMode == BasicExperiment.arrExperimentModes[0])
 	{
 		BasicExperiment.InvokeQMLFunction("DebugMode_Functions", "enableDebugMode");
 	}
@@ -163,7 +161,7 @@ BasicExperiment.__proto__.preExperimentStateChanged = _.wrap(BasicExperiment.__p
 BasicExperiment.__proto__.LogExperimentState = _.compose(BasicExperiment.LogExperimentState, function()
 {
 	BasicExperiment.LogFunctionSignature("BasicQMLExperiment","LogExperimentState", arguments, true);
-	if(BasicExperiment.sChoosenExperimenMode == "Testing_Mode")
+	if(BasicExperiment.sChoosenExperimenMode == BasicExperiment.arrExperimentModes[0])
 	{	
 		var retVal = BasicExperiment.QMLViewerObject.invokeQml2Method("DebugMode_Functions","updateExperimentState",BasicExperiment.cCurrentExperimentBlockStructure.getBlockNumber(),BasicExperiment.nCurrentExperimentStructureState.CurrentBlock_TrialNumber,BasicExperiment.nCurrentExperimentStructureState.CurrentBlock_InternalTrigger);
 		BrainStim.write2OutputWindow("* " + "DebugMode_Functions:updateExperimentState" + " returned: " + retVal + " >>>", "BasicQMLExperiment");	
@@ -175,7 +173,7 @@ BasicExperiment.__proto__.LogExperimentState = _.compose(BasicExperiment.LogExpe
 BasicExperiment.__proto__.StartExperimentObjects = _.compose(BasicExperiment.StartExperimentObjects, function()
 {
 	BasicExperiment.LogFunctionSignature("BasicQMLExperiment","StartExperimentObjects", arguments, true);
-	if(BasicExperiment.sChoosenExperimenMode == "Testing_Mode")
+	if(BasicExperiment.sChoosenExperimenMode == BasicExperiment.arrExperimentModes[0])
 	{
 		BasicExperiment.TriggerTimerObj.timeout.connect(BasicExperiment.QMLViewerObject, BasicExperiment.QMLViewerObject.incrementExternalTrigger);
 	}
@@ -189,7 +187,7 @@ BasicExperiment.__proto__.StartExperimentObjects = _.compose(BasicExperiment.Sta
 BasicExperiment.__proto__.StopExperimentObjects = _.compose(BasicExperiment.StopExperimentObjects, function()
 {
 	BasicExperiment.LogFunctionSignature("BasicQMLExperiment","StopExperimentObjects", arguments, true);
-	if(BasicExperiment.sChoosenExperimenMode == "Testing_Mode")
+	if(BasicExperiment.sChoosenExperimenMode == BasicExperiment.arrExperimentModes[0])
 	{	
 		BasicExperiment.TriggerTimerObj.timeout.disconnect(BasicExperiment.QMLViewerObject, BasicExperiment.QMLViewerObject.incrementExternalTrigger);
 	}

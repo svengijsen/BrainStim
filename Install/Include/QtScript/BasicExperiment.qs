@@ -26,7 +26,7 @@ BrainStim.clearOutputWindow("BasicExperiment");
 	BasicExperiment.nStartDateTimeStamp = 0;
 	BasicExperiment.bExperimentFirstTriggerReceived = false;
 	BasicExperiment.nTestModeTriggerDuration = 2000;
-	BasicExperiment.arrExperimentModes = new Array("Testing_Mode", "Experiment_Mode");
+	BasicExperiment.arrExperimentModes = new Array("Test, with debugging information", "Optimized, without debugging information");
 	BasicExperiment.sChoosenExperimenMode;
 	//Default Experiment Objects
 	BasicExperiment.KeyBoardCaptureObj = null; 
@@ -240,7 +240,6 @@ BrainStim.clearOutputWindow("BasicExperiment");
 	BasicExperiment.__proto__.checkRequiredScriptPlugins = function()	
 	{
 		BasicExperiment.LogFunctionSignature("BasicExperiment","checkRequiredScriptPlugins", arguments, true);
-		//if(BasicExperiment.sChoosenExperimenMode == "Testing_Mode")
 		if(BasicExperiment.KeyBoardCapture_Enabled)
 		{
 			if (typeof KeyBoardCapture === 'undefined')
@@ -293,7 +292,7 @@ BrainStim.clearOutputWindow("BasicExperiment");
 		{
 			//Now all defined objects in the experiment file are constructed and therefore available in this script, so now we can make the connections between constructed the objects.
 			
-			if(BasicExperiment.sChoosenExperimenMode == "Testing_Mode")
+			if(BasicExperiment.sChoosenExperimenMode == BasicExperiment.arrExperimentModes[0])
 				BasicExperiment.ExperimentManagerObj.setDebugMode(true);
 			else
 				BasicExperiment.ExperimentManagerObj.setDebugMode(false);
@@ -329,7 +328,7 @@ BrainStim.clearOutputWindow("BasicExperiment");
 	
 	BasicExperiment.__proto__.LogFunctionSignature = function(sOutputTabName, sFunctionName, lArguments, ignoreMode)	
 	{
-		if((BasicExperiment.sChoosenExperimenMode == "Testing_Mode") || (ignoreMode))
+		if((BasicExperiment.sChoosenExperimenMode == BasicExperiment.arrExperimentModes[0]) || (ignoreMode))
 		{
 			var sArguments = "";
 			if(lArguments.length > 0)
@@ -350,7 +349,7 @@ BrainStim.clearOutputWindow("BasicExperiment");
 	BasicExperiment.__proto__.preExternalTriggerRecieved = function()	
 	{
 		BasicExperiment.LogFunctionSignature("BasicExperiment","preExternalTriggerRecieved", arguments, true);
-		if(BasicExperiment.sChoosenExperimenMode == "Testing_Mode")
+		if(BasicExperiment.sChoosenExperimenMode == BasicExperiment.arrExperimentModes[0])
 		{
 			if(BasicExperiment.bExperimentFirstTriggerReceived == false)
 			{
@@ -374,7 +373,7 @@ BrainStim.clearOutputWindow("BasicExperiment");
 			BasicExperiment.bExperimentFirstTriggerReceived = true;
 			BasicExperiment.NewInitBlockTrial();
 		}	
-		if(BasicExperiment.sChoosenExperimenMode == "Testing_Mode")
+		if(BasicExperiment.sChoosenExperimenMode == BasicExperiment.arrExperimentModes[0])
 			BasicExperiment.LogExperimentState();
 		
 		if(BasicExperiment.nStartDateTimeStamp == 0)
@@ -436,7 +435,7 @@ BrainStim.clearOutputWindow("BasicExperiment");
 	BasicExperiment.__proto__.InitExperimentObjects = function()
 	{
 		BasicExperiment.LogFunctionSignature("BasicExperiment","InitExperimentObjects", arguments, true);
-		if(BasicExperiment.sChoosenExperimenMode == "Testing_Mode")
+		if(BasicExperiment.sChoosenExperimenMode == BasicExperiment.arrExperimentModes[0])
 		{	
 			BasicExperiment.TriggerTimerObj = new TriggerTimer();
 		}
@@ -487,7 +486,7 @@ BrainStim.clearOutputWindow("BasicExperiment");
 	BasicExperiment.__proto__.StopExperimentObjects = function()
 	{
 		BasicExperiment.LogFunctionSignature("BasicExperiment","StopExperimentObjects", arguments, true);
-		if(BasicExperiment.sChoosenExperimenMode == "Testing_Mode")
+		if(BasicExperiment.sChoosenExperimenMode == BasicExperiment.arrExperimentModes[0])
 		{	
 			BasicExperiment.TriggerTimerObj.stopTimer();
 		}

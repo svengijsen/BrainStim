@@ -60,12 +60,12 @@ private:
 };
 
 // Second, define the singleton type provider function (callback).
-static QObject *interface_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
+static QObject *qml2interface_singletontype_provider(QQmlEngine *engine, QJSEngine *scriptEngine)
 {
 	Q_UNUSED(engine)
 	Q_UNUSED(scriptEngine)
-	Qml2Interface *example = new Qml2Interface(NULL);
-	return example;
+	Qml2Interface *objQml2Interface = new Qml2Interface(NULL);
+	return objQml2Interface;
 }
 
 #endif //QML2INTERFACE_H

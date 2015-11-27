@@ -342,11 +342,6 @@ public:
 			{
 				tmpTypeVar = hQStringContainer.take(strKeyName.toLower());//get type pointer
 				*tmpTypeVar = pExpParam.toString();//Change the value				
-				//todo
-				//- check 4 custom {scriptvar} possibility?
-				//- check retino...
-				//- search for insert get set script function that dissapeared?	
-				//dfdsf
 			}
 			else
 			{

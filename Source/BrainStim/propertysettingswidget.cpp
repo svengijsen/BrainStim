@@ -1069,10 +1069,14 @@ bool PropertySettingsWidget::parseDependencies(QtVariantProperty *variantPropert
 			{
 				if(itDef->nDependencyParameterID == nID)
 				{
-					QString aa = (*it)->valueText();
-					QString bb = itDef->rRegularExpression.pattern();
+					QString sValueText = (*it)->valueText();
+					QString sRegularExpression = itDef->rRegularExpression.pattern();		
+					QRegularExpression regScriptReference;
+					regScriptReference.setPattern("^\\{.*\\}$");//	^=beginning of string, \\=escape character, $=end of string, .*=everything
+					//QString sScriptReferencePattern = regScriptReference.pattern();
+					bool bHasScriptRefMatch = regScriptReference.match(sValueText).hasMatch();
 
-					if(itDef->rRegularExpression.match((*it)->valueText()).hasMatch() == false)
+					if ((itDef->rRegularExpression.match(sValueText).hasMatch() == false) && (bHasScriptRefMatch==false))
 					{
 						itDependency->vProperty->setEnabled(false);
 						if(itDef->bHideWhenInactive)

@@ -835,22 +835,25 @@ cBlockParameterStructure::cBlockParameterStructure(const cBlockParameterStructur
 	nBlockParameterID = other.nBlockParameterID;
 	sBlockParameterValue = other.sBlockParameterValue;
 	sBlockParameterName = other.sBlockParameterName;
+	bBlockParameterIsCustom = other.bBlockParameterIsCustom;
 }
 
 bool cBlockParameterStructure::Initialize()
 {
+	bBlockParameterIsCustom = false;
 	nBlockParameterID = -1;
 	sBlockParameterValue = "";
 	sBlockParameterName = "";
 	return true;
 }
 
-cBlockParameterStructure::cBlockParameterStructure(const int &nBlockParamId, const QString &sBlockParamName, const QString &sBlockParamValue)
+cBlockParameterStructure::cBlockParameterStructure(const int &nBlockParamId, const QString &sBlockParamName, const QString &sBlockParamValue, const bool &bBlockParamIsCustom)
 {
 	currentScriptEngine = NULL;
 	nBlockParameterID = nBlockParamId;
 	sBlockParameterName = sBlockParamName;
 	sBlockParameterValue = sBlockParamValue;
+	bBlockParameterIsCustom = bBlockParamIsCustom;
 };
 
 /*! \brief The cBlockParameterStructure destructor.

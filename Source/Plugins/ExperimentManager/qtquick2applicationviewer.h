@@ -40,8 +40,9 @@ public:
 
     void setMainQmlFile(const QString &file);
     void addImportPath(const QString &path);
-	int registerDefaultCustomQMLTypes();
+	//int registerDefaultCustomQMLTypes();
 	void showExpanded();
+	QObject *getParentObject() { return parentObject; };
 
 protected:
 	//bool event(QEvent*);
@@ -53,7 +54,7 @@ private:
 	QObject *parentObject;
 	//void configureEventFilter(QObject* parentObject);
     class QtQuick2ApplicationViewerPrivate *d;
-	Qml2Interface *qml2InterfaceObject;
+	//Qml2Interface *qml2InterfaceObject;
 };
 
 #endif // QTQUICK2APPLICATIONVIEWER_H

@@ -2063,7 +2063,12 @@ void ExperimentGraphicEditor::setNewFileName(const QString &sExpTreeModelCanonFi
 { 
 	sCurrentCanonFilePath = sExpTreeModelCanonFilePath; 
 	if (expManager)
-		expManager->setExperimentFileName(sExpTreeModelCanonFilePath);
+	{
+		if(expManager->setExperimentFileName(sExpTreeModelCanonFilePath))
+		{
+			expManager->reparseExperiment();
+		}
+	}
 }
 
 QString ExperimentGraphicEditor::getCurrentFileName()

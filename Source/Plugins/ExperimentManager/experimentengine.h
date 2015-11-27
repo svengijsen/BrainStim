@@ -210,20 +210,22 @@ public slots:
 	 *  This parameter variable value is currently in use.
 	 */
 	QScriptValue getExperimentObjectParameter(const int &nObjectID, const QString &strName);
-	/*! \brief Sets the current value of an Experiment Parameter variable.
+	/*! \brief Sets the current value of an existing Experiment Parameter variable.
 	*
 	*   This function can be used to immediately set a value of an Experiment Parameter variable for a specific object.
 	*	This parameter variable value is immediately set and used.
+	*  @param bBufferTillChanged a boolean value (default=false) that allows us to specify whether this value should stay buffered till the next change of this Experiment Parameter variable.
 	*/
-	bool setExperimentObjectParameter(const int &nObjectID, const QString &strName, const QScriptValue &sScriptVal);
+	bool setExperimentObjectParameter(const int &nObjectID, const QString &strName, const QScriptValue &sScriptVal, const bool &bBufferTillChanged = false);
 	/*! \brief Update or insert an Experiment Block Parameter that can be parsed.
 	 *
 	 *  This function can be used to insert or update an Experiment Block Parameter to be parsed for a specific object.
 	 *  This Parameter can be parsed at the next initialization of a new BlockTrial if not yet initialized.
 	 *  Setting the parameter bIsInitializing to true forces the new parameter to be re-parsed at the next initialization of a new BlockTrial.
 	 *  The parameter bIsCustom (default = false) defines whether this parameter should be treated as a custom parameter.
+	 *	The parameter bForceImmediateParse (default = false) defines whether this parameter should be immediately re-parsed instead of waiting for the next initialization of a new BlockTrial.
 	 */
-	bool insertExpObjectBlockParameter(const int nObjectID,const QString sName,const QString sValue,bool bIsInitializing = true, bool bIsCustom = false);
+	bool insertExpObjectBlockParameter(const int nObjectID, const QString sName, const QString sValue, bool bIsInitializing = true, bool bIsCustom = false, bool bForceImmediateParse = false);
 	/*! \brief Returns a QScreen object representing the active Stimuli Output Screen.
 	*
 	*  This function returns a pointer to an QScreen object representing the active configured Stimuli Output Screen.
@@ -260,7 +262,7 @@ protected slots:
 	void animate(bool bOnlyCheckBlockTrials = false);
 
 private:
-	bool expandExperimentBlockParameterValue(QString &sValue);
+	bool expandExperimentBlockParameterValue(QString &sValue, bool *bScriptRefFound = NULL);
 	bool unlockExperimentObject();
 	void init();
 	void fetchCurrentExperimentStructures();
