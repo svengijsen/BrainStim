@@ -21,7 +21,7 @@ var strInstallConfigurationFileCopy = sScriptPath + "\\" + strInstallConfigurati
 var sInstallerAppName = tr("BrainStim");//BrainStim
 var arrConfigList = new Array("win32","x64");
 var sInstallerConfiguration = tr(arrConfigList[0]);//win32 or x64
-var sInstallerVersion = tr("1.0.0.1");//<Major>.<Minor>.<Build>.<Revision>
+var sInstallerVersion = tr("1.1.0.1");//<Major>.<Minor>.<Build>.<Revision>
 var sInstallerPlatform = tr("Windows");
 
 

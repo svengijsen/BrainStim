@@ -57,7 +57,7 @@ bool NetworkServerThreadClient::sendData(const QString &sData)
 		return false;
 	QByteArray block;
 	QDataStream out(&block, QIODevice::WriteOnly);
-	out.setVersion(QDataStream::Qt_5_0);
+	out.setVersion(QDataStream::Qt_5_2);
 	out << (quint16)0;
 	out << sData; 
 	out.device()->seek(0);
@@ -72,7 +72,7 @@ void NetworkServerThreadClient::clientReadyRead()
 	if(!m_socket)
 		return;
 	QDataStream in(m_socket);
-	in.setVersion(QDataStream::Qt_5_0);
+	in.setVersion(QDataStream::Qt_5_2);
 	if (networkDataBlockSize == 0) 
 	{
 		if (m_socket->bytesAvailable() < (int)sizeof(quint16))

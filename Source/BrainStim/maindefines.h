@@ -31,16 +31,16 @@
 //Also search and change "Q_CLASSINFO("ScriptAPIClassName"..!!!
 
 #define MAIN_PROGRAM_COMPANY_SHORT_NAME	"MBIC"
-#define MAIN_PROGRAM_LEGAL_COPYRIGHT	"Copyright (C) 2015"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
-#define MAIN_PROGRAM_FILE_VERSION_STRING_MAJOR	1   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
-#define MAIN_PROGRAM_FILE_VERSION_STRING_MINOR	0   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
-#define MAIN_PROGRAM_FILE_VERSION_STRING_REVISION	0   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
-#define MAIN_PROGRAM_FILE_VERSION_STRING_BUILD	1   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
-#define MAIN_PROGRAM_PRODUCT_VERSION_STRING_MAJOR	1   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
-#define MAIN_PROGRAM_PRODUCT_VERSION_STRING_MINOR	0   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
-#define MAIN_PROGRAM_PRODUCT_VERSION_STRING_REVISION	0   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
-#define MAIN_PROGRAM_PRODUCT_VERSION_STRING_BUILD	1   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
-#define MAIN_PROGRAM_INTERNAL_NAME	"BrainStim"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define MAIN_PROGRAM_LEGAL_COPYRIGHT	"Copyright (C) 2016"   //Please do not edit this line manually, see BinaryVersioning.qs (151216115531).
+#define MAIN_PROGRAM_FILE_VERSION_STRING_MAJOR	1   //Please do not edit this line manually, see BinaryVersioning.qs (151216115531).
+#define MAIN_PROGRAM_FILE_VERSION_STRING_MINOR	1   //Please do not edit this line manually, see BinaryVersioning.qs (151216115531).
+#define MAIN_PROGRAM_FILE_VERSION_STRING_REVISION	0   //Please do not edit this line manually, see BinaryVersioning.qs (151216115531).
+#define MAIN_PROGRAM_FILE_VERSION_STRING_BUILD	1   //Please do not edit this line manually, see BinaryVersioning.qs (151216115531).
+#define MAIN_PROGRAM_PRODUCT_VERSION_STRING_MAJOR	1   //Please do not edit this line manually, see BinaryVersioning.qs (151216115531).
+#define MAIN_PROGRAM_PRODUCT_VERSION_STRING_MINOR	1   //Please do not edit this line manually, see BinaryVersioning.qs (151216115531).
+#define MAIN_PROGRAM_PRODUCT_VERSION_STRING_REVISION	0   //Please do not edit this line manually, see BinaryVersioning.qs (151216115531).
+#define MAIN_PROGRAM_PRODUCT_VERSION_STRING_BUILD	1   //Please do not edit this line manually, see BinaryVersioning.qs (151216115531).
+#define MAIN_PROGRAM_INTERNAL_NAME	"BrainStim"   //Please do not edit this line manually, see BinaryVersioning.qs (151216115531).
 #define MAIN_PROGRAM_FULL_NAME							MAIN_PROGRAM_INTERNAL_NAME "(v" MAIN_PROGRAM_FILE_VERSION_STRING ")"
 #define MAIN_PROGRAM_PRODUCT_NAME                       MAIN_PROGRAM_INTERNAL_NAME
 #define MAIN_PROGRAM_AUTHOR_NAME						"Sven Gijsen"
@@ -75,8 +75,8 @@
 #define MAIN_PROGRAM_STANDARD_DATETIME_FORMAT			"yyyyMMddHHmmsszzz"
 #define MAIN_PROGRAM_INSTALLATIONFILE_EXT_POSTSTRING	"_installed"
 #define MAIN_PROGRAM_INSTALLATION_LOGFILE_POSTSTRING	MAIN_PROGRAM_INSTALLATIONFILE_EXT_POSTSTRING ".log"
-#define MAIN_PROGRAM_DEVICE_INTERFACE	"BrainStim.Plugins.DeviceInterface/1.0"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
-#define MAIN_PROGRAM_EXTENSION_INTERFACE	"BrainStim.Plugins.ExtensionInterface/1.0"   //Please do not edit this line manually, see BinaryVersioning.qs (14825141414).
+#define MAIN_PROGRAM_DEVICE_INTERFACE	"BrainStim.Plugins.DeviceInterface/1.1"   //Please do not edit this line manually, see BinaryVersioning.qs (151216115531).
+#define MAIN_PROGRAM_EXTENSION_INTERFACE	"BrainStim.Plugins.ExtensionInterface/1.1"   //Please do not edit this line manually, see BinaryVersioning.qs (151216115531).
 
 #define REGISTRY_SETTINGS_SYSTEM						"SystemSettings"
 #define REGISTRY_SETTINGS_USER							"UserSettings"

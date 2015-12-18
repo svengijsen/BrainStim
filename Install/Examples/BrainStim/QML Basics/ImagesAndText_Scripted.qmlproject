@@ -14,5 +14,5 @@ Project {
 		directory: "."
 	}
 	/* List of plugin directories passed to QML runtime */
-    importPaths: [ "E:/Projects/BrainStim_Installed/BrainStim_32/1.0.0.1/Qml/plugins/Win32" ]
+    importPaths: [ "C:/Program Files (x86)/BrainStim/Qml/plugins/Win32" ]
 }

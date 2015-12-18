@@ -213,8 +213,8 @@ public slots:
 	/*! \brief Sets the current value of an existing Experiment Parameter variable.
 	*
 	*   This function can be used to immediately set a value of an Experiment Parameter variable for a specific object.
-	*	This parameter variable value is immediately set and used.
-	*  @param bBufferTillChanged a boolean value (default=false) that allows us to specify whether this value should stay buffered till the next change of this Experiment Parameter variable.
+	*	This parameter variable value is immediately set and used. The argument bBufferTillChanged is a boolean value (default=false) 
+	*   that allows us to specify whether this value should stay buffered till the next change of this Experiment Parameter variable.
 	*/
 	bool setExperimentObjectParameter(const int &nObjectID, const QString &strName, const QScriptValue &sScriptVal, const bool &bBufferTillChanged = false);
 	/*! \brief Update or insert an Experiment Block Parameter that can be parsed.

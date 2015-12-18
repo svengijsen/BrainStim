@@ -284,6 +284,8 @@ void QML2Viewer::setTopLeftWindowPosition(const int &nXposition, const int &nYpo
 
 bool QML2Viewer::startObject()
 {	
+	int nSetScreenNumber = 0;
+	QPoint tmpPointOffsetScreen(0, 0);
 	if(sConfiguredActiveScreen == NULL)
 	{
 		sConfiguredActiveScreen = quick2ViewerWindow->grabScreenUnderMouseCursor();
@@ -291,11 +293,13 @@ bool QML2Viewer::startObject()
 		{
 			rectScreenRes = sConfiguredActiveScreen->geometry();
 			quick2ViewerWindow->setScreen(sConfiguredActiveScreen);
+			tmpPointOffsetScreen = rectScreenRes.topLeft().toPoint();
 		}
 	}
 	else
 	{
 		quick2ViewerWindow->setScreen(sConfiguredActiveScreen);
+		nSetScreenNumber = QGuiApplication::screens().indexOf(sConfiguredActiveScreen);
 	}	
 
 	if (bFullScreenMode)
@@ -307,7 +311,12 @@ bool QML2Viewer::startObject()
 	{
 		if (bIsFramelessWindow == false)
 			quick2ViewerWindow->setFlags(Qt::Window);
-		quick2ViewerWindow->setPosition(pointWindowStartPosition);
+		if (nSetScreenNumber > 0)
+		{
+			QRect tmpScreenRect = sConfiguredActiveScreen->geometry();
+			tmpPointOffsetScreen = tmpScreenRect.topLeft();
+		}
+		quick2ViewerWindow->setPosition(pointWindowStartPosition + tmpPointOffsetScreen);
 		quick2ViewerWindow->setResizeMode(QQuickView::SizeViewToRootObject);
 		quick2ViewerWindow->show();
 	}
@@ -489,7 +498,7 @@ void QML2Viewer::parseExperimentObjectBlockParameters(bool bInit, bool bSetOnlyT
 		colorBackground = QColor(87,87,87);//gives "#575757";
 		if(!bSetOnlyToDefault)
 			insertExpObjectParameter(nQML2ViewerID,QML2VIEWER_BACKGROUNDCOLOR,colorBackground);
-		qmlMainFilePath = "";
+		//qmlMainFilePath = "";
 		if(!bSetOnlyToDefault)
 			insertExpObjectParameter(nQML2ViewerID,QML2VIEWER_MAINFILEPATH,qmlMainFilePath);
 		stimHeightPixelAmount = 480;

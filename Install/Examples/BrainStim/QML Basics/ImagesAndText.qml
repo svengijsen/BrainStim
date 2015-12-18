@@ -28,7 +28,7 @@ Rectangle //Root element
       {
 	 id: centerImage
          anchors.centerIn: parent
-         source: "images/BrainStim.png"
+         source: "../common/images/brainstim.png"
       }
       
    }

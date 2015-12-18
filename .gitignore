@@ -42,3 +42,9 @@ Install/Include/QtScript/TSIExchanger.qs
 InstallJammer/build/messages
 InstallJammer/output/*
 Source/ipch/
+/install/examples/brainstim/advanced examples/Retinotopy Output/prtfiles
+/install/examples/brainstim/advanced examples/Retinotopy Output/outputfiles
+/install/examples/brainstim/advanced examples/Retinotopy Output/logfiles
+/install/examples/brainstim/advanced examples/Retinotopy Output/inputfiles
+Install/documents/*.qch
+Install/documents/*.qhc

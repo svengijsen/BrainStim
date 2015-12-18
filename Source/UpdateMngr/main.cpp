@@ -271,7 +271,7 @@ REDO_ARGUMENTS_PARSING:
 		}
 
 		appendLogMessage("Searching for " + sUserIniFilePath + " file", bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);
-		//BrainStim(v1.0.0.1, 32-bits)
+		//BrainStim(vx.x.x.x, xx-bits)
 		if (QFile(sUserIniFilePath).exists() == false)
 		{
 			appendLogMessage("Initialization file(" + sUserIniFilePath + ") not yet found", bOperationHasFailed, installationManagerBase::Informative, &lDebugMessages);

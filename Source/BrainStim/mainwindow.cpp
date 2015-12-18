@@ -2795,12 +2795,21 @@ bool MainWindow::insertPluginIntoMenu(const QString &sRegisteredPluginName)
 
 QAction* MainWindow::integratePlugin(const QString &sRegisteredPluginName)
 {
-	if ((sRegisteredPluginName.isEmpty() == false) && (installMngr->getRegisteredPluginInterface(sRegisteredPluginName)))//if successfully registered
+	PluginInterface *tmpPluginInterFace = installMngr->getRegisteredPluginInterface(sRegisteredPluginName);
+	if ((sRegisteredPluginName.isEmpty() == false) && (tmpPluginInterFace))//if successfully registered
 	{
-		QAction *action1 = new QAction(installMngr->getRegisteredPluginInterface(sRegisteredPluginName)->GetPluginInformation(),this);
+		QAction *action1 = new QAction(tmpPluginInterFace->GetPluginInformation(), this);
 		action1->setData(sRegisteredPluginName);
-		connect(action1, SIGNAL(triggered()), this, SLOT(showPluginGUI()));
-		action1->setStatusTip(tr("Show the Plugins UI(") + sRegisteredPluginName + ")");
+		if (tmpPluginInterFace->HasGUI())
+		{
+			connect(action1, SIGNAL(triggered()), this, SLOT(showPluginGUI()));
+			action1->setStatusTip(tr("Show the Plugins UI(") + sRegisteredPluginName + ")");
+		}
+		else
+		{
+			action1->setStatusTip(tr("No Plugins UI(") + sRegisteredPluginName + ")");
+			action1->setDisabled(true);
+		}
 		//collection->GetInterface(tmpIndex)->ConfigureScriptEngine(* AppScriptEngine->eng);
 		int nNewRegisteredMetaID = configurePluginScriptEngine(sRegisteredPluginName);
 		MainAppInfo::addRegisteredMetaTypeID(nNewRegisteredMetaID);
@@ -2992,7 +3001,10 @@ void MainWindow::setAppDirectories()
 void MainWindow::showPluginGUI()
 {
 	QAction *action = qobject_cast<QAction *>(sender());
-	installMngr->getRegisteredPluginInterface(action->data().toString())->ShowGUI();
+	PluginInterface *tmpPluginInterface = installMngr->getRegisteredPluginInterface(action->data().toString());
+	if (tmpPluginInterface)
+		if (tmpPluginInterface->HasGUI())
+			tmpPluginInterface->ShowGUI();
 }
 
 void MainWindow::setScriptRunningStatus(GlobalApplicationInformation::ActiveScriptMode state)

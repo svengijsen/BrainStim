@@ -56,6 +56,7 @@ public:
 		else return UnknownPlugin;
 	};
 
+	PluginInterface() { m_MainAppInfo = NULL; };
 	virtual ~PluginInterface() {}
 	virtual int ConfigureScriptEngine(QScriptEngine &eng) = 0;
 	virtual QString GetPluginInformation(void) {return strPluginInformation;}
@@ -66,10 +67,13 @@ public:
 	
 public slots:
 	virtual bool ShowGUI() = 0;
+	virtual bool HasGUI() = 0;
 	virtual QString GetMinimalMainProgramVersion() {return m_MainAppInfo->sFileVersion;};
 	virtual bool IsCompatible() 
 	{
 		QString strMainProgramMinimalVersion = GetMinimalMainProgramVersion();
+		if (m_MainAppInfo == NULL)
+			return false;
 		QStringList lstMainProgramCurrentVersion = QString(m_MainAppInfo->sFileVersion).split(".");
 		QStringList lstMainProgramMinimalVersion = strMainProgramMinimalVersion.split(".");
 		if ((lstMainProgramCurrentVersion.count() == 4) && (lstMainProgramMinimalVersion.count() == 4))

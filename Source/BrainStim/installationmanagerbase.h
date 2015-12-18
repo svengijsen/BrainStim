@@ -48,6 +48,7 @@
 #define INSTALLMNGR_SETTING_SETTING_FILES			"Files"
 
 #define INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH	"<MainAppPath>"			//These can be shared (are read-only) and need administrator privileges to install
+#define INSTALLMNGR_SETTING_MACRO_DOCUMENTATIONPATH	"<MainDocPath>"			//These can be shared (are read-only) and need administrator privileges to install
 #define INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH	"<PluginDefaultPath>"	//These can be shared (are read-only) and need administrator privileges to install
 #define INSTALLMNGR_SETTING_MACRO_USERPLUGINPATH	"<PluginUserPath>"
 #define INSTALLMNGR_SETTING_MACRO_PLUGINNAME		"<PluginName>"
@@ -112,10 +113,18 @@ public:
 
 	static QStringList getFilesByExtension(const QString &sRootSearchDirectory, const QStringList &lAllowedFileExtensions)
 	{
+		if (sRootSearchDirectory.isEmpty())
+			return QStringList();
+
+		QString sRootSearchDirectoryNormalized = sRootSearchDirectory;
+		sRootSearchDirectoryNormalized.replace("\\", "/", Qt::CaseSensitive);
+		if ((sRootSearchDirectoryNormalized.endsWith("/")) == false)
+			sRootSearchDirectoryNormalized = sRootSearchDirectoryNormalized + "/";
+		
 		QStringList lSourceUpdateFilesFound;
 		QString sUpdatesDir;
 		QDir dirUpdatesRoot;
-		dirUpdatesRoot.setPath(sRootSearchDirectory);
+		dirUpdatesRoot.setPath(sRootSearchDirectoryNormalized);
 
 		if (dirUpdatesRoot.exists())
 		{
@@ -126,9 +135,9 @@ public:
 			if (nNumberOfFoundFiles > 0)
 			{
 				for (int i = 0; i < dirUpdatesRoot.entryList().count(); i++)
-					lSourceUpdateFilesFound.append(sRootSearchDirectory + dirUpdatesRoot.entryList()[i]);
+					lSourceUpdateFilesFound.append(sRootSearchDirectoryNormalized + dirUpdatesRoot.entryList()[i]);
 			}
-			QDirIterator *it = new QDirIterator(sRootSearchDirectory);
+			QDirIterator *it = new QDirIterator(sRootSearchDirectoryNormalized);
 			while (it->hasNext())
 			{
 				QString sSubDir = it->next();
@@ -146,10 +155,11 @@ public:
 			bNeedsAdminPrivileges = true;
 		//else
 		//	bNeedsAdminPrivileges = false;
-		bIsSharedFile = ((sRetval.contains(INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH)) || (sRetval.contains(INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH)));
+		bIsSharedFile = ((sRetval.contains(INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH)) || (sRetval.contains(INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH)) || sRetval.contains(INSTALLMNGR_SETTING_MACRO_DOCUMENTATIONPATH));
 
 		sRetval.replace(INSTALLMNGR_SETTING_MACRO_USERPLUGINPATH, sMainAppsUserPluginDirPath, Qt::CaseInsensitive);
 		sRetval.replace(INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH, sMainAppDirPath, Qt::CaseInsensitive);
+		sRetval.replace(INSTALLMNGR_SETTING_MACRO_DOCUMENTATIONPATH, sMainAppDirPath + "/" + MAIN_PROGRAM_DOC_DIRNAME, Qt::CaseInsensitive);
 		sRetval.replace(INSTALLMNGR_SETTING_MACRO_PLUGINNAME, sIniCompleteBaseName, Qt::CaseInsensitive); //QFileInfo(sIniFileName).completeBaseName(), Qt::CaseInsensitive);
 		sRetval.replace(INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH, sMainAppsDefaultPluginDirPath, Qt::CaseInsensitive);
 		sRetval.replace(INSTALLMNGR_SETTING_MACRO_USERAPPPATH, sUserAppPathPath, Qt::CaseInsensitive);
@@ -207,7 +217,7 @@ public:
 
 	static bool needsAdminPrivilegesToInstall(const QString &sMacroPath)
 	{
-		return (sMacroPath.contains(INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH, Qt::CaseInsensitive) || (sMacroPath.contains(INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH, Qt::CaseInsensitive)));
+		return (sMacroPath.contains(INSTALLMNGR_SETTING_MACRO_APPLICATIONPATH, Qt::CaseInsensitive) || (sMacroPath.contains(INSTALLMNGR_SETTING_MACRO_DEFAULTPLUGINPATH, Qt::CaseInsensitive)) || (sMacroPath.contains(INSTALLMNGR_SETTING_MACRO_DOCUMENTATIONPATH, Qt::CaseInsensitive)));
 	};
 
 	static bool isPackedFile(const QString &sFilePath)
@@ -475,6 +485,7 @@ public:
 						return InstallResult_ErrorInsufficientRights;
 					}
 				}
+				QStringList lMissingSourceFiles;
 				for (int i = 0; i < lFileList.count(); i++)
 				{
 					QString sFileName = QFileInfo(lFileList[i]).fileName();
@@ -482,15 +493,18 @@ public:
 					QFile fInstallationFilePath(lFileList[i]); //sMainAppsPluginDirPath + "/" + lFileList[i]);
 					if (fSourceFilePath.exists() == false)
 					{
+						lMissingSourceFiles << fSourceFilePath.fileName();
 						bAllFilesAvailableCheck = false;
-						break;
+						//break;
 					}
-					if (fInstallationFilePath.exists())// QFileInfo(sMainAppsPluginDirPath + "/" + lFileList[i]).exists())
+					else if (fInstallationFilePath.exists())
+					{
 						nPresentInCurrentInstallIndexes.append(i);
+					}
 				}
 				if (bAllFilesAvailableCheck == false)
 				{
-					appendAndLogDebugMessage("Not all source files for the installation are present!", Failed, lMessages);
+					appendAndLogDebugMessage("Not all source files for the installation are present!\n" + lMissingSourceFiles.join("\n"), Failed, lMessages);
 					return InstallResult_ErrorNotAllSourceFilesAvailable;
 				}
 

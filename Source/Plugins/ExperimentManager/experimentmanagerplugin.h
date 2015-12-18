@@ -94,6 +94,7 @@ private:
 	QML2Viewer *Qml2ViewerObject;
 
 public slots:
+	bool HasGUI() { return false; };
     bool ShowGUI();
 	bool IsCompatible() {return PluginInterface::IsCompatible();};
 	QStringList GetAdditionalFileExtensions() {return (QStringList() << "Experiment files (*.exml);;" << "QML documents (*.qml);;");};

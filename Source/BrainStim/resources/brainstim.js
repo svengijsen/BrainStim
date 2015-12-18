@@ -58,11 +58,11 @@ function BrainStim_CreateArray(length)
 function BrainStim_Information()
 {
 	//alert('BrainStim constructor');
-	this.BrainStimReleases = [['1.0.0.1', '5.3.2', '1.0.0.1']];//, ['Exml', 'Qt', 'Product']];
+	this.BrainStimReleases = [['1.0.0.1', '5.3.2', '1.0.0.1'], ['1.1.0.1', '5.3.2', '1.1.0.1']];//, ['Exml', 'Qt', 'Product']];
 	var PropCounter = 0;
 	var ComponentCounter = 0;
+	var ReleaseCounter = 0;
 	var tmpArray;
-	var nNumberOfComponentChanges = 0;
 
 	this.Name_Index = PropCounter++;
 	this.Version_Index = PropCounter++;
@@ -74,38 +74,85 @@ function BrainStim_Information()
 	
 	var ExperimentManagerPlugin_Comp_Index = ComponentCounter++;
 	var BrainStim_QMLExtensions_Comp_Index = ComponentCounter++;
+	this.componentVersioning = BrainStim_CreateArray(this.BrainStimReleases.length, ComponentCounter, PropCounter);//Default constructor!
 	
-	this.componentVersioning = BrainStim_CreateArray(1,ComponentCounter,PropCounter);//Default constructor!
+	this.currentCopyright = 'Copyright (C) 2016';
+	this.appCompany = 'MBIC';
+	this.appName = 'BrainStim';
+	
 	//BrainStim version (1.0.0.1)
 	///////////////////////////////////////////////////////////////
-	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.Name_Index] = 'ExperimentManagerPlugin';
-	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.Version_Index] = '1.0.0.1';
-	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.ProductVersion_Index] = '1.0.0.1';
-	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this._BrainStimVersion_Index] = 0; //-->1.0.0.1
-	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.EXML_Index] = '1.0.0.1';
-	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.DevInterface_Index] = '1.0';
-	this.componentVersioning[0][ExperimentManagerPlugin_Comp_Index][this.ExtInterface_Index] = '1.0';
+	this.componentVersioning[ReleaseCounter][ExperimentManagerPlugin_Comp_Index][this.Name_Index] = 'ExperimentManagerPlugin';
+	this.componentVersioning[ReleaseCounter][ExperimentManagerPlugin_Comp_Index][this.Version_Index] = '1.0.0.1';
+	this.componentVersioning[ReleaseCounter][ExperimentManagerPlugin_Comp_Index][this.ProductVersion_Index] = '1.0.0.1';
+	this.componentVersioning[ReleaseCounter][ExperimentManagerPlugin_Comp_Index][this._BrainStimVersion_Index] = ReleaseCounter; //-->1.0.0.1
+	this.componentVersioning[ReleaseCounter][ExperimentManagerPlugin_Comp_Index][this.EXML_Index] = '1.0.0.1';
+	this.componentVersioning[ReleaseCounter][ExperimentManagerPlugin_Comp_Index][this.DevInterface_Index] = '1.0';
+	this.componentVersioning[ReleaseCounter][ExperimentManagerPlugin_Comp_Index][this.ExtInterface_Index] = '1.0';
 	///////////////////////////////////////////////////////////////
-	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this.Name_Index] = 'BrainStim_QMLExtensions';
-	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this.Version_Index] = '1.0';
-	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this.ProductVersion_Index] = 'x';
-	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this._BrainStimVersion_Index] = 0;
-	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this.EXML_Index] = 'x';
-	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this.DevInterface_Index] = 'x';
-	this.componentVersioning[0][BrainStim_QMLExtensions_Comp_Index][this.ExtInterface_Index] = 'x';
+	this.componentVersioning[ReleaseCounter][BrainStim_QMLExtensions_Comp_Index][this.Name_Index] = 'BrainStim_QMLExtensions';
+	this.componentVersioning[ReleaseCounter][BrainStim_QMLExtensions_Comp_Index][this.Version_Index] = '1.0';
+	this.componentVersioning[ReleaseCounter][BrainStim_QMLExtensions_Comp_Index][this.ProductVersion_Index] = 'x';
+	this.componentVersioning[ReleaseCounter][BrainStim_QMLExtensions_Comp_Index][this._BrainStimVersion_Index] = ReleaseCounter; //-->1.0.0.1
+	this.componentVersioning[ReleaseCounter][BrainStim_QMLExtensions_Comp_Index][this.EXML_Index] = 'x';
+	this.componentVersioning[ReleaseCounter][BrainStim_QMLExtensions_Comp_Index][this.DevInterface_Index] = 'x';
+	this.componentVersioning[ReleaseCounter][BrainStim_QMLExtensions_Comp_Index][this.ExtInterface_Index] = 'x';
+	ReleaseCounter++;
 	///////////////////////////////////////////////////////////////
-		
-	//BrainStim version (?.?.?.?)
-	///////////////////////////////////////////////////////////////
-//	nNumberOfComponentChanges = 4;//See below, increment by adding new changes for this release!
-//	tmpArray = BrainStim_CreateArray(1,nNumberOfComponentChanges,PropCounter);
-//	this.componentVersioning.push.apply(this.componentVersioning, tmpArray)
-//	this.componentVersioning[1][ExperimentManagerPlugin_Comp_Index] = 	['ExperimentManagerPlugin',	'1.0.0.1', '1.0.0.1', 1, '1.0.0.1', '1.0',  '1.0'];
-//	this.componentVersioning[1][ParallelPortPlugin_Comp_Index] =        ['ParallelPortPlugin',      '1.0.0.1', '1.0.0.1', 0, 'x',       '1.0',  '1.0'];
-//	this.componentVersioning[1][KeyBoardPlugin_Comp_Index] =            ['KeyBoardPlugin',          '1.0.0.1', '1.0.0.1', 0, 'x',       '1.0',  '1.0'];
-//	this.componentVersioning[1][BrainStim_QMLExtensions_Comp_Index] =    ['BrainStim_QMLExtensions',  '1.0',     '1.0.0.1', 0, 'x',       'x',    'x'];
 
+	//BrainStim version (1.1.0.1)
+	///////////////////////////////////////////////////////////////
+	this.componentVersioning[ReleaseCounter][ExperimentManagerPlugin_Comp_Index][this.Name_Index] = 'ExperimentManagerPlugin';
+	this.componentVersioning[ReleaseCounter][ExperimentManagerPlugin_Comp_Index][this.Version_Index] = '1.1.0.1';
+	this.componentVersioning[ReleaseCounter][ExperimentManagerPlugin_Comp_Index][this.ProductVersion_Index] = '1.1.0.1';
+	this.componentVersioning[ReleaseCounter][ExperimentManagerPlugin_Comp_Index][this._BrainStimVersion_Index] = ReleaseCounter; //-->1.1.0.1
+	this.componentVersioning[ReleaseCounter][ExperimentManagerPlugin_Comp_Index][this.EXML_Index] = '1.1.0.1';
+	this.componentVersioning[ReleaseCounter][ExperimentManagerPlugin_Comp_Index][this.DevInterface_Index] = '1.1';
+	this.componentVersioning[ReleaseCounter][ExperimentManagerPlugin_Comp_Index][this.ExtInterface_Index] = '1.1';
+	///////////////////////////////////////////////////////////////
+	this.componentVersioning[ReleaseCounter][BrainStim_QMLExtensions_Comp_Index][this.Name_Index] = 'BrainStim_QMLExtensions';
+	this.componentVersioning[ReleaseCounter][BrainStim_QMLExtensions_Comp_Index][this.Version_Index] = '1.0';
+	this.componentVersioning[ReleaseCounter][BrainStim_QMLExtensions_Comp_Index][this.ProductVersion_Index] = 'x';
+	this.componentVersioning[ReleaseCounter][BrainStim_QMLExtensions_Comp_Index][this._BrainStimVersion_Index] = ReleaseCounter; //-->1.1.0.1
+	this.componentVersioning[ReleaseCounter][BrainStim_QMLExtensions_Comp_Index][this.EXML_Index] = 'x';
+	this.componentVersioning[ReleaseCounter][BrainStim_QMLExtensions_Comp_Index][this.DevInterface_Index] = 'x';
+	this.componentVersioning[ReleaseCounter][BrainStim_QMLExtensions_Comp_Index][this.ExtInterface_Index] = 'x';
+	ReleaseCounter++;
+	///////////////////////////////////////////////////////////////
+	
+	
+	
+	///////////////////////////////////////////////////////////////
+	this.currentDevInterface = 'BrainStim.Plugins.DeviceInterface/1.1';
+	this.currentExtInterface = 'BrainStim.Plugins.ExtensionInterface/1.1';
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+BrainStim_Information.prototype.GetMainAppCopyrightString = function ()
+{ return this.currentCopyright; }
+
+BrainStim_Information.prototype.GetMainAppCompanyName = function ()
+{	return this.appCompany; }
+
+BrainStim_Information.prototype.GetMainAppInternalName = function ()
+{	return this.appName; }
+
+BrainStim_Information.prototype.GetMainAppPluginDeviceInterfaceString = function ()
+{	return this.currentDevInterface; }
+
+BrainStim_Information.prototype.GetMainAppPluginExtensionInterfaceString = function ()
+{	return this.currentExtInterface; }
 
 BrainStim_Information.prototype.GetCurrentRelease = function ()
 {
@@ -244,18 +291,3 @@ BrainStim_Information.prototype.GetComponentExtensionInterfaceVersionByIndexes =
 		return this.componentVersioning[nReleaseIndex][nComponentIndex][this.ExtInterface_Index];
 	return '';
 }
-
-BrainStim_Information.prototype.GetMainAppCopyrightString = function ()
-{ return 'Copyright (C) 2015'; }
-
-BrainStim_Information.prototype.GetMainAppCompanyName = function ()
-{	return 'MBIC'; }
-
-BrainStim_Information.prototype.GetMainAppInternalName = function ()
-{	return 'BrainStim'; }
-
-BrainStim_Information.prototype.GetMainAppPluginDeviceInterfaceString = function ()
-{	return 'BrainStim.Plugins.DeviceInterface/1.0'; }
-
-BrainStim_Information.prototype.GetMainAppPluginExtensionInterfaceString = function ()
-{	return 'BrainStim.Plugins.ExtensionInterface/1.0'; }

@@ -49,7 +49,9 @@ void Assistant::showDocumentation(const QString &page, GlobalApplicationInformat
 	ba.append("SetSource qthelp://com.trolltech.brainstim/doc/" + page.toLocal8Bit() + "\n;");
 	foreach(QString sPluginPath, lPluginDocPaths)
 	{
+#ifdef QT_DEBUG
 		ba.append("unregister " + sPluginPath + ";");
+#endif
 		ba.append("register " + sPluginPath + ";");
 	}
 	proc->write(ba);
