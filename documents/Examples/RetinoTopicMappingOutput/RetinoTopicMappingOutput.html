@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -15,7 +15,7 @@
 <link href="../../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <title>Retinotopic Mapping output files Tutorial v1.0</title>
 <!--doc-version-title-end-->
 	<style type="text/css">
@@ -27,20 +27,20 @@
 <body>
     <div class="container">
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Retinotopic Mapping output files Tutorial</h1>
 			<div class="row">
-				<div class="col-md-4"><p><strong>Document version:</strong>1.0</p></div>
-				<div class="col-md-4"><p><strong>Author(s):</strong>Sven Gijsen</p></div>
-				<div class="col-md-4"><p><strong>Date:</strong>July 2015</p></div>
+				<div class="col-md-4"><p><strong>Document version: </strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s): </strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date: </strong>July 2015</p></div>
 			</div>
 		</div>
 	</div>
 <!--doc-version-default-header-end-->
         <h2>Introduction</h2>
-        <p>This example tutorial (installed in the <em>BrainStim\examples\\brainstim\advanced 
+        <p>This example tutorial (installed in the <em>BrainStim\examples\brainstim\advanced 
 		examples\Retinotopy Output</em>\ directory) is a complete experiment 
 		that can be used for
 		<a href="http://www.brainvoyager.com/bvqx/doc/UsersGuide/PRFEstimation/PopulationReceptiveFieldEstimation.html" target="_blank">Population Receptive Field 
@@ -111,7 +111,7 @@
 		(2 digits) + <strong><em>Hour</em></strong> (2 digits) + <strong><em>
 		Minute</em></strong> (2 digits) + <strong><em>Second</em></strong> (2 
 		digits)<br />
-		ie. <strong>20151015094949</strong> is a timestamp from the 15th of 
+		i.e.. <strong>20151015094949</strong> is a timestamp from the 15th of 
 		October 2015 at 9:49 am and 49 seconds</p>
 		<h3>Generating Binary Stimuli Frames</h3>
 		<p>Generating the Binary Stimuli Frames is achieved by enabling the
@@ -121,7 +121,7 @@
 		RetinoMapper</a> Class object, read the
 		<a href="../../ExperimentManagerPlugin/RetinoMapper.html#RetinoMapperOutputExport">RetinotopyMapper 
 		documentation</a> for more information about this topic. After this output file(s) containing the 
-		pixel-level representation of the visual retinotopic stimuli in a binary 
+		pixel-level representation of the visual Retinotopic stimuli in a binary 
 		form (at each moment the object derived from the
 		<a href="../../ExperimentManagerPlugin/Doxygen/class_retinotopy_mapper.html">
 		RetinoMapper</a> Class gets triggered) are saved to a file automatically. </p>
@@ -132,10 +132,10 @@
 		<a href="../../ExperimentManagerPlugin/RetinoMapper.html#MovingBar_OutputFrameFormat">
 		OutputFrameFormat</a> (<em>PNG</em>, <em>DAT</em> or <em>CDAT</em>). The &ldquo;<em>Frame</em>&rdquo; 
 		<a href="../../ExperimentManagerPlugin/RetinoMapper.html#MovingBar_OutputFrameType">
-		OutputFrameType</a> setting contains the full color visual stimuli pixel presentation, The &ldquo;<em>Mask</em>” 
+		OutputFrameType</a> setting contains the full color visual stimuli pixel presentation, The &ldquo;<em>Mask</em>�?� 
 		setting only contains the visual stimuli mask of the activated visual 
 		area in white and the remaining information in black, the latter one is 
-		what we need and therefore this example makes use of the “<em>Mask</em>” 
+		what we need and therefore this example makes use of the �??<em>Mask</em>�?� 
 		setting. </p>
         <br />
         <div>
@@ -218,7 +218,7 @@
 			<li><strong>Test, with debugging information</strong>: used for testing 
 			or debugging purpose (all options) and for 
 			generating the needed Binary Stimuli Frames (option 3). This mode collects and 
-			saves a lot of of additional test/debugging information which may 
+			saves a lot of <span lang="en-us"></span>additional test/debugging information which may 
 			slightly slow down the experiment. The experiment is automatically 
 			triggered by a timer which has an interval time of 2 seconds.</li>
 			<li><strong>Optimized, without debugging information</strong>: no additional information is 
@@ -235,8 +235,8 @@
 		<ol>
 			<li>Start BrainStim.</li>
 			<li>Open the file <em>MovingBarsRetinotopy.qs</em> that is located in the  
-			<a href="../../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> directory 
-			in the subfolder <em>\Examples\BrainStim\Advanced 
+			<a href="../../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> 
+			<span lang="en-us"></span>in the subfolder <em>\Examples\BrainStim\Advanced 
 			Examples\Retinotopy Output\ </em></li>
 			<li>Execute the script file by pressing the green
 				<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../../images/runscript.png"/> 
@@ -251,11 +251,11 @@
 				which is then automatically triggered each 2 seconds</li>
 			</ul>
 			</li>
-			<li>See what happens and wait untill the experiment ends.
+			<li>See what happens and wait until the experiment ends.
 			<span class="auto-style1"><strong>Hint</strong></span>: you can optionally speed up 
 			the experiment by holding down the <kbd>CTRL</kbd>&nbsp; + <kbd>t</kbd> 
 			key combination.<br />
-		<p>The experiment starts and stopt with a fixation block (8 
+		<p>The experiment starts and stops with a fixation block (8 
 		triggers per block) in which only a red fixation dot is presented 
 		allowing the subject to fixate to the center of the screen. After the first 
 		fixation block 3 repetitions of a MovingBar block are presented for 8 
@@ -284,7 +284,7 @@
 			understand how the used
 			<a href="../../ExperimentManagerPlugin/RetinoMapper.html#MovingBar">Moving Bars</a>
 			<em><strong>position</strong></em> and <strong><em>orientation</em></strong> 
-			was saved in ths file. Remember that the randomization is the same 
+			was saved in this file. Remember that the randomization is the same 
 			for each MovingBar block repetition.</li>
 		</ol>
 		<h3>Run the experiment (using an existing randomization set) </h3>
@@ -292,8 +292,8 @@
 		created during the previous example to run exactly the same experiment:</p>
 		<ol>
 			<li>Make sure to activate or open the file <em>MovingBarsRetinotopy.qs</em> that is located in the  
-			<a href="../../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> directory 
-			in the subfolder <em>\Examples\BrainStim\Advanced 
+			<a href="../../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> 
+			<span lang="en-us"></span>in the subfolder <em>\Examples\BrainStim\Advanced 
 			Examples\Retinotopy Output\ </em></li>
 			<li>Execute the script file by pressing the green
 				<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../../images/runscript.png"/> 
@@ -311,11 +311,11 @@
 				which is then automatically triggered each 2 seconds</li>
 			</ul>
 			</li>
-			<li>See what happens and wait untill the experiment ends.
+			<li>See what happens and wait until the experiment ends.
 			You can optionally again speed up 
 			the experiment by holding down the <kbd>CTRL</kbd>&nbsp; + <kbd>t</kbd> 
 			key combination.<br />
-			The experiment should use exactely the same
+			The experiment should use exactly the same
 			<a href="../../ExperimentManagerPlugin/RetinoMapper.html#MovingBar">Moving Bars</a>
 			<em><strong>position</strong></em> and <em><strong>orientation</strong></em> 
 			randomization as used for the previous example.</li>
@@ -325,8 +325,8 @@
 		for the previous examples:</p>
 		<ol>
 			<li>Make sure to activate or open the file <em>MovingBarsRetinotopy.qs</em> that is located in the  
-			<a href="../../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> directory 
-			in the subfolder <em>\Examples\BrainStim\Advanced 
+			<a href="../../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> 
+			<span lang="en-us"></span>in the subfolder <em>\Examples\BrainStim\Advanced 
 			Examples\Retinotopy Output\ </em></li>
 			<li>Execute the script file by pressing the green
 				<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../../images/runscript.png"/> 
@@ -344,7 +344,7 @@
 				which is then automatically triggered each 200 milliseconds</li>
 			</ul>
 			</li>
-			<li>See what happens and wait untill the experiment ends.
+			<li>See what happens and wait until the experiment ends.
 			<span class="auto-style1"><strong>Important</strong>:</span> Now you 
 			should <span class="auto-style1">not</span> use the <kbd>CTRL</kbd>&nbsp; + <kbd>t</kbd> 
 			key combination to speed up the experiment, allowing the 
@@ -365,7 +365,7 @@
 			possible within the set trigger interval time 200 milliseconds. If 
 			this is the case (you can check this by validating that the amount 
 			of generated files is 304) then you need to increase this trigger 
-			interval time untill it can successfully generate all the files. You 
+			interval time until it can successfully generate all the files. You 
 			increase this trigger interval time for option 3 in the script by 
 			changing line 12:<br />
 			<br />
@@ -404,7 +404,7 @@
 		Stimuli Frames. The general guideline is to maximize the Retinotopy 
 		Stimuli resolution to the screen settings. This means if you are using a 
 		resolution of 1920x1200 pixels then you should use a Retinotopy Stimuli 
-		resolution of 1200 x 1200 because thats the maximum square rectangle 
+		resolution of 1200 x 1200 because that's the maximum square rectangle 
 		shape we can fit into our screen, see script line 51 and 52:</p>
 		<p>
         <table class="codeframe">
@@ -437,12 +437,12 @@ BasicExperiment.nStimHeight = 1200;</code></pre>
 		<h3>&nbsp;(C)DAT 
 		OutputFrameFormat</h3>
         <p>We can easily change the OutputFrameFormat that our experiment uses 
-		for creating the Binary Stmuli Frames information storage. The custom (C)DAT  format (*cdat and *.dat files) file protocols 
+		for creating the Binary Stimuli Frames information storage. The custom (C)DAT  format (*cdat and *.dat files) file protocols 
 		are further documented in the
 		<a href="../../ExperimentManagerPlugin/RetinoMapper.html#RetinoMapperOutputExport">RetinotopyMapper 
 		documentation</a>. A third party can use this information to implement code to be able to directly handle these type of file(s) by writing their own custom file handling routines as documented. 
 		Furthermore the 
-		<a href="../../ExperimentManagerPlugin/Doxygen/annotated.html" target="_blank">ExperimentManager Plug-in script class</a> contains a script class (the 
+		<a href="../../ExperimentManagerPlugin/Doxygen/annotated.html">ExperimentManager Plug-in script class</a> contains a script class (the 
 		<a href="../../ExperimentManagerPlugin/Doxygen/class_image_processor.html">ImageProcessor  class</a>) that makes it possible  from within the BrainStim script to directly handle these  file types. This script class contains several 
 		methods to handle the DAT and CDAT format. Now we&rsquo;ll take a look at two prepared scripts that 
 		make use some of these methods. But first we'll adapt the example 
@@ -450,8 +450,8 @@ BasicExperiment.nStimHeight = 1200;</code></pre>
 		to a CDAT format:</p>
 		<ol>
 			<li>Make sure to activate or open the file <em>MovingBarsRetinotopy.qs</em> that is located in the  
-			<a href="../../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> directory 
-			in the subfolder <em>\Examples\BrainStim\Advanced 
+			<a href="../../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> 
+			<span lang="en-us"></span>in the subfolder <em>\Examples\BrainStim\Advanced 
 			Examples\Retinotopy Output\ </em></li>
 			<li>Change line number 430 + 431 from:<br />
 			        <table class="codeframe">
@@ -507,8 +507,8 @@ var _FileRenaming_sAllowedFileExtensions = ["*_*_*_*_*.png"];</code></pre>
 		<p>Let's use a script file to view the (C)DAT file content:</p>
 		<ol>
 			<li>Open the file <em>CDatFileViewer.qs</em> that is located in the  
-			<a href="../../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> directory 
-			in the subfolder <em>\Examples\BrainStim\Advanced 
+			<a href="../../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> 
+			<span lang="en-us"></span>in the subfolder <em>\Examples\BrainStim\Advanced 
 			Examples\Retinotopy Output\ </em></li>
 			<li>Execute the script file by pressing the green
 				<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../../images/runscript.png"/> 
@@ -529,8 +529,8 @@ var _FileRenaming_sAllowedFileExtensions = ["*_*_*_*_*.png"];</code></pre>
         <ol>
 			<li>
 			<p>Open the file <em>DatFileConcatination.qs</em> that is located in the  
-			<a href="../../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> directory 
-			in the subfolder <em>\Examples\BrainStim\Advanced 
+			<a href="../../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> 
+			<span lang="en-us"></span>in the subfolder <em>\Examples\BrainStim\Advanced 
 			Examples\Retinotopy Output\ </em></p>
 			</li>
 			<li>
@@ -548,8 +548,8 @@ var _FileRenaming_sAllowedFileExtensions = ["*_*_*_*_*.png"];</code></pre>
         </p>
     </div>
 <!--doc-version-default-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
-<!--doc-version-default-footer-end-->   
+<!--doc-version-default-footer-end-->
 </body>
 </html>

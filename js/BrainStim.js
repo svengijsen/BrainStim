@@ -1,6 +1,6 @@
 //doc-version-brainstimrelease-begin
-//Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1
-var currentBrainStimRelease = '1.0.0.1';
+//Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1
+var currentBrainStimRelease = '1.1.0.1';
 //doc-version-brainstimrelease-end
 
 
@@ -24,11 +24,11 @@ function BrainStimDocuments_Information()
 	this.DocumentAuditing[nCurrentDocIndex][this.Doc_Authors_Index] = 'Sven Gijsen';
 	nCurrentDocIndex++;
 	
-	this.DocumentAuditing[nCurrentDocIndex++] = ['PreBuildDevelopmentSetup.html','Pre-Build Development Setup','1.0','July 2015','Sven Gijsen'];
+	//this.DocumentAuditing[nCurrentDocIndex++] = ['PreBuildDevelopmentSetup.html','Pre-Build Development Setup','1.0','July 2015','Sven Gijsen'];
+	//this.DocumentAuditing[nCurrentDocIndex++] = ['ExtensionPluginTemplate.html','Extension Plug-in Template','1.0','July 2015','Sven Gijsen'];	
+	//this.DocumentAuditing[nCurrentDocIndex++] = ['Development.html','BrainStim Development','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['ExperimentManagerPlugin.html','Experiment Manager Plug-in','1.0','July 2015','Sven Gijsen'];
-	this.DocumentAuditing[nCurrentDocIndex++] = ['ExtensionPluginTemplate.html','Extension Plug-in Template','1.0','July 2015','Sven Gijsen'];	
 	this.DocumentAuditing[nCurrentDocIndex++] = ['BrainStim_QMLExtensions.html','BrainStim QML Extensions Plug-in','1.0','July 2015','Sven Gijsen'];
-	this.DocumentAuditing[nCurrentDocIndex++] = ['Development.html','BrainStim Development','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['AdvancedExamples.html','Advanced Examples','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['RetinoTopicMappingOutput.html','Retinotopic Mapping output files Tutorial','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['SettingsDialog.html','Settings Dialog','1.0','July 2015','Sven Gijsen'];
@@ -41,7 +41,7 @@ function BrainStimDocuments_Information()
 	this.DocumentAuditing[nCurrentDocIndex++] = ['InternalNetworkInterface.html','Internal Network Interface','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['SignalSlotConnections.html','Signal-Slot Connections','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['DocumentTypes.html','Document Types','1.0','July 2015','Sven Gijsen'];
-	this.DocumentAuditing[nCurrentDocIndex++] = ['CustomMenus.html','Custom Menu\'s','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['CustomMenus.html','Custom Menus','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['MainLogFile.html','Main Log-file','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['UserInterface.html','Default User-Interface','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['ScriptDebugging.html','Debugging scripts','1.0','July 2015','Sven Gijsen'];
@@ -51,8 +51,11 @@ function BrainStimDocuments_Information()
 	this.DocumentAuditing[nCurrentDocIndex++] = ['CreatingExperiments.html','Creating Experiments with the Experiment Manager','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['RetinoMapper.html','RetinoMapper Class','1.0','July 2015','Sven Gijsen'];
 	this.DocumentAuditing[nCurrentDocIndex++] = ['QML2Viewer.html','QML2Viewer Class','1.0','July 2015','Sven Gijsen'];
-	
-	
+	this.DocumentAuditing[nCurrentDocIndex++] = ['BrainStim_QMLExtensions.html','QMLExtensions QML Plugin','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['ExamplesAndTutorials.html','Examples and Tutorials','1.0','July 2015','Sven Gijsen'];	
+	this.DocumentAuditing[nCurrentDocIndex++] = ['ScriptClassReferences.html','Script Class References','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['UpdateManager.html','Update Manager Tool','1.0','July 2015','Sven Gijsen'];
+	this.DocumentAuditing[nCurrentDocIndex++] = ['pluginrefs.html','External compatible (third party) plugin repositories','1.0','July 2015','Sven Gijsen'];
 	
 	//Additional dynamic documentation information
 	this.DocumentInformation = [];//BrainStimDocuments_CreateArray(2, 2); //Default constructor!

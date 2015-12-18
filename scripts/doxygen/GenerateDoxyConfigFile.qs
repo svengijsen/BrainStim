@@ -77,9 +77,7 @@ function GDCF_CreateArray(length)
 {
 	//GDCF_CreateArray();     	// [] or new Array()
 	//GDCF_CreateArray(2);    	// new Array(2)
-	//GDCF_CreateArray(3, 2); 	// [new Array(2),
-					//  new Array(2),
-					//  new Array(2)]
+	//GDCF_CreateArray(3, 2); 	// [new Array(2), new Array(2), new Array(2)]
 	var a = new Array(length || 0);
 	if (arguments.length > 1) 
 	{

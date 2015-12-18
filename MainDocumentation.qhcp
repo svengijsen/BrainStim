@@ -2,8 +2,8 @@
 <QHelpCollectionProject version="1.0">
     <assistant>
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
-	<title>BrainStim v1.0.0.1</title>
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
+	<title>BrainStim v1.1.0.1</title>
 <!--doc-version-title-end-->
 	<applicationIcon>images/brainstim.png</applicationIcon>
         <cacheDirectory>SvenGijsen/BrainStim</cacheDirectory>

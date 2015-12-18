@@ -30,11 +30,31 @@ function ToWindowsPath(path)
 	return path.replace( /\//gi,"\\");//  first argument = /regex/ (g=all occurrences, i=case insensitive), second = <replace_string>
 }
 
+function CreateArray(length) 
+{
+	//CreateArray();     	// [] or new Array()
+	//CreateArray(2);    	// new Array(2)
+	//CreateArray(3, 2); 	// [new Array(2),
+					//  new Array(2),
+					//  new Array(2)]
+	var a = new Array(length || 0);
+	if (arguments.length > 1) 
+	{
+		var args = Array.prototype.slice.call(arguments, 1);
+		for (var i = 0; i < length; i++) 
+		{
+			a[i] = CreateArray.apply(this, args);
+		}
+	}
+	return a;
+}
+
 function CleanUpScript()
 {
 	Log("CleanUpScript started...");
 	ConnectDisconnectScriptFunctions(false);
 	ToWindowsPath=null;
+	CreateArray=null;
 	tr=null;
 	tmpFile=null;
 	tmpByteArray=null;

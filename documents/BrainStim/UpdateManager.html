@@ -1,0 +1,136 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
+<title>Update Manager Tool v1.0</title>
+<!--doc-version-title-end-->
+<style type="text/css">
+.auto-style1 {
+	text-decoration: underline;
+}
+</style>
+</head>
+<body>
+    <div class="container">
+
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Update Manager Tool</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version: </strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s): </strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date: </strong>July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+    <h2>
+        Introduction</h2>
+		<p>
+		BrainStim and 
+		all of its plugins can be updated using an separate tool called 
+		the Update Manager (UpdateMngr.exe). This tool can handle installation 
+		files to configure and perform  
+		automatic update installation(s). The tool is automatically installed in the same 
+		directory as the BrainStim executable (BrainStim.exe) and should not be 
+		moved elsewere. Executing the tool and performing a certain update might 
+		need administrative rights, if needed the tool will automatically try to 
+		elevate by requesting an administrative login.</p>
+		<h2>
+		First Time Update</h2>
+		<p>
+		The<span class="auto-style1"> first time</span> that BrainStim is started for each
+		<span class="auto-style1">new user</span> it 
+		automatically configures itself for the first usage by creating a 
+		BrainStim <a href="SettingsDialog.html#ConfigurationFile">Configuration 
+		File</a>. After this it will asks the user if it should perform an automatic update 
+		by parsing the installation files from the BrainStim <strong>Updates</strong> 
+		sub-directory inside the
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
+		Main Program directory</a>. This sub-directory can contain update 
+		installation files. These installation files in the BrainStim <strong>Updates</strong> 
+		sub-directory are stored there during the BrainStim installation and 
+		contain some additional plugin installations. </p>
+		<p><img src="./../../images/firsttimeuse.png" class="img-responsive centered" alt="" /></p>
+		<p>
+		If you skip this step then 
+		this question is never asked again and the plugins are not available for 
+		the current user. An alternative for performing a automatic update again is by using the <strong>Manual Update</strong> 
+		option inside the <a href="SettingsDialog.html">Settings Dialog</a>. Sometimes a reboot of BrainStim is required after performing a 
+		update, if needed then this is automatically requested to you. If the 
+		installation succeeded you'll see a dialog like:<br />
+		<br />
+		</p>
+		<p><img src="./../../images/updatesucceeded.png" class="img-responsive centered" alt="" /></p>
+		<p>If something went wrong during the update then the BrainStim Update-Manager window 
+		remains visible and using the installation log list you can see what 
+		went wrong. This installation log is also saved to the <strong>Temp</strong> 
+		sub-directory of the BrainStim
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainUserDirectory">
+		Main User directory</a>.</p>
+		<p></p>
+		<p><img src="./../../images/updatefailed.png" class="img-responsive centered" alt="" /></p>
+		<h2>
+		Update Installation Files</h2>
+		<p>
+		There are several Installation file types for updates, these are:</p>
+		<p>
+				<table class="table table-condensed">
+				  <thead>
+				    <tr>
+				      <th><em>File type(extension)</em></th>
+				      <th><em>Description</em></th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <th scope="row">Ini (*.ini)</th>
+				      <td>This installation configuration file contains the 
+					  configuration steps of an update. Additional installation 
+					  files are normally saved in the same directory, where 
+					  these should be copied to is defined in this installation 
+					  configuration file.</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">List (*.lst)</th>
+				      <td>This List file can contain one or more reference to
+					  <strong>Ini</strong> or <strong>List</strong> file(s), 
+					  thus this is an list of installation configuration files.</td>
+				    </tr>
+				  	<tr>
+				      <th scope="row">Zip (*.zip)</th>
+				      <td>A compressed zip archive normall contains a directory 
+					  with one or more sub-directories that can contain one of 
+					  the above <strong>Installation configuration files</strong> 
+					  and their additional installation files. This Zip format 
+					  is handy when someone needs to <span class="auto-style1">
+					  combine</span> multiple update installation inside one 
+					  single archive.</td>
+				      </tr>
+				  </tbody>
+				</table>
+		</p>
+		<p>
+		&nbsp;</p>
+   </div>
+<!--doc-version-default-footer-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
+	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
+<!--doc-version-default-footer-end-->
+ </body>
+</html>

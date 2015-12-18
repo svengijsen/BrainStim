@@ -1,5 +1,5 @@
 This is the documentation (gh-pages) branch of the BrainStim software.
-All files inside this branch are used by GitHub to automatically create a project page, see http://svengijsen.github.io/BrainStim/.
+All files inside this branch are used by GitHub to automatically create a project page, see <http://svengijsen.github.io/BrainStim/>.
 Furthermore these files are used to create the offline help documentation package available in BrainStim.
 The html pages make use of the Bootstrap v3.3.5 framework to make them responsive and mobile first for the web, see http://getbootstrap.com.
 

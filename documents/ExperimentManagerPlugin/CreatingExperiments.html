@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -15,7 +15,7 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <title>Creating Experiments with the Experiment Manager v1.0</title>
 <!--doc-version-title-end-->
 	<style type="text/css">
@@ -29,14 +29,14 @@
 <body>
     <div class="container">
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Creating Experiments with the Experiment Manager</h1>
 			<div class="row">
-				<div class="col-md-4"><p><strong>Document version:</strong>1.0</p></div>
-				<div class="col-md-4"><p><strong>Author(s):</strong>Sven Gijsen</p></div>
-				<div class="col-md-4"><p><strong>Date:</strong>July 2015</p></div>
+				<div class="col-md-4"><p><strong>Document version: </strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s): </strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date: </strong>July 2015</p></div>
 			</div>
 		</div>
 	</div>
@@ -61,7 +61,7 @@
 			more to its needs than a user with novice knowledge and without any 
 			scripting experience. This document tries to help you getting 
 			started in creating and running your own experiments, starting from 
-			the most basic level, and to help you make desisions regarding the 
+			the most basic level, and to help you make decisions regarding the 
 			implementation for your experiment needs.</p>
             <h2>Implementation considerations</h2>
             <p>Depending on your experimental needs you can 
@@ -80,7 +80,8 @@
 				      <th scope="row">Retinotopic Mapping 
 					  based</th>
 				      <td>Allows for an <em>very fast</em> 
-					  and <em>accurate timed</em>(framerate) visual prentation 
+					  and <em>accurate timed</em>(frame-rate) visual 
+					  presentation 
 					  of various stimuli and is mainly used for creating <em>
 					  Retinotopic Mapping stimuli</em> experiments,
 					  read <a href="http://en.wikipedia.org/wiki/Retinotopy" target="_blank">
@@ -148,9 +149,9 @@
 					  that's developed and maintained within the
 					  <a href="http://www.qt.io/developers/" target="_blank">Qt 
 					  framework</a>. It allows users
-					  to create highly performant, 
-					  flexible and multicapable stimuli presentation screens. Editing 
-					  of type of file can be done within BrainStims code editing 
+					  to create highly performing, 
+					  flexible and multi-capable stimuli presentation screens. Editing 
+					  of type of file can be done within BrainStim's code editing 
 					  capabilities. Less advanced users can also make use of 
 					  third party tool that allows you to create these stimuli 
 					  presentations with a easy WYSIWYG (what you see is what 
@@ -183,7 +184,7 @@
 			experiment script. This code makes some standard experiment features 
 			available that can then be further easily configured from a custom 
 			script. These features are then quickly available for users who 
-			don't have much scripting expierience or advanced users. Sometimes 
+			don't have much scripting experience or advanced users. Sometimes 
 			the below examples might be a little difficult to follow because 
 			they always start from scratch, normally if you create your own 
 			experiments you would probably first start by copying some 
@@ -206,7 +207,7 @@
 			following the below steps don't worry you can find the Experiment 
 			Structure File solution from this example saved as&nbsp;<em>PolarAngle.exml </em> located in the  
 		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
-		Main Program Directory</a> directory under the subfolder <em>\BrainStim\Retinotopy 
+		Main Program Directory</a> <span lang="en-us"></span>under the subfolder <em>\BrainStim\Retinotopy 
 			Basics</em>.</p>
     		<ol>
 				<li>Start BrainStim.</li>
@@ -222,16 +223,18 @@
 				<li>Save the Experiment Structure file using the menu entry
 				<kbd>File</kbd> &gt; <kbd>Save</kbd> to a new empty Experiment Structure 
 			file.</li>
-			<br /><br />Now we need to think about our experiment timing, expecially 
+			<br /><br />Now we need to think about our experiment timing, 
+				especially 
 				when, how long and with 
 				how many repetitions something needs to happen. 
 For this example we first want to present a fixation dot for 4 seconds. After this we want to show a rotating wedge that should rotate once in let's say 20 seconds and repeat this in total
-				5 times. After this we again want to present a fixation dot for 4 seconds wereafter the experiment should finish.
+				5 times. After this we again want to present a fixation dot for 4 seconds 
+				were after the experiment should finish.
 				<br />
 				<br />
 				<li>So let's define two blocks, one for the 
-				fixation dot presentation and one for the polarangle animation. 
-				Click somewere in the <strong>Graphical Schematic "Blocks" View</strong> 
+				fixation dot presentation and one for the polar angle animation. 
+				Click somewhere in the <strong>Graphical Schematic "Blocks" View</strong> 
 				with you right mouse button. A menu pops up and then we can 
 				choose <kbd>Blocks</kbd> &gt; <kbd>Add New</kbd> and do this 
 				twice or alternatively choose&nbsp; <kbd>Blocks</kbd> &gt; <kbd>Add New(multiple)</kbd>&nbsp; and enter value 
@@ -267,11 +270,11 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 					amount of triggers! This is 
 					because BrainStim can then be <em>triggered</em> to go to 
 					the next situation without knowing how log it actually took. 
-					So it's acting independant 
+					So it's acting independent 
 					of its internal timing and instead waiting for trigger commands to do something. The 
 					trigger can then be generated by an external device 
 					connected to this computer and BrainStim is then 
-					automatically sychronized 
+					automatically synchronized 
 					at each trigger point with that device
 					without any unwanted jittering to 
 					build up. <br />Later on we'll make use of a (software) timer for this 
@@ -326,7 +329,7 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 					you can add new objects. Our object that can present 
 					different Retinotopy stimuli is from the <em>Class</em>
 					<strong>
-					<a href="Doxygen/class_retinotopy_mapper.html" target="_blank">RetinotopyMapper</a></strong>, you should be able to 
+					<a href="Doxygen/class_retinotopy_mapper.html">RetinotopyMapper</a></strong>, you should be able to 
 					select this item from the <em>Class</em> drop down combobox. 
 					We can now give this object a name using the <em>Name</em> 
 					text entry like "RetinoMapper_Object" (without the quotes, 
@@ -340,7 +343,7 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 					<li>Now we can configure our newly added 
 					object, by setting its available parameters (for each 
 					defined block).,
-					<a href="RetinoMapper.html" target="_blank">this document</a> 
+					<a href="RetinoMapper.html">this document</a> 
 					describes the available parameters for the
 					<strong><a href="Doxygen/class_retinotopy_mapper.html">RetinotopyMapper</a> </strong>
 					C<em>lass</em>. We know that 
@@ -353,11 +356,11 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 					right click and choose the menu entry <strong>Initialized 
 					Parameters</strong>. Notice how the <strong>Selection</strong> 
 					tab of the <strong>Parameter List View</strong> changes to a 
-					hierachical list view where we can configure all available 
+					hierarchical list view where we can configure all available 
 					parameters from our "RetinoMapper_Object" object. It could 
 					be handy to change the size of the <strong>Parameter List 
 					View</strong> a little bit (make it wider). The available 
-					parameters have a default value (which are used untill you 
+					parameters have a default value (which are used until you 
 					change them) set and can be changed per defined block (we 
 					defined two blocks in one of the above steps, a "Fixation" 
 					and a "Polar Angle" block).<br />
@@ -431,7 +434,7 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 				dropdown list and are always documented in the Help (in this 
 				case you would search in the Help for "TriggerTimer" (without 
 				quotes) keyword). This should then take you to
-				<a href="class_trigger_timer.html" target="_blank">this page</a> 
+				<a href="class_trigger_timer.html">this page</a> 
 				that describes the whole <strong>TriggerTimer</strong> <em>class</em>, 
 				search for the "startTimer" (without quotes) slot and see what 
 				it does, it should mention something like:<br />
@@ -481,7 +484,8 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 				opens another dialog where you can configure the argument(s) for 
 				our newly defined slot. There's only one argument available for 
 				this slot (named <strong>dMSec</strong> and of the <strong>
-				double</strong> type), this argument sets the period triggertime 
+				double</strong> type), this argument sets the period trigger 
+				time 
 				in milliseconds. For this experiment we would like to make the 
 				trigger time 1 second so we'll set the <em>dMSec</em> value to
 				<strong>1000</strong> and click the <strong>Update</strong> and
@@ -505,7 +509,7 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 				object when triggered, see (above) documentation. And we'll 
 				connect it to the incrementExternalTrigger() slot of the 
 				"RetinoMapper_Object" object, see this
-				<a href="Doxygen/class_experiment_engine.html" target="_blank">
+				<a href="Doxygen/class_experiment_engine.html">
 				documentation page</a>.</li>
 				<li>Right click with your mouse in the <strong>
 				Graphical Schematic View </strong> and select the menu entry&nbsp;<kbd>Connections</kbd> &gt; 
@@ -514,7 +518,7 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 				object(s). Using signal/slot connections inside a script 
 				is documented in
 				<a href="../BrainStim/SignalSlotConnections.html">this document</a>, 
-				for the user that doesn't have much scripting expierience using 
+				for the user that doesn't have much scripting experience using 
 				the following method is probably easier. <br />
 				Select our created "TriggerTimer_Object" object using the
 				<strong>From object</strong> combobox selection list, after this 
@@ -533,7 +537,7 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 				<li>Save the Experiment Structure file again using the 
 				key combination <kbd>Ctrl</kbd> + <kbd>s</kbd> <br />
 				<br />
-				Now it's time time execute our document and see what it does. 
+				Now it's time to execute our document and see what it does. 
 				Before we execute the document we need to know about the special 
 				key combination that allows us to abort/stop the experiment at 
 				all times when it's running, this is the <kbd>Ctrl</kbd> + <kbd>
@@ -590,7 +594,7 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 				"TriggerTimer_Object" object which is <strong>1000</strong> 
 				milliseconds.<br />
 				<br />
-				Now it's again time time execute our document and see what our 
+				Now it's again time to execute our document and see what our 
 				above changes lead to. Press the green
 				<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../images/runscript.png"/> 
 				button and watch what happens, remember to press <kbd>Ctrl</kbd> + 
@@ -602,13 +606,13 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 				You probably also noticed in the top of the screen some 
 				additional information about the current state of the internal 
 				experiment structure at each trigger this is automatically 
-				updated to the current situation which can be very usefull for 
-				debugging. Another usefull key combination you can use for 
+				updated to the current situation which can be very useful for 
+				debugging. Another useful key combination you can use for 
 				testing purpose after the experiment has been unlocked is&nbsp; <kbd>Ctrl</kbd> + 
 				<kbd>t</kbd> (t=trigger), this key combination automatically 
 				invokes the <strong>incrementExternalTrigger()</strong> 
 				slot each time this combination is used (you can also hold down 
-				this key combination for multiple invokations), allowing you to 
+				this key combination for multiple invocations), allowing you to 
 				quickly jump to the next Experiment Structure state manually.<br />
 				At some point we want to execute our experiment with 
 				a real subject and do not want this information to appear at the 
@@ -659,7 +663,7 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 				because the Loop is only repeated once (see <span lang="en-us">
 				<strong>Repetitions</strong> property!).
 				<span class="auto-style2"><strong>Important!</strong></span> 
-				Altough we set the Loop <strong>Repetitions</strong> property to 
+				Although we set the Loop <strong>Repetitions</strong> property to 
 				1 Block 0 got executed twice! This is because our Loop gets 
 				executed <span class="auto-style2">AFTER</span> Block 0. Please 
 				bear in mind that due to this if you want to repeat one or more 
@@ -678,17 +682,18 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 				<li>Save the Experiment Structure file again using the 
 				key combination <kbd>Ctrl</kbd> + <kbd>s</kbd> </li>
 			</ol>
-			<p>The above showed us howto create/execute 
+			<p>The above showed us how to create/execute 
 				and change a basic 
 				Retinotopic experiment using only one Experiment Structure file. 
 				It took many steps to accomplish this and normally you don't 
-				need to fiollow all of these steps but would start with copying 
+				need to follow all of these steps but would start with copying 
 				a Experiment Structure file and then simply adapt it to your 
 				own needs or perhaps better make use of a script include as 
 			we'll see next.<br /><br /><strong>Important!</strong> You 
 				can find the Experiment Structure File solution from this 
 				example saved as PolarAngle.exml located in the  
-			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> directory under the subfolder \Examples\BrainStim\Retinotopy 
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> 
+			<span lang="en-us"></span>under the subfolder \Examples\BrainStim\Retinotopy 
 				Basics.<br /></p>
 			<h4>Combining the Experiment Structure file with 
 			a script include</h4>
@@ -697,9 +702,10 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 			strategy to use. For the next example we'll be making a similar 
 			Retinotopy experiment as above by creating again a Experiment 
 			Structure file (but now without the
-			<em>TriggerTimer</em> Objects, (F)(In)-itializations and 
+			<em>TriggerTimer</em> Objects, (F)(In)-initializations and 
 			Connections) and add a custom script file (*.qs) that
-			<span class="auto-style1">includes</span> a template script file to accomplisch the same as above (plus more...). 
+			<span class="auto-style1">includes</span> a template script file to 
+			accomplish the same as above (plus more...). 
 			This include template script ships with BrainStim, you only need to 
 			refer to it and suit it to your needs in your own custom script (you 
 			should never change this template script file itself). The template 
@@ -709,14 +715,14 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 			<p>Let's first again create a Experiment 
 			Structure file as above but now without declaring the <em>
 			TriggerTimer</em> Object and without configuring 
-			(F)(In)-itializations and Connections (because this is already 
+			(F)(In)-initializations and Connections (because this is already 
 			implemented for us in the template script file so we don't need to 
 			worry about this). The first steps of this example are almost 
 			similar as the steps from the previous example but for clarity 
 			reasons I'll summarize them again. The resulting Experiment 
 			Structure file is saved to the file <em>PolarAngle_ScriptRef.exml that is </em> located in the  
 		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
-		Main Program Directory</a> directory under the subfolder <em>\Examples\BrainStim\Retinotopy 
+		Main Program Directory</a> <span lang="en-us"></span>under the subfolder <em>\Examples\BrainStim\Retinotopy 
 			Basics\</em>. 
 			Also the custom script file is saved there under the name <em>
 			PolarAngle_ScriptRef.qs</em>. Let's first create the Experiment Structure 
@@ -730,7 +736,7 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 				by changing the<strong> Experiment name</strong> field the
 				<strong>Selection</strong> 
 					tab of the <strong>Parameter List View</strong>, change it to "Polar Angle Experiment" (without the quotes).</li>
-				<li>Click somewere in the <strong>Graphical Schematic "Blocks" View</strong> 
+				<li>Click somewhere in the <strong>Graphical Schematic "Blocks" View</strong> 
 				with you right mouse button and choose the menu entry&nbsp; <kbd>Blocks</kbd> &gt; <kbd>Add New(multiple)</kbd>&nbsp; 
 				to add 
 				<strong>2</strong> 
@@ -765,7 +771,7 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 					object, by setting its available parameters (for each 
 					defined block). <strong>Important!</strong> This time we'll 
 				not set the parameters to a fixed value but link it to a certain 
-				variabele inside our custom script, making it easy to change 
+				variable inside our custom script, making it easy to change 
 				this parameter through our own custom script.</li>
 				<li>Select the "RetinoMapper_Object" object inside 
 					the <strong>Graphical Schematic "Objects" View</strong> and 
@@ -781,7 +787,7 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 				it by clicking it, do this now. The editable area now contains a 
 				text input box where you can add a <em>script reference</em>. 
 				This <em>script reference</em> is text that contains some script 
-				syntaxt which is 
+				syntax which is 
 				executed and should resolve the value for the parameter each time it is 
 				fetched (for each block trial). Enter the text 
 				"RetinoMapper_Global_Pattern" (without quotes) here and press 
@@ -790,7 +796,7 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 				{RetinoMapper_Global_Pattern}</strong>, these curly brackets let 
 				you know that this parameter value is linked to some script code 
 				that is inside the curly brackets. We now only have to make sure 
-				to add a script variabele with the same name <em>
+				to add a script variable with the same name <em>
 				RetinoMapper_Global_Pattern</em> so we can use it to change the 
 				parameter value. <strong>Important!</strong> bear in mind that 
 				parameter values are fetched at each new Block Trial, so 
@@ -854,7 +860,7 @@ For this example we first want to present a fixation dot for 4 seconds. After th
 				your own custom script for running a Retinotopy experiment 
 				without making use of the template script. Template script files 
 				are part of the BrainStim Include files, read
-				<a href="../BrainStim/FunctionsAndIncludes.html#Includes" target="_blank">
+				<a href="../BrainStim/FunctionsAndIncludes.html#Includes">
 				this document</a> for more information about Includes and how to 
 				use them. <strong>Important</strong>: you should never 
 				delete/move or change these Include files! For this example 
@@ -900,7 +906,7 @@ BasicExperiment.nTestModeTriggerDuration = 1000;  </pre>
 				the <span lang="en-us">function <strong>
 				BrainStim.getActiveDocumentFileLocation()</strong> for 
 				retrieving the directory path, see
-				<a href="../BrainStim/Doxygen/class_main_window.html#a70b08533c16a649bf21377cf10c2ad6e" target="_blank">
+				<a href="../BrainStim/Doxygen/class_main_window.html#a70b08533c16a649bf21377cf10c2ad6e">
 				this document</a>. </span><br />
 				After that we'll set the trigger time for a trigger simulation 
 				timer. This is a feature is implemented by our template script, 
@@ -909,11 +915,11 @@ BasicExperiment.nTestModeTriggerDuration = 1000;  </pre>
 				slot like we saw in the previous example for us. With the
 				<strong>BasicExperiment.nTestModeTriggerDuration</strong> we can 
 				set the trigger time that should be used for our experiment for 
-				a test mode(we'll see later what this test mode exactely does).
+				a test mode(we'll see later what this test mode exactly does).
 				<br />
 				<br />
 				We have unlocked some parameters and set them to refer to a 
-				script variabele, and now we have to make sure that these exist 
+				script variable, and now we have to make sure that these exist 
 				in the script, lets declare and give them a initial value like:<br />
 				<br />
 <table class="codeframe">
@@ -930,7 +936,7 @@ var RetinoMapper_Polar_TriggerDuration = 1000.0; </pre>
             </tr>
         </table>
 				<br />
-				Now we have entered enought script code for running the 
+				Now we have entered enough script code for running the 
 				experiment, which leaves us at the last pieces of code that runs 
 				the experiment:<br />
 				<br />
@@ -954,7 +960,7 @@ var RetinoMapper_Polar_TriggerDuration = 1000.0; </pre>
 				<strong>Test</strong> mode generates a lot of additional 
 				debugging information for you to use if you need to test things. 
 				It also creates and automatically starts a object constructed 
-				from the <strong>triggertimer</strong> <em>class</em> like we 
+				from the <strong>TriggerTimer</strong> <em>class</em> like we 
 				saw in the previous example that automatically triggers the 
 				experiment for you (testing purpose). It uses the
 				<strong>BasicExperiment.nTestModeTriggerDuration</strong> 
@@ -965,7 +971,7 @@ var RetinoMapper_Polar_TriggerDuration = 1000.0; </pre>
 				mode doesn't use by default a defined object for the triggering, 
 				so this is still something we'll need to configure, for now you 
 				can make use of the <kbd>Ctrl</kbd> + 
-				<kbd>t</kbd> (t=trigger) keycombination to manuall invoke the <strong>incrementExternalTrigger()</strong> 
+				<kbd>t</kbd> (t=trigger) key combination to manually invoke the <strong>incrementExternalTrigger()</strong> 
 				slot. After you choose the Experiment mode the experiment 
 				will again first enter a locked state and with the <kbd>Alt</kbd> 
 				key you can then unlock it. When it's unlocked it the waits for 
@@ -977,12 +983,12 @@ var RetinoMapper_Polar_TriggerDuration = 1000.0; </pre>
 				<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../images/runscript.png"/> 
 				button and see what happens.</li>
 				<li>Although we declared and initialize the script references 
-				(variabeles) they didn't automatically change/adapt to the 
+				(variables) they didn't automatically change/adapt to the 
 				current experiment structure while the experiment running. This 
 				is something we still need to do, the <strong>
-				RetinoMapper_Global_Pattern</strong> script variabele for 
+				RetinoMapper_Global_Pattern</strong> script variable for 
 				example needs to change from "Fixation" to "PolarAngle" for the 
-				second block (Blocknumber 1). There's a common solution that 
+				second block (BlockNumber 1). There's a common solution that 
 				let's you write your own custom script code inside a function 
 				that is automatically called just before the current experiment 
 				structure changes to a new Block or Trial. This feature is again 
@@ -1005,13 +1011,13 @@ var RetinoMapper_Polar_TriggerDuration = 1000.0; </pre>
 				Now we have an entry point that is automatically executed each 
 				time just before the experiment structure enters a new Block or 
 				Trial. Remember that <strong>parameters</strong> and therefore 
-				their referenced script variabeles are only fetched at the 
+				their referenced script variables are only fetched at the 
 				beginning of a new Block or trial. Now we need to know inside 
-				our overrided function which Block or Trial is soon to be 
+				our overridden function which Block or Trial is soon to be 
 				entered so we can for example change our script referenced 
-				variabeles accordingly to the new values for that Block-trial. 
+				variables accordingly to the new values for that Block-trial. 
 				Therefore we almost always add the following code inside 
-				(between the curly brackets {}) our overrided function:<br /><table class="codeframe">
+				(between the curly brackets {}) our overridden function:<br /><table class="codeframe">
             <tr>
                 <td>
                     <pre class="prettyprint">BasicExperiment.__proto__.PrepareNewInitBlockTrial = function()
@@ -1030,7 +1036,7 @@ var RetinoMapper_Polar_TriggerDuration = 1000.0; </pre>
 				retrieve by passing the BlockID to a function <strong>
 				getBlockPointerByID()</strong> like the above code shows. Now we 
 				have both the current Block and Trial number we can make use of 
-				them and for example change our script referenced variabeles 
+				them and for example change our script referenced variables 
 				accordingly like:<br />
 <table class="codeframe">
             <tr>
@@ -1059,7 +1065,7 @@ var RetinoMapper_Polar_TriggerDuration = 1000.0; </pre>
 				<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../images/runscript.png"/> 
 				button and see what happens.</li>
 				<li>There's another convenient function implemented by the included script 
-				template "BasicExperiment.qs" that is also often overrided in a 
+				template "BasicExperiment.qs" that is also often overridden in a 
 				custom script. This function (<strong>ExperimentStateChanged</strong>) 
 				is automatically called whenever the experiment state changes. 
 				This experiment state is something different then the experiment 
@@ -1074,7 +1080,7 @@ var RetinoMapper_Polar_TriggerDuration = 1000.0; </pre>
                 <td>
                     <pre class="prettyprint">BasicExperiment.__proto__.ExperimentStateChanged = function(currentState, sDateTimeStamp)
 {
-//This Funtion is called automatically at each time the Experiment State changes
+//This Function is called automatically at each time the Experiment State changes
 //See Help documentation (search for "ExperimentManager::ExperimentState") for a description of the different states
 	
    if(currentState == ExperimentManager.ExperimentState.ExperimentManager_Initialized)
@@ -1105,24 +1111,24 @@ var RetinoMapper_Polar_TriggerDuration = 1000.0; </pre>
 			</ol>
         	<p>&nbsp;</p>
 			<h3>QML Based examples</h3>
-			<p>With the use of QML files we can create highly performant, 
-			flexible and multicapable stimuli presentation screens. Combined 
+			<p>With the use of QML files we can create highly performing, 
+			flexible and multi-capable stimuli presentation screens. Combined 
 			with an Experiment Structure file and optionally a custom script 
 			file we can create the experiment that suits our needs. The below 
-			examples exspect you to have gained some knowledge from the above 
+			examples expect you to have gained some knowledge from the above 
 			two tutorials because QML Based experiments are not much different 
 			from Retinotopic Mapping based experiments and common parts are not 
 			explained in detail as much as done in the previous Retinotopic 
 			Mapping examples.</p>
 			<h4>The QML file</h4>
 			<p>The QML file is a User Interface specification and programming 
-			language that allows us to create highly performant, 
-					  flexible and multicapable stimuli presentation screens. Editing 
-					  of type of file can be done within BrainStims code editing 
+			language that allows us to create highly performing, 
+					  flexible and multi-capable stimuli presentation screens. Editing 
+					  of type of file can be done within BrainStim's code editing 
 					  UI capabilities or by making use of 
 					  another third party tool that allow you to create these stimuli 
 					  presentation screens with a easy WYSIWYG (what you see is what 
-					  you get) editor. The QML file type is developped and 
+					  you get) editor. The QML file type is developed and 
 			maintained by Qt, read
 			<a href="http://doc.qt.io/qt-5/qtqml-index.html" target="_blank">
 			this document</a> from Qt for a description of the file. There are 
@@ -1132,7 +1138,7 @@ var RetinoMapper_Polar_TriggerDuration = 1000.0; </pre>
 			QML is to read the
 			<a href="https://qmlbook.github.io/" target="_blank">QMLBook</a>, a 
 			great open source gitHub project with great examples and step by 
-			step tutorials. The following examples don't require much knowlegde 
+			step tutorials. The following examples don't require much knowledge 
 			of the QML syntax but also don't explain it, so if you have 
 			questions about this you should use one of the above links or use a 
 			search engine providing the string "qml" followed by the topic of 
@@ -1146,10 +1152,10 @@ var RetinoMapper_Polar_TriggerDuration = 1000.0; </pre>
 				button</li>
 				<li>from a Experiment Structure file (*.exml) with the use&nbsp; 
 				of an declared object from the 
-				<a href="QML2Viewer.html" target="_blank">QML2Viewer</a> <em>
+				<a href="QML2Viewer.html">QML2Viewer</a> <em>
 				class</em></li>
 				<li>from a script by creating a object of the  
-				<a href="QML2Viewer.html" target="_blank">QML2Viewer</a><em> class</em></li>
+				<a href="QML2Viewer.html">QML2Viewer</a><em> class</em></li>
 			</ol>
 			<p>The next examples will cover the first two usage options and 
 			afterwards also a implementation where a include of a script 
@@ -1160,7 +1166,7 @@ var RetinoMapper_Polar_TriggerDuration = 1000.0; </pre>
 			elements are. The resulting QML file from this example is saved to 
 			the file <em>ImagesAndText.qml</em> that is located in the  
 		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
-		Main Program Directory</a> directory under the subfolder <em>\Examples\BrainStim\QML 
+		Main Program Directory</a> <span lang="en-us"></span>under the subfolder <em>\Examples\BrainStim\QML 
 			Basics\.</em>
 			</p>
 			<ol>
@@ -1296,7 +1302,7 @@ Rectangle //Root element
         </table>
 				Execute the script file by pressing the green
 				<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../images/runscript.png"/> 
-				button and validate what you see is what you would exspect from 
+				button and validate what you see is what you would expect from 
 				the QML code.<br />
 				</li>
 				<li>The QML engine of BrainStim also allows to create more media 
@@ -1365,7 +1371,7 @@ Rectangle //Root element
 				our custom Script file and QML file. Let's see how we can define 
 				a function and use that from inside QML. Let's add two 
 				functions, one that changes again the <em>centerText.text</em> 
-				propery<em> </em>and another function that can change the <em>
+				property<em> </em>and another function that can change the <em>
 				centerImage.source</em> property. Add the following code 
 				after the closing curly bracket "}" of the <em>keyboardItem</em> 
 				element: <br />
@@ -1379,14 +1385,14 @@ Rectangle //Root element
       objectName: "functions"
       function setTextFunction(sText)
       {
-         console.log("setTextFunction() called with parameter:", sText)//only for debugging writes to stimulGL output file
+         console.log("setTextFunction() called with parameter:", sText)
          centerText.text = sText;
          return true;
       }
 
       function setImageFunction(sPath)
       {
-         console.log("setTextFunction() called with parameter:", sPath)//only for debugging writes to stimulGL output file
+         console.log("setTextFunction() called with parameter:", sPath)
          centerImage.source = sPath;
          return true;
       }
@@ -1439,21 +1445,21 @@ Rectangle //Root element
 			is that instead of declaring a object that&nbsp; can present 
 			different Retinotopy stimuli (from the <em>Class</em>
 					<strong>
-					<a href="Doxygen/class_retinotopy_mapper.html" target="_blank">RetinotopyMapper</a></strong>), 
+					<a href="Doxygen/class_retinotopy_mapper.html">RetinotopyMapper</a></strong>), 
 			we'll be declaring a object that can present a QML file from the 
-			Class <a href="Doxygen/class_qml2viewer_mapper.html" target="_blank">QML2Viewer</a>. 
+			Class <a href="Doxygen/class_qml2viewer_mapper.html">QML2Viewer</a>. 
 			If the following steps are not clear enough for you to understand 
 			please take a look at RetinotopyMapper example first. The result of 
 			this example is saved to the file <em>ImagesAndText.exml</em> that is located in the  
 		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
-		Main Program Directory</a> directory under the subfolder <em>\Examples\BrainStim\QML 
+		Main Program Directory</a> <span lang="en-us"></span>under the subfolder <em>\Examples\BrainStim\QML 
 			Basics\.</em> 
 			Because this example is so similar we'll adapt the result of the 
 			Retinotopy example and save it to another filename.</p>
     		<ol>
 				<li>Open the file <em>PolarAngle.exml</em> that is located in the  
 		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
-		Main Program Directory</a> directory under the subfolder <em>
+		Main Program Directory</a> <span lang="en-us"></span>under the subfolder <em>
 				\Examples\BrainStim\Retinotopy Basics\ </em>and save it under another name by using 
 				the menu entry
 				<kbd>File</kbd> &gt; <kbd>Save As...</kbd>&nbsp; </li>
@@ -1477,7 +1483,7 @@ Rectangle //Root element
 				and 
 				connect it to the <strong>incrementExternalTrigger()</strong> slot of the 
 				"QML2Viewer_Object" object, see this
-				<a href="Doxygen/class_experiment_engine.html" target="_blank">documentation page</a>.<br />
+				<a href="Doxygen/class_experiment_engine.html">documentation page</a>.<br />
 				Right click with your mouse in the <strong>Graphical Schematic View 
 				</strong>and select the menu entry&nbsp;<kbd>Connections</kbd> &gt; 
 					<kbd>Configure Connection(s)</kbd>&nbsp;and make the connection 
@@ -1516,7 +1522,7 @@ Rectangle //Root element
 				presence of the <em>parameters</em>
 				<img alt="parameters" height="24" width="24" src="../../images/parameters.png" /> 
 				icon&nbsp;inside the graphical representation of this object. Right 
-				click somewere in the <strong>Parameters Table View</strong> and select the menu 
+				click somewhere in the <strong>Parameters Table View</strong> and select the menu 
 				entry <kbd>Parameters</kbd> &gt; 
 					<kbd>Configure Parameter(s)</kbd>&nbsp;. Select the <em>
 				QML2Viewer_Object</em> from the <strong>Object</strong> 
@@ -1529,7 +1535,7 @@ Rectangle //Root element
 				"./ImagesAndText.qml" (without the quotes). Press the <strong>
 				Set</strong> button to set the new parameter value. <strong>Close</strong> the dialog and Save the Experiment Structure file again using the 
 				key combination <kbd>Ctrl</kbd> + <kbd>s</kbd> </li>
-				<li>Now it's again time time execute our document and see what our 
+				<li>Now it's again time to execute our document and see what our 
 				above changes lead to. Press the green
 				<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../images/runscript.png"/> 
 				button and watch what happens, remember to press <kbd>Alt</kbd> 
@@ -1550,21 +1556,21 @@ Rectangle //Root element
 			a script include</h4>
 			<p>Again you'll get the most advantages if you combine the QML file with a custom script, this is also the advised 
 			strategy to use. For the next example we proceed with the last 
-			Experiment Structure file and and add a custom script file (*.qs) that
+			Experiment Structure file and <span lang="en-us"></span>add a custom script file (*.qs) that
 			<span class="auto-style1">includes</span> a template script file to 
 			again get more 
 			overview, flexibility and control over your experiment.</p>
 			<p>Let's first again create a Experiment 
 			Structure file as above but now without declaring the <em>
 			TriggerTimer</em> Object and without configuring 
-			(F)(In)-itializations and Connections (because this is already 
+			(F)(In)-initializations and Connections (because this is already 
 			implemented for us in the template script file so we don't need to 
 			worry about this). The first steps of this example are almost 
 			similar as the steps from the previous example but for clarity 
 			reasons I'll summarize them again. The resulting Experiment 
 			Structure file is saved to the file <em>PolarAngle_ScriptRef.exml that is </em> located in the  
 		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
-		Main Program Directory</a> directory under the subfolder <em>\Examples\BrainStim\Retinotopy 
+		Main Program Directory</a> <span lang="en-us"></span>under the subfolder <em>\Examples\BrainStim\Retinotopy 
 			Basics\</em>. 
 			Also the custom script file is saved there under the name <em>
 			PolarAngle_ScriptRef.qs</em>. Let's first create the Experiment Structure 
@@ -1572,7 +1578,8 @@ Rectangle //Root element
 			<ol>
 				<li>Open the file <em>ImagesAndText.exml</em> file from the 
 				previous example, there's also a solution saved in the
-				<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> directory under the subfolder 
+				<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> 
+				<span lang="en-us"></span>under the subfolder 
 				<em>\Examples\BrainStim\QML Basics </em>and save it under the name 
 				"ImagesAndText_Scripted.exml" (without the quotes) by using 
 				the menu entry <kbd>File</kbd> &gt; <kbd>Save As...</kbd>&nbsp; 
@@ -1590,7 +1597,7 @@ Rectangle //Root element
 				We also don't need to set the <strong>QML File</strong> path 
 				parameter to a fixed value because we can also do this from the 
 				script environment.</li>
-				<li>In the <strong>Parameters Table View</strong> rightclick and 
+				<li>In the <strong>Parameters Table View</strong> right click and 
 				choose the menu entry <kbd>Parameters</kbd> &gt; 
 					<kbd>Configure Parameter(s)</kbd>&nbsp;. Select the <strong>
 				Object</strong> <em>QML2Viewer_Object</em> and the <strong>Block</strong>
@@ -1606,7 +1613,7 @@ Rectangle //Root element
 				</ul>
 				<br />
 				We now have a minimal Experiment Structure file that we can use 
-				frominside our custom script.</li>
+				from inside our custom script.</li>
 				<li>Create a new script file using 
 			the menu entry <kbd>File</kbd> &gt; <kbd>New</kbd> &gt; <kbd>QtScript 
 			Document</kbd></li>
@@ -1622,7 +1629,7 @@ Rectangle //Root element
 				your own custom script for running a Retinotopy experiment 
 				without making use of the template script. Template script files 
 				are part of the BrainStim Include files, read
-				<a href="../BrainStim/FunctionsAndIncludes.html#Includes" target="_blank">this document</a> for more information about Includes and how to 
+				<a href="../BrainStim/FunctionsAndIncludes.html#Includes">this document</a> for more information about Includes and how to 
 				use them. <strong>Important</strong>: you should never 
 				delete/move or change these Include files! For this example 
 				we'll include a script file named 
@@ -1662,7 +1669,7 @@ BasicExperiment.nTestModeTriggerDuration = 1000;</pre>
 				directory of our custom script file and so we can make use of 
 				the <span lang="en-us">function <strong>BrainStim.getActiveDocumentFileLocation()</strong> for 
 				retrieving the directory path, see
-				<a href="../BrainStim/Doxygen/class_main_window.html#a70b08533c16a649bf21377cf10c2ad6e" target="_blank">this document</a>. 
+				<a href="../BrainStim/Doxygen/class_main_window.html#a70b08533c16a649bf21377cf10c2ad6e">this document</a>. 
 				</span><br />After that we'll set the trigger time for a trigger simulation 
 				timer. This is a feature is implemented by our template script, 
 				it implements a <em>TriggerTimer</em> object that automatically 
@@ -1670,9 +1677,9 @@ BasicExperiment.nTestModeTriggerDuration = 1000;</pre>
 				slot like we saw in the previous example for us. With the
 				<strong>BasicExperiment.nTestModeTriggerDuration</strong> we can 
 				set the trigger time that should be used for our experiment for 
-				a test mode(we'll see later what this test mode exactely does).
+				a test mode(we'll see later what this test mode exactly does).
 				<br /><br />We have unlocked a parameters and set them to refer to a 
-				script variabele, and now we have to make sure that these exist 
+				script variable, and now we have to make sure that these exist 
 				in the script, lets declare and give them a initial value like:<br />
 				<br />
 				<table class="codeframe">
@@ -1687,7 +1694,8 @@ BasicExperiment.nTestModeTriggerDuration = 1000;</pre>
 				QML file</li>
 				<li>Open the file <em>ImagesAndText.qml</em> file from the 
 				previous example, there's also a solution saved in the
-				<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> directory under the subfolder 
+				<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> 
+				<span lang="en-us"></span>under the subfolder 
 				<em>\Examples\BrainStim\QML Basics\ </em>and save it under the name 
 				"ImagesAndText_Scripted.qml" (without the quotes) by using 
 				the menu entry <kbd>File</kbd> &gt; <kbd>Save As...</kbd>&nbsp; 
@@ -1702,11 +1710,11 @@ BasicExperiment.nTestModeTriggerDuration = 1000;</pre>
 import BrainStim_QMLExtensions 1.0</pre>
                 </td>
             </tr>
-        </table>This QML include adds some additonal features to our QML file of 
+        </table>This QML include adds some additional features to our QML file of 
 				which we can now make use of, one of these features is the
 				<strong>DebugMode</strong> element. This element show the 
 				current experiment structure in the top of our presentation 
-				window while running the experiment. We already saw a similiar 
+				window while running the experiment. We already saw a similar 
 				looking textual information area for our Retinotopy experiment.
 				<br />
 				Now we only need to add this element to our QML file, we'll 
@@ -1730,7 +1738,7 @@ import BrainStim_QMLExtensions 1.0</pre>
 				available. This element is defined in a file which is also part 
 				of the BrainStim Include files (<em>Include\QML\DebugMode.qml</em>), 
 				read
-				<a href="../BrainStim/FunctionsAndIncludes.html#Includes" target="_blank">this document</a> for more information.<br />
+				<a href="../BrainStim/FunctionsAndIncludes.html#Includes">this document</a> for more information.<br />
 				</li>
 				<li><span lang="en-us">Save the Script file again using the 
 				key combination <kbd>Ctrl</kbd> + <kbd>s</kbd></span></li>
@@ -1740,12 +1748,12 @@ import BrainStim_QMLExtensions 1.0</pre>
 				BasicExperiment.NewInitBlockTrial</strong> this function is 
 				called exactly at the moment that the Experiment Structure 
 				starts a new Block or Trial. In the previous Retinotopy example 
-				we overrided the <strong>BasicExperiment.PrepareNewInitBlockTrial</strong> 
+				we overridden the <strong>BasicExperiment.PrepareNewInitBlockTrial</strong> 
 				function because we needed to make sure to set the new script 
 				referenced parameters before they were parsed. This example 
 				we're going to dynamically change the QML scene by invoking one 
 				or more custom functions that we already defined. We'll do that 
-				now by adding the following script code which is very similiar 
+				now by adding the following script code which is very similar 
 				as for the Retinotopy example, but then for the <strong>
 				BasicExperiment.NewInitBlockTrial</strong> function: <br />
 				<table class="codeframe">
@@ -1772,7 +1780,7 @@ import BrainStim_QMLExtensions 1.0</pre>
 						<pre class="prettyprint">   if(_currentBlockNumber==0)
    {
       BasicExperiment.InvokeQMLFunction("functions", "setTextFunction", "Block 0");
-      BasicExperiment.InvokeQMLFunction("functions", "setImageFunction", "images/World.png");
+      BasicExperiment.InvokeQMLFunction("functions", "setImageFunction", "images/World. Png");
    }
    else if(_currentBlockNumber==1)
    {
@@ -1806,7 +1814,7 @@ import BrainStim_QMLExtensions 1.0</pre>
                 <td>
                     <pre class="prettyprint">BasicExperiment.__proto__.ExperimentStateChanged = function(currentState, sDateTimeStamp)
 {
-//This Funtion is called automatically at each time the Experiment State changes
+//This Function is called automatically at each time the Experiment State changes
 //See Help documentation (search for "ExperimentManager::ExperimentState") for a description of the different states
 	
    if(currentState == ExperimentManager.ExperimentState.ExperimentManager_Initialized)
@@ -1826,7 +1834,7 @@ import BrainStim_QMLExtensions 1.0</pre>
             </tr>
         </table>
 				<br /></li>
-				<li>Now we have entered enought script code for running the 
+				<li>Now we have entered enough script code for running the 
 				experiment, which leaves us at the last pieces of code that runs 
 				the experiment:<br />
 <table class="codeframe">
@@ -1848,7 +1856,7 @@ import BrainStim_QMLExtensions 1.0</pre>
         	<h4>Editing a QML file with Qt Creator</h4>
 			<p>Qt releases a program called Qt Creator that has an internal QML 
 			editor that let's you edit, view and debug and view QML files. It 
-			can be convienient to use this third party program combined with 
+			can be convenient to use this third party program combined with 
 			BrainStim for the development of an QML file because it has an 
 			WYSIWYG editor, combined with many debugging facilities. One 
 			limitation is that this program needs to support the same version of 
@@ -1856,12 +1864,12 @@ import BrainStim_QMLExtensions 1.0</pre>
 			downloadable installer 
 			from 
 <!--doc-version-qtCreatorDownloadDir-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <a href="http://download.qt.io/official_releases/qtcreator/3.5/3.5.1/" target="_blank">here</a>
 <!--doc-version-qtCreatorDownloadDir-end-->
  saved under the filename <strong>
 <!--doc-version-qtCreatorDownloadName-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 qt-creator-opensource-windows-x86-3.5.1.exe
 <!--doc-version-qtCreatorDownloadName-end-->
         	</strong>
@@ -1872,14 +1880,15 @@ qt-creator-opensource-windows-x86-3.5.1.exe
 				installed QtCreator (qtcreator.exe) application and open the 
 				file "ImagesAndText_Scripted.qml" (without the quotes) that is located in the  
 		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
-		Main Program Directory</a> directory under the subfolder <em>
+		Main Program Directory</a> <span lang="en-us"></span>under the subfolder <em>
 				\Examples\BrainStim\QML Basics\.<br />
 				</em>Notice that after opening the log message <span>"<em>plugin 
 				cannot be loaded for module "BrainStim_QMLExtensions</em>"</span> 
 				was appended to the <strong>Application Output</strong>. 
 				Furthermore the second line from the QML file in the editor 
 				("import BrainStim_QMLExtensions 1.0") has a small thin red line 
-				below it, if we move our mouse over it it will say something 
+				below it, if we move our mouse over it <span lang="en-us">
+				</span>will say something 
 				like "<em>QML module not found</em>". The problem here is that 
 				when editing a QML file in QtCreator that it doesn't know about 
 				custom imports (plugins) which are implemented by BrainStim.<br />
@@ -1889,7 +1898,7 @@ qt-creator-opensource-windows-x86-3.5.1.exe
 				QML project file (*.qmlproject) which we can use for defining 
 				our custom QML plugin path from BrainStim, let's create such a 
 				file in BrainStim (there's also a BrainStim script file that 
-				automatically performs the below steps for you, it's decribed 
+				automatically performs the below steps for you, it's described 
 				after the following example steps):</li>
 			</ol>
 			<p>&nbsp;</p>
@@ -1931,7 +1940,7 @@ Project {
 				Make sure to change the <strong>importPaths</strong> setting 
 				from the above code to match your BrainStim Installation QML 
 				plugin directory path, see
-				<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory" target="_blank">this</a> document.<br />
+				<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">this</a> document.<br />
 				</li>
 				<li>Save the file again using the 
 				key combination <kbd>Ctrl</kbd> + <kbd>s</kbd> and open the file 
@@ -1951,7 +1960,8 @@ Project {
 			<ol>
 				<li>Open in BrainStim the file <em>CreateQtCreatorProject.qs</em> 
 				located in the
-				<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> directory under the subfolder 
+				<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> 
+				<span lang="en-us"></span>under the subfolder 
 				<em>\Examples\BrainStim\QML QtCreator\</em></li>
 				<li>Execute the script file by pressing the green
 				<strong>Execute</strong>&nbsp;<img alt="Execute" height="24" width="24" src="../../images/runscript.png"/> 
@@ -1964,7 +1974,7 @@ Project {
 				QML project file for us to use within QtCreator.</li>
 			</ol>
         	<p>We can also configure BrainStim to execute the QML scene from 
-				within QtCreator, to do this we we need to register BrainStim in 
+				within QtCreator, to do this we <span lang="en-us"></span>need to register BrainStim in 
 				QtCreator as an external tool that can execute QML files, let's 
 				try this: </p>
 			<ol>
@@ -2001,11 +2011,11 @@ Project {
 					<li><strong>Arguments</strong>: the arguments to pass to 
 				the BrainStim executable, we'll pass the QML document file path using 
 				the BrainStim <strong>-f</strong> (files) and the <strong>-e</strong> 
-					(execute) command line option (<a href="../BrainStim/CommandLineOptions.html" target="_blank">read 
+					(execute) command line option (<a href="../BrainStim/CommandLineOptions.html">read 
 					this document about BrainStim Command-Line Options</a>) to make 
 				sure that it executes directly:&nbsp;<em>-f 
 				%{CurrentDocument:FilePath} -e</em> </li>
-					<li><strong>Working directory</strong>:the working 
+					<li><strong>Working directory</strong>: the working 
 					directory, we'll use the documents directory for this: <em>%{CurrentDocument:Path}</em>
 					</li>
 					<li><strong>Output</strong>: Leave the <strong>Show in 
@@ -2029,7 +2039,7 @@ Project {
     </div>
 	<strong>
 <!--doc-version-default-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
 <!--doc-version-default-footer-end-->
 </body>

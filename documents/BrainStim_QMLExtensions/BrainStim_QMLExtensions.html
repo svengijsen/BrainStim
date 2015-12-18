@@ -1,0 +1,89 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
+<title>BrainStim QML Extensions Plug-in v1.0</title>
+<!--doc-version-title-end-->
+	</head>
+<body>
+    <div class="container">
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>BrainStim QML Extensions Plug-in</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version: </strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s): </strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date: </strong>July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+        <div id="toc_Area">
+            <ul id="toc"></ul>
+            <h2>Introduction</h2>
+            <p>A default BrainStim installation installs a custom QML plugin 
+			that can be imported and used inside a QML file. This plugin is 
+			called <strong><em>BrainStim_QMLExtensions</em></strong> and can be 
+			imported from a QML file like:</p>
+        <table class="codeframe">
+            <tr>
+                <td>
+                    <pre class="prettyprint">import BrainStim_QMLExtensions 1.0; </pre>
+                </td>
+            </tr>
+        </table>
+			<p>This plugin that is stored in the 
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">
+			Main Program Directory</a> under the sub-directory
+			<span style="color: rgb(51, 51, 51); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: bold; letter-spacing: normal; line-height: 20px; orphans: auto; text-align: left; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none; background-color: rgb(255, 255, 255);">
+			Qml/plugins/[architecture]</span> is 
+			then automatically loaded and imported to the QML scene.</p>
+            <h3>Features</h3>
+            <p>At the moment there are two main <a href="Doxygen/classes.html">
+			script classes</a> made available inside the<strong><em> BrainStim_QMLExtensions</em></strong> 
+			QML plugin, these are:&nbsp;</p>
+			<ol>
+				<li><a href="Doxygen/class_ogre_item.html">OgreItem</a>: This 
+				class can be used as an QML type. The type implements a dynamic 
+				QML 3D viewer for a QML scene. This is made available by the use 
+				of <a href="http://www.ogre3d.org/" target="_blank">Ogre</a> (a 
+				popular open-source graphics rendering engine). There's an
+				<a href="../Examples/AdvancedExamples.html">advanced example</a> 
+				that shows its features.</li>
+				<li><a href="Doxygen/class_brain_stim_interface.html">
+				BrainStimInterface</a>: This class can't be used as an item but 
+				its member functions can be called directly. This class is the 
+				default for all features regarding the BrainStim software. 
+				There's also an <a href="../Examples/AdvancedExamples.html">
+				advanced example</a> that shows this class features.</li>
+			</ol>
+			<h2>Further reading</h2>
+			<p>To start learning how to create Experiment using the Experiment 
+			Manager plugin you should definitely read this
+			<a href="CreatingExperiments.html">Creating Experiments with the Experiment Manager</a> document. 
+			After that you should try out some (Advanced) Examples and try to 
+			tweak them.</p>
+        </div>
+    </div>
+<!--doc-version-default-footer-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
+	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
+<!--doc-version-default-footer-end-->
+</body>
+</html>

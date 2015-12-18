@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -14,7 +14,7 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <title>Settings Dialog v1.0</title>
 <!--doc-version-title-end-->
 <style type="text/css">
@@ -31,30 +31,37 @@
     <div class="container">
 
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Settings Dialog</h1>
 			<div class="row">
-				<div class="col-md-4"><p><strong>Document version:</strong>1.0</p></div>
-				<div class="col-md-4"><p><strong>Author(s):</strong>Sven Gijsen</p></div>
-				<div class="col-md-4"><p><strong>Date:</strong>July 2015</p></div>
+				<div class="col-md-4"><p><strong>Document version: </strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s): </strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date: </strong>July 2015</p></div>
 			</div>
 		</div>
 	</div>
 <!--doc-version-default-header-end-->
 
-        <p>By using the settings dialog BrainStim users can configure their 
+        <h2>Introduction</h2>
+		<p>By using the settings dialog BrainStim users can configure their 
 		setting and configuration preferences.
 		<span style="color: rgb(51, 51, 51); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 20px; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none; background-color: rgb(255, 255, 255);">
 		You can open the settings dialog from BrainStim by selecting the menu 
 		commands:<span class="Apple-converted-space">&nbsp;</span></span><kbd style="box-sizing: border-box; font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; font-size: 12.6000003814697px; padding: 2px 4px; color: rgb(255, 255, 255); border-radius: 3px; -webkit-box-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px inset; box-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px inset; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(51, 51, 51);">Tools</kbd><span style="color: rgb(51, 51, 51); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 20px; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none; background-color: rgb(255, 255, 255);"><span class="Apple-converted-space">&nbsp;</span>--&gt;<span class="Apple-converted-space">&nbsp;</span></span><kbd style="box-sizing: border-box; font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; font-size: 12.6000003814697px; padding: 2px 4px; color: rgb(255, 255, 255); border-radius: 3px; -webkit-box-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px inset; box-shadow: rgba(0, 0, 0, 0.247059) 0px -1px 0px inset; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; background-color: rgb(51, 51, 51);">Options</kbd><span style="color: rgb(51, 51, 51); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 20px; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none; background-color: rgb(255, 255, 255);">. 
-		Custom configured settings from this dialog are saved to the BrainStim 
-		configuration file.</span></p>
+		</span></p>
+		<h2 id="ConfigurationFile">Configuration File</h2>
+		<p>
+		<span style="color: rgb(51, 51, 51); font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 20px; orphans: auto; text-align: start; text-indent: 0px; text-transform: none; white-space: normal; widows: 1; word-spacing: 0px; -webkit-text-stroke-width: 0px; display: inline !important; float: none; background-color: rgb(255, 255, 255);">Custom configured 
+		BrainStim settings are saved in the BrainStim 
+		configuration file. This file is located in the
+		<a href="../GettingStartedGuide/GettingStartedGuide.html#MainUserDirectory">
+		Main User Directory</a> under the filename BrainStim.ini. </span></p>
+		<h2>Settings</h2>
 		<p><span class="auto-style1">The settings dialog contains a selectable 
-		tabbular bar that divides all the settings in different groups. 
+		tabular bar that divides all the settings in different groups. 
 		Available settings are:</span></p>
-		<p>&nbsp;</p>
 		<table class="table table-condensed">
 		  <thead>
 		    <tr>
@@ -80,12 +87,12 @@
 		      <th scope="row"></th>
 		      <td><strong>Allow multiple instances of BrainStim</strong></td>
 		      <td>When checked then multiple instances of BrainStim are allowed 
-			  to run simultaneously as a seperate BrainStim process on the same 
+			  to run simultaneously as a separate BrainStim process on the same 
 			  computer. If this setting is unchecked and you would try to start 
 			  another instance of BrainStim by executing again the executable 
 			  then this process is automatically stopped by the first instance. 
-			  A situation where this setting could be usefull is when you would 
-			  assiociate BrainStim in Windows with a particular file type 
+			  A situation where this setting could be useful is when you would 
+			  associate BrainStim in Windows with a particular file type 
 			  extensions, see <a href="FileTypeAssociations.html">this document</a> 
 			  for more information.</td>
 		    </tr>
@@ -95,9 +102,9 @@
 		      <td>This setting can be used to enable a custom BrainStim login 
 			  option, if this option is enabled then you first need to 
 			  login/register an account to make use of BrainStim the next time 
-			  it starts. This options can be usefull in situations where you 
-			  want to be able to store custom Brainstim-user account settings 
-			  seperately while using the same Windows-user account. See
+			  it starts. This options can be useful in situations where you 
+			  want to be able to store custom BrainStim-user account settings 
+			  separately while using the same Windows-user account. See
 			  <a href="CustomUserLogins.html">this document</a> for more 
 			  information.</td>
 		    </tr>
@@ -177,7 +184,7 @@
 		    <tr>
 		      <th scope="row"></th>
 		      <td><span class="auto-style2">Updates Directory</span></td>
-		      <td>This directory is fixed and therefore readonly here. This 
+		      <td>This directory is fixed and therefore read-only here. This 
 			  directory is used by BrainStim for installing some automatic 
 			  updates each time a new user starts BrainStim for the first time.</td>
 		    </tr>
@@ -197,7 +204,7 @@
 		      <th scope="row"></th>
 		      <td><strong>Properties</strong></td>
 		      <td>These settings are automatically implemented by the installed 
-			  and enabled plugins.The by default available
+			  and enabled plugins. The by default available
 			  <a href="../ExperimentManagerPlugin/ExperimentManagerPlugin.html">
 			  ExperimentManager plugin</a> implements a <strong>Automatic EXML 
 			  File Validation</strong> setting allowing you to disable the 

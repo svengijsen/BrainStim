@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15113114038), version 1.0.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -15,21 +15,21 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15113114038), version 1.0.0.1-->
 <title>Extension Plug-in Template v1.0</title>
 <!--doc-version-title-end-->
 </head>
 <body>
     <div class="container">
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (15113114038), version 1.0.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Extension Plug-in Template</h1>
 			<div class="row">
-				<div class="col-md-4"><p><strong>Document version:</strong>1.0</p></div>
-				<div class="col-md-4"><p><strong>Author(s):</strong>Sven Gijsen</p></div>
-				<div class="col-md-4"><p><strong>Date:</strong>July 2015</p></div>
+				<div class="col-md-4"><p><strong>Document version: </strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s): </strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date: </strong>July 2015</p></div>
 			</div>
 		</div>
 	</div>
@@ -50,10 +50,13 @@
             <li>
                 Static or Dynamic:
                 <ul>
-                    <li><strong>Static</strong>, a static Plug-in consists of routines that are compiled and linked directly into the main BrainStim program. When you compile the main BrainStim program that uses a static library, all the functionality of the static library becomes part of the BrainStim executable. On Windows, static libraries typically have a .lib extension, whereas on Linux, static libraries typically have an .a (archive) extension. One advantage of static libraries is that you only have to distribute the executable in order for users to run your Plug-In. Because the library becomes part of your program, this ensures that the right version of the library is always used with your program. Also, because static libraries become part of your program, you can use them just like functionality you?ve written for your own program. On the downside, because a copy of the library becomes part of every executable that uses it, this can cause a lot of wasted space. Static libraries also can not be upgraded easy ? to update the library, the entire executable needs to be replaced. For this reason only Plug-ins that can?t be seen as a separate module from BrainStim and are extensively tested are implemented statically as a Plug-in.</li>
+                    <li><strong>Static</strong>, a static Plug-in consists of routines that are compiled and linked directly into the main BrainStim program. When you compile the main BrainStim program that uses a static library, all the functionality of the static library becomes part of the BrainStim executable. On Windows, static libraries typically have a .lib extension, whereas on Linux, static libraries typically have an .a (archive) extension. One advantage of static libraries is that you only have to distribute the executable in order for users to run your Plug-In. Because the library becomes part of your program, this ensures that the right version of the library is always used with your program. Also, because static libraries become part of your program, you can use them just like functionality 
+					you've written for your own program. On the downside, because a copy of the library becomes part of every executable that uses it, this can cause a lot of wasted space. Static libraries also can not be upgraded easy ? to update the library, the entire executable needs to be replaced. For this reason only Plug-ins that 
+					can't be seen as a separate module from BrainStim and are extensively tested are implemented statically as a Plug-in.</li>
                     <li>
                         <strong>Dynamic</strong>, a dynamic Plug-in consists of routines that can be loaded into a program at run time during start-up. When you compile a program that uses a dynamic library, the library does not become part of your executable ? it remains as a separate unit. On Windows, dynamic libraries typically have a .dll (dynamic link library) extension, whereas on Linux, dynamic libraries typically have a .so (shared object) extension. One advantage of dynamic libraries is that many programs can share one copy, which saves space. Perhaps a bigger advantage is that the dynamic library can be upgraded to a newer version without replacing all of the executables that use it.<br />
-                        Because we want to separate BrainStim from the Plug-ins, to keep everything modular, we don?t define and explicitly import these Plug-ins but they are automatically detected (inside the Plug-in directory) and automatically defined and loaded during start-up without explicitly defining them in the main BrainStim source code. After they are loaded the User Interface can be accessed trough BrainStim and some functionality is automatically linked to the script environment.
+                        Because we want to separate BrainStim from the Plug-ins, to keep everything modular, we 
+						don't define and explicitly import these Plug-ins but they are automatically detected (inside the Plug-in directory) and automatically defined and loaded during start-up without explicitly defining them in the main BrainStim source code. After they are loaded the User Interface can be accessed trough BrainStim and some functionality is automatically linked to the script environment.
                     </li>
                 </ul>
             </li>
@@ -71,7 +74,8 @@
         <ol>
             <li>  Copy and Paste the folder &quot;ExtensionPluginTemplate&quot; (from BrainStim source directory/Source/Plug-ins/),  rename the new pasted folder to your own &lt;ExtensionName&gt; name (do not use blank spaces for this name!).</li>
             <li>
-                Replace the substring &quot;_extensionname_&quot; from all file/(folder)-names with the choosen &lt;ExtensionName&gt; from the previous step.<br />
+                Replace the substring &quot;_extensionname_&quot; from all file/(folder)-names with the 
+				chosen &lt;ExtensionName&gt; from the previous step.<br />
                 i.e. _extensionname__plugin_global.h becomes Retinotopic_Mapping_plugin_global.h if &lt;ExtensionName&gt; = &quot;Retinotopic_Mapping&quot;.
             </li>
             <li>Replace all substrings &quot;_extensionname_&quot; found in the content of all files to &lt;ExtensionName&gt;, you can use a text editor like UltraEdit  to quickly ?replace in files? to do this quickly, select include sub-folders!</li>

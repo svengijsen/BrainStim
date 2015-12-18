@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -15,21 +15,21 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <title>Advanced Examples v1.0</title>
 <!--doc-version-title-end-->
 </head>
 <body>
     <div class="container">
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Advanced Examples</h1>
 			<div class="row">
-				<div class="col-md-4"><p><strong>Document version:</strong>1.0</p></div>
-				<div class="col-md-4"><p><strong>Author(s):</strong>Sven Gijsen</p></div>
-				<div class="col-md-4"><p><strong>Date:</strong>July 2015</p></div>
+				<div class="col-md-4"><p><strong>Document version: </strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s): </strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date: </strong>July 2015</p></div>
 			</div>
 		</div>
 	</div>
@@ -37,13 +37,13 @@
         <h2>Introduction</h2>
         <p>There are some advanced examples stored in the <em><strong>BrainStim\Examples\BrainStim\Advanced 
 		Examples\</strong></em> directory. The documentation of these examples 
-		is not detailed because they exspect you to have some basic knowledge 
-		about BrainStim and Scripting. This document summarises these examples 
-		together with a short explaination. </p>
+		is not detailed because they expect you to have some basic knowledge 
+		about BrainStim and Scripting. This document summarizes these examples 
+		together with a short explanation. </p>
         <p>Some examples make use of the <em><strong>
 		BrainStim\Examples\BrainStim\Common</strong></em> directory for files 
 		that are (or can be) shared with other examples for saving disk space 
-		and therefore also kepping the BrainStim installer as small as possible. If you plan to create your own experiment or script using one of the example 
+		and therefore also keeping the BrainStim installer as small as possible. If you plan to create your own experiment or script using one of the example 
 		file(s) as a template you should copy all the used files. Bear in mind that there might be some references to the <em><strong>\Common\</strong></em> sub-directory that you should not forget to copy.</p>
 		<h2>Examples</h2>
 		<p>&nbsp;The following examples are available in the sub-directories of the
@@ -59,6 +59,23 @@
 				  </thead>
 				  <tbody>
 				    <tr>
+				      <th scope="row">BrainStim FileSearch</th>
+				      <td>FileListing.qs</td>
+				      <td>example that shows how you can 
+					  use BrainStim for an administrative task such as searching 
+					  for files inside a directory (and sub-directories) of a 
+					  specified file type.</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">BrainStim QML2Viewer</th>
+				      <td>QML2Viewer.qs</td>
+				      <td>example that shows how we can 
+					  make use of a QML2Viewer script object to create a QML 
+					  scene in a custom script. Furthermore it shows how you can 
+					  change the output windows features, like position, screen 
+					  number, etc.</td>
+				    </tr>
+				  	<tr>
 				      <th scope="row">Experiment FingerTapping</th>
 				      <td>FingerTapping.qs</td>
 				      <td>an example of an complete FingerTapping experiment, it 
@@ -71,146 +88,106 @@
 					  <a href="http://support.brainvoyager.com/automation-aamp-development/23-file-formats/494-the-format-of-prt-files.html" target="_blank">
 					  this document</a>) that stores the stimulation protocol is 
 					  also available.</td>
-				    </tr>
-				    <tr>
-				      <th scope="row" style="height: 31px">QML MediaPlayer</th>
-				      <td style="height: 31px">MediaExample.qs</td>
-				      <td style="height: 31px">an example of how you can make 
-					  use of Audio and Movie files in your experiments using 
-					  QML.</td>
-				    </tr>
-				    <tr>
-				      <th scope="row" style="height: 31px">QML ImageBuffer</th>
-				      <td style="height: 31px">ImageBuffer.qs</td>
-				      <td style="height: 31px">an example that shows how you can 
+				      </tr>
+					  <tr>
+				      <th scope="row">ExperimentStructure 
+					  BlockLoops</th>
+				      <td>BlockLoops.qs</td>
+				      <td>example of an experiment 
+					  structure file that has multiple Block Loops defined.</td>
+				      </tr>
+					  <tr>
+				      <th scope="row">ExperimentStructure 
+					  CustomParameters</th>
+				      <td>CustomParameters.qs</td>
+				      <td>example of how you can make use of 
+			<em>custom parameters</em> that are defined in the Experiment file or script.</td>
+				      </tr>
+					  <tr>
+				      <th scope="row">ExperimentStructure 
+					  DynamicEditing</th>
+				      <td>ExperimentStructureEditing.qs</td>
+				      <td>example that shows how we can 
+					  manage (load, create, access and change) the <em>ExperimentStructure</em> 
+					  from inside a custom script.</td>
+				      </tr>
+					  <tr>
+				      <th scope="row">QML ImageBuffer</th>
+				      <td>ImageBuffer.qs</td>
+				      <td>an example that shows how you can 
 					  make use of the Image Buffering capabilities of the
 					  <strong>QML2Viewer</strong> <em>class</em>, read
-					  <a href="../ExperimentManagerPlugin/Doxygen/class_q_m_l2_viewer.html" target="_blank">
-					  this document</a> for more infomation. The experiments 
+					  <a href="../ExperimentManagerPlugin/Doxygen/class_q_m_l2_viewer.html">
+					  this document</a> for more information. The experiments 
 					  first loads images from disk, buffers them and then 
 					  changes, adds, removes and updates the images from the 
 					  Image Buffer. After that the images are rapidly presented 
 					  in a <strong>Image</strong> element of a QML scene from 
 					  the image buffer (memory).</td>
-				    </tr>
-				    <tr>
-				      <th scope="row" style="height: 31px">QtScript 
-					  UserInterfaces</th>
-				      <td style="height: 31px">&lt;Multiple Examples&gt;</td>
-				      <td style="height: 31px">a collection of examples that 
-					  show how you can create a User Interface inside a script 
-					  and use that for interaction between your script and 
-					  end-user.</td>
-				    </tr>
-				    <tr>
-				      <th scope="row" style="height: 31px">QML Ogre3D</th>
-				      <td style="height: 31px">Ogre3D_Example1.qs and
+				      </tr>
+					  <tr>
+				      <th scope="row">QML MediaPlayer</th>
+				      <td>MediaExample.qs</td>
+				      <td>an example of how you can make 
+					  use of Audio and Movie files in your experiments using 
+					  QML.</td>
+				      </tr>
+					  <tr>
+				      <th scope="row">QML Ogre3D</th>
+				      <td>Ogre3D_Example1.qs and
 					  <span lang="en-us">Ogre3D_Example2.qs</span></td>
-				      <td style="height: 31px">two examples that show how you 
+				      <td>two examples that show how you 
 					  can make use of the Ogre3D item in a QML scene for 
 					  presenting and controlling dynamic 3D environments(meshes, 
 					  cameras, lighting, shaders).</td>
-				    </tr>
-				    <tr>
-				      <th scope="row" style="height: 31px">QtScript Timers</th>
-				      <td style="height: 31px">Timer_Example1.qs</td>
-				      <td style="height: 31px">example that shows the use of 
+				      </tr>
+					  <tr>
+				      <th scope="row">QML OpenGL 
+					  Shaders</th>
+				      <td>MovingDots.qs</td>
+				      <td>complete example experiment that 
+					  makes use of OpenGL shaders within QML to create a space 
+					  scene consisting of random moving dots. </td>
+				      </tr>
+					  <tr>
+				      <th scope="row">QtScript Timers</th>
+				      <td>Timer_Example1.qs</td>
+				      <td>example that shows the use of 
 					  different timer types, each timer type has it's own pros 
 					  and cons.</td>
-				    </tr>
-				    <tr>
-				      <th scope="row" style="height: 31px">ExperimentStructure 
-					  DynamicEditing</th>
-				      <td style="height: 31px">ExperimentStructureEditing.qs</td>
-				      <td style="height: 31px">example that shows how we can 
-					  manage (load, create, access and change) the <em>ExperimentStructure</em> 
-					  from inside a custom script.</td>
-				    </tr>
-				    <tr>
-				      <th scope="row" style="height: 31px">ExperimentStructure 
-					  CustomParameters</th>
-				      <td style="height: 31px">CustomParameters.qs</td>
-				      <td style="height: 31px">example of how you can make use of 
-			<em>custom parameters</em> that are defined in the Experiment file or script.</td>
-				    </tr>
-				    <tr>
-				      <th scope="row" style="height: 31px">ExperimentStructure 
-					  BlockLoops</th>
-				      <td style="height: 31px">BlockLoops.qs</td>
-				      <td style="height: 31px">example of an experiment 
-					  structure file that has multiple Block Loops defined.</td>
-				    </tr>
-				    <tr>
-				      <th scope="row" style="height: 31px">Retinotopy 
+				      </tr>
+					  <tr>
+				      <th scope="row">QtScript 
+					  UserInterfaces</th>
+				      <td>&lt;Multiple Files&gt;</td>
+				      <td>a collection of examples that 
+					  show how you can create a User Interface inside a script 
+					  and use that for interaction between your script and 
+					  end-user.</td>
+				      </tr>
+					  <tr>
+				      <th scope="row">Retinotopy 
 					  CustomPainting</th>
-				      <td style="height: 31px">CustomPainting.qs</td>
-				      <td style="height: 31px">extended example of an experiment 
+				      <td>CustomPainting.qs</td>
+				      <td>extended example of an experiment 
 					  showing custom dynamic drawings (plaids) using a 
 					  RetinoMapper object with a custom script paint handler 
 					  function.</td>
-				    </tr>
-				    <tr>
-				      <th scope="row" style="height: 31px">Retinotopy Output</th>
-				      <td style="height: 31px">MovingBarsRetinotopy.qs</td>
-				      <td style="height: 31px">complete example of an Retinotopy 
+				      </tr>
+					  <tr>
+				      <th scope="row">Retinotopy Output</th>
+				      <td>MovingBarsRetinotopy.qs</td>
+				      <td>complete example experiment of an Retinotopy 
 					  experiment that can be used for 
 					  <a href="http://www.brainvoyager.com/bvqx/doc/UsersGuide/PRFEstimation/PopulationReceptiveFieldEstimation.html" target="_blank">Population Receptive Field 
 					  Estimation</a>, read 
 					  <a href="RetinoTopicMappingOutput/RetinoTopicMappingOutput.html">this document</a> for a 
 					  detailed description and usage guide of the experiment 
 					  example.</td>
-				    </tr>
+				      </tr>
 				  </tbody>
 				</table>
-&nbsp;</p>
-		<p>&nbsp;</p>
-        <ul>
-			<li><strong>15_NeuroFeedBack</strong>: this directory contains an 
-			example that shows how you can make use of the default
-			<a href="../References/Script/TBVExchangerPlugin/Doxygen/class_t_b_v_exchanger.html">TBVExchanger plugin</a>, that can communicate with the 
-			<a href="http://www.brainvoyager.com/products/turbobrainvoyager.html" target="new">
-			</a>
-			<a href="http://www.brainvoyager.com/downloads/install_turbobrainvoyager.html" target="new">Turbo-BrainVoyager</a>software, and use this for creating a basic neurofeedback experiment. Please read 
-			<a href="./15_NeuroFeedBack/15_NeuroFeedBack.html">this description and tutorial</a> if you're interested.</li>
-        </ul>
-        <p>The following sub-directories containing the Plug-in script class examples are present in the<em><strong> BrainStim\examples\Tutorials\99_PluginExamples\</strong></em>directory:</p>
-        <ul>
-            <li><strong>ExperimentManager</strong></li>
-            <li><strong>FirebirdClient</strong></li>
-            <li><strong>KeyBoardDevice</strong></li>
-            <li><strong>ParallelPortDevice</strong></li>
-            <li><strong>PiezoStimDevice</strong></li>
-            <li><strong>SerialPortDevice</strong></li>
-            <li><strong>TBVExchanger</strong></li>
-            <li><strong>TCPNetworkServer</strong></li>
-            <li><strong>USBHIDDevice</strong></li>
-        </ul>
-		<p>blockloops</p>
-		<p>custom parameters</p>
-		<p>dynamic editing</p>
-		<p>imagebuffer</p>
-		<p>mediaplayer</p>
-		<p>ogre3d</p>
-		<p>timers</p>
-		<p>UI script</p>
-		<p>custom painting</p>
-		<p>output retino, dat files and moving bar</p>
-		<p>&nbsp;</p>
-		<p>arne moving dots</p>
-		<p>gal raz learning</p>
-		<p>joel 3d face</p>
-		<p>judith meridian</p>
-		<p>martin frost x2</p>
-		<p>Sven</p>
-		<ul>
-			<li>custom painting</li>
-			<li>moving dots</li>
-			<li>ogre</li>
-			<li>filelisting</li>
-			<li>xmlread</li>
-			<li>qml brainstrim interface</li>
-			<li>qmlviewer from script</li>
-		</ul>
+		</p>
     </div>
 </body>
 </html>

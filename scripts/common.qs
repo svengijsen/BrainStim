@@ -1,7 +1,18 @@
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 var BrainStim_Settings_QTDirWin32 = "E:/Libraries/Qt5.3.2_32bit/5.3/msvc2013_opengl/";
 var BrainStim_Settings_QTDirWin64 = "E:/Libraries/Qt5.3.2_64bit/5.3/msvc2013_64_opengl/";
-var BrainStim_Settings_ProjectDirectory = "../../BrainStim";
+var BrainStim_Settings_ProjectDirectory = "BrainStim";
+var BrainStim_Settings_ProjectDirectoryDir = new QDir(BrainStim_Settings_ProjectDirectory);
+var BrainStim_Settings_ProjectDirectoryCounter = 0;
+while(BrainStim_Settings_ProjectDirectoryDir.exists()==false)
+{
+	BrainStim_Settings_ProjectDirectory = "../" + BrainStim_Settings_ProjectDirectory;
+	BrainStim_Settings_ProjectDirectoryDir.setPath(BrainStim_Settings_ProjectDirectory);
+	BrainStim_Settings_ProjectDirectoryCounter++;
+	if(BrainStim_Settings_ProjectDirectoryCounter == 5)
+		break;
+}
+Log("Found BrainStim directory: " + BrainStim_Settings_ProjectDirectory);
 var BrainStim_Settings_JSConfigurationFilePath = BrainStim_Settings_ProjectDirectory + "/Source/BrainStim/resources/brainstim.js";
 var BrainStim_Settings_CurrentBrainStimReleaseIndex = "";
 var BrainStim_Settings_CurrentBrainStimReleaseString = "";
@@ -42,8 +53,12 @@ if(tmpCommonFile.exists() == false)
 	if(QFile(BrainStim_Settings_JSConfigurationFilePath).exists() == false)
 	{
 		Log("Javascript configuration file not found.\n");
-		tmpCommonbProceed = false
+		tmpCommonbProceed = false;
 	}
+}
+else
+{
+	Log("Javascript configuration file found.\n");
 }
 
 if(tmpCommonbProceed)

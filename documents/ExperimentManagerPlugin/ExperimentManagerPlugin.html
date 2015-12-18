@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -15,21 +15,39 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <title>Experiment Manager Plug-in v1.0</title>
 <!--doc-version-title-end-->
+	<style type="text/css">
+	.auto-style1 {
+		text-decoration: underline;
+	}
+	.auto-style2 {
+		border-collapse: collapse;
+		background-color: #575757;
+	}
+	.auto-style4 {
+		text-align: center;
+		font-size: large;
+	}
+	.auto-style5 {
+		text-align: center;
+		font-size: large;
+		color: #FFFFFF;
+	}
+	</style>
 </head>
 <body>
     <div class="container">
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
-			<h1>Experiment Manager Plug-in (v1.0.0.1)</h1>
+			<h1>Experiment Manager Plug-in (v1.0)</h1>
 			<div class="row">
-				<div class="col-md-4"><p><strong>Document version:</strong>1.0</p></div>
-				<div class="col-md-4"><p><strong>Author(s):</strong>Sven Gijsen</p></div>
-				<div class="col-md-4"><p><strong>Date:</strong>July 2015</p></div>
+				<div class="col-md-4"><p><strong>Document version: </strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s): </strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date: </strong>July 2015</p></div>
 			</div>
 		</div>
 	</div>
@@ -37,172 +55,242 @@
         <div id="toc_Area">
             <ul id="toc"></ul>
             <h2>Introduction</h2>
-            <p>The Experiment Manager Plug-in implements a Experiment Engine that you can use to present various kinds of stimuli. It can load  an Experiment file (*.exml) that defines the configuration  for the experiment; see the EXML-File definition. The Experiment Manager can be created and used  by a script or can be used directly by executing an Experiment file by  BrainStim.</p>
+            <p>The Experiment Manager Plug-in implements a Experiment Engine that you can use to present various kinds of stimuli. It can load  an Experiment file (*.exml) that defines the configuration  for the experiment; see the EXML-File definition. The Experiment Manager can be created and used  by a script or can be used directly by executing an Experiment file by  BrainStim. 
+			Please read the
+			<a href="CreatingExperiments.html">Creating Experiments with the Experiment Manager</a> 
+			document for a beginners Getting Started Guide.</p>
             <h3>Directories</h3>
-            <p>The Experiment manager uses the following directories inside the main root BrainStim directory:</p>
-            <p>
-                <strong>/outputs</strong><br />
-                this directory is used for storing files created by the Experiment Manager.
-            </p>
-            <h2>EXML-File definition</h2>
-            <p>The experiment file is an <a href="http://en.wikipedia.org/wiki/XML" target="_blank">XML file type</a> that can be loaded by the Experiment Manger for its configuration. You can manually edit this document in BrainStim or another text/code editor. The first lines consist out of a file header:</p>
-            <table class="codeframe">
-                <tr>
-                    <td>
-                        <pre class="prettyprint">
-	&lt;?xml version='1.0' encoding='UTF-8'?&gt;<br />&lt;!DOCTYPE EXML&gt;<br />&lt;!-- <br />This is a comment example<br />Place you own text here...<br />--&gt;<br />&lt;EXML version=&quot;2.0.0.2&quot;&gt;
-	</pre>
-                    </td>
-                </tr>
-            </table>
-            <p>The header holds the XML and EXML version, there?s no reason for a user to change this manually. You may also find text between the &lt;!--�and --&gt;�tag, these are used for comments and the text section between these tags is not parsed by the Experiment Manager.</p>
-            <table class="codeframe">
-                <tr>
-                    <td>
-                        <pre class="prettyprint">
-	&lt;defines&gt;<br />    &lt;experiment ID=&quot;0&quot;&gt;<br />        &lt;name&gt;Experiment name&lt;/name&gt;<br />        &lt;debugmode&gt;false&lt;/debugmode&gt;<br />    &lt;/experiment&gt;<br />&lt;/defines&gt;
-	</pre>
-                    </td>
-                </tr>
-            </table>
-            <p>The &lt;defines&gt;�section has an &lt;experiment&gt; section where the name of the experiment can be defined. Some tags include an ID=&quot;&lt;number&gt;&quot;�attribute, this unique ID is automatically generated and used internally by BrainStim and therefore you should not change this. The &lt;debugmode&gt; section defines whether the experiment should be executed in debugmode or not. This debugmode can be helpful during the setup and debugging of the experiment because it outputs some extra information regarding the experiment. Because it can slow down the experiment speed you should disable it when you need to be sure it runs smoothly.</p>
-            <table class="codeframe">
-                <tr>
-                    <td>
-                        <pre class="prettyprint">
-	&lt;declarations&gt; 
-	    &lt;object�ID=&quot;0&quot;&gt;
-		&lt;class&gt;TriggerTimer&lt;/class&gt;
-		&lt;name&gt;Timer_Object_1&lt;/name&gt;
-		&lt;constructor&gt;
-		    &lt;param1/&gt;
-		&lt;/constructor&gt;
-	    &lt;/object&gt;
-	&nbsp;
-	    &lt;object�ID=&quot;1&quot;&gt; 
-		&lt;class&gt;RetinotopyMapper&lt;/class&gt;
-		&lt;name&gt;RetinotopyMapper_object&lt;/name&gt;
-		&lt;constructor&gt;
-		    &lt;param1/&gt;
-		&lt;/constructor&gt;
-	    &lt;/object&gt; 
-	&lt;/declarations&gt;
-	</pre>
-                    </td>
-                </tr>
-            </table>
-            <p>In the &lt;declarations&gt; section all needed experiment objects are declared so they can be used for the experiment. The name &lt;name&gt;�of the new object that should be constructed from a class &lt;class&gt; together with the optional parameter(s) &lt;param&lt;number&gt;&gt; are defined her per object.</p>
-            <table class="codeframe">
-                <tr>
-                    <td>
-                        <pre class="prettyprint">
-	&lt;connections&gt; 
-	    &lt;object�ID=&quot;2&quot;&gt; 
-		&lt;type&gt;signal&lt;/type&gt; 
-		&lt;signature&gt;CaptureThreadTriggered(short)&lt;/signature&gt; 
-		&lt;target�ID=&quot;1&quot;&gt; 
-		    &lt;type&gt;slot&lt;/type&gt;  
-		    &lt;signature&gt;incrementExternalTrigger()&lt;/signature&gt;
-		&lt;/target&gt;
-	    &lt;/object&gt;
-	    &lt;object�ID=&quot;0&quot;&gt; 
-		&lt;type&gt;signal&lt;/type&gt; 
-		&lt;signature&gt;timeout()&lt;/signature&gt; 
-		&lt;target�ID=&quot;1&quot;&gt; 
-		    &lt;type&gt;slot&lt;/type&gt;  
-		    &lt;signature&gt;incrementExternalTrigger()&lt;/signature&gt;
-		&lt;/target&gt;
-	    &lt;/object&gt;
-	&lt;/connections&gt;
-	</pre>
-                    </td>
-                </tr>
-            </table>
-            <p>Inside the &lt;connections&gt; section the declared objects can be connected to each other (internally BrainStim is using the Qt signal/slot mechanism for establishing the connections, see <a href="http://qt-project.org/doc/qt-5.1/qtcore/signalsandslots.html" target="_blank">http://qt-project.org/doc/qt-5.1/qtcore/signalsandslots.html</a>). Signals and Slots can be connected to each other, the Signal or Slot (define this first by using the &lt;type&gt; section) signature &lt;signature&gt; can also be defined here.</p>
-            <table class="codeframe">
-                <tr>
-                    <td>
-                        <pre class="prettyprint">
-	&lt;initializations&gt;
-	    &lt;object�ID=&quot;0&quot;&gt;
-		&lt;type&gt;slot&lt;/type&gt;
-		&lt;signature&gt;startTimer&lt;/signature&gt;
-		&lt;parameters&gt;
-		    &lt;parameter�ID=&quot;0&quot;&gt;
-			&lt;name&gt;msec&lt;/name&gt;
-			&lt;value&gt;200&lt;/value&gt;
-			&lt;type&gt;double&lt;/type&gt;
-		    &lt;/parameter&gt;
-		&lt;/parameters&gt;
-	    &lt;/object&gt;
-	&lt;/initializations&gt;
-	</pre>
-                    </td>
-                </tr>
-            </table>
-            <p>Declared objects often need to be initialized before they can be used. This can be defined within the &lt;initializations&gt; section. Initialization is done before the experiment starts and is done by providing the type &lt;type&gt; and signature &lt;signature&gt;�and the declared object ID &lt;object�ID=&quot;&lt;number&gt;&quot;&gt; which should be initialized. Furthermore parameter(s) can be defined and used for the initialization.</p>
-            <table class="codeframe">
-                <tr>
-                    <td>
-                        <pre class="prettyprint">
-	&lt;actions&gt;
-	    &lt;blocks&gt;
-		&lt;block�ID=&quot;0&quot;&gt;
-		    &lt;name&gt;Fixation_Block&lt;/name&gt;
-		    &lt;block_number&gt;0&lt;/block_number&gt;
-		    &lt;nr_of_trials&gt;1&lt;/nr_of_trials&gt;
-		    &lt;nr_of_internal_triggers&gt;8&lt;/nr_of_internal_triggers&gt;
-		    &lt;nr_of_external_triggers&gt;1&lt;/nr_of_external_triggers&gt;
-		    &lt;object�ID=&quot;1&quot;&gt;
-			&lt;parameters&gt;
-			    parameter�ID=&quot;0&quot;&gt;
-				&lt;name&gt;RetinoPattern&lt;/name&gt;
-				&lt;value&gt;fixation&lt;/value&gt;
-			    &lt;/parameter&gt;
-			    &lt;parameter�ID=&quot;1&quot;&gt;
-				&lt;name&gt;ShowFixPoint&lt;/name&gt;
-				&lt;value&gt;true&lt;/value&gt;
-			    &lt;/parameter&gt;
-			&lt;/parameters&gt;
-		    &lt;/object&gt;
-		&lt;/block&gt;
-		&lt;block�ID=&quot;1&quot;&gt;
-		    &lt;name&gt;PolarAngle_Block&lt;/name&gt;
-		    &lt;block_number&gt;1&lt;/block_number&gt;
-		    &lt;nr_of_trials&gt;6&lt;/nr_of_trials&gt;
-		    &lt;nr_of_internal_triggers&gt;36&lt;/nr_of_internal_triggers&gt;
-		    &lt;nr_of_external_triggers&gt;1&lt;/nr_of_external_triggers&gt;
-		    &lt;object�ID=&quot;1&quot;&gt;
-			&lt;/parameters&gt;
-		    &lt;/object&gt;
-	    &lt;/blocks&gt;
-	&lt;/actions&gt;
-	</pre>
-                    </td>
-                </tr>
-            </table>
-            <p>When the experiment starts the section within the &lt;actions&gt; tag is executed. In case of a triggered block design you can specify the different blocks within the &lt;blocks&gt;�section. The &lt;block_number&gt; defines the order of the blocks and how they are sequentially processed during the execution of the experiment. Within a defined block the &lt;nr_of_trials&gt; defines how many times the block is executed before going to the next block. </p>
-            <p>A block trial is externally triggered by an external source, like a hardware trigger device or a declared automatic trigger timer. This external source is then connected inside the &lt;connections&gt; section to the Experiment Manager default receive slot with the signature incrementExternalTrigger(). By making use of this slot the Experiment manager know when it should switch to another block depending on the configuration within the &lt;blocks&gt;�section. At each incrementExternalTrigger()�slot execution the External Trigger count is incremented.. It takes &lt;nr_of_external_triggers&gt;�amount of External Triggers before the Internal Trigger count is incremented, thus this works like a sort of trigger divider (External-&gt;Internal). After &lt;nr_of_internal_triggers&gt;�amount of Internal Triggers the Experiment manager switched to the next block trial.</p>
-            <p>In the above example the first fixation�block takes 8 external triggers. In case a trigger is send each 2 seconds the first block trial is 16 seconds visible on the screen.</p>
-            <h2>Retinotopic Mapping</h2>
-            <p><span lang="en-us">refer to parameters here!</span></p>
-            <h2>Experiment Manager Usage</h2>
-            <p>When you start the Experiment Manager and run an experiment it shows (after the initialization &lt;initializations&gt; section) first an informative screen were you need to press the ?TAB? key to proceed or the ?CTRL+a? key combination to abort the experiment (You may also use this combination during a running experiment to abort). After you pressed the ?TAB? key it waits for the first Internal Trigger. After it receives this trigger the experiment starts running.</p>
-            <h2>Experiment Manager Public Signal and Slots</h2>
-            <p>The Experiment Manager exposes several <strong>public Signals and Slots</strong> that can be used from within c++ code, a script context or experiment file. These are explained in the <a href="../../Script/ExperimentManagerPlugin/Doxygen/class_experiment_manager.html">Experiment Manager script class reference</a>.</p>
-            <h2>Additional available script classes</h2>
-            <p>There are some additional classes defined inside the Experiment Manager which can be used to derive a new object from trough the BrainStim script environment, these are:</p>
-            <h3>ImageProcessor</h3>
-            <h3>PRTFormatManager</h3>
-            <h3>TriggerTimer and ExperimentTimer</h3>
-            <h3>ExperimentStructure</h3>
-            <h3>QML2Viewer</h3>
-            <h3>RandomGenerator</h3>
-            <p>&nbsp;</p>
+            <p>The Experiment manager makes use of the <strong>Outputs</strong> 
+			sub-directory inside the
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainUserDirectory">
+			Main User Directory</a> of BrainStim for storing log and output 
+			files.&nbsp;</p>
+            <h2>EXML-File</h2>
+            <p>The experiment structure file is an <a href="http://en.wikipedia.org/wiki/XML" target="_blank">XML file type</a> that can be loaded by the Experiment Manger for its configuration. You can edit this 
+			type of file directly in BrainStim using its User Interface or use a 
+			text/code editor.</p>
+            <p>The file can be used for configuring:</p>
+			<ol>
+				<li>&nbsp;<strong>Experiment Structure</strong>, this structure 
+				represent a sequential timing scheme that is used when running 
+				the experiment. Depending on the current Experiment Structure 
+				one or more tasks can be executed. The Experiment Structure does 
+				not run automatically by using a sort of internal timer but 
+				instead can receive trigger signals to advance to another state.</li>
+				<li><strong>Objects Declarations</strong>, these declared 
+				objects are automatically constructed and destructed at the 
+				beginning and end of the experiment and can be used during the 
+				experiment to perform certain tasks.</li>
+				<li><strong>Object Connections</strong>, these connections can 
+				link two objects to each other. This for example can cause one 
+				objects action to lead automatically to another objects action 
+				to occur.</li>
+				<li><strong>Object Initializations/Finalizations</strong>, these 
+				initializations/finalizations define object action that should 
+				be performed at the beginning or end of an Experiment.</li>
+				<li><strong>Object Parameters</strong>, depending on the current 
+				Experiment Structure these object parameters are automatically 
+				changed and used when the Experiment is running.</li>
+			</ol>
+            <h2>Experiment Structure</h2>
+			<p>as explained above this structure represent a sequential timing 
+			scheme that is used when running the experiment. The Experiment 
+			Structures scheme is defined by one or more <strong>Block</strong> and 
+			optionally <strong>
+			Loop</strong> element(s). These defined <strong>Block</strong> and 
+			optionally <strong>
+			Loop</strong> element(s) from a Experiment Structure file are 
+			automatically visualized in BrainStim when such an file is opened.</p>
+			<h3>Experiment Structure Block</h3>
+			<p>This element contains the following child elements that can be 
+			configured:</p>
+			<ol>
+				<li><strong>Block Name</strong>: This is the name for the
+				<strong>Block</strong></li>
+				<li><strong>Block Number</strong>: This determines the order of 
+				the Block inside the <strong>Experiment Structure</strong>. The 
+				Block with the lowest <strong>Block Number</strong> (starting 
+				from 0) is executed first and thereafter subsequently the next
+				<strong>Block Number</strong> is executed. Later on we'll see 
+				that a <strong>Loop</strong> can be an exception to this rule, 
+				but in general they are automatically executed sequentially and 
+				when there are no more Blocks to be executed (with a higher
+				<strong>Block Number</strong>) then the experiment automatically 
+				finishes. The <strong>Block Number</strong> can not be a 
+				negative number and must be unique!</li>
+				<li><strong>Block Trials</strong>: This determines the <em>
+				number of trials</em> for this block. Each <strong>Block Trial</strong> 
+				is executed once for each Block. At each beginning of a new
+				<strong>Block Trial</strong> the optionally defined <strong>
+				Object Actions</strong> are automatically fetched and used.</li>
+				<li><strong>Internal Triggers</strong>: This determines how many<strong> 
+				Internal Triggers</strong> one <strong>Block Trial</strong> 
+				takes.</li>
+				<li><strong>External Triggers</strong>: This determines how many
+				<strong>External Triggers</strong> one <strong>Internal Trigger</strong> 
+				takes.<br />
+				<br />
+				</li>
+			</ol>
+			<img src="./images/Blocks.png" class="img-responsive centered" alt="" />
+			<h3>Experiment Structure Loop</h3>
+			<p>Above here we read that Blocks generally are automatically 
+			sequentially executed by using their <strong>Block Number</strong> 
+			setting and when there are no more Blocks left the experiment 
+			automatically ends. An exception to this rule is a <strong>Loop</strong>. 
+			This <strong>Loop</strong> is an additional Block link that connects 
+			the <span class="auto-style1">end</span> (after execution) of 
+			another <strong>Block</strong> to the beginning (before execution) of an
+			<strong>Block</strong>. This <strong>Loop</strong> element contains 
+			the following child elements that can be configured:</p>
+			<ol>
+				<li><strong>Loop Name</strong>: This is the name for the <strong>
+				Loop</strong></li>
+				<li><strong>Loop Number</strong>: This determines the order of 
+				the Loop executions for the optional available defined Loops for 
+				a certain Block (after execution) inside the <strong>Experiment 
+				Structure</strong>. The Loop with the lowest <strong>Loop Number</strong> 
+				(starting from 0) is executed first and thereafter subsequently 
+				the next <strong>Loop Number</strong> is executed. The <strong>
+				Loop Number</strong> can not be a negative number and must be 
+				unique for a Block!</li>
+				<li><strong>Loop Source</strong>: This is the <strong>Block</strong> 
+				where after (after execution) this Loop is linked
+				<span class="auto-style1">from</span>.</li>
+				<li><strong>Loop Target</strong>: This is the <strong>Block</strong> 
+				to which this Loop links <span class="auto-style1">to</span> 
+				(before execution).</li>
+				<li><strong>Loops</strong>: This is the amount executions of the 
+				loop after the <strong>Loop Source</strong> is executed. For 
+				each time the <strong>Loop</strong> is used this is incremented 
+				till the <strong>Loops</strong> setting, after that the next
+				<strong>Loop</strong> (if defined) or next <strong>Block</strong> 
+				(if defined) is automatically executed. </li>
+				<li>&nbsp;<span class="auto-style1"><strong>Important</strong></span>: 
+				Remember that <strong>Loops</strong> are executed
+				<span class="auto-style1">after</span> the execution of a block. 
+				Bearing this in mind try to understand why Block 1 in the below 
+				Experiment Structure scheme is executed
+				<span class="auto-style1">3 times</span> in total with a <strong>
+				Loops</strong> (Amount) setting of <em>2</em> for the loop.<br />
+				<br />
+				</li>
+			</ol>
+			<img src="./images/BlockLoops.png" class="img-responsive centered" alt="" />
+			<p>&nbsp;</p>
+			<h3>Experiment Structure External Triggering</h3>
+			<p>After the experiment has been started a internal
+			<a href="Doxygen/class_experiment_engine.html">Experiment Engine</a> 
+			loads the <a href="Doxygen/classc_experiment_structure.html">
+			Experiment Structure</a> and waits for the first <strong>External 
+			Trigger</strong> to be incremented. This is done by invoking a 
+			function called
+			<a href="Doxygen/class_experiment_engine.html#a1da1839962ee627e8fc4f018d100125e">
+			incrementExternalTrigger()</a>. After this each invocation of that 
+			slot causes the <strong>External Trigger</strong> for the current
+			<strong>BlockTrial</strong> to automatically increment. Depending on 
+			how long the time is between two subsequent invocations the current 
+			Experiment Structure changes as shown above here. The internal 
+			Experiment Engine has no knowledge of how long the time is between 
+			two subsequent invocations and is therefore totally independent of 
+			this. Each time a new <strong>Block Trial</strong> is started the <strong>Object Parameters</strong> 
+			are again fetched and used, if they are not redefined then the last 
+			used values kept (buffered).</p>
+			<h2>Experiment Engine</h2>
+			<p>The internal
+			<a href="Doxygen/class_experiment_engine.html">Experiment Engine</a> 
+			is currently implemented by two different script classes, and 
+			depending on your experimental needs you can choose between these:</p>
+			<ol>
+				<li>
+				<a href="Doxygen/class_retinotopy_mapper.html">
+				RetinotopyMapper</a> class: Allows for an <em>very fast</em> 
+					  and <em>accurate timed</em>(frame rate) visual 
+				presentation 
+					  of various stimuli and is mainly used for creating <em>
+					  Retinotopic Mapping stimuli</em> experiments,
+					  read <a href="http://en.wikipedia.org/wiki/Retinotopy" target="_blank">
+					  this document</a> for more information about this topic.</li>
+				<li><a href="Doxygen/class_q_m_l2_viewer.html">
+				QML2Viewer</a> class: Allows for an <em>fast presentation 
+					  of all kind of stimuli</em> (like graphics, movies, audio, 
+					  3D content...) and can make use of almost <em>any device 
+					  or feature</em>  available by default or through one of 
+				the available plugin(s).</li>
+			</ol>
+			<h2>Experiment States</h2>
+			<p class="text-left">The ExperimentManager can go through different 
+			states when loading or executing an Experiment, these states are 
+			defined
+			<a href="Doxygen/class_experiment_manager.html#ad4d79fc2e2aedba5ca0830b7a902caad">
+			here</a>. We can catch these state changes in our script and make 
+			use of that. Furthermore after successfully loading/preparing an 
+			experiment and executing it (by using the BrainStim User Interface 
+			or by calling the function
+			<a href="Doxygen/class_experiment_manager.html#a3d70102fe8e4a2abfa25b6597c367f2a">
+			ExperimentManager::runExperiment()</a> it gives the control back to 
+			the user one more time where it can wait, abort or "really" start 
+			the Experiment were after the
+			<a href="Doxygen/class_experiment_engine.html">Experiment Engine</a> 
+			is ready to receive it's first External Trigger.</p>
+			<p class="text-left">When the User gets a Final control, depending 
+			on the internal
+			<a href="Doxygen/class_experiment_engine.html">Experiment Engine</a> 
+			implementation the screen changes to something like:</p>
+			<table align="center" cellpadding="0" class="auto-style2" style="width: 100%">
+				<tr>
+					<td>
+					&nbsp;
+					<p class="auto-style4">&nbsp;</p>
+					<p class="auto-style5"><strong>Experiment ready, press 'Alt' 
+					to proceed or CTRL + 'a' to abort the experiment</strong></p>
+					<p class="auto-style4">&nbsp;</p>
+					</td>
+				</tr>
+			</table>
+			<p>&nbsp;</p>
+			<p>At this moment you can press the <kbd>Alt</kbd> key to unlock the 
+			experiment were after the
+			<a href="Doxygen/class_experiment_engine.html">Experiment Engine</a> 
+			is ready to receive it's first External Trigger. You can also choose 
+			to press the <kbd>CTRL</kbd> +&nbsp; <kbd>a</kbd> (<span class="auto-style1">a</span>bort) 
+			key combination to abort. You can also choose to do this while the 
+			experiment is running. After you unlocked the Experiment using the
+			<kbd>Alt</kbd> key the screen changes to:</p>
+			<table align="center" cellpadding="0" class="auto-style2" style="width: 100%">
+				<tr>
+					<td>
+					&nbsp;
+					<p class="auto-style4">&nbsp;</p>
+					<p class="auto-style5"><strong>Experiment ready, waiting for 
+					a trigger to start...</strong></p>
+					<p class="auto-style4">&nbsp;</p>
+					</td>
+				</tr>
+			</table>
+			<p>&nbsp;</p>
+			<p>If the
+			<a href="Doxygen/class_experiment_engine.html">Experiment Engine</a> 
+			now receives it's first External Trigger then that timestamp is the 
+			exact "real" start of the experiment and because the first <strong>
+			Trial</strong> for the first <strong>Block</strong> is initialized 
+			at that moment the newly configured <strong>Object Parameters</strong> 
+			are immediately processed.</p>
+			<h2>Experiment Manager Script Classes</h2>
+			<p>There are a number of
+			<a href="Doxygen/classes.html">script classes</a> 
+			made available for us by the ExperimentManager plugin that support 
+			Experimental Designs.</p>
+			<h2>Further reading</h2>
+			<p>To start learning how to create Experiment using the Experiment 
+			Manager plugin you should definitely read this
+			<a href="CreatingExperiments.html">Creating Experiments with the Experiment Manager</a> document. 
+			After that you should try out some (Advanced) Examples and try to 
+			tweak them.</p>
         </div>
     </div>
 <!--doc-version-default-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
 <!--doc-version-default-footer-end-->
 </body>

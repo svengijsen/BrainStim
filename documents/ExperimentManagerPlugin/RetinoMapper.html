@@ -3,7 +3,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -15,26 +15,21 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <title>RetinoMapper Class v1.0</title>
 <!--doc-version-title-end-->
-	<style type="text/css">
-	.auto-style1 {
-		font-weight: normal;
-	}
-	</style>
 	</head>
 <body>
     <div class="container">
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>RetinoMapper Class</h1>
 			<div class="row">
-				<div class="col-md-4"><p><strong>Document version:</strong>1.0</p></div>
-				<div class="col-md-4"><p><strong>Author(s):</strong>Sven Gijsen</p></div>
-				<div class="col-md-4"><p><strong>Date:</strong>July 2015</p></div>
+				<div class="col-md-4"><p><strong>Document version: </strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s): </strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date: </strong>July 2015</p></div>
 			</div>
 		</div>
 	</div>
@@ -44,9 +39,9 @@
             <h2>Introduction</h2>
             <p>The Experiment Manager Plug-in features a 
 			<strong>
-			<a href="Doxygen/class_retinotopy_mapper.html" target="_blank">RetinoMapper</a></strong> <em>class</em> (derived from the 
+			<a href="Doxygen/class_retinotopy_mapper.html">RetinoMapper</a></strong> <em>class</em> (derived from the 
 			<strong>
-			<a href="Doxygen/class_experiment_engine.html" target="_blank">ExperimentEngine</a></strong><em>
+			<a href="Doxygen/class_experiment_engine.html">ExperimentEngine</a></strong><em>
 			class</em>) that 
 			is created and optimized for displaying various 
 			Retinotopy stimuli. Configuration of these stimuli can be achieved 
@@ -57,13 +52,13 @@
 			<p>There are various Retinotopy Parameters that 
 			can be configured for an object created from a 
 			<strong>
-			<a href="Doxygen/class_retinotopy_mapper.html" target="_blank">RetinoMapper</a> </strong> 
+			<a href="Doxygen/class_retinotopy_mapper.html">RetinoMapper</a> </strong> 
 			<em>class</em>, 
-			most parameters availability is dependend of another parameter and 
+			most parameters availability depend of other parameters and 
 			so not all of them are in use 
-			during the retinotopy stimuli presentation. In this document we'll 
+			during the Retinotopy stimuli presentation. In this document we'll 
 			split up and describe the parameter groups that depend on the Retinotopy pattern 
-			(RetinoPattern parameter) seperately. The available Retinotopy patterns are:</p>
+			(RetinoPattern parameter) separately. The available Retinotopy patterns are:</p>
             <ul>
                 <li>Fixation</li>
                 <li>PolarAngle</li>
@@ -141,7 +136,7 @@
 				      <td>Float</td>
                       <td>&gt;0</td>
                       <td>480</td>
-                      <td>the width of the retinotopy stimuli 
+                      <td>the width of the Retinotopy stimuli 
 					  area</td>
 				    </tr>
 				    <tr>
@@ -149,7 +144,7 @@
 				      <td>Float</td>
                       <td>&gt;0</td>
                       <td>480</td>
-                      <td>the height of the retinotopy 
+                      <td>the height of the Retinotopy 
 					  stimuli area</td>
 				    </tr>
 				    <tr>
@@ -158,7 +153,7 @@
                       <td>"true" or "false"</td>
                       <td>"true"</td>
                       <td>if anti-aliasing 
-					  should be enabled for the retinotopy 
+					  should be enabled for the Retinotopy 
 					  stimuli</td>
 				    </tr>
 				  </tbody>
@@ -176,9 +171,9 @@
             <p><img src="images/image24.png" alt="" /></p>
             <p>The above picture shows stimuli presentation 
 			where the <em>Fixation</em> <strong>RetinoPattern</strong> parameter 
-			is used. The <em>retinotopy stimuli area</em> (in
+			is used. The <em>Retinotopy stimuli area</em> (in
 			grey) is smaller than the screen (black) 
-			output area. Within the <em>retinotopy 
+			output area. Within the <em>Retinotopy 
 			stimuli area</em> we can see a fixation point (red). 
 			There are no further parameters defined which only belong to this
 			<em>Fixation</em> <strong>RetinoPattern</strong>.</p>
@@ -316,7 +311,7 @@
                       <td>"false"</td>
                       <td>when enabled then 
 					  the Experiment manager saves a 
-					  retinotopic stimuli display (to the /outputs
+					  Retinotopic stimuli display (to the /outputs
 					  directory) for each stimuli step 
 					  to a file, see the <a href="#RetinoMapperOutputExport">RetinoMapper Output 
 					  Export</a> chapter.
@@ -331,7 +326,7 @@
                       <td>"DAT"</td>
                       <td>if the <strong>OutputTriggerFrame</strong> parameter is enabled then this value specifies the output format (and extension) 
 					  for the saved file(s). &ldquo;PNG&rdquo; creates a standard (*.png) file format containing the 
-					  <em>retinotopy stimuli area</em>. See 
+					  <em>Retinotopy stimuli area</em>. See 
 					  the chapter 
 					  about <a href="#OutputFrameFormat">Output Frame Format</a>
 					  for an explanation about the DAT and CDAT format</td>
@@ -375,7 +370,7 @@
                       <td>&gt;=0</td>
                       <td>0</td>
                       <td>this parameter defines how many Trigger Steps of a full cycle should be Empty (the Wedge is then
-					  hidden!). These Empty trigger steps are randomly choosen. 
+					  hidden!). These Empty trigger steps are randomly chosen. 
 					  The randomization keeps the history of empty trigger steps 
 					  in memory within each block 
 					  trial</td>
@@ -384,12 +379,12 @@
 				      <th scope="row">RandomizeTriggerStepsArray</th>
 				      <td>Integer Array</td>
                       <td>a String containing one or more 
-					  index positions seperated by a comma, like "2,4,6,8"</td>
+					  index positions separated by a comma, like "2,4,6,8"</td>
                       <td>"" (empty string)</td>
                       <td>this parameter is only taken 
 					  into account if the <strong>RandomizeTriggerSteps</strong> 
 					  parameter is set to true. The default randomization is 
-					  overridden by the value(s) defined here seperated by a 
+					  overridden by the value(s) defined here separated by a 
 					  comma. Each value refers to a specific index of the 
 					  stimuli</td>
 				    </tr>
@@ -397,12 +392,12 @@
 				      <th scope="row">EmptyTriggerStepsArray</th>
 				      <td>Integer Array</td>
                       <td>a String containing one or more 
-					  index positions seperated by a comma, like "2,4,6,8"</td>
+					  index positions separated by a comma, like "2,4,6,8"</td>
                       <td>"" (empty string)</td>
                       <td>This parameter is only taken into account if the
 					  <strong>EmptyTriggerSteps</strong> parameter is set to 
 					  true. The default randomization is overridden by the 
-					  value(s) defined here seperated by a comma. Each value 
+					  value(s) defined here separated by a comma. Each value 
 					  refers to a specific index of the stimuli</td>
 				    </tr>
 				  </tbody>
@@ -419,7 +414,7 @@
                 A full wedge cycle is internally subdivided by the <strong>CycleTriggerAmount</strong>
 				parameter. These steps can be randomized 
 				(see <strong>RandomizeTriggerSteps</strong> 
-				parameter) and empy (see <strong>EmptyTriggerSteps</strong> 
+				parameter) and empty (see <strong>EmptyTriggerSteps</strong> 
 				parameter) as explained in the above parameter table. Internally these sub-cycles are indexed from [0 ... (CycleTriggerAmount-1)]. The first index (with value 0) is always at 0 degree and is dependent of the 
 				<strong>PolarRotationDirection 
 				</strong>parameter, as explained above. These indexed are internally also used to keep track of the
@@ -566,7 +561,7 @@
 			where the <em>Eccentricity</em> <strong>RetinoPattern</strong> 
 			parameter is used. It's again the same as the
 			<em>Fixation</em> <strong>RetinoPattern</strong>
-			plus an additional ring inside the retinotopy 
+			plus an additional ring inside the Retinotopy 
 				stimuli area in which its diameter can change (eccentricity). One cycle here 
 				means a full diameter change of the wedge. The ring consist
                 out of several sub-ring(s) each divided in checkers 
@@ -690,7 +685,7 @@
                       <td>"false"</td>
                       <td>when enabled then 
 					  the Experiment manager saves a 
-					  retinotopic stimuli display (to the /outputs
+					  Retinotopic stimuli display (to the /outputs
 					  directory) for each stimuli step 
 					  to a file, see the <a href="#RetinoMapperOutputExport">RetinoMapper Output 
 					  Export</a> chapter.
@@ -706,7 +701,7 @@
                       <td>"DAT"</td>
                       <td>if the <strong>OutputTriggerFrame</strong> parameter is enabled then this value specifies the output format (and extension) 
 					  for the saved file(s). &ldquo;PNG&rdquo; creates a standard (*.png) file format containing the 
-					  <em>retinotopy stimuli area</em>. See 
+					  <em>Retinotopy stimuli area</em>. See 
 					  the chapter 
 					  about <a href="#OutputFrameFormat">Output Frame Format</a>
 					  for an explanation about the DAT and CDAT format</td>
@@ -739,8 +734,8 @@
                       <td>"true" or "false"</td>
                       <td>"false"</td>
                       <td>if true then the 
-					  rings diameter is choosen randomly at each trigger step. Between two triggers the 
-					  ring diamater changes smoothly 
+					  rings diameter is chosen randomly at each trigger step. Between two triggers the 
+					  ring diameter changes smoothly 
 					  to the next closest diameter (only when
 					  <strong>DiscreteTriggerSteps</strong>
 					  is disabled) in the
@@ -756,7 +751,7 @@
                       <td>0</td>
                       <td>this parameter defines how many Trigger Steps of a full cycle should be Empty (the 
 					  Ring is then
-					  hidden!). These Empty trigger steps are randomly choosen. 
+					  hidden!). These Empty trigger steps are randomly chosen. 
 					  The randomization keeps the history of empty trigger steps 
 					  in memory within each block 
 					  trial</td>
@@ -765,12 +760,12 @@
 				      <th scope="row">RandomizeTriggerStepsArray</th>
 				      <td>Integer Array</td>
                       <td>a String containing one or more 
-					  index positions seperated by a comma, like "2,4,6,8"</td>
+					  index positions separated by a comma, like "2,4,6,8"</td>
                       <td>"" (empty string)</td>
                       <td>this parameter is only taken 
 					  into account if the <strong>RandomizeTriggerSteps</strong> 
 					  parameter is set to true. The default randomization is 
-					  overridden by the value(s) defined here seperated by a 
+					  overridden by the value(s) defined here separated by a 
 					  comma. Each value refers to a specific index of the 
 					  stimuli</td>
 				    </tr>
@@ -778,12 +773,12 @@
 				      <th scope="row">EmptyTriggerStepsArray</th>
 				      <td>Integer Array</td>
                       <td>a String containing one or more 
-					  index positions seperated by a comma, like "2,4,6,8"</td>
+					  index positions separated by a comma, like "2,4,6,8"</td>
                       <td>"" (empty string)</td>
                       <td>This parameter is only taken into account if the
 					  <strong>EmptyTriggerSteps</strong> parameter is set to 
 					  true. The default randomization is overridden by the 
-					  value(s) defined here seperated by a comma. Each value 
+					  value(s) defined here separated by a comma. Each value 
 					  refers to a specific index of the stimuli</td>
 				    </tr>
 				  </tbody>
@@ -792,7 +787,8 @@
             <p>&nbsp;</p>
             <h4 id="CorticalMagnitudeFactorEccentricity">Cortical Magnitude Factor</h4>
             <p><img src="images/image36s.png" alt="" /></p>
-            <p>This factor defines how the total width (see A) of all the visible rings compared to the eccentricity amount. This width is dependant of the eccentricity (ring diameter) at that moment (this
+            <p>This factor defines how the total width (see A) of all the visible rings compared to the eccentricity amount. This width is 
+			depending of the eccentricity (ring diameter) at that moment (this
 			doesn't apply when the 
 			<strong>DisableCortMagFac</strong> parameter
 			is set to true). The smallest ring eccentricity diameter is equal to the gap diameter (see C).</p>
@@ -803,7 +799,7 @@
             <h4>Eccentricity triggered cycles and direction</h4>
             <p>A full Eccentricity cycle is internally subdivided by the <strong>CycleTriggerAmount</strong>
 			parameter. These steps can be randomized (see <strong>RandomizeTriggerSteps</strong> 
-				parameter) and empy (see <strong>EmptyTriggerSteps</strong> 
+				parameter) and empty (see <strong>EmptyTriggerSteps</strong> 
 				parameter) as explained in the above parameter table. Internally these sub-cycles are indexed from [0 ... (CycleTriggerAmount-1)]. The indexing is dependent of the 
 			<strong>EccentricityDirection</strong> parameter. 
 			These indexed are internally also used to keep track of the randomly 
@@ -937,12 +933,13 @@
                 &nbsp;</p>
 			<p>
                 The above picture shows a stimuli presentation where 
-				the <strong>MovingBar</strong> <em>RetinoPattern</em> parameter is used.It's the same as 
+				the <strong>MovingBar</strong> <em>RetinoPattern</em> parameter is 
+				used. It's the same as 
 				the <strong>Fixation</strong> <em>RetinoPattern</em> plus an additional bar consisting of 
 				different sub-bar(s) that can move within the 
-				retinotopy stimuli area. Each sub-bar 
+				Retinotopy stimuli area. Each sub-bar 
 				consists out of several checkers with an alternating 
-				color along its lenght (see below A). A full bar movement 
+				color along its length (see below A). A full bar movement 
 				(see below C direction) is called one 
 				cycle. The moving bar has a set angle which 
 				remains the same during one cycle. Special parameters that belong to this
@@ -1070,7 +1067,7 @@
                       <td>"false"</td>
                       <td>when enabled then 
 					  the Experiment manager saves a 
-					  retinotopic stimuli display (to the /outputs
+					  Retinotopic stimuli display (to the /outputs
 					  directory) for each stimuli step 
 					  to a file, see the <a href="#RetinoMapperOutputExport">RetinoMapper Output 
 					  Export</a> chapter.
@@ -1086,7 +1083,7 @@
                       <td>"DAT"</td>
                       <td>if the <strong>OutputTriggerFrame</strong> parameter is enabled then this value specifies the output format (and extension) 
 					  for the saved file(s). &ldquo;PNG&rdquo; creates a standard (*.png) file format containing the 
-					  <em>retinotopy stimuli area</em>. See 
+					  <em>Retinotopy stimuli area</em>. See 
 					  the chapter 
 					  about <a href="#OutputFrameFormat">Output Frame Format</a>
 					  for an explanation about the DAT and CDAT format</td>
@@ -1112,7 +1109,7 @@
                       <td>if true then the 
 					  bar movement changes in discrete steps at each trigger step. Between 
 					  two triggers the bar moves smoothly 
-					  untill the next closest position</td>
+					  until the next closest position</td>
 				    </tr>
 				    <tr>
 				      <th scope="row">RandomizeTriggerSteps</th>
@@ -1120,7 +1117,7 @@
                       <td>"true" or "false"</td>
                       <td>"false"</td>
                       <td>if true then the 
-					  bar movement starting position is choosen randomly at each trigger step. Between two triggers the 
+					  bar movement starting position is chosen randomly at each trigger step. Between two triggers the 
 					  bar still moves smoothly to the 
 					  next closest diameter if the
 					  <strong>DiscreteTriggerSteps</strong>
@@ -1139,7 +1136,7 @@
                       <td>0</td>
                       <td>this parameter defines how many Trigger Steps of a full cycle should be Empty (the 
 					  Bar is then
-					  hidden!). These Empty trigger steps are randomly choosen. 
+					  hidden!). These Empty trigger steps are randomly chosen. 
 					  The randomization keeps the history of empty trigger steps 
 					  in memory within each block 
 					  trial</td>
@@ -1148,12 +1145,12 @@
 				      <th scope="row">RandomizeTriggerStepsArray</th>
 				      <td>Integer Array</td>
                       <td>a String containing one or more 
-					  index positions seperated by a comma, like "2,4,6,8"</td>
+					  index positions separated by a comma, like "2,4,6,8"</td>
                       <td>"" (empty string)</td>
                       <td>this parameter is only taken 
 					  into account if the <strong>RandomizeTriggerSteps</strong> 
 					  parameter is set to true. The default randomization is 
-					  overridden by the value(s) defined here seperated by a 
+					  overridden by the value(s) defined here separated by a 
 					  comma. Each value refers to a specific index of the 
 					  stimuli</td>
 				    </tr>
@@ -1161,12 +1158,12 @@
 				      <th scope="row">EmptyTriggerStepsArray</th>
 				      <td>Integer Array</td>
                       <td>a String containing one or more 
-					  index positions seperated by a comma, like "2,4,6,8"</td>
+					  index positions separated by a comma, like "2,4,6,8"</td>
                       <td>"" (empty string)</td>
                       <td>This parameter is only taken into account if the
 					  <strong>EmptyTriggerSteps</strong> parameter is set to 
 					  true. The default randomization is overridden by the 
-					  value(s) defined here seperated by a comma. Each value 
+					  value(s) defined here separated by a comma. Each value 
 					  refers to a specific index of the stimuli</td>
 				    </tr>
 				  </tbody>
@@ -1178,7 +1175,7 @@
             <p>&nbsp;</p>
             <p>
                 We see above inside a full screen area(see 
-				total grey area) an retinotopy stimuli area 
+				total grey area) an Retinotopy stimuli area 
 				(see marker B, the red rectangle) covering the diagonal B. The bar is at 
 				its first
                 initial position (first step of a full cycle) and moves along the direction of the yellow arrow(see 
@@ -1194,7 +1191,7 @@
                 A full MovingBar cycle is internally subdivided by the <strong>CycleTriggerAmount
 				</strong>parameter. These steps 
 				can be randomized (see <strong>RandomizeTriggerSteps</strong> 
-				parameter) and empy (see <strong>EmptyTriggerSteps</strong> 
+				parameter) and empty (see <strong>EmptyTriggerSteps</strong> 
 				parameter) as explained in the above parameter table. Internally 
 				these sub-cycles are indexed from [0 ... 
 				(CycleTriggerAmount-1)]. The indexing is dependent of the 
@@ -1258,7 +1255,7 @@
                     <td><div align="left"></div></td>
                     <td><div align="left"></div></td>
                     <td><p align="left"><strong><img src="images/image41.png" alt="" /></strong></p></td>
-                    <td><div align="left"><strong>IndexIndex 11</strong></div></td>
+                    <td><div align="left"><strong>Index 11</strong></div></td>
                     <td><div align="left"></div></td>
                 </tr>
             </table>
@@ -1326,12 +1323,14 @@
             <img src="images/image29.png" alt="" />
             <p>
                 <br />
-                The abThe above picture shows a MovingDots screen example. Within the active 
-				retinotopy stimuli area (grey) several dots are presented
-                inside two areas (Hemifields). These dots can move around when they leave the Hemifield they automatically appear again
+                The above picture shows a MovingDots screen example. Within the active 
+				Retinotopy stimuli area (grey) several dots are presented
+                inside two areas (Hemi-fields). These dots can move around when they leave the 
+				Hemi-field they automatically appear again
                 in the opposite corner moving with the same speed and direction/angle making sure that the amount of visible dots remains
-                constant. In the above example the left and right hemifields are visible and divided by a distance from each other. Both
-                Hemifields contain the dots at the same position (They are identical). The distance between the hemifields could also be
+                constant. In the above example the left and right hemi-fields are visible and divided by a distance from each other. Both
+                Hemi-fields contain the dots at the same position (They are identical). The distance between the 
+				hemi-fields could also be
                 made zero which would create one area with the dots smoothly moving from one area to the other. Again in the center of
                 the screen a fixation point (red) is shown.
             </p>
@@ -1363,7 +1362,7 @@
                       <td>4.0</td>
                       <td>the minimal and maximal movement speed of the Dots in Pixels/StimuliRefreshRate,, 
 					  if your computer is fast enough too keep display your 
-					  retinotopy stimuli with your choosen parameter 
+					  Retinotopy stimuli with your chosen parameter 
 					  configuration then the <strong>StimuliRefreshRate</strong> will be the same 
 					  as the screen refresh rate</td>
 				      </tr>
@@ -1381,8 +1380,8 @@
                       <td>&gt;0</td>
                       <td>1000</td>
                       <td>the amount of active visible 
-					  moving dots per visible Hemispere. If a dot moves over the 
-					  corner of an Hemiphere the it will can be halfway visible 
+					  moving dots per visible Hemi-field. If a dot moves over the 
+					  corner of an Hemi-field the it will can be halfway visible 
 					  at the e.g. the left and right side where it moves then 
 					  back in again</td>
 				    </tr>
@@ -1399,7 +1398,7 @@
 				      <td>String</td>
                       <td>"Left, "Right" or "Both"</td>
                       <td>"Both"</td>
-                      <td>defines which Hemifield(s) 
+                      <td>defines which Hemi-field(s) 
 					  are visible within the active stimuli area</td>
 				      </tr>
 				    <tr>
@@ -1408,10 +1407,10 @@
                       <td>&gt;0</td>
                       <td>100</td>
                       <td>the distance between the 
-					  Hemifield (left and/or right) and the center X position on 
+					  Hemi-field (left and/or right) and the center X position on 
 					  the screen in pixels (see red line). E.g. a value of 100 
-					  will make sure that the left and right hemifield are 2*100 
-					  pixels seperated from each other</td>
+					  will make sure that the left and right hemi-field are 2*100 
+					  pixels separated from each other</td>
 				    </tr>
 				    <tr>
 				      <th scope="row">MovingDotsStationairy</th>
@@ -1419,14 +1418,14 @@
                       <td>"true" or "false"</td>
                       <td>"false"</td>
                       <td>defines whether the dots should move or hold their initial
-					  randomly choosen position</td>
+					  randomly chosen position</td>
 				    </tr>
 					  <tr>
 				      <th scope="row">MovingDotsHemiFieldWidth</th>
 				      <td>Integer</td>
                       <td>&gt;0</td>
                       <td>320</td>
-                      <td>defines the width of one Hemifield (including the 
+                      <td>defines the width of one Hemi-field (including the 
 					  <strong>MovingDotsPixelFromCenter</strong> 
 					  parameter, see the yellow square 
 					  in the above picture</td>
@@ -1437,7 +1436,7 @@
                       <td>&gt;0</td>
                       <td>240</td>
                       <td>this defines the height of 
-					  one Hemifield, see the yellow square in 
+					  one Hemi-field, see the yellow square in 
 					  the above picture</td>
 				    </tr>				    
 				  </tbody>
@@ -1454,7 +1453,7 @@
 			parameter) then the Experiment manager 
 			automatically saves for each trigger step 
 			the displayed 
-					  retinotopic stimuli  
+					  Retinotopic stimuli  
 					  to a file. This option is only usable 
 			in non-experimental modes where accurate timing is not an critical 
 			issue because enabling this option may dramatically slow down the experiment and may cause that the requested
@@ -1466,7 +1465,7 @@
 			<h3>Output Directory</h3>
 			<p>Exported files are saved (under 
 			subdirectories) inside the Output Directory, which is by default the
-			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainUserdirectory" target="_blank">
+			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainUserdirectory">
 			Main User Directory</a>\Outputs directory. You can override this 
 			output directory to which 
 			the <em>RetinoMapper</em> object saves these files to, you 
@@ -1694,12 +1693,12 @@ quint32 height = image.height();</code></pre>
                 </tr>
             </table>
             <p>Hereafter the actual Image(s) data can be found per pixel as a 
-			<a href="http://doc.qt.io/qt-5/qcolor.html#QRgb-typedef" target="_blank">Qt QRgb type</a> type (image after image).</p>
+			<a href="http://doc.qt.io/qt-5/qcolor.html#QRgb-typedef" target="_blank">Qt QRgb type</a> (image after image).</p>
             <p>&nbsp;</p>
         </div>
     </div>
 <!--doc-version-default-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
 <!--doc-version-default-footer-end-->
 </body>

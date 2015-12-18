@@ -1,0 +1,196 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en_US" lang="en_US">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!--doc-version-default-links-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
+<!-- Bootstrap core CSS -->
+<link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
+<!-- Bootstrap theme -->
+<link href="../../bootstrap/css/bootstrap-theme.min.css" type="text/css" rel="stylesheet"/>
+<!-- Code-Prettify -->
+<link href="../../google-code-prettify/prettify.css" type="text/css" rel="stylesheet"/>
+<script src="../../google-code-prettify/prettify.js" type="text/javascript"></script>
+<!-- Custom styles for this template -->
+<link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
+<!--doc-version-default-links-end-->
+<!--doc-version-title-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
+<title>Script Class References v1.0</title>
+<!--doc-version-title-end-->
+</head>
+<body>
+    <div class="container">
+<!--doc-version-default-header-begin-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
+	<div class="doc-header">
+		<div class="alert alert-info" role="alert">
+			<h1>Script Class References</h1>
+			<div class="row">
+				<div class="col-md-4"><p><strong>Document version: </strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s): </strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date: </strong>July 2015</p></div>
+			</div>
+		</div>
+	</div>
+<!--doc-version-default-header-end-->
+        <h2>Introduction</h2>
+        <p>This document summarizes the references to the default script classes 
+		of which you can make use of inside a custom BrainStim script.</p>
+		<h2>Script Class References</h2>
+		<p>&nbsp;The following script classes are available by default:</p>
+		<p><table class="table table-condensed">
+				  <thead>
+				    <tr>
+				      <th><em>Script Class Name</em></th>
+				      <th><em>Description</em></th>
+				    </tr>
+				  </thead>
+				  <tbody>
+				    <tr>
+				      <th scope="row"><a href="Doxygen/class_main_window.html">BrainStim</a></th>
+				      <td>Use this inside a custom script for accessing 
+					  BrainStim functionality. There's only one <strong>
+					  BrainStim</strong> instance available under the name <em>
+					  BrainStim</em> in the script. You cannot construct more
+					  <strong>BrainStim</strong> class objects in the script</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:40px" scope="row">
+					  <a href="Doxygen/class_archiver.html">Archiver</a></th>
+				      <td>Use this class for creating, extracting and 
+					  compressing files</td>
+				    </tr>
+				    <tr>
+				      <th scope="row">
+					  QMLExtensions QML Plugin</th>
+				      <td>This is a QML plugin which is available after the <em>
+					  "import BrainStim_QMLExtensions x.x"</em> statement</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:30px" scope="row">
+					  <a href="../BrainStim_QMLExtensions/Doxygen/class_brain_stim_interface.html">
+					  BrainStimInterface</a></th>
+				      <td>Through this name you can access BrainStim 
+					  functionality from within a QML file</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:30px" scope="row">
+					  <a href="../BrainStim_QMLExtensions/Doxygen/class_ogre_item.html">OgreItem</a></th>
+				      <td>This custom QML item type can be used for creating a 
+					  3D scene</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:60px" scope="row">
+					  <a href="../BrainStim_QMLExtensions/Doxygen/class_ogre_camera_node.html">
+					  camera</a></th>
+				      <td>Use this OgreItem sub-type for creating/accessing a 
+					  camera node</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:60px" scope="row">
+					  <a href="../BrainStim_QMLExtensions/Doxygen/class_ogre_light_node.html">
+					  light</a></th>
+				      <td>Use this OgreItem sub-type for creating/accessing a 
+					  light node</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:0px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/class_experiment_manager.html">
+					  ExperimentManager</a> Plugin</th>
+				      <td>This is the ExperimentManager plugin</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:30px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/class_experiment_engine.html">ExperimentEngine</a></th>
+				      <td>This is the Experiment Engine</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:60px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/class_retinotopy_mapper.html">RetinotopyMapper</a></th>
+				      <td>This is a sub-class derived from the ExperimentEngine</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:60px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/class_q_m_l2_viewer.html">QML2Viewer</a></th>
+				      <td>This is a sub-class derived from the ExperimentEngine</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:30px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/classc_experiment_structure.html">ExperimentStructure</a></th>
+				      <td>This is the main experiment structure</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:60px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/classc_block_structure.html">BlockStructure</a></th>
+				      <td>This class can describe a block inside a experiment 
+					  structure</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:90px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/classc_block_parameter_structure.html">BlockParameterStructure</a></th>
+				      <td>This class can describe a block parameter of a block 
+					  inside a experiment structure</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:60px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/classc_loop_structure.html">LoopStructure</a></th>
+				      <td>This class can describe a loop inside a experiment 
+					  structure</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:60px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/classc_method_structure.html">MethodStructure</a></th>
+				      <td>This class can describe a method</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:90px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/classc_method_parameter_structure.html">MethodParameterStructure</a></th>
+				      <td>This class can describe a parameter of a method</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:60px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/classc_method_connection_structure.html">MethodConnectionStructure</a></th>
+				      <td>This class decribes a method connection</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:60px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/classc_object_structure.html">ObjectStructure</a></th>
+				      <td>This class describes a object inside a experiment 
+					  structure</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:30px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/class_experiment_timer.html">ExperimentTimer</a></th>
+				      <td>This is a custom timer script class</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:30px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/class_image_processor.html">ImageProcessor</a></th>
+				      <td>You can make use of this script class for processing 
+					  images</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:30px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/class_prt_format_manager.html">PrtFormatManager</a></th>
+				      <td>You can make use of this script class for editing prt 
+					  files</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:30px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/class_random_generator.html">RandomGenerator</a></th>
+				      <td>You can make use of this script class for generating 
+					  random numbers and lists</td>
+				    </tr>
+				    <tr>
+				      <th style ="padding-left:30px" scope="row">
+					  <a href="../ExperimentManagerPlugin/Doxygen/class_trigger_timer.html">TriggerTimer</a></th>
+				      <td>This is a custom timer script class that can trigger 
+					  at specified intervals</td>
+				    </tr>
+				  </tbody>
+				</table>
+		</p>
+    </div>
+</body>
+</html>

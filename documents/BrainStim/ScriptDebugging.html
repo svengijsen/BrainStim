@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -14,7 +14,7 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <title>Debugging scripts v1.0</title>
 <!--doc-version-title-end-->
 <style type="text/css">
@@ -30,14 +30,14 @@
     <div class="container">
 
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Debugging scripts</h1>
 			<div class="row">
-				<div class="col-md-4"><p><strong>Document version:</strong>1.0</p></div>
-				<div class="col-md-4"><p><strong>Author(s):</strong>Sven Gijsen</p></div>
-				<div class="col-md-4"><p><strong>Date:</strong>July 2015</p></div>
+				<div class="col-md-4"><p><strong>Document version: </strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s): </strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date: </strong>July 2015</p></div>
 			</div>
 		</div>
 	</div>
@@ -49,7 +49,7 @@
 				want to test it's functionality or if you want to track down a 
 				bug in your script it's important to know what tools you can use 
 				to debug your code. Currently BrainStim unfortunately doesn't 
-				have yet a fully flavoured debugger for testing your code with 
+				have yet a fully flavored debugger for testing your code with 
 				various tools for adding breakpoints or running your program 
 				step by step and resolve values.
 				Below here are some techniques/features described which you may 
@@ -58,7 +58,7 @@
 		<p>The <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
 		is one of the most common tools for gathering information while a script 
 		is running. You can easily access and change this <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
-		from within the script. Appending a line of text can beeasily done by 
+		from within the script. Appending a line of text can be easily done by 
 		using the <strong>Log()</strong> or <strong>
 		BrainStim.write2OutputWindow()</strong> function. These functions are 
 		internally the same, they both accept a string value for the first 
@@ -67,7 +67,7 @@
 		optional parameter that contains the name of the tab/sub-window to which 
 		the message should be written to, by default all messages are written to 
 		the standard '<em>Default</em>' sub-window. Furthermore the <strong>
-		Log()</strong> function is offcourse also quicker to type. Let's try 
+		Log()</strong> function is off course also quicker to type. Let's try 
 		this (the final result of the below steps are saved to the file <em>
 		OutputLogwindow.qs</em> that is located in the  
 			<a href="../GettingStartedGuide/GettingStartedGuide.html#MainProgramdirectory">Main Program Directory</a> subfolder 
@@ -117,7 +117,7 @@ Log(&quot;&lt;font color=\&quot;red\&quot;&gt;This is some &lt;em&gt;custom&lt;/
 		BrainStim.write2OutputWindow()</strong> function accepts another 
 			optional parameter that contains the name of the tab/sub-window to 
 			which the message should be written to. Before we can do this we 
-			need to make sure to add this subwindow using the 
+			need to make sure to add this sub-window using the 
 			BrainStim.addOutputWindow() providing the new sub-window name as the 
 			first parameter, like:<br />
 			<br />
@@ -163,7 +163,7 @@ BrainStim.write2OutputWindow("Custom sub-window logged message.", "custom sub-wi
 		(for making sure that this <em>
 		<a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
 		sub-window name is used). This <strong>Log()</strong> function is not 
-		descibed in a script reference document because it's a global function 
+		described in a script reference document because it's a global function 
 		that doesn't "belong" to a object or namespace, like the <strong>
 		BrainStim.write2OutputWindow()</strong> function is part of the <strong>
 		BrainStim</strong> object/namespace. There're some more global functions like 
@@ -251,7 +251,7 @@ BrainStim.write2OutputWindow("Custom sub-window logged message.", "custom sub-wi
 			</div>
 			<p></p>
 			<p>In the '<em>Default</em>' sub-window we see that the script 
-			syntaxt was valid and it took 4ms to execute, the '<em>Script Output</em>' 
+			syntax was valid and it took 4ms to execute, the '<em>Script Output</em>' 
 			sub-window shows the two messages that are send to this sub-window 
 			at the start and end of the script execution. The '<em>Default</em>' 
 			sub-window is automatically cleared each time you run a script, this 
@@ -260,7 +260,7 @@ BrainStim.write2OutputWindow("Custom sub-window logged message.", "custom sub-wi
 			can do this using the script function <strong>
 			BrainStim.clearOutputWindow() </strong>as we can see in the example 
 			document. <strong><br />
-			Important! </strong>Because the next example generates syntaxt error 
+			Important! </strong>Because the next example generates syntax error 
 			that leads to a non execution of the script (and therefore
 			<span class="auto-style1">not</span> executing the <strong>
 			BrainStim.clearOutputWindow()</strong> function) we have to clear 
@@ -275,11 +275,11 @@ BrainStim.write2OutputWindow("Custom sub-window logged message.", "custom sub-wi
 			reported in the '<em>Default</em>' 
 		sub-window of the <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
 			during evaluation of the script code (before the script is actually 
-			executed). When a syntaxt error is detected then the cursor will then automatically jump to the position in the 
+			executed). When a syntax error is detected then the cursor will then automatically jump to the position in the 
 			script code 
 		where the syntax error was first detected and the '<em>Default</em>' sub-windows 
-		shows a description of the syntaxt error containing the line and column 
-		of the syntaxt error position. Let's try this:<br />
+		shows a description of the syntax error containing the line and column 
+		of the syntax error position. Let's try this:<br />
 			Uncomment the QtScript code line that contains a syntax error:
         <table class="codeframe">
             <tr>
@@ -298,11 +298,11 @@ BrainStim.write2OutputWindow("Custom sub-window logged message.", "custom sub-wi
 			sub-window is not created by the script because the script is never 
 			executed because a script syntax error is detected! We can now see 
 			in the '<em>Default</em>' <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a></em> 
-			sub-window that a script syntaxt error was detected with some 
+			sub-window that a script syntax error was detected with some 
 			additional information about where (line, column) the syntax error 
 			was detected (notice that the cursor also automatically jumps to 
 			this section of the script code) and what it expected. Comment the 
-			line (move the curor to the line and use the <kbd>CTRL</kbd> + <kbd>k</kbd> key combination), or reload (without saving!) 
+			line (move the cursor to the line and use the <kbd>CTRL</kbd> + <kbd>k</kbd> key combination), or reload (without saving!) 
 			(using the menu entry <kbd>File</kbd> &gt; <kbd>Reload)</kbd> the document.</p>
 			</li>
 			<li>Often an exception doesn't happen at the time the script is evaluated, but at 
@@ -319,7 +319,7 @@ write2OutputWindow(&quot;&lt;&lt;After NonExistingFunctionCall()&gt;&gt;&quot;, 
             </tr>
         </table>
 <p>Note that the second line calls a function that doesn't exist because is 
-nowhere defined, although this is sytaxial correct this line&nbsp;raises an exception 
+nowhere defined, although this is syntaxial correct this line&nbsp;raises an exception 
 when executed and causing the internal script engine to stop. Let's try this by 
 executing (press the <kbd>F5</kbd> key) the QtScript code and validate 
 		again the <em><a href="UserInterface.html#OutputLogwindow">Output Log window</a> 
@@ -372,7 +372,7 @@ Debug: MainWindow::executeScriptContent "... Evaluate script::UncaughtException(
 			clarity reasons this is not shown in the above text.</p>
 			<p>If we were in the middle of doing something important in the 
 			script code than this kind of error can be very unwanted because it 
-			leads to an immediat ending of the script. There's a solution for 
+			leads to an immediate ending of the script. There's a solution for 
 			this which allows us to catch the exception and handle it before it 
 			raises an error causing the script to end. This is done by using a 
 			<strong>try/catch</strong> statements. Let's comment the above lines again (by 
@@ -400,7 +400,7 @@ catch (e)
         </table>
 <p>Note that the above example script code is the same as the previous example 
 code except for the <strong>try/catch</strong> statements. When an exception 
-occurres inside the <strong>try</strong> block then the <strong>catch</strong> 
+occurred inside the <strong>try</strong> block then the <strong>catch</strong> 
 block is executed with the <em><strong>e</strong></em> parameter set to a 
 exception description and the code is still further executed which gives us a 
 possibility to handle it. Let's try this by 
@@ -481,14 +481,14 @@ executing (press the <kbd>F5</kbd> key) the QtScript code and validate
             </tr>
         </table>
 			<br />
-			The <strong><em>getTime()</em></strong> funtion simply returns the number of milliseconds between midnight of January 1, 1970 and the 
+			The <strong><em>getTime()</em></strong> function simply returns the number of milliseconds between midnight of January 1, 1970 and the 
 			moment that the <strong>Date</strong> object was constructed like we 
 			did above here. We can then store the result of the <strong><em>getTime()</em></strong> 
-			funtion to a temporarily variabele and re-construct (using the
+			function to a temporarily variable and re-construct (using the
 			<strong>new</strong> operator) the <strong>Date</strong> object 
-			again followed by a <strong><em>getTime()</em></strong> funtion call 
-			and store that result in another temporarily variabele. The 
-			difference between these temporarily variabeles is then the time it 
+			again followed by a <strong><em>getTime()</em></strong> function call 
+			and store that result in another temporarily variable. The 
+			difference between these temporarily variables is then the time it 
 			took to execute the code between the two moment that the <strong>
 			Date</strong> object was constructed.</li>
 		</ol>
@@ -507,7 +507,7 @@ executing (press the <kbd>F5</kbd> key) the QtScript code and validate
 		<p>&nbsp;</p>
    </div>
 <!--doc-version-default-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
 <!--doc-version-default-footer-end-->
 </body>

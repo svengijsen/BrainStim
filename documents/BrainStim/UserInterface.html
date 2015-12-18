@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <!--doc-version-default-links-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <!-- Bootstrap core CSS -->
 <link href="../../bootstrap/css/bootstrap.min.css" type="text/css" rel="stylesheet"/>
 <!-- Bootstrap theme -->
@@ -14,7 +14,7 @@
 <link href="../../css/custom_theme.css" type="text/css" rel="stylesheet"/>
 <!--doc-version-default-links-end-->
 <!--doc-version-title-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 <title>Default User-Interface v1.0</title>
 <!--doc-version-title-end-->
 <style type="text/css">
@@ -27,14 +27,14 @@
     <div class="container">
 
 <!--doc-version-default-header-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 	<div class="doc-header">
 		<div class="alert alert-info" role="alert">
 			<h1>Default User-Interface</h1>
 			<div class="row">
-				<div class="col-md-4"><p><strong>Document version:</strong>1.0</p></div>
-				<div class="col-md-4"><p><strong>Author(s):</strong>Sven Gijsen</p></div>
-				<div class="col-md-4"><p><strong>Date:</strong>July 2015</p></div>
+				<div class="col-md-4"><p><strong>Document version: </strong>1.0</p></div>
+				<div class="col-md-4"><p><strong>Author(s): </strong>Sven Gijsen</p></div>
+				<div class="col-md-4"><p><strong>Date: </strong>July 2015</p></div>
 			</div>
 		</div>
 	</div>
@@ -54,7 +54,7 @@
 		customizations are 
 		automatically saved for each <a href="DocumentTypes.html">document type</a> 
 		to the <a href="../GettingStartedGuide/GettingStartedGuide.html#BrainStimSettingsfile">
-		Settings file</a> seperately 
+		Settings file</a> separately 
 		and reloaded/applied when a document of that type is opened/activated.</p>
 		<h3>Dockable windows</h3>
 		<p>BrainStim can contain one or more dockable windows, like the 
@@ -64,13 +64,14 @@
 		together with some movements (drag) to fit its size to your needs. You can even
 		drag the dockable window so that it becomes a 
 		free floating window, you can do this by left mouse click and hold the 
-		docable window header title (like the '<em>Output Log</em>' header title) and move it to somewere else and then release 
+		dockable window header title (like the '<em>Output Log</em>' header title) and move it to 
+		somewhere else and then release 
 		your left mouse button again. You might have notice while moving around 
 		the window that you can also move it to some predefined locations inside 
-		the Brainstim main window. These dockable areas are located around the 
+		the BrainStim main window. These dockable areas are located around the 
 		left, top, right and bottom border of the <em>Document Editing region</em>. 
-		Furthermore it's even posible to completely hide a dockable window 
-		byusing your mouse and right click it's header and then uncheck it. 
+		Furthermore it's even possible to completely hide a dockable window 
+		by using your mouse and right click it's header and then uncheck it. 
 		<strong>Important!</strong> 
 		to show a dockable window again you can use your mouse and right click 
 		on the <strong>ToolBar</strong> and then check the dockable window from 
@@ -125,7 +126,7 @@
 				<p>The<span lang="nl"> default menu bar can be extended by 
 				implementing one or more menu configuration files, read
 				<a href="CustomMenus.html">this document</a> for 
-				more infomation about this topic.</span></p>
+				more information about this topic.</span></p>
 		<h2>File/document handling</h2>
 		<p>BrainStim can open and edit type of files, see
 		<a href="DocumentTypes.html">this document</a> for more information 
@@ -146,10 +147,10 @@
 		information about this topic.</p>
 		<h3>Document windows</h3>
 		<p>BrainStim is a multiple document editor, meaning that it can open and 
-		edit multiple (different) files simultaneously in seperate documents. 
+		edit multiple (different) files simultaneously in separate documents. 
 		Each document has it's own <em>Document Editing</em> window and they can 
 		be activated by selecting them using the tabular bar right above the <em>
-		Document Editing</em> region. You can also swith between them using the
+		Document Editing</em> region. You can also switch between them using the
 		<kbd>Window</kbd> &gt; <kbd>Next</kbd> or <kbd>Window</kbd> &gt; <kbd>
 		Previous</kbd> menu entry, or by selecting one of them from the list of 
 		opened documents inside the <kbd>Window</kbd> menu. After you activate 
@@ -195,7 +196,7 @@
 		<a href="ScriptDebugging.html#UsingtheOutputLogwindow">this document</a> 
 		for more information about how to control this Output Log window from a 
 		script. The menu&nbsp; <kbd>Edit</kbd> &gt; 
-			<kbd>Output Log</kbd> contains several commans for working with the <em>Output Log window</em>, 
+			<kbd>Output Log</kbd> contains several commands for working with the <em>Output Log window</em>, 
 		alternatively you can right click with you mouse in a sub-window to show 
 		a menu of commands.</p>
 		<h2>Executing a document</h2>
@@ -210,13 +211,13 @@
 		button stays disabled after execution of your (QtScript *.qs) script 
 		(although it seems that your script did what you expected it to do). You 
 		cannot execute the script again because the&nbsp; <kbd>Execute</kbd> 
-		button is disabled. When this happens you probaly didn't follow the 
+		button is disabled. When this happens you probably didn't follow the 
 		guidelines for a automatic garbage collection, read
 		<a href="GarbageCollection.html">this document</a> for more information 
 		about this topic. To enable the execute button again you can try to 
 		abort the script first by using the <kbd>F7</kbd> 
 		key or the menu entry <kbd>Document</kbd> &gt; <kbd>Abort</kbd>. If this 
-		still doesn't work you can use the the <kbd>F9</kbd> 
+		still doesn't work you can use the <kbd><span lang="en-us"></span>F9</kbd> 
 		key or the menu entry <kbd>Document</kbd> &gt; <kbd>Restart Script 
 		Engine</kbd> to completely restart the internal Script Engine.</p>
 		<h2>Options</h2>
@@ -271,7 +272,7 @@
 		    <tr>
 		      <th scope="row">Disable</th>
 		      <td>This button allows you to disable a plugin that is selected in 
-			  the list, BrainStim then automatically skippes the plugin from 
+			  the list, BrainStim then automatically skips the plugin from 
 			  loading at startup. Newly installed plugins are automatically 
 			  enabled. If they are manually disabled the text of the plugin in 
 			  the list colors red and a <em>Disabled:</em> pre-text is appended.</td>
@@ -327,13 +328,13 @@
 		help contains the BrainStim help content including that of the
 		<a href="DefaultPlugins.html">default plugins</a>, furthermore if you 
 		installed some additional 3rd party plugins than this documentation (if 
-		provided by the plugin) is also available here.There's also an online 
+		provided by the plugin) is also available here. There's also an online 
 		version of this Help, use
 		<a href="http://svengijsen.github.io/BrainStim/" target="_blank">this 
 		link</a> to open the online Help collection. This online collection only 
 		contains the documentation for the latest release of BrainStim and it's
 		<a href="DefaultPlugins.html">default plugins</a>, 3rd party plugins 
-		can provide thier own online documentation somewhere else. By using the 
+		can provide their own online documentation somewhere else. By using the 
 		menu entry <kbd>Help</kbd> &gt; <kbd>About BrainStim</kbd> you can open 
 		a dialog that shows the current version and licensing information for 
 		the currently installed version. BrainStim is build making use of the
@@ -343,7 +344,7 @@
 		<kbd>About Qt</kbd>.</p>
    </div>
 <!--doc-version-default-footer-begin-->
-<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151018182358), version 1.0.0.1-->
+<!-- Please do not edit the below line(s) manually, see DocumentVersioning.qs (151116145015), version 1.1.0.1-->
 	<script type="text/javascript">document.body.onload = function() {prettyPrint()};</script>
 <!--doc-version-default-footer-end-->
  </body>
